@@ -327,7 +327,7 @@ public class AdController extends BaseController {
 		query.setSort("status_i", SolrQuery.ORDER.desc);
 		List<Long> merchantIds = adSolrParam.getMerchantIds();
 		String str = "";
-		if (merchantIds.size() > 0) {
+		if (!merchantIds.isEmpty()) {
 			for (Long id : merchantIds) {
 				str += "merchantId_l:" + id + " or ";
 			}

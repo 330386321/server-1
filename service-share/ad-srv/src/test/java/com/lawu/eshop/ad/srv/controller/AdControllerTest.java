@@ -29,7 +29,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.ad.constants.AdEgainTypeEnum;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -38,13 +37,14 @@ import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.param.AdEgainInternalParam;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.AdSolrParam;
+import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
 import com.lawu.eshop.ad.srv.domain.AdDO;
@@ -1010,4 +1010,35 @@ public class AdControllerTest {
         }
 
     }*/
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void queryAdByTitle() {
+    	
+    	AdsolrFindParam param =new AdsolrFindParam();
+    	
+    	AdSolrParam adParam = new AdSolrParam();
+    	adParam.setTitle("广告");
+    	param.setAdSolrParam(adParam);
+    	param.setMemberId(1l);
+        param.setCurrentPage(1);
+        param.setPageSize(20);
+        List<Long> merchantIds = new ArrayList<>();
+        merchantIds.add(1001l);
+        param.setMerchantIds(merchantIds);
+        param.setRegionPath("11/1101/110101");
+        String requestJson = JSONObject.toJSONString(param);
+        
+        try {
+            RequestBuilder request = post("/ad/queryAdByTitle/").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+        
+    }
 }
