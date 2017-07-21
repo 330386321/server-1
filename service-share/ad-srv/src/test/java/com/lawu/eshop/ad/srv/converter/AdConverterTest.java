@@ -45,6 +45,9 @@ public class AdConverterTest {
     public void convertBO(){
 		
 		AdDO ad=new AdDO();
+		ad.setId(1l);
+		ad.setAdCount(10);
+		ad.setBeginTime(new Date());
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
@@ -62,6 +65,11 @@ public class AdConverterTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setViewcount(20);
+        ad.setAreas("11");
+        ad.setRadius(15);
+        ad.setAuditorId(12);
+        ad.setRemark("审核");
         AdBO  bo = AdConverter.convertBO(ad);
         
         Assert.assertNotNull(bo);
@@ -72,6 +80,9 @@ public class AdConverterTest {
     public void convertBOS(){
 		
 		AdDO ad=new AdDO();
+		ad.setId(1l);
+		ad.setAdCount(10);
+		ad.setBeginTime(new Date());
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
@@ -89,6 +100,11 @@ public class AdConverterTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setViewcount(20);
+        ad.setAreas("11");
+        ad.setRadius(15);
+        ad.setAuditorId(12);
+        ad.setRemark("审核");
         
         List<AdDO> list = new ArrayList<AdDO>();
         list.add(ad);
@@ -104,13 +120,16 @@ public class AdConverterTest {
         adBO.setId(1l);
 		adBO.setAdCount(10);
 		adBO.setBeginTime(new Date());
+		adBO.setIsFavorite(true);
+		adBO.setIsPraise(false);
+		adBO.setNumber(10);
 		adBO.setMediaUrl("ad_image/1494582624025648401.png");
 		adBO.setMerchantId(1l);
 		adBO.setGmtCreate(new Date());
 		adBO.setAdCount(10);
 		adBO.setPoint(BigDecimal.valueOf(10));
 		adBO.setTitle("广告测试内容");
-		adBO.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
+		adBO.setTypeEnum(AdTypeEnum.AD_TYPE_PRAISE);
 		adBO.setPutWayEnum(PutWayEnum.PUT_WAY_FENS);
 		adBO.setStatusEnum(AdStatusEnum.AD_STATUS_PUTING);
 		adBO.setTotalPoint(BigDecimal.valueOf(10));
