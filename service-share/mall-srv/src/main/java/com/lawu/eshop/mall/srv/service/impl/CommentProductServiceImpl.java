@@ -1,17 +1,5 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
@@ -20,11 +8,7 @@ import com.lawu.eshop.mall.constants.CommentGradeEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.constants.CommentTypeEnum;
 import com.lawu.eshop.mall.dto.MemberProductCommentDTO;
-import com.lawu.eshop.mall.param.CommentListParam;
-import com.lawu.eshop.mall.param.CommentMerchantListParam;
-import com.lawu.eshop.mall.param.CommentProductListParam;
-import com.lawu.eshop.mall.param.CommentProductPageParam;
-import com.lawu.eshop.mall.param.CommentProductParam;
+import com.lawu.eshop.mall.param.*;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
 import com.lawu.eshop.mall.srv.converter.CommentProductConverter;
@@ -39,6 +23,17 @@ import com.lawu.eshop.mall.srv.mapper.extend.CommentProductDOMapperExtend;
 import com.lawu.eshop.mall.srv.service.CommentProductService;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderAutoCommentNotification;
 import com.lawu.eshop.utils.DateUtil;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -76,20 +71,18 @@ public class CommentProductServiceImpl implements CommentProductService {
 		commentProductDOMapper.insert(commentProductDO);// 新增评价信息
 		Long id = commentProductDO.getId();
 		if (!StringUtils.isEmpty(headImg)) {
-			String imgs[] = headImg.split(",");
+			String[] imgs = headImg.split(",");
 			if (id != null && id > 0) {
 				// 新增评价图片
 				for (int i = 0; i < imgs.length; i++) {
-					if (!StringUtils.isEmpty(imgs[i])) {
 						CommentImageDO commentImageDO = new CommentImageDO();
 						commentImageDO.setCommentId(id);
-						commentImageDO.setImgUrl(imgs[i]);
+						commentImageDO.setImgUrl(imgs[i] == null ? "" : imgs[i]);
 						commentImageDO.setStatus(true);// 有效
 						commentImageDO.setType(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);// 评论商品
 						commentImageDO.setGmtCreate(new Date());
 						commentImageDO.setGmtModified(new Date());
 						commentImageDOMapper.insert(commentImageDO);
-					}
 				}
 			}
 		}
@@ -138,7 +131,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 
 		int totalCount = commentProductDOMapperExtend.selectCountByProductId(listParam.getProductId());
 
-		Page<CommentProductBO> commentProductBOPage = new Page<CommentProductBO>();
+		Page<CommentProductBO> commentProductBOPage = new Page<>();
 		commentProductBOPage.setTotalCount(totalCount);
 		commentProductBOPage.setCurrentPage(listParam.getCurrentPage());
 
@@ -150,8 +143,8 @@ public class CommentProductServiceImpl implements CommentProductService {
 		List<CommentProductDOView> commentProductDOViews = commentProductDOMapperExtend
 				.selectCommentsWithImg(productPageParam);
 
-		Page<CommentProductBO> pages = new Page<CommentProductBO>();
-		List<CommentProductBO> commentProductBOS = new ArrayList<CommentProductBO>();
+		Page<CommentProductBO> pages = new Page<>();
+		List<CommentProductBO> commentProductBOS = new ArrayList<>();
 		if (!commentProductDOViews.isEmpty()) {
 			for (CommentProductDOView commentProductDOView : commentProductDOViews) {
 				CommentProductBO commentProductBO = CommentProductConverter.converterBOFromView(commentProductDOView);
@@ -160,7 +153,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 				imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDOView.getId())
 						.andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
 				List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
-				List<String> images = new ArrayList<String>();
+				List<String> images = new ArrayList<>();
 				if (!commentImageDOS.isEmpty()) {
 					for (int i = 0; i < commentImageDOS.size(); i++) {
 						images.add(commentImageDOS.get(i).getImgUrl());
@@ -178,10 +171,8 @@ public class CommentProductServiceImpl implements CommentProductService {
 
 	@Override
 	public CommentProductBO findProductComment(Long commentId) {
-
 		CommentProductDO commentProductDO = commentProductDOMapper.selectByPrimaryKey(commentId);
-		CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
-		return commentProductBO;
+		return  CommentProductConverter.converterBO(commentProductDO);
 	}
 
 	@Override
@@ -191,8 +182,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 		commentProductDO.setId(commentId);
 		commentProductDO.setReplyContent(replyContent);
 		commentProductDO.setGmtReply(new Date());
-		int rows = commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
-		return rows;
+		return commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
 	}
 
 	@Override
@@ -219,7 +209,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 		example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val)
 				.andProductIdEqualTo(productId);
 		Integer totalCount = commentProductDOMapper.countByExample(example);
-		double goodGrade = new BigDecimal((double) goodCount / totalCount).setScale(2, RoundingMode.UP).doubleValue();
+		double goodGrade =  BigDecimal.valueOf((double) goodCount / totalCount).setScale(2, RoundingMode.UP).doubleValue();
 		CommentGradeBO commentGradeBO = new CommentGradeBO();
 		commentGradeBO.setAvgGrade(avgGrade);
 		commentGradeBO.setGoodGrad(goodGrade);
@@ -229,7 +219,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 	@Override
 	public Page<CommentProductBO> getCommentProductListOperator(CommentListParam listParam) {
 		CommentProductDOExample example = new CommentProductDOExample();
-		example.setOrderByClause("id desc");
+		example.setOrderByClause("id DESC");
 		CommentProductDOExample.Criteria criteria = example.createCriteria();
 		criteria.andStatusEqualTo(new Byte("1"));
 		if(org.apache.commons.lang.StringUtils.isNotEmpty(listParam.getBeginDate())){
@@ -315,7 +305,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 			imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDO.getId())
 					.andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
 			List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
-			List<String> images = new ArrayList<String>();
+			List<String> images = new ArrayList<>();
 			if (!commentImageDOS.isEmpty()) {
 				for (int i = 0; i < commentImageDOS.size(); i++) {
 					images.add(commentImageDOS.get(i).getImgUrl());
@@ -338,7 +328,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 		}
 		List<CommentProductDOView> productDOViews = commentProductDOMapperExtend
 				.getProductCommentIdsByMerchantId(pageParam);
-		List<CommentProductBO> commentProductBOS = new ArrayList<CommentProductBO>();
+		List<CommentProductBO> commentProductBOS = new ArrayList<>();
 		for (CommentProductDOView commentProductDOView : productDOViews) {
 			CommentProductBO commentProductBO = new CommentProductBO();
 			commentProductBO.setProductId(commentProductDOView.getProductId());
@@ -378,11 +368,9 @@ public class CommentProductServiceImpl implements CommentProductService {
 		example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).andProductIdEqualTo(productId);
 		example.setOrderByClause(" id desc ");
 		RowBounds rowBounds = new RowBounds(0, 1);
-//		Page<CommentProductBO> page = new Page<>();
-//		page.setTotalCount(commentProductDOMapper.countByExample(example));
-//		page.setCurrentPage(1);
+
 		List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example,rowBounds);
-		List<MemberProductCommentDTO> dtos = new ArrayList<MemberProductCommentDTO>();
+		List<MemberProductCommentDTO> dtos = new ArrayList<>();
 		for (CommentProductDO comment : commentProductDOS) {
 			MemberProductCommentDTO dto = new MemberProductCommentDTO();
 			dto.setContent(comment.getContent());
@@ -392,7 +380,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 			CommentImageDOExample imageDOExample = new CommentImageDOExample();
 			imageDOExample.createCriteria().andCommentIdEqualTo(comment.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val).andStatusEqualTo(true);
 			List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
-			List<String> images = new ArrayList<String>();
+			List<String> images = new ArrayList<>();
 			if (!commentImageDOS.isEmpty()) {
 				for (int i = 0; i < commentImageDOS.size(); i++) {
 					images.add(commentImageDOS.get(i).getImgUrl());
@@ -412,7 +400,6 @@ public class CommentProductServiceImpl implements CommentProductService {
 	public Integer getProductCommentCount(Long productId) {
 		CommentProductDOExample example = new CommentProductDOExample();
 		example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).andProductIdEqualTo(productId);
-		int count = commentProductDOMapper.countByExample(example);
-		return count;
+		return commentProductDOMapper.countByExample(example);
 	}
 }
