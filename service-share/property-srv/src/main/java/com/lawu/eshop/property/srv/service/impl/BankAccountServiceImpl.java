@@ -92,7 +92,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 	    bankAccountBO.setBankId(bankAccountDO.getBankId());
 	    BankDO bankDO=bankDOMapper.selectByPrimaryKey(bankAccountDO.getBankId());
 	    bankAccountBO.setBankName(bankDO.getName());
-	    bankAccountBO.setBankId(Long.valueOf(bankDO.getId().toString()));
+	    bankAccountBO.setBankId(bankDO.getId());
 		return bankAccountBO;
 	}
 

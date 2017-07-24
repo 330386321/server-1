@@ -953,7 +953,7 @@ public class AdServiceImpl implements AdService {
 	public AdDetailBO selectDetail(Long id) {
 		AdDO adDO=adDOMapper.selectByPrimaryKey(id);
 		AdDetailBO detail=AdConverter.convertDetailBO(adDO);
-		if(adDO.getType()==AdTypeEnum.AD_TYPE_FLAT.getVal() || adDO.getType()==AdTypeEnum.AD_TYPE_VIDEO.val){
+		if(adDO.getType()==AdTypeEnum.AD_TYPE_FLAT.getVal() || adDO.getType()==AdTypeEnum.AD_TYPE_VIDEO.getVal()){
 			detail.setAlreadyGetCount(adDO.getHits());
 			detail.setNotGetCount(adDO.getAdCount()-adDO.getHits());
 			detail.setAlreadyGetPoint(adDO.getPoint().multiply(BigDecimal.valueOf(adDO.getHits())));
