@@ -1,5 +1,7 @@
 package com.lawu.eshop.order.srv.service.impl.transaction;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ public class OrderCommentMerchantTransactionFollowServiceImpl extends AbstractTr
 	public void execute(CommentMerchantNotification notification) {
 		PayOrderDO order = new PayOrderDO();
 		order.setId(notification.getPayOrderId());
+		order.setCommentTime(new Date());
 		order.setIsEvaluation(true);
 		payOrderDOMapper.updateByPrimaryKeySelective(order);
 	}

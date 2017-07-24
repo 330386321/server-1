@@ -15,17 +15,17 @@ public class MockLockService implements LockService {
 
 	@Override
 	public boolean tryLock(String lockKey) {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean tryLock(LockModule lockModule, String lockKey, Long relatedId) {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean tryLock(LockModule lockModule, String lockKey) {
-		return false;
+		return true;
 	}
 
 	@Override
