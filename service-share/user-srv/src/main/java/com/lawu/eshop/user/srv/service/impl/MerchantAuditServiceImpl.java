@@ -1,7 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
@@ -48,6 +48,9 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
     private MerchantStoreImageDOMapper merchantStoreImageDOMapper;
     @Autowired
     private UserSrvConfig userSrvConfig;
+
+    @Autowired
+    private SolrService solrService;
 
     @Override
     @Transactional
@@ -261,7 +264,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                     }
                     if(MerchantAuditTypeEnum.AUDIT_TYPE_STORE.val.byteValue() == auditParam.getTypeEnum().val || isEntity){
                         SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
-                        SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+                        solrService.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
                     }
                 } else {
                     //审核不通过

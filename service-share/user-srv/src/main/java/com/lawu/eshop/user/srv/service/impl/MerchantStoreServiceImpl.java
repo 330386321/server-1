@@ -1,6 +1,6 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
@@ -48,6 +48,9 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 
     @Autowired
     private MerchantDOMapper merchantDOMapper;
+
+    @Autowired
+    private SolrService solrService;
 
     @Override
     public MerchantStoreBO selectMerchantStore(Long merchantId) {
@@ -111,7 +114,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         merchantStoreDO.setFeedbackRate(param.getFeedbackRate());
         merchantStoreDOMapper.updateByPrimaryKeySelective(merchantStoreDO);
 
-        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+        SolrDocument solrDocument = solrService.getSolrDocsById(id, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         if (solrDocument != null) {
             SolrInputDocument document = new SolrInputDocument();
             document.addField("id", solrDocument.get("id"));
@@ -125,7 +128,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             document.addField("averageConsumeAmount_d", param.getAverageConsumeAmount() == null ? 0 : param.getAverageConsumeAmount().toString());
             document.addField("averageScore_d", param.getAverageScore() == null ? 0 : param.getAverageScore().toString());
             document.addField("favoriteNumber_i", solrDocument.get("favoriteNumber_i"));
-            SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+            solrService.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         }
     }
 
@@ -136,14 +139,14 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             return;
         }
 
-        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+        SolrDocument solrDocument = solrService.getSolrDocsById(id, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         if(solrDocument == null){
             MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
             merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreDO.getId()).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val).andStatusEqualTo(true);
             List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
             String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
             SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
-            SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+            solrService.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         }
     }
 
@@ -172,7 +175,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
                 SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
                 documents.add(document);
             }
-            SolrUtil.addSolrDocsList(documents, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+            solrService.addSolrDocsList(documents, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         }
     }
 
@@ -196,7 +199,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             for (MerchantStoreDO merchantStoreDO : merchantStoreDOS) {
                 ids.add(String.valueOf(merchantStoreDO.getId()));
             }
-            SolrUtil.delSolrDocsByIds(ids, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+            solrService.delSolrDocsByIds(ids, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         }
     }
 

@@ -1,19 +1,18 @@
 package com.lawu.eshop.user.srv.service.impl.transaction;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.property.StoreStatusNotification;
 import com.lawu.eshop.mq.dto.user.MerchantStatusEnum;
-import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author zhangyong
@@ -29,6 +28,9 @@ public class HandleDepositAuditCancelTransactionFollowServiceImpl extends Abstra
 	@Autowired
 	private UserSrvConfig userSrvConfig;
 
+	@Autowired
+	private SolrService solrService;
+
 	/**
 	 *
 	 */
@@ -38,6 +40,6 @@ public class HandleDepositAuditCancelTransactionFollowServiceImpl extends Abstra
 		MerchantStoreInfoBO storeInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(notification.getMerchantId());
 		merchantStoreInfoService.updateMerchantStoreStatus(notification.getMerchantId(), MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
 		// 删除solr门店信息
-		SolrUtil.delSolrDocsById(storeInfoBO.getMerchantStoreId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+		solrService.delSolrDocsById(storeInfoBO.getMerchantStoreId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
 	}
 }

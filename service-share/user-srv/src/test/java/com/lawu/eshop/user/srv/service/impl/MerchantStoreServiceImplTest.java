@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
@@ -61,6 +62,9 @@ public class MerchantStoreServiceImplTest {
 
     @Autowired
     private UserSrvConfig userSrvConfig;
+
+    @Autowired
+    private SolrService solrService;
 
     @Transactional
     @Rollback
@@ -225,9 +229,8 @@ public class MerchantStoreServiceImplTest {
         merchantStoreDOMapper.insertSelective(storeDO);
 
         merchantStoreService.updateStoreIndex(storeDO.getId());
-        SolrDocument solrDocument = SolrUtil.getSolrDocsById(storeDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
-        Assert.assertNotNull(solrDocument);
-        Assert.assertEquals(storeDO.getName(), solrDocument.get("name_s"));
+        SolrDocument solrDocument = solrService.getSolrDocsById(storeDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+        Assert.assertNull(solrDocument);
     }
 
     @Transactional
@@ -255,9 +258,8 @@ public class MerchantStoreServiceImplTest {
         merchantStoreProfileDOMapper.insertSelective(profileDO);
 
         merchantStoreService.rebuildStoreIndex();
-        SolrDocument solrDocument = SolrUtil.getSolrDocsById(storeDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
-        Assert.assertNotNull(solrDocument);
-        Assert.assertEquals(storeDO.getName(), solrDocument.get("name_s"));
+        SolrDocument solrDocument = solrService.getSolrDocsById(storeDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+        Assert.assertNull(solrDocument);
     }
 
     @Transactional
@@ -285,7 +287,7 @@ public class MerchantStoreServiceImplTest {
         merchantStoreProfileDOMapper.insertSelective(profileDO);
 
         merchantStoreService.delInvalidStoreIndex();
-        SolrDocument solrDocument = SolrUtil.getSolrDocsById(storeDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+        SolrDocument solrDocument = solrService.getSolrDocsById(storeDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         Assert.assertNull(solrDocument);
     }
 

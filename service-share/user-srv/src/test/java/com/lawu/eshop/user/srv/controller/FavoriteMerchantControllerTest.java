@@ -96,8 +96,8 @@ public class FavoriteMerchantControllerTest {
         RequestBuilder request = delete("/favoriteMerchant/remove").param("memberId", "100").contentType(MediaType.APPLICATION_JSON).content(requestJson);
         try {
             ResultActions perform = mvc.perform(request);
-            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_NO_CONTENT)).andDo(MockMvcResultHandlers.print()).andReturn();
-            Assert.assertEquals(HttpCode.SC_NO_CONTENT, mvcResult.getResponse().getStatus());
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());

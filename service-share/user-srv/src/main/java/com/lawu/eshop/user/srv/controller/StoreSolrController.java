@@ -4,7 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.user.constants.StoreSolrEnum;
 import com.lawu.eshop.user.dto.StoreSearchWordDTO;
 import com.lawu.eshop.user.dto.StoreSolrDTO;
@@ -31,6 +31,9 @@ public class StoreSolrController extends BaseController {
 
     @Autowired
     private UserSrvConfig userSrvConfig;
+
+    @Autowired
+    private SolrService solrService;
 
     /**
      * 搜索门店
@@ -79,7 +82,7 @@ public class StoreSolrController extends BaseController {
         }
         query.setStart(storeSolrParam.getOffset());
         query.setRows(storeSolrParam.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+        SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
