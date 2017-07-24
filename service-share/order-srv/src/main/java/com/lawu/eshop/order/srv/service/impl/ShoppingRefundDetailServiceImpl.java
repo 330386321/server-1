@@ -449,13 +449,15 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			}
 			// 更新实际支付给商家的金额
 			shoppingOrderExtendDO.setActualAmountSubtraction(shoppingOrderItemDO.getSalesPrice().multiply(new BigDecimal(shoppingOrderItemDO.getQuantity())));
-			shoppingOrderExtendDOMapper.updateByPrimaryKeySelective(shoppingOrderExtendDO);
 			
 			// 发送MQ消息给property模块，退款给用户
 			shoppingRefundAgreeToRefundTransactionMainServiceImpl.sendNotice(shoppingOrderItemDO.getId());
 			
 			// 发送MQ消息给mall模块，删除商品订单评价
 			shoppingRefundAgreeToRefundDeleteCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemDO.getId());
+			
+			// 发送MQ消息之后再更新购物订单表，因为需要获取订单取消之前的订单状态
+			shoppingOrderExtendDOMapper.updateByPrimaryKeySelective(shoppingOrderExtendDO);
 			
 			// 商家同意退款，提醒买家
 			ShoppingRefundToBeRefundRemindNotification notification = new ShoppingRefundToBeRefundRemindNotification();

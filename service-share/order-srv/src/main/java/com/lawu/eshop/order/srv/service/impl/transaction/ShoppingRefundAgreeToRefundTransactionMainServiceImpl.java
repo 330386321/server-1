@@ -42,10 +42,6 @@ public class ShoppingRefundAgreeToRefundTransactionMainServiceImpl extends Abstr
     	
     	ShoppingOrderExtendBO shoppingOrderExtendBO = shoppingOrderService.getByShoppingOrderItemId(shoppingOrderItemId);
     	
-    	if (shoppingOrderExtendBO == null || shoppingOrderExtendBO.getId() == null || shoppingOrderExtendBO.getId() <= 0) {
-    		return rtn;
-    	}
-    	
     	boolean isLast = true;
     	BigDecimal refundMoney = null;
     	OrderRefundStatusEnum status = null;
@@ -56,15 +52,14 @@ public class ShoppingRefundAgreeToRefundTransactionMainServiceImpl extends Abstr
     		
     		if (shoppingOrderItemBO.getId().equals(shoppingOrderItemId)) {
     			refundMoney = shoppingOrderItemBO.getSalesPrice().multiply(new BigDecimal(shoppingOrderItemBO.getQuantity()));
-    			
-    			if (shoppingOrderItemBO.getOrderStatus().equals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION)
-        				|| shoppingOrderItemBO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS)) {
-    				status = OrderRefundStatusEnum.FINISH;
-        		} else {
-        			status = OrderRefundStatusEnum.IN_PROCESSING;
-        		}
     		}
     	}
+    	
+    	if (shoppingOrderExtendBO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS)) {
+			status = OrderRefundStatusEnum.FINISH;
+		} else {
+			status = OrderRefundStatusEnum.IN_PROCESSING;
+		}
     	
     	rtn.setMenberNum(shoppingOrderExtendBO.getMemberNum());
     	rtn.setMerchantNum(shoppingOrderExtendBO.getMerchantNum());
