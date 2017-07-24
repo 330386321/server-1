@@ -10,7 +10,7 @@
 ```bash
 mkdir -p ~/certs
 cd ~/certs
-openssl genrsa -out reg.itmuch.com.key 2048
+openssl genrsa -out registry.eshop.com.key 2048
 ```
 
 3、生成密钥文件
@@ -22,7 +22,7 @@ openssl req -newkey rsa:4096 -nodes -sha256 -keyout registry.eshop.com.key -x509
 4、拷贝证书
 ----
 ```bash
-sudo mkdir -p /etc/docker/certs.d/reg.itmuch.com
+sudo mkdir -p /etc/docker/certs.d/registry.eshop.com
 sudo cp ~/certs/registry.eshop.com.crt /etc/docker/certs.d/registry.eshop.com/
 ```
 
