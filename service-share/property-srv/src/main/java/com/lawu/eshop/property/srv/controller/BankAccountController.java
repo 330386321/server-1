@@ -42,7 +42,7 @@ public class BankAccountController extends BaseController{
 	@RequestMapping(value = "saveBankAccount", method = RequestMethod.POST)
     public Result saveBankAccount(@RequestParam String userNum,@RequestBody BankAccountParam bankAccountParam) {
 		Boolean  flag=bankAccountService.selectByAccount(bankAccountParam.getAccountNumber(),userNum);
-		if(!flag){
+		if(flag){
 			return successCreated(ResultCode.BANK_ACCOUNT_IS_EXIST);
 		}
 		bankAccountService.saveBankAccount(userNum,bankAccountParam);

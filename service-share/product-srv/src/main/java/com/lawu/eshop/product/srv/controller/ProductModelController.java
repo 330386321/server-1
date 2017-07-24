@@ -78,7 +78,7 @@ public class ProductModelController extends BaseController {
 		CommentProductInfoBO commentProductInfoBO = productModelService.selectCommentProductInfo(productModelId);
 
 		if (commentProductInfoBO == null) {
-			successGet(ResultCode.RESOURCE_NOT_FOUND);
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 
 		CommentProductInfoDTO dto = new CommentProductInfoDTO();

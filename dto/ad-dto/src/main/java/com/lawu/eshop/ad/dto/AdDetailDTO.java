@@ -75,6 +75,10 @@ public class AdDetailDTO {
 	@ApiModelProperty(value = "审核时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date auditTime;
+	
+	@ApiModelProperty(value = "开始时间")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date beginTime;
 
 	public Long getId() {
 		return id;
@@ -236,6 +240,14 @@ public class AdDetailDTO {
 
 	public void setAuditTime(Date auditTime) {
 		this.auditTime = auditTime;
+	}
+
+	public Date getBeginTime() {
+		return beginTime;
+	}
+
+	public void setBeginTime(Date beginTime) {
+		this.beginTime = beginTime;
 	}
 	
 	

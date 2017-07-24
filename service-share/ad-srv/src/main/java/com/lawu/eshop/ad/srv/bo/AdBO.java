@@ -75,6 +75,9 @@ public class AdBO {
    private String videoImgUrl;
    
    private String regionName;
+   
+   
+   private Boolean isClickAd;
 	
 
 	public Boolean getIsPraise() {
@@ -284,4 +287,14 @@ public class AdBO {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+
+	public Boolean getIsClickAd() {
+		return isClickAd;
+	}
+
+	public void setIsClickAd(Boolean isClickAd) {
+		this.isClickAd = isClickAd;
+	}
+	
+	
 }

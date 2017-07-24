@@ -45,5 +45,23 @@ public interface BankAccountService {
 	 */
 	@RequestMapping(method = RequestMethod.DELETE, value = "bankAccount/remove/{id}")
     Result delete(@PathVariable("id") Long id);
+	
+	/**
+	 * 单个查询
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "bankAccount/selectAccount/{id}", method = RequestMethod.GET)
+    public Result<BankAccountDTO> selectAccount(@PathVariable("id") Long id);
+	
+	
+	/**
+	 * 修改
+	 * @param id
+	 * @param bankAccountParam
+	 * @return
+	 */
+	@RequestMapping(value = "bankAccount/updateBankAccount/{id}", method = RequestMethod.PUT)
+    public Result updateBankAccount(@PathVariable("id") Long id,@RequestParam("userNum") String userNum,@RequestBody BankAccountParam bankAccountParam);
 
 }

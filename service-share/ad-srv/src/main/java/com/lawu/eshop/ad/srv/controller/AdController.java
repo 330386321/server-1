@@ -69,7 +69,7 @@ import com.lawu.eshop.solr.SolrUtil;
 
 /**
  * E赚接口提供
- * 
+ *
  * @author zhangrc
  * @date 2017/4/6
  *
@@ -92,7 +92,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 添加E赚
-	 * 
+	 *
 	 * @param adSaveParam
 	 * @return
 	 */
@@ -116,7 +116,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 查询商家E赚,E赞
-	 * 
+	 *
 	 * @param adMerchantParam
 	 * @param memberId
 	 * @return
@@ -133,7 +133,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 对广告的操作，下架和删除
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -156,7 +156,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 对广告的操作，删除
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -168,7 +168,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 广告详情
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -180,7 +180,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 点击广告
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -215,14 +215,14 @@ public class AdController extends BaseController {
 
 	/**
 	 * 运营查询广告
-	 * 
+	 *
 	 * @param adPlatParam
 	 * @return
 	 */
 	@RequestMapping(value = "selectListByPlatForm", method = RequestMethod.POST)
-	public Result<Page<AdDTO>> selectListByMerchant(@RequestBody AdFindParam adPlatParam) {
-		Page<AdBO> pageBO = adService.selectListByPlatForm(adPlatParam);
-		Page<AdDTO> pageDTO = new Page<AdDTO>();
+    public Result<Page<AdDTO>> selectListByPlatForm(@RequestBody AdFindParam adPlatParam) {
+		Page<AdBO> pageBO=  adService.selectListByPlatForm(adPlatParam);
+		Page<AdDTO> pageDTO=new Page<AdDTO>();
 		pageDTO.setCurrentPage(pageBO.getCurrentPage());
 		pageDTO.setTotalCount(pageBO.getTotalCount());
 		pageDTO.setRecords(AdConverter.convertDTOS(pageBO.getRecords()));
@@ -231,7 +231,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 会员查询广告
-	 * 
+	 *
 	 * @param adMemberParam
 	 * @param memberId
 	 * @return
@@ -248,7 +248,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 会员查询广告
-	 * @see 
+	 * @see
 	 * @param adMemberParam
 	 * @return
 	 */
@@ -265,7 +265,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 会员E赞
-	 * 
+	 *
 	 * @param adPraiseParam
 	 * @return
 	 */
@@ -281,7 +281,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 会员E赞
-	 * 
+	 *
 	 * @param id
 	 * @param memberId
 	 * @param num
@@ -361,7 +361,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 领取红包
-	 * 
+	 *
 	 * @param merchantId
 	 * @param memberId
 	 * @param memberNum
@@ -384,7 +384,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 获取所有的广告ids
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(value = "getAllAd", method = RequestMethod.GET)
@@ -402,7 +402,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 修改广告浏览次数
-	 * 
+	 *
 	 * @param id
 	 * @param count
 	 * @return
@@ -431,7 +431,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 根据ID查询广告详情
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -446,7 +446,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 商家端广告详情
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -502,7 +502,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 重建平面视频广告索引
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(value = "rebuildAdIndex", method = RequestMethod.GET)
@@ -513,7 +513,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 删除无效的平面视频广告索引
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(value = "delInvalidAdIndex", method = RequestMethod.GET)
@@ -524,7 +524,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 根据商家获取红包相关信息
-	 * 
+	 *
 	 * @param merchantId
 	 * @return
 	 */
@@ -543,7 +543,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 判断红包是否领取完成
-	 * 
+	 *
 	 * @param merchantId
 	 * @return
 	 */
@@ -557,7 +557,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 商家批量删除广告
-	 * 
+	 *
 	 * @param ids
 	 * @return
 	 */
@@ -574,7 +574,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 商家详情
-	 * 
+	 *
 	 * @param id
 	 * @return
 	 */
@@ -600,7 +600,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 广告收益统计
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(value = "selectReportAdEarnings", method = RequestMethod.GET)
@@ -624,7 +624,7 @@ public class AdController extends BaseController {
 
 	/**
 	 * 分页查询E赚广告
-	 * 
+	 *
 	 * @param memberId
 	 *            会员id
 	 * @param param
@@ -639,10 +639,10 @@ public class AdController extends BaseController {
 		Page<AdEgainQueryDTO> rtn = AdConverter.convertAdEgainQueryDTOPage(pageAdEgainBO);
 		return successCreated(rtn);
 	}
-	
+
 	/**
 	 * 查询积分排行榜广告
-	 * 
+	 *
 	 * @param param
 	 *            查询参数
 	 * @return
@@ -655,10 +655,10 @@ public class AdController extends BaseController {
 		List<AdPointDTO> rtn = AdConverter.convertAdPointDTOList(adPointBOList);
 		return successCreated(rtn);
 	}
-	
+
 	/**
 	 * 分页查询精选推荐广告
-	 * 
+	 *
 	 * @param memberId
 	 *            会员id
 	 * @param param

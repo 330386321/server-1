@@ -132,6 +132,7 @@ public class AdConverter {
 		adDTO.setVideoImgUrl(adBO.getVideoImgUrl());
 		adDTO.setAuditorId(adBO.getAuditorId());
 		adDTO.setRemark(adBO.getRemark());
+		adDTO.setIsClickAd(adBO.getIsClickAd());
 		Date date=new Date();
 		if(adBO.getTypeEnum().getVal()==3 && adBO.getStatusEnum().val==2){ //结束倒计时
 			Long time=adBO.getBeginTime().getTime()+ (20*60*1000)-date.getTime();
@@ -196,6 +197,7 @@ public class AdConverter {
 			dto.setVideoImgUrl(adBO.getVideoImgUrl());
 			dto.setRadius(adBO.getRadius());
 			dto.setRegionName(adBO.getRegionName());
+			dto.setAdCount(adBO.getAdCount());
 			DTOS.add(dto);
 		}
 		return DTOS;
@@ -372,6 +374,7 @@ public class AdConverter {
 		adDetailBO.setRegionName(adDO.getRegionName());
 		adDetailBO.setRemark(adDO.getRemark());
 		adDetailBO.setAuditTime(adDO.getAuditTime());
+		adDetailBO.setBeginTime(adDO.getBeginTime());
         return adDetailBO;
 		
 		
@@ -404,11 +407,12 @@ public class AdConverter {
 		adDetailDTO.setNotGetCount(adDetailBO.getNotGetCount());
 		adDetailDTO.setAlreadyGetPoint(adDetailBO.getAlreadyGetPoint());
 		adDetailDTO.setNotGetPoint(adDetailBO.getNotGetPoint());
+		adDetailDTO.setBeginTime(adDetailBO.getBeginTime());
         return adDetailDTO;
 		
 		
 	}
-	
+
 	/**
 	 * AdDO转AdEgainBO
 	 * @param adDO
@@ -437,7 +441,7 @@ public class AdConverter {
 		rtn.setMerchantStoreName(adDO.getMerchantStoreName());
         return rtn;
 	}
-	
+
 	/**
 	 * Page&lt;AdEgainBO&gt;转Page&lt;AdEgainQueryDTO&gt;
 	 * @param pageAdBO
@@ -468,7 +472,7 @@ public class AdConverter {
 		}
         return rtn;
 	}
-	
+
 	/**
 	 * &lt;List&gt;AdDO转&lt;List&gt;AdPointBO
 	 * @param adDOList
@@ -499,7 +503,7 @@ public class AdConverter {
 		}
         return rtn;
 	}
-	
+
 	/**
 	 * &lt;List&gt;AdPointBO转&lt;List&gt;AdPointDTO
 	 * @param adPointBOList
@@ -525,7 +529,7 @@ public class AdConverter {
 		}
         return rtn;
 	}
-	
+
 	/**
 	 * AdDO转ChoicenessAdBO
 	 * @param adDO
@@ -557,7 +561,7 @@ public class AdConverter {
 		rtn.setStatus(AdPraiseStatusEnum.getEnum(adDO.getStatus()));
         return rtn;
 	}
-	
+
 	/**
 	 * Page&lt;ChoicenessAdBO&gt;转Page&lt;ChoicenessAdDTO&gt;
 	 * @param pageChoicenessAdBO

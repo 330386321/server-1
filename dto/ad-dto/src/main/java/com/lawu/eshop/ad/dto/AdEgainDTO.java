@@ -58,6 +58,9 @@ public class AdEgainDTO {
 	
 	@ApiModelProperty(value = "视频封面图片路径")
 	private String videoImgUrl;
+	
+	@ApiModelProperty(value = "是否点击过广告")
+	private Boolean isClickAd;
 
 	public Long getId() {
 		return id;
@@ -195,7 +198,14 @@ public class AdEgainDTO {
 		this.videoImgUrl = videoImgUrl;
 	}
 
-	
+	public Boolean getIsClickAd() {
+		return isClickAd;
+	}
+
+	public void setIsClickAd(Boolean isClickAd) {
+		this.isClickAd = isClickAd;
+	}
+
 	
 
 	

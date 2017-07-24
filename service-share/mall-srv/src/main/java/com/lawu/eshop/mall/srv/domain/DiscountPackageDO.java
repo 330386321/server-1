@@ -97,7 +97,7 @@ public class DiscountPackageDO implements Serializable {
 
     /**
      *
-     * 使用时间-周一到周日(用1-7表示,并用逗号分隔)
+     * 使用时间-周一到周日(用0-6表示,0为周日,并用逗号分隔)
      * discount_package.use_time_week
      *
      * @mbg.generated

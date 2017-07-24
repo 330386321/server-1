@@ -54,7 +54,7 @@ public class DiscountPackageSaveForeignParam {
 	 * 使用时间-周一到周日(用1-7表示,并用逗号分隔)
 	 */
 	@NotBlank(message = "使用时间-周一到周日不能为空")
-	@ApiModelProperty(name = "useTimeWeek", value = "使用时间-周一到周日(用1-7表示,并用逗号分隔)", required = true)
+	@ApiModelProperty(name = "useTimeWeek", value = "使用时间-周一到周日(用0-6表示,0为周日,并用逗号分隔)", required = true)
 	private String useTimeWeek;
 
 	/**
@@ -90,14 +90,14 @@ public class DiscountPackageSaveForeignParam {
 	 * 套餐内容
 	 */
 	@NotBlank(message = "套餐内容不能为空")
-	@ApiModelProperty(name = "discountPackageContents", value = "套餐内容")
+	@ApiModelProperty(name = "discountPackageContents", value = "套餐内容", example = "[{\"name\":null,\"quantity\":null,\"unit\":null,\"unitPrice\":null}]")
 	private String discountPackageContents;
 	
 	/**
 	 * 套餐图片详情
 	 */
 	@NotBlank(message = "套餐内容不能为空")
-	@ApiModelProperty(name = "discountPackageImages", value = "套餐图片详情")
+	@ApiModelProperty(name = "discountPackageImages", value = "套餐图片详情", example = "[{\"description\":null}]")
 	private String discountPackageImages;
 
 	public String getName() {

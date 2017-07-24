@@ -278,11 +278,11 @@ public class StoreDetailDTO {
         isOverdue = overdue;
     }
 
-    public boolean isExistStore() {
+    public boolean getIsExistStore() {
         return isExistStore;
     }
 
-    public void setExistStore(boolean existStore) {
+    public void setIsExistStore(boolean existStore) {
         isExistStore = existStore;
     }
 }

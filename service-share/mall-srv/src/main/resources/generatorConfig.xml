@@ -85,9 +85,6 @@
         <table tableName="transaction_record" domainObjectName="TransactionRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="discount_package" domainObjectName="DiscountPackageDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
         <table tableName="discount_package_content" domainObjectName="DiscountPackageContentDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
@@ -98,7 +95,7 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         -->
-        <table tableName="express_company" domainObjectName="ExpressCompanyDO">
+        <table tableName="discount_package" domainObjectName="DiscountPackageDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

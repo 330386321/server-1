@@ -100,10 +100,10 @@ public class MerchantStoreAuditDTO {
     @ApiModelProperty(value = "商家ID")
     private Long merchantId;
 
-    @ApiModelProperty(value = "状态")
+    @ApiModelProperty(value = "状态 MERCHANT_AUDIT_STATUS_UNCHECK:未审核,MERCHANT_AUDIT_STATUS_CHECKED:审核通过,MERCHANT_AUDIT_STATUS_CHECK_FAILED:审核不通过")
     private MerchantAuditStatusEnum statusEnum;
 
-    @ApiModelProperty(value = "审核类型")
+    @ApiModelProperty(value = "审核类型 AUDIT_TYPE_STORE:申请实体店, AUDIT_TYPE_EDIT_INFO:修改资料")
     private MerchantAuditTypeEnum typeEnum;
 
     @ApiModelProperty(value = "审核人ID")

@@ -152,7 +152,7 @@ public class CommentController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getProductsByMerchantId", method = RequestMethod.GET)
-    public Result<Page<CommentProductInfoDTO>> getProductsByMerchantId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true) CommentListParam listparam) throws Exception {
+    public Result<Page<CommentProductInfoDTO>> getProductsByMerchantId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true) CommentListParam listparam) {
 
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         if (listparam == null) {

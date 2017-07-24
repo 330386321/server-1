@@ -102,6 +102,9 @@ public class AdDTO {
 
 	@ApiModelProperty(value = "审核备注")
 	private String remark;
+	
+	@ApiModelProperty(value = "是否点击过广告")
+	private Boolean isClickAd;
 
 	public Long getId() {
 		return id;
@@ -393,4 +396,16 @@ public class AdDTO {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+
+
+	public Boolean getIsClickAd() {
+		return isClickAd;
+	}
+
+
+	public void setIsClickAd(Boolean isClickAd) {
+		this.isClickAd = isClickAd;
+	}
+	
+	
 }

@@ -359,4 +359,16 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
         merchantStoreAuditDO.setIsShow(true);
         merchantStoreAuditDOMapper.updateByExampleSelective(merchantStoreAuditDO,example);
     }
+
+    @Override
+    public MerchantStoreAuditBO getRecentMerchantAuditRecord(Long merchantId) {
+        MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        example.setOrderByClause("id desc");
+        List<MerchantStoreAuditDO> list = merchantStoreAuditDOMapper.selectByExampleWithBLOBs(example);
+        if(list.isEmpty()){
+            return null;
+        }
+        return MerchantStoreAuditConverter.convertBO(list.get(0));
+    }
 }

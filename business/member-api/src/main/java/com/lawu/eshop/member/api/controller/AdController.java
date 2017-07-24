@@ -194,7 +194,7 @@ public class AdController extends BaseController {
     	adEgainDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
     	adEgainDTO.setMerchantId(adDTO.getMerchantId());
     	adEgainDTO.setStatusEnum(adDTO.getStatusEnum());
-    	
+    	adEgainDTO.setIsClickAd(adDTO.getIsClickAd());
     	Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
     	Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
     	
@@ -274,7 +274,7 @@ public class AdController extends BaseController {
 
 		Result<List<PointPoolDTO>> member = adService.selectMemberList(id);
 		List<UserTopDTO> user = new ArrayList<>();
-		if(isSuccess(member)){
+		if(!isSuccess(member)){
 			return successCreated(member.getRet());
 		}
 		List<PointPoolDTO> top3 = member.getModel();

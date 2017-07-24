@@ -11,10 +11,12 @@ import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import com.lawu.eshop.user.param.ListStoreAuditParam;
 import com.lawu.eshop.user.param.MerchantAuditParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreAuditConverter;
 import com.lawu.eshop.user.srv.service.MerchantAuditService;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +32,8 @@ public class MerchantAuditController extends BaseController {
     private MerchantAuditService merchantAuditService;
     @Autowired
     private MerchantStoreInfoService merchantStoreInfoService;
+    @Autowired
+    private MerchantStoreService merchantStoreService;
 
     /**
      * 门店审核
@@ -106,6 +110,21 @@ public class MerchantAuditController extends BaseController {
         if (merchantStoreAuditBO == null) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
+        return successGet(MerchantStoreAuditConverter.convertDTO(merchantStoreAuditBO));
+    }
+
+    /**
+     * 最近一条审核记录信息
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(value = "getRecentMerchantAuditRecord", method = RequestMethod.GET)
+    public Result<MerchantStoreAuditDTO> getRecentMerchantAuditRecord(@RequestParam("merchantId") Long merchantId){
+        MerchantStoreBO merchantStoreBO = merchantStoreService.selectMerchantStore(merchantId);
+        if (merchantStoreBO == null) {
+            return successGet(ResultCode.MERCHANT_STORE_NO_EXIST);
+        }
+        MerchantStoreAuditBO merchantStoreAuditBO = merchantAuditService.getRecentMerchantAuditRecord(merchantId);
         return successGet(MerchantStoreAuditConverter.convertDTO(merchantStoreAuditBO));
     }
 

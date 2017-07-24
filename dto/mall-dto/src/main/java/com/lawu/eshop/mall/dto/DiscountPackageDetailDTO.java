@@ -72,7 +72,7 @@ public class DiscountPackageDetailDTO {
     /**
      * 使用时间-周一到周日(用1-7表示,并用逗号分隔)
      */
-	@ApiModelProperty(value = "使用时间-周一到周日(用1-7表示,并用逗号分隔)", required = true)
+	@ApiModelProperty(value = "使用时间-周一到周日(用0-6表示,0为周日,并用逗号分隔)", required = true)
     private String useTimeWeek;
 
     /**
@@ -106,10 +106,16 @@ public class DiscountPackageDetailDTO {
      */
 	@ApiModelProperty(value = "使用规则")
     private String useRules;
-
+	
+	/**
+	 * 套餐内容
+	 */
 	@ApiModelProperty(value = "套餐内容")
 	private List<DiscountPackageContentDTO> discountPackageContents;
 	
+	/**
+	 * 套餐图片详情
+	 */
 	@ApiModelProperty(value = "套餐图片详情")
 	private List<DiscountPackageImageDTO> discountPackageImages;
 	

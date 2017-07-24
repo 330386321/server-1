@@ -67,7 +67,7 @@ import util.UploadFileUtil;
  * @author Sunny
  * @date 2017/3/27
  */
-@Api(tags = "discountPackage")
+@Api(tags = "discountPackage", value = "优惠套餐")
 @RestController
 @RequestMapping(value = "discountPackage/")
 public class DiscountPackageController extends BaseController {

@@ -24,14 +24,11 @@ public class UploadFileUtil {
     private static final  String MAP_KEY_MSG = "msg";
     private static final  String MAP_VALUE = "0";
     private static final String IMAGE_FORMAT_WRONG_UPLOAD = "1011";
-    private static final String IMAGE_WRONG_UPLOAD = "1010";
     private static final String IMAGE_SIZE_ERROR = "1015";
     private static final String UPLOAD_SIZE_BIGER = "1021";
-    private static final String UPLOAD_VIDEO_FAIL = "1020";
 
     private static final String IMAGE_FORMAT_WRONG_UPLOAD_MSG = "上传图片格式错误";
     private static final String UPLOAD_SIZE_BIGER_MSG = "图片文件太大";
-    private static final String UPLOAD_FAIL = "上传失败";
     private static final String UPLOAD_VIDEO_URL = "videoUrl";
     private static final String UPLOAD_IMG_URL = "imgUrl";
     private UploadFileUtil(){
@@ -50,15 +47,14 @@ public class UploadFileUtil {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
         valsMap.put(MAP_KEY, MAP_VALUE);
-        FileOutputStream out = null;
         byte[] b = new byte[1024 * 1024];
         Collection<Part> parts = null;
 
         String urlImg = "";
         try {
             parts = request.getParts();
-        } catch (IOException e) {
-            logger.info("IOException {}",e);
+        } catch (IOException ie) {
+            logger.info("IOException {}",ie);
         } catch (ServletException e) {
             logger.info("ServletException {}",e);
         }
@@ -87,15 +83,12 @@ public class UploadFileUtil {
                         file.mkdirs();
                     }
 
-                    try (InputStream in = part.getInputStream()) {
-                        out = new FileOutputStream(new File(file, newfileName));
+                    try (InputStream in = part.getInputStream();
+                    FileOutputStream out = new FileOutputStream(new File(file, newfileName))) {
                         int index;
                         while ((index = in.read(b)) != -1) {
                             out.write(b, 0, index);
                         }
-                        in.close();
-                        out.flush();
-                        out.close();
                     } catch (FileNotFoundException e) {
                         logger.info("FileNotFoundException {}",e);
                     } catch (IOException e) {
@@ -124,8 +117,6 @@ public class UploadFileUtil {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
         valsMap.put(MAP_KEY, MAP_VALUE);
-        //String bashdir = baseImageDir;// 根路径
-       // FileOutputStream out = null;
         byte[] b = new byte[1024 * 1024];
         String urlImg = "";
         if (part.getContentType() == null) {
@@ -151,17 +142,14 @@ public class UploadFileUtil {
             if (!file.exists()) {
                 file.mkdirs();
             }
-            try (InputStream in = part.getInputStream()) {
-                FileOutputStream  out = new FileOutputStream(new File(file, newfileName));
+            try (InputStream in = part.getInputStream();
+            FileOutputStream  out = new FileOutputStream(new File(file, newfileName))) {
                 int index;
                 while ((index = in.read(b)) != -1) {
                     out.write(b, 0, index);
                 }
-                in.close();
-                out.flush();
-                out.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.info("IOException {}",e);
             }
                 //文件路径，文件类型
                 urlImg =   dir + File.separator + newfileName;
@@ -176,8 +164,6 @@ public class UploadFileUtil {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
         valsMap.put(MAP_KEY, MAP_VALUE);
-        //String bashdir = baseVideoDir;// 上传文件根路径
-        FileOutputStream out = null;
         byte[] b = new byte[1024 * 1024];
         Collection<Part> parts = null;
 
@@ -210,16 +196,12 @@ public class UploadFileUtil {
                         file.mkdirs();
                     }
 
-                    try (InputStream in = part.getInputStream()) {
-                        out = new FileOutputStream(new File(file, newfileName));
-
+                    try (InputStream in = part.getInputStream();
+                         FileOutputStream  out = new FileOutputStream(new File(file, newfileName))) {
                         int index = 0;
                         while ((index = in.read(b)) != -1) {
                             out.write(b, 0, index);
                         }
-                        in.close();
-                        out.flush();
-                        out.close();
                     } catch (IOException e) {
                         logger.info("out stream close exception {}",e);
                     }

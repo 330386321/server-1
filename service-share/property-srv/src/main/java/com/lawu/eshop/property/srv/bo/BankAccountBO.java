@@ -14,9 +14,9 @@ public class BankAccountBO {
 	
 	private String iconUrl;
 	
-	private Long bankId;
-	
-	
+	private Integer bankId;
+
+
 	public String getIconUrl() {
 		return iconUrl;
 	}
@@ -66,14 +66,14 @@ public class BankAccountBO {
 		this.bankName = bankName;
 	}
 
-	public Long getBankId() {
+	public Integer getBankId() {
 		return bankId;
 	}
 
-	public void setBankId(Long bankId) {
+	public void setBankId(Integer bankId) {
 		this.bankId = bankId;
 	}
-	 
+
 	 
 	
 	

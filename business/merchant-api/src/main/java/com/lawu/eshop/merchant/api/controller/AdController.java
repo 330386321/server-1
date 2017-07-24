@@ -87,8 +87,10 @@ public class AdController extends BaseController {
     public Result saveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-		if(adParam.getTypeEnum().getVal()!=4 && !StringUtils.isNotEmpty(adParam.getBeginTime())){
-			return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
+		if(adParam.getTypeEnum().getVal() != 4){
+			if(StringUtils.isEmpty(adParam.getBeginTime())){
+				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
+			}
 		}
     	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
     	if (isSuccess(resultFreeze)){
@@ -307,7 +309,7 @@ public class AdController extends BaseController {
     	}
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-    	if(!StringUtils.isNotEmpty(adAgainParam.getBeginTime())){
+    	if(StringUtils.isEmpty(adAgainParam.getBeginTime())){
 			return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
 		}
     	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
