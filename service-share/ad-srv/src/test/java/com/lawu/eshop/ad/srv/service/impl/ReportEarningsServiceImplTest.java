@@ -29,6 +29,7 @@ import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.service.ReportEarningsService;
 import com.lawu.eshop.utils.DateUtil;
+import com.mysql.fabric.xmlrpc.base.Data;
 
 /**
  * 广告收益测试
@@ -125,7 +126,7 @@ public class ReportEarningsServiceImplTest {
 		ad.setTotalPoint(BigDecimal.valueOf(100));
 		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
         ad.setGmtCreate(new Date());
-        ad.setGmtModified(DateUtil.formatDate("2017-07-20 12:20:00", "yyyy-MM-dd HH:mm:ss"));
+        ad.setGmtModified(DateUtil.formatDate(new Data().toString(), "yyyy-MM-dd HH:mm:ss"));
         ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
         adDOMapper.insertSelective(ad);
 

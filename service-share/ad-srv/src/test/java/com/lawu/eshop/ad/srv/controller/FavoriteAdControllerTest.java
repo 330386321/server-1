@@ -102,7 +102,7 @@ public class FavoriteAdControllerTest {
          try {
              RequestBuilder request = delete("/favoriteAd/remove/"+favoriteAdDO.getAdId()).param("memberId", "1");
              ResultActions perform= mvc.perform(request);
-             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_NO_CONTENT)).andDo(MockMvcResultHandlers.print()).andReturn();
+             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
 
          } catch (Exception e) {
              e.printStackTrace();
