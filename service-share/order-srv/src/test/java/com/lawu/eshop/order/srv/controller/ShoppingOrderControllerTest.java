@@ -1,4 +1,4 @@
-package com.lawu.eshop.order.srv;
+package com.lawu.eshop.order.srv.controller;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.lawu.eshop.order.srv.OrderSrvApplication;
 import com.lawu.eshop.order.srv.controller.ShoppingOrderController;
 
 /**
