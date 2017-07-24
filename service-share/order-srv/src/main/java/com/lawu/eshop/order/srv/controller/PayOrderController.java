@@ -121,7 +121,11 @@ public class PayOrderController extends BaseController {
 		}
 		ThirdPayCallBackQueryPayOrderBO bo = payOrderService.selectThirdPayCallBackPayOrder(orderId);
 		ThirdPayCallBackQueryPayOrderDTO dto = new ThirdPayCallBackQueryPayOrderDTO();
-		BeanUtil.copyProperties(bo, dto);
+//		BeanUtil.copyProperties(bo, dto);
+		dto.setActualMoney(bo.getActualMoney());
+		dto.setBusinessUserNum(bo.getBusinessUserNum());
+		dto.setOrderNum(bo.getOrderNum());
+		dto.setPayOrderStatusEnum(bo.getPayOrderStatusEnum());
 		return dto;
 	}
 

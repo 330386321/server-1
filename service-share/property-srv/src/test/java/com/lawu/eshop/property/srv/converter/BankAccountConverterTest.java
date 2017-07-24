@@ -60,7 +60,7 @@ public class BankAccountConverterTest {
         bankAccountBO.setId(1L);
         bankAccountBO.setAccountName("dfd");
         bankAccountBO.setAccountNumber("zzz");
-        bankAccountBO.setBankId(1L);
+        bankAccountBO.setBankId(1);
         bankAccountBO.setBankName("中银");
         bankAccountBO.setSubBranchName("fdf");
         BankAccountDTO dto = BankAccountConverter.convertDTO(bankAccountBO);
@@ -75,7 +75,7 @@ public class BankAccountConverterTest {
         bankAccountBO.setId(1L);
         bankAccountBO.setAccountName("dfd");
         bankAccountBO.setAccountNumber("zzz");
-        bankAccountBO.setBankId(1L);
+        bankAccountBO.setBankId(1);
         bankAccountBO.setBankName("中银");
         bankAccountBO.setSubBranchName("fdf");
         bankAccountBOS.add(bankAccountBO);
