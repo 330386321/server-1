@@ -1,5 +1,8 @@
 package com.lawu.eshop.order.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.lawu.eshop.order.constants.EvaluationEnum;
 import com.lawu.eshop.order.dto.MemberPayOrderInfoDTO;
 import com.lawu.eshop.order.dto.MerchantPayOrderListDTO;
@@ -7,9 +10,6 @@ import com.lawu.eshop.order.dto.OperatorPayOrderListDTO;
 import com.lawu.eshop.order.dto.PayOrderDTO;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author zhangyong
@@ -29,14 +29,17 @@ public class PayOrderConverter {
             return null;
         }
         PayOrderBO payOrderBO = new PayOrderBO();
+        payOrderBO.setOrderNum(payOrderDO.getOrderNum());
         payOrderBO.setId(payOrderDO.getId());
-        payOrderBO.setTotalAmount(payOrderDO.getTotalAmount());
         payOrderBO.setActualAmount(payOrderDO.getActualAmount());
+        payOrderBO.setGmtCreate(payOrderDO.getGmtCreate());
+        payOrderBO.setMemberId(payOrderDO.getMemberId());
+        payOrderBO.setMerchantId(payOrderDO.getMerchantId());
+        payOrderBO.setCommentTime(payOrderDO.getCommentTime());
+        payOrderBO.setPayType(payOrderDO.getPayType());
         payOrderBO.setEvaluation(payOrderDO.getIsEvaluation());
         payOrderBO.setFavoredAmount(payOrderDO.getFavoredAmount());
-        payOrderBO.setGmtCreate(payOrderDO.getGmtCreate());
-        payOrderBO.setMerchantId(payOrderDO.getMerchantId());
-        payOrderBO.setOrderNum(payOrderDO.getOrderNum());
+        payOrderBO.setTotalAmount(payOrderDO.getTotalAmount());
         return payOrderBO;
     }
 
@@ -61,16 +64,8 @@ public class PayOrderConverter {
             return new ArrayList<>();
         }
         List<PayOrderBO> payOrderBOS = new ArrayList<>();
-        PayOrderBO payOrderBO ;
         for (PayOrderDO payOrderDO : payOrderDOS) {
-            payOrderBO = new PayOrderBO();
-            payOrderBO.setOrderNum(payOrderDO.getOrderNum());
-            payOrderBO.setId(payOrderDO.getId());
-            payOrderBO.setActualAmount(payOrderDO.getActualAmount());
-            payOrderBO.setGmtCreate(payOrderDO.getGmtCreate());
-            payOrderBO.setMemberId(payOrderDO.getMemberId());
-            payOrderBO.setMerchantId(payOrderDO.getMerchantId());
-            payOrderBOS.add(payOrderBO);
+            payOrderBOS.add(coverBO(payOrderDO));
         }
         return payOrderBOS;
     }

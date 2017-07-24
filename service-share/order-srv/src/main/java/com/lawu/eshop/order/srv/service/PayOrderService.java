@@ -22,7 +22,7 @@ public interface PayOrderService {
      * @param param
      * @return
      */
-    PayOrderBO savePayOrderInfo(Long memberId, PayOrderParam param,String numNum);
+    PayOrderBO savePayOrderInfo(Long memberId, PayOrderParam param, String numNum);
 
     /**
      * 买单记录列表
