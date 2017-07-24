@@ -2,6 +2,7 @@ package com.lawu.eshop.cache.srv;
 
 import com.lawu.eshop.cache.srv.controller.UserVisitController;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ public class UserVisitControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(userVisitController).build();
     }
 
+    @Ignore
     @Test
     public void getUserVisitRecords() throws Exception {
         RequestBuilder request = MockMvcRequestBuilders.delete("/userVisit/delVisitRecords").param("time", "20170703");
