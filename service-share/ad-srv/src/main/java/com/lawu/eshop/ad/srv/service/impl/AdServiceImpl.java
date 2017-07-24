@@ -1,64 +1,13 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.AuditEnum;
-import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
-import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
-import com.lawu.eshop.ad.constants.PropertyType;
-import com.lawu.eshop.ad.constants.RedPacketArithmetic;
-import com.lawu.eshop.ad.param.AdChoicenessInternalParam;
-import com.lawu.eshop.ad.param.AdEgainInternalParam;
-import com.lawu.eshop.ad.param.AdFindParam;
-import com.lawu.eshop.ad.param.AdMemberParam;
-import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdParam;
-import com.lawu.eshop.ad.param.AdPointInternalParam;
-import com.lawu.eshop.ad.param.AdPraiseParam;
-import com.lawu.eshop.ad.param.AdSaveParam;
-import com.lawu.eshop.ad.param.ListAdParam;
+import com.lawu.eshop.ad.constants.*;
+import com.lawu.eshop.ad.param.*;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.bo.AdDetailBO;
-import com.lawu.eshop.ad.srv.bo.AdEgainBO;
-import com.lawu.eshop.ad.srv.bo.AdPointBO;
-import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
-import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
-import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
-import com.lawu.eshop.ad.srv.bo.ReportAdBO;
-import com.lawu.eshop.ad.srv.bo.ViewBO;
+import com.lawu.eshop.ad.srv.bo.*;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
-import com.lawu.eshop.ad.srv.domain.AdDO;
-import com.lawu.eshop.ad.srv.domain.AdDOExample;
+import com.lawu.eshop.ad.srv.domain.*;
 import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
-import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
-import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
-import com.lawu.eshop.ad.srv.domain.MemberAdRecordDOExample;
-import com.lawu.eshop.ad.srv.domain.PointPoolDO;
-import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
-import com.lawu.eshop.ad.srv.domain.extend.AdDOView;
-import com.lawu.eshop.ad.srv.domain.extend.MemberAdRecordDOView;
-import com.lawu.eshop.ad.srv.domain.extend.ReportAdView;
-import com.lawu.eshop.ad.srv.domain.extend.SelectAdEgainIdExample;
-import com.lawu.eshop.ad.srv.domain.extend.SelectAdPointIdExample;
-import com.lawu.eshop.ad.srv.domain.extend.SelectChoicenessAdIdExample;
+import com.lawu.eshop.ad.srv.domain.extend.*;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
@@ -71,9 +20,21 @@ import com.lawu.eshop.ad.srv.service.FavoriteAdService;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.utils.AdArithmeticUtil;
 import com.lawu.eshop.utils.DateUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 /**
  * E赚接口实现类
@@ -130,6 +91,9 @@ public class AdServiceImpl implements AdService {
 
 	@Autowired
 	private AdSrvConfig adSrvConfig;
+
+	@Autowired
+	private SolrService solrService;
 
 	private int currentPage = 1;
 
@@ -337,7 +301,7 @@ public class AdServiceImpl implements AdService {
 		AdDO ad = adDOMapper.selectByPrimaryKey(id);
 		matransactionMainAddService.sendNotice(ad.getId());
 		// 删除solr中的数据
-		SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		return i;
 	}
 
@@ -355,7 +319,7 @@ public class AdServiceImpl implements AdService {
 		adDO.setStatus(AdStatusEnum.AD_STATUS_DELETE.val);
 		Integer i = adDOMapper.updateByPrimaryKeySelective(adDO);
 		// 删除solr中的数据
-		SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		return i;
 	}
 
@@ -490,7 +454,7 @@ public class AdServiceImpl implements AdService {
 			adDO.setGmtModified(new Date());
 			adDOMapper.updateByPrimaryKey(adDO);
 			// 删除solr中的数据
-			SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
 		userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 		return adDO.getPoint();
@@ -517,7 +481,7 @@ public class AdServiceImpl implements AdService {
 		if (auditEnum.val.byteValue() == AuditEnum.AD_AUDIT_PASS.val) {
 			adDO = adDOMapper.selectByPrimaryKey(id);
 			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-			SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		} else {
 			// 审核不通过退还积分
 			matransactionMainAddService.sendNotice(id);
@@ -607,7 +571,7 @@ public class AdServiceImpl implements AdService {
 					}
 				}
 			}
-			SolrUtil.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
 	}
 
@@ -757,7 +721,7 @@ public class AdServiceImpl implements AdService {
 		// 更新solr广告浏览人数
 		adDO = adDOMapper.selectByPrimaryKey(id);
 		SolrInputDocument document = AdConverter.convertSolrUpdateDocument(adDO);
-		SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 
 	}
 
@@ -809,7 +773,7 @@ public class AdServiceImpl implements AdService {
 			matransactionMainAddService.sendNotice(id);
 		}
 		// 删除solr中的数据
-		SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 	}
 
 	@Override
@@ -834,10 +798,10 @@ public class AdServiceImpl implements AdService {
 			return;
 		}
 
-		SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		SolrDocument solrDocument = solrService.getSolrDocsById(id, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		if (solrDocument == null) {
 			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-			SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
 	}
 
@@ -869,7 +833,7 @@ public class AdServiceImpl implements AdService {
 				SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 				documents.add(document);
 			}
-			SolrUtil.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
 	}
 
@@ -900,7 +864,7 @@ public class AdServiceImpl implements AdService {
 			for (AdDO adDO : adDOS) {
 				ids.add(String.valueOf(adDO.getId()));
 			}
-			SolrUtil.delSolrDocsByIds(ids, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			solrService.delSolrDocsByIds(ids, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
 	}
 
@@ -946,7 +910,7 @@ public class AdServiceImpl implements AdService {
 		for (Long id : adIds) {
 			ids.add(String.valueOf(id));
 		}
-		SolrUtil.delSolrDocsByIds(ids, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		solrService.delSolrDocsByIds(ids, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 	}
 
 	@Override
@@ -1050,7 +1014,7 @@ public class AdServiceImpl implements AdService {
 	/**
 	 * 查询E赚广告
 	 *
-	 * @param adMemberParam
+	 * @param param
 	 * @param memberId
 	 * @return
 	 */
@@ -1126,7 +1090,7 @@ public class AdServiceImpl implements AdService {
 	/**
 	 * 查询精选推荐广告
 	 *
-	 * @param adMemberParam
+	 * @param param
 	 *            查询参数
 	 * @param memberId
 	 *            会员id

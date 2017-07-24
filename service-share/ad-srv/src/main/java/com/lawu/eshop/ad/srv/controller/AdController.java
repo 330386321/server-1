@@ -1,62 +1,12 @@
 package com.lawu.eshop.ad.srv.controller;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocumentList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
-import com.lawu.eshop.ad.dto.AdDTO;
-import com.lawu.eshop.ad.dto.AdDetailDTO;
-import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
-import com.lawu.eshop.ad.dto.AdPointDTO;
-import com.lawu.eshop.ad.dto.AdSolrDTO;
-import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
-import com.lawu.eshop.ad.dto.ClickAdPointDTO;
-import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
-import com.lawu.eshop.ad.dto.IsMyDateDTO;
-import com.lawu.eshop.ad.dto.PraisePointDTO;
-import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
-import com.lawu.eshop.ad.dto.ReportAdDTO;
-import com.lawu.eshop.ad.dto.ViewDTO;
-import com.lawu.eshop.ad.param.AdChoicenessInternalParam;
-import com.lawu.eshop.ad.param.AdEgainInternalParam;
-import com.lawu.eshop.ad.param.AdFindParam;
-import com.lawu.eshop.ad.param.AdMemberParam;
-import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdPointInternalParam;
-import com.lawu.eshop.ad.param.AdPraiseParam;
-import com.lawu.eshop.ad.param.AdSaveParam;
-import com.lawu.eshop.ad.param.AdsolrFindParam;
-import com.lawu.eshop.ad.param.ListAdParam;
+import com.lawu.eshop.ad.dto.*;
+import com.lawu.eshop.ad.param.*;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.bo.AdEgainBO;
-import com.lawu.eshop.ad.srv.bo.AdPointBO;
-import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
-import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
-import com.lawu.eshop.ad.srv.bo.GetRedPacketBO;
-import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
-import com.lawu.eshop.ad.srv.bo.ReportAdBO;
-import com.lawu.eshop.ad.srv.bo.ViewBO;
+import com.lawu.eshop.ad.srv.bo.*;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
@@ -65,7 +15,19 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.solr.service.SolrService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocumentList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * E赚接口提供
@@ -89,6 +51,9 @@ public class AdController extends BaseController {
 
 	@Autowired
 	private AdSrvConfig adSrvConfig;
+
+	@Autowired
+	private SolrService solrService;
 
 	/**
 	 * 添加E赚
@@ -347,7 +312,7 @@ public class AdController extends BaseController {
 		query.setStart(adSolrParam.getOffset());
 		query.setRows(adSolrParam.getPageSize());
 		SolrDocumentList solrDocumentList = new SolrDocumentList();
-		solrDocumentList = SolrUtil.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		Page<AdSolrDTO> page = new Page<AdSolrDTO>();
 		page.setRecords(AdConverter.convertDTO(solrDocumentList));
 		if (solrDocumentList == null) {
