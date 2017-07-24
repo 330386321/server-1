@@ -19,9 +19,11 @@ import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.TransactionRecordDO;
 import com.lawu.eshop.order.srv.domain.TransactionRecordDOExample;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
+import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.TransactionRecordDOMapper;
 import com.lawu.eshop.utils.RandomUtil;
 
@@ -41,6 +43,9 @@ public class ShoppingOrderCancelOrderTransactionMainServiceImplTest {
 	
 	@Autowired
 	private ShoppingOrderDOMapper shoppingOrderDOMapper;
+	
+	@Autowired
+	private ShoppingOrderItemDOMapper shoppingOrderItemDOMapper;
 	
 	@Autowired
 	private TransactionRecordDOMapper transactionRecordDOMapper;
@@ -78,11 +83,29 @@ public class ShoppingOrderCancelOrderTransactionMainServiceImplTest {
     	expected.setShoppingCartIdsStr("1");
     	expected.setSendTime(0);
     	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(false);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(1L);
+    	shoppingOrderItemDO.setProductModelName("test");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	// 发送消息
 		shoppingOrderCancelOrderTransactionMainServiceImpl.sendNotice(expected.getId());
 		// 交易发送消息是否正常
     	TransactionRecordDOExample example = new TransactionRecordDOExample();
-    	example.createCriteria().andRelateIdEqualTo(expected.getId());
+    	example.createCriteria().andRelateIdEqualTo(shoppingOrderItemDO.getId());
     	TransactionRecordDO transactionRecordDO = transactionRecordDOMapper.selectByExample(example).get(0);
 		Assert.assertNotNull(transactionRecordDO);
 		Assert.assertNotNull(transactionRecordDO.getGmtModified());
@@ -90,7 +113,7 @@ public class ShoppingOrderCancelOrderTransactionMainServiceImplTest {
 		Assert.assertNotNull(transactionRecordDO.getId());
 		Assert.assertNotNull(transactionRecordDO.getType());
 		Assert.assertEquals(false, transactionRecordDO.getIsProcessed());
-		Assert.assertEquals(expected.getId(), transactionRecordDO.getRelateId());
+		Assert.assertEquals(shoppingOrderItemDO.getId(), transactionRecordDO.getRelateId());
 		Assert.assertEquals(0L, transactionRecordDO.getTimes().longValue());
 		// 接收回复消息
 		Reply reply = new Reply();
@@ -100,7 +123,7 @@ public class ShoppingOrderCancelOrderTransactionMainServiceImplTest {
 		transactionRecordDO = transactionRecordDOMapper.selectByPrimaryKey(transactionRecordDO.getId());
 		Assert.assertEquals(true, transactionRecordDO.getIsProcessed());
 		// 第二次发送消息
-		shoppingOrderCancelOrderTransactionMainServiceImpl.sendNotice(expected.getId());
+		shoppingOrderCancelOrderTransactionMainServiceImpl.sendNotice(shoppingOrderItemDO.getId());
 		// 校验第二次发送消息是否正常
     	transactionRecordDO = transactionRecordDOMapper.selectByPrimaryKey(transactionRecordDO.getId());
 		Assert.assertEquals(false, transactionRecordDO.getIsProcessed());
