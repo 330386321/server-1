@@ -134,10 +134,10 @@ public class BankAccountServiceImplTest {
         bankAccountParam.setAccountNumber("6217852000014838927");
         bankAccountParam.setBankId(bdo.getId());
         bankAccountParam.setSubBranchName("南山支行");
-        bankAccountService.saveBankAccount("10001",bankAccountParam);
+        bankAccountService.saveBankAccount("M10001",bankAccountParam);
 
-        Boolean bool = bankAccountService.selectByAccount("6217852000014838927","10001");
-        Assert.assertTrue(!bool);
+        Boolean bool = bankAccountService.selectByAccount("6217852000014838927","M10001");
+        Assert.assertTrue(bool);
     }
 
     @Transactional
