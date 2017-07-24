@@ -1,0 +1,70 @@
+package com.lawu.eshop.order.srv.service.impl;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lawu.eshop.order.constants.PayOrderStatusEnum;
+import com.lawu.eshop.order.constants.ReportFansRiseRateEnum;
+import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.order.dto.ReportRiseRateDTO;
+import com.lawu.eshop.order.param.ReportDataParam;
+import com.lawu.eshop.order.srv.domain.PayOrderDO;
+import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
+import com.lawu.eshop.order.srv.service.ReportPayService;
+import com.lawu.eshop.utils.StringUtil;
+
+/**
+ * 
+ * @author jiangxinjun
+ * @date 2017年7月24日
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "/spring-test.xml" })
+public class ReportPayServiceImplTest {
+
+	@Autowired
+	private ReportPayService reportPayService;
+
+	@Autowired
+	private PayOrderDOMapper payOrderDOMapper;
+
+	@Rollback
+	@Transactional
+	@Test
+	public void delPayOrderInfo() {
+		// 插入一条已经支付成功并且已经评论的买单记录
+		PayOrderDO expected = new PayOrderDO();
+		expected.setActualAmount(new BigDecimal(1));
+		expected.setCommentTime(new Date());
+		expected.setFavoredAmount(new BigDecimal(1));
+		expected.setGmtCreate(new Date());
+		expected.setGmtModified(new Date());
+		expected.setIsEvaluation(true);
+		expected.setMemberId(1L);
+		expected.setMemberNum("M00001");
+		expected.setMerchantId(1L);
+		expected.setMerchantNum("B00001");
+		expected.setNotFavoredAmount(new BigDecimal(1));
+		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderStatus(true);
+		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
+		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
+		expected.setTotalAmount(new BigDecimal(2));
+		payOrderDOMapper.insert(expected);
+		
+		ReportDataParam dparam = new ReportDataParam();
+		dparam.setFlag(ReportFansRiseRateEnum.DAY);
+		dparam.setMerchantId(expected.getMerchantId());
+		ReportRiseRateDTO actual = reportPayService.payVolumeRiseRate(dparam);
+		Assert.assertNotNull(actual);
+	}
+}
