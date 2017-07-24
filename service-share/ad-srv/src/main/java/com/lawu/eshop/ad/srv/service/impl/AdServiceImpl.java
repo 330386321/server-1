@@ -536,10 +536,10 @@ public class AdServiceImpl implements AdService {
 		cr.andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.val); 
 		if(adPraiseParam.getStatusEnum().val==1){  //开枪中
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
-			example.setOrderByClause("gmt_create asc");
+			example.setOrderByClause("begin_time asc");
 		}else if(adPraiseParam.getStatusEnum().val==2){ //即将开始
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
-			example.setOrderByClause("begin_time desc");
+			example.setOrderByClause("begin_time asc");
 		}else if(adPraiseParam.getStatusEnum().val==3){ //已结束
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTED.val);
 			example.setOrderByClause("gmt_create desc");
