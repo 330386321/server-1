@@ -97,12 +97,4 @@ public class CashManageFrontController extends BaseController {
 		return cashManageFrontService.findCashList(cparam);
 	}
 
-//	@Audit(date = "2017-04-15", reviewer = "孙林青")
-//	@ApiOperation(value = "提现详情", notes = "用户提现详情，[]，(杨清华)", httpMethod = "GET")
-//	@Authorization
-//	@RequestMapping(value = "cashDetail/{id}", method = RequestMethod.GET)
-//	public Result<WithdrawCashDetailDTO> cashDetail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-//			@PathVariable @ApiParam(required = true, value = "提现记录ID") Long id) {
-//		return cashManageFrontService.cashDetail(id);
-//	}
 }

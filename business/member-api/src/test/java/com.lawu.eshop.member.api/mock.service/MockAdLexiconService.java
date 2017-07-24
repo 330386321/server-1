@@ -1,0 +1,23 @@
+package com.lawu.eshop.member.api.mock.service;
+
+import com.lawu.eshop.ad.dto.AdLexiconDTO;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.member.api.service.AdLexiconService;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+
+@Service
+public class MockAdLexiconService extends BaseController implements AdLexiconService {
+
+
+	@Override
+	public Result<List<AdLexiconDTO>> selectList(@RequestParam("adId") Long adId) {
+		return null;
+	}
+}
