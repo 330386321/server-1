@@ -10,7 +10,7 @@ import com.lawu.eshop.product.param.ProductSearchParam;
 import com.lawu.eshop.product.param.ProductSearchRealParam;
 import com.lawu.eshop.product.srv.ProductSrvConfig;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
-import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.solr.service.SolrService;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocumentList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,9 @@ public class ProductSolrController extends BaseController {
     @Autowired
     private ProductSrvConfig productSrvConfig;
 
+    @Autowired
+    private SolrService solrService;
+
     /**
      * 根据商品类别查询商品信息
      *
@@ -43,7 +46,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -69,7 +72,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("salesVolume_i", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -94,7 +97,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(productSearchParam.getOffset());
         query.setRows(productSearchParam.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -119,7 +122,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successCreated(ResultCode.NOT_FOUND_DATA);
         }
@@ -182,7 +185,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(searchParam.getOffset());
         query.setRows(searchParam.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         return  ProductConverter.convertDTO(solrDocumentList);
     }
 

@@ -1,22 +1,5 @@
 package com.lawu.eshop.product.srv.service.impl;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
@@ -31,36 +14,33 @@ import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.ProductSrvConfig;
-import com.lawu.eshop.product.srv.bo.ProductBO;
-import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
-import com.lawu.eshop.product.srv.bo.ProductInfoBO;
-import com.lawu.eshop.product.srv.bo.ProductModelBO;
-import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+import com.lawu.eshop.product.srv.bo.*;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
-import com.lawu.eshop.product.srv.domain.ProductCategoryeDO;
-import com.lawu.eshop.product.srv.domain.ProductDO;
-import com.lawu.eshop.product.srv.domain.ProductDOExample;
+import com.lawu.eshop.product.srv.domain.*;
 import com.lawu.eshop.product.srv.domain.ProductDOExample.Criteria;
-import com.lawu.eshop.product.srv.domain.ProductImageDO;
-import com.lawu.eshop.product.srv.domain.ProductImageDOExample;
-import com.lawu.eshop.product.srv.domain.ProductModelDO;
-import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
-import com.lawu.eshop.product.srv.domain.ProductModelInventoryDO;
 import com.lawu.eshop.product.srv.domain.extend.ProductDOView;
 import com.lawu.eshop.product.srv.domain.extend.ProductModelDOView;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
-import com.lawu.eshop.product.srv.mapper.ProductCategoryeDOMapper;
-import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
-import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
-import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
-import com.lawu.eshop.product.srv.mapper.ProductModelInventoryDOMapper;
+import com.lawu.eshop.product.srv.mapper.*;
 import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.mapper.extend.ProductModelDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
-import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.utils.StringUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -95,6 +75,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     @Qualifier("delProductCommentTransactionMainServiceImpl")
     private TransactionMainService<Reply> delProductCommentTransactionMainServiceImpl;
+
+    @Autowired
+    private SolrService solrService;
 
     @Override
     public Page<ProductQueryBO> selectProduct(ProductDataQuery query) {
@@ -187,10 +170,10 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         if(!delIds.isEmpty()){
-            SolrUtil.delSolrDocsByIds(delIds, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+            solrService.delSolrDocsByIds(delIds, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
         if(!documents.isEmpty()){
-            SolrUtil.addSolrDocsList(documents, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+            solrService.addSolrDocsList(documents, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
         return rows;
     }
@@ -529,7 +512,7 @@ public class ProductServiceImpl implements ProductService {
         }
         ProductDO productDO1 = productDOMapper.selectByPrimaryKey(productId);
         SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO1);
-        SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
     }
 
 
@@ -612,7 +595,7 @@ public class ProductServiceImpl implements ProductService {
         productDO.setAverageDailySales(averageDailySales);
         productDOMapper.updateByPrimaryKeySelective(productDO);
 
-        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        SolrDocument solrDocument = solrService.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if (solrDocument != null) {
             SolrInputDocument document = new SolrInputDocument();
             document.addField("id", solrDocument.get("id"));
@@ -632,7 +615,7 @@ public class ProductServiceImpl implements ProductService {
                     document.addField("categoryId_is", categoryId);
                 }
             }
-            SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+            solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
 
@@ -642,10 +625,10 @@ public class ProductServiceImpl implements ProductService {
         if(productDO == null){
             return;
         }
-        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        SolrDocument solrDocument = solrService.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if(solrDocument == null){
             SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
-            SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+            solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
 
@@ -671,7 +654,7 @@ public class ProductServiceImpl implements ProductService {
                 SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
                 documents.add(document);
             }
-            SolrUtil.addSolrDocsList(documents, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+            solrService.addSolrDocsList(documents, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
 
@@ -696,7 +679,7 @@ public class ProductServiceImpl implements ProductService {
             for (ProductDO productDO : productDOS) {
                 ids.add(String.valueOf(productDO.getId()));
             }
-            SolrUtil.delSolrDocsByIds(ids, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+            solrService.delSolrDocsByIds(ids, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
 
