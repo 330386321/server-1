@@ -50,7 +50,7 @@ public class SolrUtil {
     private SolrUtil() {
     }
 
-    private static SolrClient getSolrClient(String solrUrl, String solrCore, Boolean isCloudSolr) {
+    public static SolrClient getSolrClient(String solrUrl, String solrCore, Boolean isCloudSolr) {
         if (PRODUCT_CORE.equals(solrCore)) {
             if (isCloudSolr) {
                 return getProductCloudSolrClient(solrUrl, solrCore);
