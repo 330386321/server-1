@@ -38,7 +38,7 @@ public class ReportUserIncomeExpenditureController extends BaseController {
 	 * @date 2017年7月3日
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public Result save(@RequestBody ReportUserIncomeExpenditureSaveParam param) {
 		reportUserIncomeExpenditureService.save(param);
 		return successCreated();
