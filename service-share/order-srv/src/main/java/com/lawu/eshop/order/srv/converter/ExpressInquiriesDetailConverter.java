@@ -1,7 +1,6 @@
 package com.lawu.eshop.order.srv.converter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
@@ -39,13 +38,16 @@ public class ExpressInquiriesDetailConverter {
 		if (expressInquiriesDetail == null) {
 			return rtn;
 		}
-
 		rtn = new ExpressInquiriesDetailBO();
 		rtn.setSuccess(expressInquiriesDetail.getSuccess());
 		rtn.setReason(expressInquiriesDetail.getReason());
 		rtn.setState(ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetail.getState()));
-		rtn.setTraces(convert(expressInquiriesDetail.getTraces()));
-
+		if (expressInquiriesDetail.getTraces() != null && !expressInquiriesDetail.getTraces().isEmpty()) {
+			rtn.setTraces(new ArrayList<>());
+			for (Trace item : expressInquiriesDetail.getTraces()) {
+				rtn.getTraces().add(convert(item));
+			}
+		}
 		return rtn;
 	}
 
@@ -71,27 +73,6 @@ public class ExpressInquiriesDetailConverter {
 	}
 
 	/**
-	 * 
-	 * @param trace
-	 * @return
-	 * @author Sunny
-	 * @date 2017年6月15日
-	 */
-	public static List<TraceBO> convert(List<Trace> traceList) {
-		List<TraceBO> rtn = null;
-		if (traceList == null || traceList.isEmpty()) {
-			return rtn;
-		}
-
-		rtn = new ArrayList<>();
-		for (Trace trace : traceList) {
-			rtn.add(convert(trace));
-		}
-
-		return rtn;
-	}
-
-	/**
 	 * ExpressInquiriesDatailDTO转换
 	 *
 	 * @param expressInquiriesDetail
@@ -109,7 +90,12 @@ public class ExpressInquiriesDetailConverter {
 		rtn.setSuccess(expressInquiriesDetailBO.getSuccess());
 		rtn.setReason(expressInquiriesDetailBO.getReason());
 		rtn.setState(expressInquiriesDetailBO.getState());
-		rtn.setTraces(convertTraceDTOList(expressInquiriesDetailBO.getTraces()));
+		rtn.setTraces(new ArrayList<>());
+		if (expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
+			for (TraceBO item : expressInquiriesDetailBO.getTraces()) {
+				rtn.getTraces().add(convert(item));
+			}
+		}
 		return rtn;
 	}
 
@@ -130,27 +116,6 @@ public class ExpressInquiriesDetailConverter {
 		rtn.setAcceptStation(traceBO.getAcceptStation());
 		rtn.setAcceptTime(traceBO.getAcceptTime());
 		rtn.setRemark(traceBO.getRemark());
-
-		return rtn;
-	}
-
-	/**
-	 * 
-	 * @param trace
-	 * @return
-	 * @author Sunny
-	 * @date 2017年6月15日
-	 */
-	public static List<TraceDTO> convertTraceDTOList(List<TraceBO> traceBOList) {
-		List<TraceDTO> rtn = null;
-		if (traceBOList == null || traceBOList.isEmpty()) {
-			return rtn;
-		}
-
-		rtn = new ArrayList<>();
-		for (TraceBO traceBO : traceBOList) {
-			rtn.add(convert(traceBO));
-		}
 
 		return rtn;
 	}
