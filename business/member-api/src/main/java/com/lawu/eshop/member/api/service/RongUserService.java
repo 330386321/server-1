@@ -25,7 +25,7 @@ public interface RongUserService {
      * @throws Exception
      */
     @RequestMapping(value = "member/getRongToken",method = RequestMethod.GET)
-    Result<RongYunTokenDTO> getRongToken(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri) throws Exception;
+    Result<RongYunTokenDTO> getRongToken(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri);
 
     /**
      * 检查融云用户在线状态
@@ -34,7 +34,7 @@ public interface RongUserService {
      * @throws Exception
      */
     @RequestMapping(value = "rongUser/checkOnline/{userId}", method = RequestMethod.GET)
-    Result<RongYunOnlineDTO> checkOnline(@PathVariable("userId") String userId) throws Exception;
+    Result<RongYunOnlineDTO> checkOnline(@PathVariable("userId") String userId);
 
     /**
      * 刷新用户信息
@@ -45,5 +45,5 @@ public interface RongUserService {
      * @throws Exception
      */
     @RequestMapping(value = "rongUser/refreshUserInfo", method = RequestMethod.GET)
-    Result<RongYunRefreshDTO> refreshUserInfo(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri) throws Exception;
+    Result<RongYunRefreshDTO> refreshUserInfo(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri);
 }
