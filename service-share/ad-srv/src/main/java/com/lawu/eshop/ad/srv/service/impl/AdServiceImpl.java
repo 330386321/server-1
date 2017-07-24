@@ -2,8 +2,6 @@ package com.lawu.eshop.ad.srv.service.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -19,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
@@ -123,9 +122,6 @@ public class AdServiceImpl implements AdService {
 	@Autowired
 	private AdSrvConfig adSrvConfig;
 	
-	private int currentPage=1;
-	
-
 	/**
 	 * 商家发布E赚
 	 * @param adSaveParam
@@ -164,9 +160,9 @@ public class AdServiceImpl implements AdService {
 		adDO.setRegionName(adParam.getRegionName());
 		adDO.setContent(adParam.getContent());
 		Integer i=adDOMapper.insert(adDO);
-		if(adParam.getTypeEnum().val==3){ //E赞  红包
+		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //E赞  红包
 			savePointPool(adDO,adSaveParam.getCount());
-		}else if(adParam.getTypeEnum().val==4){
+		}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PACKET){
 			saveRPPool(adDO);
 		}
 		if(adParam.getAreas()!=null){ //不是全国投放
@@ -265,7 +261,7 @@ public class AdServiceImpl implements AdService {
 			List<Byte> status=new ArrayList<>();
 			
 			if(adMerchantParam.getStatusEnum()!=null){
-				if(adMerchantParam.getStatusEnum().val==3){
+				if(adMerchantParam.getStatusEnum()==AdStatusEnum.AD_STATUS_PUTED){
 					status.add(AdStatusEnum.AD_STATUS_PUTED.val);
 					status.add(AdStatusEnum.AD_STATUS_OUT.val);
 					c1.andStatusIn(status)
@@ -427,40 +423,28 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andAdIdEqualTo(adDO.getId()).andMemberIdEqualTo(memberId);
 		Long count = favoriteAdDOMapper.countByExample(example);
 		AdBO adBO = AdConverter.convertBO(adDO);
-		Long praiseCount = 0l;
-		boolean isPraise = false;
 		if (adDO.getType() == 3) { // 获取E赞的抢赞人数
 			PointPoolDOExample ppexample = new PointPoolDOExample();
 			ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
 					.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val);
-			praiseCount = pointPoolDOMapper.countByExample(ppexample);
+			Long praiseCount = pointPoolDOMapper.countByExample(ppexample);
+			adBO.setNumber(praiseCount.intValue());
 
 			PointPoolDOExample ppexample2 = new PointPoolDOExample();
 			ppexample2.createCriteria().andAdIdEqualTo(adDO.getId())
 					.andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
 					.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val).andMemberIdEqualTo(memberId);
 			Long number = pointPoolDOMapper.countByExample(ppexample2);
-			if (number > 0) {
-				isPraise = true;
-			}
+			adBO.setIsPraise(number>0);
 		}else{
 			
 			MemberAdRecordDOExample memberAdRecordDOExample=new MemberAdRecordDOExample();
 			memberAdRecordDOExample.createCriteria().andAdIdEqualTo(id).andMemberIdEqualTo(memberId);
 			Long clickCount= memberAdRecordDOMapper.countByExample(memberAdRecordDOExample);
-			if (clickCount.intValue() > 0) {
-				adBO.setIsClickAd(true);
-			} else {
-			 	adBO.setIsClickAd(false);
-			}
+			adBO.setIsClickAd(clickCount.intValue()>0);
 		}
-		adBO.setIsPraise(isPraise);
-		adBO.setNumber(praiseCount.intValue());
-		if (count.intValue() > 0) {
-			adBO.setIsFavorite(true);
-		} else {
-			adBO.setIsFavorite(false);
-		}
+		
+		adBO.setIsFavorite(count.intValue() > 0);
 		return adBO;
 	}
 	
@@ -534,13 +518,13 @@ public class AdServiceImpl implements AdService {
 		AdDOExample example=new AdDOExample();
 		Criteria cr= example.createCriteria();
 		cr.andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.val); 
-		if(adPraiseParam.getStatusEnum().val==1){  //开枪中
+		if(adPraiseParam.getStatusEnum()==AdPraiseStatusEnum.AD_STATUS_SHOOT){  //开枪中
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
 			example.setOrderByClause("begin_time asc");
-		}else if(adPraiseParam.getStatusEnum().val==2){ //即将开始
+		}else if(adPraiseParam.getStatusEnum()==AdPraiseStatusEnum.AD_STATUS_TOBEGIN){ //即将开始
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
 			example.setOrderByClause("begin_time asc");
-		}else if(adPraiseParam.getStatusEnum().val==3){ //已结束
+		}else if(adPraiseParam.getStatusEnum()==AdPraiseStatusEnum.AD_STATUS_END){ //已结束
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTED.val);
 			example.setOrderByClause("gmt_create desc");
 		}
@@ -636,11 +620,11 @@ public class AdServiceImpl implements AdService {
 		List<AdDO> DOS=adDOMapperExtend.selectChoiceness();
 		List<AdBO> BOS=new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
-			if(adDO.getType()==3){ 
+			if(adDO.getType()==AdTypeEnum.AD_TYPE_PRAISE.val){ 
 				AdBO BO=AdConverter.convertBO(adDO);
 				 BOS.add(BO);
 			}else{
-				if(adDO.getStatus()==2){
+				if(adDO.getStatus()==AdStatusEnum.AD_STATUS_PUTING.val){
 					AdBO BO=AdConverter.convertBO(adDO);
 					BOS.add(BO);
 				}
@@ -728,31 +712,27 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public List<ViewBO> getAllAd() {
-		AdDOExample example =new AdDOExample();
-		example.createCriteria().andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
-		RowBounds rowBounds = new RowBounds((currentPage-1)*100, 100);
-		List<AdDO> list=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-		int count=adDOMapper.countByExample(example);
-		int totalPageNum;
-		if(count%100==0){
-			totalPageNum=count/100;
-		}else{
-			totalPageNum=count/100+1;
-		}
-		if(currentPage>=totalPageNum){
-			currentPage=1;
-		}else{
-			currentPage++;
-		}
+		int currentPage = 0;
 		List<ViewBO> bos=new ArrayList<>();
-		for (AdDO adDO : list) {
-			ViewBO bo=new ViewBO();
-			bo.setId(adDO.getId());
-			bo.setViewCount(adDO.getViewcount());
-			bos.add(bo);
+		while (true) {
+			currentPage ++;
+			AdDOExample example =new AdDOExample();
+			example.createCriteria().andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
+			RowBounds rowBounds = new RowBounds((currentPage-1)*100, 100);
+			List<AdDO> list=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+			
+			if (list == null || list.isEmpty()) {
+				break ;
+			}
+			for (AdDO adDO : list) {
+				ViewBO bo=new ViewBO();
+				bo.setId(adDO.getId());
+				bo.setViewCount(adDO.getViewcount());
+				bos.add(bo);
+			}
+			
 		}
 		return bos;
-		
 	}
 
 	@Override
