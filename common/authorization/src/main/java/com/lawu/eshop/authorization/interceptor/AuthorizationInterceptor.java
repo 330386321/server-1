@@ -139,8 +139,8 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             }
         }
         // 如果验证token失败，并且方法注明了Authorization，返回401错误
-        if (handlerMethod.getBeanType().getAnnotation(Authorization.class) != null   // 查看方法所在的Controller是否有注解
-                || method.getAnnotation(Authorization.class) != null) { // 查看方法上是否有注解
+        if (!isDebug && (handlerMethod.getBeanType().getAnnotation(Authorization.class) != null   // 查看方法所在的Controller是否有注解
+                || method.getAnnotation(Authorization.class) != null)) { // 查看方法上是否有注解
 
             response.setStatus(unauthorizedErrorCode);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);

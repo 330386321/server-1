@@ -1,7 +1,10 @@
 package com.lawu.eshop.member.api;
 
+import com.lawu.eshop.authorization.interceptor.AuthorizationInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.ImportResource;
@@ -16,7 +19,19 @@ import org.springframework.context.annotation.ImportResource;
 @SpringBootApplication
 @ImportResource(locations={"classpath:spring-test.xml"})
 public class MemberApiApplicationTest {
+
     public static void main(String[] args) {
         SpringApplication.run(MemberApiApplicationTest.class, args);
+    }
+
+    @Bean
+    public AuthorizationInterceptor authorizationInterceptor(){
+        AuthorizationInterceptor authorizationInterceptor = new AuthorizationInterceptor();
+        authorizationInterceptor.setDebug(true);
+        authorizationInterceptor.setTestId(1L);
+        authorizationInterceptor.setTestAccount("1234567");
+        authorizationInterceptor.setTestNum("M00002");
+        authorizationInterceptor.setHttpHeaderName("Authorization");
+        return authorizationInterceptor;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,17 +19,26 @@ public class MockAddressService extends BaseController implements AddressService
 
 	@Override
 	public Result update(@RequestBody AddressParam address, @PathVariable("id") Long id, @RequestParam("userNum") String userNum) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result<AddressDTO> get(@PathVariable("id") Long id) {
-		return null;
+		AddressDTO dto = new AddressDTO();
+		dto.setName("公司地址");
+		dto.setId(1L);
+		dto.setAddr("大冲商务中心D座1301");
+		dto.setIsDefault(true);
+		dto.setMobile("17512036360");
+		dto.setPostcode("00000");
+		dto.setRegionName("广东省深圳市南山区");
+		dto.setRegionPath("11/1101/110101");
+		return successCreated(dto);
 	}
 
 	@Override
 	public Result delete(@PathVariable("id") Long userId, @RequestParam("userNum") String userNum) {
-		return null;
+		return successAccepted();
 	}
 
 	@Override
@@ -38,11 +48,22 @@ public class MockAddressService extends BaseController implements AddressService
 
 	@Override
 	public Result<List<AddressDTO>> selectByUserNum(@PathVariable("userNum") String userNum) {
-		return null;
+		AddressDTO dto = new AddressDTO();
+		dto.setName("公司地址");
+		dto.setId(1L);
+		dto.setAddr("大冲商务中心D座1301");
+		dto.setIsDefault(true);
+		dto.setMobile("17512036360");
+		dto.setPostcode("00000");
+		dto.setRegionName("广东省深圳市南山区");
+		dto.setRegionPath("11/1101/110101");
+		List<AddressDTO> list = new ArrayList<>();
+		list.add(dto);
+		return successCreated(list);
 	}
 
 	@Override
 	public Result saveWithUserNum(@PathVariable("userNum") String userNum, @RequestBody @Validated AddressParam addressDO) {
-		return null;
+		return successCreated();
 	}
 }
