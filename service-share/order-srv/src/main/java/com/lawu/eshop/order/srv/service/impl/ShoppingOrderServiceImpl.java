@@ -1430,7 +1430,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 		List<ReportFansSaleTransFormDO> reportFansSaleTransFormDOList = shoppingOrderDOExtendMapper.selectByFansSaleTransForm(shoppingOrderReportDataParam);
 
-		return ReportConvert.convert(reportFansSaleTransFormDOList);
+		return ShoppingOrderConverter.convertReportRiseRerouceDTOList(reportFansSaleTransFormDOList);
 	}
 
 	/**

@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.srv.OrderSrvApplicationTest;
 
 /**
@@ -46,7 +47,12 @@ public class ShoppingCartControllerTest {
     @Rollback
     @Test
     public void save() throws Exception {
-    	RequestBuilder request = MockMvcRequestBuilders.post("/ad/saveAd").contentType(MediaType.APPLICATION_JSON).content("");    	
+    	Long memberId = 1L;
+    	ShoppingCartSaveParam param = new ShoppingCartSaveParam();
+    	param.setMerchantId(1L);
+    	param.setMerchantName("拉乌网络");
+    	param.setMerchantStoreId(1L);
+    	RequestBuilder request = MockMvcRequestBuilders.post(memberId + "").contentType(MediaType.APPLICATION_JSON).content("");    	
         ResultActions perform = mvc.perform(request);
         MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
     }
