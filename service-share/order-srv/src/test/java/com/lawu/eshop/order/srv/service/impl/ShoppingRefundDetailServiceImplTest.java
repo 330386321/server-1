@@ -30,6 +30,8 @@ import com.lawu.eshop.order.srv.bo.ShoppingRefundProcessBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverterTest;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverterTest;
+import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverterTest;
+import com.lawu.eshop.order.srv.converter.ShoppingRefundProcessConverterTest;
 import com.lawu.eshop.order.srv.domain.PropertyDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
@@ -1036,7 +1038,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	expected.setStatus(StatusEnum.VALID.getValue());
     	shoppingRefundDetailDOMapper.insert(expected);
     	ShoppingRefundDetailBO actual = shoppingRefundDetailService.get(expected.getId());
-    	ShoppingOrderItemServiceImplTest.assertShoppingRefundDetailBO(expected, actual);
+    	ShoppingRefundDetailConverterTest.assertShoppingRefundDetailBO(expected, actual);
     }
     
     @Transactional
@@ -1299,9 +1301,9 @@ public class ShoppingRefundDetailServiceImplTest {
     	ShoppingOrderItemExtendBO actual = shoppingRefundDetailService.getByShoppingOrderItemId(shoppingOrderItemDO.getId());
     	ShoppingOrderConverterTest.assertShoppingOrderBO(expected, actual.getShoppingOrder());
     	ShoppingOrderItemConverterTest.assertShoppingOrderItemBO(shoppingOrderItemDO, actual);
-    	ShoppingOrderItemServiceImplTest.assertShoppingRefundDetailBO(shoppingRefundDetailDO, actual.getShoppingRefundDetail());
+    	ShoppingRefundDetailConverterTest.assertShoppingRefundDetailBO(shoppingRefundDetailDO, actual.getShoppingRefundDetail());
     	for (ShoppingRefundProcessBO item : actual.getShoppingRefundDetail().getShoppingRefundProcessList()) {
-    		assertShoppingOrderItemExtendBO(shoppingRefundProcessDO, item);
+    		ShoppingRefundProcessConverterTest.assertShoppingRefundProcessBO(shoppingRefundProcessDO, item);
     	}
     }
     
@@ -1546,11 +1548,4 @@ public class ShoppingRefundDetailServiceImplTest {
     	Assert.assertEquals(StatusEnum.INVALID.getValue(), actualShoppingRefundDetailDO.getStatus());
     }
     
-    private static void assertShoppingOrderItemExtendBO (ShoppingRefundProcessDO expected, ShoppingRefundProcessBO actual) {
-    	Assert.assertNotNull(actual);
-    	Assert.assertEquals(expected.getId(), actual.getId());
-    	Assert.assertEquals(expected.getGmtCreate(), actual.getGmtCreate());
-    	Assert.assertEquals(expected.getRefundStatus(), actual.getRefundStatus().getValue());
-    	Assert.assertEquals(expected.getShoppingRefundDetailId(), actual.getShoppingRefundDetailId());
-    }
 }
