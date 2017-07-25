@@ -26,6 +26,7 @@ import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
+import com.lawu.eshop.order.srv.converter.PayOrderConverterTest;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.domain.PayOrderDOExample;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
@@ -111,7 +112,7 @@ public class PayOrderServiceImplTest {
 		Assert.assertEquals(1, actual.getTotalCount().intValue());
 		Assert.assertEquals(1, actual.getRecords().size());
 		for (PayOrderBO item : actual.getRecords()) {
-			assertPayOrderBO(expected, item);
+			PayOrderConverterTest.assertPayOrderBO(expected, item);
 		}
 	}
 	
@@ -149,7 +150,7 @@ public class PayOrderServiceImplTest {
 		Assert.assertEquals(1, actual.getTotalCount().intValue());
 		Assert.assertEquals(1, actual.getRecords().size());
 		for (PayOrderBO item : actual.getRecords()) {
-			assertPayOrderBO(expected, item);
+			PayOrderConverterTest.assertPayOrderBO(expected, item);
 		}
 	}
 	
@@ -187,7 +188,7 @@ public class PayOrderServiceImplTest {
 		Assert.assertEquals(1, actual.getTotalCount().intValue());
 		Assert.assertEquals(1, actual.getRecords().size());
 		for (PayOrderBO item : actual.getRecords()) {
-			assertPayOrderBO(expected, item);
+			PayOrderConverterTest.assertPayOrderBO(expected, item);
 		}
 	}
 	
@@ -216,7 +217,7 @@ public class PayOrderServiceImplTest {
 		payOrderDOMapper.insert(expected);
 		
 		PayOrderBO actual = payOrderService.getOrderInfo(expected.getId(), expected.getMemberId());
-		assertPayOrderBO(expected, actual);
+		PayOrderConverterTest.assertPayOrderBO(expected, actual);
 	}
 	
 	@Rollback
@@ -354,19 +355,6 @@ public class PayOrderServiceImplTest {
 		Assert.assertNotNull(actual);
 		Assert.assertNotNull(actual.getGmtCommission());
 		Assert.assertEquals(CommissionStatusEnum.CALCULATED.getValue(), actual.getCommissionStatus());
-	}
-	
-	public static void assertPayOrderBO(PayOrderDO expected, PayOrderBO actual) {
-		Assert.assertNotNull(actual);
-		Assert.assertEquals(expected.getMemberId(), actual.getMemberId());
-		Assert.assertEquals(expected.getCommentTime() != null ? expected.getCommentTime().getTime() : null, actual.getCommentTime() != null ? actual.getCommentTime().getTime() : null);
-		Assert.assertEquals(expected.getActualAmount().doubleValue(), actual.getActualAmount().doubleValue(), 0D);
-		Assert.assertEquals(expected.getPayType(), actual.getPayType());
-		Assert.assertEquals(expected.getIsEvaluation(), actual.getEvaluation());
-		Assert.assertEquals(expected.getFavoredAmount().doubleValue(), actual.getFavoredAmount().doubleValue(), 0D);
-		Assert.assertEquals(expected.getMerchantId(), actual.getMerchantId());
-		Assert.assertEquals(expected.getOrderNum(), actual.getOrderNum());
-		Assert.assertEquals(expected.getTotalAmount().doubleValue(), actual.getTotalAmount().doubleValue(), 0D);
 	}
 	
 	public static void assertShoppingOrderCommissionDTO(PayOrderDO expected, ShoppingOrderCommissionDTO actual) {
