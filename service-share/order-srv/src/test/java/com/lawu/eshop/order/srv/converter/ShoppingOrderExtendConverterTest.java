@@ -33,7 +33,7 @@ public class ShoppingOrderExtendConverterTest {
 	@Test
 	public void convertShoppingOrderExtendDetailDTO() {
 		ShoppingOrderExtendBO expected = initShoppingOrderExtendBO();
-		ExpressInquiriesDetailBO expectedExpressInquiriesDetailBO = ShoppingOrderConverterTest.initExpressInquiriesDetailBO();
+		ExpressInquiriesDetailBO expectedExpressInquiriesDetailBO = ExpressInquiriesDetailConverterTest.initExpressInquiriesDetailBO();
 		ShoppingOrderExtendDetailDTO actual = ShoppingOrderExtendConverter.convert(expected, expectedExpressInquiriesDetailBO);
 		assertShoppingOrderExtendDetailDTO(expected, actual);
 		for (int i = 0; i < expected.getItems().size(); i++) {

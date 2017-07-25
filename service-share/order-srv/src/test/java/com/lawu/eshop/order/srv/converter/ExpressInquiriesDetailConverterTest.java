@@ -1,17 +1,20 @@
 package com.lawu.eshop.order.srv.converter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
 import com.lawu.eshop.order.dto.foreign.TraceDTO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.TraceBO;
 import com.lawu.eshop.order.srv.utils.express.kdniao.bo.ExpressInquiriesDetail;
 import com.lawu.eshop.order.srv.utils.express.kdniao.bo.Trace;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 
@@ -21,7 +24,7 @@ import com.lawu.eshop.order.srv.utils.express.kdniao.bo.Trace;
 public class ExpressInquiriesDetailConverterTest {
 
 	@Test
-	private void convertExpressInquiriesDetailBO() {
+	public void convertExpressInquiriesDetailBO() {
 		ExpressInquiriesDetail expected = new ExpressInquiriesDetail();
 		expected.setEBusinessID("123456");
 		expected.setOrderCode("84513374");
@@ -32,6 +35,7 @@ public class ExpressInquiriesDetailConverterTest {
 		Trace trace = new Trace();
 		trace.setAcceptStation("快递已经发货，等待揽收");
 		trace.setAcceptTime("2017-07-24 17:35:00");
+		traces.add(trace);
 		expected.setTraces(traces);
 		
 		ExpressInquiriesDetailBO actual = ExpressInquiriesDetailConverter.convert(expected);
@@ -39,7 +43,7 @@ public class ExpressInquiriesDetailConverterTest {
 	}
 	
 	@Test
-	private void convertTraceBO() {
+	public void convertTraceBO() {
 		Trace expected = new Trace();
 		expected.setAcceptStation("快递已经发货，等待揽收");
 		expected.setAcceptTime("2017-07-24 17:35:00");
@@ -48,20 +52,14 @@ public class ExpressInquiriesDetailConverterTest {
 	}
 	
 	@Test
-	private void convertExpressInquiriesDetailDTO() {
-		ExpressInquiriesDetailBO expected = new ExpressInquiriesDetailBO();
-		expected.setSuccess(true);
-		List<TraceBO> traces = new ArrayList<>();
-		TraceBO trace = new TraceBO();
-		trace.setAcceptStation("快递已经发货，等待揽收");
-		trace.setAcceptTime("2017-07-24 17:35:00");
-		expected.setTraces(traces);
+	public void convertExpressInquiriesDetailDTO() {
+		ExpressInquiriesDetailBO expected = initExpressInquiriesDetailBO();
 		ExpressInquiriesDetailDTO actual = ExpressInquiriesDetailConverter.convert(expected);
 		assertExpressInquiriesDetailDTO(expected, actual);
 	}
 	
 	@Test
-	private void convertTraceDTO() {
+	public void convertTraceDTO() {
 		TraceBO expected = new TraceBO();
 		expected.setAcceptStation("快递已经发货，等待揽收");
 		expected.setAcceptTime("2017-07-24 17:35:00");
@@ -74,7 +72,7 @@ public class ExpressInquiriesDetailConverterTest {
 		Assert.assertEquals(expected.getReason(), actual.getReason());
 		Assert.assertEquals(expected.getState(), actual.getState().getValue());
 		Assert.assertEquals(expected.getSuccess(), actual.getSuccess());
-		if (actual.getTraces() != null || actual.getTraces().isEmpty()) {
+		if (actual.getTraces() != null && !actual.getTraces().isEmpty()) {
 			for (int i = 0; i < actual.getTraces().size(); i++) {
 				assertTraceBO(expected.getTraces().get(i), actual.getTraces().get(i));
 			}
@@ -91,7 +89,7 @@ public class ExpressInquiriesDetailConverterTest {
 	public static void assertExpressInquiriesDetailDTO(ExpressInquiriesDetailBO expected, ExpressInquiriesDetailDTO actual) {
 		Assert.assertNotNull(actual);
 		Assert.assertEquals(expected.getReason(), actual.getReason());
-		Assert.assertEquals(expected.getState(), actual.getState().getValue());
+		Assert.assertEquals(expected.getState(), actual.getState());
 		Assert.assertEquals(expected.getSuccess(), actual.getSuccess());
 		if (actual.getTraces() != null || actual.getTraces().isEmpty()) {
 			for (int i = 0; i < actual.getTraces().size(); i++) {
@@ -107,4 +105,16 @@ public class ExpressInquiriesDetailConverterTest {
 		Assert.assertEquals(expected.getRemark(), actual.getRemark());
 	}
 	
+    public static ExpressInquiriesDetailBO initExpressInquiriesDetailBO() {
+    	ExpressInquiriesDetailBO rtn = new ExpressInquiriesDetailBO();
+    	rtn.setReason("快递未揽收");
+    	rtn.setState(ExpressInquiriesDetailStateEnum.NO_INFO);
+    	rtn.setSuccess(true);
+    	rtn.setTraces(new ArrayList<>());
+    	TraceBO traceBO = new TraceBO();
+    	traceBO.setAcceptStation("等待快递揽收");
+    	traceBO.setAcceptTime(DateUtil.getDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
+    	rtn.getTraces().add(traceBO);
+    	return rtn;
+    }
 }

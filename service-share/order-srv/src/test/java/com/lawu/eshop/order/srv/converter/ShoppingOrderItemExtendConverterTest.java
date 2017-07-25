@@ -252,7 +252,7 @@ public class ShoppingOrderItemExtendConverterTest {
     	return rtn;
 	}
 	
-	private ShoppingOrderItemExtendBO initShoppingOrderItemExtendBO() {
+	public static ShoppingOrderItemExtendBO initShoppingOrderItemExtendBO() {
 		ShoppingOrderItemExtendBO rtn = new ShoppingOrderItemExtendBO();
 		
     	ShoppingOrderBO shoppingOrderBO = new ShoppingOrderBO();
@@ -317,7 +317,7 @@ public class ShoppingOrderItemExtendConverterTest {
     	shoppingRefundDetailExtendBO.setStatus(StatusEnum.VALID);
     	
     	ShoppingRefundProcessBO shoppingRefundProcessBO = new ShoppingRefundProcessBO();
-    	shoppingRefundDetailExtendBO.setId(1L);
+    	shoppingRefundProcessBO.setId(1L);
     	shoppingRefundProcessBO.setGmtCreate(new Date());
     	shoppingRefundProcessBO.setShoppingRefundDetailId(shoppingRefundDetailExtendBO.getId());
     	shoppingRefundProcessBO.setRefundStatus(RefundStatusEnum.TO_BE_CONFIRMED);

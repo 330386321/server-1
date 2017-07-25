@@ -9,18 +9,15 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
-import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
-import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
-import com.lawu.eshop.order.dto.foreign.TraceDTO;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
@@ -29,10 +26,8 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
-import com.lawu.eshop.order.srv.bo.TraceBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
-import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.RandomUtil;
 
 /**
@@ -168,33 +163,16 @@ public class ShoppingOrderConverterTest {
 	@Test
 	public void convertShoppingOrderExpressDTO() {
 		ShoppingOrderBO expected = initShoppingOrderBO();
-		ExpressInquiriesDetailBO expectedExpressInquiriesDetailBO = initExpressInquiriesDetailBO();
+		ExpressInquiriesDetailBO expectedExpressInquiriesDetailBO = ExpressInquiriesDetailConverterTest.initExpressInquiriesDetailBO();
 		ShoppingOrderExpressDTO actual = ShoppingOrderConverter.covert(expected, expectedExpressInquiriesDetailBO);
 		assertShoppingOrderExpressDTO(expected, actual);
-		assertExpressInquiriesDetailDTO(expectedExpressInquiriesDetailBO, actual.getExpressInquiriesDetailDTO());
+		ExpressInquiriesDetailConverterTest.assertExpressInquiriesDetailDTO(expectedExpressInquiriesDetailBO, actual.getExpressInquiriesDetailDTO());
 	}
 	
 	public static void assertShoppingOrderExpressDTO(ShoppingOrderBO expected, ShoppingOrderExpressDTO actual) {
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(expected.getExpressCompanyName(), actual.getExpressCompanyName());
     	Assert.assertEquals(expected.getWaybillNum(), actual.getWaybillNum());
-    }
-	
-	public static void assertExpressInquiriesDetailDTO(ExpressInquiriesDetailBO expected, ExpressInquiriesDetailDTO actual) {
-    	Assert.assertNotNull(actual);
-    	Assert.assertEquals(expected.getReason(), actual.getReason());
-    	Assert.assertEquals(expected.getState(), actual.getState());
-    	Assert.assertEquals(expected.getSuccess(), actual.getSuccess());
-    	for (int i = 0; i < expected.getTraces().size(); i++) {
-    		assertTraceDTO(expected.getTraces().get(i), actual.getTraces().get(i));
-    	}
-    }
-	
-	public static void assertTraceDTO(TraceBO expected, TraceDTO actual) {
-    	Assert.assertNotNull(actual);
-    	Assert.assertEquals(expected.getAcceptStation(), actual.getAcceptStation());
-    	Assert.assertEquals(expected.getAcceptTime(), actual.getAcceptTime());
-    	Assert.assertEquals(expected.getRemark(), actual.getRemark());
     }
 	
 	public static void assertShoppingOrderCommissionDTOList(List<ShoppingOrderBO> expected, List<ShoppingOrderCommissionDTO> actual) {
@@ -292,19 +270,6 @@ public class ShoppingOrderConverterTest {
     	Assert.assertEquals(expected.getWaybillNum(), actual.getWaybillNum());
     	Assert.assertEquals(expected.getGmtTransaction() != null ? expected.getGmtTransaction().getTime() : null, expected.getGmtTransaction() != null ? actual.getGmtTransaction().getTime() : null);
     	Assert.assertEquals(expected.getGmtTransport() != null ? expected.getGmtTransport().getTime() : null, actual.getGmtTransport() != null ? actual.getGmtTransport().getTime() : null);
-    }
-    
-    public static ExpressInquiriesDetailBO initExpressInquiriesDetailBO() {
-    	ExpressInquiriesDetailBO rtn = new ExpressInquiriesDetailBO();
-    	rtn.setReason("快递未揽收");
-    	rtn.setState(ExpressInquiriesDetailStateEnum.NO_INFO);
-    	rtn.setSuccess(true);
-    	rtn.setTraces(new ArrayList<>());
-    	TraceBO traceBO = new TraceBO();
-    	traceBO.setAcceptStation("等待快递揽收");
-    	traceBO.setAcceptTime(DateUtil.getDateFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
-    	rtn.getTraces().add(traceBO);
-    	return rtn;
     }
     
     public static ShoppingOrderUpdateInfomationParam initShoppingOrderUpdateInfomationParam() {
