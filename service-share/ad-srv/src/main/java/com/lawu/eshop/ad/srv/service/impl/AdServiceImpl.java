@@ -264,6 +264,7 @@ public class AdServiceImpl implements AdService {
 				if(adMerchantParam.getStatusEnum()==AdStatusEnum.AD_STATUS_PUTED){
 					status.add(AdStatusEnum.AD_STATUS_PUTED.val);
 					status.add(AdStatusEnum.AD_STATUS_OUT.val);
+					status.add(AdStatusEnum.AD_STATUS_AUDIT_FAIL.val);
 					c1.andStatusIn(status)
 					.andMerchantIdEqualTo(merchantId);
 					if(adMerchantParam.getTypeEnum()!=null){
