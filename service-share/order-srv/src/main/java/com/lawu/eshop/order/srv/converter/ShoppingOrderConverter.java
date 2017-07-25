@@ -10,7 +10,6 @@ import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.order.dto.CommentOrderDTO;
 import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
@@ -23,7 +22,6 @@ import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
@@ -93,23 +91,6 @@ public class ShoppingOrderConverter {
 		return rtn;
 	}
 	
-	/**
-	 * 
-	 * @param shoppingOrderItemBO
-	 * @return
-	 * @author Sunny
-	 * @date 2017年6月16日
-	 */
-	public static CommentOrderDTO coverCommentStatusDTO(ShoppingOrderItemBO shoppingOrderItemBO) {
-		CommentOrderDTO rtn = null;
-		if (shoppingOrderItemBO == null) {
-			return rtn;
-		}
-		rtn = new CommentOrderDTO();
-		rtn.setEvaluation(shoppingOrderItemBO.getIsEvaluation());
-		return rtn;
-	}
-
 	/**
 	 * ShoppingOrderExpressDTO转换
 	 * 
@@ -190,14 +171,13 @@ public class ShoppingOrderConverter {
 	 * @return
 	 * @author Sunny
 	 */
-	public static ShoppingOrderDO convert(ShoppingOrderDO shoppingOrderDO, ShoppingOrderUpdateInfomationParam param) {
+	public static ShoppingOrderDO convert(Long id, ShoppingOrderUpdateInfomationParam param) {
 		ShoppingOrderDO rtn = null;
-		if (shoppingOrderDO == null || param == null) {
+		if (id == null || param == null) {
 			return rtn;
 		}
-
 		rtn = new ShoppingOrderDO();
-		rtn.setId(shoppingOrderDO.getId());
+		rtn.setId(id);
 		rtn.setConsigneeAddress(param.getConsigneeAddress());
 		rtn.setConsigneeMobile(param.getConsigneeMobile());
 		rtn.setConsigneeName(param.getConsigneeName());
@@ -205,9 +185,7 @@ public class ShoppingOrderConverter {
 		rtn.setExpressCompanyId(param.getExpressCompanyId());
 		rtn.setExpressCompanyName(param.getExpressCompanyName());
 		rtn.setWaybillNum(param.getWaybillNum());
-		
 		rtn.setOrderStatus(param.getOrderStatus().getValue());
-
 		return rtn;
 	}
 
@@ -338,42 +316,22 @@ public class ShoppingOrderConverter {
 	}
 	
 	/**
-	 * @param shoppingOrderBO
-	 * @return
-	 * @author Sunny
-	 */
-	public static ShoppingOrderCommissionDTO convertShoppingOrderCommissionDTO(ShoppingOrderBO shoppingOrderBO) {
-		ShoppingOrderCommissionDTO rtn = null;
-		
-		if (shoppingOrderBO == null) {	
-			return rtn;
-		}
-		
-		rtn = new ShoppingOrderCommissionDTO();
-		rtn.setId(shoppingOrderBO.getId());
-		rtn.setMemberNum(shoppingOrderBO.getMemberNum());
-		rtn.setMerchantNum(shoppingOrderBO.getMerchantNum());
-		rtn.setActualAmount(shoppingOrderBO.getActualAmount());
-		
-		return rtn;
-	}
-	
-	/**
 	 * @param shoppingOrderBOList
 	 * @return
 	 * @author Sunny
 	 */
 	public static List<ShoppingOrderCommissionDTO> convertShoppingOrderCommissionDTOList(List<ShoppingOrderBO> shoppingOrderBOList) {
 		List<ShoppingOrderCommissionDTO> rtn = new ArrayList<>();
-		
 		if (shoppingOrderBOList == null || shoppingOrderBOList.isEmpty()) {
 			return rtn;
 		}
-		
 		for (ShoppingOrderBO item : shoppingOrderBOList) {
-			rtn.add(convertShoppingOrderCommissionDTO(item));
+			ShoppingOrderCommissionDTO shoppingOrderCommissionDTO = new ShoppingOrderCommissionDTO();
+			shoppingOrderCommissionDTO.setId(item.getId());
+			shoppingOrderCommissionDTO.setMemberNum(item.getMemberNum());
+			shoppingOrderCommissionDTO.setMerchantNum(item.getMerchantNum());
+			shoppingOrderCommissionDTO.setActualAmount(item.getActualAmount());
 		}
-
 		return rtn;
 	}
 	

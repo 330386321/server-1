@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderNoPaymentNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderOrdersTradingIncomeNoticeNotification;
@@ -1022,27 +1021,16 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 *            购物订单id
 	 * @param param
 	 *            查询参数
-	 * @return
 	 */
 	@Transactional
 	@Override
-	public int updateInformation(Long id, ShoppingOrderUpdateInfomationParam param) {
-
-		if (id == null || id <= 0) {
-			return ResultCode.ID_EMPTY;
-		}
-
+	public void updateInformation(Long id, ShoppingOrderUpdateInfomationParam param) {
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
-
-		if (shoppingOrderDO == null || shoppingOrderDO.getId() == null || shoppingOrderDO.getId() <= 0) {
-			return ResultCode.RESOURCE_NOT_FOUND;
+		if (shoppingOrderDO == null || shoppingOrderDO.getStatus().equals(StatusEnum.INVALID)) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
 		}
-
-		shoppingOrderDO = ShoppingOrderConverter.convert(shoppingOrderDO, param);
-
+		shoppingOrderDO = ShoppingOrderConverter.convert(id, param);
 		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
-
-		return ResultCode.SUCCESS;
 	}
 
 	/**

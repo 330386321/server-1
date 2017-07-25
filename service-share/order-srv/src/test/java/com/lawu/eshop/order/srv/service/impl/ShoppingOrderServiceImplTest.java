@@ -36,6 +36,7 @@ import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
@@ -47,6 +48,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderMoneyBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
+import com.lawu.eshop.order.srv.converter.ShoppingOrderConverterTest;
 import com.lawu.eshop.order.srv.domain.PropertyDO;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
@@ -169,7 +171,7 @@ public class ShoppingOrderServiceImplTest {
     	List<ShoppingOrderBO> result = shoppingOrderService.commissionShoppingOrder();
     	Assert.assertNotNull(result);
     	for (ShoppingOrderBO actual : result) {
-    		assertShoppingOrderBO(expected, actual);
+    		ShoppingOrderConverterTest.assertShoppingOrderBO(expected, actual);
     	}
     }
     
@@ -314,7 +316,7 @@ public class ShoppingOrderServiceImplTest {
     	expectedMap.put(shoppingOrderItemDO.getId(), shoppingOrderItemDO);
     	
     	ShoppingOrderExtendBO result = shoppingOrderService.get(shoppingOrderDO.getId());
-    	assertShoppingOrderBO(shoppingOrderDO, result);
+    	ShoppingOrderConverterTest.assertShoppingOrderBO(shoppingOrderDO, result);
     	for (ShoppingOrderItemBO actual : result.getItems()) {
     		assertShoppingOrderItemBO(expectedMap.get(actual.getId()), actual);
     	}
@@ -404,13 +406,13 @@ public class ShoppingOrderServiceImplTest {
     	expectedMap.put(shoppingOrderItemDO.getId(), shoppingOrderItemDO);
     	
     	ShoppingOrderExtendBO result = shoppingOrderService.get(shoppingOrderDO.getId(), shoppingOrderDO.getMemberId(), null);
-    	assertShoppingOrderBO(shoppingOrderDO, result);
+    	ShoppingOrderConverterTest.assertShoppingOrderBO(shoppingOrderDO, result);
     	for (ShoppingOrderItemBO actual : result.getItems()) {
     		assertShoppingOrderItemBO(expectedMap.get(actual.getId()), actual);
     	}
     	
     	result = shoppingOrderService.get(shoppingOrderDO.getId(), null, shoppingOrderDO.getMerchantId());
-    	assertShoppingOrderBO(shoppingOrderDO, result);
+    	ShoppingOrderConverterTest.assertShoppingOrderBO(shoppingOrderDO, result);
     	for (ShoppingOrderItemBO actual : result.getItems()) {
     		assertShoppingOrderItemBO(expectedMap.get(actual.getId()), actual);
     	}
@@ -459,7 +461,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDOMapper.insertSelective(expected);
     	
     	ShoppingOrderBO actual = shoppingOrderService.getShoppingOrder(expected.getId());
-    	assertShoppingOrderBO(expected, actual);
+    	ShoppingOrderConverterTest.assertShoppingOrderBO(expected, actual);
     }
     
     @Transactional
@@ -505,10 +507,10 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDOMapper.insertSelective(expected);
     	
     	ShoppingOrderBO actual = shoppingOrderService.getShoppingOrder(expected.getId(), expected.getMemberId(), null);
-    	assertShoppingOrderBO(expected, actual);
+    	ShoppingOrderConverterTest.assertShoppingOrderBO(expected, actual);
     	
     	actual = shoppingOrderService.getShoppingOrder(expected.getId(), null, expected.getMerchantId());
-    	assertShoppingOrderBO(expected, actual);
+    	ShoppingOrderConverterTest.assertShoppingOrderBO(expected, actual);
     }
     
     @Transactional
@@ -574,7 +576,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	
     	ShoppingOrderIsNoOnGoingOrderBO actual = shoppingOrderService.isNoOnGoingOrder(expected.getMerchantId());
-    	assertShoppingOrderIsNoOnGoingOrderBO(false, actual);
+    	ShoppingOrderConverterTest.assertShoppingOrderIsNoOnGoingOrderBO(1L, actual);
     }
     
     @Transactional
@@ -1071,36 +1073,8 @@ public class ShoppingOrderServiceImplTest {
     @Test
     public void save() {
     	List<ShoppingOrderSettlementParam> params = new ArrayList<>();
-    	ShoppingOrderSettlementParam param = new ShoppingOrderSettlementParam();
-    	param.setCommodityTotalPrice(new BigDecimal(1));
-    	param.setConsigneeAddress("大冲商务中心");
-    	param.setConsigneeMobile("123456");
-    	param.setConsigneeName("Sunny");
-    	param.setFreightPrice(new BigDecimal(0));
-    	param.setIsFans(false);
-    	param.setIsNoReasonReturn(false);
-    	param.setMemberId(1L);
-    	param.setMemberNum("M00001");
-    	param.setMerchantId(1L);
-    	param.setMerchantName("拉乌网络");
-    	param.setMerchantNum("B0001");
-    	param.setMerchantStoreId(1L);
-    	param.setOrderTotalPrice(new BigDecimal(1));
-    	
-    	List<ShoppingOrderSettlementItemParam> items = new ArrayList<>();
-    	ShoppingOrderSettlementItemParam item = new ShoppingOrderSettlementItemParam();
-    	item.setIsAllowRefund(true);
-    	item.setProductFeatureImage("test.jpg");
-    	item.setProductId(1L);
-    	item.setProductModelId(1L);
-    	item.setProductName("productName");
-    	item.setProductModelName("productModelName");
-    	item.setQuantity(1);
-    	item.setRegularPrice(new BigDecimal(1));
-    	item.setSalesPrice(new BigDecimal(1));
-    	item.setShoppingCartId(1L);
-    	items.add(item);
-    	param.setItems(items);
+    	ShoppingOrderSettlementParam param = ShoppingOrderConverterTest.initShoppingOrderSettlementParam();
+    	ShoppingOrderSettlementItemParam item = param.getItems().get(0);
     	params.add(param);
     	List<Long> actual = shoppingOrderService.save(params);
     	Assert.assertNotNull(actual);
@@ -1114,26 +1088,8 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderItemDOExample.createCriteria().andShoppingOrderIdEqualTo(shoppingOrderDO.getId());
     	ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByExample(shoppingOrderItemDOExample).get(0);
     	
-    	Assert.assertNotNull(shoppingOrderDO);
+    	ShoppingOrderConverterTest.assertShoppingOrderDO(param, shoppingOrderDO);
     	Assert.assertEquals(actual.get(0), shoppingOrderDO.getId());
-    	Assert.assertEquals(param.getConsigneeAddress(), shoppingOrderDO.getConsigneeAddress());
-    	Assert.assertEquals(param.getConsigneeMobile(), shoppingOrderDO.getConsigneeMobile());
-    	Assert.assertEquals(param.getConsigneeName(), shoppingOrderDO.getConsigneeName());
-    	Assert.assertEquals(param.getMemberNum(), shoppingOrderDO.getMemberNum());
-    	Assert.assertEquals(param.getMerchantName(), shoppingOrderDO.getMerchantName());
-    	Assert.assertEquals(param.getMerchantNum(), shoppingOrderDO.getMerchantNum());
-    	Assert.assertEquals(param.getMessage(), shoppingOrderDO.getMessage());
-    	Assert.assertEquals(param.getCommodityTotalPrice().doubleValue(), shoppingOrderDO.getCommodityTotalPrice().doubleValue(), 0D);
-    	Assert.assertEquals(param.getFreightPrice().doubleValue(), shoppingOrderDO.getFreightPrice().doubleValue(), 0D);
-    	Assert.assertEquals(param.getIsFans(), shoppingOrderDO.getIsFans());
-    	Assert.assertEquals(param.getIsNoReasonReturn(), shoppingOrderDO.getIsNoReasonReturn());
-    	Assert.assertEquals(param.getMemberId(), shoppingOrderDO.getMemberId());
-    	Assert.assertEquals(param.getMerchantId(), shoppingOrderDO.getMerchantId());
-    	Assert.assertEquals(param.getMerchantStoreId(), shoppingOrderDO.getMerchantStoreId());
-    	Assert.assertEquals(param.getOrderTotalPrice().doubleValue(), shoppingOrderDO.getOrderTotalPrice().doubleValue(), 0D);
-    	Assert.assertEquals(item.getShoppingCartId().toString(), shoppingOrderDO.getShoppingCartIdsStr());
-    	Assert.assertEquals(ShoppingOrderStatusEnum.PENDING.getValue(), shoppingOrderDO.getOrderStatus());
-    	Assert.assertEquals(StatusEnum.VALID.getValue(), shoppingOrderDO.getStatus());
     	
     	Assert.assertNotNull(shoppingOrderItemDO);
     	Assert.assertEquals(item.getProductFeatureImage(), shoppingOrderItemDO.getProductFeatureImage());
@@ -1325,7 +1281,7 @@ public class ShoppingOrderServiceImplTest {
     	Assert.assertEquals(param.getCurrentPage(), actual.getCurrentPage());
     	Assert.assertEquals(1, actual.getTotalCount().intValue());
     	for (ShoppingOrderExtendBO shoppingOrderExtendBO : actual.getRecords()) {
-    		assertShoppingOrderBO(expected, shoppingOrderExtendBO);
+    		ShoppingOrderConverterTest.assertShoppingOrderBO(expected, shoppingOrderExtendBO);
     		for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
     			assertShoppingOrderItemBO(shoppingOrderItemDO, shoppingOrderItemBO);
     		}
@@ -1404,7 +1360,7 @@ public class ShoppingOrderServiceImplTest {
     	Assert.assertEquals(param.getCurrentPage(), actual.getCurrentPage());
     	Assert.assertEquals(1, actual.getTotalCount().intValue());
     	for (ShoppingOrderExtendBO shoppingOrderExtendBO : actual.getRecords()) {
-    		assertShoppingOrderBO(expected, shoppingOrderExtendBO);
+    		ShoppingOrderConverterTest.assertShoppingOrderBO(expected, shoppingOrderExtendBO);
     		for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
     			assertShoppingOrderItemBO(shoppingOrderItemDO, shoppingOrderItemBO);
     		}
@@ -1483,7 +1439,7 @@ public class ShoppingOrderServiceImplTest {
     	Assert.assertEquals(param.getCurrentPage(), actual.getCurrentPage());
     	Assert.assertEquals(1, actual.getTotalCount().intValue());
     	for (ShoppingOrderExtendBO shoppingOrderExtendBO : actual.getRecords()) {
-    		assertShoppingOrderBO(expected, shoppingOrderExtendBO);
+    		ShoppingOrderConverterTest.assertShoppingOrderBO(expected, shoppingOrderExtendBO);
     		for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
     			assertShoppingOrderItemBO(shoppingOrderItemDO, shoppingOrderItemBO);
     		}
@@ -2527,50 +2483,45 @@ public class ShoppingOrderServiceImplTest {
     	Assert.assertEquals(StatusEnum.INVALID.getValue(), actualShoppingRefundDetailDO.getStatus());
     }
     
-    private void assertShoppingOrderIsNoOnGoingOrderBO(Boolean expected, ShoppingOrderIsNoOnGoingOrderBO actual) {
-    	Assert.assertNotNull(actual);
-    	Assert.assertEquals(expected, actual.getIsNoOnGoingOrder());
-    }
-    
-    public static void assertShoppingOrderBO(ShoppingOrderDO expected, ShoppingOrderBO actual){
-    	Assert.assertNotNull(actual);
-    	Assert.assertEquals(expected.getActualAmount().doubleValue(), actual.getActualAmount().doubleValue(), 0D);
-    	Assert.assertEquals(expected.getCommissionStatus(), actual.getCommissionStatus().getValue());
-    	Assert.assertEquals(expected.getCommodityTotalPrice().doubleValue(), actual.getCommodityTotalPrice().doubleValue(), 0D);
-    	Assert.assertEquals(expected.getConsigneeAddress(), actual.getConsigneeAddress());
-    	Assert.assertEquals(expected.getConsigneeMobile(), actual.getConsigneeMobile());
-    	Assert.assertEquals(expected.getConsigneeName(), actual.getConsigneeName());
-    	Assert.assertEquals(expected.getExpressCompanyCode(), actual.getExpressCompanyCode());
-    	Assert.assertEquals(expected.getExpressCompanyId(), actual.getExpressCompanyId());
-    	Assert.assertEquals(expected.getExpressCompanyName(), actual.getExpressCompanyName());
-    	Assert.assertEquals(expected.getFreightPrice().doubleValue(), actual.getFreightPrice().doubleValue(), 0D);
-    	Assert.assertEquals(expected.getGmtCommission() != null ? expected.getGmtCommission().getTime() : null, actual.getGmtCommission() != null ? actual.getGmtCommission().getTime() : null);
-    	Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime());
-    	Assert.assertEquals(expected.getGmtModified().getTime(), actual.getGmtModified().getTime());
-    	Assert.assertEquals(expected.getGmtPayment() != null ? expected.getGmtPayment().getTime() : null, actual.getGmtPayment() != null ? actual.getGmtPayment().getTime() : null);
-    	Assert.assertEquals(expected.getId(), actual.getId());
-    	Assert.assertEquals(expected.getIsAutomaticReceipt(), actual.getIsAutomaticReceipt());
-    	Assert.assertEquals(expected.getIsDone(), actual.getIsDone());
-    	Assert.assertEquals(expected.getIsFans(), actual.getIsFans());
-    	Assert.assertEquals(expected.getIsNeedsLogistics(), actual.getIsNeedsLogistics());
-    	Assert.assertEquals(expected.getIsNoReasonReturn(), actual.getIsNoReasonReturn());
-    	Assert.assertEquals(expected.getMemberId(), actual.getMemberId());
-    	Assert.assertEquals(expected.getMemberNum(), actual.getMemberNum());
-    	Assert.assertEquals(expected.getMerchantId(), actual.getMerchantId());
-    	Assert.assertEquals(expected.getMerchantName(), actual.getMerchantName());
-    	Assert.assertEquals(expected.getMerchantNum(), actual.getMerchantNum());
-    	Assert.assertEquals(expected.getMerchantStoreId(), actual.getMerchantStoreId());
-    	Assert.assertEquals(expected.getOrderNum(), actual.getOrderNum());
-    	Assert.assertEquals(expected.getOrderStatus(), actual.getOrderStatus().getValue());
-    	Assert.assertEquals(expected.getOrderTotalPrice().doubleValue(), actual.getOrderTotalPrice().doubleValue(), 0D);
-    	Assert.assertEquals(expected.getPaymentMethod(), actual.getPaymentMethod().getVal());
-    	Assert.assertEquals(expected.getSendTime(), actual.getSendTime());
-    	Assert.assertEquals(expected.getShoppingCartIdsStr(), actual.getShoppingCartIdsStr());
-    	Assert.assertEquals(expected.getStatus(), actual.getStatus().getValue());
-    	Assert.assertEquals(expected.getThirdNumber(), actual.getThirdNumber());
-    	Assert.assertEquals(expected.getWaybillNum(), actual.getWaybillNum());
-    	Assert.assertEquals(expected.getGmtTransaction() != null ? expected.getGmtTransaction().getTime() : null, expected.getGmtTransaction() != null ? actual.getGmtTransaction().getTime() : null);
-    	Assert.assertEquals(expected.getGmtTransport() != null ? expected.getGmtTransport().getTime() : null, actual.getGmtTransport() != null ? actual.getGmtTransport().getTime() : null);
+    @Transactional
+    @Rollback
+    @Test
+    public void updateInformation() {
+    	ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
+    	shoppingOrderDO.setCommodityTotalPrice(new BigDecimal(1));
+    	shoppingOrderDO.setActualAmount(new BigDecimal(1));
+    	shoppingOrderDO.setFreightPrice(new BigDecimal(0));
+    	shoppingOrderDO.setGmtCreate(new Date());
+    	shoppingOrderDO.setGmtModified(new Date());
+    	shoppingOrderDO.setGmtTransport(new Date());
+    	shoppingOrderDO.setIsFans(true);
+    	shoppingOrderDO.setIsNeedsLogistics(true);
+    	shoppingOrderDO.setIsNoReasonReturn(true);
+    	shoppingOrderDO.setMemberId(1L);
+    	shoppingOrderDO.setMemberNum("M0001");
+    	shoppingOrderDO.setMerchantId(1L);
+    	shoppingOrderDO.setMerchantName("拉乌网络");
+    	shoppingOrderDO.setMerchantStoreId(1L);
+    	shoppingOrderDO.setMerchantNum("B0001");
+    	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+    	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
+    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
+    	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
+    	shoppingOrderDO.setConsigneeMobile("123456");
+    	shoppingOrderDO.setConsigneeName("Sunny");
+    	shoppingOrderDO.setIsDone(false);
+    	shoppingOrderDO.setShoppingCartIdsStr("1");
+    	shoppingOrderDO.setSendTime(0);
+    	shoppingOrderDO.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	shoppingOrderDOMapper.insertSelective(shoppingOrderDO);
+    	
+    	ShoppingOrderUpdateInfomationParam expected = ShoppingOrderConverterTest.initShoppingOrderUpdateInfomationParam();
+    	shoppingOrderService.updateInformation(shoppingOrderDO.getId(), expected);
+    	
+    	ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderDO.getId());
+    	ShoppingOrderConverterTest.assertShoppingOrderDOByUpdate(expected, actual, shoppingOrderDO.getId());
     }
     
     public static void assertShoppingOrderItemBO(ShoppingOrderItemDO expected, ShoppingOrderItemBO actual){

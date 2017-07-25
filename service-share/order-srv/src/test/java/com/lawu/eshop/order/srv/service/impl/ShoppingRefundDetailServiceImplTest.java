@@ -28,6 +28,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundProcessBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
+import com.lawu.eshop.order.srv.converter.ShoppingOrderConverterTest;
 import com.lawu.eshop.order.srv.domain.PropertyDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
@@ -1295,7 +1296,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	shoppingRefundProcessDOMapper.insert(shoppingRefundProcessDO);
     	
     	ShoppingOrderItemExtendBO actual = shoppingRefundDetailService.getByShoppingOrderItemId(shoppingOrderItemDO.getId());
-    	ShoppingOrderServiceImplTest.assertShoppingOrderBO(expected, actual.getShoppingOrder());
+    	ShoppingOrderConverterTest.assertShoppingOrderBO(expected, actual.getShoppingOrder());
     	ShoppingOrderServiceImplTest.assertShoppingOrderItemBO(shoppingOrderItemDO, actual);
     	ShoppingOrderItemServiceImplTest.assertShoppingRefundDetailBO(shoppingRefundDetailDO, actual.getShoppingRefundDetail());
     	for (ShoppingRefundProcessBO item : actual.getShoppingRefundDetail().getShoppingRefundProcessList()) {

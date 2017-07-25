@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.dto.CommentOrderDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemDTO;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
@@ -166,5 +167,21 @@ public class ShoppingOrderItemConverter {
 		
 		return rtn;
 	}
-
+	
+	/**
+	 * 
+	 * @param shoppingOrderItemBO
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月16日
+	 */
+	public static CommentOrderDTO coverCommentStatusDTO(ShoppingOrderItemBO shoppingOrderItemBO) {
+		CommentOrderDTO rtn = null;
+		if (shoppingOrderItemBO == null) {
+			return rtn;
+		}
+		rtn = new CommentOrderDTO();
+		rtn.setEvaluation(shoppingOrderItemBO.getIsEvaluation());
+		return rtn;
+	}
 }

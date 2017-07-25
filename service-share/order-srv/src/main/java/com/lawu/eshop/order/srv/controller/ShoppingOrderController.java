@@ -59,6 +59,7 @@ import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
+import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemExtendConverter;
 import com.lawu.eshop.order.srv.exception.CanNotFillInShippingLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
@@ -407,13 +408,12 @@ public class ShoppingOrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updateInformation/{id}", method = RequestMethod.PUT)
 	public Result updateInformation(@PathVariable Long id, @RequestBody ShoppingOrderUpdateInfomationParam param) {
-
-		int result = shoppingOrderService.updateInformation(id, param);
-
-		if (result != ResultCode.SUCCESS) {
-			return successCreated(result);
+		try {
+			shoppingOrderService.updateInformation(id, param);
+		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		}
-
 		return successCreated();
 	}
 
@@ -564,7 +564,7 @@ public class ShoppingOrderController extends BaseController {
 	public Result<CommentOrderDTO> getOrderCommentStatus(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId) {
 		// 查询订单商品评价状态
 		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingOrderItemId);
-		CommentOrderDTO commentOrderDTO = ShoppingOrderConverter.coverCommentStatusDTO(shoppingOrderItemBO);
+		CommentOrderDTO commentOrderDTO = ShoppingOrderItemConverter.coverCommentStatusDTO(shoppingOrderItemBO);
 		return successGet(commentOrderDTO);
 	}
 

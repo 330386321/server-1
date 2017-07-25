@@ -244,9 +244,8 @@ public interface ShoppingOrderService {
 	 *            购物订单id
 	 * @param param
 	 *            查询参数
-	 * @return
 	 */
-	int updateInformation(Long id, ShoppingOrderUpdateInfomationParam param);
+	void updateInformation(Long id, ShoppingOrderUpdateInfomationParam param);
 
 	/**
 	 * 检查数据库中超时评论的订单 执行自动评论
