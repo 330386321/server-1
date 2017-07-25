@@ -338,18 +338,7 @@ public class ShoppingOrderConverterTest {
     	rtn.setOrderTotalPrice(new BigDecimal(1));
     	
     	List<ShoppingOrderSettlementItemParam> items = new ArrayList<>();
-    	ShoppingOrderSettlementItemParam item = new ShoppingOrderSettlementItemParam();
-    	item.setIsAllowRefund(true);
-    	item.setProductFeatureImage("test.jpg");
-    	item.setProductId(1L);
-    	item.setProductModelId(1L);
-    	item.setProductName("productName");
-    	item.setProductModelName("productModelName");
-    	item.setQuantity(1);
-    	item.setRegularPrice(new BigDecimal(1));
-    	item.setSalesPrice(new BigDecimal(1));
-    	item.setShoppingCartId(1L);
-    	items.add(item);
+    	items.add(ShoppingOrderItemConverterTest.initShoppingOrderSettlementItemParam());
     	rtn.setItems(items);
     	return rtn;
     }

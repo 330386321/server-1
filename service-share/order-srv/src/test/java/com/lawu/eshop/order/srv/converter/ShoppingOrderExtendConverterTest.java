@@ -21,7 +21,6 @@ import com.lawu.eshop.order.dto.foreign.TraceDTO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
-import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.utils.RandomUtil;
 
 /**
@@ -221,25 +220,6 @@ public class ShoppingOrderExtendConverterTest {
     	Assert.assertEquals(expected.getQuantity(), actual.getQuantity());
     	Assert.assertEquals(expected.getRefundStatus(), actual.getRefundStatus() != null ? actual.getRefundStatus().getValue() : null);
     	Assert.assertEquals(expected.getRegularPrice().doubleValue(), actual.getRegularPrice().doubleValue(), 0D);
-    }
-	
-    public static void assertShoppingOrderItemBO(ShoppingOrderItemDO expected, ShoppingOrderItemBO actual){
-    	Assert.assertNotNull(actual);
-    	Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime());
-    	Assert.assertEquals(expected.getGmtModified().getTime(), actual.getGmtModified().getTime());
-    	Assert.assertEquals(expected.getIsAllowRefund(), actual.getIsAllowRefund());
-    	Assert.assertEquals(expected.getIsEvaluation(), actual.getIsEvaluation());
-    	Assert.assertEquals(expected.getOrderStatus(), actual.getOrderStatus().getValue());
-    	Assert.assertEquals(expected.getProductFeatureImage(), actual.getProductFeatureImage());
-    	Assert.assertEquals(expected.getProductId(), actual.getProductId());
-    	Assert.assertEquals(expected.getProductModelId(), actual.getProductModelId());
-    	Assert.assertEquals(expected.getProductModelName(), actual.getProductModelName());
-    	Assert.assertEquals(expected.getProductName(), actual.getProductName());
-    	Assert.assertEquals(expected.getQuantity(), actual.getQuantity());
-    	Assert.assertEquals(expected.getRefundStatus(), actual.getRefundStatus() != null ? actual.getRefundStatus().getValue() : null);
-    	Assert.assertEquals(expected.getRegularPrice().doubleValue(), actual.getRegularPrice().doubleValue(), 0D);
-    	Assert.assertEquals(expected.getSendTime(), actual.getSendTime());
-    	Assert.assertEquals(expected.getShoppingOrderId(), actual.getShoppingOrderId());
     }
 	
 	private ShoppingOrderExtendBO initShoppingOrderExtendBO() {

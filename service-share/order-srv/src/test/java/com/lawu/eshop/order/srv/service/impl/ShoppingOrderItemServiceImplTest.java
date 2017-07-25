@@ -22,7 +22,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverterTest;
-import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverterTest;
+import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverterTest;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
@@ -75,7 +75,7 @@ public class ShoppingOrderItemServiceImplTest {
     	expected.setShoppingOrderId(1L);
     	shoppingOrderItemDOMapper.insert(expected);
     	ShoppingOrderItemBO actual = shoppingOrderItemService.get(expected.getId());
-    	ShoppingOrderExtendConverterTest.assertShoppingOrderItemBO(expected, actual);
+    	ShoppingOrderItemConverterTest.assertShoppingOrderItemBO(expected, actual);
     }
     
     @Transactional
@@ -161,7 +161,7 @@ public class ShoppingOrderItemServiceImplTest {
     	
     	ShoppingOrderItemExtendBO actual = shoppingOrderItemService.getByComment(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
-    	ShoppingOrderExtendConverterTest.assertShoppingOrderItemBO(shoppingOrderItemDO, actual);
+    	ShoppingOrderItemConverterTest.assertShoppingOrderItemBO(shoppingOrderItemDO, actual);
     	ShoppingOrderConverterTest.assertShoppingOrderBO(expected, actual.getShoppingOrder());
     }
     
@@ -237,7 +237,7 @@ public class ShoppingOrderItemServiceImplTest {
     	Assert.assertEquals(1, actual.getTotalCount().intValue());
     	Assert.assertNotNull(actual.getRecords());
     	for (ShoppingOrderItemExtendBO item : actual.getRecords()) {
-    		ShoppingOrderExtendConverterTest.assertShoppingOrderItemBO(shoppingOrderItemDO, item);
+    		ShoppingOrderItemConverterTest.assertShoppingOrderItemBO(shoppingOrderItemDO, item);
 	    	ShoppingOrderConverterTest.assertShoppingOrderBO(expected, item.getShoppingOrder());
 	    	assertShoppingRefundDetailBO(shoppingRefundDetailDO, item.getShoppingRefundDetail());
     	}
@@ -315,7 +315,7 @@ public class ShoppingOrderItemServiceImplTest {
     	Assert.assertEquals(1, actual.getTotalCount().intValue());
     	Assert.assertNotNull(actual.getRecords());
     	for (ShoppingOrderItemExtendBO item : actual.getRecords()) {
-    		ShoppingOrderExtendConverterTest.assertShoppingOrderItemBO(shoppingOrderItemDO, item);
+    		ShoppingOrderItemConverterTest.assertShoppingOrderItemBO(shoppingOrderItemDO, item);
 	    	ShoppingOrderConverterTest.assertShoppingOrderBO(expected, item.getShoppingOrder());
 	    	assertShoppingRefundDetailBO(shoppingRefundDetailDO, item.getShoppingRefundDetail());
     	}
@@ -393,7 +393,7 @@ public class ShoppingOrderItemServiceImplTest {
     	Assert.assertEquals(1, actual.getTotalCount().intValue());
     	Assert.assertNotNull(actual.getRecords());
     	for (ShoppingOrderItemExtendBO item : actual.getRecords()) {
-    		ShoppingOrderExtendConverterTest.assertShoppingOrderItemBO(shoppingOrderItemDO, item);
+    		ShoppingOrderItemConverterTest.assertShoppingOrderItemBO(shoppingOrderItemDO, item);
 	    	ShoppingOrderConverterTest.assertShoppingOrderBO(expected, item.getShoppingOrder());
 	    	assertShoppingRefundDetailBO(shoppingRefundDetailDO, item.getShoppingRefundDetail());
     	}
