@@ -23,8 +23,7 @@ public interface AdExtendService {
 
 	/**
 	 * 查询广告
-	 * @param adMerchantParam
-	 * @param memberId
+	 * @param adEgainParam
 	 * @return
 	 */
     Result<Page<AdDTO>> selectListByMember(AdEgainParam adEgainParam);
@@ -39,7 +38,7 @@ public interface AdExtendService {
     
     /**
      * 积分榜，人气榜查询
-     * @param adMemberParam
+     * @param adPointParam
      * @return
      */
     @Deprecated
