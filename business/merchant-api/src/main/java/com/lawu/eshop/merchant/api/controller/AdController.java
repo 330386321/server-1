@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
@@ -85,7 +87,7 @@ public class AdController extends BaseController {
     public Result saveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-		if(adParam.getTypeEnum().val!=4){
+		if(adParam.getTypeEnum()!=AdTypeEnum.AD_TYPE_PACKET){
 			if(StringUtils.isEmpty(adParam.getBeginTime())){
 				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
 			}
@@ -106,12 +108,12 @@ public class AdController extends BaseController {
     	String mediaUrl="";
     	String videoImgUrl="";
     	HttpServletRequest request = getRequest();
-    	if(adParam.getTypeEnum().val==1 || adParam.getTypeEnum().val==3){ //平面投放
+    	if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_FLAT || adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //平面投放
     		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
             if(!"".equals(retMap.get("imgUrl"))){
             	mediaUrl = retMap.get("imgUrl");
             }
-    	}else if(adParam.getTypeEnum().val==2){//视频投放
+    	}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_VIDEO){//视频投放
     		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
     		if(!"".equals(retMap.get("videoUrl"))){
             	mediaUrl = retMap.get("videoUrl");
@@ -123,13 +125,13 @@ public class AdController extends BaseController {
             }
     	}
     	Integer count=0;
-    	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==1){
+    	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_AREAS){
     		String areas=adParam.getAreas();
     		if(areas==null || areas==""){
     			areas=ALL_PLACE;
     		}
     		count=memberCountService.findMemberCount(areas);
-    	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==2){
+    	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_FENS){
     		count=memberCountService.findFensCount(merchantId);
     	}
     	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStoreByMId(merchantId);
@@ -298,12 +300,12 @@ public class AdController extends BaseController {
     	String mediaUrl="";
     	String videoImgUrl="";
     	HttpServletRequest request = getRequest();
-    	if(result.getModel().getTypeEnum().val==1 || result.getModel().getTypeEnum().val==3){ //平面投放
+    	if(result.getModel().getTypeEnum()==AdTypeEnum.AD_TYPE_FLAT || result.getModel().getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //平面投放
     		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
             if(!"".equals(retMap.get("imgUrl"))){
             	mediaUrl = retMap.get("imgUrl");
             }
-    	}else if(result.getModel().getTypeEnum().val==2){//视频投放
+    	}else if(result.getModel().getTypeEnum()==AdTypeEnum.AD_TYPE_VIDEO){//视频投放
     		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
     		if(!"".equals(retMap.get("videoUrl"))){
             	mediaUrl = retMap.get("videoUrl");
@@ -315,13 +317,13 @@ public class AdController extends BaseController {
             }
     	}
     	Integer count=0;
-    	if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum().val==1){
+    	if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum()==PutWayEnum.PUT_WAY_AREAS){
     		String areas=adAgainParam.getAreas();
     		if(areas==null || areas==""){
     			areas=ALL_PLACE;
     		}
     		count=memberCountService.findMemberCount(areas);
-    	}else if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum().val==2){
+    	}else if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum()==PutWayEnum.PUT_WAY_FENS){
     		count=memberCountService.findFensCount(merchantId);
     	}
     	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStoreByMId(merchantId);
