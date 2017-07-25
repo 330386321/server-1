@@ -133,7 +133,7 @@ public class ShoppingOrderConverterTest {
 		expected.add(reportFansSaleTransFormDO);
 		reportFansSaleTransFormDO = new ReportFansSaleTransFormDO();
 		reportFansSaleTransFormDO.setIsFans("0");
-		reportFansSaleTransFormDO.setIsFans("1");
+		reportFansSaleTransFormDO.setCount(1L);
 		expected.add(reportFansSaleTransFormDO);
 		
 		List<ReportRiseRerouceDTO> actual = ShoppingOrderConverter.convertReportRiseRerouceDTOList(expected);
@@ -247,7 +247,7 @@ public class ShoppingOrderConverterTest {
     public static void assertShoppingOrderIsNoOnGoingOrderBO(Long expected, ShoppingOrderIsNoOnGoingOrderBO actual) {
     	Assert.assertNotNull(actual);
     	boolean isNoGoingOrder = false;
-    	if (expected != null && expected > 0) {
+    	if (expected == null || expected < 0) {
     		isNoGoingOrder = true;
     	}
     	Assert.assertEquals(isNoGoingOrder, actual.getIsNoOnGoingOrder());
@@ -284,7 +284,7 @@ public class ShoppingOrderConverterTest {
     	Assert.assertEquals(expected.getOrderNum(), actual.getOrderNum());
     	Assert.assertEquals(expected.getOrderStatus(), actual.getOrderStatus().getValue());
     	Assert.assertEquals(expected.getOrderTotalPrice().doubleValue(), actual.getOrderTotalPrice().doubleValue(), 0D);
-    	Assert.assertEquals(expected.getPaymentMethod(), actual.getPaymentMethod().getVal());
+    	Assert.assertEquals(expected.getPaymentMethod(), actual.getPaymentMethod() != null ? actual.getPaymentMethod().getVal() : null);
     	Assert.assertEquals(expected.getSendTime(), actual.getSendTime());
     	Assert.assertEquals(expected.getShoppingCartIdsStr(), actual.getShoppingCartIdsStr());
     	Assert.assertEquals(expected.getStatus(), actual.getStatus().getValue());
@@ -357,6 +357,7 @@ public class ShoppingOrderConverterTest {
     private ShoppingOrderDO initShoppingOrderDO() {
     	ShoppingOrderDO rtn  = new ShoppingOrderDO();
     	rtn.setId(1L);
+    	rtn.setActualAmount(new BigDecimal(1));
     	rtn.setCommodityTotalPrice(new BigDecimal(1));
     	rtn.setFreightPrice(new BigDecimal(0));
     	rtn.setGmtCreate(new Date());
@@ -381,6 +382,7 @@ public class ShoppingOrderConverterTest {
     private ShoppingOrderBO initShoppingOrderBO() {
     	ShoppingOrderBO rtn  = new ShoppingOrderBO();
     	rtn.setId(1L);
+    	rtn.setActualAmount(new BigDecimal(1));
     	rtn.setCommodityTotalPrice(new BigDecimal(1));
     	rtn.setFreightPrice(new BigDecimal(0));
     	rtn.setGmtCreate(new Date());

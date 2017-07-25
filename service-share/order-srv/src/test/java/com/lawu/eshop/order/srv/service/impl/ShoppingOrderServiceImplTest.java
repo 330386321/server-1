@@ -49,6 +49,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverterTest;
+import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverterTest;
 import com.lawu.eshop.order.srv.domain.PropertyDO;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
@@ -318,7 +319,7 @@ public class ShoppingOrderServiceImplTest {
     	ShoppingOrderExtendBO result = shoppingOrderService.get(shoppingOrderDO.getId());
     	ShoppingOrderConverterTest.assertShoppingOrderBO(shoppingOrderDO, result);
     	for (ShoppingOrderItemBO actual : result.getItems()) {
-    		assertShoppingOrderItemBO(expectedMap.get(actual.getId()), actual);
+    		ShoppingOrderExtendConverterTest.assertShoppingOrderItemBO(expectedMap.get(actual.getId()), actual);
     	}
     }
     
@@ -408,13 +409,13 @@ public class ShoppingOrderServiceImplTest {
     	ShoppingOrderExtendBO result = shoppingOrderService.get(shoppingOrderDO.getId(), shoppingOrderDO.getMemberId(), null);
     	ShoppingOrderConverterTest.assertShoppingOrderBO(shoppingOrderDO, result);
     	for (ShoppingOrderItemBO actual : result.getItems()) {
-    		assertShoppingOrderItemBO(expectedMap.get(actual.getId()), actual);
+    		ShoppingOrderExtendConverterTest.assertShoppingOrderItemBO(expectedMap.get(actual.getId()), actual);
     	}
     	
     	result = shoppingOrderService.get(shoppingOrderDO.getId(), null, shoppingOrderDO.getMerchantId());
     	ShoppingOrderConverterTest.assertShoppingOrderBO(shoppingOrderDO, result);
     	for (ShoppingOrderItemBO actual : result.getItems()) {
-    		assertShoppingOrderItemBO(expectedMap.get(actual.getId()), actual);
+    		ShoppingOrderExtendConverterTest.assertShoppingOrderItemBO(expectedMap.get(actual.getId()), actual);
     	}
     }
     
@@ -1283,7 +1284,7 @@ public class ShoppingOrderServiceImplTest {
     	for (ShoppingOrderExtendBO shoppingOrderExtendBO : actual.getRecords()) {
     		ShoppingOrderConverterTest.assertShoppingOrderBO(expected, shoppingOrderExtendBO);
     		for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
-    			assertShoppingOrderItemBO(shoppingOrderItemDO, shoppingOrderItemBO);
+    			ShoppingOrderExtendConverterTest.assertShoppingOrderItemBO(shoppingOrderItemDO, shoppingOrderItemBO);
     		}
     	}
     }
@@ -1362,7 +1363,7 @@ public class ShoppingOrderServiceImplTest {
     	for (ShoppingOrderExtendBO shoppingOrderExtendBO : actual.getRecords()) {
     		ShoppingOrderConverterTest.assertShoppingOrderBO(expected, shoppingOrderExtendBO);
     		for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
-    			assertShoppingOrderItemBO(shoppingOrderItemDO, shoppingOrderItemBO);
+    			ShoppingOrderExtendConverterTest.assertShoppingOrderItemBO(shoppingOrderItemDO, shoppingOrderItemBO);
     		}
     	}
     }
@@ -1441,7 +1442,7 @@ public class ShoppingOrderServiceImplTest {
     	for (ShoppingOrderExtendBO shoppingOrderExtendBO : actual.getRecords()) {
     		ShoppingOrderConverterTest.assertShoppingOrderBO(expected, shoppingOrderExtendBO);
     		for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
-    			assertShoppingOrderItemBO(shoppingOrderItemDO, shoppingOrderItemBO);
+    			ShoppingOrderExtendConverterTest.assertShoppingOrderItemBO(shoppingOrderItemDO, shoppingOrderItemBO);
     		}
     	}
     }
@@ -2523,23 +2524,5 @@ public class ShoppingOrderServiceImplTest {
     	ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderDO.getId());
     	ShoppingOrderConverterTest.assertShoppingOrderDOByUpdate(expected, actual, shoppingOrderDO.getId());
     }
-    
-    public static void assertShoppingOrderItemBO(ShoppingOrderItemDO expected, ShoppingOrderItemBO actual){
-    	Assert.assertNotNull(actual);
-    	Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime());
-    	Assert.assertEquals(expected.getGmtModified().getTime(), actual.getGmtModified().getTime());
-    	Assert.assertEquals(expected.getIsAllowRefund(), actual.getIsAllowRefund());
-    	Assert.assertEquals(expected.getIsEvaluation(), actual.getIsEvaluation());
-    	Assert.assertEquals(expected.getOrderStatus(), actual.getOrderStatus().getValue());
-    	Assert.assertEquals(expected.getProductFeatureImage(), actual.getProductFeatureImage());
-    	Assert.assertEquals(expected.getProductId(), actual.getProductId());
-    	Assert.assertEquals(expected.getProductModelId(), actual.getProductModelId());
-    	Assert.assertEquals(expected.getProductModelName(), actual.getProductModelName());
-    	Assert.assertEquals(expected.getProductName(), actual.getProductName());
-    	Assert.assertEquals(expected.getQuantity(), actual.getQuantity());
-    	Assert.assertEquals(expected.getRefundStatus(), actual.getRefundStatus() != null ? actual.getRefundStatus().getValue() : null);
-    	Assert.assertEquals(expected.getRegularPrice().doubleValue(), actual.getRegularPrice().doubleValue(), 0D);
-    	Assert.assertEquals(expected.getSendTime(), actual.getSendTime());
-    	Assert.assertEquals(expected.getShoppingOrderId(), actual.getShoppingOrderId());
-    }
+
 }

@@ -171,14 +171,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		for (ShoppingOrderSettlementParam shoppingOrderSettlementParam : params) {
 			ShoppingOrderDO shoppingOrderDO = ShoppingOrderConverter.convert(shoppingOrderSettlementParam);
 
-			List<Long> shoppingCartIdList = new ArrayList<>();
-			for (ShoppingOrderSettlementItemParam item : shoppingOrderSettlementParam.getItems()) {
-				shoppingCartIdList.add(item.getShoppingCartId());
-			}
-
-			// 把购物车id用逗号分隔保存在购物订单表中，用于删除购物车记录
-			shoppingOrderDO.setShoppingCartIdsStr(StringUtils.join(shoppingCartIdList, ","));
-
 			shoppingOrderDOMapper.insertSelective(shoppingOrderDO);
 			Long id = shoppingOrderDO.getId();
 

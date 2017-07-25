@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
@@ -17,6 +19,7 @@ import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
+import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
@@ -72,6 +75,13 @@ public class ShoppingOrderConverter {
 		rtn.setMerchantStoreId(param.getMerchantStoreId());
 		rtn.setMessage(param.getMessage());
 		rtn.setOrderTotalPrice(param.getOrderTotalPrice());
+		
+		List<Long> shoppingCartIdList = new ArrayList<>();
+		for (ShoppingOrderSettlementItemParam item : param.getItems()) {
+			shoppingCartIdList.add(item.getShoppingCartId());
+		}
+		// 把购物车id用逗号分隔保存在购物订单表中，用于删除购物车记录
+		rtn.setShoppingCartIdsStr(StringUtils.join(shoppingCartIdList, ","));
 		
 		// 设置自动收货为false
 		rtn.setIsAutomaticReceipt(false);
@@ -331,6 +341,7 @@ public class ShoppingOrderConverter {
 			shoppingOrderCommissionDTO.setMemberNum(item.getMemberNum());
 			shoppingOrderCommissionDTO.setMerchantNum(item.getMerchantNum());
 			shoppingOrderCommissionDTO.setActualAmount(item.getActualAmount());
+			rtn.add(shoppingOrderCommissionDTO);
 		}
 		return rtn;
 	}
