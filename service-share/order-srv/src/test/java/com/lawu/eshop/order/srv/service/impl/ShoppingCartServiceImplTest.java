@@ -18,6 +18,7 @@ import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
+import com.lawu.eshop.order.srv.converter.ShoppingCartConverterTest;
 import com.lawu.eshop.order.srv.domain.PropertyDO;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDOExample;
@@ -111,7 +112,7 @@ public class ShoppingCartServiceImplTest {
     	Assert.assertNotNull(result);
     	Assert.assertEquals(1, result.size());
     	for (ShoppingCartBO actual : result) {
-    		assertShoppingCartBO(expected, actual);
+    		ShoppingCartConverterTest.assertShoppingCartBO(expected, actual);
     	}
     }
     
@@ -133,7 +134,7 @@ public class ShoppingCartServiceImplTest {
     	shoppingCartDOMapper.insert(expected);
     	
     	ShoppingCartBO actual = shoppingCartService.get(expected.getMemberId(), expected.getId());
-    	assertShoppingCartBO(expected, actual);
+    	ShoppingCartConverterTest.assertShoppingCartBO(expected, actual);
     }
     
     @Transactional
@@ -262,16 +263,5 @@ public class ShoppingCartServiceImplTest {
     		Assert.assertEquals(actual.getQuantity(), expected.getQuantity());
     	}
     }
-    
-    private void assertShoppingCartBO(ShoppingCartDO expected, ShoppingCartBO actual){
-    	Assert.assertNotNull(actual);
-    	Assert.assertEquals(expected.getId(), actual.getId());
-    	Assert.assertEquals(expected.getMerchantId(), actual.getMerchantId());
-    	Assert.assertEquals(expected.getMerchantName(), actual.getMerchantName());
-    	Assert.assertEquals(expected.getMerchantStoreId(), actual.getMerchantStoreId());
-    	Assert.assertEquals(expected.getProductId(), actual.getProductId());
-    	Assert.assertEquals(expected.getProductModelId(), actual.getProductModelId());
-    	Assert.assertEquals(expected.getQuantity(), actual.getQuantity());
-    	Assert.assertEquals(expected.getSalesPrice().doubleValue(), actual.getSalesPrice().doubleValue(), 0D);
-    }
+
 }
