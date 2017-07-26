@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
+
 
 @Service
 class MockVerifyCodeService extends BaseController implements VerifyCodeService {
@@ -22,6 +24,7 @@ class MockVerifyCodeService extends BaseController implements VerifyCodeService 
     public Result<VerifyCodeDTO> verifySmsCode(@PathVariable("id") Long id, @RequestParam("smsCode") String smsCode) {
         VerifyCodeDTO dto = new VerifyCodeDTO();
         dto.setMobile("13800138000");
+        dto.setGmtCreate(new Date());
         return successCreated(dto);
     }
 

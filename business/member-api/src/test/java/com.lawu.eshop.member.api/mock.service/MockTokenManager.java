@@ -18,7 +18,7 @@ public class MockTokenManager implements TokenManager {
 
 	@Override
 	public String createToken(String type, String userNo, Long userId, String account) {
-		return null;
+		return "fdsffffffsdafasfasdfsadfsadfsafdd";
 	}
 
 	@Override

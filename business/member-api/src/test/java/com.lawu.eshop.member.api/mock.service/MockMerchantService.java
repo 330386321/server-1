@@ -13,7 +13,7 @@ public class MockMerchantService extends BaseController implements MerchantServi
 
     @Override
     public Result<RongYunDTO> getRongYunInfoByNum(@PathVariable("num") String num) {
-        return null;
+        return successCreated();
     }
 
     @Override

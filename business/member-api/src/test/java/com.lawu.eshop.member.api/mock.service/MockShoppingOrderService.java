@@ -29,7 +29,9 @@ public class MockShoppingOrderService extends BaseController implements Shopping
 
 	@Override
 	public Result<CommentOrderDTO> getOrderCommentStatus(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId) {
-		return null;
+		CommentOrderDTO dto = new CommentOrderDTO();
+		dto.setEvaluation(false);
+		return successCreated(dto);
 	}
 
 	@Override
@@ -81,7 +83,13 @@ public class MockShoppingOrderService extends BaseController implements Shopping
 
 	@Override
 	public Result<ShoppingOrderNumberOfOrderStatusDTO> numberOfOrderStartus(@PathVariable("memberId") Long memberId) {
-		return null;
+		ShoppingOrderNumberOfOrderStatusDTO dto = new ShoppingOrderNumberOfOrderStatusDTO();
+		dto.setBeShippedCount(1L);
+		dto.setEvaluationCount(1L);
+		dto.setPendingPaymentCount(1L);
+		dto.setRefundingCount(1L);
+		dto.setToBeReceivedCount(1L);
+		return successCreated(dto);
 	}
 
 	@Override

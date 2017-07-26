@@ -76,7 +76,7 @@ public class FavoriteProductController extends BaseController{
 	/**
 	 * 取消收藏
 	 * @param token
-	 * @param id
+	 * @param productId
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")

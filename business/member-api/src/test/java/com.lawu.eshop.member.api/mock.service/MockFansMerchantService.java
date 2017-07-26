@@ -29,7 +29,7 @@ public class MockFansMerchantService extends BaseController implements FansMerch
 
     @Override
     public Result saveFansMerchant(@PathVariable("merchantId") Long merchantId, @RequestParam("memberId") Long memberId, @RequestParam("channelEnum") FansMerchantChannelEnum channelEnum) {
-        return null;
+        return successCreated();
     }
 
     @Override

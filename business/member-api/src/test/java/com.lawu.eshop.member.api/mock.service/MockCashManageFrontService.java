@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,12 +21,19 @@ public class MockCashManageFrontService extends BaseController implements CashMa
 
 	@Override
 	public Result save(@RequestBody CashDataParam cash) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result<Page<WithdrawCashQueryDTO>> findCashList(@RequestBody CashBillDataParam cparam) {
-		return null;
+		WithdrawCashQueryDTO dto = new WithdrawCashQueryDTO();
+		List<WithdrawCashQueryDTO> list = new ArrayList<>();
+		list.add(dto);
+		Page<WithdrawCashQueryDTO> page = new Page();
+		page.setRecords(list);
+		page.setCurrentPage(1);
+		page.setTotalCount(100);
+		return successCreated(page);
 	}
 
 	@Override

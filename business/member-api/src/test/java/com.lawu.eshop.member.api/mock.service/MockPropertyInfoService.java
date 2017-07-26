@@ -17,17 +17,17 @@ class MockPropertyInfoService extends BaseController implements PropertyInfoServ
 
 	@Override
 	public Result updatePayPwd(@PathVariable("userNum") String userNum, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result resetPayPwd(@PathVariable("userNum") String userNum, @RequestParam("newPwd") String newPwd) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result setPayPwd(@PathVariable("userNum") String userNum, @RequestParam("newPwd") String newPwd) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
@@ -37,7 +37,7 @@ class MockPropertyInfoService extends BaseController implements PropertyInfoServ
 
 	@Override
 	public Result isSetPayPwd(@PathVariable("userNum") String userNum) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
@@ -66,7 +66,9 @@ class MockPropertyInfoService extends BaseController implements PropertyInfoServ
 
 	@Override
 	public Result<PropertyLoveAccountDTO> selectLoveAccount(@PathVariable("userNum") String userNum) {
-		return null;
+		PropertyLoveAccountDTO dto = new PropertyLoveAccountDTO();
+		dto.setLoveAccount(new BigDecimal("1100"));
+		return successCreated(dto);
 	}
 
 	@Override

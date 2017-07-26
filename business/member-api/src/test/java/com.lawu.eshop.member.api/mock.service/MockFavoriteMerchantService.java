@@ -1,6 +1,8 @@
 package com.lawu.eshop.member.api.mock.service;
 
+import com.lawu.eshop.ad.dto.FavoriteAdDOViewDTO;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.FavoriteMerchantService;
 import com.lawu.eshop.user.dto.FavoriteMerchantDTO;
@@ -10,21 +12,32 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
-public class MockFavoriteMerchantService implements FavoriteMerchantService {
+public class MockFavoriteMerchantService extends BaseController implements FavoriteMerchantService {
 
 	@Override
 	public Result save(@RequestParam("memberId") Long memberId, @RequestBody FavoriteStoreParam param) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result<Page<FavoriteMerchantDTO>> getMyFavoriteMerchant(@RequestParam("memberId") Long memberId, @RequestBody FavoriteMerchantParam pageQuery) {
-		return null;
+		FavoriteMerchantDTO dto = new FavoriteMerchantDTO();
+		dto.setMerchantId(1L);
+		List<FavoriteMerchantDTO> list = new ArrayList<>();
+		list.add(dto);
+		Page<FavoriteMerchantDTO> page = new Page();
+		page.setCurrentPage(1);
+		page.setTotalCount(100);
+		page.setRecords(list);
+		return successCreated(page);
 	}
 
 	@Override
 	public Result remove(@RequestBody FavoriteStoreParam param, @RequestParam("memberId") Long memberId) {
-		return null;
+		return successCreated();
 	}
 }

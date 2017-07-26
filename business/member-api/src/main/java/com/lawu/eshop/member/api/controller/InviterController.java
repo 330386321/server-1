@@ -56,7 +56,7 @@ public class InviterController extends BaseController {
     
     /**
      * 我的商家推荐总数量
-     * @param id
+     * @param token
      * @return
     */
     @Audit(date = "2017-04-01", reviewer = "孙林青")

@@ -71,7 +71,7 @@ public class FavoriteAdController extends BaseController{
 	/**
 	 * 会员收藏的广告列表
 	 * @param token
-	 * @param pageQuery
+	 * @param param
 	 * @return
 	 */
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
@@ -100,7 +100,7 @@ public class FavoriteAdController extends BaseController{
 	/**
 	 * 取消收藏
 	 * @param token
-	 * @param id
+	 * @param adId
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
