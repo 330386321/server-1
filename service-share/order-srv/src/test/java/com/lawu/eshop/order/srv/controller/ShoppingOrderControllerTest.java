@@ -1,7 +1,6 @@
 package com.lawu.eshop.order.srv.controller;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.lawu.eshop.order.srv.OrderSrvApplication;
-import com.lawu.eshop.order.srv.controller.ShoppingOrderController;
+import com.lawu.eshop.order.srv.OrderSrvApplicationTest;
 
 /**
  * 
@@ -23,7 +21,7 @@ import com.lawu.eshop.order.srv.controller.ShoppingOrderController;
  * @date 2017年6月20日
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = OrderSrvApplication.class)
+@SpringBootTest(classes = OrderSrvApplicationTest.class)
 @WebAppConfiguration
 public class ShoppingOrderControllerTest {
 	
@@ -37,7 +35,6 @@ public class ShoppingOrderControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(shoppingOrderController).build();
     }
 
-    @Ignore
     @Test
     public void setMemberTokenOneToOne() throws Exception {
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get("/shoppingOrder/getExpressInfo/75").accept(MediaType.APPLICATION_JSON)).andReturn();
