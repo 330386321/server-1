@@ -700,6 +700,8 @@ public class AdServiceImplTest {
         pointPoolDO.setGmtCreate(new Date());
         pointPoolDO.setGmtModified(new Date());
         pointPoolDO.setMerchantId(1002l);
+        pointPoolDO.setMemberId(1l);
+        pointPoolDO.setMemberNum("aaa");
         pointPoolDO.setOrdinal(0);
         pointPoolDO.setPoint(BigDecimal.valueOf(15));
         pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
