@@ -166,18 +166,6 @@ public class AdServiceImpl implements AdService {
 		}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PACKET){
 			saveRPPool(adDO);
 		}
-		if(adParam.getAreas()!=null){ //不是全国投放
-			String[] path=adParam.getAreas().split(",");
-			for (String s : path) {
-				AdRegionDO adRegionDO=new AdRegionDO();
-				adRegionDO.setAdId(adDO.getId());
-				adRegionDO.setMerchantId(adSaveParam.getMerchantId());
-				adRegionDO.setGmtCreate(new Date());
-				adRegionDO.setRegionId(s);
-				adRegionDOMapper.insert(adRegionDO);
-			}
-			
-		}
 		//发送消息，通知其他模块处理事务 积分的处理
 		mctransactionMainAddService.sendNotice(adDO.getId());
 		return i;

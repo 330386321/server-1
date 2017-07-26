@@ -88,10 +88,10 @@ public class BankAccountController extends BaseController{
 	 */
 	@RequestMapping(value = "updateBankAccount/{id}", method = RequestMethod.PUT)
     public Result updateBankAccount(@PathVariable Long id,@RequestParam String userNum,@RequestBody BankAccountParam bankAccountParam) {
-		Boolean  flag=bankAccountService.selectByAccount(bankAccountParam.getAccountNumber(),userNum);
+		/*Boolean  flag=bankAccountService.selectByAccount(bankAccountParam.getAccountNumber(),userNum);
 		if(flag){
 			return successCreated(ResultCode.BANK_ACCOUNT_IS_EXIST);
-		}
+		}*/
 		bankAccountService.updateBankAccount(id, bankAccountParam);
 		return  successCreated();
     }

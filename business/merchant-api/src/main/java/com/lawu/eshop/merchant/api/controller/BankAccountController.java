@@ -137,12 +137,21 @@ public class BankAccountController extends BaseController{
     		return successCreated(ResultCode.BANK_ACCOUNT_ERROR);
     	}
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-    	Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
-		if(flag.getModel()!=null && (Boolean)flag.getModel()){
-			 bankAccountService.updateBankAccount(id,userNum, bankAccountParam);
-			 return successCreated(ResultCode.SUCCESS);
+    	
+    	Result<Boolean> bankRs= cashManageFrontService.isExistCash(userNum, id);
+    	if(!isSuccess(bankRs)){
+    		 return successCreated(bankRs.getRet());
+    	}
+    	if(bankRs.getModel()){
+			return successCreated(ResultCode.BANK_CASH_EXIST);
 		}else{
-			 return successCreated(ResultCode.PAY_PWD_ERROR);
+			Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
+			if(flag.getModel()!=null && (Boolean)flag.getModel()){
+				 bankAccountService.updateBankAccount(id,userNum, bankAccountParam);
+				 return successCreated(ResultCode.SUCCESS);
+			}else{
+				 return successCreated(ResultCode.PAY_PWD_ERROR);
+			}
 		}
 
     }
