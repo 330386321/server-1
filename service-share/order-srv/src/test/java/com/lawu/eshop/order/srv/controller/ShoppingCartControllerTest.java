@@ -1,6 +1,7 @@
 package com.lawu.eshop.order.srv.controller;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class ShoppingCartControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(shoppingCartController).build();
     }
 
+    @Ignore
     @Transactional
     @Rollback
     @Test

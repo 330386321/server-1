@@ -66,7 +66,7 @@ public class OrderCommentProductTransactionFollowServiceImplTest {
     	shoppingOrderItemDOMapper.insert(expected);
     	
 		CommentProductNotification notification = new CommentProductNotification();
-		notification.setShoppingOrderItemId(1L);
+		notification.setShoppingOrderItemId(expected.getId());
 		notification.setTransactionId(1L);
 		orderCommentProductTransactionFollowServiceImpl.receiveNotice(notification);
     	

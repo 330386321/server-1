@@ -143,7 +143,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	param.setRefusalReasons("商品已经损坏");
     	shoppingRefundDetailService.agreeToApply(shoppingRefundDetailDO.getId(), expected.getMerchantId(), param);
     	
-    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(RefundStatusEnum.REFUND_FAILED.getValue(), actual.getRefundStatus());
     	Assert.assertEquals(0, actual.getSendTime().intValue());
@@ -233,7 +233,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	param.setRefusalReasons("商品已经损坏");
     	shoppingRefundDetailService.agreeToRefund(shoppingRefundDetailDO.getId(), expected.getMerchantId(), param);
     	
-    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(RefundStatusEnum.REFUND_FAILED.getValue(), actual.getRefundStatus());
     	Assert.assertEquals(0, actual.getSendTime().intValue());
@@ -324,7 +324,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), shoppingOrderDO.getOrderStatus());
     	Assert.assertEquals(0D, shoppingOrderDO.getActualAmount().doubleValue(), 0D);
     	
-    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), actual.getRefundStatus());
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actual.getOrderStatus());
@@ -571,7 +571,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), shoppingOrderDO.getOrderStatus());
     	Assert.assertEquals(0D, shoppingOrderDO.getActualAmount().doubleValue(), 0D);
     	
-    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), actual.getRefundStatus());
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actual.getOrderStatus());
@@ -1113,7 +1113,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	param.setWaybillNum("123456789");
     	shoppingRefundDetailService.fillLogisticsInformation(shoppingRefundDetailDO.getId(), expected.getMemberId(), param);
     	
-    	ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actualShoppingOrderItemDO);
     	Assert.assertEquals(RefundStatusEnum.TO_BE_REFUNDED.getValue(), actualShoppingOrderItemDO.getRefundStatus());
     	Assert.assertEquals(0, actualShoppingOrderItemDO.getSendTime().intValue());
@@ -1206,7 +1206,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	param.setConsigneeName("Sunny");
     	shoppingRefundDetailService.fillReturnAddress(shoppingRefundDetailDO.getId(), expected.getMerchantId(), param);
     	
-    	ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actualShoppingOrderItemDO);
     	Assert.assertEquals(RefundStatusEnum.TO_BE_RETURNED.getValue(), actualShoppingOrderItemDO.getRefundStatus());
     	Assert.assertEquals(0, actualShoppingOrderItemDO.getSendTime().intValue());
@@ -1374,7 +1374,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	
     	shoppingRefundDetailService.platformIntervention(shoppingRefundDetailDO.getId(), expected.getMemberId());
     	
-    	ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actualShoppingOrderItemDO);
     	Assert.assertEquals(RefundStatusEnum.PLATFORM_INTERVENTION.getValue(), actualShoppingOrderItemDO.getRefundStatus());
     	Assert.assertEquals(0, actualShoppingOrderItemDO.getSendTime().intValue());
@@ -1459,7 +1459,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	
     	shoppingRefundDetailService.revokeRefundRequest(shoppingRefundDetailDO.getId(), expected.getMemberId());
     	
-    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertNull(actual.getRefundStatus());
     	Assert.assertEquals(expected.getOrderStatus(), actual.getOrderStatus());
@@ -1537,7 +1537,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	
     	shoppingRefundDetailService.revokeRefundRequest(shoppingRefundDetailDO.getId());
     	
-    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertNull(actual.getRefundStatus());
     	Assert.assertEquals(expected.getOrderStatus(), actual.getOrderStatus());

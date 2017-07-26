@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
@@ -214,7 +215,7 @@ public class ShoppingOrderItemServiceImplTest {
     	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
     	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
     	shoppingOrderItemDO.setSendTime(0);
-    	shoppingOrderItemDO.setShoppingOrderId(1L);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
     	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	
     	ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
@@ -225,6 +226,7 @@ public class ShoppingOrderItemServiceImplTest {
     	shoppingRefundDetailDO.setReason("七天无理由退货");
     	shoppingRefundDetailDO.setShoppingOrderItemId(shoppingOrderItemDO.getId());
     	shoppingRefundDetailDO.setStatus(StatusEnum.VALID.getValue());
+    	shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.RETURN_REFUND.getValue());
     	shoppingRefundDetailDOMapper.insert(shoppingRefundDetailDO);
     	
     	ShoppingRefundQueryForeignParam param = new ShoppingRefundQueryForeignParam();
@@ -292,7 +294,7 @@ public class ShoppingOrderItemServiceImplTest {
     	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
     	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
     	shoppingOrderItemDO.setSendTime(0);
-    	shoppingOrderItemDO.setShoppingOrderId(1L);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
     	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	
     	ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
@@ -303,13 +305,14 @@ public class ShoppingOrderItemServiceImplTest {
     	shoppingRefundDetailDO.setReason("七天无理由退货");
     	shoppingRefundDetailDO.setShoppingOrderItemId(shoppingOrderItemDO.getId());
     	shoppingRefundDetailDO.setStatus(StatusEnum.VALID.getValue());
+    	shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.RETURN_REFUND.getValue());
     	shoppingRefundDetailDOMapper.insert(shoppingRefundDetailDO);
     	
     	ShoppingRefundQueryForeignParam param = new ShoppingRefundQueryForeignParam();
     	param.setCurrentPage(1);
     	param.setPageSize(10);
     	param.setKeyword(expected.getOrderNum());
-    	Page<ShoppingOrderItemExtendBO> actual = shoppingOrderItemService.selectRefundPageByMemberId(expected.getMerchantId(), param);
+    	Page<ShoppingOrderItemExtendBO> actual = shoppingOrderItemService.selectRefundPageByMemberId(expected.getMemberId(), param);
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(param.getCurrentPage(), actual.getCurrentPage());
     	Assert.assertEquals(1, actual.getTotalCount().intValue());
@@ -370,7 +373,7 @@ public class ShoppingOrderItemServiceImplTest {
     	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
     	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
     	shoppingOrderItemDO.setSendTime(0);
-    	shoppingOrderItemDO.setShoppingOrderId(1L);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
     	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	
     	ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
@@ -381,6 +384,7 @@ public class ShoppingOrderItemServiceImplTest {
     	shoppingRefundDetailDO.setReason("七天无理由退货");
     	shoppingRefundDetailDO.setShoppingOrderItemId(shoppingOrderItemDO.getId());
     	shoppingRefundDetailDO.setStatus(StatusEnum.VALID.getValue());
+    	shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.RETURN_REFUND.getValue());
     	shoppingRefundDetailDOMapper.insert(shoppingRefundDetailDO);
     	
     	ShoppingRefundQueryForeignParam param = new ShoppingRefundQueryForeignParam();

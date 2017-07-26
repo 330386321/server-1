@@ -114,7 +114,7 @@ public class ShoppingOrderPaymentTransactionFollowServiceImplTest {
     	Assert.assertEquals(notification.getPaymentMethod(), actual.getPaymentMethod());
     	Assert.assertEquals(notification.getThirdNumber(), actual.getThirdNumber());
 		
-    	ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actualShoppingOrderItemDO);
     	Assert.assertEquals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue(), actualShoppingOrderItemDO.getOrderStatus());
     	

@@ -108,7 +108,7 @@ public class ShoppingRefundAgreeToRefundDeleteCommentTransactionMainServiceImplT
 		
 		// 交易发送消息是否正常
     	TransactionRecordDOExample example = new TransactionRecordDOExample();
-    	example.createCriteria().andRelateIdEqualTo(expected.getId());
+    	example.createCriteria().andRelateIdEqualTo(shoppingOrderItemDO.getId());
     	TransactionRecordDO transactionRecordDO = transactionRecordDOMapper.selectByExample(example).get(0);
 		Assert.assertNotNull(transactionRecordDO);
 		Assert.assertNotNull(transactionRecordDO.getGmtModified());

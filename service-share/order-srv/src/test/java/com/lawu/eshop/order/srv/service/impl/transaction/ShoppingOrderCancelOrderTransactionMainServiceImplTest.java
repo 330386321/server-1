@@ -105,7 +105,7 @@ public class ShoppingOrderCancelOrderTransactionMainServiceImplTest {
 		shoppingOrderCancelOrderTransactionMainServiceImpl.sendNotice(expected.getId());
 		// 交易发送消息是否正常
     	TransactionRecordDOExample example = new TransactionRecordDOExample();
-    	example.createCriteria().andRelateIdEqualTo(shoppingOrderItemDO.getId());
+    	example.createCriteria().andRelateIdEqualTo(expected.getId());
     	TransactionRecordDO transactionRecordDO = transactionRecordDOMapper.selectByExample(example).get(0);
 		Assert.assertNotNull(transactionRecordDO);
 		Assert.assertNotNull(transactionRecordDO.getGmtModified());

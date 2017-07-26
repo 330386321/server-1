@@ -105,7 +105,7 @@ public class TransactionStatusServiceImplTest {
 		expected.setType((byte) 1);
 		transactionRecordDOMapper.insert(expected);
 		
-		transactionStatusService.success(expected.getRelateId());
+		transactionStatusService.success(expected.getId());
 		
 		TransactionRecordDO actual = transactionRecordDOMapper.selectByPrimaryKey(expected.getId());
 		Assert.assertNotNull(actual);
