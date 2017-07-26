@@ -126,14 +126,14 @@ public class ReportEarningsServiceImplTest {
 		ad.setTotalPoint(BigDecimal.valueOf(100));
 		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
         ad.setGmtCreate(new Date());
-        ad.setGmtModified(DateUtil.formatDate(new Data().toString(), "yyyy-MM-dd HH:mm:ss"));
+        ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
         adDOMapper.insertSelective(ad);
 
         PointPoolDO pointPoolDO=new PointPoolDO();
         pointPoolDO.setAdId(ad.getId());
         pointPoolDO.setGmtCreate(new Date());
-        pointPoolDO.setGmtModified(new Date(2017-07-18));
+        pointPoolDO.setGmtModified(new Date());
         pointPoolDO.setMerchantId(1002l);
         pointPoolDO.setOrdinal(0);
         pointPoolDO.setPoint(BigDecimal.valueOf(15));

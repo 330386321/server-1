@@ -449,33 +449,18 @@ public class AdServiceImpl implements AdService {
 		memberAdRecordD.setOriginalPoint(adDO.getPoint());
 		memberAdRecordDOMapper.insert(memberAdRecordD);
 		
-		//当前广告点击次数
-		MemberAdRecordDOExample example = new MemberAdRecordDOExample();
-		example.createCriteria().andAdIdEqualTo(id);
-		Long clickCount= memberAdRecordDOMapper.countByExample(example);
+		// 修改点击次数记录
+		adDOMapperExtend.updateHitsByPrimaryKey(id);
+		//发送消息修改积分
+		userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 		
-		if (clickCount.intValue() + 1 >= adDO.getAdCount()) {
+		if (adDO.getHits() + 1 >= adDO.getAdCount()) {
 			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); // 投放结束
 			adDO.setGmtModified(new Date());
 			adDOMapper.updateByPrimaryKey(adDO);
 			// 删除solr中的数据
 			solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
-		
-		//异步修改广告点击次数和为用户添加积分
-		new Thread(){
-			public void run(){
-				// 修改点击次数记录
-				adDOMapperExtend.updateHitsByPrimaryKey(id);
-				//发送消息修改积分
-				userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
-				try {
-					TimeUnit.SECONDS.sleep(3);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}.start();
 		
 		return adDO.getPoint();
 	}
