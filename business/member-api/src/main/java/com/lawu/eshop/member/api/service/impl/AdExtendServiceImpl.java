@@ -458,13 +458,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 							adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum
 									.getEnum(merchantAdInfoDTO.getManageTypeEnum().val));
 						}
-						Date date=new Date();
-			     		Long time=adDTO.getBeginTime().getTime()-date.getTime();
-			     		if(time>0){
-			     			adDTO.setNeedBeginTime(time);
-			     		}else{
-			     			adDTO.setNeedBeginTime(0l);
-			     		}
+			     		adDTO.setNeedBeginTime(adDTO.getNeedBeginTime());
 					}
 				}
 			}
