@@ -161,6 +161,7 @@ public class AdServiceImpl implements AdService {
 		adDO.setContent(adParam.getContent());
 		Integer i=adDOMapper.insert(adDO);
 		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //E赞  红包
+			adDO.setAdCount(adSaveParam.getCount());
 			savePointPool(adDO,adSaveParam.getCount());
 		}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PACKET){
 			saveRPPool(adDO);
