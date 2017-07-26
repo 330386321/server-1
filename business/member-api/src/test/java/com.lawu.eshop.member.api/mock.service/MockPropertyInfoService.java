@@ -1,14 +1,18 @@
 package com.lawu.eshop.member.api.mock.service;
 
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
+import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
+
 @Service
-class MockPropertyInfoService implements PropertyInfoService {
+class MockPropertyInfoService extends BaseController implements PropertyInfoService {
 
 
 	@Override
@@ -43,17 +47,21 @@ class MockPropertyInfoService implements PropertyInfoService {
 
 	@Override
 	public Result<PropertyPointDTO> getPropertyPoint(@PathVariable("userNum") String userNum) {
-		return null;
+		PropertyPointDTO dto = new PropertyPointDTO();
+		dto.setPoint(new BigDecimal("100"));
+		return successCreated(dto);
 	}
 
 	@Override
 	public Result varifyPayPwd(@RequestParam("userNum") String userNum, @RequestParam("payPwd") String payPwd) {
-		return null;
+		return successCreated(true);
 	}
 
 	@Override
 	public Result<PropertyPointAndBalanceDTO> getPropertyInfoMoney(@PathVariable("userNum") String userNum) {
-		return null;
+		PropertyPointAndBalanceDTO dto = new PropertyPointAndBalanceDTO();
+		dto.setPoint(new BigDecimal("10"));
+		return successCreated(dto);
 	}
 
 	@Override
@@ -63,6 +71,8 @@ class MockPropertyInfoService implements PropertyInfoService {
 
 	@Override
 	public Result<PropertyInfoFreezeDTO> getPropertyinfoFreeze(@PathVariable("userNum") String userNum) {
-		return null;
+		PropertyInfoFreezeDTO dto = new PropertyInfoFreezeDTO();
+		dto.setStatus(PropertyinfoFreezeEnum.NO);
+		return successCreated(dto);
 	}
 }

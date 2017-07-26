@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.mock.service;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Service
-class MockMessageService implements MessageService {
+class MockMessageService extends BaseController implements MessageService {
 
     @Override
     public Result<MessageStatisticsDTO> getMessageStatistics(@PathVariable("userNum") String userNum) {
@@ -36,7 +37,7 @@ class MockMessageService implements MessageService {
 
     @Override
     public Result saveMessage(@PathVariable("userNum") String userNum, @ModelAttribute MessageInfoParam messageInfoParam) {
-        return null;
+        return successCreated();
     }
 
     @Override

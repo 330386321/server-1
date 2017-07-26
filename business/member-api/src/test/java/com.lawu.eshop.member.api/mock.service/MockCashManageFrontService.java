@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.mock.service;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.CashManageFrontService;
 import com.lawu.eshop.property.dto.WithdrawCashDetailDTO;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Service
-public class MockCashManageFrontService implements CashManageFrontService {
+public class MockCashManageFrontService extends BaseController implements CashManageFrontService {
 
 	@Override
 	public Result save(@RequestBody CashDataParam cash) {
@@ -39,6 +40,6 @@ public class MockCashManageFrontService implements CashManageFrontService {
 
 	@Override
 	public Result<Boolean> isExistCash(@RequestParam("userNum") String userNum, @RequestParam("bankAccountId") Long bankAccountId) {
-		return null;
+		return successCreated(true);
 	}
 }

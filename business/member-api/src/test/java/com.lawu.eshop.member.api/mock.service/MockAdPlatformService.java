@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,7 +20,10 @@ public class MockAdPlatformService extends BaseController implements AdPlatformS
 
     @Override
     public Result<List<AdPlatformDTO>> selectByPosition(@RequestBody PositionEnum positionEnum) {
-        return null;
+        AdPlatformDTO dto = new AdPlatformDTO();
+        List<AdPlatformDTO> list = new ArrayList<>();
+        list.add(dto);
+        return successCreated(list);
     }
 
     @Override

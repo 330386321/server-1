@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.mock.service;
 
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.BankAccountService;
 import com.lawu.eshop.property.dto.BankAccountDTO;
@@ -10,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Service
-public class MockBankAccountService implements BankAccountService {
+public class MockBankAccountService extends BaseController implements BankAccountService {
 
 
 	@Override
 	public Result saveBankAccount(@RequestParam("userNum") String userNum, @RequestBody BankAccountParam bankAccountParam) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
@@ -25,16 +26,17 @@ public class MockBankAccountService implements BankAccountService {
 
 	@Override
 	public Result delete(@PathVariable("id") Long id) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result<BankAccountDTO> selectAccount(@PathVariable("id") Long id) {
-		return null;
+		BankAccountDTO dto = new BankAccountDTO();
+		return successCreated(dto);
 	}
 
 	@Override
 	public Result updateBankAccount(@PathVariable("id") Long id, @RequestParam("userNum") String userNum, @RequestBody BankAccountParam bankAccountParam) {
-		return null;
+		return successCreated();
 	}
 }

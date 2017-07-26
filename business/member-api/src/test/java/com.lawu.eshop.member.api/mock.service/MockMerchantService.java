@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.mock.service;
 
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.MerchantService;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
-public class MockMerchantService implements MerchantService {
+public class MockMerchantService extends BaseController implements MerchantService {
 
     @Override
     public Result<RongYunDTO> getRongYunInfoByNum(@PathVariable("num") String num) {
@@ -17,6 +18,8 @@ public class MockMerchantService implements MerchantService {
 
     @Override
     public Result<MerchantBaseInfoDTO> getMerchantById(@PathVariable("merchantId") Long merchantId) {
-        return null;
+        MerchantBaseInfoDTO dto = new MerchantBaseInfoDTO();
+        dto.setUserNum("B00001");
+        return successCreated(dto);
     }
 }

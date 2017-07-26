@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.mock.service;
 
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.product.dto.MemberProductStoreDTO;
@@ -9,11 +10,12 @@ import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
 @Service
-public class MockMerchantStoreService implements MerchantStoreService {
+public class MockMerchantStoreService extends BaseController implements MerchantStoreService {
 
     @Override
     public Result<MerchantInfoForShoppingCartDTO> getMerchantInfoForShoppingCart(@PathVariable("merchantId") Long merchantId) {
@@ -42,7 +44,13 @@ public class MockMerchantStoreService implements MerchantStoreService {
 
     @Override
     public Result<MerchantStoreDTO> selectMerchantStoreByMId(@RequestParam("merchantId") Long merchantId) {
-        return null;
+        MerchantStoreDTO dto = new MerchantStoreDTO();
+        dto.setName("嘉旺");
+        dto.setMerchantStoreId(1L);
+        dto.setLogoUrl("/logo/1.jpg");
+        dto.setLatitude(new BigDecimal("22.23"));
+        dto.setLongitude(new BigDecimal("120.343"));
+        return successCreated(dto);
     }
 
     @Override
@@ -67,7 +75,7 @@ public class MockMerchantStoreService implements MerchantStoreService {
 
     @Override
     public Result<ManageTypeEnum> getManageType(@RequestParam("merchantId") Long merchantId) {
-        return null;
+        return successCreated(ManageTypeEnum.COMMON);
     }
 
     @Override
@@ -82,6 +90,13 @@ public class MockMerchantStoreService implements MerchantStoreService {
 
     @Override
     public Result<List<MerchantAdInfoDTO>> getAdMerchantStoreByIds(@RequestParam("merchantIds") List<Long> merchantIds) {
+        MerchantAdInfoDTO dto = new MerchantAdInfoDTO();
+        dto.setMerchantId(1L);
+        dto.setMerchantStoreId(1L);
+        dto.setName("嘉旺");
+        dto.setPath("/path/1.jpg");
+        dto.setManageTypeEnum(ManageTypeEnum.COMMON);
+
         return null;
     }
 

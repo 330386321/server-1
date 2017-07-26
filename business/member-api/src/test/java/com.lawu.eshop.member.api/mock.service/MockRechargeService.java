@@ -19,6 +19,9 @@ public class MockRechargeService implements RechargeService {
 
 	@Override
 	public ThirdPayCallBackQueryPayOrderDTO getRechargeMoney(@RequestParam("rechargeId") String rechargeId) {
-		return null;
+		ThirdPayCallBackQueryPayOrderDTO dto = new ThirdPayCallBackQueryPayOrderDTO();
+		dto.setActualMoney(Double.parseDouble("100"));
+		dto.setOrderNum("4213123123");
+		return dto;
 	}
 }

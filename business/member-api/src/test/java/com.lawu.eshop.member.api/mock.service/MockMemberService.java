@@ -5,6 +5,7 @@ package com.lawu.eshop.member.api.mock.service;/**
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.MemberQuery;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,7 +29,9 @@ public class MockMemberService extends BaseController implements MemberService {
 
     @Override
     public Result<UserDTO> findMemberInfo(@PathVariable("memberId") Long memberId) {
-        return null;
+        UserDTO dto = new UserDTO();
+        dto.setRegionPath("1/101/10101");
+        return successCreated(dto);
     }
 
     @Override
@@ -52,12 +56,14 @@ public class MockMemberService extends BaseController implements MemberService {
 
     @Override
     public Result register(@ModelAttribute RegisterRealParam registerRealParam) {
-        return null;
+        return successCreated();
     }
 
     @Override
     public Result<MemberDTO> getMemberByAccount(@PathVariable("account") String account) {
-        return null;
+        MemberDTO dto = new MemberDTO();
+        dto.setRegionPath("1/101/10101");
+        return successCreated(ResultCode.FAIL);
     }
 
     @Override
@@ -87,7 +93,10 @@ public class MockMemberService extends BaseController implements MemberService {
 
     @Override
     public Result<UserRedPacketDTO> isRegister(@RequestParam("moblie") String moblie) {
-        return null;
+        UserRedPacketDTO dto = new UserRedPacketDTO();
+        dto.setMemberId(1L);
+        dto.setUserNum("M00001");
+        return successCreated(dto);
     }
 
     @Override
@@ -107,7 +116,14 @@ public class MockMemberService extends BaseController implements MemberService {
 
     @Override
     public Result<List<MemberDTO>> getMemberByIds(@RequestParam("memberIds") List<Long> memberIds) {
-        return null;
+        MemberDTO dto = new MemberDTO();
+        dto.setId(1L);
+        dto.setHeadimg("/head/1.jpg");
+        dto.setMobile("13800138000");
+        dto.setRegionPath("1/101/10101");
+        List<MemberDTO> list = new ArrayList<>();
+        list.add(dto);
+        return successCreated(list);
     }
 
     @Override
@@ -117,6 +133,10 @@ public class MockMemberService extends BaseController implements MemberService {
 
     @Override
     public Result<AdQueryMemberInfoDTO> adQueryMemberInfo(@PathVariable("memberId") Long memberId) {
-        return null;
+        AdQueryMemberInfoDTO dto = new AdQueryMemberInfoDTO();
+        dto.setRegionPath("1/101/10101");
+        List<Long> list = new ArrayList<>();
+        dto.setFansList(list);
+        return successCreated(dto);
     }
 }

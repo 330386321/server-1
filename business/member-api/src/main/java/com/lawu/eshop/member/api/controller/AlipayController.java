@@ -75,8 +75,7 @@ public class AlipayController extends BaseController {
 		// 查询支付金额
 		double money = 0;
 		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(param.getBizFlagEnum().getVal())) {
-			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
-					.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
 			if(payOrderCallback == null){
 				return successCreated(ResultCode.PAY_ORDER_NULL);
 			}else if(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal().equals(payOrderCallback.getPayOrderStatusEnum().getVal())){

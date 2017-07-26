@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.mock.service;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
@@ -14,11 +15,12 @@ import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
 @Service
-public class MockShoppingOrderService implements ShoppingOrderService {
+public class MockShoppingOrderService extends BaseController implements ShoppingOrderService {
 
 	@Override
 	public Result<List<Long>> save(@RequestBody List<ShoppingOrderSettlementParam> params) {
@@ -72,7 +74,9 @@ public class MockShoppingOrderService implements ShoppingOrderService {
 
 	@Override
 	public Result<ShoppingOrderMoneyDTO> selectOrderMoney(@RequestParam("orderIds") String orderIds) {
-		return null;
+		ShoppingOrderMoneyDTO dto = new ShoppingOrderMoneyDTO();
+		dto.setOrderTotalPrice(new BigDecimal("100"));
+		return successCreated(dto);
 	}
 
 	@Override

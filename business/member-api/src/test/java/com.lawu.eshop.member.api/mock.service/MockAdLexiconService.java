@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,6 +19,10 @@ public class MockAdLexiconService extends BaseController implements AdLexiconSer
 
 	@Override
 	public Result<List<AdLexiconDTO>> selectList(@RequestParam("adId") Long adId) {
-		return null;
+		AdLexiconDTO dto = new AdLexiconDTO();
+		dto.setTitle("nimei");
+		List<AdLexiconDTO> list = new ArrayList<>();
+		list.add(dto);
+		return successCreated(list);
 	}
 }

@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.mock.service;
 
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Service
-class MockVerifyCodeService implements VerifyCodeService {
+class MockVerifyCodeService extends BaseController implements VerifyCodeService {
 
     @Override
     public void savePicCode(@PathVariable("mobile") String mobile, @RequestParam("picCode") String picCode, @RequestParam("purpose") VerifyCodePurposeEnum purpose) {
@@ -19,7 +20,9 @@ class MockVerifyCodeService implements VerifyCodeService {
 
     @Override
     public Result<VerifyCodeDTO> verifySmsCode(@PathVariable("id") Long id, @RequestParam("smsCode") String smsCode) {
-        return null;
+        VerifyCodeDTO dto = new VerifyCodeDTO();
+        dto.setMobile("13800138000");
+        return successCreated(dto);
     }
 
     @Override
