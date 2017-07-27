@@ -393,6 +393,8 @@ public class MerchantStoreConverter {
             storeSolrDTO.setFavoriteNumber(solrDocument.get("favoriteNumber_i") == null ? 0 : Integer.valueOf(solrDocument.get("favoriteNumber_i").toString()));
             storeSolrDTO.setAverageConsumeAmount(solrDocument.get("averageConsumeAmount_d") == null ? 0.0 : Double.valueOf(solrDocument.get("averageConsumeAmount_d").toString()));
             storeSolrDTO.setAverageScore(solrDocument.get("averageScore_d") == null ? 0.0 : Double.valueOf(solrDocument.get("averageScore_d").toString()));
+            storeSolrDTO.setFavoreInfo(solrDocument.get("favoreInfo_s") == null ? "" : solrDocument.get("favoreInfo_s").toString());
+            storeSolrDTO.setDiscountPackage(solrDocument.get("discountPackage_s") == null ? "" : solrDocument.get("discountPackage_s").toString());
             storeSolrDTOS.add(storeSolrDTO);
         }
         return storeSolrDTOS;

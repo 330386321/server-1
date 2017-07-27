@@ -44,6 +44,12 @@ public class StoreSolrDTO {
     @ApiModelProperty(value = "区域名称")
     private String areaName;
 
+    @ApiModelProperty(value = "优惠信息")
+    private String favoreInfo;
+
+    @ApiModelProperty(value = "优惠套餐")
+    private String discountPackage;
+
     public Long getMerchantId() {
         return merchantId;
     }
@@ -138,5 +144,21 @@ public class StoreSolrDTO {
 
     public void setAreaName(String areaName) {
         this.areaName = areaName;
+    }
+
+    public String getFavoreInfo() {
+        return favoreInfo;
+    }
+
+    public void setFavoreInfo(String favoreInfo) {
+        this.favoreInfo = favoreInfo;
+    }
+
+    public String getDiscountPackage() {
+        return discountPackage;
+    }
+
+    public void setDiscountPackage(String discountPackage) {
+        this.discountPackage = discountPackage;
     }
 }
