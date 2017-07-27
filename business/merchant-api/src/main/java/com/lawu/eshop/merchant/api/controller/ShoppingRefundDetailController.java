@@ -1,25 +1,15 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import javax.validation.constraints.NotNull;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.AddressService;
 import com.lawu.eshop.merchant.api.service.ShoppingRefundDetailService;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
@@ -28,12 +18,28 @@ import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailRerurnAddressForeignParam;
+import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.AddressDTO;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import util.UploadFileUtil;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author Sunny 
@@ -43,12 +49,15 @@ import io.swagger.annotations.ApiResponse;
 @RestController
 @RequestMapping(value = "shoppingRefundDetail/")
 public class ShoppingRefundDetailController extends BaseController {
-
+	private static Logger logger = LoggerFactory.getLogger(ShoppingRefundDetailController.class);
 	@Autowired
 	private ShoppingRefundDetailService shoppingRefundDetailService;
 	
 	@Autowired
 	private AddressService addressService;
+
+	@Autowired
+	private MerchantApiConfig merchantApiConfig;
 	
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
@@ -131,4 +140,52 @@ public class ShoppingRefundDetailController extends BaseController {
     	Result result = shoppingRefundDetailService.agreeToRefund(id, merchantId, param);
     	return successCreated(result);
     }
+
+	@ApiOperation(value = "商家拒绝退款", notes = "商家拒绝退款。。[1002|1003|4011|4013|4028]（章勇）", httpMethod = "POST")
+	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+	@Authorization
+	@RequestMapping(value = "refuseRefund/{id}", method = RequestMethod.POST)
+    public Result refuseRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+							   @PathVariable("id") @ApiParam(required = true, value = "退款详情id") Long id,
+							   @RequestParam("refusalReasons") @ApiParam(required = true, value = "拒绝原因") String refusalReasons){
+		if(StringUtils.isEmpty(refusalReasons)){
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
+		}
+		HttpServletRequest request = getRequest();
+		Long merchantId = UserUtil.getCurrentUserId(request);
+		Collection<Part> parts = null;
+		try {
+			parts = request.getParts();
+
+		} catch (IOException e) {
+			logger.info("IOException {}",e);
+			return successCreated(e.getMessage());
+		} catch (ServletException ex) {
+			logger.info("ServletException:{}",ex);
+		}
+		StringBuilder refuseImages = new StringBuilder();
+		if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
+			for (Part part : parts) {
+				Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_ORDER, part, merchantApiConfig.getImageUploadUrl());
+				String flag = map.get("resultFlag");
+				if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
+					//有图片上传成功返回,拼接图片url
+					String imgUrl = map.get("imgUrl");
+					if (StringUtils.isNotEmpty(imgUrl)) {
+						refuseImages.append(imgUrl + ",");
+					}
+				} else {
+					return successCreated(Integer.valueOf(flag));
+				}
+			}
+		}
+		ShoppingRefundDetailAgreeToRefundForeignParam param = new ShoppingRefundDetailAgreeToRefundForeignParam();
+		param.setIsAgree(false);
+		if(StringUtils.isNotEmpty(refusalReasons)){
+			param.setRefusalReasons(refusalReasons);
+		}
+		param.setRefuseImages(refuseImages.toString());
+		Result result = shoppingRefundDetailService.agreeToRefund(id, merchantId, param);
+		return successCreated(result);
+	}
 }

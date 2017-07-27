@@ -1,25 +1,9 @@
 package com.lawu.eshop.order.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
-import com.lawu.eshop.mq.dto.order.ShoppingRefundFillReturnAddressRemindNotification;
-import com.lawu.eshop.mq.dto.order.ShoppingRefundRefuseRefundRemindNotification;
-import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeConfirmedForRefundRemindNotification;
-import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeRefundRemindNotification;
-import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeReturnRemindNotification;
+import com.lawu.eshop.mq.dto.order.*;
 import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
@@ -35,22 +19,11 @@ import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
-import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
-import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
-import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
-import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
-import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO;
+import com.lawu.eshop.order.srv.domain.*;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
-import com.lawu.eshop.order.srv.exception.CanNotAgreeToARefundException;
-import com.lawu.eshop.order.srv.exception.CanNotAgreeToApplyException;
-import com.lawu.eshop.order.srv.exception.CanNotApplyForPlatformInterventionException;
-import com.lawu.eshop.order.srv.exception.CanNotCancelApplicationException;
-import com.lawu.eshop.order.srv.exception.CanNotFillInTheReturnAddressException;
-import com.lawu.eshop.order.srv.exception.CanNotFillOutTheReturnLogisticsException;
-import com.lawu.eshop.order.srv.exception.DataNotExistException;
-import com.lawu.eshop.order.srv.exception.IllegalOperationException;
+import com.lawu.eshop.order.srv.exception.*;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingRefundDetailDOMapper;
@@ -60,6 +33,17 @@ import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderItemExtendDOMapper;
 import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingRefundDetailService;
 import com.lawu.eshop.utils.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailService {
@@ -114,7 +98,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	/**
 	 * 根据购物订单项id 获取购物退货详情
 	 * 
-	 * @param shoppingOrderitemId
+	 * @param shoppingOrderItemId
 	 *            购物订单项id
 	 * @return
 	 */
@@ -428,6 +412,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundDetailUpdateDO.setRefusalReasons(param.getRefusalReasons());
 		shoppingRefundDetailUpdateDO.setGmtRefund(new Date());
 		shoppingRefundDetailUpdateDO.setGmtModified(new Date());
+		shoppingRefundDetailUpdateDO.setRefuseImages(param.getRefuseImages());
 		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailUpdateDO);
 		// 加入退款流程
 		ShoppingRefundProcessDO shoppingRefundProcessDO = new ShoppingRefundProcessDO();

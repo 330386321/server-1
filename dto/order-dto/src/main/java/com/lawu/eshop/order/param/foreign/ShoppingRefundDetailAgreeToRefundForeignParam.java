@@ -1,9 +1,9 @@
 package com.lawu.eshop.order.param.foreign;
 
-import javax.validation.constraints.NotNull;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 商家填写物流信息
@@ -27,6 +27,12 @@ public class ShoppingRefundDetailAgreeToRefundForeignParam {
     */
 	@ApiModelProperty(required = false, value = "拒绝退款理由")
     private String refusalReasons;
+
+	/**
+	 * 拒绝退款图片
+	 */
+	@ApiModelProperty(required = false, value = "拒绝退款图片")
+	private String refuseImages;
 	
 	public Boolean getIsAgree() {
 		return isAgree;
@@ -43,5 +49,12 @@ public class ShoppingRefundDetailAgreeToRefundForeignParam {
 	public void setRefusalReasons(String refusalReasons) {
 		this.refusalReasons = refusalReasons;
 	}
-	
+
+	public String getRefuseImages() {
+		return refuseImages;
+	}
+
+	public void setRefuseImages(String refuseImages) {
+		this.refuseImages = refuseImages;
+	}
 }

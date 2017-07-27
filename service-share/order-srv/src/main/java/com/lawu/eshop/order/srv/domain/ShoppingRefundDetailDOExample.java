@@ -586,6 +586,76 @@ public class ShoppingRefundDetailDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andRefuseImagesIsNull() {
+            addCriterion("refuse_images is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesIsNotNull() {
+            addCriterion("refuse_images is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesEqualTo(String value) {
+            addCriterion("refuse_images =", value, "refuseImages");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesNotEqualTo(String value) {
+            addCriterion("refuse_images <>", value, "refuseImages");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesGreaterThan(String value) {
+            addCriterion("refuse_images >", value, "refuseImages");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesGreaterThanOrEqualTo(String value) {
+            addCriterion("refuse_images >=", value, "refuseImages");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesLessThan(String value) {
+            addCriterion("refuse_images <", value, "refuseImages");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesLessThanOrEqualTo(String value) {
+            addCriterion("refuse_images <=", value, "refuseImages");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesLike(String value) {
+            addCriterion("refuse_images like", value, "refuseImages");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesNotLike(String value) {
+            addCriterion("refuse_images not like", value, "refuseImages");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesIn(List<String> values) {
+            addCriterion("refuse_images in", values, "refuseImages");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesNotIn(List<String> values) {
+            addCriterion("refuse_images not in", values, "refuseImages");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesBetween(String value1, String value2) {
+            addCriterion("refuse_images between", value1, value2, "refuseImages");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseImagesNotBetween(String value1, String value2) {
+            addCriterion("refuse_images not between", value1, value2, "refuseImages");
+            return (Criteria) this;
+        }
+
         public Criteria andRefusalReasonsIsNull() {
             addCriterion("refusal_reasons is null");
             return (Criteria) this;
