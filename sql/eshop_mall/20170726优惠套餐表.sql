@@ -1,1 +1,1 @@
-ALTER TABLE `discount_package` MODIFY COLUMN `price`  decimal(11,2) UNSIGNED NOT NULL COMMENT '套餐价格' AFTER `cover_image`;
+ALTER TABLE `discount_package` MODIFY COLUMN `original_price` decimal(15,2) UNSIGNED NOT NULL COMMENT '原价' AFTER `price`;
