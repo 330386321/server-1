@@ -64,6 +64,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.utils.AdArithmeticUtil;
 import com.lawu.eshop.utils.DateUtil;
+import com.mysql.fabric.xmlrpc.base.Data;
 
 
 /**
@@ -429,7 +430,8 @@ public class AdServiceImpl implements AdService {
 		}else{
 			
 			MemberAdRecordDOExample memberAdRecordDOExample=new MemberAdRecordDOExample();
-			memberAdRecordDOExample.createCriteria().andAdIdEqualTo(id).andMemberIdEqualTo(memberId);
+			memberAdRecordDOExample.createCriteria().andAdIdEqualTo(id).andMemberIdEqualTo(memberId)
+									.andClickDateEqualTo(new Date());
 			Long clickCount= memberAdRecordDOMapper.countByExample(memberAdRecordDOExample);
 			adBO.setIsClickAd(clickCount.intValue()>0);
 		}
