@@ -191,6 +191,8 @@ public class PayOrderController extends BaseController {
             payOrderInfoDTO.setAddress(storeInfoDTO.getAddress());
             payOrderInfoDTO.setStoreUrl(storeInfoDTO.getStoreUrl());
             payOrderInfoDTO.setPrincipalMobile(storeInfoDTO.getPrincipalMobile());
+            payOrderInfoDTO.setRegionName(storeInfoDTO.getRegionName());
+            payOrderInfoDTO.setUserNum(storeInfoDTO.getUserNum());
         }
         if (EvaluationEnum.EVALUATION_SUCCESS.equals(payOrderInfoDTO.getEvaluationEnum())) {
             //已经评论

@@ -21,6 +21,10 @@ public class PayOrderStoreInfoView implements Serializable {
 
     private String address;
 
+    private String regionName;
+
+    private String userNum;
+
     public String getName() {
         return name;
     }
@@ -67,5 +71,21 @@ public class PayOrderStoreInfoView implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
+
+    public String getUserNum() {
+        return userNum;
+    }
+
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
     }
 }
