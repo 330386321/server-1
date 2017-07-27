@@ -19,7 +19,7 @@ public class MerchantPayOrderListDTO {
     private String orderNum;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date gmtCreate;
 
     public BigDecimal getActualAmount() {
