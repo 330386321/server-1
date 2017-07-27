@@ -1,12 +1,5 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.mall.constants.DiscountPackageStatusEnum;
 import com.lawu.eshop.mall.constants.StatusEnum;
 import com.lawu.eshop.mall.param.DiscountPackageImageSaveParam;
@@ -14,12 +7,10 @@ import com.lawu.eshop.mall.param.DiscountPackageSaveParam;
 import com.lawu.eshop.mall.param.DiscountPackageUpdateParam;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageContentSaveForeignParam;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageQueryForeignParam;
+import com.lawu.eshop.mall.srv.MallSrvConfig;
 import com.lawu.eshop.mall.srv.bo.DiscountPackageBO;
 import com.lawu.eshop.mall.srv.bo.DiscountPackageExtendBO;
-import com.lawu.eshop.mall.srv.converter.DiscountPackageContentConverter;
-import com.lawu.eshop.mall.srv.converter.DiscountPackageConverter;
-import com.lawu.eshop.mall.srv.converter.DiscountPackageExtendConverter;
-import com.lawu.eshop.mall.srv.converter.DiscountPackageImageConverter;
+import com.lawu.eshop.mall.srv.converter.*;
 import com.lawu.eshop.mall.srv.domain.DiscountPackageContentDO;
 import com.lawu.eshop.mall.srv.domain.DiscountPackageDO;
 import com.lawu.eshop.mall.srv.domain.DiscountPackageDOExample;
@@ -32,6 +23,15 @@ import com.lawu.eshop.mall.srv.mapper.DiscountPackageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.DiscountPackageImageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.DiscountPackageExtendDOMapper;
 import com.lawu.eshop.mall.srv.service.DiscountPackageService;
+import com.lawu.eshop.solr.service.SolrService;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 优惠套餐服务接口实现类
@@ -53,6 +53,12 @@ public class DiscountPackageServiceImpl implements DiscountPackageService {
 
 	@Autowired
 	DiscountPackageImageDOMapper discountPackageImageDOMapper;
+
+	@Autowired
+	private SolrService solrService;
+
+	@Autowired
+	private MallSrvConfig mallSrvConfig;
 	
 	/**
 	 * 根据商家id查询商家的所有优惠套餐<p>
@@ -133,6 +139,8 @@ public class DiscountPackageServiceImpl implements DiscountPackageService {
 			DiscountPackageImageDO discountPackageImageDO = DiscountPackageImageConverter.convert(discountPackageDO.getId(), discountPackageImageSaveParam);
 			discountPackageImageDOMapper.insert(discountPackageImageDO);
 		}
+
+		updateSolrDiscountPackage(merchantId, 0L);
 	}
 
 	/**
@@ -213,6 +221,8 @@ public class DiscountPackageServiceImpl implements DiscountPackageService {
 				discountPackageImageDOMapper.updateByPrimaryKeySelective(updateDiscountPackageImageDO);
 			}
 		});
+
+		updateSolrDiscountPackage(merchantId, 0L);
 	}
 
 	/**
@@ -243,6 +253,8 @@ public class DiscountPackageServiceImpl implements DiscountPackageService {
 		updateDiscountPackageDO.setId(id);
 		updateDiscountPackageDO.setStatus(DiscountPackageStatusEnum.INVALID.getValue());
 		discountPackageDOMapper.updateByPrimaryKeySelective(updateDiscountPackageDO);
+
+		updateSolrDiscountPackage(merchantId, id);
 	}
 
 	/**
@@ -273,6 +285,8 @@ public class DiscountPackageServiceImpl implements DiscountPackageService {
 		updateDiscountPackageDO.setId(id);
 		updateDiscountPackageDO.setStatus(DiscountPackageStatusEnum.UP.getValue());
 		discountPackageDOMapper.updateByPrimaryKeySelective(updateDiscountPackageDO);
+
+		updateSolrDiscountPackage(merchantId, 0L);
 	}
 
 	/**
@@ -303,6 +317,8 @@ public class DiscountPackageServiceImpl implements DiscountPackageService {
 		updateDiscountPackageDO.setId(id);
 		updateDiscountPackageDO.setStatus(DiscountPackageStatusEnum.DOWN.getValue());
 		discountPackageDOMapper.updateByPrimaryKeySelective(updateDiscountPackageDO);
+
+		updateSolrDiscountPackage(merchantId, id);
 	}
 
 	/**
@@ -354,6 +370,36 @@ public class DiscountPackageServiceImpl implements DiscountPackageService {
 		for (Long id : idList) {
 			down(merchantId, id);
 		}
+	}
+
+	/**
+	 * 更新solr保存的门店优惠套餐
+	 *
+	 * @param merchantId
+	 */
+	private void updateSolrDiscountPackage(Long merchantId, Long id) {
+		DiscountPackageDOExample example = new DiscountPackageDOExample();
+		example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(DiscountPackageStatusEnum.UP.getValue());
+		example.setOrderByClause("gmt_up desc");
+		List<DiscountPackageDO> discountPackageDOS = discountPackageDOMapper.selectByExample(example);
+
+		Long storeId = 0L;
+		String discountPackage = "";
+		if (discountPackageDOS.isEmpty()) {
+			DiscountPackageDO discountPackageDO = discountPackageDOMapper.selectByPrimaryKey(id);
+			storeId = discountPackageDO == null ? 0L : discountPackageDO.getMerchantStoreId();
+		} else {
+			DiscountPackageDO discountPackageDO = discountPackageDOS.get(0);
+			storeId = discountPackageDO.getMerchantStoreId();
+			discountPackage = discountPackageDO.getName();
+		}
+		SolrDocument solrDocument = solrService.getSolrDocsById(storeId, mallSrvConfig.getSolrUrl(), mallSrvConfig.getSolrMerchantCore(), mallSrvConfig.getIsCloudSolr());
+		if (solrDocument == null) {
+			return;
+		}
+		SolrInputDocument document = SolrDocumentConverter.converSolrInputDocument(solrDocument);
+		document.addField("discountPackage_s", discountPackage);
+		solrService.addSolrDocs(document, mallSrvConfig.getSolrUrl(), mallSrvConfig.getSolrMerchantCore(), mallSrvConfig.getIsCloudSolr());
 	}
 
 }
