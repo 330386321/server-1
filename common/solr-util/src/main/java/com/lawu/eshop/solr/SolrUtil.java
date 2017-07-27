@@ -215,7 +215,10 @@ public class SolrUtil {
      * @return
      */
     public static boolean addSolrDocsList(Collection<SolrInputDocument> documents, String solrUrl, String solrCore, Boolean isCloudSolr) {
-        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if(documents.isEmpty()){
+        	 return false;
+        }
+    	SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
         if (solrClient == null) {
             return false;
         }
