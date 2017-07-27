@@ -96,7 +96,6 @@ public class AlipayController extends BaseController {
 			logger.error("支付宝支付封装参数错误，错误信息：{}", e.getMessage(),e);
 			return successCreated(ResultCode.FAIL);
 		}
-		System.out.println("------------->" + msg);
 		return successCreated(msg);
 	}
 
@@ -148,52 +147,6 @@ public class AlipayController extends BaseController {
 
 		String html = "<!doctype html><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">";
 		sHtmlText = html + sHtmlText;
-
-		// -------------------------------
-		// String extra_common_param = "";
-		// if
-		// (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val))
-		// {
-		// extra_common_param = param.getBizFlagEnum().val + split +
-		// param.getUserNum() + split
-		// + "商家缴纳保证金P" + split + param.getBizId();
-		// } else if
-		// (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val))
-		// {
-		// extra_common_param = param.getBizFlagEnum().val + split +
-		// param.getUserNum() + split + "商家充值余额P";
-		// } else if
-		// (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val))
-		// {
-		// extra_common_param = param.getBizFlagEnum().val + split +
-		// param.getUserNum() + split + "商家充值积分P";
-		// }
-		// AlipayClient alipayClient = new
-		// DefaultAlipayClient(propertySrvConfig.getAlipayGateway(),
-		// propertySrvConfig.getAlipayAppIdBusiness(),
-		// propertySrvConfig.getAlipayPrivateKey(), "json", "utf-8",
-		// propertySrvConfig.getAlipayPublicKey(), "RSA");
-		// AlipayTradePagePayRequest alipayRequest = new
-		// AlipayTradePagePayRequest();
-		// alipayRequest.setReturnUrl(propertySrvConfig.getAlipayReturnUrlPc());
-		// alipayRequest.setNotifyUrl(propertySrvConfig.getAlipayNotifyUrlPc());
-		// alipayRequest.setBizContent("{" + "
-		// \"out_trade_no\":\""+param.getOutTradeNo()+"\","
-		// + " \"product_code\":\"FAST_INSTANT_TRADE_PAY\"," + "
-		// \"total_amount\":"+param.getTotalAmount()+","
-		// + " \"subject\":\""+param.getSubject()+"\","
-		// + " \"passback_params\":\""+extra_common_param+"\"}");
-		// String sHtmlText = "";
-		// try {
-		// sHtmlText = alipayClient.pageExecute(alipayRequest).getBody(); //
-		// 调用SDK生成表单
-		// } catch (AlipayApiException e) {
-		// e.printStackTrace();
-		// }
-		// String html = "<!doctype html><html><head><meta
-		// http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">";
-		// sHtmlText = html + sHtmlText;
-		// ------------------------------------------------------------------------
 
 		return successCreated(sHtmlText);
 	}

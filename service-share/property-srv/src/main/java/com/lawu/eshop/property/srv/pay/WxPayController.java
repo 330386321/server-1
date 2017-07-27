@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -86,9 +87,11 @@ public class WxPayController extends BaseController {
 		packageParams.put("nonce_str", RandomStringGenerator.getRandomStringByLength(32));
 		packageParams.put("body", param.getThirdPayBodyEnum().val);
 		packageParams.put("out_trade_no", param.getOutTradeNo());
-		double fTotalAmount = Double.parseDouble(param.getTotalAmount());
-		int iTotalAmount = (int) (fTotalAmount * 100);
-		packageParams.put("total_fee", String.valueOf(iTotalAmount));
+		String totalFee = new BigDecimal(param.getTotalAmount()).multiply(new BigDecimal("100")).toString();
+		if(totalFee.endsWith(".00")){
+			totalFee = totalFee.substring(0,totalFee.length()-3);
+		}
+		packageParams.put("total_fee", totalFee);
 		packageParams.put("spbill_create_ip", propertySrvConfig.getWxpayIp());
 		packageParams.put("attach", param.getBizFlagEnum().val + split + param.getUserNum() + split
 				+ param.getThirdPayBodyEnum().val + split + param.getBizIds() + split + param.getSideUserNum() + split + param.getMerchantId());

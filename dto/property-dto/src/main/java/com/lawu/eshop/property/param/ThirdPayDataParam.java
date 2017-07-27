@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.param;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -46,7 +47,7 @@ public class ThirdPayDataParam extends ThirdPayParam {
 	private String sideUserNum;
 	
 	@NotBlank(message = "totalAmount不能为空")
-	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "totalAmount格式错误要求数字或小数位不超过2位")
+	@Pattern(regexp = "^\\d{1,9}(\\.\\d{1,2})?$", message = "金额错误(要求最大8位整数且保留2位小数)")
 	private String totalAmount;
 	
 	//商家缴纳保证金时需要回调发送消息改门店状态（事务）

@@ -74,9 +74,9 @@ public class AlipayController extends BaseController {
 
 		// 查询支付金额
 		double money = 0;
+		String rtnMoney = "";
 		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getBizFlagEnum().val)) {
-			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
-					.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
 			if(payOrderCallback == null){
 				return successCreated(ResultCode.PAY_ORDER_NULL);
 			}else if(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal().equals(payOrderCallback.getPayOrderStatusEnum().getVal())){
@@ -84,6 +84,7 @@ public class AlipayController extends BaseController {
 			}
 			aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
 			money = payOrderCallback.getActualMoney();
+			rtnMoney = String.valueOf(money);
 
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getBizFlagEnum().val)) {
 			// 考虑商品可能有减库存失败可能
@@ -92,16 +93,19 @@ public class AlipayController extends BaseController {
 				return successCreated(result.getRet());
 			}
 			money = result.getModel().getOrderTotalPrice().doubleValue();
+			rtnMoney = result.getModel().getOrderTotalPrice().toString();
+
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
 				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
 			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
 			money = recharge.getActualMoney();
-			
+			rtnMoney = String.valueOf(money);
+
 		}
 		if(StringUtil.doubleCompareTo(money, 0) == 0){
 			return successCreated(ResultCode.MONEY_IS_ZERO);
 		}
-		aparam.setTotalAmount(String.valueOf(money));
+		aparam.setTotalAmount(rtnMoney);
 		
 		return successCreated(alipayService.getAppAlipayReqParams(aparam));
 
