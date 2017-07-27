@@ -35,6 +35,7 @@ sudo systemctl restart docker
 ----
 ```bash
 sudo docker run -d -p 443:5000 --restart=always --name registry \
+-v /etc/localtime:/etc/localtime:ro \
 -v ~/certs:/certs \
 -v ~/docker-image:/opt/docker-image \
 -e STORAGE_PATH=/opt/docker-image \

@@ -27,6 +27,7 @@ sudo docker build -t eshop/docker-maven:17-dind .
 ```bash
 sudo docker run -d --privileged --name docker-maven \
     --add-host registry.eshop.com:192.168.100.94 \
+    -v /etc/localtime:/etc/localtime:ro \
     -v ~/src/server:/usr/src/maven \
     -v /etc/docker/certs.d/registry.eshop.com:/etc/docker/certs.d/registry.eshop.com:ro \
     -v /usr/local/lawu/apache-maven-3.5.0/conf/settings.xml:/usr/share/maven/conf/settings.xml \
