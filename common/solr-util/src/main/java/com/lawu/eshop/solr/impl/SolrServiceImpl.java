@@ -26,6 +26,9 @@ public class SolrServiceImpl implements SolrService {
 
     @Override
     public boolean addSolrDocs(SolrInputDocument document, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        if (document == null) {
+            return false;
+        }
         SolrClient solrClient = SolrUtil.getSolrClient(solrUrl, solrCore, isCloudSolr);
         if (solrClient == null) {
             return false;
@@ -44,6 +47,9 @@ public class SolrServiceImpl implements SolrService {
 
     @Override
     public boolean addSolrDocsList(Collection<SolrInputDocument> documents, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        if (documents == null || documents.isEmpty()) {
+            return false;
+        }
         SolrClient solrClient = SolrUtil.getSolrClient(solrUrl, solrCore, isCloudSolr);
         if (solrClient == null) {
             return false;
@@ -62,6 +68,9 @@ public class SolrServiceImpl implements SolrService {
 
     @Override
     public boolean delSolrDocsById(Long id, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        if (id == null) {
+            return false;
+        }
         SolrClient solrClient = SolrUtil.getSolrClient(solrUrl, solrCore, isCloudSolr);
         if (solrClient == null) {
             return false;
@@ -80,6 +89,9 @@ public class SolrServiceImpl implements SolrService {
 
     @Override
     public boolean delSolrDocsByIds(List<String> ids, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        if (ids == null || ids.isEmpty()) {
+            return false;
+        }
         SolrClient solrClient = SolrUtil.getSolrClient(solrUrl, solrCore, isCloudSolr);
         if (solrClient == null) {
             return false;
@@ -113,6 +125,9 @@ public class SolrServiceImpl implements SolrService {
 
     @Override
     public SolrDocument getSolrDocsById(Long id, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        if (id == null) {
+            return null;
+        }
         SolrClient solrClient = SolrUtil.getSolrClient(solrUrl, solrCore, isCloudSolr);
         if (solrClient == null) {
             return null;
