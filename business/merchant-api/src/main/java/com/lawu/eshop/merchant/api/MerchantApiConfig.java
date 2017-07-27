@@ -46,6 +46,12 @@ public class MerchantApiConfig {
     @Value(value="${inviter.member.url}")
     private String inviterMemberUrl;
 
+    @Value(value="${fastdfs.trackerServers}")
+    private String trackerServers;
+    
+    @Value(value="${fastdfs.trackerTttpPport}")
+    private Integer trackerTttpPport;
+    
     public String getImageUrl() {
         return imageUrl;
     }
@@ -92,6 +98,34 @@ public class MerchantApiConfig {
 
 	public String getInviterMemberUrl() {
 		return inviterMemberUrl;
+	}
+
+	/**
+	 * @return the trackerServers
+	 */
+	public String getTrackerServers() {
+		return trackerServers;
+	}
+
+	/**
+	 * @param trackerServers the trackerServers to set
+	 */
+	public void setTrackerServers(String trackerServers) {
+		this.trackerServers = trackerServers;
+	}
+
+	/**
+	 * @return the trackerTttpPport
+	 */
+	public Integer getTrackerTttpPport() {
+		return trackerTttpPport;
+	}
+
+	/**
+	 * @param trackerTttpPport the trackerTttpPport to set
+	 */
+	public void setTrackerTttpPport(Integer trackerTttpPport) {
+		this.trackerTttpPport = trackerTttpPport;
 	}
 
     

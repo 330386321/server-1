@@ -47,6 +47,13 @@ public class ResultCode {
 
     public static final int ID_CARD_RECORD_EXIST = 1029;
     public static final int REG_NUMBER_RECORD_EXIST = 1030;
+    
+    //FastDFS上传图片异常
+    public static final int FD_FILE_ERROR =1031;
+    public static final int FD_FILE_IMG_BIG =1032;
+    public static final int FD_FILE_CUT_ERROR=1034;
+    
+    
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -212,6 +219,12 @@ public class ResultCode {
         ResultCode.messageMap.put(ID_CARD_RECORD_EXIST, "该身份证号已经创建过门店");
         ResultCode.messageMap.put(REG_NUMBER_RECORD_EXIST, "该执照已经创建过门店");
 
+        //FastDFS error info
+        ResultCode.messageMap.put(FD_FILE_ERROR, "获取上传文件信息异常");
+        ResultCode.messageMap.put(FD_FILE_IMG_BIG, "上传图片应小于5M");
+        ResultCode.messageMap.put(FD_FILE_CUT_ERROR, "获取视频帧转图片异常");
+       
+        
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");
         ResultCode.messageMap.put(USER_WRONG_ID, "ID不存在");

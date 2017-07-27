@@ -146,7 +146,7 @@ public class DiscountPackageController extends BaseController {
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-    	
+//    	discountPackageImages
     	HttpServletRequest request = getRequest();
         Map<String, String> images = new HashMap<>();
         

@@ -3,8 +3,6 @@ package com.lawu.eshop.member.api;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import io.swagger.annotations.ApiModelProperty;
-
 /**
  * @author Leach
  * @date 2017/4/26
@@ -45,6 +43,13 @@ public class MemberApiConfig {
     @Value(value="${inviter.member.url}")
     private String inviterMemberUrl;
 
+    @Value(value="${fastdfs.trackerServers}")
+    private String trackerServers;
+    
+    @Value(value="${fastdfs.trackerTttpPport}")
+    private Integer trackerTttpPport;
+    
+    
     public String getImageUrl() {
         return imageUrl;
     }
@@ -99,6 +104,34 @@ public class MemberApiConfig {
 
 	public String getInviterMemberUrl() {
 		return inviterMemberUrl;
+	}
+
+	/**
+	 * @return the trackerServers
+	 */
+	public String getTrackerServers() {
+		return trackerServers;
+	}
+
+	/**
+	 * @param trackerServers the trackerServers to set
+	 */
+	public void setTrackerServers(String trackerServers) {
+		this.trackerServers = trackerServers;
+	}
+
+	/**
+	 * @return the trackerTttpPport
+	 */
+	public Integer getTrackerTttpPport() {
+		return trackerTttpPport;
+	}
+
+	/**
+	 * @param trackerTttpPport the trackerTttpPport to set
+	 */
+	public void setTrackerTttpPport(Integer trackerTttpPport) {
+		this.trackerTttpPport = trackerTttpPport;
 	}
     
     
