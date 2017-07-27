@@ -161,7 +161,7 @@ public class AdServiceImpl implements AdService {
 	 */
 	public void savePointPool(AdDO adDO, Integer count) {
 		// 算法生成积分明细
-		Integer piontCount = count % 10 == 0 ? count / 10 : count / 10 + 1;
+		Integer piontCount = count % (adSrvConfig.getAdPraiseAllotProb()) == 0 ? count / (adSrvConfig.getAdPraiseAllotProb()) : count / (adSrvConfig.getAdPraiseAllotProb()) + 1;
 		if (piontCount <= 10)
 			piontCount = 10;
 		double[] points = AdArithmeticUtil.getMoney(adDO.getTotalPoint().doubleValue(), piontCount);

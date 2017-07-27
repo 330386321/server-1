@@ -21,6 +21,10 @@ public class AdSrvConfig {
     
     @Value(value = "${image.ad_default_mediaUrl}")
     private String adDefaultMediaUrl;
+    
+    @Value(value = "${ad_praise_allot_prob}")
+    private Integer adPraiseAllotProb;
+    
 
     public String getSolrUrl() {
         return solrUrl;
@@ -40,6 +44,10 @@ public class AdSrvConfig {
 
 	public void setAdDefaultMediaUrl(String adDefaultMediaUrl) {
 		this.adDefaultMediaUrl = adDefaultMediaUrl;
+	}
+
+	public Integer getAdPraiseAllotProb() {
+		return adPraiseAllotProb;
 	}
     
     

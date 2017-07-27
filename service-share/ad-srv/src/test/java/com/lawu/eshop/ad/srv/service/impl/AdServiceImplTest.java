@@ -90,6 +90,7 @@ public class AdServiceImplTest {
     	adSaveParam.setMerchantStoreId(1001l);
     	adSaveParam.setMerchantStoreName("E店商家");
     	adSaveParam.setManageType(ManageTypeEnum.ENTITY);
+    	adSaveParam.setCount(100);
     	AdParam param=new AdParam();
     	param.setAdCount(20);
     	param.setBeginTime("2017-05-17 11:35:00");
@@ -99,7 +100,7 @@ public class AdServiceImplTest {
     	param.setRegionName("全国");
     	param.setTitle("广告测试标题");
     	param.setTotalPoint(BigDecimal.valueOf(100));
-    	param.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
+    	param.setTypeEnum(AdTypeEnum.AD_TYPE_PRAISE);
     	adSaveParam.setAdParam(param);
     	adService.saveAd(adSaveParam);
 
