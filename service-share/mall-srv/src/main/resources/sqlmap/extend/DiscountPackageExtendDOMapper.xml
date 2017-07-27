@@ -17,6 +17,8 @@
     <result column="use_time_end" jdbcType="TIME" property="useTimeEnd" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="is_reservation" jdbcType="BIT" property="isReservation" />
+    <result column="advance_booking_time" jdbcType="VARCHAR" property="advanceBookingTime" />
+    <result column="purchase_notes" jdbcType="VARCHAR" property="purchaseNotes" />
     <result column="use_rules" jdbcType="VARCHAR" property="useRules" />
     <result column="gmt_up" jdbcType="TIMESTAMP" property="gmtUp" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
@@ -82,7 +84,7 @@
   <sql id="DiscountPackage_Column_List">
     dp.id, dp.merchant_id, dp.merchant_store_id, dp.name, dp.cover_image, dp.price, dp.original_price, dp.other_instructions, 
     dp.validity_period_begin, dp.validity_period_end, dp.use_time_week, dp.use_time_begin, dp.use_time_end, 
-    dp.status, dp.is_reservation, dp.use_rules, dp.gmt_up as dp_gmt_up, dp.gmt_create, dp.gmt_modified
+    dp.status, dp.is_reservation, dp.advance_booking_time, dp.purchase_notes, dp.use_rules, dp.gmt_up as dp_gmt_up, dp.gmt_create, dp.gmt_modified
   </sql>
   
   <sql id="DiscountPackageContent_Column_List">

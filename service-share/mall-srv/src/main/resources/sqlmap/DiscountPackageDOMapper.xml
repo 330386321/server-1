@@ -21,6 +21,8 @@
     <result column="use_time_end" jdbcType="TIME" property="useTimeEnd" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="is_reservation" jdbcType="BIT" property="isReservation" />
+    <result column="advance_booking_time" jdbcType="VARCHAR" property="advanceBookingTime" />
+    <result column="purchase_notes" jdbcType="VARCHAR" property="purchaseNotes" />
     <result column="use_rules" jdbcType="VARCHAR" property="useRules" />
     <result column="gmt_up" jdbcType="TIMESTAMP" property="gmtUp" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
@@ -99,7 +101,8 @@
     -->
     id, merchant_id, merchant_store_id, name, cover_image, price, original_price, other_instructions, 
     validity_period_begin, validity_period_end, use_time_week, use_time_begin, use_time_end, 
-    status, is_reservation, use_rules, gmt_up, gmt_create, gmt_modified
+    status, is_reservation, advance_booking_time, purchase_notes, use_rules, gmt_up, 
+    gmt_create, gmt_modified
   </sql>
   <select id="selectByExample" parameterType="com.lawu.eshop.mall.srv.domain.DiscountPackageDOExample" resultMap="BaseResultMap">
     <!--
@@ -160,15 +163,17 @@
       other_instructions, validity_period_begin, 
       validity_period_end, use_time_week, use_time_begin, 
       use_time_end, status, is_reservation, 
-      use_rules, gmt_up, gmt_create, 
-      gmt_modified)
+      advance_booking_time, purchase_notes, use_rules, 
+      gmt_up, gmt_create, gmt_modified
+      )
     values (#{merchantId,jdbcType=BIGINT}, #{merchantStoreId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
       #{coverImage,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{originalPrice,jdbcType=DECIMAL}, 
       #{otherInstructions,jdbcType=VARCHAR}, #{validityPeriodBegin,jdbcType=TIMESTAMP}, 
       #{validityPeriodEnd,jdbcType=TIMESTAMP}, #{useTimeWeek,jdbcType=VARCHAR}, #{useTimeBegin,jdbcType=TIME}, 
       #{useTimeEnd,jdbcType=TIME}, #{status,jdbcType=TINYINT}, #{isReservation,jdbcType=BIT}, 
-      #{useRules,jdbcType=VARCHAR}, #{gmtUp,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModified,jdbcType=TIMESTAMP})
+      #{advanceBookingTime,jdbcType=VARCHAR}, #{purchaseNotes,jdbcType=VARCHAR}, #{useRules,jdbcType=VARCHAR}, 
+      #{gmtUp,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.mall.srv.domain.DiscountPackageDO">
     <!--
@@ -221,6 +226,12 @@
       </if>
       <if test="isReservation != null">
         is_reservation,
+      </if>
+      <if test="advanceBookingTime != null">
+        advance_booking_time,
+      </if>
+      <if test="purchaseNotes != null">
+        purchase_notes,
       </if>
       <if test="useRules != null">
         use_rules,
@@ -277,6 +288,12 @@
       </if>
       <if test="isReservation != null">
         #{isReservation,jdbcType=BIT},
+      </if>
+      <if test="advanceBookingTime != null">
+        #{advanceBookingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseNotes != null">
+        #{purchaseNotes,jdbcType=VARCHAR},
       </if>
       <if test="useRules != null">
         #{useRules,jdbcType=VARCHAR},
@@ -354,6 +371,12 @@
       <if test="record.isReservation != null">
         is_reservation = #{record.isReservation,jdbcType=BIT},
       </if>
+      <if test="record.advanceBookingTime != null">
+        advance_booking_time = #{record.advanceBookingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.purchaseNotes != null">
+        purchase_notes = #{record.purchaseNotes,jdbcType=VARCHAR},
+      </if>
       <if test="record.useRules != null">
         use_rules = #{record.useRules,jdbcType=VARCHAR},
       </if>
@@ -392,6 +415,8 @@
       use_time_end = #{record.useTimeEnd,jdbcType=TIME},
       status = #{record.status,jdbcType=TINYINT},
       is_reservation = #{record.isReservation,jdbcType=BIT},
+      advance_booking_time = #{record.advanceBookingTime,jdbcType=VARCHAR},
+      purchase_notes = #{record.purchaseNotes,jdbcType=VARCHAR},
       use_rules = #{record.useRules,jdbcType=VARCHAR},
       gmt_up = #{record.gmtUp,jdbcType=TIMESTAMP},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
@@ -449,6 +474,12 @@
       <if test="isReservation != null">
         is_reservation = #{isReservation,jdbcType=BIT},
       </if>
+      <if test="advanceBookingTime != null">
+        advance_booking_time = #{advanceBookingTime,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseNotes != null">
+        purchase_notes = #{purchaseNotes,jdbcType=VARCHAR},
+      </if>
       <if test="useRules != null">
         use_rules = #{useRules,jdbcType=VARCHAR},
       </if>
@@ -484,6 +515,8 @@
       use_time_end = #{useTimeEnd,jdbcType=TIME},
       status = #{status,jdbcType=TINYINT},
       is_reservation = #{isReservation,jdbcType=BIT},
+      advance_booking_time = #{advanceBookingTime,jdbcType=VARCHAR},
+      purchase_notes = #{purchaseNotes,jdbcType=VARCHAR},
       use_rules = #{useRules,jdbcType=VARCHAR},
       gmt_up = #{gmtUp,jdbcType=TIMESTAMP},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},

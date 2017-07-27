@@ -1163,6 +1163,146 @@ public class DiscountPackageDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andAdvanceBookingTimeIsNull() {
+            addCriterion("advance_booking_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeIsNotNull() {
+            addCriterion("advance_booking_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeEqualTo(String value) {
+            addCriterion("advance_booking_time =", value, "advanceBookingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeNotEqualTo(String value) {
+            addCriterion("advance_booking_time <>", value, "advanceBookingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeGreaterThan(String value) {
+            addCriterion("advance_booking_time >", value, "advanceBookingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("advance_booking_time >=", value, "advanceBookingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeLessThan(String value) {
+            addCriterion("advance_booking_time <", value, "advanceBookingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeLessThanOrEqualTo(String value) {
+            addCriterion("advance_booking_time <=", value, "advanceBookingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeLike(String value) {
+            addCriterion("advance_booking_time like", value, "advanceBookingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeNotLike(String value) {
+            addCriterion("advance_booking_time not like", value, "advanceBookingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeIn(List<String> values) {
+            addCriterion("advance_booking_time in", values, "advanceBookingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeNotIn(List<String> values) {
+            addCriterion("advance_booking_time not in", values, "advanceBookingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeBetween(String value1, String value2) {
+            addCriterion("advance_booking_time between", value1, value2, "advanceBookingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvanceBookingTimeNotBetween(String value1, String value2) {
+            addCriterion("advance_booking_time not between", value1, value2, "advanceBookingTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesIsNull() {
+            addCriterion("purchase_notes is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesIsNotNull() {
+            addCriterion("purchase_notes is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesEqualTo(String value) {
+            addCriterion("purchase_notes =", value, "purchaseNotes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesNotEqualTo(String value) {
+            addCriterion("purchase_notes <>", value, "purchaseNotes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesGreaterThan(String value) {
+            addCriterion("purchase_notes >", value, "purchaseNotes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesGreaterThanOrEqualTo(String value) {
+            addCriterion("purchase_notes >=", value, "purchaseNotes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesLessThan(String value) {
+            addCriterion("purchase_notes <", value, "purchaseNotes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesLessThanOrEqualTo(String value) {
+            addCriterion("purchase_notes <=", value, "purchaseNotes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesLike(String value) {
+            addCriterion("purchase_notes like", value, "purchaseNotes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesNotLike(String value) {
+            addCriterion("purchase_notes not like", value, "purchaseNotes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesIn(List<String> values) {
+            addCriterion("purchase_notes in", values, "purchaseNotes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesNotIn(List<String> values) {
+            addCriterion("purchase_notes not in", values, "purchaseNotes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesBetween(String value1, String value2) {
+            addCriterion("purchase_notes between", value1, value2, "purchaseNotes");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseNotesNotBetween(String value1, String value2) {
+            addCriterion("purchase_notes not between", value1, value2, "purchaseNotes");
+            return (Criteria) this;
+        }
+
         public Criteria andUseRulesIsNull() {
             addCriterion("use_rules is null");
             return (Criteria) this;
