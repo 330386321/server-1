@@ -4,8 +4,7 @@
 ----
 192.168.100.94 registry.eshop.com
 
-
-2、生成证书
+2、生成密钥文件
 ----
 ```bash
 mkdir -p ~/certs
@@ -13,7 +12,7 @@ cd ~/certs
 openssl genrsa -out registry.eshop.com.key 2048
 ```
 
-3、生成密钥文件
+3、生成证书
 ----
 ```bash
 openssl req -newkey rsa:4096 -nodes -sha256 -keyout registry.eshop.com.key -x509 -days 365 -out registry.eshop.com.crt
