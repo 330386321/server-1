@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.*;
 public interface MerchantFavoredService {
 
     @RequestMapping(value = "merchantFavored/saveMerchantFavoredInfo/{merchantId}", method = RequestMethod.POST)
-    public Result saveMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantFavoredParam param);
+    public Result saveMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @RequestParam("storeId") Long storeId, @ModelAttribute MerchantFavoredParam param);
 
     @RequestMapping(value = "merchantFavored/findFavoredByMerchantId/{merchantId}", method = RequestMethod.GET)
     public Result<MerchantFavoredDTO> findFavoredByMerchantId(@PathVariable("merchantId") Long merchantId);
 
     @RequestMapping(value = "merchantFavored/delMerchantFavoredInfo/{id}", method = RequestMethod.DELETE)
-    public Result delMerchantFavoredInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
+    public Result delMerchantFavoredInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestParam("storeId") Long storeId);
 
     @RequestMapping(value = "merchantFavored/updateMerchantFavoredInfo/{merchantId}", method = RequestMethod.PUT)
-    public Result updateMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantFavoredParam param);
+    public Result updateMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @RequestParam("storeId") Long storeId, @ModelAttribute MerchantFavoredParam param);
 }

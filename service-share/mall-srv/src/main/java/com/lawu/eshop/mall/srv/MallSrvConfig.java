@@ -46,6 +46,15 @@ public class MallSrvConfig {
     @Value(value = "${sms.send.mobile.count}")
     private Integer smsSendMobileCount;
 
+    @Value(value = "${solr_url}")
+    private String solrUrl;
+
+    @Value(value = "${solr_merchant_core}")
+    private String solrMerchantCore;
+
+    @Value(value = "${is_cloud_solr}")
+    private Boolean isCloudSolr;
+
     public String getSmsUrl() {
         return smsUrl;
     }
@@ -92,5 +101,17 @@ public class MallSrvConfig {
 
     public Integer getSmsSendMobileCount() {
         return smsSendMobileCount;
+    }
+
+    public String getSolrUrl() {
+        return solrUrl;
+    }
+
+    public String getSolrMerchantCore() {
+        return solrMerchantCore;
+    }
+
+    public Boolean getIsCloudSolr() {
+        return isCloudSolr;
     }
 }

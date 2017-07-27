@@ -31,7 +31,7 @@ public class MerchantFavoredController extends BaseController {
      * @return
      */
     @RequestMapping(value = "saveMerchantFavoredInfo/{merchantId}", method = RequestMethod.POST)
-    public Result saveMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @RequestBody MerchantFavoredParam param) {
+    public Result saveMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @RequestParam Long storeId, @RequestBody MerchantFavoredParam param) {
         if (merchantId == null || param == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
@@ -39,7 +39,7 @@ public class MerchantFavoredController extends BaseController {
         if (merchantFavoredBO != null) {
             return successCreated(ResultCode.RECORD_EXIST);
         }
-        Integer id = merchantFavoredService.saveMerchantFavoredInfo(merchantId, param);
+        Integer id = merchantFavoredService.saveMerchantFavoredInfo(merchantId, storeId, param);
         if (id == null || id < 0) {
             return successCreated(ResultCode.SAVE_FAIL);
         }
@@ -67,7 +67,7 @@ public class MerchantFavoredController extends BaseController {
     }
 
     @RequestMapping(value = "delMerchantFavoredInfo/{id}", method = RequestMethod.DELETE)
-    public Result delMerchantFavoredInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId) {
+    public Result delMerchantFavoredInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestParam Long storeId) {
         if (id == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
@@ -75,12 +75,12 @@ public class MerchantFavoredController extends BaseController {
         if (merchantFavoredBO == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
-        merchantFavoredService.delMerchantFavoredInfoById(id,merchantId);
+        merchantFavoredService.delMerchantFavoredInfoById(id,merchantId,storeId);
         return successDelete(ResultCode.SUCCESS);
     }
 
     @RequestMapping(value = "updateMerchantFavoredInfo/{merchantId}", method = RequestMethod.PUT)
-    public Result updateMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @RequestBody MerchantFavoredParam param) {
+    public Result updateMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @RequestParam Long storeId, @RequestBody MerchantFavoredParam param) {
         if (merchantId == null || param == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
@@ -88,7 +88,7 @@ public class MerchantFavoredController extends BaseController {
         if (merchantFavoredBO == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
-        Integer row = merchantFavoredService.updateMerchantFavoredInfo(merchantId, param);
+        Integer row = merchantFavoredService.updateMerchantFavoredInfo(merchantId, storeId, param);
         if (row == null || row < 0) {
             return successCreated(ResultCode.UPDATE_FAIL);
         }

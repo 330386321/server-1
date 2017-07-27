@@ -10,6 +10,7 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
 import com.lawu.eshop.mall.param.MerchantFavoredParam;
 import com.lawu.eshop.merchant.api.service.MerchantFavoredService;
+import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -27,6 +28,9 @@ public class MerchantFavoredController extends BaseController {
     @Autowired
     private MerchantFavoredService merchantFavoredService;
 
+    @Autowired
+    private MerchantStoreService merchantStoreService;
+
     @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "新增优惠变更配置", notes = "新增优惠变更配置 [1004,1005,1000，1012] 章勇", httpMethod = "POST")
     @Authorization
@@ -34,7 +38,12 @@ public class MerchantFavoredController extends BaseController {
     @RequestMapping(value = "saveMerchantFavoredInfo", method = RequestMethod.POST)
     public Result saveMerchantFavoredInfo(@ModelAttribute MerchantFavoredParam param, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
-        Result result = merchantFavoredService.saveMerchantFavoredInfo(merchantId, param);
+        Long storeId = 0L;
+        Result<Long> storeIdResult = merchantStoreService.getMerchantStoreId(merchantId);
+        if(isSuccess(storeIdResult)){
+            storeId = storeIdResult.getModel();
+        }
+        Result result = merchantFavoredService.saveMerchantFavoredInfo(merchantId, storeId, param);
         return result;
     }
 
@@ -56,7 +65,12 @@ public class MerchantFavoredController extends BaseController {
     @RequestMapping(value = "delMerchantFavoredInfo/{id}", method = RequestMethod.DELETE)
     public Result delMerchantFavoredInfo(@PathVariable("id") Long id,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
-        Result result = merchantFavoredService.delMerchantFavoredInfo(id, merchantId);
+        Long storeId = 0L;
+        Result<Long> storeIdResult = merchantStoreService.getMerchantStoreId(merchantId);
+        if(isSuccess(storeIdResult)){
+            storeId = storeIdResult.getModel();
+        }
+        Result result = merchantFavoredService.delMerchantFavoredInfo(id, merchantId, storeId);
         return successDelete(result);
     }
 
@@ -67,7 +81,12 @@ public class MerchantFavoredController extends BaseController {
     @RequestMapping(value = "updateMerchantFavoredInfo", method = RequestMethod.PUT)
     public Result updateMerchantFavoredInfo(@ModelAttribute MerchantFavoredParam param,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
-        Result result = merchantFavoredService.updateMerchantFavoredInfo(merchantId, param);
+        Long storeId = 0L;
+        Result<Long> storeIdResult = merchantStoreService.getMerchantStoreId(merchantId);
+        if(isSuccess(storeIdResult)){
+            storeId = storeIdResult.getModel();
+        }
+        Result result = merchantFavoredService.updateMerchantFavoredInfo(merchantId, storeId, param);
         return result;
     }
 }

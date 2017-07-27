@@ -8,13 +8,13 @@ import com.lawu.eshop.mall.srv.bo.MerchantFavoredBO;
  * @date 2017/4/10.
  */
 public interface MerchantFavoredService {
-    Integer saveMerchantFavoredInfo(Long merchantId, MerchantFavoredParam param);
+    Integer saveMerchantFavoredInfo(Long merchantId, Long storeId, MerchantFavoredParam param);
 
     MerchantFavoredBO findFavoredByMerchantId(Long merchantId);
 
-    void delMerchantFavoredInfoById(Long id, Long merchantId);
+    void delMerchantFavoredInfoById(Long id, Long merchantId, Long storeId);
 
     MerchantFavoredBO findFavoredById(Long id);
 
-    Integer updateMerchantFavoredInfo(Long merchantId, MerchantFavoredParam param);
+    Integer updateMerchantFavoredInfo(Long merchantId, Long storeId, MerchantFavoredParam param);
 }
