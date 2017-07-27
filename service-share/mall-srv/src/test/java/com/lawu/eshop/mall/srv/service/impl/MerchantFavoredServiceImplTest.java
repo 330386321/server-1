@@ -48,7 +48,7 @@ public class MerchantFavoredServiceImplTest {
         param.setValidDayBeginTime("07:00");
         param.setValidDayEndTime("18:00");
         param.setValidWeekTime("每周");
-        merchantFavoredService.saveMerchantFavoredInfo(1L,param);
+        merchantFavoredService.saveMerchantFavoredInfo(1L,2L,param);
         List<MerchantFavoredDO> list = merchantFavoredDOMapper.selectByExample(null);
         Assert.assertNotNull(list);
         Assert.assertEquals(1,list.size());
@@ -80,7 +80,7 @@ public class MerchantFavoredServiceImplTest {
         merchantFavoredDO.setMerchantId(1L);
         merchantFavoredDO.setType(MerchantFavoredTypeEnum.TYPE_DISCOUNT.val);
         merchantFavoredDOMapper.insert(merchantFavoredDO);
-        merchantFavoredService.delMerchantFavoredInfoById(merchantFavoredDO.getId(),1L);
+        merchantFavoredService.delMerchantFavoredInfoById(merchantFavoredDO.getId(),1L,2L);
         List<MerchantFavoredDO> list = merchantFavoredDOMapper.selectByExample(null);
         Assert.assertNotNull(list);
         Assert.assertEquals(1,list.size());
@@ -120,7 +120,7 @@ public class MerchantFavoredServiceImplTest {
         param.setValidDayBeginTime("07:00");
         param.setValidDayEndTime("18:00");
         param.setValidWeekTime("每周");
-        merchantFavoredService.updateMerchantFavoredInfo(1L,param);
+        merchantFavoredService.updateMerchantFavoredInfo(1L,2L,param);
         List<MerchantFavoredDO> list = merchantFavoredDOMapper.selectByExample(null);
         Assert.assertNotNull(list);
         Assert.assertEquals(1,list.size());
@@ -128,7 +128,7 @@ public class MerchantFavoredServiceImplTest {
         param.setTypeEnum(MerchantFavoredTypeEnum.TYPE_FULL_REDUCE);
         param.setReachAmount(BigDecimal.valueOf(100));
         param.setFavoredAmount(BigDecimal.valueOf(20));
-        merchantFavoredService.updateMerchantFavoredInfo(1L,param);
+        merchantFavoredService.updateMerchantFavoredInfo(1L,2L, param);
         List<MerchantFavoredDO> merchantFavoredDOS = merchantFavoredDOMapper.selectByExample(null);
         Assert.assertNotNull(merchantFavoredDOS);
         Assert.assertEquals(1,merchantFavoredDOS.size());

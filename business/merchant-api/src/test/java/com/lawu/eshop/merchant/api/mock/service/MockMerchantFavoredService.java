@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Service
 public class MockMerchantFavoredService extends BaseController implements MerchantFavoredService {
+
     @Override
-    public Result saveMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantFavoredParam param) {
+    public Result saveMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @RequestParam("storeId") Long storeId, @ModelAttribute MerchantFavoredParam param) {
         return successCreated();
     }
 
@@ -27,12 +28,12 @@ public class MockMerchantFavoredService extends BaseController implements Mercha
     }
 
     @Override
-    public Result delMerchantFavoredInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId) {
+    public Result delMerchantFavoredInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestParam("storeId") Long storeId) {
         return successDelete();
     }
 
     @Override
-    public Result updateMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantFavoredParam param) {
+    public Result updateMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @RequestParam("storeId") Long storeId, @ModelAttribute MerchantFavoredParam param) {
         return successCreated();
     }
 }

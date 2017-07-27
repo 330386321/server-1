@@ -69,7 +69,7 @@ public class MerchantFavoredControllerTest {
         String requestJson = JSONObject.toJSONString(param);
         RequestBuilder request = null;
         ResultActions perform = null;
-        request = post("/merchantFavored/saveMerchantFavoredInfo/1").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        request = post("/merchantFavored/saveMerchantFavoredInfo/1").param("storeId","2").contentType(MediaType.APPLICATION_JSON).content(requestJson);
         try {
             perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -77,7 +77,7 @@ public class MerchantFavoredControllerTest {
             e.printStackTrace();
         }
 
-        request = post("/merchantFavored/saveMerchantFavoredInfo/1").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        request = post("/merchantFavored/saveMerchantFavoredInfo/1").param("storeId","2").contentType(MediaType.APPLICATION_JSON).content(requestJson);
         try {
             perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -127,7 +127,7 @@ public class MerchantFavoredControllerTest {
     public void delMerchantFavoredInfo(){
         RequestBuilder request = null;
         ResultActions perform = null;
-        request = delete("/merchantFavored/delMerchantFavoredInfo/1").param("merchantId","1");
+        request = delete("/merchantFavored/delMerchantFavoredInfo/1").param("merchantId","1").param("storeId","2");
         try {
             perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -147,7 +147,7 @@ public class MerchantFavoredControllerTest {
         merchantFavoredDO.setValidWeekTime("每周");
         merchantFavoredDO.setMerchantId(1L);
         merchantFavoredDOMapper.insert(merchantFavoredDO);
-        request = delete("/merchantFavored/delMerchantFavoredInfo/"+merchantFavoredDO.getId()).param("merchantId","1");
+        request = delete("/merchantFavored/delMerchantFavoredInfo/"+merchantFavoredDO.getId()).param("merchantId","1").param("storeId","2");
         try {
             perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_NO_CONTENT)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -173,7 +173,7 @@ public class MerchantFavoredControllerTest {
         param.setValidDayEndTime("18:00");
         param.setValidWeekTime("每周");
         String requestJson = JSONObject.toJSONString(param);
-        request = put("/merchantFavored/updateMerchantFavoredInfo/1").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        request = put("/merchantFavored/updateMerchantFavoredInfo/1").param("storeId","2").contentType(MediaType.APPLICATION_JSON).content(requestJson);
         try {
             perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -193,7 +193,7 @@ public class MerchantFavoredControllerTest {
         merchantFavoredDO.setValidWeekTime("每周");
         merchantFavoredDO.setMerchantId(1L);
         merchantFavoredDOMapper.insert(merchantFavoredDO);
-        request = put("/merchantFavored/updateMerchantFavoredInfo/1").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        request = put("/merchantFavored/updateMerchantFavoredInfo/1").param("storeId","2").contentType(MediaType.APPLICATION_JSON).content(requestJson);
         try {
             perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
