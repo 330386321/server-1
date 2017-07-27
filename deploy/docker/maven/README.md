@@ -29,6 +29,7 @@ sudo docker run -d --privileged --name docker-maven \
     --add-host registry.eshop.com:192.168.100.94 \
     -v ~/src/server:/usr/src/maven \
     -v /etc/docker/certs.d/registry.eshop.com:/etc/docker/certs.d/registry.eshop.com:ro \
+    -v /usr/local/lawu/apache-maven-3.5.0/conf/settings.xml:/usr/share/maven/conf/settings.xml \
     -v ~/.m2:/root/.m2 \
     -v ~/maven/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh \
     -v ~/maven/dockerd-entrypoint.sh:/usr/local/bin/dockerd-entrypoint.sh \
@@ -43,7 +44,7 @@ sudo docker run -d --privileged --name docker-maven \
 构建docker镜像
 ======
 ```bash    
-sudo docker exec -it maven mvn clean package -Dmaven.test.skip -DpushImage
+sudo docker exec -it docker-maven mvn clean package -Dmaven.test.skip -DpushImage
 ```
 
 
