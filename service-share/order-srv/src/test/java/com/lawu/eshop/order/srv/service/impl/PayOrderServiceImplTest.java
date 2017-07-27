@@ -232,11 +232,15 @@ public class PayOrderServiceImplTest {
 		param.setMerchantNum("B00001");
 		param.setNotFavoredAmount(1D);
 		param.setTotalAmount(2D);
-		payOrderService.savePayOrderInfo(memberId, param, memberNum);
+		PayOrderBO payOrderBO = payOrderService.savePayOrderInfo(memberId, param, memberNum);
 		
 		PayOrderDOExample example = new PayOrderDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId);
 		PayOrderDO actual = payOrderDOMapper.selectByExample(example).get(0);
+		Assert.assertNotNull(payOrderBO);
+		Assert.assertNotNull(payOrderBO.getOrderNum());
+		Assert.assertNotNull(payOrderBO.getId());
+		Assert.assertEquals(payOrderBO.getId(), actual.getId());
 		Assert.assertNotNull(actual);
 		Assert.assertNotNull(actual.getId());
 		Assert.assertNotNull(actual.getGmtCreate());

@@ -1,5 +1,6 @@
 package com.lawu.eshop.order.srv.controller;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.order.dto.PayOrderIdDTO;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.OrderSrvApplicationTest;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
@@ -65,7 +67,13 @@ public class PayOrderControllerTest {
     	
     	RequestBuilder request = MockMvcRequestBuilders.post("/payOrder/savePayOrderInfo/" + memberId).param("numNum", memberNum).contentType(MediaType.APPLICATION_JSON).content(content);
         ResultActions perform = mvc.perform(request);
-        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
-        System.out.println( mvcResult.getResponse().getContentAsString());
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        PayOrderIdDTO payOrderIdDTO = JSONObject.parseObject(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), PayOrderIdDTO.class);
+        Assert.assertNotNull(payOrderIdDTO);
     }
 }
