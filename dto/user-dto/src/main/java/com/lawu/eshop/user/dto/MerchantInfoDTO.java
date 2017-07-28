@@ -70,6 +70,9 @@ public class MerchantInfoDTO {
     @ApiModelProperty(name = "审核类型", value= "AUDIT_TYPE_STORE：申请实体店，AUDIT_TYPE_EDIT_INFO：修改资料")
     private MerchantAuditTypeEnum auditTypeEnum;
 
+    @ApiModelProperty(name = "level", value= "等级")
+    private Integer level;
+
     public Integer getInviteMemberCount() {
         return inviteMemberCount;
     }
@@ -180,5 +183,13 @@ public class MerchantInfoDTO {
 
     public void setAuditTypeEnum(MerchantAuditTypeEnum auditTypeEnum) {
         this.auditTypeEnum = auditTypeEnum;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }

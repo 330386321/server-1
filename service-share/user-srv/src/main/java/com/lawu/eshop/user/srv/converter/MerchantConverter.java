@@ -134,6 +134,7 @@ public class MerchantConverter {
         merchantBO.setHeadimg(merchantDO.getHeadimg());
         merchantBO.setGtCid(merchantDO.getGtCid());
         merchantBO.setRyToken(merchantDO.getRyToken());
+        merchantBO.setLevel(merchantDO.getLevel());
         return merchantBO;
     }
 

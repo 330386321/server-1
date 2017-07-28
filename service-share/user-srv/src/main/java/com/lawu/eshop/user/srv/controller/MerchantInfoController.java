@@ -74,6 +74,7 @@ public class MerchantInfoController extends BaseController{
         merchantInfoDTO.setGtCid(merchantInfoBO.getGtCid());
         merchantInfoDTO.setRyToken(merchantInfoBO.getRyToken());
         merchantInfoDTO.setHeadimg(merchantInfoBO.getHeadimg());
+        merchantInfoDTO.setLevel(merchantInfoBO.getLevel());
         //商家扩展信息
         MerchantProfileBO merchantProfileBO = merchantProfileService.findMerchantProfileInfo(merchantId);
         merchantInfoDTO.setInviteMemberCount(merchantProfileBO.getInviteMemberCount());

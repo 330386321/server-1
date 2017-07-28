@@ -23,6 +23,8 @@ public class MerchantInfoBO {
 
     private String regionPath;
 
+    private Integer level;
+
     public String getAccount() {
         return account;
     }
@@ -69,5 +71,13 @@ public class MerchantInfoBO {
 
     public void setRegionPath(String regionPath) {
         this.regionPath = regionPath;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }
