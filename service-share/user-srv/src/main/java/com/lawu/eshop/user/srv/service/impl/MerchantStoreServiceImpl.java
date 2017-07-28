@@ -253,7 +253,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 
     @Override
     public List<NewMerchantStoreBO> listNewMerchant(String regionPath) {
-        List<NewMerchantStoreDOView> storeDOViews = merchantStoreDOMapperExtend.listNewMerchant();
+        List<NewMerchantStoreDOView> storeDOViews = merchantStoreDOMapperExtend.listNewMerchant(regionPath);
         return MerchantStoreConverter.convertNewStoreBO(storeDOViews);
     }
 

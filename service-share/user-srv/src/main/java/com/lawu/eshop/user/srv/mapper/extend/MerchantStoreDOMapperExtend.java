@@ -35,7 +35,7 @@ public interface MerchantStoreDOMapperExtend {
 
     PayOrderStoreInfoView getPayOrderMerchantInfo(Long merchantId);
 
-    List<NewMerchantStoreDOView> listNewMerchant();
+    List<NewMerchantStoreDOView> listNewMerchant(String regionPath);
 
     List<RecommendFoodDOview> listRecommendFoodConsume(Map<String, Object> map);
 

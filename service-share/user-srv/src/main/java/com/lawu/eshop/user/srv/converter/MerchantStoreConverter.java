@@ -501,7 +501,7 @@ public class MerchantStoreConverter {
 
         for (NewMerchantStoreDOView storeDOView : storeDOViews) {
             NewMerchantStoreBO storeBO = new NewMerchantStoreBO();
-            storeBO.setMerchantId(storeDOView.getMerchantStoreId());
+            storeBO.setMerchantId(storeDOView.getMerchantId());
             storeBO.setMerchantStoreId(storeDOView.getMerchantStoreId());
             storeBO.setName(storeDOView.getName());
             storeBO.setIndustryName(storeDOView.getIndustryName());
@@ -528,7 +528,7 @@ public class MerchantStoreConverter {
 
         for (NewMerchantStoreBO storeBO : storeBOS) {
             NewMerchantStoreDTO storeDTO = new NewMerchantStoreDTO();
-            storeDTO.setMerchantId(storeBO.getMerchantStoreId());
+            storeDTO.setMerchantId(storeBO.getMerchantId());
             storeDTO.setMerchantStoreId(storeBO.getMerchantStoreId());
             storeDTO.setName(storeBO.getName());
             storeDTO.setIndustryName(storeBO.getIndustryName());
@@ -555,7 +555,7 @@ public class MerchantStoreConverter {
 
         for (RecommendFoodDOview foodDOview : foodDOviews) {
             RecommendFoodBO foodBO = new RecommendFoodBO();
-            foodBO.setMerchantId(foodDOview.getMerchantStoreId());
+            foodBO.setMerchantId(foodDOview.getMerchantId());
             foodBO.setMerchantStoreId(foodDOview.getMerchantStoreId());
             foodBO.setName(foodDOview.getName());
             foodBO.setIndustryName(foodDOview.getIndustryName());
@@ -567,7 +567,7 @@ public class MerchantStoreConverter {
             foodBO.setAverageScore(foodDOview.getAverageScore());
             foodBO.setAverageConsumeAmount(foodDOview.getAverageConsumeAmount());
             foodBO.setBuyNumbers(foodDOview.getBuyNumbers());
-            foodBO.setCommentsCount(foodDOview.getBuyNumbers());
+            foodBO.setCommentsCount(foodDOview.getCommentsCount());
             foodBOS.add(foodBO);
         }
         return foodBOS;
@@ -588,7 +588,7 @@ public class MerchantStoreConverter {
 
         for (RecommendFoodBO foodBO : foodBOS) {
             RecommendFoodDTO foodDTO = new RecommendFoodDTO();
-            foodDTO.setMerchantId(foodBO.getMerchantStoreId());
+            foodDTO.setMerchantId(foodBO.getMerchantId());
             foodDTO.setMerchantStoreId(foodBO.getMerchantStoreId());
             foodDTO.setName(foodBO.getName());
             foodDTO.setIndustryName(foodBO.getIndustryName());
@@ -600,7 +600,7 @@ public class MerchantStoreConverter {
             foodDTO.setAverageScore(foodBO.getAverageScore());
             foodDTO.setAverageConsumeAmount(foodBO.getAverageConsumeAmount());
             foodDTO.setBuyNumbers(foodBO.getBuyNumbers());
-            foodDTO.setCommentsCount(foodBO.getBuyNumbers());
+            foodDTO.setCommentsCount(foodBO.getCommentsCount());
             foodDTOS.add(foodDTO);
         }
         return foodDTOS;
