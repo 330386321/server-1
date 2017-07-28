@@ -1,7 +1,10 @@
 package com.lawu.eshop.ad.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.ad.param.FavoriteAdParam;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
+import com.lawu.eshop.ad.srv.bo.FavoriteAdPraiseWarnBO;
 import com.lawu.eshop.framework.core.page.Page;
 
 /**
@@ -18,7 +21,7 @@ public interface FavoriteAdService {
 	 * @param memberId
 	 * @return
 	 */
-	Integer save(Long adId,Long memberId);
+	Integer save(Long adId,Long memberId,String userNum );
 	
 	/**
 	 * 取消收藏
@@ -41,4 +44,14 @@ public interface FavoriteAdService {
 	 */
 	Boolean isFavoriteAd(Long adId,Long memberId);
 
+	/**
+	 * 收藏的广告抢赞十分钟提醒
+	 */
+	List<FavoriteAdPraiseWarnBO> selectFavoriteAdPraise();
+	
+	/**
+	 * 抢赞提示改为已发送
+	 * @param id
+	 */
+	void updateIsSend(Long id);
 }

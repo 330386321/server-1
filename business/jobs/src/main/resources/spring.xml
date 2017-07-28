@@ -68,6 +68,9 @@
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 
 	<job:simple id="reportEarningMonthReportJob" description="每月广告收益同步" class="com.lawu.eshop.jobs.impl.ad.ReportEarningMonthReportJob" registry-center-ref="regCenter" cron="0 0 1 1 * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" /> 
+				
+	<job:simple id="favoriteAdPraiseWarnJob" description="收藏的抢赞提醒" class="com.lawu.eshop.jobs.impl.ad.FavoriteAdPraiseWarnJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 
 	<!-- Lock service -->

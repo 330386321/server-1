@@ -375,6 +375,136 @@ public class FavoriteAdDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andMemberNumIsNull() {
+            addCriterion("member_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumIsNotNull() {
+            addCriterion("member_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumEqualTo(String value) {
+            addCriterion("member_num =", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotEqualTo(String value) {
+            addCriterion("member_num <>", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumGreaterThan(String value) {
+            addCriterion("member_num >", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumGreaterThanOrEqualTo(String value) {
+            addCriterion("member_num >=", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumLessThan(String value) {
+            addCriterion("member_num <", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumLessThanOrEqualTo(String value) {
+            addCriterion("member_num <=", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumLike(String value) {
+            addCriterion("member_num like", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotLike(String value) {
+            addCriterion("member_num not like", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumIn(List<String> values) {
+            addCriterion("member_num in", values, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotIn(List<String> values) {
+            addCriterion("member_num not in", values, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumBetween(String value1, String value2) {
+            addCriterion("member_num between", value1, value2, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotBetween(String value1, String value2) {
+            addCriterion("member_num not between", value1, value2, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSendIsNull() {
+            addCriterion("is_send is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSendIsNotNull() {
+            addCriterion("is_send is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSendEqualTo(Boolean value) {
+            addCriterion("is_send =", value, "isSend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSendNotEqualTo(Boolean value) {
+            addCriterion("is_send <>", value, "isSend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSendGreaterThan(Boolean value) {
+            addCriterion("is_send >", value, "isSend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSendGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_send >=", value, "isSend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSendLessThan(Boolean value) {
+            addCriterion("is_send <", value, "isSend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSendLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_send <=", value, "isSend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSendIn(List<Boolean> values) {
+            addCriterion("is_send in", values, "isSend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSendNotIn(List<Boolean> values) {
+            addCriterion("is_send not in", values, "isSend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSendBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_send between", value1, value2, "isSend");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsSendNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_send not between", value1, value2, "isSend");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtCreateIsNull() {
             addCriterion("gmt_create is null");
             return (Criteria) this;

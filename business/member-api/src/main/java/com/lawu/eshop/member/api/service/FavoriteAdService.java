@@ -22,7 +22,7 @@ import com.lawu.eshop.framework.web.Result;
 public interface FavoriteAdService {
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "favoriteAd/save")
-	Result save(@RequestParam("memberId") Long memberId,@RequestParam("adId") Long adId);
+	Result save(@RequestParam("memberId") Long memberId,@RequestParam("adId") Long adId,@RequestParam("userNum") String userNum);
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "favoriteAd/remove/{adId}")
     Result remove(@PathVariable("adId") Long adId,@RequestParam("memberId") Long memberId);

@@ -108,6 +108,8 @@ CREATE TABLE `favorite_ad` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `ad_id` bigint(20) unsigned NOT NULL COMMENT '广告ID',
   `member_id` bigint(20) unsigned NOT NULL COMMENT '会员ID',
+  `member_num` varchar(19) NOT NULL COMMENT '会员编号',
+  `is_send`  tinyint(1) DEFAULT '0' NOT NULL COMMENT '是否发送消息',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx_member_id` (`member_id`)

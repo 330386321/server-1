@@ -1,5 +1,8 @@
 package com.lawu.eshop.ad.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.FavoriteAdDOViewDTO;
+import com.lawu.eshop.ad.dto.FavoriteAdPraiseWarnDTO;
 import com.lawu.eshop.ad.param.FavoriteAdParam;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
+import com.lawu.eshop.ad.srv.bo.FavoriteAdPraiseWarnBO;
 import com.lawu.eshop.ad.srv.converter.FavoriteAdConverter;
+import com.lawu.eshop.ad.srv.domain.extend.FavoriteAdPraiseWarnView;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
@@ -38,8 +44,8 @@ public class FavoriteAdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.PUT)
-    public Result save(@RequestParam Long memberId,@RequestParam  Long  adId ) {
-    	Integer i=favoriteAdService.save(memberId,adId);
+    public Result save(@RequestParam Long memberId,@RequestParam  Long  adId,@RequestParam String userNum ) {
+    	Integer i=favoriteAdService.save(memberId,adId,userNum);
     	if(i>0){
     		return successCreated(ResultCode.SUCCESS);
     	}else if(i==0){
@@ -89,6 +95,43 @@ public class FavoriteAdController extends BaseController{
 	@RequestMapping(value = "isFavoriteAd", method = RequestMethod.GET)
     public Result<Boolean> isFavoriteAd(@RequestParam Long adId,@RequestParam Long memberId) {
     	return successGet(favoriteAdService.isFavoriteAd(adId, memberId));
+    	
+    }
+	
+	/**
+	 * 收藏的抢赞十分提示
+	 * @return
+	 */
+	@RequestMapping(value = "selectFavoriteAdPraise", method = RequestMethod.GET)
+    public Result<List<FavoriteAdPraiseWarnDTO>> selectFavoriteAdPraise() {
+		List<FavoriteAdPraiseWarnBO> list=favoriteAdService.selectFavoriteAdPraise();
+		
+		List<FavoriteAdPraiseWarnDTO> dtoList=new ArrayList<>();
+		
+		for (FavoriteAdPraiseWarnBO bo : list) {
+			
+			FavoriteAdPraiseWarnDTO dto = new FavoriteAdPraiseWarnDTO();
+			dto.setAdId(bo.getAdId());
+			dto.setMemberId(bo.getMemberId());
+			dto.setTitle(bo.getTitle());
+			dto.setMemberNum(bo.getMemberNum());
+			dto.setId(bo.getId());
+			dtoList.add(dto);
+		}
+		
+    	return successGet(dtoList);
+    	
+    }
+	
+	/**
+	 * 将抢赞设置为已发送消息
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "updateIsSend/{id}", method = RequestMethod.PUT)
+    public Result updateIsSend(@PathVariable Long id) {
+    	favoriteAdService.updateIsSend(id);
+    	return successCreated();
     	
     }
 

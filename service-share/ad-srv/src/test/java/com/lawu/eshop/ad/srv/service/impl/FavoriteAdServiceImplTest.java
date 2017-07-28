@@ -20,8 +20,10 @@ import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.param.FavoriteAdParam;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
+import com.lawu.eshop.ad.srv.bo.FavoriteAdPraiseWarnBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDO;
+import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.service.AdService;
@@ -53,7 +55,7 @@ public class FavoriteAdServiceImplTest {
     @Test
     public void save() {
 
-    	favoriteAdService.save(1l, 1l);
+    	favoriteAdService.save(1l, 1l,"M000001");
 
         List<FavoriteAdDO> dos = favoriteAdDOMapper.selectByExample(null);
         Assert.assertNotNull(dos);
@@ -64,7 +66,7 @@ public class FavoriteAdServiceImplTest {
     @Rollback
     @Test
     public void remove() {
-    	favoriteAdService.save(1l, 1l);
+    	favoriteAdService.save(1l, 1l,"M000001");
     	favoriteAdService.remove(1l, 1l);
     	List<FavoriteAdDO> dos = favoriteAdDOMapper.selectByExample(null);
         Assert.assertTrue(dos.size() == 0);
@@ -98,7 +100,7 @@ public class FavoriteAdServiceImplTest {
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
         adDOMapper.insertSelective(ad);
-    	favoriteAdService.save(ad.getId(), 1l);
+    	favoriteAdService.save(ad.getId(), 1l,"M000001");
     	
     	FavoriteAdParam paramQuery=new FavoriteAdParam();
     	paramQuery.setCurrentPage(1);
@@ -117,12 +119,67 @@ public class FavoriteAdServiceImplTest {
     @Test
     public void isFavoriteAd() {
 
-    	favoriteAdService.save(1l, 1l);
+    	favoriteAdService.save(1l, 1l,"M000001");
 
         Boolean flag = favoriteAdService.isFavoriteAd(1l, 1l);
         Assert.assertNotNull(flag);
         Assert.assertTrue(flag);
     }
     
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void selectFavoriteAdPraise() {
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        adDOMapper.insertSelective(ad);
+    	favoriteAdService.save(ad.getId(), 1l,"M000001");
+
+    	List<FavoriteAdPraiseWarnBO>  list = favoriteAdService.selectFavoriteAdPraise();
+        Assert.assertNotNull(list);
+        Assert.assertTrue(list.size()>0);
+    }
+    
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void updateIsSend() {
+    	FavoriteAdDO favoriteAd=new FavoriteAdDO();
+		favoriteAd.setAdId(1l);
+		favoriteAd.setMemberId(1l);
+		favoriteAd.setGmtCreate(new Date());
+		favoriteAd.setMemberNum("M000001");
+		favoriteAdDOMapper.insert(favoriteAd);
+		favoriteAdService.updateIsSend(favoriteAd.getId());
+		
+		FavoriteAdDOExample example = new FavoriteAdDOExample();
+		example.createCriteria().andIdEqualTo(favoriteAd.getId()).andIsSendEqualTo(true);
+    	List<FavoriteAdDO> dos = favoriteAdDOMapper.selectByExample(example);
+    	Assert.assertNotNull(dos);
+        Assert.assertTrue(dos.size() >= 0);
+
+    }
     
 }

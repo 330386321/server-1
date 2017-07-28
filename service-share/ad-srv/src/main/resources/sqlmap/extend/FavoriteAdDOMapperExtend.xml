@@ -37,4 +37,24 @@
     	ORDER BY fa.gmt_create desc
     	</where>
   </select>
+  
+  <resultMap id="FavoriteAdPraiseResultMap" type="com.lawu.eshop.ad.srv.domain.extend.FavoriteAdPraiseWarnView">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <id column="ad_id" jdbcType="BIGINT" property="adId" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="member_num" jdbcType="VARCHAR" property="memberNum" />
+  </resultMap>
+  <select resultMap="FavoriteAdPraiseResultMap"  id="selectFavoriteAdPraise"  parameterType="com.lawu.eshop.ad.srv.domain.extend.FavoriteAdExtendDOView">
+     select 
+     	fa.id as id,
+    	fa.member_id as member_id,
+    	fa.member_num as member_num, 
+    	fa.ad_id as ad_id,
+    	a.title as title
+    from favorite_ad fa  
+    	left join ad a on fa.ad_id= a.id
+	      where fa.is_send = 0 and a.type =3 and a.status=2
+	      and  a.begin_time > #{warnDate} 
+  </select> 
 </mapper>

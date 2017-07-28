@@ -58,7 +58,7 @@ public class FavoriteAdControllerTest {
      @Test
      public void save() {
          try {
-             RequestBuilder request = put("/favoriteAd/save").param("memberId", "1").param("adId", "1");
+             RequestBuilder request = put("/favoriteAd/save").param("memberId", "1").param("adId", "1").param("userNum", "M000001");
              ResultActions perform= mvc.perform(request);
              MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
 
@@ -77,9 +77,10 @@ public class FavoriteAdControllerTest {
     	 favoriteAdDO.setAdId(1l);
     	 favoriteAdDO.setGmtCreate(new Date());
     	 favoriteAdDO.setMemberId(1l);
+    	 favoriteAdDO.setMemberNum("M000001");
     	 favoriteAdDOMapper.insert(favoriteAdDO);
          try {
-             RequestBuilder request = put("/favoriteAd/save").param("memberId", favoriteAdDO.getMemberId().toString()).param("adId", favoriteAdDO.getAdId().toString());
+             RequestBuilder request = put("/favoriteAd/save").param("memberId", favoriteAdDO.getMemberId().toString()).param("adId", favoriteAdDO.getAdId().toString()).param("userNum", "M000001");
              ResultActions perform= mvc.perform(request);
              MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
 
@@ -98,6 +99,7 @@ public class FavoriteAdControllerTest {
     	 favoriteAdDO.setAdId(1l);
     	 favoriteAdDO.setGmtCreate(new Date());
     	 favoriteAdDO.setMemberId(1l);
+    	 favoriteAdDO.setMemberNum("M000001");
     	 favoriteAdDOMapper.insert(favoriteAdDO);
          try {
              RequestBuilder request = delete("/favoriteAd/remove/"+favoriteAdDO.getAdId()).param("memberId", "1");
@@ -139,6 +141,39 @@ public class FavoriteAdControllerTest {
      public void isFavoriteAd() {
          try {
              RequestBuilder request = get("/favoriteAd/isFavoriteAd").param("adId", "1").param("memberId", "1");
+             ResultActions perform= mvc.perform(request);
+             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+         } catch (Exception e) {
+             e.printStackTrace();
+             Assert.fail(e.getMessage());
+         }
+
+     }
+     
+     @Transactional
+     @Rollback
+     @Test
+     public void updateIsSend() {
+         try {
+             RequestBuilder request = put("/favoriteAd/updateIsSend/"+1);
+             ResultActions perform= mvc.perform(request);
+             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+         } catch (Exception e) {
+             e.printStackTrace();
+             Assert.fail(e.getMessage());
+         }
+
+     }
+     
+     @Transactional
+     @Rollback
+     @Test
+     public void selectFavoriteAdPraise() {
+    	 
+         try {
+             RequestBuilder request = get("/favoriteAd/selectFavoriteAdPraise");
              ResultActions perform= mvc.perform(request);
              MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
 

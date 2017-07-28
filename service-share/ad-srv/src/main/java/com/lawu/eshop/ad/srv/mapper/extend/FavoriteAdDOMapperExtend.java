@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 
-import com.lawu.eshop.ad.param.FavoriteAdParam;
 import com.lawu.eshop.ad.srv.domain.extend.FavoriteAdDOView;
+import com.lawu.eshop.ad.srv.domain.extend.FavoriteAdExtendDOView;
+import com.lawu.eshop.ad.srv.domain.extend.FavoriteAdPraiseWarnView;
 
 /**
  * 广告收藏接口扩展
@@ -22,5 +23,11 @@ public interface FavoriteAdDOMapperExtend {
 	 * @return
 	 */
 	List<FavoriteAdDOView> selectMyFavoriteAdByRowbounds(FavoriteAdDOView  param, RowBounds rowBounds);
+
+	/**
+	 * 收藏的抢赞十分钟提醒
+	 * @return
+	 */
+	List<FavoriteAdPraiseWarnView> selectFavoriteAdPraise(FavoriteAdExtendDOView view);
     
 }

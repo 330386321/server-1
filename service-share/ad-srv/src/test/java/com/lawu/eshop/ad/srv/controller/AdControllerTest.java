@@ -256,6 +256,7 @@ public class AdControllerTest {
         FavoriteAdDO favoriteAdDO=new FavoriteAdDO();
         favoriteAdDO.setAdId(ad.getId());
         favoriteAdDO.setMemberId(1l);
+        favoriteAdDO.setMemberNum("M000001");
         favoriteAdDO.setGmtCreate(new Date());
         favoriteAdDOMapper.insert(favoriteAdDO);
 		

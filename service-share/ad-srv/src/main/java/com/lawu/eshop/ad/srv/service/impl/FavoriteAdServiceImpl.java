@@ -1,5 +1,7 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -9,14 +11,18 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.param.FavoriteAdParam;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
+import com.lawu.eshop.ad.srv.bo.FavoriteAdPraiseWarnBO;
 import com.lawu.eshop.ad.srv.converter.FavoriteAdConverter;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
 import com.lawu.eshop.ad.srv.domain.extend.FavoriteAdDOView;
+import com.lawu.eshop.ad.srv.domain.extend.FavoriteAdExtendDOView;
+import com.lawu.eshop.ad.srv.domain.extend.FavoriteAdPraiseWarnView;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.extend.FavoriteAdDOMapperExtend;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 广告收藏接口实现
@@ -37,7 +43,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 	 * 广告收藏
 	 */
 	@Override
-	public Integer save(Long memberId,Long adId) {
+	public Integer save(Long memberId,Long adId,String userNum ) {
 		FavoriteAdDOExample example=new FavoriteAdDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andAdIdEqualTo(adId);
 		Long count=favoriteAdDOMapper.countByExample(example);
@@ -48,6 +54,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 		favoriteAd.setAdId(adId);
 		favoriteAd.setMemberId(memberId);
 		favoriteAd.setGmtCreate(new Date());
+		favoriteAd.setMemberNum(userNum);
 		int row=favoriteAdDOMapper.insert(favoriteAd);
 		return row;
 	}
@@ -93,5 +100,34 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 			return false;
 		}
 	}
+
+	@Override
+	public List<FavoriteAdPraiseWarnBO> selectFavoriteAdPraise() {
+		FavoriteAdExtendDOView view = new FavoriteAdExtendDOView();
+		Calendar nowTime = Calendar.getInstance();
+		nowTime.add(Calendar.MINUTE, 10);
+		view.setWarnDate(DateUtil.getDateFormat(nowTime.getTime()));
+		List<FavoriteAdPraiseWarnView> list=favoriteAdDOMapperExtend.selectFavoriteAdPraise(view);
+		List<FavoriteAdPraiseWarnBO> listBO = new ArrayList<>();
+		for (FavoriteAdPraiseWarnView favoriteAdPraiseWarnView : list) {
+			FavoriteAdPraiseWarnBO bo = new FavoriteAdPraiseWarnBO();
+			bo.setAdId(favoriteAdPraiseWarnView.getAdId());
+			bo.setMemberId(favoriteAdPraiseWarnView.getMemberId());
+			bo.setTitle(favoriteAdPraiseWarnView.getTitle());
+			bo.setMemberNum(favoriteAdPraiseWarnView.getMemberNum());
+			bo.setId(favoriteAdPraiseWarnView.getId());
+			listBO.add(bo);
+		}
+		return listBO;
+	}
+
+	@Override
+	public void updateIsSend(Long id) {
+		FavoriteAdDO record = new FavoriteAdDO();
+		record.setAdId(id);
+		record.setIsSend(true);
+		favoriteAdDOMapper.updateByPrimaryKey(record);
+	}
+	
 
 }

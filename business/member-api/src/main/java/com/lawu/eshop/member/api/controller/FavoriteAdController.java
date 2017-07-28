@@ -61,7 +61,8 @@ public class FavoriteAdController extends BaseController{
     public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     						@RequestParam @ApiParam(required = true, value = "商品id") Long adId) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
-        Result rs = favoriteAdService.save(memberId, adId);
+		String userNum = UserUtil.getCurrentUserNum(getRequest());
+        Result rs = favoriteAdService.save(memberId, adId,userNum);
         if(!isSuccess(rs)){
         	return successCreated(rs.getRet());
         }
