@@ -1,9 +1,47 @@
 安装
 ======
+第一种方式
+------
 下载：https://github.com/docker/compose/releases/download/1.14.0/docker-compose-Linux-x86_64
 拷贝至：/usr/local/bin/docker-compose
 
+第二种方式
+------
+```bash
+curl -L https://github.com/docker/compose/releases/download/1.14.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+```
+
+获取权限
+=====
+```bash
+sudo chmod +x /usr/local/bin/docker-compose
+```
 
 参考资料
 ======
 https://docs.docker.com/compose/install/
+
+启动服务
+=====
+基础服务
+-----
+config-server
+```bash
+docker run -d -p 8080:8080 --privileged --name config-server \
+    -v /usr/local/eshop/config:/root/config:ro \
+    -e spring.profiles.active=native,dev \
+    registry.eshop.com/config-server
+```
+
+eureka-server
+```bash
+docker run -d -p 8888:8888 --privileged --name eureka-server \
+    -e spring.profiles.active=native,dev \
+    registry.eshop.com/eureka-server
+```
+
+业务服务
+-----
+```bash
+docker-compose -f ~/compose/dev/23/docker-compose.yml up -d 
+```
