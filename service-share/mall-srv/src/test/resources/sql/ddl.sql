@@ -84,7 +84,7 @@ CREATE TABLE `discount_package` (
   `name` varchar(25) NOT NULL COMMENT '套餐名称',
   `cover_image` varchar(255) NOT NULL COMMENT '封面图片',
   `price` decimal(7,2) unsigned NOT NULL COMMENT '套餐价格',
-  `original_price` decimal(7,2) unsigned NOT NULL COMMENT '原价',
+  `original_price` decimal(15,2) unsigned NOT NULL COMMENT '原价',
   `other_instructions` varchar(250) DEFAULT NULL COMMENT '其他说明',
   `validity_period_begin` datetime NOT NULL COMMENT '有效期-开始(yyyy-MM-dd)',
   `validity_period_end` datetime NOT NULL COMMENT '有效期-结束(yyyy-MM-dd)',
@@ -93,6 +93,8 @@ CREATE TABLE `discount_package` (
   `use_time_end` time NOT NULL COMMENT '使用时间-结束(HH:mm)',
   `status` tinyint(2) unsigned NOT NULL COMMENT '状态(0-删除|1-上架|2-下架)',
   `is_reservation` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否需要预约(0-免预约|1-需要预约)',
+  `advance_booking_time` varchar(10) DEFAULT NULL COMMENT '提前预约时间(xx小时|xx分钟|)',
+  `purchase_notes` varchar(100) DEFAULT NULL COMMENT '购买须知',
   `use_rules` varchar(550) DEFAULT NULL COMMENT '使用规则',
   `gmt_up` datetime NOT NULL COMMENT '上架时间',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
@@ -108,15 +110,15 @@ CREATE TABLE `discount_package_content` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `discount_package_id` bigint(20) unsigned NOT NULL COMMENT '优惠套餐id',
   `name` varchar(20) NOT NULL COMMENT '内容名称',
-  `unit_price` decimal(5,2) unsigned NOT NULL COMMENT '单价',
+  `unit_price` decimal(7,2) unsigned NOT NULL COMMENT '单价',
   `quantity` int(11) unsigned NOT NULL COMMENT '数量',
   `unit` varchar(5) NOT NULL COMMENT '单位',
-  `subtotal` decimal(5,2) unsigned NOT NULL COMMENT '小计',
+  `subtotal` decimal(11,2) unsigned NOT NULL COMMENT '小计',
   `status` tinyint(2) unsigned NOT NULL COMMENT '状态(0-删除|1-正常)',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ;
+);
 
 -- ----------------------------
 -- Table structure for discount_package_image
@@ -125,11 +127,22 @@ DROP TABLE IF EXISTS `discount_package_image`;
 CREATE TABLE `discount_package_image` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `discount_package_id` bigint(20) unsigned NOT NULL COMMENT '优惠套餐id',
-  `description` varchar(100) NOT NULL COMMENT '文字描述',
+  `description` varchar(250) NOT NULL COMMENT '文字描述',
   `image` varchar(255) NOT NULL COMMENT '图片',
   `status` tinyint(2) unsigned NOT NULL COMMENT '状态(0-删除|1-正常)',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+);
+
+-- ----------------------------
+-- Table structure for discount_package_purchase_notes
+-- ----------------------------
+DROP TABLE IF EXISTS `discount_package_purchase_notes`;
+CREATE TABLE `discount_package_purchase_notes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `note` varchar(255) NOT NULL COMMENT '购买须知选项',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 );
 
