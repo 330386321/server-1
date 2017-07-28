@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.user.constants.StoreSolrEnum;
+import com.lawu.eshop.user.param.DiscountStoreParam;
 import com.lawu.eshop.user.param.StoreSolrParam;
 import com.lawu.eshop.user.srv.UserSrvApplicationTest;
 import org.junit.Assert;
@@ -25,7 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -77,6 +79,26 @@ public class StoreSolrControllerTest {
     @Test
     public void listStoreSearchWord() {
         RequestBuilder request = get("/storeSolr/listStoreSearchWord").param("name", "test");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void discountStore() {
+        DiscountStoreParam param = new DiscountStoreParam();
+        param.setRegionPath("44/4403");
+        param.setLongitude(new BigDecimal(104.23));
+        param.setLatitude(new BigDecimal(22.36));
+        String requestJson = JSONObject.toJSONString(param);
+        RequestBuilder request = post("/storeSolr/discountStore").contentType(MediaType.APPLICATION_JSON).content(requestJson);
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
