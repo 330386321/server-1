@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
@@ -9,13 +10,8 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.member.api.service.AdPlatformService;
-import com.lawu.eshop.member.api.service.MerchantStoreService;
-import com.lawu.eshop.member.api.service.RegionService;
-import com.lawu.eshop.member.api.service.StoreSolrService;
-import com.lawu.eshop.user.dto.StoreSearchWordDTO;
-import com.lawu.eshop.user.dto.StoreSolrDTO;
-import com.lawu.eshop.user.dto.StoreSolrInfoDTO;
+import com.lawu.eshop.member.api.service.*;
+import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.DiscountStoreParam;
 import com.lawu.eshop.user.param.StoreSolrParam;
 import io.swagger.annotations.Api;
@@ -48,6 +44,9 @@ public class StoreSolrController extends BaseController {
 
     @Autowired
     private RegionService regionService;
+
+    @Autowired
+    private RecommendStoreCacheService recommendStoreCacheService;
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "搜索门店/猜你喜欢/更多商家", notes = "搜索门店(名称搜索)/猜你喜欢(全部商家)/更多商家(同行业商家)。[1100] (梅述全)", httpMethod = "GET")
@@ -122,10 +121,22 @@ public class StoreSolrController extends BaseController {
         return successGet(storeSolrDTOS);
     }
 
+    @ApiOperation(value = "新店推荐", notes = "新店推荐(前50)。[1100] (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "listNewMerchant", method = RequestMethod.GET)
+    public Result<List<NewMerchantStoreDTO>> listNewMerchant(@RequestParam @ApiParam(name = "regionPath", required = true, value = "区域路径") String regionPath) {
+        Result<String> result = recommendStoreCacheService.getNewMerchant(regionPath);
+        if (StringUtils.isEmpty(result.getModel())) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        List<NewMerchantStoreDTO> storeDTOS = JSON.parseArray(result.getModel(), NewMerchantStoreDTO.class);
+        return successGet(storeDTOS);
+    }
+
     @ApiOperation(value = "专属特惠", notes = "专属特惠(优惠系数升序)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "discountStore", method = RequestMethod.GET)
-    public Result<Page<StoreSolrDTO>> listStore(@ModelAttribute @ApiParam DiscountStoreParam discountStoreParam) {
+    public Result<Page<StoreSolrDTO>> discountStore(@ModelAttribute @ApiParam DiscountStoreParam discountStoreParam) {
         Result<Page<StoreSolrDTO>> result = storeSolrService.discountStore(discountStoreParam);
         if (!isSuccess(result)) {
             return result;
@@ -137,6 +148,26 @@ public class StoreSolrController extends BaseController {
             }
         }
         return result;
+    }
+
+    @ApiOperation(value = "优选美食", notes = "优选美食(人气最高和评分最高各5个)。(梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "listRecommendFood", method = RequestMethod.GET)
+    public Result<RecommendFoodStoreDTO> listRecommendFood(@RequestParam @ApiParam(name = "regionPath", required = true, value = "区域路径") String regionPath) {
+        RecommendFoodStoreDTO storeDTO = new RecommendFoodStoreDTO();
+        List<RecommendFoodDTO> consumeDTOS = new ArrayList<>();
+        List<RecommendFoodDTO> commentDTOS = new ArrayList<>();
+        Result<String> consumeResult = recommendStoreCacheService.getRecommendFoodConsume(regionPath);
+        Result<String> commentResult = recommendStoreCacheService.getRecommendFoodComment(regionPath);
+        if (!StringUtils.isEmpty(consumeResult.getModel())) {
+            consumeDTOS = JSON.parseArray(consumeResult.getModel(), RecommendFoodDTO.class);
+        }
+        if (StringUtils.isEmpty(commentResult.getModel())) {
+            commentDTOS = JSON.parseArray(commentResult.getModel(), RecommendFoodDTO.class);
+        }
+        storeDTO.setRecommendConsume(consumeDTOS);
+        storeDTO.setRecommendComment(commentDTOS);
+        return successGet(storeDTO);
     }
 
 }
