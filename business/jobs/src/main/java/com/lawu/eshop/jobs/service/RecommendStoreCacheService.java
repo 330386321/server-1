@@ -43,31 +43,4 @@ public interface RecommendStoreCacheService {
     @RequestMapping(value = "recommendStore/saveRecommendFoodComment", method = RequestMethod.POST)
     Result saveRecommendFoodComment(@RequestParam("regionPath") String regionPath, @RequestParam("storeInfo") String storeInfo);
 
-    /**
-     * 新店推荐
-     *
-     * @param regionPath
-     * @return
-     */
-    @RequestMapping(value = "recommendStore/getNewMerchant", method = RequestMethod.GET)
-    Result<String> getNewMerchant(@RequestParam("regionPath") String regionPath);
-
-    /**
-     * 优选美食-人气最高
-     *
-     * @param regionPath
-     * @return
-     */
-    @RequestMapping(value = "recommendStore/getRecommendFoodConsume", method = RequestMethod.GET)
-    Result<String> getRecommendFoodConsume(@RequestParam("regionPath") String regionPath);
-
-    /**
-     * 优选美食-评价最高
-     *
-     * @param regionPath
-     * @return
-     */
-    @RequestMapping(value = "recommendStore/getRecommendFoodComment", method = RequestMethod.GET)
-    Result<String> getRecommendFoodComment(@RequestParam("regionPath") String regionPath);
-
 }
