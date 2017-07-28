@@ -10,6 +10,7 @@ import com.lawu.eshop.mall.dto.CommentOperatorDTO;
 import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentMerchantParam;
+import com.lawu.eshop.mall.param.PayOrderAutoCommentParam;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentMerchantBO;
 import com.lawu.eshop.mall.srv.converter.CommentMerchantConverter;
@@ -145,6 +146,12 @@ public class CommentMerchantController extends BaseController {
     public Byte getGradeByOrderId(@RequestParam("id") Long id, @RequestParam("memberId") Long memberId) {
         Byte grade = commentMerchantService.getGradeByOrderId(id, memberId);
         return grade;
+    }
+
+    @RequestMapping(value = "payOrderAutoComment",method = RequestMethod.POST)
+    Result payOrderAutoComment(@RequestBody PayOrderAutoCommentParam param){
+        commentMerchantService.payOrderAutoComment(param);
+        return successCreated();
     }
 
 }

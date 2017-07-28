@@ -1,5 +1,5 @@
-namesrvAddr=192.168.100.90:9876;192.168.100.91:9876
-brokerIP1=192.168.100.90
+namesrvAddr=192.168.1.29:9876
+brokerIP1=192.168.1.29
 brokerName=broker-a
 brokerClusterName=DefaultCluster
 brokerId=0

@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentMerchantParam;
+import com.lawu.eshop.mall.param.PayOrderAutoCommentParam;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentMerchantBO;
 
@@ -57,4 +58,6 @@ public interface CommentMerchantService {
     void delCommentMerchantInfo(Long commentId);
 
     Byte getGradeByOrderId(Long payOrderId, Long memberId);
+
+    void payOrderAutoComment(PayOrderAutoCommentParam param);
 }

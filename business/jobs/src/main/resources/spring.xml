@@ -8,7 +8,7 @@
 	<!--配置作业注册中心 -->
 	<reg:zookeeper id="regCenter" server-lists="${zookeeper.servers}" namespace="jobs-job" />
 
-	<!-- 配置作业-->
+	 配置作业
 	<job:simple id="adViewJob" description="广告浏览次数" class="com.lawu.eshop.jobs.impl.ad.AdViewJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 	<job:simple id="productOrderCommissionJob" description="商品订单提成" class="com.lawu.eshop.jobs.impl.order.ProductOrderCommissionJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
@@ -16,7 +16,7 @@
 	<job:simple id="payOrderCommissionJob" description="买单提成" class="com.lawu.eshop.jobs.impl.payorder.PayOrderCommissionJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"  />
 	<job:simple id="clickAdCommissionJob" description="点击广告提成" class="com.lawu.eshop.jobs.impl.ad.ClickAdCommissionJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
-				sharding-total-count="1" overwrite="true" disabled="false" />
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="storeStatisticsJob" description="门店人均消费、平均得分、好评率统计" class="com.lawu.eshop.jobs.impl.store.StoreStatisticsJob" registry-center-ref="regCenter" cron="0 0 0 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="productAverageDailySalesJob" description="商品平均日销量" class="com.lawu.eshop.jobs.impl.product.ProductAverageDailySalesJob" registry-center-ref="regCenter" cron="0 0 0 1/1 * ?"
@@ -76,6 +76,8 @@
 	<job:simple id="recommendStoreJob" description="新增门店、专属特惠、优选美食" class="com.lawu.eshop.jobs.impl.store.RecommendStoreJob" registry-center-ref="regCenter" cron="0 30 * * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 
+	<job:simple id="payOrderAutoCommentJob" description="自动评论买单" class="com.lawu.eshop.jobs.impl.payorder.PayOrderAutoCommentJob" registry-center-ref="regCenter" cron="0 0/1 * * * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<!-- Lock service -->
 	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />
 	<bean id="redissonConfiguration" class="com.lawu.eshop.synchronization.lock.config.RedissonConfiguration" />

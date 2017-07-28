@@ -1,16 +1,5 @@
 package com.lawu.eshop.order.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
@@ -26,12 +15,24 @@ import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
 import com.lawu.eshop.order.srv.converter.PayOrderConverter;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.domain.PayOrderDOExample;
+import com.lawu.eshop.order.srv.domain.extend.PayOrderExtendDOVew;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
+import com.lawu.eshop.order.srv.mapper.extend.PayOrderExtendDOMapper;
 import com.lawu.eshop.order.srv.service.PayOrderService;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -42,6 +43,8 @@ public class PayOrderServiceImpl implements PayOrderService {
 	@Autowired
 	private PayOrderDOMapper payOrderDOMapper;
 
+	@Autowired
+	private PayOrderExtendDOMapper payOrderExtendDOMapper;
 
     @Override
     @Transactional
@@ -245,5 +248,13 @@ public class PayOrderServiceImpl implements PayOrderService {
 		List<PayOrderBO> payOrderBOS = PayOrderConverter.coverBOS(payOrderDOS);
 		page.setRecords(payOrderBOS);
 		return page;
+	}
+
+	@Override
+	public List<PayOrderBO> getAutoCommentPayOrderList() {
+
+		List<PayOrderExtendDOVew> list = payOrderExtendDOMapper.getAutoCommentPayOrderList(new Date());
+		List<PayOrderBO> payOrderBOS = PayOrderConverter.coverBOSWithDOVews(list);
+		return payOrderBOS;
 	}
 }

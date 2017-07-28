@@ -3,12 +3,10 @@ package com.lawu.eshop.mall.srv.service.impl;
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.mall.constants.CommentGradeEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.constants.CommentTypeEnum;
-import com.lawu.eshop.mall.param.CommentListParam;
-import com.lawu.eshop.mall.param.CommentMerchantListParam;
-import com.lawu.eshop.mall.param.CommentMerchantPageParam;
-import com.lawu.eshop.mall.param.CommentMerchantParam;
+import com.lawu.eshop.mall.param.*;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentMerchantBO;
 import com.lawu.eshop.mall.srv.converter.CommentMerchantConverter;
@@ -284,6 +282,24 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
             return commentMerchantDOS.get(0).getGrade();
         }
         return 0;
+    }
+
+    @Override
+    @Transactional
+    public void payOrderAutoComment(PayOrderAutoCommentParam param) {
+        CommentMerchantDO commentMerchantDO = new CommentMerchantDO();
+        commentMerchantDO.setGmtCreate(new Date());
+        commentMerchantDO.setGmtModified(new Date());
+        commentMerchantDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
+        commentMerchantDO.setPayOrderId(param.getPayOrderId());
+        commentMerchantDO.setMemberId(param.getMemberId());
+        commentMerchantDO.setMerchantId(param.getMerchantId());
+        commentMerchantDO.setAvgSpend(param.getAvgSpend());
+        commentMerchantDO.setIsAnonymous(true);
+        commentMerchantDO.setContent("好评");
+        commentMerchantDO.setGrade(CommentGradeEnum.COMMENT_STAR_LEVEL_FOUR.val);
+        commentMerchantDOMapper.insertSelective(commentMerchantDO);
+        transactionMainService.sendNotice(param.getPayOrderId());
     }
 
 }

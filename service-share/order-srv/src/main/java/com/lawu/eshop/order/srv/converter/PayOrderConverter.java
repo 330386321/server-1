@@ -1,15 +1,13 @@
 package com.lawu.eshop.order.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.lawu.eshop.order.constants.EvaluationEnum;
-import com.lawu.eshop.order.dto.MemberPayOrderInfoDTO;
-import com.lawu.eshop.order.dto.MerchantPayOrderListDTO;
-import com.lawu.eshop.order.dto.OperatorPayOrderListDTO;
-import com.lawu.eshop.order.dto.PayOrderDTO;
+import com.lawu.eshop.order.dto.*;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
+import com.lawu.eshop.order.srv.domain.extend.PayOrderExtendDOVew;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -119,5 +117,39 @@ public class PayOrderConverter {
             payOrderListDTOS.add(payOrderListDTO);
         }
         return payOrderListDTOS;
+    }
+
+    public static List<PayOrderBO> coverBOSWithDOVews(List<PayOrderExtendDOVew> list) {
+	    if(list.isEmpty()){
+	        return new ArrayList<>();
+        }
+        List<PayOrderBO> payOrderBOS = new ArrayList<>();
+        PayOrderBO payOrderBO;
+        for(PayOrderExtendDOVew payOrderExtendDOVew :list){
+            payOrderBO = new PayOrderBO();
+            payOrderBO.setId(payOrderExtendDOVew.getId());
+            payOrderBO.setMerchantId(payOrderExtendDOVew.getMerchantId());
+            payOrderBO.setMemberId(payOrderExtendDOVew.getMemberId());
+            payOrderBO.setActualAmount(payOrderExtendDOVew.getActualAmount());
+            payOrderBOS.add(payOrderBO);
+        }
+        return payOrderBOS;
+    }
+
+    public static List<PayOrderAutoCommentDTO> coverAutoCommentDTOS(List<PayOrderBO> payOrderBOS) {
+        if (payOrderBOS.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<PayOrderAutoCommentDTO> payOrderAutoCommentDTOS = new ArrayList<>();
+        PayOrderAutoCommentDTO payOrderAutoCommentDTO;
+        for (PayOrderBO payOrderBO : payOrderBOS) {
+            payOrderAutoCommentDTO = new PayOrderAutoCommentDTO();
+            payOrderAutoCommentDTO.setId(payOrderBO.getId());
+            payOrderAutoCommentDTO.setMerchantId(payOrderBO.getMerchantId());
+            payOrderAutoCommentDTO.setMemberId(payOrderBO.getMemberId());
+            payOrderAutoCommentDTO.setActualAmount(payOrderBO.getActualAmount());
+            payOrderAutoCommentDTOS.add(payOrderAutoCommentDTO);
+        }
+        return payOrderAutoCommentDTOS;
     }
 }

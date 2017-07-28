@@ -1,8 +1,10 @@
 package com.lawu.eshop.order.srv.mapper.extend;
 
+import com.lawu.eshop.order.srv.domain.extend.PayOrderExtendDOVew;
 import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface PayOrderExtendDOMapper {
@@ -13,4 +15,5 @@ public interface PayOrderExtendDOMapper {
 	String payVolumeTotal(@Param("formatDate") String formatDate, @Param("flag") Byte flag,
 			@Param("merchantId") Long merchantId, @Param("status") Byte status);
 
+	List<PayOrderExtendDOVew> getAutoCommentPayOrderList(Date nowTime);
 }

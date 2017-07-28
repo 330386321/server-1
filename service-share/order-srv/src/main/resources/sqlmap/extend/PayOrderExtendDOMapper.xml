@@ -60,4 +60,23 @@
 			#{merchantId} and `status` = #{status}
 		</if>
 	</select>
+
+	<select id="getAutoCommentPayOrderList" resultType="com.lawu.eshop.order.srv.domain.extend.PayOrderExtendDOVew" >
+		SELECT
+		id,
+		total_amount AS totalAmount,
+		actual_amount AS actualAmount,
+		favored_amount AS favoredAmount,
+		merchant_id AS merchantId,
+		member_id AS memberId,
+		is_evaluation AS isEvaluation,
+		gmt_create AS gmtCreate
+		FROM
+		pay_order
+		WHERE
+		STATUS = 2
+		AND is_evaluation = 0
+		AND DATE_ADD(gmt_create, INTERVAL 7 DAY) <![CDATA[  <=  ]]> #{value}
+		limit 0 ,20
+	</select>
 </mapper>
