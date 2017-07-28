@@ -49,4 +49,19 @@ public class KeyConstant {
      */
     public static final String REDIS_KEY_MERCHANT_VISIT_COUNT = "MERCHANT_VISIT_COUNT_";
 
+    /**
+     * 新店推荐
+     */
+    public static final String REDIS_KEY_MERCHANT_NEW_STORE = "MERCHANT_NEW_STORE_";
+
+    /**
+     * 优选美食-人气最高
+     */
+    public static final String REDIS_KEY_MERCHANT_HOT_STORE = "MERCHANT_HOT_STORE_";
+
+    /**
+     * 优选美食-评价最高
+     */
+    public static final String REDIS_KEY_MERCHANT_COMMENT_STORE = "MERCHANT_COMMENT_STORE_";
+
 }
