@@ -16,8 +16,8 @@ import java.util.List;
 public class MockFavoriteAdService extends BaseController implements FavoriteAdService {
 
 	@Override
-	public Result save(@RequestParam("memberId") Long memberId, @RequestParam("adId") Long adId) {
-		return successCreated();
+	public Result save(@RequestParam("memberId") Long memberId, @RequestParam("adId") Long adId, @RequestParam("userNum") String userNum) {
+		return null;
 	}
 
 	@Override

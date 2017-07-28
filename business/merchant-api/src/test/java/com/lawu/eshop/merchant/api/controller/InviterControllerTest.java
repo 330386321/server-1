@@ -85,4 +85,20 @@ public class InviterControllerTest {
         }
     }
 
+    @Test
+    public void selectEFriend() {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("queryContent","135");
+        map.add("currentPage", "1");
+        map.add("pageSize", "10");
+        RequestBuilder request = get("/inviter/selectEFriend").header("authorization", "").params(map);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
 }

@@ -16,6 +16,9 @@ public class EFriendInviterConverter {
 
     public static List<EFriendInviterDTO> converter(List<EFriendInviterBO> records) {
         List<EFriendInviterDTO> rtnList = new ArrayList<>();
+        if(records == null){
+            return null;
+        }
         for(EFriendInviterBO bo : records){
             EFriendInviterDTO dto = new EFriendInviterDTO();
             dto.setGmtCreate(bo.getGmtCreate());

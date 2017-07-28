@@ -1,16 +1,13 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.dto.CommissionInvitersUserDTO;
+import com.lawu.eshop.user.param.EFriendQueryDataParam;
+import com.lawu.eshop.user.srv.bo.EFriendInviterBO;
 import com.lawu.eshop.user.srv.bo.InviterBO;
-import com.lawu.eshop.user.srv.domain.InviteRelationDO;
-import com.lawu.eshop.user.srv.domain.MemberDO;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
-import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.service.CommonService;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.RandomUtil;
@@ -49,6 +46,9 @@ public class CommonServiceImplTest {
 
     @Autowired
     private InviteRelationDOMapper inviteRelationDOMapper;
+
+    @Autowired
+    private MemberProfileDOMapper memberProfileDOMapper;
 
     @Transactional
     @Rollback
@@ -109,5 +109,78 @@ public class CommonServiceImplTest {
         invitersUserDTOS = commonService.selectHigherLevelInviters("M0002", 1, true);
         Assert.assertNotNull(invitersUserDTOS);
         Assert.assertEquals(1, invitersUserDTOS.size());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void selectEFriend() {
+
+        InviteRelationDO inviteRelationDO = new InviteRelationDO();
+        inviteRelationDO.setUserNum("M00001");
+        inviteRelationDO.setDepth(0);
+        inviteRelationDO.setInviteUserNum("M00001");
+        inviteRelationDO.setType(new Byte("1"));
+        inviteRelationDOMapper.insert(inviteRelationDO);
+        InviteRelationDO inviteRelationDO1 = new InviteRelationDO();
+        inviteRelationDO1.setUserNum("M00001");
+        inviteRelationDO1.setDepth(1);
+        inviteRelationDO1.setInviteUserNum("M00002");
+        inviteRelationDO1.setType(new Byte("1"));
+        inviteRelationDOMapper.insert(inviteRelationDO1);
+        InviteRelationDO inviteRelationDO2 = new InviteRelationDO();
+        inviteRelationDO2.setUserNum("M00001");
+        inviteRelationDO2.setDepth(1);
+        inviteRelationDO2.setInviteUserNum("B00001");
+        inviteRelationDO2.setType(new Byte("1"));
+        inviteRelationDOMapper.insert(inviteRelationDO2);
+
+        MemberDO memberDO = new MemberDO();
+        memberDO.setName("鲁班七号");
+        memberDO.setAccount("13510231310");
+        memberDO.setGmtCreate(new Date());
+        memberDO.setLevel(1);
+        memberDO.setNickname("小短腿");
+        memberDO.setRegionName("wzry");
+        memberDO.setNum("M00002");
+        memberDO.setStatus(new Byte("1"));
+        memberDOMapper.insertSelective(memberDO);
+        MemberProfileDO memberProfileDO = new MemberProfileDO();
+        memberProfileDO.setId(memberDO.getId());
+        memberProfileDO.setInviteMemberCount(1);
+        memberProfileDO.setGmtCreate(new Date());
+        memberProfileDOMapper.insertSelective(memberProfileDO);
+
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setLevel(1);
+        merchantDO.setGmtCreate(new Date());
+        merchantDO.setAccount("13590901232");
+        merchantDO.setNum("B00001");
+        merchantDO.setStatus(new Byte("1"));
+        merchantDOMapper.insertSelective(merchantDO);
+        MerchantProfileDO merchantProfileDO = new MerchantProfileDO();
+        merchantProfileDO.setId(merchantDO.getId());
+        merchantProfileDO.setInviteMemberCount(1);
+        merchantProfileDO.setGmtCreate(new Date());
+        MerchantStoreDO merchantStoreDO = new MerchantStoreDO();
+        merchantStoreDO.setGmtCreate(new Date());
+        merchantStoreDO.setName("土地");
+        merchantStoreDO.setAddress("网内");
+        merchantStoreDO.setPrincipalName("鲁班");
+        merchantStoreDO.setMerchantId(merchantDO.getId());
+        merchantStoreDO.setRegionName("区域");
+        merchantStoreDO.setStatus(new Byte("1"));
+        merchantStoreDOMapper.insertSelective(merchantStoreDO);
+
+        EFriendQueryDataParam param = new EFriendQueryDataParam();
+        param.setQueryContent("135");
+        param.setUserNum("M00001");
+        param.setCurrentPage(1);
+        param.setPageSize(10);
+        Page<EFriendInviterBO> rtnPage = commonService.selectEFriend(param);
+        Assert.assertNotNull(rtnPage);
+        Assert.assertEquals(2, rtnPage.getTotalCount().intValue());
+
+
     }
 }

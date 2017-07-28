@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.user.param.EFriendQueryDataParam;
 import com.lawu.eshop.user.srv.UserSrvApplicationTest;
 import org.junit.Assert;
 import org.junit.Before;
@@ -75,4 +76,24 @@ public class CommonControllerTest {
         }
     }
 
+    @Transactional
+    @Rollback
+    @Test
+    public void selectEFriend() {
+        EFriendQueryDataParam dataParam = new EFriendQueryDataParam();
+        dataParam.setUserNum("M00001");
+        dataParam.setCurrentPage(1);
+        dataParam.setPageSize(10);
+        dataParam.setQueryContent("135");
+        String requestJson = JSONObject.toJSONString(dataParam);
+        RequestBuilder request = post("/user/common/selectEFriend").param("level", "1").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
 }
