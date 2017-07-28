@@ -1,10 +1,10 @@
 package com.lawu.eshop.order.srv.bo;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 public class ShoppingRefundDetailBO {
 
@@ -127,6 +127,8 @@ public class ShoppingRefundDetailBO {
 	 * 更新时间
 	 */
 	private Date gmtModified;
+
+	private String refuseImages;
 
 	public Long getId() {
 		return id;
@@ -320,4 +322,11 @@ public class ShoppingRefundDetailBO {
 		this.gmtModified = gmtModified;
 	}
 
+	public String getRefuseImages() {
+		return refuseImages;
+	}
+
+	public void setRefuseImages(String refuseImages) {
+		this.refuseImages = refuseImages;
+	}
 }

@@ -59,7 +59,7 @@ public class ShoppingRefundDetailExtendConverter {
 		rtn.setStatus(StatusEnum.getEnum(shoppingRefundDetailExtendDO.getStatus()));
 		rtn.setType(ShoppingRefundTypeEnum.getEnum(shoppingRefundDetailExtendDO.getType()));
 		rtn.setShoppingRefundProcessList(ShoppingRefundProcessConverter.convert(shoppingRefundDetailExtendDO.getShoppingRefundProcessList()));
-		
+		rtn.setRefuseImages(shoppingRefundDetailExtendDO.getRefuseImages());
 		return rtn;
 	}
 

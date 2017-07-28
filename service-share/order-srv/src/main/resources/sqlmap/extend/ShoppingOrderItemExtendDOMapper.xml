@@ -33,6 +33,7 @@
 		<result column="reason" jdbcType="VARCHAR" property="reason" />
 		<result column="description" jdbcType="VARCHAR" property="description" />
     	<result column="voucher_picture" jdbcType="VARCHAR" property="voucherPicture" />
+		<result column="refuse_images" jdbcType="VARCHAR" property="refuseImages" />
     	<result column="refusal_reasons" jdbcType="VARCHAR" property="refusalReasons" />
 		<result column="amount" jdbcType="DECIMAL" property="amount" />
 		<result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
@@ -144,7 +145,7 @@
 	</sql>
 
 	<sql id="ShoppingRefundDetail_Column_List">
-		srd.id as srd_id, srd.shopping_order_item_id, srd.type, srd.reason, description, voucher_picture, refusal_reasons,
+		srd.id as srd_id, srd.shopping_order_item_id, srd.type, srd.reason, description, voucher_picture,srd.refuse_images, refusal_reasons,
 		srd.amount, srd.consignee_name, srd.consignee_address,
 		srd.consignee_mobile, srd.express_company_id, srd.express_company_code,
 		srd.express_company_name,

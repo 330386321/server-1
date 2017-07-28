@@ -1,16 +1,15 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.order.dto.ShoppingRefundProcessDTO;
-
 import io.swagger.annotations.ApiModelProperty;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 public class ShoppingRefundDetailDTO {
 
@@ -170,6 +169,9 @@ public class ShoppingRefundDetailDTO {
 	 */
 	@ApiModelProperty(value = "退款流程", required = true)
 	private List<ShoppingRefundProcessDTO> shoppingRefundProcessList;
+
+	@ApiModelProperty(value = "拒绝退款图片")
+	private String refuseImages;
 	
 	public Long getId() {
 		return id;
@@ -371,4 +373,11 @@ public class ShoppingRefundDetailDTO {
 		this.shoppingRefundProcessList = shoppingRefundProcessList;
 	}
 
+	public String getRefuseImages() {
+		return refuseImages;
+	}
+
+	public void setRefuseImages(String refuseImages) {
+		this.refuseImages = refuseImages;
+	}
 }

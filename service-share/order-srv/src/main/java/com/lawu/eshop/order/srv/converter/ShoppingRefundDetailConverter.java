@@ -107,7 +107,7 @@ public class ShoppingRefundDetailConverter {
 		rtn.setDescribe(shoppingOrderItemExtendBO.getShoppingRefundDetail().getDescription());
 		rtn.setPaymentMethod(shoppingOrderItemExtendBO.getShoppingOrder().getPaymentMethod());
 		rtn.setShoppingRefundProcessList(ShoppingRefundProcessConverter.convertShoppingRefundProcessDTOList(shoppingRefundDetailExtendBO.getShoppingRefundProcessList()));
-		
+		rtn.setRefuseImages(shoppingOrderItemExtendBO.getShoppingRefundDetail().getRefuseImages() == null ? "" : shoppingOrderItemExtendBO.getShoppingRefundDetail().getRefuseImages());
 		return rtn;
 	}
 	
