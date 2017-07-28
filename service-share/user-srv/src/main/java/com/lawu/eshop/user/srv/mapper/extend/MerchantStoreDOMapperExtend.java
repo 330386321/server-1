@@ -6,6 +6,7 @@ import com.lawu.eshop.user.srv.domain.extend.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangyong
@@ -33,4 +34,10 @@ public interface MerchantStoreDOMapperExtend {
     PayOrderStoreInfoView getPayOrderDetailStoreInfo(Long merchantId);
 
     PayOrderStoreInfoView getPayOrderMerchantInfo(Long merchantId);
+
+    List<NewMerchantStoreDOView> listNewMerchant();
+
+    List<RecommendFoodDOview> listRecommendFoodConsume(Map<String, Object> map);
+
+    List<RecommendFoodDOview> listRecommendFoodComment(Map<String, Object> map);
 }

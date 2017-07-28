@@ -6,7 +6,9 @@ import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.domain.extend.NewMerchantStoreDOView;
 import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
+import com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview;
 import com.lawu.eshop.utils.DataTransUtil;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -483,4 +485,125 @@ public class MerchantStoreConverter {
         rtn.setMerchantStoreName(merchantStoreInfoBO.getName());
         return rtn;
     }
+
+    /**
+     * BO转换
+     *
+     * @param storeDOViews
+     * @return
+     * @author meishuquan
+     */
+    public static List<NewMerchantStoreBO> convertNewStoreBO(List<NewMerchantStoreDOView> storeDOViews) {
+        List<NewMerchantStoreBO> storeBOS = new ArrayList<>();
+        if (storeDOViews == null || storeDOViews.isEmpty()) {
+            return storeBOS;
+        }
+
+        for (NewMerchantStoreDOView storeDOView : storeDOViews) {
+            NewMerchantStoreBO storeBO = new NewMerchantStoreBO();
+            storeBO.setMerchantId(storeDOView.getMerchantStoreId());
+            storeBO.setMerchantStoreId(storeDOView.getMerchantStoreId());
+            storeBO.setName(storeDOView.getName());
+            storeBO.setIndustryName(storeDOView.getIndustryName());
+            storeBO.setRegionName(storeDOView.getRegionName());
+            storeBO.setAddress(storeDOView.getAddress());
+            storeBO.setStorePic(storeDOView.getStorePic());
+            storeBOS.add(storeBO);
+        }
+        return storeBOS;
+    }
+
+    /**
+     * DTO转换
+     *
+     * @param storeBOS
+     * @return
+     * @author meishuquan
+     */
+    public static List<NewMerchantStoreDTO> convertNewStoreDTO(List<NewMerchantStoreBO> storeBOS) {
+        List<NewMerchantStoreDTO> storeDTOS = new ArrayList<>();
+        if (storeBOS == null || storeBOS.isEmpty()) {
+            return storeDTOS;
+        }
+
+        for (NewMerchantStoreBO storeBO : storeBOS) {
+            NewMerchantStoreDTO storeDTO = new NewMerchantStoreDTO();
+            storeDTO.setMerchantId(storeBO.getMerchantStoreId());
+            storeDTO.setMerchantStoreId(storeBO.getMerchantStoreId());
+            storeDTO.setName(storeBO.getName());
+            storeDTO.setIndustryName(storeBO.getIndustryName());
+            storeDTO.setRegionName(storeBO.getRegionName());
+            storeDTO.setAddress(storeBO.getAddress());
+            storeDTO.setStorePic(storeBO.getStorePic());
+            storeDTOS.add(storeDTO);
+        }
+        return storeDTOS;
+    }
+
+    /**
+     * BO转换
+     *
+     * @param foodDOviews
+     * @return
+     * @author meishuquan
+     */
+    public static List<RecommendFoodBO> convertRecommendStoreBO(List<RecommendFoodDOview> foodDOviews) {
+        List<RecommendFoodBO> foodBOS = new ArrayList<>();
+        if (foodDOviews == null || foodDOviews.isEmpty()) {
+            return foodBOS;
+        }
+
+        for (RecommendFoodDOview foodDOview : foodDOviews) {
+            RecommendFoodBO foodBO = new RecommendFoodBO();
+            foodBO.setMerchantId(foodDOview.getMerchantStoreId());
+            foodBO.setMerchantStoreId(foodDOview.getMerchantStoreId());
+            foodBO.setName(foodDOview.getName());
+            foodBO.setIndustryName(foodDOview.getIndustryName());
+            foodBO.setRegionName(foodDOview.getRegionName());
+            foodBO.setAddress(foodDOview.getAddress());
+            foodBO.setStorePic(foodDOview.getStorePic());
+            foodBO.setLongitude(foodDOview.getLongitude());
+            foodBO.setLatitude(foodDOview.getLatitude());
+            foodBO.setAverageScore(foodDOview.getAverageScore());
+            foodBO.setAverageConsumeAmount(foodDOview.getAverageConsumeAmount());
+            foodBO.setBuyNumbers(foodDOview.getBuyNumbers());
+            foodBO.setCommentsCount(foodDOview.getBuyNumbers());
+            foodBOS.add(foodBO);
+        }
+        return foodBOS;
+    }
+
+    /**
+     * DTO转换
+     *
+     * @param foodBOS
+     * @return
+     * @author meishuquan
+     */
+    public static List<RecommendFoodDTO> convertRecommendStoreDTO(List<RecommendFoodBO> foodBOS) {
+        List<RecommendFoodDTO> foodDTOS = new ArrayList<>();
+        if (foodBOS == null || foodBOS.isEmpty()) {
+            return foodDTOS;
+        }
+
+        for (RecommendFoodBO foodBO : foodBOS) {
+            RecommendFoodDTO foodDTO = new RecommendFoodDTO();
+            foodDTO.setMerchantId(foodBO.getMerchantStoreId());
+            foodDTO.setMerchantStoreId(foodBO.getMerchantStoreId());
+            foodDTO.setName(foodBO.getName());
+            foodDTO.setIndustryName(foodBO.getIndustryName());
+            foodDTO.setRegionName(foodBO.getRegionName());
+            foodDTO.setAddress(foodBO.getAddress());
+            foodDTO.setStorePic(foodBO.getStorePic());
+            foodDTO.setLongitude(foodBO.getLongitude());
+            foodDTO.setLatitude(foodBO.getLatitude());
+            foodDTO.setAverageScore(foodBO.getAverageScore());
+            foodDTO.setAverageConsumeAmount(foodBO.getAverageConsumeAmount());
+            foodDTO.setBuyNumbers(foodBO.getBuyNumbers());
+            foodDTO.setCommentsCount(foodBO.getBuyNumbers());
+            foodDTOS.add(foodDTO);
+        }
+        return foodDTOS;
+    }
+
 }

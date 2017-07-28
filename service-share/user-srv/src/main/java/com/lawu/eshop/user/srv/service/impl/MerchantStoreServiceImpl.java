@@ -9,13 +9,12 @@ import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
-import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
+import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.extend.MerchantAdInfoView;
+import com.lawu.eshop.user.srv.domain.extend.NewMerchantStoreDOView;
+import com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
@@ -27,9 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class MerchantStoreServiceImpl implements MerchantStoreService {
@@ -252,6 +249,30 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             }
         }
         return merchantInfoBO;
+    }
+
+    @Override
+    public List<NewMerchantStoreBO> listNewMerchant(String regionPath) {
+        List<NewMerchantStoreDOView> storeDOViews = merchantStoreDOMapperExtend.listNewMerchant();
+        return MerchantStoreConverter.convertNewStoreBO(storeDOViews);
+    }
+
+    @Override
+    public List<RecommendFoodBO> listRecommendFoodConsume(Integer industryId, String regionPath) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("industryId", industryId);
+        map.put("regionPath", regionPath);
+        List<RecommendFoodDOview> foodDOviews = merchantStoreDOMapperExtend.listRecommendFoodConsume(map);
+        return MerchantStoreConverter.convertRecommendStoreBO(foodDOviews);
+    }
+
+    @Override
+    public List<RecommendFoodBO> listRecommendFoodComment(Integer industryId, String regionPath) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("industryId", industryId);
+        map.put("regionPath", regionPath);
+        List<RecommendFoodDOview> foodDOviews = merchantStoreDOMapperExtend.listRecommendFoodComment(map);
+        return MerchantStoreConverter.convertRecommendStoreBO(foodDOviews);
     }
 
 }

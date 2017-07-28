@@ -170,4 +170,38 @@
         m.id =  #{merchantId}
     </select>
 
+    <select id="listNewMerchant" resultType="com.lawu.eshop.user.srv.domain.extend.NewMerchantStoreDOView" parameterType="java.lang.String">
+        select m.id as merchantId,ms.id as merchantStoreId,ms.name,ms.industry_name as industryName,ms.region_name as regionName,ms.address,msi.path as storePic
+        from merchant m inner join merchant_store ms on m.id = ms.merchant_id
+        inner join merchant_store_profile msp on m.id = msp.merchant_id
+        inner join merchant_store_image msi on ms.id = msi.merchant_store_id
+        where m.status = 1 and ms.status = 1 and msp.manage_type = 2 and msi.status = 1 and msi.type = 1
+        and ms.region_path like CONCAT(#{regionPath},'%' )
+        order by ms.id desc limit 50
+    </select>
+
+    <select id="listRecommendFoodConsume" resultType="com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview" parameterType="java.util.Map">
+        select m.id as merchantId,ms.id as merchantStoreId,ms.name,ms.industry_name as industryName,ms.region_name as regionName,ms.address,
+        ms.longitude,ms.latitude,ms.average_score as averageScore,ms.average_consume_amount as averageConsumeAmount,ms.buy_numbers as buyNumbers,
+        ms.comments_count as commentsCount,msi.path as storePic
+        from merchant m inner join merchant_store ms on m.id = ms.merchant_id
+        inner join merchant_store_profile msp on m.id = msp.merchant_id
+        inner join merchant_store_image msi on ms.id = msi.merchant_store_id
+        where m.status = 1 and ms.status = 1 and msp.manage_type = 2 and msi.status = 1 and msi.type = 1
+        and ms.industry_path like CONCAT(#{industryId},'%' ) and ms.region_path like CONCAT(#{regionPath},'%' )
+        order by ms.buy_numbers desc limit 5
+    </select>
+
+    <select id="listRecommendFoodComment" resultType="com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview" parameterType="java.util.Map">
+        select m.id as merchantId,ms.id as merchantStoreId,ms.name,ms.industry_name as industryName,ms.region_name as regionName,ms.address,
+        ms.longitude,ms.latitude,ms.average_score as averageScore,ms.average_consume_amount as averageConsumeAmount,ms.buy_numbers as buyNumbers,
+        ms.comments_count as commentsCount,msi.path as storePic
+        from merchant m inner join merchant_store ms on m.id = ms.merchant_id
+        inner join merchant_store_profile msp on m.id = msp.merchant_id
+        inner join merchant_store_image msi on ms.id = msi.merchant_store_id
+        where m.status = 1 and ms.status = 1 and msp.manage_type = 2 and msi.status = 1 and msi.type = 1
+        and ms.industry_path like CONCAT(#{industryId},'%' ) and ms.region_path like CONCAT(#{regionPath},'%' )
+        order by ms.average_score * ms.comments_count desc limit 5
+    </select>
+
 </mapper>

@@ -3,10 +3,7 @@ package com.lawu.eshop.user.srv.service;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
-import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
+import com.lawu.eshop.user.srv.bo.*;
 
 import java.util.List;
 
@@ -90,4 +87,33 @@ public interface MerchantStoreService {
     MerchantStoreStatusBO merchantStoreIsExist(Long id);
 
     MerchantInfoBO findAccountAndRegionPathByNum(String merchantNum);
+
+    /**
+     * 新店推荐
+     *
+     * @param regionPath
+     * @return
+     * @author meishuquan
+     */
+    List<NewMerchantStoreBO> listNewMerchant(String regionPath);
+
+    /**
+     * 优选美食-人气最高
+     *
+     * @param industryId
+     * @param regionPath
+     * @return
+     * @author meishuquan
+     */
+    List<RecommendFoodBO> listRecommendFoodConsume(Integer industryId, String regionPath);
+
+    /**
+     * 优选美食-评价最高
+     *
+     * @param industryId
+     * @param regionPath
+     * @return
+     * @author meishuquan
+     */
+    List<RecommendFoodBO> listRecommendFoodComment(Integer industryId, String regionPath);
 }

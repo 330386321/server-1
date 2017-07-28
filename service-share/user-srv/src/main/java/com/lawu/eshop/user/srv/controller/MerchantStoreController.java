@@ -653,5 +653,45 @@ public class MerchantStoreController extends BaseController {
 		return successGet(merchantStoreInfoBO.getName());
 	}
 
+	/**
+	 * 新店推荐
+	 *@param regionPath
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "listNewMerchant", method = RequestMethod.GET)
+	public Result<List<NewMerchantStoreDTO>> listNewMerchant(@RequestParam String regionPath) {
+		List<NewMerchantStoreBO> storeBOS = merchantStoreService.listNewMerchant(regionPath);
+		return successGet(MerchantStoreConverter.convertNewStoreDTO(storeBOS));
+	}
+
+	/**
+	 * 优选美食-人气最高
+	 *
+	 * @param industryId
+	 * @param regionPath
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "listRecommendFoodConsume/{industryId}", method = RequestMethod.GET)
+	public Result<List<RecommendFoodDTO>> listRecommendFoodConsume(@PathVariable Integer industryId, @RequestParam String regionPath) {
+		List<RecommendFoodBO> foodBOS = merchantStoreService.listRecommendFoodConsume(industryId, regionPath);
+		return successGet(MerchantStoreConverter.convertRecommendStoreDTO(foodBOS));
+	}
+
+	/**
+	 * 优选美食-评价最高
+	 *
+	 * @param industryId
+	 * @param regionPath
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "listRecommendFoodComment/{industryId}", method = RequestMethod.GET)
+	public Result<List<RecommendFoodDTO>> listRecommendFoodComment(@PathVariable Integer industryId, @RequestParam String regionPath) {
+		List<RecommendFoodBO> foodBOS = merchantStoreService.listRecommendFoodComment(industryId, regionPath);
+		return successGet(MerchantStoreConverter.convertRecommendStoreDTO(foodBOS));
+	}
+
 }
 
