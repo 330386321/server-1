@@ -7,7 +7,7 @@
     <result column="longitude" property="longitude" jdbcType="DECIMAL" />
     <result column="latitude" property="latitude" jdbcType="DECIMAL" />
     <result column="industry_name" property="industryName" jdbcType="VARCHAR" />
-    <result column="feedback_rate" property="feedbackRate" jdbcType="DECIMAL" />
+    <result column="average_score" property="feedbackRate" jdbcType="DECIMAL" />
     <result column="merchant_store_id" property="merchantStoreId" jdbcType="BIGINT" />
     <result column="count_fs" jdbcType="INTEGER" property="countFs" />
   </resultMap>
@@ -19,7 +19,7 @@
     	   MS.industry_name,
            MS.latitude ,
            MS.longitude,
-           MS.feedback_rate,
+           MS.average_score,
            MS.id as merchant_store_id,
            (select count(*) from favorite_merchant where merchant_id=FM.merchant_id) as count_fs
        FROM favorite_merchant FM 
