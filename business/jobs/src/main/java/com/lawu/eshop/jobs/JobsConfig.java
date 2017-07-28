@@ -13,7 +13,14 @@ public class JobsConfig {
     @Value(value = "${rongyun_message_download_url}")
     private String downLoadDir;
 
+    @Value(value = "${industry_type_id}")
+    private Integer industryTypeId;
+
     public String getDownLoadDir() {
         return downLoadDir;
+    }
+
+    public Integer getIndustryTypeId() {
+        return industryTypeId;
     }
 }

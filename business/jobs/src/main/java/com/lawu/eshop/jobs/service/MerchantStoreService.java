@@ -2,6 +2,8 @@ package com.lawu.eshop.jobs.service;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.NewMerchantStoreDTO;
+import com.lawu.eshop.user.dto.RecommendFoodDTO;
 import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
@@ -44,4 +46,37 @@ public interface MerchantStoreService {
 
     @RequestMapping(method = RequestMethod.GET, value = "merchantStore/findAccountAndRegionPathByNum")
     VisitUserInfoDTO findAccountAndRegionPathByNum(@RequestParam("merchantNum") String merchantNum);
+
+    /**
+     * 新店推荐
+     *
+     * @param regionPath
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchantStore/listNewMerchant")
+    Result<List<NewMerchantStoreDTO>> listNewMerchant(@RequestParam("regionPath") String regionPath);
+
+    /**
+     * 优选美食-人气最高
+     *
+     * @param industryId
+     * @param regionPath
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchantStore/listRecommendFoodConsume/{industryId}")
+    Result<List<RecommendFoodDTO>> listRecommendFoodConsume(@PathVariable("industryId") Integer industryId, @RequestParam("regionPath") String regionPath);
+
+    /**
+     * 优选美食-评价最高
+     *
+     * @param industryId
+     * @param regionPath
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchantStore/listRecommendFoodComment/{industryId}")
+    Result<List<RecommendFoodDTO>> listRecommendFoodComment(@PathVariable("industryId") Integer industryId, @RequestParam("regionPath") String regionPath);
+
 }
