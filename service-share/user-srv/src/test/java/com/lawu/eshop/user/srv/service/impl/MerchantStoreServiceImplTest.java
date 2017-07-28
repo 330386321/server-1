@@ -1,16 +1,12 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
-import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
+import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
@@ -393,6 +389,33 @@ public class MerchantStoreServiceImplTest {
         MerchantInfoBO merchantInfoBO = merchantStoreService.findAccountAndRegionPathByNum("B0001");
         Assert.assertNotNull(merchantInfoBO);
         Assert.assertEquals(storeDO.getRegionPath(), merchantInfoBO.getRegionPath());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void listNewMerchant() {
+        List<NewMerchantStoreBO> storeBOS = merchantStoreService.listNewMerchant("44/4403");
+        Assert.assertNotNull(storeBOS);
+        Assert.assertEquals(0, storeBOS.size());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void listRecommendFoodConsume() {
+        List<RecommendFoodBO> foodBOS = merchantStoreService.listRecommendFoodConsume(10, "44/4403");
+        Assert.assertNotNull(foodBOS);
+        Assert.assertEquals(0, foodBOS.size());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void listRecommendFoodComment() {
+        List<RecommendFoodBO> foodBOS = merchantStoreService.listRecommendFoodComment(10, "44/4403");
+        Assert.assertNotNull(foodBOS);
+        Assert.assertEquals(0, foodBOS.size());
     }
 
 }

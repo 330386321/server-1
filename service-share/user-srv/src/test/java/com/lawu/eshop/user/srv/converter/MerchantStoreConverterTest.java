@@ -6,7 +6,9 @@ import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.domain.extend.NewMerchantStoreDOView;
 import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
+import com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview;
 import com.lawu.eshop.utils.DataTransUtil;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -408,6 +410,86 @@ public class MerchantStoreConverterTest {
         MerchantInfoForShoppingCartDTO rtn = MerchantStoreConverter.convert(merchantStoreInfoBO);
         Assert.assertNotNull(rtn);
         Assert.assertEquals(merchantStoreInfoBO.getMerchantStoreId(), rtn.getMerchantStoreId());
+    }
+
+    @Test
+    public void convertNewStoreBO() {
+        NewMerchantStoreDOView storeDOView = new NewMerchantStoreDOView();
+        storeDOView.setMerchantId(200L);
+        storeDOView.setMerchantStoreId(300L);
+        storeDOView.setName("test");
+        storeDOView.setIndustryName("test");
+        storeDOView.setRegionName("test");
+        storeDOView.setAddress("test");
+        storeDOView.setStorePic("pic");
+        List<NewMerchantStoreDOView> storeDOViews = new ArrayList<>();
+        storeDOViews.add(storeDOView);
+        List<NewMerchantStoreBO> storeBOS = MerchantStoreConverter.convertNewStoreBO(storeDOViews);
+        Assert.assertNotNull(storeBOS);
+        Assert.assertEquals(storeDOView.getMerchantId(), storeBOS.get(0).getMerchantId());
+    }
+
+    @Test
+    public void convertNewStoreDTO() {
+        NewMerchantStoreBO storeBO = new NewMerchantStoreBO();
+        storeBO.setMerchantId(200L);
+        storeBO.setMerchantStoreId(300L);
+        storeBO.setName("test");
+        storeBO.setIndustryName("test");
+        storeBO.setRegionName("test");
+        storeBO.setAddress("test");
+        storeBO.setStorePic("test");
+        List<NewMerchantStoreBO> storeBOS = new ArrayList<>();
+        storeBOS.add(storeBO);
+        List<NewMerchantStoreDTO> storeDTOS = MerchantStoreConverter.convertNewStoreDTO(storeBOS);
+        Assert.assertNotNull(storeDTOS);
+        Assert.assertEquals(storeBO.getMerchantId(), storeDTOS.get(0).getMerchantId());
+    }
+
+    @Test
+    public void convertRecommendStoreBO() {
+        RecommendFoodDOview foodDOview = new RecommendFoodDOview();
+        foodDOview.setMerchantId(200L);
+        foodDOview.setMerchantStoreId(300L);
+        foodDOview.setName("test");
+        foodDOview.setIndustryName("test");
+        foodDOview.setRegionName("test");
+        foodDOview.setAddress("test");
+        foodDOview.setStorePic("test");
+        foodDOview.setLongitude(BigDecimal.valueOf(104.23));
+        foodDOview.setLatitude(BigDecimal.valueOf(22.36));
+        foodDOview.setAverageScore(BigDecimal.valueOf(10));
+        foodDOview.setAverageConsumeAmount(BigDecimal.valueOf(10));
+        foodDOview.setBuyNumbers(10);
+        foodDOview.setCommentsCount(10);
+        List<RecommendFoodDOview> foodDOviews = new ArrayList<>();
+        foodDOviews.add(foodDOview);
+        List<RecommendFoodBO> foodBOS = MerchantStoreConverter.convertRecommendStoreBO(foodDOviews);
+        Assert.assertNotNull(foodBOS);
+        Assert.assertEquals(foodDOview.getMerchantId(), foodBOS.get(0).getMerchantId());
+    }
+
+    @Test
+    public void convertRecommendStoreDTO() {
+        RecommendFoodBO foodBO = new RecommendFoodBO();
+        foodBO.setMerchantId(200L);
+        foodBO.setMerchantStoreId(300L);
+        foodBO.setName("test");
+        foodBO.setIndustryName("test");
+        foodBO.setRegionName("test");
+        foodBO.setAddress("test");
+        foodBO.setStorePic("test");
+        foodBO.setLongitude(BigDecimal.valueOf(104.23));
+        foodBO.setLatitude(BigDecimal.valueOf(22.36));
+        foodBO.setAverageScore(BigDecimal.valueOf(10));
+        foodBO.setAverageConsumeAmount(BigDecimal.valueOf(10));
+        foodBO.setBuyNumbers(10);
+        foodBO.setCommentsCount(10);
+        List<RecommendFoodBO> foodBOS = new ArrayList<>();
+        foodBOS.add(foodBO);
+        List<RecommendFoodDTO> foodDTOS = MerchantStoreConverter.convertRecommendStoreDTO(foodBOS);
+        Assert.assertNotNull(foodDTOS);
+        Assert.assertEquals(foodBO.getMerchantId(), foodDTOS.get(0).getMerchantId());
     }
 
 }

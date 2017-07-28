@@ -212,6 +212,7 @@ CREATE TABLE `merchant_store` (
 	`is_no_reason_return` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否支持无理由退货,0否 1是',
 	`favorite_number` INT(10) UNSIGNED NULL DEFAULT '0' COMMENT '收藏人数',
 	`buy_numbers` INT(10) UNSIGNED NULL DEFAULT '0' COMMENT '已买笔数',
+	`comments_count` INT(10) UNSIGNED NULL DEFAULT '0' COMMENT '评价人数',
 	`average_consume_amount` DECIMAL(10,2) UNSIGNED NULL DEFAULT '0.00' COMMENT '人均消费',
 	`average_score` DECIMAL(10,2) UNSIGNED NULL DEFAULT '0.00' COMMENT '平均得分',
 	`feedback_rate` DECIMAL(10,2) UNSIGNED NULL DEFAULT '0.00' COMMENT '好评率',
