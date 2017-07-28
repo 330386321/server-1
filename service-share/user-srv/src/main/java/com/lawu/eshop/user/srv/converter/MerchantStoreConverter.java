@@ -364,6 +364,7 @@ public class MerchantStoreConverter {
         document.addField("favoriteNumber_i", merchantStoreDO.getFavoriteNumber());
         document.addField("averageConsumeAmount_d", merchantStoreDO.getAverageConsumeAmount() == null ? 0 : merchantStoreDO.getAverageConsumeAmount().doubleValue());
         document.addField("averageScore_d", merchantStoreDO.getAverageScore() == null ? 0 : merchantStoreDO.getAverageScore().doubleValue());
+        document.addField("discountOrdinal_d", 100);
         document.addField("storePic_s", storePic);
         return document;
     }
