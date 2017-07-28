@@ -397,3 +397,27 @@ INSERT INTO `region` (`id`, `parent_id`, `path`, `level`, `name`, `longitude`, `
 
 
 INSERT INTO `industry_type` (`id`, `parent_id`, `path`, `name`, `image_url`, `ordinal`, `status`, `gmt_modified`, `gmt_create`) VALUES ('10', '0', '10', '美食', '', '1', '1', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
+
+
+-- ----------------------------
+-- Table structure for work_order
+-- ----------------------------
+DROP TABLE IF EXISTS `work_order`;
+CREATE TABLE `work_order` (
+	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`user_num` VARCHAR(19) NOT NULL COMMENT '用户编号',
+	`account` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '账号',
+	`type` TINYINT(2) NOT NULL DEFAULT '1' COMMENT '提交人类型 1--用户，2--商家',
+	`name` VARCHAR(100) NOT NULL DEFAULT '' COMMENT '提交工单人/门店名称',
+	`status` TINYINT(2) NOT NULL DEFAULT '1' COMMENT '状态 1--未处理，2--已回复，3--不予处理',
+	`content` VARCHAR(250) NOT NULL COMMENT '工单内容',
+	`reply_content` VARCHAR(250) NULL DEFAULT NULL COMMENT '回复内容',
+	`auditor_id` INT(11) NULL DEFAULT '0' COMMENT '审核人员ID',
+	`auditor_name` VARCHAR(50) NULL DEFAULT NULL COMMENT '审核人员名称',
+	`gmt_deal` DATETIME NULL DEFAULT NULL COMMENT '处理时间',
+	`gmt_modified` DATETIME NULL DEFAULT NULL COMMENT '修改时间',
+	`gmt_create` DATETIME NULL DEFAULT NULL COMMENT '创建时间',
+	PRIMARY KEY (`id`)
+)
+;
+

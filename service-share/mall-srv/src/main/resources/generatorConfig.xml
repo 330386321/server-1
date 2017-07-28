@@ -4,7 +4,11 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
+<<<<<<< HEAD
             location="G:/lib/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
+=======
+            location="D:/maven_repos_love/repository/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
+>>>>>>> feat:用户端和商家端提交工单接口。
     <context id="MysqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
         <!-- 再次生成xml时候是覆盖 -->
         <property name="mergeable" value="false"></property>
@@ -98,7 +102,7 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         -->
-        <table tableName="discount_package" domainObjectName="DiscountPackageDO">
+        <table tableName="work_order" domainObjectName="WorkOrderDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
