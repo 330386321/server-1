@@ -2,6 +2,7 @@ package com.lawu.eshop.product.param;
 
 import javax.validation.constraints.NotNull;
 
+import com.lawu.eshop.product.constant.ProductStatusEnum;
 import org.hibernate.validator.constraints.NotBlank;
 
 import io.swagger.annotations.ApiParam;
@@ -52,6 +53,9 @@ public class EditProductParam {
 	@ApiParam(value = "是否支持退换货(true|false)", required = true)
 	@NotNull(message="isAllowRefund不能为空")
 	private Boolean isAllowRefund;
+
+	@ApiParam(value = "保存、上架、下架操作枚举（上架：PRODUCT_STATUS_UP、下架：PRODUCT_STATUS_DOWN、保存为空）", required = false)
+	private ProductStatusEnum productStatus;
 	
 	public Integer getCategoryId() {
 		return categoryId;
@@ -133,4 +137,11 @@ public class EditProductParam {
 		this.deleteSpecIds = deleteSpecIds;
 	}
 
+	public ProductStatusEnum getProductStatus() {
+		return productStatus;
+	}
+
+	public void setProductStatus(ProductStatusEnum productStatus) {
+		this.productStatus = productStatus;
+	}
 }

@@ -225,6 +225,7 @@ public class ProductController extends BaseController {
 		dataProduct.setDetailImages(productDetailImage);
 		dataProduct.setIsAllowRefund(product.getIsAllowRefund());
 		dataProduct.setDeleteSpecIds(product.getDeleteSpecIds());
+		dataProduct.setProductStatus(product.getProductStatus());
 
 		return productService.saveProduct(dataProduct);
 

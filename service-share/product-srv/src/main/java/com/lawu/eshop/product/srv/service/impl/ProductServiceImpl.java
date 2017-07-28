@@ -419,6 +419,9 @@ public class ProductServiceImpl implements ProductService {
             }
             ProductDOExample example = new ProductDOExample();
             example.createCriteria().andIdEqualTo(productId);
+            if(param.getProductStatus() != null){
+                productDO.setStatus(param.getProductStatus().val);
+            }
             productDOMapper.updateByExampleSelective(productDO, example);
         }
 
