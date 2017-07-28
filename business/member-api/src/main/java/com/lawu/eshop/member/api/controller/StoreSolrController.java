@@ -16,6 +16,7 @@ import com.lawu.eshop.member.api.service.StoreSolrService;
 import com.lawu.eshop.user.dto.StoreSearchWordDTO;
 import com.lawu.eshop.user.dto.StoreSolrDTO;
 import com.lawu.eshop.user.dto.StoreSolrInfoDTO;
+import com.lawu.eshop.user.param.DiscountStoreParam;
 import com.lawu.eshop.user.param.StoreSolrParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -119,6 +120,23 @@ public class StoreSolrController extends BaseController {
             storeSolrDTOS.add(storeSolrDTO);
         }
         return successGet(storeSolrDTOS);
+    }
+
+    @ApiOperation(value = "专属特惠", notes = "专属特惠(优惠系数升序)。[1100] (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "discountStore", method = RequestMethod.GET)
+    public Result<Page<StoreSolrDTO>> listStore(@ModelAttribute @ApiParam DiscountStoreParam discountStoreParam) {
+        Result<Page<StoreSolrDTO>> result = storeSolrService.discountStore(discountStoreParam);
+        if (!isSuccess(result)) {
+            return result;
+        }
+        for (StoreSolrDTO storeSolrDTO : result.getModel().getRecords()) {
+            if (StringUtils.isNotEmpty(storeSolrDTO.getRegionPath())) {
+                String areaName = regionService.getAreaName(storeSolrDTO.getRegionPath()).getModel();
+                storeSolrDTO.setAreaName(areaName);
+            }
+        }
+        return result;
     }
 
 }
