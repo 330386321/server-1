@@ -397,7 +397,7 @@ public class DiscountPackageServiceImpl implements DiscountPackageService {
 		if (solrDocument == null) {
 			return;
 		}
-		SolrInputDocument document = SolrDocumentConverter.converSolrInputDocument(solrDocument);
+		SolrInputDocument document = SolrDocumentConverter.converDiscountSolrInputDocument(solrDocument);
 		document.addField("discountPackage_s", discountPackage);
 		solrService.addSolrDocs(document, mallSrvConfig.getSolrUrl(), mallSrvConfig.getSolrMerchantCore(), mallSrvConfig.getIsCloudSolr());
 	}

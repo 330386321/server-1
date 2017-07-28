@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -66,15 +67,20 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
                 return i;
             }
             String favoreInfo = "";
+            double discountOrdinal = 100;
             if (param.getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL.val) {
                 favoreInfo = "买单每满" + param.getReachAmount() + "减" + param.getFavoredAmount() + "元";
+                discountOrdinal = (param.getReachAmount().subtract(param.getFavoredAmount())).divide(param.getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
             } else if (param.getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val) {
                 favoreInfo = "买单满" + param.getReachAmount() + "减" + param.getFavoredAmount() + "元";
+                discountOrdinal = (param.getReachAmount().subtract(param.getFavoredAmount())).divide(param.getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
             } else if (param.getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_DISCOUNT.val) {
                 favoreInfo = "买单" + param.getDiscountRate() + "折";
+                discountOrdinal = param.getDiscountRate().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
             }
-            SolrInputDocument document = SolrDocumentConverter.converSolrInputDocument(solrDocument);
+            SolrInputDocument document = SolrDocumentConverter.converFavoredSolrInputDocument(solrDocument);
             document.addField("favoreInfo_s", favoreInfo);
+            document.addField("discountOrdinal_d", discountOrdinal);
             solrService.addSolrDocs(document, mallSrvConfig.getSolrUrl(), mallSrvConfig.getSolrMerchantCore(), mallSrvConfig.getIsCloudSolr());
         }
         return i;
@@ -104,8 +110,9 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
         if (solrDocument == null) {
             return;
         }
-        SolrInputDocument document = SolrDocumentConverter.converSolrInputDocument(solrDocument);
+        SolrInputDocument document = SolrDocumentConverter.converFavoredSolrInputDocument(solrDocument);
         document.addField("favoreInfo_s", "");
+        document.addField("discountOrdinal_d", 100);
         solrService.addSolrDocs(document, mallSrvConfig.getSolrUrl(), mallSrvConfig.getSolrMerchantCore(), mallSrvConfig.getIsCloudSolr());
     }
 
@@ -149,15 +156,20 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
                 return i;
             }
             String favoreInfo = "";
+            double discountOrdinal = 100;
             if (param.getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL.val) {
                 favoreInfo = "买单每满" + param.getReachAmount() + "减" + param.getFavoredAmount() + "元";
+                discountOrdinal = (param.getReachAmount().subtract(param.getFavoredAmount())).divide(param.getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
             } else if (param.getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val) {
                 favoreInfo = "买单满" + param.getReachAmount() + "减" + param.getFavoredAmount() + "元";
+                discountOrdinal = (param.getReachAmount().subtract(param.getFavoredAmount())).divide(param.getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
             } else if (param.getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_DISCOUNT.val) {
                 favoreInfo = "买单" + param.getDiscountRate() + "折";
+                discountOrdinal = param.getDiscountRate().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
             }
-            SolrInputDocument document = SolrDocumentConverter.converSolrInputDocument(solrDocument);
+            SolrInputDocument document = SolrDocumentConverter.converFavoredSolrInputDocument(solrDocument);
             document.addField("favoreInfo_s", favoreInfo);
+            document.addField("discountOrdinal_d", discountOrdinal);
             solrService.addSolrDocs(document, mallSrvConfig.getSolrUrl(), mallSrvConfig.getSolrMerchantCore(), mallSrvConfig.getIsCloudSolr());
         }
         return i;
