@@ -270,7 +270,7 @@ public class AdControllerTest {
         RequestBuilder request = post("/ad/registerGetRedPacket").header("authorization","").params(params);
         try {
             ResultActions perform = mvc.perform(request);
-            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());

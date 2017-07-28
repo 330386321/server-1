@@ -2,6 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lawu.eshop.user.srv.mapper.extend.MerchantDOMapperExtend" >
 
+    <resultMap id="inviteResultMap" type="com.lawu.eshop.user.srv.domain.extend.InviteMerchantInfoView" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="account" property="account" jdbcType="VARCHAR" />
+        <result column="level" property="level" jdbcType="INTEGER" />
+        <result column="name" property="storeName" jdbcType="VARCHAR" />
+        <result column="region_name" property="regionName" jdbcType="VARCHAR" />
+        <result column="address" property="address" jdbcType="VARCHAR" />
+        <result column="principal_name" property="principalName" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+    </resultMap>
+
     <update id="delMerchantGtPush"  parameterType="java.lang.Long">
         update merchant set gt_cid = NULL where id = #{merchantId}
     </update>
@@ -9,5 +21,29 @@
     <select id="getMerchantViewById" parameterType="java.lang.Long" resultType="com.lawu.eshop.user.srv.domain.extend.MerchantDOView">
         select m.account,ms.name as storeName from merchant m left join merchant_store ms on m.id = ms.merchant_id
         where m.id = #{id}
+    </select>
+
+    <select id="selectNumLikeContent" resultType="java.lang.String" parameterType="java.lang.String" >
+        select
+        num
+        from merchant me
+        left join merchant_store ms on me.id=ms.merchant_id
+        where ms.name like #{queryContent} or me.account like #{queryContent}
+    </select>
+
+    <select id="selectInviteMerchantInfo" resultMap="inviteResultMap" parameterType="java.lang.String">
+        select
+        me.id as id,
+        me.account as account,
+        me.level as level,
+        ms.name as name,
+        ms.principal_name as principal_name,
+        ms.region_name as region_name,
+        ms.address as address,
+        ms.status as status,
+        me.gmt_create as gmt_create
+        from merchant me
+        left join merchant_store ms on me.id=ms.merchant_id
+        where me.num = #{inviteUserNum}
     </select>
 </mapper>

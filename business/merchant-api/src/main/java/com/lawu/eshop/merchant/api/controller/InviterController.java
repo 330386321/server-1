@@ -1,5 +1,8 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.user.dto.*;
+import com.lawu.eshop.user.param.EFriendQueryDataParam;
+import com.lawu.eshop.user.param.EFriendQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,11 +23,6 @@ import com.lawu.eshop.merchant.api.service.InviterService;
 import com.lawu.eshop.merchant.api.service.MemberProfileService;
 import com.lawu.eshop.merchant.api.service.MemberService;
 import com.lawu.eshop.merchant.api.service.MerchantInviterService;
-import com.lawu.eshop.user.dto.EfriendDTO;
-import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
-import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
-import com.lawu.eshop.user.dto.InviterDTO;
-import com.lawu.eshop.user.dto.MerchantInviterDTO;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 
@@ -66,6 +64,7 @@ public class InviterController extends BaseController {
 	 * @param pageQuery
 	 * @return
 	 */
+      @Deprecated
     @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "我推荐的商家", notes = "我推荐的商家查询,[]（张荣成）", httpMethod = "GET")
     @Authorization
@@ -85,6 +84,7 @@ public class InviterController extends BaseController {
      * @param query
      * @return
      */
+    @Deprecated
     @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "我的E友", notes = "我的E有查询,[]（张荣成）", httpMethod = "GET")
     @Authorization
@@ -97,4 +97,27 @@ public class InviterController extends BaseController {
         return page;
     }
 
+    /**
+     * 我的E友
+     * @param token
+     * @param param
+     * @since since v2.3.0
+     * @return
+     */
+    @ApiOperation(value = "我的E友", notes = "我的E友，[](杨清华)", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "selectEFriend", method = RequestMethod.GET)
+    public Result<Page<EFriendInviterDTO>> selectEFriend(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "查询信息") EFriendQueryParam param) {
+        Long userId = UserUtil.getCurrentUserId(getRequest());
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        EFriendQueryDataParam dataParam = new EFriendQueryDataParam();
+        dataParam.setUserId(userId);
+        dataParam.setUserNum(userNum);
+        dataParam.setQueryContent(param.getQueryContent());
+        dataParam.setCurrentPage(param.getCurrentPage());
+        dataParam.setPageSize(param.getPageSize());
+        Result<Page<EFriendInviterDTO>> page = inviterService.selectEFriend(dataParam);
+        return page;
+    }
 }

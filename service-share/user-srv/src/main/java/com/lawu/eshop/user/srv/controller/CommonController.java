@@ -2,6 +2,11 @@ package com.lawu.eshop.user.srv.controller;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.dto.EFriendInviterDTO;
+import com.lawu.eshop.user.param.EFriendQueryDataParam;
+import com.lawu.eshop.user.srv.bo.EFriendInviterBO;
+import com.lawu.eshop.user.srv.converter.EFriendInviterConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,5 +57,22 @@ public class CommonController extends BaseController {
 			@RequestParam int level, @RequestBody boolean isLevel) {
 		List<CommissionInvitersUserDTO> userNumList = commonService.selectHigherLevelInviters(invitedUserNum, level,isLevel);
 		return userNumList;
+	}
+
+	/**
+	 * 我的E友
+	 * @param dataParam
+	 * @since  v2.3.0
+	 * @return
+	 */
+	@RequestMapping(value = "selectEFriend", method = RequestMethod.POST)
+	public Result<Page<EFriendInviterDTO>> selectEFriend(@RequestBody EFriendQueryDataParam dataParam) {
+		Page<EFriendInviterBO> page = commonService.selectEFriend(dataParam);
+		Page<EFriendInviterDTO> rtnPage = new Page();
+		rtnPage.setCurrentPage(page.getCurrentPage());
+		rtnPage.setTotalCount(page.getTotalCount());
+		List<EFriendInviterDTO> rtnList = EFriendInviterConverter.converter(page.getRecords());
+		rtnPage.setRecords(rtnList);
+		return successCreated(rtnPage);
 	}
 }

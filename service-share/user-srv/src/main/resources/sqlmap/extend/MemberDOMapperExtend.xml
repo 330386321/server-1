@@ -67,5 +67,12 @@
 	    </if>
 	    limit ${offset} ,${limit}
 	  </select>
+
+	<select id="selectNumLikeContent" resultType="java.lang.String" parameterType="java.lang.String" >
+		select
+		num
+		from member
+		where status = 1 and (account like #{queryContent} or nickname like #{queryContent})
+	</select>
 	  
 </mapper>

@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.service;
 
 import java.util.List;
 
+import com.lawu.eshop.user.param.EFriendQueryDataParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -213,4 +214,6 @@ public interface MemberService {
 	 */
 	@RequestMapping(value = "adQueryMemberInfo/{memberId}", method = RequestMethod.GET)
 	Result<AdQueryMemberInfoDTO> adQueryMemberInfo(@PathVariable("memberId") Long memberId);
+
+
 }

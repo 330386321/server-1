@@ -2,7 +2,12 @@ package com.lawu.eshop.user.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.CommissionInvitersUserDTO;
+import com.lawu.eshop.user.dto.EFriendInviterDTO;
+import com.lawu.eshop.user.param.EFriendQueryDataParam;
+import com.lawu.eshop.user.srv.bo.EFriendInviterBO;
 import com.lawu.eshop.user.srv.bo.InviterBO;
 
 /**
@@ -29,4 +34,11 @@ public interface CommonService {
      * @return
      */
 	List<CommissionInvitersUserDTO> selectHigherLevelInviters(String invitedUserNum, int level,boolean isLevel);
+
+    /**
+     * 我的E友
+     * @param dataParam
+     * @return
+     */
+    Page<EFriendInviterBO> selectEFriend(EFriendQueryDataParam dataParam);
 }

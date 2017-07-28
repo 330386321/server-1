@@ -1,11 +1,15 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.InviterService;
+import com.lawu.eshop.user.dto.EFriendInviterDTO;
 import com.lawu.eshop.user.dto.InviterDTO;
+import com.lawu.eshop.user.param.EFriendQueryDataParam;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author meishuquan
@@ -20,5 +24,10 @@ public class MockInviterService extends BaseController implements InviterService
         dto.setUserNum("M0001");
         dto.setInviterName("test");
         return successGet(dto);
+    }
+
+    @Override
+    public Result<Page<EFriendInviterDTO>> selectEFriend(@RequestBody EFriendQueryDataParam dataParam) {
+        return null;
     }
 }

@@ -19,4 +19,5 @@ public interface MemberDOMapperExtend {
 	List<MemberDO> selectByExampleWithRowbounds(InviterUserDOView view);
 
 
+    List<String> selectNumLikeContent(String queryContent);
 }
