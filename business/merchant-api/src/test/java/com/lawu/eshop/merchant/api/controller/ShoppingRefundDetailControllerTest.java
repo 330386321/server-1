@@ -111,4 +111,19 @@ public class ShoppingRefundDetailControllerTest {
         }
     }
 
+    @Test
+    public void refuseRefund() {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("refusalReasons", "refusalReasons");
+        RequestBuilder request = post("/shoppingRefundDetail/refuseRefund/10").header("authorization", "8888").params(map);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
 }
