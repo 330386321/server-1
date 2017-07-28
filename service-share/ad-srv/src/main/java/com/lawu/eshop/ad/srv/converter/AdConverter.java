@@ -7,6 +7,8 @@ import com.lawu.eshop.ad.dto.*;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.framework.web.ResultCode;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -14,6 +16,7 @@ import org.apache.solr.common.SolrInputDocument;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -182,6 +185,15 @@ public class AdConverter {
 			dto.setRadius(adBO.getRadius());
 			dto.setRegionName(adBO.getRegionName());
 			dto.setAdCount(adBO.getAdCount());
+			Calendar calendar = Calendar.getInstance();  //得到日历  
+			calendar.setTime(new Date());//把当前时间赋给日历  
+			calendar.add(Calendar.DAY_OF_MONTH, -14);  //设置为14天前  
+		    Date before14days = calendar.getTime();   //得到14天前的时间  
+		    if(adBO.getBeginTime()!=null && before14days.getTime() < adBO.getBeginTime().getTime()){  
+		    	dto.setIsShowDown(false);
+		    }else{
+		    	dto.setIsShowDown(true);
+		    }
 			DTOS.add(dto);
 		}
 		return DTOS;
