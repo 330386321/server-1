@@ -346,6 +346,32 @@ CREATE TABLE `verify_code` (
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ;
+
+
+-- ----------------------------
+-- Table structure for inform
+-- ----------------------------
+DROP TABLE IF EXISTS `inform`;
+CREATE TABLE `inform` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `informer_user_num` varchar(19) NOT NULL COMMENT '举报人用户编号',
+  `informer_account` varchar(20) DEFAULT NULL COMMENT '举报人账号',
+  `inform_type` tinyint(2) DEFAULT NULL COMMENT '举报类型:1平面广告、2E赞、3商家、4商品',
+  `informt_item_id` bigint(20) DEFAULT NULL COMMENT '被举报对象ID',
+  `informt_item_name` varchar(255) DEFAULT NULL COMMENT '被举报对象名称',
+  `content` varchar(255) DEFAULT NULL COMMENT '举报内容',
+  `status` tinyint(2) unsigned NOT NULL COMMENT '0：待处理，1：已处理，2：不处理',
+  `auditor_id` int(11) DEFAULT '0' COMMENT '审核人员ID',
+  `auditor_name` varchar(50) DEFAULT NULL COMMENT '审核人员名称',
+  `remark` varchar(255) DEFAULT NULL COMMENT '审核备注',
+  `audit_time` datetime DEFAULT NULL COMMENT '审核时间',
+  `gmt_modified` datetime NOT NULL COMMENT '修改时间',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+);
+
+
+
 INSERT INTO `message_template` (`id`, `title`, `content`, `type`, `gmt_modified`, `gmt_create`) VALUES ('1', '粉丝邀请', '亲爱的{0}，您收到来自{12}的1条新的粉丝邀请。', '1', '2017-05-06 16:19:04', '2017-05-06 16:19:07');
 INSERT INTO `message_template` (`id`, `title`, `content`, `type`, `gmt_modified`, `gmt_create`) VALUES ('2', '订单待付款', '亲爱的{0}，您的订单{1}尚未付款，点击立即付款。', '2', '2017-05-06 16:19:04', '2017-05-06 16:19:07');
 INSERT INTO `message_template` (`id`, `title`, `content`, `type`, `gmt_modified`, `gmt_create`) VALUES ('3', '订单正在派件', '亲爱的{0}，您的商品{9}正在派件（{20}）。运单编号：{2}。', '5', '2017-05-06 16:19:04', '2017-05-06 16:19:07');
