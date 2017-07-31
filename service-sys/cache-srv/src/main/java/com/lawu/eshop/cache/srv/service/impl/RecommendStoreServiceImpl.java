@@ -4,11 +4,13 @@ import com.lawu.eshop.cache.srv.constants.KeyConstant;
 import com.lawu.eshop.cache.srv.service.RecommendStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
 
 /**
  * @author meishuquan
  * @date 2017/7/28.
  */
+@Service
 public class RecommendStoreServiceImpl implements RecommendStoreService {
 
     @Autowired
