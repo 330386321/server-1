@@ -151,7 +151,7 @@ public class DiscountPackageConverter {
 		rtn.setValidityPeriodBegin(discountPackageUpdateParam.getValidityPeriodBegin());
 		rtn.setValidityPeriodEnd(discountPackageUpdateParam.getValidityPeriodEnd());
 		rtn.setGmtModified(new Date());
-		rtn.setStatus(discountPackageUpdateParam.getStatus().getValue());
+		rtn.setStatus(discountPackageUpdateParam.getStatus() != null ? discountPackageUpdateParam.getStatus().getValue() : null);
 		return rtn;
 	}
 	
