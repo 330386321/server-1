@@ -154,7 +154,14 @@ public class FavoriteAdServiceImplTest {
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
         adDOMapper.insertSelective(ad);
-    	favoriteAdService.save(ad.getId(), 1l,"M000001");
+        
+        FavoriteAdDO faDO = new FavoriteAdDO();
+        faDO.setAdId(ad.getId());
+        faDO.setGmtCreate(new Date());
+        faDO.setIsSend(false);
+        faDO.setMemberId(1l);
+        faDO.setMemberNum("M000001");
+    	favoriteAdDOMapper.insert(faDO);
 
     	List<FavoriteAdPraiseWarnBO>  list = favoriteAdService.selectFavoriteAdPraise();
         Assert.assertNotNull(list);
