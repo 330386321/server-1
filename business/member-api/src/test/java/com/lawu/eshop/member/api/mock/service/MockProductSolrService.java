@@ -10,6 +10,7 @@ import com.lawu.eshop.product.param.ProductSearchRealParam;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,6 +43,16 @@ public class MockProductSolrService implements ProductSolrService {
 
     @Override
     public List<ProductSearchDTO> findProductSearchList(@RequestBody ProductSearchParam searchParam) {
-        return null;
+        ProductSearchDTO dto = new ProductSearchDTO();
+        dto.setName("name");
+        dto.setContent("content");
+        dto.setFeatureImage("1.jpg");
+        dto.setOriginalPrice(Double.parseDouble("2"));
+        dto.setPrice(Double.parseDouble("2"));
+        dto.setProductId(1L);
+        dto.setSalesVolume(2);
+        List<ProductSearchDTO> list = new ArrayList<>();
+        list.add(dto);
+        return list;
     }
 }

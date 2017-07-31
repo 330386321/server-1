@@ -62,7 +62,8 @@ public class MockMerchantStoreService extends BaseController implements Merchant
 
     @Override
     public Result<ShoppingStoreDetailDTO> getShoppingStoreDetailById(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
-        return null;
+        ShoppingStoreDetailDTO dto = new ShoppingStoreDetailDTO();
+        return successCreated(dto);
     }
 
     @Override
@@ -106,13 +107,14 @@ public class MockMerchantStoreService extends BaseController implements Merchant
     public MerchantStoreStatusDTO merchantStoreIsExist(@PathVariable("id") Long id) {
         MerchantStoreStatusDTO dto = new MerchantStoreStatusDTO();
         dto.setExist(true);
-        dto.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
+        //dto.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);//
+        dto.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CANCEL.val);
         return dto;
     }
 
     @Override
     public String getLogoUrlByStoreId(@PathVariable("id") Long id) {
-        return null;
+        return "1.jpg";
     }
 
     @Override

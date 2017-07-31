@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.mock.service;
 
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.MerchantStoreImageService;
 import com.lawu.eshop.user.dto.MerchantStoreImageDTO;
@@ -11,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Service
-class MockMerchantStoreImageService implements MerchantStoreImageService {
+class MockMerchantStoreImageService extends BaseController implements MerchantStoreImageService {
 
     @Override
     public Result<List<MerchantStoreImageDTO>> listMerchantStoreImageByType(@PathVariable("merchantId") Long merchantId, @RequestParam("merchantStoreImageEnum") MerchantStoreImageEnum merchantStoreImageEnum) {
-        return null;
+        return successCreated();
     }
 }
