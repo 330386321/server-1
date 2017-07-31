@@ -106,7 +106,7 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
         //查询商家优惠套餐
         Result<Page<DiscountPackageQueryDTO>> discountResult = discountPackageService.listForMember(foodDTO.getMerchantId());
         String discountPackage = "";
-        if (discountResult.getRet() == ResultCode.SUCCESS) {
+        if (discountResult.getRet() == ResultCode.SUCCESS && !discountResult.getModel().getRecords().isEmpty()) {
             discountPackage = discountResult.getModel().getRecords().get(0).getName();
         }
         foodDTO.setFavoreInfo(discountPackage);
