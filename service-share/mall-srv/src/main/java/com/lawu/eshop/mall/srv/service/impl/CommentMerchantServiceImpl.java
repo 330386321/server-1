@@ -72,19 +72,17 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         Long id = commentMerchantDO.getId();
         if (!StringUtils.isEmpty(commentPic)) {
             String[] imgs = commentPic.split(",");
-            if (id != null && id > 0) {
-                //新增评价图片
-                for (int i = 0; i < imgs.length; i++) {
-                    if(!StringUtils.isEmpty(imgs[i])){
-                        CommentImageDO commentImageDO = new CommentImageDO();
-                        commentImageDO.setCommentId(id);
-                        commentImageDO.setImgUrl(imgs[i]);
-                        commentImageDO.setStatus(true);//有效
-                        commentImageDO.setType(CommentTypeEnum.COMMENT_TYPE_MERCHANT.val);//评论商家
-                        commentImageDO.setGmtCreate(new Date());
-                        commentImageDO.setGmtModified(new Date());
-                        commentImageDOMapper.insert(commentImageDO);
-                    }
+            //新增评价图片
+            for (int i = 0; i < imgs.length; i++) {
+                if (!StringUtils.isEmpty(imgs[i])) {
+                    CommentImageDO commentImageDO = new CommentImageDO();
+                    commentImageDO.setCommentId(id);
+                    commentImageDO.setImgUrl(imgs[i]);
+                    commentImageDO.setStatus(true);//有效
+                    commentImageDO.setType(CommentTypeEnum.COMMENT_TYPE_MERCHANT.val);//评论商家
+                    commentImageDO.setGmtCreate(new Date());
+                    commentImageDO.setGmtModified(new Date());
+                    commentImageDOMapper.insert(commentImageDO);
                 }
             }
         }
