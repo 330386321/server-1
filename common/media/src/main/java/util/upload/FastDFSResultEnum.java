@@ -1,7 +1,7 @@
 /**
  * 
  */
-package util;
+package util.upload;
 
 /**
  * 上传文件返回枚举

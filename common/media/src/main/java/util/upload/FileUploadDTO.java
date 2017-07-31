@@ -1,20 +1,13 @@
 /**
  * 
  */
-package util;
+package util.upload;
 
 /**
- * 上传返回对象
- * 
  * @author lihj
- * @date 2017年7月25日
+ * @date 2017年7月27日
  */
-public class FastDFSResult {
-
-	/**
-	 * 上传状态枚举
-	 */
-	private FastDFSResultEnum fenum;
+public class FileUploadDTO {
 	/**
 	 * 上传文件返回的路径
 	 */
@@ -26,27 +19,20 @@ public class FastDFSResult {
 	private String cutImgUrl;
 
 	/**
-	 * @return the fenum
-	 */
-	public FastDFSResultEnum getFenum() {
-		return fenum;
-	}
-
-	/**
-	 * @param fenum
-	 *            the fenum to set
-	 */
-	public void setFenum(FastDFSResultEnum fenum) {
-		this.fenum = fenum;
-	}
-
-	/**
 	 * @return the fileUrl
 	 */
 	public String getFileUrl() {
 		return fileUrl;
 	}
 
+	public FileUploadDTO(){
+		
+	}
+	public FileUploadDTO(String fileUrl,String cutImgUrl){
+		this.fileUrl=fileUrl;
+		this.cutImgUrl=cutImgUrl;
+	}
+	
 	/**
 	 * @param fileUrl
 	 *            the fileUrl to set

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.lawu.eshop.merchant.api.controller;
 
@@ -27,67 +27,66 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import util.FastDFSResult;
+import util.upload.FastDFSResult;
 import util.FastDFSUploadUtils;
-import util.FileUploadDTO;
+import util.upload.FileUploadDTO;
 import util.UploadParam;
 
 /**
  * 统一上传接口
- * 
+ *
  * @author lihj
  * @date 2017年7月26日
  */
 @Api(tags = "upload", value = "统一上传接口")
 @RestController
-@RequestMapping(value="upload/")
+@RequestMapping(value = "upload/")
 public class UploadController extends BaseController {
 
-	@Autowired
-	private MerchantApiConfig merchantApiConfig;
-	
-	@Audit(date="2017-07-26",reviewer="李洪军")
-	@Authorization
-	@ApiOperation(value="统一上传接口",notes="上传接口(李洪军)",httpMethod="POST")
-	@ApiResponse(code=HttpCode.SC_CREATED,message ="success")
-	@RequestMapping(value="uploadFile",method=RequestMethod.POST)
-	public Result<FileUploadDTO> uploadFile(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required =true,value="上传类型图片(img)，视频(video),其他(file)") String type){
-		HttpServletRequest request = getRequest();
-		UploadParam uparam =new UploadParam();
-//		uparam.setBaseImageDir(merchantApiConfig.getImageUploadUrl());
-		uparam.setBaseImageDir("C:/ffmpeg.exe");
-		uparam.setDir(FileDirConstant.DIR_HEAD);
-		uparam.setType(type);
-		ClientParams cp =new ClientParams();
-		cp.setTrackerServer(merchantApiConfig.getTrackerServers());
-		cp.setTrackerTttpPport(merchantApiConfig.getTrackerTttpPport());
-		uparam.setCparam(cp);
-		FastDFSResult fastResult = FastDFSUploadUtils.upload(request, uparam);
-		Result<FileUploadDTO> result =new Result<FileUploadDTO>();
-		switch(fastResult.getFenum().getVal()) {
-			case 1:
-				result.setRet(HttpCode.SC_CREATED);
-				result.setModel(new FileUploadDTO(fastResult.getFileUrl(),fastResult.getCutImgUrl()));
-				break;
-			case 2:
-				result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);
-				result.setMsg(ResultCode.get(ResultCode.FD_FILE_ERROR));
-				break;
-			case 3:
-				result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);
-				result.setMsg(ResultCode.get(ResultCode.FD_FILE_IMG_BIG));
-				break;
-			case 4:
-				result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);
-				result.setMsg(ResultCode.get(ResultCode.UPLOAD_SIZE_BIGER));
-				break;
-			case 5:
-				result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);
-				result.setMsg(ResultCode.get(ResultCode.FD_FILE_CUT_ERROR));
-				break;
-		}
-		return successCreated(result.getModel());
-	}
-	
-	
+    @Autowired
+    private MerchantApiConfig merchantApiConfig;
+
+    @Authorization
+    @ApiOperation(value = "统一上传接口", notes = "上传接口(李洪军)", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
+    public Result<FileUploadDTO> uploadFile(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                            @RequestParam @ApiParam(required = true, value = "上传类型图片(img)，视频(video),其他(file)") String type) {
+        HttpServletRequest request = getRequest();
+        UploadParam uparam = new UploadParam();
+        // uparam.setBaseImageDir(merchantApiConfig.getImageUploadUrl());
+        uparam.setBaseImageDir("C:/ffmpeg.exe");
+        uparam.setDir(FileDirConstant.DIR_HEAD);
+        uparam.setType(type);
+        ClientParams cp = new ClientParams();
+        cp.setTrackerServer(merchantApiConfig.getTrackerServers());
+        cp.setTrackerTttpPport(merchantApiConfig.getTrackerTttpPport());
+        uparam.setCparam(cp);
+        FastDFSResult fastResult = FastDFSUploadUtils.upload(request, uparam);
+        Result<FileUploadDTO> result = new Result<FileUploadDTO>();
+        switch (fastResult.getFenum()) {
+            case FD_UPLOAD_SUCCESS:
+                result.setRet(HttpCode.SC_CREATED);
+                result.setModel(new FileUploadDTO(fastResult.getFileUrl(), fastResult.getCutImgUrl()));
+                break;
+            case FD_FILE_ERROR:
+                result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);
+                result.setMsg(ResultCode.get(ResultCode.FD_FILE_ERROR));
+                break;
+            case FD_FILE_IMG_BIG:
+                result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);
+                result.setMsg(ResultCode.get(ResultCode.FD_FILE_IMG_BIG));
+                break;
+            case UPLOAD_SIZE_BIGER:
+                result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);
+                result.setMsg(ResultCode.get(ResultCode.UPLOAD_SIZE_BIGER));
+                break;
+            case FD_FILE_CUT_ERROR:
+                result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);
+                result.setMsg(ResultCode.get(ResultCode.FD_FILE_CUT_ERROR));
+                break;
+        }
+        return successCreated(result.getModel());
+    }
+
 }
