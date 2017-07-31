@@ -165,14 +165,14 @@ public class StoreSolrController extends BaseController {
             consumeDTOS = JSON.parseArray(consumeResult.getModel(), RecommendFoodDTO.class);
             for (RecommendFoodDTO foodDTO : consumeDTOS) {
                 double distance = DistanceUtil.getDistance(recommendFoodParam.getLongitude().doubleValue(), recommendFoodParam.getLatitude().doubleValue(), foodDTO.getLongitude().doubleValue(), foodDTO.getLatitude().doubleValue());
-                foodDTO.setDistance(distance);
+                foodDTO.setDistance(distance / 1000);
             }
         }
-        if (StringUtils.isEmpty(commentResult.getModel())) {
+        if (!StringUtils.isEmpty(commentResult.getModel())) {
             commentDTOS = JSON.parseArray(commentResult.getModel(), RecommendFoodDTO.class);
             for (RecommendFoodDTO foodDTO : commentDTOS) {
                 double distance = DistanceUtil.getDistance(recommendFoodParam.getLongitude().doubleValue(), recommendFoodParam.getLatitude().doubleValue(), foodDTO.getLongitude().doubleValue(), foodDTO.getLatitude().doubleValue());
-                foodDTO.setDistance(distance);
+                foodDTO.setDistance(distance / 1000);
             }
         }
         storeDTO.setRecommendConsume(consumeDTOS);
