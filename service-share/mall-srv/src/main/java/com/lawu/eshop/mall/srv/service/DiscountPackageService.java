@@ -42,7 +42,19 @@ public interface DiscountPackageService {
 	/**
 	 * 根据优惠套餐id查询优惠套餐详情
 	 * 
-	 * @param id
+	 * @param id 套餐详情id
+	 * @param id 商家id
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月26日
+	 */
+	DiscountPackageExtendBO get(Long id, Long merchantId);
+	
+	/**
+	 * 根据优惠套餐id查询优惠套餐详情
+	 * 
+	 * @param id 套餐详情id
+	 * @param id 商家id
 	 * @return
 	 * @author Sunny
 	 * @date 2017年6月26日

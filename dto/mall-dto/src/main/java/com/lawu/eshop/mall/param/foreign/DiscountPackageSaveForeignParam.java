@@ -99,7 +99,20 @@ public class DiscountPackageSaveForeignParam {
 	@NotBlank(message = "套餐内容不能为空")
 	@ApiModelProperty(name = "discountPackageImages", value = "套餐图片详情", example = "[{\"description\":null}]")
 	private String discountPackageImages;
-
+	
+    /**
+    *
+    * 提前预约时间
+    */
+	@ApiModelProperty(value = "提前预约时间")
+    private String advanceBookingTime;
+    
+    /**
+    * 购买须知
+    */
+	@ApiModelProperty(value = "购买须知")
+    private String purchaseNotes;
+	
 	public String getName() {
 		return name;
 	}
@@ -194,6 +207,22 @@ public class DiscountPackageSaveForeignParam {
 
 	public void setDiscountPackageImages(String discountPackageImages) {
 		this.discountPackageImages = discountPackageImages;
+	}
+
+	public String getAdvanceBookingTime() {
+		return advanceBookingTime;
+	}
+
+	public void setAdvanceBookingTime(String advanceBookingTime) {
+		this.advanceBookingTime = advanceBookingTime;
+	}
+
+	public String getPurchaseNotes() {
+		return purchaseNotes;
+	}
+
+	public void setPurchaseNotes(String purchaseNotes) {
+		this.purchaseNotes = purchaseNotes;
 	}
 	
 }

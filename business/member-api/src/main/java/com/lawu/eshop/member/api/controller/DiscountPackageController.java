@@ -11,7 +11,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.mall.dto.DiscountPackageDetailDTO;
+import com.lawu.eshop.mall.dto.DiscountPackageDetailForMemberDTO;
 import com.lawu.eshop.mall.dto.DiscountPackageQueryDTO;
 import com.lawu.eshop.member.api.service.DiscountPackageService;
 
@@ -63,8 +63,8 @@ public class DiscountPackageController extends BaseController {
 	@ApiOperation(value = "查询优惠套餐详情", notes = "查询单个优惠套餐详情。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public Result<DiscountPackageDetailDTO> get(@ApiParam(value = "优惠套餐id") @PathVariable("id") Long id) {
-		Result<DiscountPackageDetailDTO> result = discountPackageService.get(id);
+	public Result<DiscountPackageDetailForMemberDTO> get(@ApiParam(value = "优惠套餐id") @PathVariable("id") Long id) {
+		Result<DiscountPackageDetailForMemberDTO> result = discountPackageService.getByMember(id);
 		return successGet(result);
 	}
 }

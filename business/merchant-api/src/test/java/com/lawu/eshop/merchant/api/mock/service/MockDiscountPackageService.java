@@ -1,5 +1,12 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -9,11 +16,6 @@ import com.lawu.eshop.mall.param.DiscountPackageSaveParam;
 import com.lawu.eshop.mall.param.DiscountPackageUpdateParam;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageQueryForeignParam;
 import com.lawu.eshop.merchant.api.service.DiscountPackageService;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -27,7 +29,7 @@ public class MockDiscountPackageService extends BaseController implements Discou
     }
 
     @Override
-    public Result<DiscountPackageDetailDTO> get(@PathVariable("id") Long id) {
+    public Result<DiscountPackageDetailDTO> get(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId) {
         return successGet();
     }
 

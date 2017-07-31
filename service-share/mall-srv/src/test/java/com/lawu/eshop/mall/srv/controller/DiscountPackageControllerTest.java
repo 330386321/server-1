@@ -1,22 +1,14 @@
 package com.lawu.eshop.mall.srv.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.mall.constants.DiscountPackageStatusQueryEnum;
-import com.lawu.eshop.mall.param.DiscountPackageImageSaveParam;
-import com.lawu.eshop.mall.param.DiscountPackageImageUpdateParam;
-import com.lawu.eshop.mall.param.DiscountPackageSaveParam;
-import com.lawu.eshop.mall.param.DiscountPackageUpdateParam;
-import com.lawu.eshop.mall.param.foreign.DiscountPackageContentSaveForeignParam;
-import com.lawu.eshop.mall.param.foreign.DiscountPackageContentUpdateForeignParam;
-import com.lawu.eshop.mall.param.foreign.DiscountPackageQueryForeignParam;
-import com.lawu.eshop.mall.srv.domain.DiscountPackageContentDO;
-import com.lawu.eshop.mall.srv.domain.DiscountPackageDO;
-import com.lawu.eshop.mall.srv.domain.DiscountPackageImageDO;
-import com.lawu.eshop.mall.srv.mapper.DiscountPackageContentDOMapper;
-import com.lawu.eshop.mall.srv.mapper.DiscountPackageDOMapper;
-import com.lawu.eshop.mall.srv.mapper.DiscountPackageImageDOMapper;
-import com.lawu.eshop.mall.srv.service.MallSrvApplicationTest;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,17 +22,30 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.mall.constants.DiscountPackageStatusQueryEnum;
+import com.lawu.eshop.mall.param.DiscountPackageImageSaveParam;
+import com.lawu.eshop.mall.param.DiscountPackageImageUpdateParam;
+import com.lawu.eshop.mall.param.DiscountPackageSaveParam;
+import com.lawu.eshop.mall.param.DiscountPackageUpdateParam;
+import com.lawu.eshop.mall.param.foreign.DiscountPackageContentSaveForeignParam;
+import com.lawu.eshop.mall.param.foreign.DiscountPackageContentUpdateForeignParam;
+import com.lawu.eshop.mall.param.foreign.DiscountPackageQueryForeignParam;
+import com.lawu.eshop.mall.srv.domain.DiscountPackageContentDO;
+import com.lawu.eshop.mall.srv.domain.DiscountPackageDO;
+import com.lawu.eshop.mall.srv.domain.DiscountPackageImageDO;
+import com.lawu.eshop.mall.srv.domain.DiscountPackagePurchaseNotesDO;
+import com.lawu.eshop.mall.srv.mapper.DiscountPackageContentDOMapper;
+import com.lawu.eshop.mall.srv.mapper.DiscountPackageDOMapper;
+import com.lawu.eshop.mall.srv.mapper.DiscountPackageImageDOMapper;
+import com.lawu.eshop.mall.srv.mapper.DiscountPackagePurchaseNotesDOMapper;
+import com.lawu.eshop.mall.srv.service.MallSrvApplicationTest;
 
 /**
  * @author zhangyong
@@ -63,6 +68,9 @@ public class DiscountPackageControllerTest {
 
     @Autowired
     private DiscountPackageImageDOMapper discountPackageImageDOMapper;
+    
+    @Autowired
+    private DiscountPackagePurchaseNotesDOMapper discountPackagePurchaseNotesDOMapper;
 
     @Before
     public void setUp() throws Exception {
@@ -73,7 +81,7 @@ public class DiscountPackageControllerTest {
     @Rollback
     @Test
     public void listForMember() {
-        RequestBuilder request = get("/discountPackage/member/list/1");
+        RequestBuilder request = MockMvcRequestBuilders.get("/discountPackage/member/list/1");
 
         ResultActions perform = null;
         try {
@@ -105,9 +113,97 @@ public class DiscountPackageControllerTest {
     @Transactional
     @Rollback
     @Test
-    public void getInfo() {
-        RequestBuilder request = get("/discountPackage/1");
-
+    public void get() {
+    	DiscountPackageDO discountPackageDO = new DiscountPackageDO();
+        discountPackageDO.setMerchantId(1L);
+        discountPackageDO.setGmtCreate(new Date());
+        discountPackageDO.setName("test");
+        discountPackageDO.setIsReservation(true);
+        discountPackageDO.setStatus((byte) 1);
+        discountPackageDO.setOriginalPrice(BigDecimal.TEN);
+        discountPackageDO.setGmtUp(new Date());
+        discountPackageDO.setMerchantStoreId(1L);
+        discountPackageDO.setUseTimeBegin(new Date());
+        discountPackageDO.setPrice(BigDecimal.TEN);
+        discountPackageDO.setValidityPeriodEnd(new Date());
+        discountPackageDO.setValidityPeriodBegin(new Date());
+        discountPackageDO.setUseTimeBegin(new Date());
+        discountPackageDO.setUseTimeEnd(new Date());
+        discountPackageDO.setUseTimeWeek("1");
+        discountPackageDOMapper.insert(discountPackageDO);
+        DiscountPackageContentDO contentDO = new DiscountPackageContentDO();
+        contentDO.setDiscountPackageId(discountPackageDO.getId());
+        contentDO.setGmtCreate(new Date());
+        contentDO.setName("test");
+        contentDO.setQuantity(1);
+        contentDO.setStatus((byte) 1);
+        contentDO.setSubtotal(BigDecimal.TEN);
+        contentDO.setUnitPrice(BigDecimal.TEN);
+        discountPackageContentDOMapper.insert(contentDO);
+        DiscountPackageImageDO imageDO = new DiscountPackageImageDO();
+        imageDO.setGmtCreate(new Date());
+        imageDO.setImage("default.png");
+        imageDO.setDiscountPackageId(discountPackageDO.getId());
+        imageDO.setStatus((byte) 1);
+        imageDO.setDescription("");
+        discountPackageImageDOMapper.insert(imageDO);
+    	
+        RequestBuilder request = MockMvcRequestBuilders.get("/discountPackage/" + discountPackageDO.getId()).param("merchantId", discountPackageDO.getMerchantId().toString());
+        ResultActions perform = null;
+        try {
+            perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void getByMember() {
+    	DiscountPackagePurchaseNotesDO discountPackagePurchaseNotesDO = new DiscountPackagePurchaseNotesDO();
+    	discountPackagePurchaseNotesDO.setGmtCreate(new Date());
+    	discountPackagePurchaseNotesDO.setNote("免费停车");
+    	discountPackagePurchaseNotesDOMapper.insert(discountPackagePurchaseNotesDO);
+    	
+    	DiscountPackageDO discountPackageDO = new DiscountPackageDO();
+        discountPackageDO.setMerchantId(1L);
+        discountPackageDO.setGmtCreate(new Date());
+        discountPackageDO.setName("test");
+        discountPackageDO.setIsReservation(true);
+        discountPackageDO.setStatus((byte) 1);
+        discountPackageDO.setOriginalPrice(BigDecimal.TEN);
+        discountPackageDO.setGmtUp(new Date());
+        discountPackageDO.setMerchantStoreId(1L);
+        discountPackageDO.setUseTimeBegin(new Date());
+        discountPackageDO.setPrice(BigDecimal.TEN);
+        discountPackageDO.setValidityPeriodEnd(new Date());
+        discountPackageDO.setValidityPeriodBegin(new Date());
+        discountPackageDO.setUseTimeBegin(new Date());
+        discountPackageDO.setUseTimeEnd(new Date());
+        discountPackageDO.setUseTimeWeek("1");
+        discountPackageDO.setAdvanceBookingTime("30分钟");
+        discountPackageDO.setPurchaseNotes(discountPackagePurchaseNotesDO.getId().toString());
+        discountPackageDOMapper.insert(discountPackageDO);
+        DiscountPackageContentDO contentDO = new DiscountPackageContentDO();
+        contentDO.setDiscountPackageId(discountPackageDO.getId());
+        contentDO.setGmtCreate(new Date());
+        contentDO.setName("test");
+        contentDO.setQuantity(1);
+        contentDO.setStatus((byte) 1);
+        contentDO.setSubtotal(BigDecimal.TEN);
+        contentDO.setUnitPrice(BigDecimal.TEN);
+        discountPackageContentDOMapper.insert(contentDO);
+        DiscountPackageImageDO imageDO = new DiscountPackageImageDO();
+        imageDO.setGmtCreate(new Date());
+        imageDO.setImage("default.png");
+        imageDO.setDiscountPackageId(discountPackageDO.getId());
+        imageDO.setStatus((byte) 1);
+        imageDO.setDescription("");
+        discountPackageImageDOMapper.insert(imageDO);
+    	
+        RequestBuilder request = MockMvcRequestBuilders.get("/discountPackage/member/" + discountPackageDO.getId());
         ResultActions perform = null;
         try {
             perform = mvc.perform(request);
@@ -146,6 +242,8 @@ public class DiscountPackageControllerTest {
         param.setPrice(BigDecimal.TEN);
         param.setUseTimeBegin(new Date());
         param.setUseTimeWeek("week");
+        param.setAdvanceBookingTime("30分钟");
+        param.setPurchaseNotes("1");
         String requestJson = JSONObject.toJSONString(param);
         RequestBuilder request = post("/discountPackage/1").contentType(MediaType.APPLICATION_JSON).content(requestJson);
         ResultActions perform = null;
@@ -208,6 +306,8 @@ public class DiscountPackageControllerTest {
 
         DiscountPackageUpdateParam param = new DiscountPackageUpdateParam();
         param.setName("test2");
+        param.setAdvanceBookingTime("30分钟");
+        param.setPurchaseNotes("1");
         param.setDiscountPackageContents(updateForeignParams);
         param.setDiscountPackageImages(imageUpdateParams);
         String requestJson = JSONObject.toJSONString(param);

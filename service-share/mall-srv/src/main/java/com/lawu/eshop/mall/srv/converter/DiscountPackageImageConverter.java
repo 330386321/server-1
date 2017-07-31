@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.lawu.eshop.mall.constants.StatusEnum;
 import com.lawu.eshop.mall.dto.DiscountPackageImageDTO;
+import com.lawu.eshop.mall.dto.DiscountPackageImageForMemberDTO;
 import com.lawu.eshop.mall.param.DiscountPackageImageSaveParam;
 import com.lawu.eshop.mall.param.DiscountPackageImageUpdateParam;
 import com.lawu.eshop.mall.srv.bo.DiscountPackageImageBO;
@@ -172,6 +173,42 @@ public class DiscountPackageImageConverter {
 			rtn.add(convert(discountPackageImageBO));
 		}
 
+		return rtn;
+	}
+	
+	/**
+	 * DiscountPackageImageDTO转换
+	 *
+	 * @param discountPackageImageBO
+	 * @return
+	 */
+	public static DiscountPackageImageForMemberDTO convertDiscountPackageImageForMemberDTO(DiscountPackageImageBO discountPackageImageBO) {
+		DiscountPackageImageForMemberDTO rtn = null;
+		if (discountPackageImageBO == null) {
+			return rtn;
+		}
+		rtn = new DiscountPackageImageForMemberDTO();
+		rtn.setDescription(discountPackageImageBO.getDescription());
+		rtn.setImage(discountPackageImageBO.getImage());
+		return rtn;
+	}
+
+	/**
+	 * DiscountPackageImageDTOList转换
+	 * 
+	 * @param discountPackageImageDOList
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月26日
+	 */
+	public static List<DiscountPackageImageForMemberDTO> convertDiscountPackageImageForMemberDTOList(List<DiscountPackageImageBO> discountPackageImageBOList) {
+		List<DiscountPackageImageForMemberDTO> rtn = new ArrayList<>();
+		if (discountPackageImageBOList == null || discountPackageImageBOList.isEmpty()) {
+			return null;
+		}
+		for (DiscountPackageImageBO discountPackageImageBO : discountPackageImageBOList) {
+			rtn.add(convertDiscountPackageImageForMemberDTO(discountPackageImageBO));
+		}
 		return rtn;
 	}
 }

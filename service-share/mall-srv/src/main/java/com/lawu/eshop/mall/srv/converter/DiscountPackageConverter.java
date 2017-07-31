@@ -55,6 +55,8 @@ public class DiscountPackageConverter {
 		rtn.setUseTimeWeek(discountPackageDO.getUseTimeWeek());
 		rtn.setValidityPeriodBegin(discountPackageDO.getValidityPeriodBegin());
 		rtn.setValidityPeriodEnd(discountPackageDO.getValidityPeriodEnd());
+		rtn.setAdvanceBookingTime(discountPackageDO.getAdvanceBookingTime());
+		rtn.setPurchaseNotes(discountPackageDO.getPurchaseNotes());
 		return rtn;
 	}
 	
@@ -114,7 +116,8 @@ public class DiscountPackageConverter {
 		// 添加的新记录默认为上架状态
 		rtn.setGmtUp(new Date());
 		rtn.setStatus(DiscountPackageStatusEnum.UP.getValue());
-		
+		rtn.setAdvanceBookingTime(discountPackageSaveParam.getAdvanceBookingTime());
+		rtn.setPurchaseNotes(discountPackageSaveParam.getPurchaseNotes());
 		return rtn;
 	}
 	
@@ -138,12 +141,10 @@ public class DiscountPackageConverter {
 		rtn.setCoverImage(discountPackageUpdateParam.getCoverImage());
 		rtn.setIsReservation(discountPackageUpdateParam.getIsReservation());
 		rtn.setName(discountPackageUpdateParam.getName());
-		
 		rtn.setOriginalPrice(new BigDecimal(0));
 		for (DiscountPackageContentSaveForeignParam discountPackageContent : discountPackageUpdateParam.getDiscountPackageContents()) {
 			rtn.setOriginalPrice(rtn.getOriginalPrice().add(discountPackageContent.getUnitPrice().multiply(new BigDecimal(discountPackageContent.getQuantity()))));
 		}
-		
 		rtn.setOtherInstructions(discountPackageUpdateParam.getOtherInstructions());
 		rtn.setPrice(discountPackageUpdateParam.getPrice());
 		rtn.setUseRules(discountPackageUpdateParam.getUseRules());
@@ -152,8 +153,9 @@ public class DiscountPackageConverter {
 		rtn.setUseTimeWeek(discountPackageUpdateParam.getUseTimeWeek());
 		rtn.setValidityPeriodBegin(discountPackageUpdateParam.getValidityPeriodBegin());
 		rtn.setValidityPeriodEnd(discountPackageUpdateParam.getValidityPeriodEnd());
-		
 		rtn.setGmtModified(new Date());
+		rtn.setAdvanceBookingTime(discountPackageUpdateParam.getAdvanceBookingTime());
+		rtn.setPurchaseNotes(discountPackageUpdateParam.getPurchaseNotes());
 		return rtn;
 	}
 	

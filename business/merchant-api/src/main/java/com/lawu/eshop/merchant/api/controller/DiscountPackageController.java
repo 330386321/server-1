@@ -122,7 +122,8 @@ public class DiscountPackageController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public Result<DiscountPackageDetailDTO> get(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,  @ApiParam(value = "优惠套餐id", required = true) @PathVariable("id") Long id) {
-		Result<DiscountPackageDetailDTO> result = discountPackageService.get(id);
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		Result<DiscountPackageDetailDTO> result = discountPackageService.get(id, merchantId);
 		return successGet(result);
 	}
 	

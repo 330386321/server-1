@@ -1,16 +1,17 @@
 package com.lawu.eshop.member.api.mock.service;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.dto.DiscountPackageDetailDTO;
-import com.lawu.eshop.mall.dto.DiscountPackageQueryDTO;
-import com.lawu.eshop.member.api.service.DiscountPackageService;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.dto.DiscountPackageDetailForMemberDTO;
+import com.lawu.eshop.mall.dto.DiscountPackageQueryDTO;
+import com.lawu.eshop.member.api.service.DiscountPackageService;
 
 
 @Service
@@ -29,8 +30,8 @@ public class MockDiscountPackageService extends BaseController implements Discou
 	}
 
 	@Override
-	public Result<DiscountPackageDetailDTO> get(@PathVariable("id") Long id) {
-		DiscountPackageDetailDTO dto = new DiscountPackageDetailDTO();
+	public Result<DiscountPackageDetailForMemberDTO> getByMember(@PathVariable("id") Long id) {
+		DiscountPackageDetailForMemberDTO dto = new DiscountPackageDetailForMemberDTO();
 		return successCreated(dto);
 	}
 }

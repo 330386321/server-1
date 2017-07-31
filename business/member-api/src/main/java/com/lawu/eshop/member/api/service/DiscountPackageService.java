@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.DiscountPackageDetailDTO;
+import com.lawu.eshop.mall.dto.DiscountPackageDetailForMemberDTO;
 import com.lawu.eshop.mall.dto.DiscountPackageQueryDTO;
 
 /**
@@ -37,6 +38,6 @@ public interface DiscountPackageService {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
-	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	Result<DiscountPackageDetailDTO> get(@PathVariable("id") Long id);
+	@RequestMapping(value = "member/{id}", method = RequestMethod.GET)
+	Result<DiscountPackageDetailForMemberDTO> getByMember(@PathVariable("id") Long id);
 }

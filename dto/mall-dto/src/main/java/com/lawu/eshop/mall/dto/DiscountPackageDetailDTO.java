@@ -102,6 +102,18 @@ public class DiscountPackageDetailDTO {
     private Boolean isReservation;
 
     /**
+    * 提前预约时间(xx小时|xx分钟|)
+    */
+	@ApiModelProperty(value = "提前预约时间(xx小时|xx分钟|)")
+    private String advanceBookingTime;
+
+   /**
+    * 购买须知
+    */
+	@ApiModelProperty(value = "购买须知(用逗号分隔)")
+    private String purchaseNotes;
+	
+    /**
      * 使用规则
      */
 	@ApiModelProperty(value = "使用规则")
@@ -221,6 +233,22 @@ public class DiscountPackageDetailDTO {
 
 	public void setIsReservation(Boolean isReservation) {
 		this.isReservation = isReservation;
+	}
+
+	public String getAdvanceBookingTime() {
+		return advanceBookingTime;
+	}
+
+	public void setAdvanceBookingTime(String advanceBookingTime) {
+		this.advanceBookingTime = advanceBookingTime;
+	}
+
+	public String getPurchaseNotes() {
+		return purchaseNotes;
+	}
+
+	public void setPurchaseNotes(String purchaseNotes) {
+		this.purchaseNotes = purchaseNotes;
 	}
 
 	public String getUseRules() {

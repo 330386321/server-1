@@ -1,4 +1,4 @@
-package com.lawu.eshop.mall.srv.Converter;
+package com.lawu.eshop.mall.srv.converter;
 
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyQueryDTO;

@@ -100,6 +100,18 @@ public class DiscountPackageUpdateForeignParam {
 	@ApiModelProperty(name = "discountPackageImages", value = "套餐图片详情", notes = "如果是新增的图片详情id置空", example = "[{\"description\":null,\"id\":null}]")
 	private String discountPackageImages;
 	
+    /**
+    * 提前预约时间
+    */
+	@ApiModelProperty(value = "提前预约时间")
+    private String advanceBookingTime;
+    
+    /**
+    * 购买须知
+    */
+	@ApiModelProperty(value = "购买须知")
+    private String purchaseNotes;
+	
 	public String getName() {
 		return name;
 	}
@@ -194,6 +206,22 @@ public class DiscountPackageUpdateForeignParam {
 
 	public void setDiscountPackageImages(String discountPackageImages) {
 		this.discountPackageImages = discountPackageImages;
+	}
+
+	public String getAdvanceBookingTime() {
+		return advanceBookingTime;
+	}
+
+	public void setAdvanceBookingTime(String advanceBookingTime) {
+		this.advanceBookingTime = advanceBookingTime;
+	}
+
+	public String getPurchaseNotes() {
+		return purchaseNotes;
+	}
+
+	public void setPurchaseNotes(String purchaseNotes) {
+		this.purchaseNotes = purchaseNotes;
 	}
 	
 }

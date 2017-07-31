@@ -83,6 +83,17 @@ public class DiscountPackageSaveParam {
 	 */
 	private List<DiscountPackageImageSaveParam> discountPackageImages;
 	
+    /**
+    *
+    * 提前预约时间
+    */
+    private String advanceBookingTime;
+    
+    /**
+    * 购买须知
+    */
+    private String purchaseNotes;
+	
 	public String getName() {
 		return name;
 	}
@@ -193,6 +204,22 @@ public class DiscountPackageSaveParam {
 
 	public void setDiscountPackageImages(List<DiscountPackageImageSaveParam> discountPackageImages) {
 		this.discountPackageImages = discountPackageImages;
+	}
+
+	public String getAdvanceBookingTime() {
+		return advanceBookingTime;
+	}
+
+	public void setAdvanceBookingTime(String advanceBookingTime) {
+		this.advanceBookingTime = advanceBookingTime;
+	}
+
+	public String getPurchaseNotes() {
+		return purchaseNotes;
+	}
+
+	public void setPurchaseNotes(String purchaseNotes) {
+		this.purchaseNotes = purchaseNotes;
 	}
 	
 }

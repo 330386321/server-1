@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.lawu.eshop.mall.constants.StatusEnum;
 import com.lawu.eshop.mall.dto.DiscountPackageContentDTO;
+import com.lawu.eshop.mall.dto.DiscountPackageContentForMemberDTO;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageContentSaveForeignParam;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageContentUpdateForeignParam;
 import com.lawu.eshop.mall.srv.bo.DiscountPackageContentBO;
@@ -197,6 +198,48 @@ public class DiscountPackageContentConverter {
 
 		for (DiscountPackageContentBO discountPackageContentBO : discountPackageContentBOList) {
 			rtn.add(convert(discountPackageContentBO));
+		}
+		return rtn;
+	}
+	
+	/**
+	 * DiscountPackageContentForMemberDTO转换
+	 * 
+	 * @param discountPackageContentBO
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月26日
+	 */
+	public static DiscountPackageContentForMemberDTO convertDiscountPackageContentForMemberDTO(DiscountPackageContentBO discountPackageContentBO) {
+		DiscountPackageContentForMemberDTO rtn = null;
+		if (discountPackageContentBO == null) {
+			return rtn;
+		}
+
+		rtn = new DiscountPackageContentForMemberDTO();
+		rtn.setName(discountPackageContentBO.getName());
+		rtn.setQuantity(discountPackageContentBO.getQuantity());
+		rtn.setSubtotal(discountPackageContentBO.getSubtotal());
+		rtn.setUnit(discountPackageContentBO.getUnit());
+		rtn.setUnitPrice(discountPackageContentBO.getUnitPrice());
+		return rtn;
+	}
+
+	/**
+	 * DiscountPackageContentBOList转换
+	 * 
+	 * @param discountPackageContentDOList
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月26日
+	 */
+	public static List<DiscountPackageContentForMemberDTO> convertDiscountPackageContentForMemberDTOList(List<DiscountPackageContentBO> discountPackageContentBOList) {
+		List<DiscountPackageContentForMemberDTO> rtn = new ArrayList<>();
+		if (discountPackageContentBOList == null || discountPackageContentBOList.isEmpty()) {
+			return rtn;
+		}
+		for (DiscountPackageContentBO discountPackageContentBO : discountPackageContentBOList) {
+			rtn.add(convertDiscountPackageContentForMemberDTO(discountPackageContentBO));
 		}
 		return rtn;
 	}

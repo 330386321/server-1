@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
@@ -44,7 +45,7 @@ public interface DiscountPackageService {
 	 * @date 2017年6月26日
 	 */
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	Result<DiscountPackageDetailDTO> get(@PathVariable("id") Long id);
+	Result<DiscountPackageDetailDTO> get(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
 	
 	/**
 	 * 保存优惠套餐

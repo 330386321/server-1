@@ -1,7 +1,9 @@
 package com.lawu.eshop.mall.srv.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.core.page.Page;
@@ -16,14 +19,18 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.dto.DiscountPackageDetailDTO;
+import com.lawu.eshop.mall.dto.DiscountPackageDetailForMemberDTO;
 import com.lawu.eshop.mall.dto.DiscountPackageQueryDTO;
 import com.lawu.eshop.mall.param.DiscountPackageSaveParam;
 import com.lawu.eshop.mall.param.DiscountPackageUpdateParam;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageQueryForeignParam;
+import com.lawu.eshop.mall.srv.bo.DiscountPackageExtendBO;
+import com.lawu.eshop.mall.srv.bo.DiscountPackagePurchaseNotesBO;
 import com.lawu.eshop.mall.srv.converter.DiscountPackageConverter;
 import com.lawu.eshop.mall.srv.converter.DiscountPackageExtendConverter;
 import com.lawu.eshop.mall.srv.exception.DataNotExistException;
 import com.lawu.eshop.mall.srv.exception.IllegalOperationException;
+import com.lawu.eshop.mall.srv.service.DiscountPackagePurchaseNotesService;
 import com.lawu.eshop.mall.srv.service.DiscountPackageService;
 
 /**
@@ -38,6 +45,9 @@ public class DiscountPackageController extends BaseController {
 	
 	@Autowired
 	private DiscountPackageService discountPackageService;
+	
+	@Autowired
+	private DiscountPackagePurchaseNotesService discountPackagePurchaseNotesService;
 
 	/**
 	 * 根据商家id查询商家的所有优惠套餐<p>
@@ -77,13 +87,47 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
-	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public Result<DiscountPackageDetailDTO> get(@PathVariable("id") Long id) {
-		DiscountPackageDetailDTO discountPackageDetailDTO = DiscountPackageExtendConverter.convert(discountPackageService.get(id));
-		if (discountPackageDetailDTO == null) {
-			return successGet(ResultCode.NOT_FOUND_DATA);
+	@RequestMapping(value = "member/{id}", method = RequestMethod.GET)
+	public Result<DiscountPackageDetailForMemberDTO> getByMember(@PathVariable("id") Long id) {
+		DiscountPackageExtendBO discountPackageExtendBO = null;
+		try{
+			discountPackageExtendBO = discountPackageService.get(id);
+		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		}
-		return successGet(discountPackageDetailDTO);
+		DiscountPackageDetailForMemberDTO rtn = DiscountPackageExtendConverter.convertDiscountPackageDetailForMemberDTO(discountPackageExtendBO);
+		if (StringUtils.isNotBlank(discountPackageExtendBO.getPurchaseNotes())) {
+			List<DiscountPackagePurchaseNotesBO> discountPackagePurchaseNotesBOList = discountPackagePurchaseNotesService.list(discountPackageExtendBO.getPurchaseNotes());
+			rtn.setPurchaseNotes(new ArrayList<>());
+			for (DiscountPackagePurchaseNotesBO item : discountPackagePurchaseNotesBOList) {
+				rtn.getPurchaseNotes().add(item.getNote());
+			}
+		}
+		return successGet(rtn);
+	}
+	
+	/**
+	 * 根据优惠套餐id查询优惠套餐详情
+	 * 
+	 * @param id
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月26日
+	 */
+	@RequestMapping(value = "{id}", method = RequestMethod.GET)
+	public Result<DiscountPackageDetailDTO> get(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId) {
+		DiscountPackageExtendBO discountPackageExtendBO = null;
+		try{
+			discountPackageExtendBO = discountPackageService.get(id, merchantId);
+		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
+			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		}
+		return successGet(DiscountPackageExtendConverter.convert(discountPackageExtendBO));
 	}
 	
 	/**

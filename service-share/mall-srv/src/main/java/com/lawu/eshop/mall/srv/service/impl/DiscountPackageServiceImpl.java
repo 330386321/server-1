@@ -1,5 +1,14 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.mall.constants.DiscountPackageStatusEnum;
 import com.lawu.eshop.mall.constants.StatusEnum;
 import com.lawu.eshop.mall.param.DiscountPackageImageSaveParam;
@@ -10,7 +19,11 @@ import com.lawu.eshop.mall.param.foreign.DiscountPackageQueryForeignParam;
 import com.lawu.eshop.mall.srv.MallSrvConfig;
 import com.lawu.eshop.mall.srv.bo.DiscountPackageBO;
 import com.lawu.eshop.mall.srv.bo.DiscountPackageExtendBO;
-import com.lawu.eshop.mall.srv.converter.*;
+import com.lawu.eshop.mall.srv.converter.DiscountPackageContentConverter;
+import com.lawu.eshop.mall.srv.converter.DiscountPackageConverter;
+import com.lawu.eshop.mall.srv.converter.DiscountPackageExtendConverter;
+import com.lawu.eshop.mall.srv.converter.DiscountPackageImageConverter;
+import com.lawu.eshop.mall.srv.converter.SolrDocumentConverter;
 import com.lawu.eshop.mall.srv.domain.DiscountPackageContentDO;
 import com.lawu.eshop.mall.srv.domain.DiscountPackageDO;
 import com.lawu.eshop.mall.srv.domain.DiscountPackageDOExample;
@@ -24,14 +37,6 @@ import com.lawu.eshop.mall.srv.mapper.DiscountPackageImageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.DiscountPackageExtendDOMapper;
 import com.lawu.eshop.mall.srv.service.DiscountPackageService;
 import com.lawu.eshop.solr.service.SolrService;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 优惠套餐服务接口实现类
@@ -111,9 +116,31 @@ public class DiscountPackageServiceImpl implements DiscountPackageService {
 	 * @date 2017年6月26日
 	 */
 	@Override
+	public DiscountPackageExtendBO get(Long id, Long merchantId) {
+		DiscountPackageExtendDO discountPackageExtendDO = discountPackageExtendDOMapper.selectByPrimaryKey(id);
+		boolean isNotExist = discountPackageExtendDO == null || discountPackageExtendDO.getId() == null || discountPackageExtendDO.getId() <= 0
+				|| DiscountPackageStatusEnum.INVALID.getValue().equals(discountPackageExtendDO.getStatus());
+		if (isNotExist) {
+			throw new DataNotExistException("优惠套餐不存在");
+		}
+		
+		if (merchantId != null && !discountPackageExtendDO.getMerchantId().equals(merchantId)) {
+			throw new IllegalOperationException("非法操作优惠套餐");
+		}
+		return DiscountPackageExtendConverter.convert(discountPackageExtendDO);
+	}
+	
+	/**
+	 * 根据优惠套餐id查询优惠套餐详情
+	 * 
+	 * @param id
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月26日
+	 */
+	@Override
 	public DiscountPackageExtendBO get(Long id) {
-		DiscountPackageExtendBO rtn = DiscountPackageExtendConverter.convert(discountPackageExtendDOMapper.selectByPrimaryKey(id));
-		return rtn;
+		return get(id, null);
 	}
 
 	/**
