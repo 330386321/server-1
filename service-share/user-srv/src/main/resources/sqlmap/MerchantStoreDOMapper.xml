@@ -23,6 +23,7 @@
     <result column="is_no_reason_return" property="isNoReasonReturn" jdbcType="BIT" />
     <result column="favorite_number" property="favoriteNumber" jdbcType="INTEGER" />
     <result column="buy_numbers" property="buyNumbers" jdbcType="INTEGER" />
+    <result column="comments_count" property="commentsCount" jdbcType="INTEGER" />
     <result column="average_consume_amount" property="averageConsumeAmount" jdbcType="DECIMAL" />
     <result column="average_score" property="averageScore" jdbcType="DECIMAL" />
     <result column="feedback_rate" property="feedbackRate" jdbcType="DECIMAL" />
@@ -102,8 +103,8 @@
     -->
     id, merchant_id, name, region_path, region_name, address, longitude, latitude, industry_path, 
     industry_name, intro, status, principal_name, principal_mobile, is_no_reason_return, 
-    favorite_number, buy_numbers, average_consume_amount, average_score, feedback_rate, 
-    gmt_modified, gmt_create
+    favorite_number, buy_numbers, comments_count, average_consume_amount, average_score, 
+    feedback_rate, gmt_modified, gmt_create
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lawu.eshop.user.srv.domain.MerchantStoreDOExample" >
     <!--
@@ -164,17 +165,17 @@
       latitude, industry_path, industry_name, 
       intro, status, principal_name, 
       principal_mobile, is_no_reason_return, favorite_number, 
-      buy_numbers, average_consume_amount, average_score, 
-      feedback_rate, gmt_modified, gmt_create
-      )
+      buy_numbers, comments_count, average_consume_amount, 
+      average_score, feedback_rate, gmt_modified, 
+      gmt_create)
     values (#{merchantId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{regionPath,jdbcType=VARCHAR}, 
       #{regionName,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{longitude,jdbcType=DECIMAL}, 
       #{latitude,jdbcType=DECIMAL}, #{industryPath,jdbcType=VARCHAR}, #{industryName,jdbcType=VARCHAR}, 
       #{intro,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{principalName,jdbcType=VARCHAR}, 
       #{principalMobile,jdbcType=VARCHAR}, #{isNoReasonReturn,jdbcType=BIT}, #{favoriteNumber,jdbcType=INTEGER}, 
-      #{buyNumbers,jdbcType=INTEGER}, #{averageConsumeAmount,jdbcType=DECIMAL}, #{averageScore,jdbcType=DECIMAL}, 
-      #{feedbackRate,jdbcType=DECIMAL}, #{gmtModified,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}
-      )
+      #{buyNumbers,jdbcType=INTEGER}, #{commentsCount,jdbcType=INTEGER}, #{averageConsumeAmount,jdbcType=DECIMAL}, 
+      #{averageScore,jdbcType=DECIMAL}, #{feedbackRate,jdbcType=DECIMAL}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{gmtCreate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.user.srv.domain.MerchantStoreDO" >
     <!--
@@ -233,6 +234,9 @@
       </if>
       <if test="buyNumbers != null" >
         buy_numbers,
+      </if>
+      <if test="commentsCount != null" >
+        comments_count,
       </if>
       <if test="averageConsumeAmount != null" >
         average_consume_amount,
@@ -298,6 +302,9 @@
       </if>
       <if test="buyNumbers != null" >
         #{buyNumbers,jdbcType=INTEGER},
+      </if>
+      <if test="commentsCount != null" >
+        #{commentsCount,jdbcType=INTEGER},
       </if>
       <if test="averageConsumeAmount != null" >
         #{averageConsumeAmount,jdbcType=DECIMAL},
@@ -384,6 +391,9 @@
       <if test="record.buyNumbers != null" >
         buy_numbers = #{record.buyNumbers,jdbcType=INTEGER},
       </if>
+      <if test="record.commentsCount != null" >
+        comments_count = #{record.commentsCount,jdbcType=INTEGER},
+      </if>
       <if test="record.averageConsumeAmount != null" >
         average_consume_amount = #{record.averageConsumeAmount,jdbcType=DECIMAL},
       </if>
@@ -427,6 +437,7 @@
       is_no_reason_return = #{record.isNoReasonReturn,jdbcType=BIT},
       favorite_number = #{record.favoriteNumber,jdbcType=INTEGER},
       buy_numbers = #{record.buyNumbers,jdbcType=INTEGER},
+      comments_count = #{record.commentsCount,jdbcType=INTEGER},
       average_consume_amount = #{record.averageConsumeAmount,jdbcType=DECIMAL},
       average_score = #{record.averageScore,jdbcType=DECIMAL},
       feedback_rate = #{record.feedbackRate,jdbcType=DECIMAL},
@@ -491,6 +502,9 @@
       <if test="buyNumbers != null" >
         buy_numbers = #{buyNumbers,jdbcType=INTEGER},
       </if>
+      <if test="commentsCount != null" >
+        comments_count = #{commentsCount,jdbcType=INTEGER},
+      </if>
       <if test="averageConsumeAmount != null" >
         average_consume_amount = #{averageConsumeAmount,jdbcType=DECIMAL},
       </if>
@@ -531,6 +545,7 @@
       is_no_reason_return = #{isNoReasonReturn,jdbcType=BIT},
       favorite_number = #{favoriteNumber,jdbcType=INTEGER},
       buy_numbers = #{buyNumbers,jdbcType=INTEGER},
+      comments_count = #{commentsCount,jdbcType=INTEGER},
       average_consume_amount = #{averageConsumeAmount,jdbcType=DECIMAL},
       average_score = #{averageScore,jdbcType=DECIMAL},
       feedback_rate = #{feedbackRate,jdbcType=DECIMAL},

@@ -1306,6 +1306,66 @@ public class MerchantStoreDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andCommentsCountIsNull() {
+            addCriterion("comments_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentsCountIsNotNull() {
+            addCriterion("comments_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentsCountEqualTo(Integer value) {
+            addCriterion("comments_count =", value, "commentsCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentsCountNotEqualTo(Integer value) {
+            addCriterion("comments_count <>", value, "commentsCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentsCountGreaterThan(Integer value) {
+            addCriterion("comments_count >", value, "commentsCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentsCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("comments_count >=", value, "commentsCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentsCountLessThan(Integer value) {
+            addCriterion("comments_count <", value, "commentsCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentsCountLessThanOrEqualTo(Integer value) {
+            addCriterion("comments_count <=", value, "commentsCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentsCountIn(List<Integer> values) {
+            addCriterion("comments_count in", values, "commentsCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentsCountNotIn(List<Integer> values) {
+            addCriterion("comments_count not in", values, "commentsCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentsCountBetween(Integer value1, Integer value2) {
+            addCriterion("comments_count between", value1, value2, "commentsCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommentsCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("comments_count not between", value1, value2, "commentsCount");
+            return (Criteria) this;
+        }
+
         public Criteria andAverageConsumeAmountIsNull() {
             addCriterion("average_consume_amount is null");
             return (Criteria) this;
