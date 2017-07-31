@@ -32,7 +32,7 @@ public class BalancePayDataParam extends BalancePayParam{
 	
 	@NotBlank(message = "totalAmount不能为空")
 	@Pattern(regexp = "^\\d{1,9}(\\.\\d{1,2})?$", message = "金额错误(要求最大8位整数且保留2位小数)")
-	@Max(value=10000000,message="金额错误(要求不能超过10000000)")
+	@Max(value=10000000,message="金额错误(要求不能超过10000000元)")
 	private String totalAmount;
 	
 	//订单号
