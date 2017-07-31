@@ -340,7 +340,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	ShoppingRefundProcessDO shoppingRefundProcessDO = shoppingRefundProcessDOMapper.selectByExample(shoppingRefundProcessDOExample).get(0);
     	Assert.assertNotNull(shoppingRefundProcessDO);
     	Assert.assertNotNull(shoppingRefundProcessDO.getGmtCreate());
-    	Assert.assertEquals(shoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getId());
+    	Assert.assertEquals(shoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getShoppingRefundDetailId());
     	Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), shoppingRefundProcessDO.getRefundStatus());
     }
     
@@ -587,7 +587,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	ShoppingRefundProcessDO shoppingRefundProcessDO = shoppingRefundProcessDOMapper.selectByExample(shoppingRefundProcessDOExample).get(0);
     	Assert.assertNotNull(shoppingRefundProcessDO);
     	Assert.assertNotNull(shoppingRefundProcessDO.getGmtCreate());
-    	Assert.assertEquals(shoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getId());
+    	Assert.assertEquals(shoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getShoppingRefundDetailId());
     	Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), shoppingRefundProcessDO.getRefundStatus());
     }
     
@@ -1388,7 +1388,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	ShoppingRefundProcessDO shoppingRefundProcessDO = shoppingRefundProcessDOMapper.selectByExample(shoppingRefundProcessDOExample).get(0);
     	Assert.assertNotNull(shoppingRefundProcessDO);
     	Assert.assertNotNull(shoppingRefundProcessDO.getGmtCreate());
-    	Assert.assertEquals(shoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getId());
+    	Assert.assertEquals(shoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getShoppingRefundDetailId());
     	Assert.assertEquals(RefundStatusEnum.PLATFORM_INTERVENTION.getValue(), shoppingRefundProcessDO.getRefundStatus());
     }
     
