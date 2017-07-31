@@ -30,6 +30,6 @@ public interface WorkOrderService {
 	 * @param workOrderQuery
 	 * @return
 	 */
-	@RequestMapping(value = "workOrder/selectWorkOrder", method = RequestMethod.GET)
+	@RequestMapping(value = "workOrder/selectWorkOrder", method = RequestMethod.POST)
 	Result<Page<WorkOrderDTO>> selectWorkOrder(@RequestBody WorkOrderQuery workOrderQuery);
 }

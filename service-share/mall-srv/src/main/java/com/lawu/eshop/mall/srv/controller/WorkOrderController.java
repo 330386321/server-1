@@ -63,7 +63,7 @@ public class WorkOrderController extends BaseController {
      * @param workOrderQuery
      * @return
      */
-    @RequestMapping(value = "selectWorkOrder", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.POST, value = "selectWorkOrder")
     public Result<Page<WorkOrderDTO>> selectWorkOrder(@RequestBody WorkOrderQuery workOrderQuery) {
     	Page<WorkOrderBO> page = workOrderService.selectWorkOrder(workOrderQuery);
     	List<WorkOrderDTO> list = WorkOrderConverter.convertBoToDto(page.getRecords());

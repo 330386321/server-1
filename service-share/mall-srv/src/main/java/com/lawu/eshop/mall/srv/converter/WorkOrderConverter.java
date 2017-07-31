@@ -58,14 +58,14 @@ public class WorkOrderConverter {
 	
 	@SuppressWarnings("null")
 	public static List<WorkOrderDTO> convertBoToDto(List<WorkOrderBO> list) {
-		List<WorkOrderDTO> result = null;
+		List<WorkOrderDTO> result = new ArrayList<WorkOrderDTO>();
 		if(list == null || list.isEmpty())
 			return result;
 		for(WorkOrderBO workOrderBO : list) {
 			WorkOrderDTO dto = new WorkOrderDTO();
 			dto.setAccount(workOrderBO.getAccount());
 			dto.setContent(workOrderBO.getContent());
-			dto.setGmtCreat(workOrderBO.getGmtCreat());
+			dto.setGmtCreate(workOrderBO.getGmtCreat());
 			dto.setGmtDeal(workOrderBO.getGmtDeal());
 			dto.setId(workOrderBO.getId());
 			dto.setName(workOrderBO.getName());

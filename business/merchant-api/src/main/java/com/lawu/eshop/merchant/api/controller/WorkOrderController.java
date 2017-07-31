@@ -13,6 +13,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.WorkOrderService;
+import com.lawu.eshop.mall.constants.WorkOrderTypeEnum;
 import com.lawu.eshop.mall.param.WorkOrderParam;
 
 import io.swagger.annotations.Api;
@@ -35,8 +36,9 @@ public class WorkOrderController extends BaseController{
 	@ApiOperation(value = "商家提交工单", notes = "商家提交工单,[]（洪钦明）", httpMethod = "POST")
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-	@RequestMapping(value = "saveOrder", method = RequestMethod.POST)
-	public Result saveOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute WorkOrderParam workOrderParam) {
+	@RequestMapping(value = "saveWorkOrder", method = RequestMethod.POST)
+	public Result saveWorkOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute WorkOrderParam workOrderParam) {
+		workOrderParam.setWorkOrderTypeEnum(WorkOrderTypeEnum.MERCHANT);
 		return workOrderService.saveWorkOrder(workOrderParam);
 	}
 }
