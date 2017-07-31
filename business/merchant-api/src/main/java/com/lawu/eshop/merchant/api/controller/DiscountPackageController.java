@@ -274,6 +274,7 @@ public class DiscountPackageController extends BaseController {
 		discountPackageUpdateParam.setUseTimeWeek(discountPackageUpdateForeignParam.getUseTimeWeek());
 		discountPackageUpdateParam.setValidityPeriodBegin(discountPackageUpdateForeignParam.getValidityPeriodBegin());
 		discountPackageUpdateParam.setValidityPeriodEnd(discountPackageUpdateForeignParam.getValidityPeriodEnd());
+		discountPackageUpdateParam.setStatus(discountPackageUpdateForeignParam.getStatus());
 		String discountPackageContentsStr = null;
 		String discountPackageImagesStr = null;
 		try {
@@ -334,9 +335,10 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Deprecated
 	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "上架优惠套餐", notes = "上架优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "PUT")
+	@ApiOperation(value = "上架优惠套餐[Deprecated]", notes = "上架优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "up/{id}", method = RequestMethod.PUT)
@@ -355,9 +357,10 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Deprecated
 	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "下架优惠套餐", notes = "下架优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "PUT")
+	@ApiOperation(value = "下架优惠套餐[Deprecated]", notes = "下架优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "down/{id}", method = RequestMethod.PUT)

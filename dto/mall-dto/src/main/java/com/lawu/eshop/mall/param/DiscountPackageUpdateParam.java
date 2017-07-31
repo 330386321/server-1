@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.mall.constants.DiscountPackageUpdateStatusEnum;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageContentUpdateForeignParam;
 
 public class DiscountPackageUpdateParam {
@@ -77,6 +78,11 @@ public class DiscountPackageUpdateParam {
 	 * 套餐图片详情
 	 */
 	private List<DiscountPackageImageUpdateParam> discountPackageImages;
+	
+    /**
+    * 状态
+    */
+    private DiscountPackageUpdateStatusEnum status;
 	
 	public String getName() {
 		return name;
@@ -180,6 +186,14 @@ public class DiscountPackageUpdateParam {
 
 	public void setDiscountPackageImages(List<DiscountPackageImageUpdateParam> discountPackageImages) {
 		this.discountPackageImages = discountPackageImages;
+	}
+
+	public DiscountPackageUpdateStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(DiscountPackageUpdateStatusEnum status) {
+		this.status = status;
 	}
 	
 }
