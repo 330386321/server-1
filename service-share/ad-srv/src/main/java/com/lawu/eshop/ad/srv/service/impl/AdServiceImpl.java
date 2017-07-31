@@ -24,6 +24,7 @@ import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PropertyType;
+import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.constants.RedPacketArithmetic;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
@@ -300,8 +301,10 @@ public class AdServiceImpl implements AdService {
 		 int count=adDOMapper.countByExample(example);
 		 List<AdDO> DOS=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		 for (AdDO adDO : DOS) {
-			if(adDO.getType()==AdTypeEnum.AD_TYPE_PACKET.val){
-				adDO.setMediaUrl(adSrvConfig.getAdDefaultMediaUrl());
+			if(adDO.getType()==AdTypeEnum.AD_TYPE_PACKET.val && adDO.getPutWay()==PutWayEnum.PUT_WAY_COMMON.val){
+				adDO.setMediaUrl(adSrvConfig.getRedPacketCommonMediaUrl());
+			}else if(adDO.getType()==AdTypeEnum.AD_TYPE_PACKET.val && adDO.getPutWay()==PutWayEnum.PUT_WAY_LUCK.val){
+				adDO.setMediaUrl(adSrvConfig.getRedPacketLuckMediaUrl());
 			}
 		 }
 		 Page<AdBO> page=new Page<AdBO>();
@@ -979,7 +982,11 @@ public class AdServiceImpl implements AdService {
 				detail.setNotGetCount(adDO.getAdCount()-ppList.size());
 				detail.setAlreadyGetPoint(sumPoint);
 				detail.setNotGetPoint(adDO.getTotalPoint().subtract(sumPoint));
-				detail.setMediaUrl(adSrvConfig.getAdDefaultMediaUrl());
+				if(adDO.getPutWay()==PutWayEnum.PUT_WAY_COMMON.val){
+					detail.setMediaUrl(adSrvConfig.getRedPacketCommonMediaUrl());
+				}else if(adDO.getPutWay()==PutWayEnum.PUT_WAY_LUCK.val){
+					detail.setMediaUrl(adSrvConfig.getRedPacketLuckMediaUrl());
+				}
 			}
 			
 		}

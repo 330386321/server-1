@@ -19,8 +19,11 @@ public class AdSrvConfig {
     @Value(value = "${is_cloud_solr}")
     private Boolean isCloudSolr;
     
-    @Value(value = "${image.ad_default_mediaUrl}")
-    private String adDefaultMediaUrl;
+    @Value(value = "${image.red_packet_common}")
+    private String redPacketCommonMediaUrl;
+    
+    @Value(value = "${image.red_packet_luck}")
+    private String redPacketLuckMediaUrl;
 
     public String getSolrUrl() {
         return solrUrl;
@@ -34,13 +37,15 @@ public class AdSrvConfig {
         return isCloudSolr;
     }
 
-	public String getAdDefaultMediaUrl() {
-		return adDefaultMediaUrl;
+	public String getRedPacketCommonMediaUrl() {
+		return redPacketCommonMediaUrl;
 	}
 
-	public void setAdDefaultMediaUrl(String adDefaultMediaUrl) {
-		this.adDefaultMediaUrl = adDefaultMediaUrl;
+	public String getRedPacketLuckMediaUrl() {
+		return redPacketLuckMediaUrl;
 	}
+
+	
     
     
 }
