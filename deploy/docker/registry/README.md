@@ -37,7 +37,7 @@ sudo systemctl restart docker
 sudo docker run -d -p 443:5000 --restart=always --name registry \
 -v /etc/localtime:/etc/localtime:ro \
 -v ~/certs:/certs \
--v ~/docker-image:/opt/docker-image \
+-v ~/docker-image:/var/lib/registry/docker/registry/v2/repositories \
 -e STORAGE_PATH=/opt/docker-image \
 -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.eshop.com.crt \
 -e REGISTRY_HTTP_TLS_KEY=/certs/registry.eshop.com.key \
