@@ -88,8 +88,8 @@ public class WxPayController extends BaseController {
 		packageParams.put("body", param.getThirdPayBodyEnum().val);
 		packageParams.put("out_trade_no", param.getOutTradeNo());
 		String totalFee = new BigDecimal(param.getTotalAmount()).multiply(new BigDecimal("100")).toString();
-		if(totalFee.endsWith(".00")){
-			totalFee = totalFee.substring(0,totalFee.length()-3);
+		if(totalFee.indexOf('.') > 0){
+			totalFee = totalFee.substring(0,totalFee.indexOf('.'));
 		}
 		packageParams.put("total_fee", totalFee);
 		packageParams.put("spbill_create_ip", propertySrvConfig.getWxpayIp());
