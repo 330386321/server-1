@@ -15,6 +15,8 @@ import java.util.Map;
 public interface MerchantStoreDOMapperExtend {
     Integer  addMerchantStoreBuyNums(Long merchantId);
 
+    Integer  addMerchantStoreCommentsCount(Long merchantId);
+
     List<MerchantPushView> selectPushInfo(@Param("area") String area);
 
     List<MerchantStoreDO> listMerchantStore(ListMerchantStoreParam listMerchantStoreParam);

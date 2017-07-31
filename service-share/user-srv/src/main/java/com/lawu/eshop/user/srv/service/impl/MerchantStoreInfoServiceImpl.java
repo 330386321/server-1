@@ -569,6 +569,12 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
 	@Override
 	@Transactional
+	public void addMerchantStoreCommentsCount(Long merchantId) {
+		merchantStoreDOMapperExtend.addMerchantStoreCommentsCount(merchantId);
+	}
+
+	@Override
+	@Transactional
 	public void updateMerchantStoreStatus(Long merchantId, Byte status) {
 		MerchantStoreDOExample example = new MerchantStoreDOExample();
 		example.createCriteria().andMerchantIdEqualTo(merchantId);

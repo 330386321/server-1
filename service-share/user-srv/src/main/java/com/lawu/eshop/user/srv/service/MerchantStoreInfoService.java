@@ -90,6 +90,14 @@ public interface MerchantStoreInfoService {
     void addMerchantStoreBuyNums(Long merchantId);
 
     /**
+     * 增加门店评论人数
+     *
+     * @param merchantId
+     * @author meishuquan
+     */
+    void addMerchantStoreCommentsCount(Long merchantId);
+
+    /**
      * 根据商家Id修改门店状态
      *
      * @param merchantId

@@ -12,6 +12,13 @@
 	merchant_id = #{merchantId}
     </update>
 
+    <update id="addMerchantStoreCommentsCount" parameterType="java.lang.Long">
+        UPDATE merchant_store
+        SET comments_count = comments_count + 1
+        WHERE
+        merchant_id = #{merchantId}
+    </update>
+
     <select id="selectPushInfo" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT
         m.num,

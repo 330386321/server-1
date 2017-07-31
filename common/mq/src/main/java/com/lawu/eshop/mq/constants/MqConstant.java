@@ -87,6 +87,11 @@ public class MqConstant {
      * 买单更改状态发布MQ增加买单笔数
      */
     public static final String TAG_BUY_NUMBERS = "buy_numbers";
+
+    /**
+     * 更改评论状态发布MQ增加评论人数
+     */
+    public static final String TAG_COMMENTS_COUNT = "comments_count";
     
     /**
      * 创建购物订单时发布的MQ消息

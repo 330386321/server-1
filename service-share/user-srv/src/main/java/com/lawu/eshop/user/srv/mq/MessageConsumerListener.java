@@ -64,6 +64,10 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
                 fansMerchantService.saveFansMerchant(fansInfo.getMerchantId(),fansInfo.getMemberId(), FansMerchantChannelEnum.PAY);
             }
 
+        }else if(MqConstant.TOPIC_ORDER_SRV.equals(topic) && MqConstant.TAG_COMMENTS_COUNT.equals(tags)){
+            //增加评论人数
+            Long merchantId = (Long) message;
+            merchantStoreInfoService.addMerchantStoreCommentsCount(merchantId);
         }else if (MqConstant.TOPIC_MALL_SRV.equals(topic) && MqConstant.TAG_GTPUSH.equals(tags)){
             //发送推送消息
             MessagePushInfo info = (MessagePushInfo) message;
