@@ -13,6 +13,7 @@ import com.lawu.eshop.mall.dto.RegionDTO;
 import com.lawu.eshop.user.dto.NewMerchantStoreDTO;
 import com.lawu.eshop.user.dto.RecommendFoodDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import java.util.List;
  * @author meishuquan
  * @date 2017/7/27.
  */
+@Service
 public class RecommendStoreServiceImpl implements RecommendStoreService {
 
     @Autowired
