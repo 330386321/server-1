@@ -116,7 +116,7 @@ public class ShoppingRefundAgreeToRefundTransactionMainServiceImplTest {
 		Assert.assertNotNull(transactionRecordDO.getId());
 		Assert.assertNotNull(transactionRecordDO.getType());
 		Assert.assertEquals(false, transactionRecordDO.getIsProcessed());
-		Assert.assertEquals(expected.getId(), transactionRecordDO.getRelateId());
+		Assert.assertEquals(shoppingOrderItemDO.getId(), transactionRecordDO.getRelateId());
 		Assert.assertEquals(0L, transactionRecordDO.getTimes().longValue());
 		
 		// 接收回复消息
@@ -129,7 +129,7 @@ public class ShoppingRefundAgreeToRefundTransactionMainServiceImplTest {
 		Assert.assertEquals(true, transactionRecordDO.getIsProcessed());
 		
 		// 第二次发送消息
-		shoppingRefundAgreeToRefundTransactionMainServiceImpl.sendNotice(expected.getId());
+		shoppingRefundAgreeToRefundTransactionMainServiceImpl.sendNotice(shoppingOrderItemDO.getId());
 		// 校验第二次发送消息是否正常
     	transactionRecordDO = transactionRecordDOMapper.selectByPrimaryKey(transactionRecordDO.getId());
     	Assert.assertNotNull(transactionRecordDO);

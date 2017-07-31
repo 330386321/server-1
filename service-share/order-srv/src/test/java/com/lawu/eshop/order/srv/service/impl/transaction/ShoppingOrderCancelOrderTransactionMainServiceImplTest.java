@@ -113,7 +113,7 @@ public class ShoppingOrderCancelOrderTransactionMainServiceImplTest {
 		Assert.assertNotNull(transactionRecordDO.getId());
 		Assert.assertNotNull(transactionRecordDO.getType());
 		Assert.assertEquals(false, transactionRecordDO.getIsProcessed());
-		Assert.assertEquals(shoppingOrderItemDO.getId(), transactionRecordDO.getRelateId());
+		Assert.assertEquals(expected.getId(), transactionRecordDO.getRelateId());
 		Assert.assertEquals(0L, transactionRecordDO.getTimes().longValue());
 		// 接收回复消息
 		Reply reply = new Reply();
@@ -123,7 +123,7 @@ public class ShoppingOrderCancelOrderTransactionMainServiceImplTest {
 		transactionRecordDO = transactionRecordDOMapper.selectByPrimaryKey(transactionRecordDO.getId());
 		Assert.assertEquals(true, transactionRecordDO.getIsProcessed());
 		// 第二次发送消息
-		shoppingOrderCancelOrderTransactionMainServiceImpl.sendNotice(shoppingOrderItemDO.getId());
+		shoppingOrderCancelOrderTransactionMainServiceImpl.sendNotice(expected.getId());
 		// 校验第二次发送消息是否正常
     	transactionRecordDO = transactionRecordDOMapper.selectByPrimaryKey(transactionRecordDO.getId());
 		Assert.assertEquals(false, transactionRecordDO.getIsProcessed());
