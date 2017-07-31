@@ -183,12 +183,12 @@ public class BankAccountServiceImplTest {
         BankAccountParam bankAccountParam = new BankAccountParam();
         bankAccountParam.setAccountName("习大大");
         bankAccountParam.setAccountNumber("6217852000014838927");
-        bankAccountParam.setBankId(1);
+        bankAccountParam.setBankId(bdo.getId());
         bankAccountParam.setSubBranchName("南山支行");
         bankAccountService.saveBankAccount("10001",bankAccountParam);
 
         bankAccountParam = new BankAccountParam();
-        bankAccountParam.setBankId(1);
+        bankAccountParam.setBankId(bdo.getId());
         bankAccountParam.setSubBranchName("罗湖支行");
         bankAccountParam.setAccountNumber("6212264000054195975");
         bankAccountParam.setAccountName("彭丽媛");
