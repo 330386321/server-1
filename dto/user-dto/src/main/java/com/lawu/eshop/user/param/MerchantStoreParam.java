@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
+ *
  * Created by zhangyong on 2017/3/27.
  */
 public class MerchantStoreParam {
@@ -35,19 +36,19 @@ public class MerchantStoreParam {
     /**
      * 店铺地址信息
      */
-    @ApiParam(name = "address", value = "店铺地址信息",required = true)
+    @ApiParam(name = "address", value = "店铺地址信息")
     private String address;
 
     /**
      * 经度
      */
-    @ApiParam(name = "longitude", value = "经度",required = true)
+    @ApiParam(name = "longitude", value = "经度")
     private BigDecimal longitude;
 
     /**
      * 纬度
      */
-    @ApiParam(name = "latitude", value = "纬度",required = true)
+    @ApiParam(name = "latitude", value = "纬度")
     private BigDecimal latitude;
 
     /**
@@ -83,7 +84,7 @@ public class MerchantStoreParam {
     /**
      * 注册公司名称
      */
-    @ApiParam(name = "companyName", value = "注册公司名称",required = true)
+    @ApiParam(name = "companyName", value = "注册公司名称")
     private String companyName;
 
     /**
