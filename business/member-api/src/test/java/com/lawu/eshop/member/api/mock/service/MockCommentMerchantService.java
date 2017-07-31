@@ -95,6 +95,6 @@ public class MockCommentMerchantService extends BaseController implements Commen
 
     @Override
     public Byte getGradeByOrderId(@RequestParam("id") Long id, @RequestParam("memberId") Long memberId) {
-        return null;
+        return new Byte("0");
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -83,7 +84,13 @@ public class MockMerchantStoreService extends BaseController implements Merchant
 
     @Override
     public Result<List<PayOrderStoreInfoDTO>> getPayOrderStoreInfo(@RequestParam("merchantIds") List<Long> merchantIds) {
-        return null;
+        PayOrderStoreInfoDTO dto = new PayOrderStoreInfoDTO();
+        dto.setMerchantId(1L);
+        dto.setName("name");
+        dto.setStoreUrl("1.jpg");
+        List<PayOrderStoreInfoDTO> list = new ArrayList<>();
+        list.add(dto);
+        return successCreated(list);
     }
 
     @Override
@@ -124,6 +131,8 @@ public class MockMerchantStoreService extends BaseController implements Merchant
 
     @Override
     public PayOrderMerchantStoreInfoDTO getPayOrderDetailStoreInfo(@RequestParam("merchantId") Long merchantId) {
-        return null;
+        PayOrderMerchantStoreInfoDTO dto = new PayOrderMerchantStoreInfoDTO();
+        dto.setName("name");
+        return dto;
     }
 }

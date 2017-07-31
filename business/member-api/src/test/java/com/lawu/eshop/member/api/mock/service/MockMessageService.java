@@ -17,7 +17,7 @@ class MockMessageService extends BaseController implements MessageService {
 
     @Override
     public Result<MessageStatisticsDTO> getMessageStatistics(@PathVariable("userNum") String userNum) {
-        return null;
+        return successCreated();
     }
 
     @Override

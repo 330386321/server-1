@@ -34,6 +34,17 @@ public class MockMerchantFavoredService extends BaseController implements Mercha
 
     @Override
     public Result<MerchantFavoredDTO> findFavoredById(@PathVariable("id") Long id) {
-        return null;
+        MerchantFavoredDTO dto = new MerchantFavoredDTO();
+        dto.setReachAmount(new BigDecimal("10"));
+        dto.setFavoredAmount(new BigDecimal("10"));
+        dto.setDiscountRate(new BigDecimal("1"));
+        dto.setId(1L);
+        dto.setValidDayBeginTime("2017");
+        dto.setValidDayEndTime("1");
+        dto.setValidWeekTime("2");
+        dto.setEntireBeginTime(new Date());
+        dto.setEntireEndTime(new Date());
+        dto.setTypeEnum(MerchantFavoredTypeEnum.TYPE_DISCOUNT);
+        return successCreated(dto);
     }
 }
