@@ -8,6 +8,7 @@ import com.lawu.eshop.mall.constants.CommentTypeEnum;
 import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentMerchantParam;
+import com.lawu.eshop.mall.param.PayOrderAutoCommentParam;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentMerchantBO;
 import com.lawu.eshop.mall.srv.domain.CommentImageDO;
@@ -311,6 +312,22 @@ public class CommentMerchantServiceImplTest {
         Assert.assertNotNull(grade);
         Assert.assertEquals(CommentGradeEnum.COMMENT_STAR_LEVEL_FIVE.val,grade);
 
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void payOrderAutoComment(){
+        PayOrderAutoCommentParam param = new PayOrderAutoCommentParam();
+        param.setPayOrderId(1L);
+        param.setAvgSpend(BigDecimal.TEN);
+        param.setMerchantId(1L);
+        param.setMemberId(1L);
+        commentMerchantService.payOrderAutoComment(param);
+        List<CommentMerchantDO> list = commentMerchantDOMapper.selectByExample(null);
+        Assert.assertNotNull(list);
+        Assert.assertTrue(list.size() == 1);
+        Assert.assertTrue(list.get(0).getGrade() == CommentGradeEnum.COMMENT_STAR_LEVEL_FOUR.val);
     }
 
 }

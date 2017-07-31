@@ -8,6 +8,7 @@ import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentMerchantParam;
+import com.lawu.eshop.mall.param.PayOrderAutoCommentParam;
 import com.lawu.eshop.mall.srv.domain.CommentMerchantDO;
 import com.lawu.eshop.mall.srv.mapper.CommentMerchantDOMapper;
 import com.lawu.eshop.mall.srv.service.MallSrvApplicationTest;
@@ -284,5 +285,25 @@ public class CommentMerchantControllerTest {
         }
     }
 
+    @Transactional
+    @Rollback
+    @Test
+    public void payOrderAutoComment(){
+        PayOrderAutoCommentParam param = new PayOrderAutoCommentParam();
+        param.setPayOrderId(1L);
+        param.setAvgSpend(BigDecimal.TEN);
+        param.setMerchantId(1L);
+        param.setMemberId(1L);
+        String requestJson = JSONObject.toJSONString(param);
+        RequestBuilder request = post("/commentMerchant/payOrderAutoComment")
+                .contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        ResultActions perform = null;
+        try {
+            perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
