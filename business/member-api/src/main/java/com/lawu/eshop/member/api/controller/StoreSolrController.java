@@ -13,7 +13,9 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.*;
 import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.DiscountStoreParam;
+import com.lawu.eshop.user.param.RecommendFoodParam;
 import com.lawu.eshop.user.param.StoreSolrParam;
+import com.lawu.eshop.utils.DistanceUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -153,17 +155,25 @@ public class StoreSolrController extends BaseController {
     @ApiOperation(value = "优选美食", notes = "优选美食(人气最高和评分最高各5个)。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listRecommendFood", method = RequestMethod.GET)
-    public Result<RecommendFoodStoreDTO> listRecommendFood(@RequestParam @ApiParam(name = "regionPath", required = true, value = "区域路径") String regionPath) {
+    public Result<RecommendFoodStoreDTO> listRecommendFood(@ModelAttribute @ApiParam RecommendFoodParam recommendFoodParam) {
         RecommendFoodStoreDTO storeDTO = new RecommendFoodStoreDTO();
         List<RecommendFoodDTO> consumeDTOS = new ArrayList<>();
         List<RecommendFoodDTO> commentDTOS = new ArrayList<>();
-        Result<String> consumeResult = recommendStoreCacheService.getRecommendFoodConsume(regionPath);
-        Result<String> commentResult = recommendStoreCacheService.getRecommendFoodComment(regionPath);
+        Result<String> consumeResult = recommendStoreCacheService.getRecommendFoodConsume(recommendFoodParam.getRegionPath());
+        Result<String> commentResult = recommendStoreCacheService.getRecommendFoodComment(recommendFoodParam.getRegionPath());
         if (!StringUtils.isEmpty(consumeResult.getModel())) {
             consumeDTOS = JSON.parseArray(consumeResult.getModel(), RecommendFoodDTO.class);
+            for (RecommendFoodDTO foodDTO : consumeDTOS) {
+                double distance = DistanceUtil.getDistance(recommendFoodParam.getLongitude().doubleValue(), recommendFoodParam.getLatitude().doubleValue(), foodDTO.getLongitude().doubleValue(), foodDTO.getLatitude().doubleValue());
+                foodDTO.setDistance(distance);
+            }
         }
         if (StringUtils.isEmpty(commentResult.getModel())) {
             commentDTOS = JSON.parseArray(commentResult.getModel(), RecommendFoodDTO.class);
+            for (RecommendFoodDTO foodDTO : commentDTOS) {
+                double distance = DistanceUtil.getDistance(recommendFoodParam.getLongitude().doubleValue(), recommendFoodParam.getLatitude().doubleValue(), foodDTO.getLongitude().doubleValue(), foodDTO.getLatitude().doubleValue());
+                foodDTO.setDistance(distance);
+            }
         }
         storeDTO.setRecommendConsume(consumeDTOS);
         storeDTO.setRecommendComment(commentDTOS);
