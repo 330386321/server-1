@@ -161,7 +161,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		} else {
 			merchantStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
 		}
-		merchantStoreDOMapper.insert(merchantStoreDO);
+		merchantStoreDOMapper.insertSelective(merchantStoreDO);
 
 		// 新增商家店铺扩展信息
 		MerchantStoreProfileDO merchantStoreProfileDO = (MerchantStoreProfileDO) MerchantStoreConverter.couverDOByParam(merchantStoreParam, 2);
@@ -174,7 +174,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		merchantStoreProfileDO.setGmtCreate(new Date());
 		merchantStoreProfileDO.setGmtModified(new Date());
 
-		merchantStoreProfileDOMapper.insert(merchantStoreProfileDO);
+		merchantStoreProfileDOMapper.insertSelective(merchantStoreProfileDO);
 
 		MerchantStoreImageDO merchantStoreImageDO = new MerchantStoreImageDO();
 		merchantStoreImageDO.setMerchantId(merchantId);
