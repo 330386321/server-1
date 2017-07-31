@@ -340,6 +340,7 @@ public class AdController extends BaseController {
     	adParam.setPutWayEnum(adAgainParam.getPutWayEnum());
     	adParam.setRadius(adAgainParam.getRadius());
     	adParam.setTypeEnum(result.getModel().getTypeEnum());
+    	adParam.setRegionName(adAgainParam.getRegionName());
     	adSave.setAdParam(adParam);
     	adSave.setLatitude(storeDTO.getLatitude());
     	adSave.setLongitude(storeDTO.getLongitude());
