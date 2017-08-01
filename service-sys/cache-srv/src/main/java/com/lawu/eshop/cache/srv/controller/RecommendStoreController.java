@@ -27,7 +27,7 @@ public class RecommendStoreController extends BaseController {
     @RequestMapping(value = "saveNewMerchant", method = RequestMethod.POST)
     public Result saveNewMerchant(@RequestParam String regionPath, @RequestParam String storeInfo) {
         recommendStoreService.setNewMerchant(regionPath, storeInfo);
-        return successGet();
+        return successCreated();
     }
 
     /**
@@ -40,7 +40,7 @@ public class RecommendStoreController extends BaseController {
     @RequestMapping(value = "saveRecommendFoodConsume", method = RequestMethod.POST)
     public Result saveRecommendFoodConsume(@RequestParam String regionPath, @RequestParam String storeInfo) {
         recommendStoreService.setRecommendFoodConsume(regionPath, storeInfo);
-        return successGet();
+        return successCreated();
     }
 
     /**
@@ -53,7 +53,7 @@ public class RecommendStoreController extends BaseController {
     @RequestMapping(value = "saveRecommendFoodComment", method = RequestMethod.POST)
     public Result saveRecommendFoodComment(@RequestParam String regionPath, @RequestParam String storeInfo) {
         recommendStoreService.setRecommendFoodComment(regionPath, storeInfo);
-        return successGet();
+        return successCreated();
     }
 
     /**
