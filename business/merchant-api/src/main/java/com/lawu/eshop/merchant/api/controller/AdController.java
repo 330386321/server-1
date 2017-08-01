@@ -117,12 +117,18 @@ public class AdController extends BaseController {
     		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
     		if(!"".equals(retMap.get("videoUrl"))){
             	mediaUrl = retMap.get("videoUrl");
-            	//截取视频图片
-            	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
-            	
+            }
+    		Map<String, String> retVideoMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
+            if(!"".equals(retVideoMap.get("imgUrl"))){
+            	videoImgUrl = retVideoMap.get("imgUrl");
+            }
+            if(StringUtils.isEmpty(videoImgUrl) || videoImgUrl == ""){ //商家没有上传图片，系统默认自动截取一张
             	String ffmpegUrl=merchantApiConfig.getFfmpegUrl();  //ffmpeg安装路径
+            	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
+            	//截取视频图片
             	videoImgUrl=VideoCutImgUtil.processImg(veido_path,FileDirConstant.DIR_AD_VIDEO_IMAGE, merchantApiConfig.getImageUploadUrl(),ffmpegUrl);
             }
+            
     	}
     	Integer count=0;
     	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==1){
@@ -337,10 +343,15 @@ public class AdController extends BaseController {
     		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
     		if(!"".equals(retMap.get("videoUrl"))){
             	mediaUrl = retMap.get("videoUrl");
-            	//截取视频图片
-            	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
-
+            }
+    		Map<String, String> retVideoMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
+            if(!"".equals(retVideoMap.get("imgUrl"))){
+            	videoImgUrl = retVideoMap.get("imgUrl");
+            }
+            if(StringUtils.isEmpty(videoImgUrl) || videoImgUrl == ""){ //商家没有上传图片，系统默认自动截取一张
             	String ffmpegUrl=merchantApiConfig.getFfmpegUrl();  //ffmpeg安装路径
+            	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
+            	//截取视频图片
             	videoImgUrl=VideoCutImgUtil.processImg(veido_path,FileDirConstant.DIR_AD_VIDEO_IMAGE, merchantApiConfig.getImageUploadUrl(),ffmpegUrl);
             }
     	}
