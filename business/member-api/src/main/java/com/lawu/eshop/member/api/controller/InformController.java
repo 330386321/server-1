@@ -21,6 +21,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.param.InformParam;
 import com.lawu.eshop.mall.param.InformSaveParam;
 import com.lawu.eshop.member.api.service.InformService;
@@ -42,7 +43,8 @@ public class InformController extends BaseController{
 
 	@Autowired
 	private InformService informService;
-	
+
+	@Audit(date = "2017-08-01", reviewer = "孙林青")
 	@ApiOperation(value="添加举报信息",notes="添加举报信息(李洪军)",httpMethod="POST")
 	@Authorization
 	@ApiResponse(code=HttpCode.SC_CREATED,message="success")

@@ -104,6 +104,7 @@ public class InviterController extends BaseController {
      * @since since v2.3.0
      * @return
      */
+    @Audit(date = "2017-08-01", reviewer = "孙林青")
     @ApiOperation(value = "我的E友", notes = "我的E友，[](杨清华)", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")

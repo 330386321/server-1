@@ -12,6 +12,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.WorkOrderService;
 import com.lawu.eshop.mall.constants.WorkOrderTypeEnum;
 import com.lawu.eshop.mall.param.WorkOrderParam;
@@ -32,7 +33,8 @@ public class WorkOrderController extends BaseController{
 
 	@Autowired
 	private WorkOrderService workOrderService;
-	
+
+	@Audit(date = "2017-08-01", reviewer = "孙林青")
 	@ApiOperation(value = "商家提交工单", notes = "商家提交工单,[]（洪钦明）", httpMethod = "POST")
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
