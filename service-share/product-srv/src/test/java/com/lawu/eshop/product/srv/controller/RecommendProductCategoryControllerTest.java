@@ -111,9 +111,9 @@ public class RecommendProductCategoryControllerTest {
 			log.info(del.andReturn().getResponse().getContentAsString());
 			ResultActions performq1 = mvc.perform(requestq);
 			log.info(performq1.andReturn().getResponse().getContentAsString());
-			MvcResult mvcResult = del.andExpect(status().is(HttpCode.SC_CREATED))
+			MvcResult mvcResult = del.andExpect(status().is(HttpCode.SC_NO_CONTENT))
 					.andDo(MockMvcResultHandlers.print()).andReturn();
-			Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+			Assert.assertEquals(HttpCode.SC_NO_CONTENT, mvcResult.getResponse().getStatus());
 		}catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
