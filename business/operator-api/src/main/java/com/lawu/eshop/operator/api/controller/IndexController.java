@@ -1,11 +1,18 @@
 package com.lawu.eshop.operator.api.controller;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.operator.api.service.AdService;
-import com.lawu.eshop.operator.api.service.MerchantStoreService;
-import com.lawu.eshop.operator.api.service.ProductService;
+import com.lawu.eshop.mall.constants.MerchantFavoredTypeEnum;
+import com.lawu.eshop.mall.dto.DiscountPackageQueryDTO;
+import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
+import com.lawu.eshop.operator.api.service.*;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.param.ListMerchantStoreParam;
+import com.lawu.eshop.user.param.StoreIndexParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -14,6 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author meishuquan
@@ -33,12 +44,70 @@ public class IndexController extends BaseController {
     @Autowired
     private AdService adService;
 
+    @Autowired
+    private MerchantFavoredService merchantFavoredService;
+
+    @Autowired
+    private DiscountPackageService discountPackageService;
+
     @ApiOperation(value = "更新门店索引", notes = "更新门店索引。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequiresPermissions("index:store")
     @RequestMapping(value = "updateStoreIndex", method = RequestMethod.GET)
     public Result updateStoreIndex() {
-          return merchantStoreService.rebuildStoreIndex();
+        ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
+        listMerchantStoreParam.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
+        listMerchantStoreParam.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT.val);
+        listMerchantStoreParam.setPageSize(1000);
+        int currentPage = 0;
+
+        while (true) {
+            currentPage++;
+            listMerchantStoreParam.setCurrentPage(currentPage);
+            Result<List<MerchantStoreDTO>> result = merchantStoreService.listMerchantStore(listMerchantStoreParam);
+            if (!isSuccess(result) || result.getModel().isEmpty()) {
+                return successGet();
+            }
+
+            Result<MerchantFavoredDTO> favoredDTOResult;
+            Result<Page<DiscountPackageQueryDTO>> discountResult;
+            List<StoreIndexParam> indexParamList = new ArrayList<>();
+            StoreIndexParam storeIndexParam = new StoreIndexParam();
+            for (MerchantStoreDTO storeDTO : result.getModel()) {
+                //查询商家优惠信息
+                favoredDTOResult = merchantFavoredService.findFavoredByMerchantId(storeDTO.getMerchantId());
+                String favoreInfo = "";
+                double discountOrdinal = 100;
+                if (isSuccess(favoredDTOResult)) {
+                    if (favoredDTOResult.getModel().getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL.val) {
+                        favoreInfo = "买单每满" + favoredDTOResult.getModel().getReachAmount() + "减" + favoredDTOResult.getModel().getFavoredAmount() + "元";
+                        discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    } else if (favoredDTOResult.getModel().getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val) {
+                        favoreInfo = "买单满" + favoredDTOResult.getModel().getReachAmount() + "减" + favoredDTOResult.getModel().getFavoredAmount() + "元";
+                        discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    } else if (favoredDTOResult.getModel().getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_DISCOUNT.val) {
+                        favoreInfo = "买单" + favoredDTOResult.getModel().getDiscountRate() + "折";
+                        discountOrdinal = favoredDTOResult.getModel().getDiscountRate().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    }
+                }
+
+                //查询商家优惠套餐
+                discountResult = discountPackageService.listForMember(storeDTO.getMerchantId());
+                String discountPackage = "";
+                if (isSuccess(discountResult) && !discountResult.getModel().getRecords().isEmpty()) {
+                    discountPackage = discountResult.getModel().getRecords().get(0).getName();
+                }
+
+                storeIndexParam.setMerchantStoreId(storeDTO.getMerchantStoreId());
+                storeIndexParam.setFavoreInfo(favoreInfo);
+                storeIndexParam.setDiscountPackage(discountPackage);
+                storeIndexParam.setDiscountOrdinal(discountOrdinal);
+                indexParamList.add(storeIndexParam);
+            }
+            if (!indexParamList.isEmpty()) {
+                merchantStoreService.rebuildStoreIndex(indexParamList);
+            }
+        }
     }
 
     @ApiOperation(value = "更新商品索引", notes = "更新商品索引。（梅述全）", httpMethod = "GET")

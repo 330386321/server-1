@@ -447,6 +447,7 @@ public class MerchantStoreController extends BaseController {
 	 * @param id
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping(value = "updateStoreIndex/{id}", method = RequestMethod.PUT)
 	public Result updateStoreIndex(@PathVariable Long id) {
 		merchantStoreService.updateStoreIndex(id);
@@ -455,12 +456,13 @@ public class MerchantStoreController extends BaseController {
 
 	/**
 	 * 重建门店索引
+	 *
 	 * @return
 	 */
-	@RequestMapping(value = "rebuildStoreIndex", method = RequestMethod.GET)
-	public Result rebuildStoreIndex() {
-		merchantStoreService.rebuildStoreIndex();
-		return successGet();
+	@RequestMapping(value = "rebuildStoreIndex", method = RequestMethod.POST)
+	public Result rebuildStoreIndex(@RequestBody List<StoreIndexParam> indexParamList) {
+		merchantStoreService.rebuildStoreIndex(indexParamList);
+		return successCreated();
 	}
 
 	/**

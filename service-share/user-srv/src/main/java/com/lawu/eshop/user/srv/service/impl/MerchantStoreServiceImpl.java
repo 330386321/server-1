@@ -7,6 +7,7 @@ import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.StoreIndexParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.*;
@@ -132,6 +133,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         }
     }
 
+    @Deprecated
     @Override
     public void updateStoreIndex(Long id) {
         MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
@@ -151,32 +153,27 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
     }
 
     @Override
-    public void rebuildStoreIndex() {
-        ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
-        listMerchantStoreParam.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
-        listMerchantStoreParam.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT.val);
-        listMerchantStoreParam.setPageSize(1000);
-        int currentPage = 0;
+    public void rebuildStoreIndex(List<StoreIndexParam> indexParamList) {
+        if (indexParamList == null || indexParamList.isEmpty()) {
+            return;
+        }
 
-        while (true) {
-            currentPage ++;
-            listMerchantStoreParam.setCurrentPage(currentPage);
-            List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapperExtend.listMerchantStore(listMerchantStoreParam);
-            if (merchantStoreDOS == null || merchantStoreDOS.isEmpty()) {
-                return ;
-            }
-
-            Collection<SolrInputDocument> documents = new ArrayList<>();
-            for (MerchantStoreDO merchantStoreDO : merchantStoreDOS) {
-                MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-                merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreDO.getId()).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val).andStatusEqualTo(true);
-                List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
-                String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
+        Collection<SolrInputDocument> documents = new ArrayList<>();
+        for (StoreIndexParam param : indexParamList) {
+            MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+            merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(param.getMerchantStoreId()).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val).andStatusEqualTo(true);
+            List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+            String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
+            MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(param.getMerchantStoreId());
+            if (merchantStoreDO != null) {
                 SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
+                document.addField("favoreInfo_s", param.getFavoreInfo());
+                document.addField("discountPackage_s", param.getDiscountPackage());
+                document.addField("discountOrdinal_d", param.getDiscountOrdinal());
                 documents.add(document);
             }
-            solrService.addSolrDocsList(documents, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         }
+        solrService.addSolrDocsList(documents, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
     }
 
     @Override

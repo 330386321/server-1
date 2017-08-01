@@ -6,6 +6,7 @@ import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
 import com.lawu.eshop.user.dto.OperatorMerchantInfoDTO;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStorePlatParam;
+import com.lawu.eshop.user.param.StoreIndexParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,15 +42,17 @@ public interface MerchantStoreService {
 	 * @param id
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping(method = RequestMethod.PUT, value = "merchantStore/updateStoreIndex/{id}")
 	Result updateStoreIndex(@PathVariable("id") Long id);
 
 	/**
 	 * 重建门店索引
+	 *
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "merchantStore/rebuildStoreIndex")
-	Result rebuildStoreIndex();
+	@RequestMapping(method = RequestMethod.POST, value = "merchantStore/rebuildStoreIndex")
+	Result rebuildStoreIndex(@RequestBody List<StoreIndexParam> indexParamList);
 
 	/**
 	 * 删除无效门店索引

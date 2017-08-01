@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.StoreIndexParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.bo.*;
 
@@ -65,12 +66,13 @@ public interface MerchantStoreService {
      *
      * @param id
      */
+    @Deprecated
     void updateStoreIndex(Long id);
 
     /**
      * 重建门店索引
      */
-    void rebuildStoreIndex();
+    void rebuildStoreIndex(List<StoreIndexParam> indexParamList);
 
     /**
      * 删除无效的门店索引
