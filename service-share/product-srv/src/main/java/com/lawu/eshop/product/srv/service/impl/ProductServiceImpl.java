@@ -138,7 +138,7 @@ public class ProductServiceImpl implements ProductService {
         Collection<SolrInputDocument> documents = new ArrayList<>();
         String idArray[] = ids.split(",");
         for (int i = 0; i < idArray.length; i++) {
-        	
+
         	ProductDO productDO = productDOMapper.selectByPrimaryKey(Long.valueOf(idArray[i]));
         	if(productStatus.getVal().equals(ProductStatusEnum.PRODUCT_STATUS_UP.getVal())){
         		if(productDO.getTotalInventory() < 0){
@@ -339,6 +339,11 @@ public class ProductServiceImpl implements ProductService {
             if(ret == 0){
             	return;
             }
+            example.createCriteria().andIdEqualTo(productId);
+            if(param.getProductStatus() != null){
+                productDO.setStatus(param.getProductStatus().getVal());
+            }
+            productDOMapper.updateByExampleSelective(productDO, example);
         }
 
         String spec = param.getSpec();

@@ -170,4 +170,186 @@ public class SolrUtil {
         }
     }
 
+    /**
+     * 新增
+     *
+     * @param document
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
+     * @return
+     */
+    public static boolean addSolrDocs(SolrInputDocument document, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return false;
+        }
+        try {
+            UpdateResponse rspAdd = solrClient.add(document);
+            UpdateResponse rspCommit = solrClient.commit();
+            if (rspAdd.getStatus() == 0 && rspCommit.getStatus() == 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            logger.error("solr新增异常：{}", e);
+        }
+        return false;
+    }
+
+    /**
+     * 新增
+     *
+     * @param documents
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
+     * @return
+     */
+    public static boolean addSolrDocsList(Collection<SolrInputDocument> documents, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        if(documents.isEmpty()){
+        	 return false;
+        }
+    	SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return false;
+        }
+        try {
+            UpdateResponse rspAdd = solrClient.add(documents);
+            UpdateResponse rspCommit = solrClient.commit();
+            if (rspAdd.getStatus() == 0 && rspCommit.getStatus() == 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            logger.error("solr批量新增异常：{}", e);
+        }
+        return false;
+    }
+
+    /**
+     * 根据ID删除
+     *
+     * @param id
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
+     * @return
+     */
+    public static boolean delSolrDocsById(Long id, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return false;
+        }
+        try {
+            UpdateResponse rspAdd = solrClient.deleteById(String.valueOf(id));
+            UpdateResponse rspCommit = solrClient.commit();
+            if (rspAdd.getStatus() == 0 && rspCommit.getStatus() == 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            logger.error("solr删除异常：{}", e);
+        }
+        return false;
+    }
+
+    /**
+     * 根据ids删除
+     *
+     * @param ids
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
+     * @return
+     */
+    public static boolean delSolrDocsByIds(List<String> ids, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return false;
+        }
+        try {
+            UpdateResponse rspAdd = solrClient.deleteById(ids);
+            UpdateResponse rspCommit = solrClient.commit();
+            if (rspAdd.getStatus() == 0 && rspCommit.getStatus() == 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            logger.error("solr批量删除异常：{}", e);
+        }
+        return false;
+    }
+
+    /**
+     * 根据条件查询
+     *
+     * @param query
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
+     * @throws Exception
+     */
+    public static SolrDocumentList getSolrDocsByQuery(SolrQuery query, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return null;
+        }
+        try {
+            QueryResponse rsp = solrClient.query(query);
+            return rsp.getResults();
+        } catch (Exception e) {
+            logger.error("solr查询异常：{}", e);
+        }
+        return null;
+    }
+
+    /**
+     * 根据主键查询
+     *
+     * @param id
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
+     * @return
+     */
+    public static SolrDocument getSolrDocsById(Long id, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return null;
+        }
+        SolrDocument solrDocument = null;
+        SolrQuery query = new SolrQuery();
+        query.setQuery("id:" + id);
+        try {
+            QueryResponse rsp = solrClient.query(query);
+            SolrDocumentList docsList = rsp.getResults();
+            if (docsList.getNumFound() > 0) {
+                solrDocument = docsList.get(0);
+            }
+        } catch (Exception e) {
+            logger.error("solr根据ID查询异常：{}", e);
+        }
+        return solrDocument;
+    }
+
+    /**
+     * 词频统计
+     *
+     * @param query
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
+     * @return
+     */
+    public static TermsResponse getTermsResponseByQuery(SolrQuery query, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return null;
+        }
+        try {
+            QueryResponse rsp = solrClient.query(query);
+            return rsp.getTermsResponse();
+        } catch (Exception e) {
+            logger.error("solr查询词频异常：{}", e);
+        }
+        return null;
+    }
+
 }

@@ -36,7 +36,7 @@ public class AdDetailDTO {
     private AdStatusEnum statusEnum;
 
 	@ApiModelProperty(value = "创建时间")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date gmtCreate;
 	
 	@ApiModelProperty(value = "广告数量")
@@ -73,11 +73,11 @@ public class AdDetailDTO {
 	private String remark;
 	
 	@ApiModelProperty(value = "审核时间")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date auditTime;
 	
 	@ApiModelProperty(value = "开始时间")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date beginTime;
 
 	public Long getId() {

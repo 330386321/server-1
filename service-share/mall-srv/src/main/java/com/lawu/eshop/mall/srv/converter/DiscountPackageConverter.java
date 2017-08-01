@@ -156,6 +156,7 @@ public class DiscountPackageConverter {
 		rtn.setGmtModified(new Date());
 		rtn.setAdvanceBookingTime(discountPackageUpdateParam.getAdvanceBookingTime());
 		rtn.setPurchaseNotes(discountPackageUpdateParam.getPurchaseNotes());
+		rtn.setStatus(discountPackageUpdateParam.getStatus() != null ? discountPackageUpdateParam.getStatus().getValue() : null);
 		return rtn;
 	}
 	

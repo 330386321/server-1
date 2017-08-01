@@ -95,7 +95,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 
 	@Autowired
 	private PropertyInfoDataService propertyInfoDataService;
-	
+
 	@Autowired
 	private AdLexiconService adLexiconService;
 
@@ -334,7 +334,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 
 	/**
 	 * 公用方法广告过滤
-	 * 
+	 *
 	 * @param list
 	 * @param memberId
 	 * @return
@@ -467,13 +467,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 						if (merchantAdInfoDTO.getManageTypeEnum() != null) {
 							adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(merchantAdInfoDTO.getManageTypeEnum().val));
 						}
-						Date date = new Date();
-						Long time = adDTO.getBeginTime().getTime() - date.getTime();
-						if (time > 0) {
-							adDTO.setNeedBeginTime(time);
-						} else {
-							adDTO.setNeedBeginTime(0l);
-						}
+			     		adDTO.setNeedBeginTime(adDTO.getNeedBeginTime());
 					}
 				}
 			}
@@ -606,7 +600,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 
 	/**
 	 * 查询E赚广告
-	 * 
+	 *
 	 * @param adEgainParam
 	 * @return
 	 * @author jiangxinjun
@@ -635,10 +629,10 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		Result<Page<AdEgainQueryDTO>> result = adService.selectPageAdEgain(memberId, adEgainInternalParam);
 		return successGet(result);
 	}
-	
+
     /**
      * 积分榜，人气榜查询
-     * 
+     *
      * @param adPointParam
      * @return
      * @author jiangxinjun
@@ -665,10 +659,10 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		Result<List<AdPointDTO>> result = adService.selectAdPoint(adPointInternalParam);
 		return successGet(result);
 	}
-	
+
     /**
      * 查询精品推荐广告列表
-     * 
+     *
      * @param adChoicenessParam
      * @return
      * @author jiangxinjun

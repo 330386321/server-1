@@ -18,6 +18,10 @@ public class PayOrderStoreInfoBO {
 
     private String principalMobile;
 
+    private String regionName;
+
+    private String userNum;
+
     public Long getMerchantId() {
         return merchantId;
     }
@@ -64,5 +68,21 @@ public class PayOrderStoreInfoBO {
 
     public void setPrincipalMobile(String principalMobile) {
         this.principalMobile = principalMobile;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
+
+    public String getUserNum() {
+        return userNum;
+    }
+
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
     }
 }

@@ -1,6 +1,38 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
-import com.lawu.eshop.ad.constants.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
+import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
+import com.lawu.eshop.ad.constants.PropertyType;
+import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.constants.RedPacketArithmetic;
+import com.lawu.eshop.ad.param.AdFindParam;
+import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.param.AdMerchantParam;
+import com.lawu.eshop.ad.param.AdParam;
+import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.*;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.*;
@@ -23,19 +55,6 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.utils.AdArithmeticUtil;
 import com.lawu.eshop.utils.DateUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * E赚接口实现类
@@ -96,9 +115,6 @@ public class AdServiceImpl implements AdService {
 	@Autowired
 	private SolrService solrService;
 
-	private int currentPage = 1;
-
-	private int reportCurrentPage = 1;
 
 	/**
 	 * 商家发布E赚
@@ -133,8 +149,16 @@ public class AdServiceImpl implements AdService {
 		adDO.setPoint(adParam.getPoint());
 		adDO.setAdCount(adParam.getAdCount());
 		adDO.setRadius(adParam.getRadius());
-		if (adParam.getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_VIDEO.getVal()) {
-			adDO.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val); // 视频广告默认为审核中
+		Integer piontCount=0;
+		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_VIDEO){
+			adDO.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val); //视频广告默认为审核中
+		}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){
+			Integer praiseCount=adSaveParam.getCount();
+			piontCount=praiseCount%10==0?praiseCount/10:praiseCount/10+1 ;
+			if(piontCount<=10){
+				 piontCount=10;
+			}
+			adDO.setAdCount(piontCount);
 		}
 		if (adParam.getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PRAISE.getVal()) {
 			adDO.setAdCount(adSaveParam.getCount());
@@ -145,10 +169,10 @@ public class AdServiceImpl implements AdService {
 		adDO.setAreas(adParam.getAreas());
 		adDO.setRegionName(adParam.getRegionName());
 		adDO.setContent(adParam.getContent());
-		Integer i = adDOMapper.insert(adDO);
-		if (adParam.getTypeEnum().getVal() == 3) { // E赞 红包
-			savePointPool(adDO, adSaveParam.getCount());
-		} else if (adParam.getTypeEnum().getVal() == 4) {
+		Integer i=adDOMapper.insert(adDO);
+		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //E赞  红包
+			savePointPool(adDO,piontCount);
+		}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PACKET){
 			saveRPPool(adDO);
 		}
 		// 发送消息，通知其他模块处理事务 积分的处理
@@ -162,8 +186,7 @@ public class AdServiceImpl implements AdService {
 	public void savePointPool(AdDO adDO, Integer count) {
 		// 算法生成积分明细
 		Integer piontCount =(int)Math.ceil(count * (adSrvConfig.getAdPraiseAllotProb()/100));
-		if (piontCount <= 10)
-			piontCount = 10;
+
 		double[] points = AdArithmeticUtil.getMoney(adDO.getTotalPoint().doubleValue(), piontCount);
 		for (int j = 0; j < piontCount; j++) {
 			PointPoolDO pointPool = new PointPoolDO();
@@ -226,19 +249,22 @@ public class AdServiceImpl implements AdService {
 	 */
 	@Override
 	public Page<AdBO> selectListByMerchant(AdMerchantParam adMerchantParam, Long merchantId) {
-		AdDOExample example = new AdDOExample();
-		if (adMerchantParam.getStatusEnum() == null && adMerchantParam.getTypeEnum() == null && adMerchantParam.getPutWayEnum() == null) {
-			example.createCriteria().andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val).andMerchantIdEqualTo(merchantId);
-		} else {
-			Criteria c1 = example.createCriteria();
-			List<Byte> status = new ArrayList<>();
-
-			if (adMerchantParam.getStatusEnum() != null) {
-				if (adMerchantParam.getStatusEnum().val == 3) {
+		AdDOExample example=new AdDOExample();
+		if(adMerchantParam.getStatusEnum()==null && adMerchantParam.getTypeEnum()==null && adMerchantParam.getPutWayEnum()==null ){
+			example.createCriteria().andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
+					.andMerchantIdEqualTo(merchantId);
+		}else{
+			Criteria c1=example.createCriteria();
+			List<Byte> status=new ArrayList<>();
+			
+			if(adMerchantParam.getStatusEnum()!=null){
+				if(adMerchantParam.getStatusEnum()==AdStatusEnum.AD_STATUS_PUTED){
 					status.add(AdStatusEnum.AD_STATUS_PUTED.val);
 					status.add(AdStatusEnum.AD_STATUS_OUT.val);
-					c1.andStatusIn(status).andMerchantIdEqualTo(merchantId);
-					if (adMerchantParam.getTypeEnum() != null) {
+					status.add(AdStatusEnum.AD_STATUS_AUDIT_FAIL.val);
+					c1.andStatusIn(status)
+					.andMerchantIdEqualTo(merchantId);
+					if(adMerchantParam.getTypeEnum()!=null){
 						c1.andTypeEqualTo(adMerchantParam.getTypeEnum().getVal());
 					}
 					if (adMerchantParam.getPutWayEnum() != null) {
@@ -268,15 +294,17 @@ public class AdServiceImpl implements AdService {
 				}
 
 			}
-
-		}
-		example.setOrderByClause("gmt_create " + adMerchantParam.getOrderType() + "");
-		RowBounds rowBounds = new RowBounds(adMerchantParam.getOffset(), adMerchantParam.getPageSize());
-		int count = (int) adDOMapper.countByExample(example);
-		List<AdDO> DOS = adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-		for (AdDO adDO : DOS) {
-			if (adDO.getType() == AdTypeEnum.AD_TYPE_PACKET.getVal()) {
-				adDO.setMediaUrl(adSrvConfig.getAdDefaultMediaUrl());
+			
+		 }
+		 example.setOrderByClause("gmt_create "+adMerchantParam.getOrderType()+"");
+		 RowBounds rowBounds = new RowBounds(adMerchantParam.getOffset(), adMerchantParam.getPageSize());
+		 int count=adDOMapper.countByExample(example);
+		 List<AdDO> DOS=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+		 for (AdDO adDO : DOS) {
+			if(adDO.getType()==AdTypeEnum.AD_TYPE_PACKET.getVal() && adDO.getPutWay()==PutWayEnum.PUT_WAY_COMMON.val){
+				adDO.setMediaUrl(adSrvConfig.getRedPacketCommonMediaUrl());
+			}else if(adDO.getType()==AdTypeEnum.AD_TYPE_PACKET.getVal() && adDO.getPutWay()==PutWayEnum.PUT_WAY_LUCK.val){
+				adDO.setMediaUrl(adSrvConfig.getRedPacketLuckMediaUrl());
 			}
 		}
 		Page<AdBO> page = new Page<AdBO>();
@@ -396,40 +424,29 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andAdIdEqualTo(adDO.getId()).andMemberIdEqualTo(memberId);
 		Long count = favoriteAdDOMapper.countByExample(example);
 		AdBO adBO = AdConverter.convertBO(adDO);
-		Long praiseCount = 0l;
-		boolean isPraise = false;
 		if (adDO.getType() == 3) { // 获取E赞的抢赞人数
 			PointPoolDOExample ppexample = new PointPoolDOExample();
 			ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
 					.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val);
-			praiseCount = pointPoolDOMapper.countByExample(ppexample);
+			Long praiseCount = pointPoolDOMapper.countByExample(ppexample);
+			adBO.setNumber(praiseCount.intValue());
 
 			PointPoolDOExample ppexample2 = new PointPoolDOExample();
 			ppexample2.createCriteria().andAdIdEqualTo(adDO.getId())
 					.andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
 					.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val).andMemberIdEqualTo(memberId);
 			Long number = pointPoolDOMapper.countByExample(ppexample2);
-			if (number > 0) {
-				isPraise = true;
-			}
+			adBO.setIsPraise(number>0);
 		}else{
 
 			MemberAdRecordDOExample memberAdRecordDOExample=new MemberAdRecordDOExample();
-			memberAdRecordDOExample.createCriteria().andAdIdEqualTo(id).andMemberIdEqualTo(memberId);
+			memberAdRecordDOExample.createCriteria().andAdIdEqualTo(id).andMemberIdEqualTo(memberId)
+									.andClickDateEqualTo(new Date());
 			Long clickCount= memberAdRecordDOMapper.countByExample(memberAdRecordDOExample);
-			if (clickCount.intValue() > 0) {
-				adBO.setIsClickAd(true);
-			} else {
-			 	adBO.setIsClickAd(false);
-			}
+			adBO.setIsClickAd(clickCount.intValue()>0);
 		}
-		adBO.setIsPraise(isPraise);
-		adBO.setNumber(praiseCount.intValue());
-		if (count.intValue() > 0) {
-			adBO.setIsFavorite(true);
-		} else {
-			adBO.setIsFavorite(false);
-		}
+
+		adBO.setIsFavorite(count.intValue() > 0);
 		return adBO;
 	}
 
@@ -448,12 +465,12 @@ public class AdServiceImpl implements AdService {
 		memberAdRecordD.setClickDate(new Date());
 		memberAdRecordD.setOriginalPoint(adDO.getPoint());
 		memberAdRecordDOMapper.insert(memberAdRecordD);
-		
+
 		// 修改点击次数记录
 		adDOMapperExtend.updateHitsByPrimaryKey(id);
 		//发送消息修改积分
 		userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
-		
+
 		if (adDO.getHits() + 1 >= adDO.getAdCount()) {
 			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); // 投放结束
 			adDO.setGmtModified(new Date());
@@ -461,7 +478,7 @@ public class AdServiceImpl implements AdService {
 			// 删除solr中的数据
 			solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
-		
+
 		return adDO.getPoint();
 	}
 
@@ -502,13 +519,13 @@ public class AdServiceImpl implements AdService {
 		AdDOExample example=new AdDOExample();
 		Criteria cr= example.createCriteria();
 		cr.andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.getVal());
-		if(adPraiseParam.getStatusEnum().getVal()==1){  //开枪中
+		if(adPraiseParam.getStatusEnum()==AdPraiseStatusEnum.AD_STATUS_SHOOT){  //开枪中
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
 			example.setOrderByClause("begin_time asc");
-		}else if(adPraiseParam.getStatusEnum().getVal()==2){ //即将开始
+		}else if(adPraiseParam.getStatusEnum()==AdPraiseStatusEnum.AD_STATUS_TOBEGIN){ //即将开始
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
 			example.setOrderByClause("begin_time asc");
-		}else if(adPraiseParam.getStatusEnum().getVal()==3){ //已结束
+		}else if(adPraiseParam.getStatusEnum()==AdPraiseStatusEnum.AD_STATUS_END){ //已结束
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTED.val);
 			example.setOrderByClause("gmt_create desc");
 		}
@@ -605,12 +622,12 @@ public class AdServiceImpl implements AdService {
 		List<AdDO> DOS = adDOMapperExtend.selectChoiceness();
 		List<AdBO> BOS = new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
-			if (adDO.getType() == 3) {
-				AdBO BO = AdConverter.convertBO(adDO);
-				BOS.add(BO);
-			} else {
-				if (adDO.getStatus() == 2) {
-					AdBO BO = AdConverter.convertBO(adDO);
+			if(adDO.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal()){
+				AdBO BO=AdConverter.convertBO(adDO);
+				 BOS.add(BO);
+			}else{
+				if(adDO.getStatus()==AdStatusEnum.AD_STATUS_PUTING.val){
+					AdBO BO=AdConverter.convertBO(adDO);
 					BOS.add(BO);
 				}
 			}
@@ -690,31 +707,27 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public List<ViewBO> getAllAd() {
-		AdDOExample example = new AdDOExample();
-		example.createCriteria().andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.getVal()).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
-		RowBounds rowBounds = new RowBounds((currentPage - 1) * 100, 100);
-		List<AdDO> list = adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-		int count = (int) adDOMapper.countByExample(example);
-		int totalPageNum;
-		if (count % 100 == 0) {
-			totalPageNum = count / 100;
-		} else {
-			totalPageNum = count / 100 + 1;
-		}
-		if (currentPage >= totalPageNum) {
-			currentPage = 1;
-		} else {
-			currentPage++;
-		}
-		List<ViewBO> bos = new ArrayList<>();
-		for (AdDO adDO : list) {
-			ViewBO bo = new ViewBO();
-			bo.setId(adDO.getId());
-			bo.setViewCount(adDO.getViewcount());
-			bos.add(bo);
+		int currentPage = 0;
+		List<ViewBO> bos=new ArrayList<>();
+		while (true) {
+			currentPage ++;
+			AdDOExample example =new AdDOExample();
+			example.createCriteria().andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
+			RowBounds rowBounds = new RowBounds((currentPage-1)*100, 100);
+			List<AdDO> list=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+
+			if (list == null || list.isEmpty()) {
+				break ;
+			}
+			for (AdDO adDO : list) {
+				ViewBO bo=new ViewBO();
+				bo.setId(adDO.getId());
+				bo.setViewCount(adDO.getViewcount());
+				bos.add(bo);
+			}
+
 		}
 		return bos;
-
 	}
 
 	@Override
@@ -968,7 +981,11 @@ public class AdServiceImpl implements AdService {
 				detail.setNotGetCount(adDO.getAdCount()-ppList.size());
 				detail.setAlreadyGetPoint(sumPoint);
 				detail.setNotGetPoint(adDO.getTotalPoint().subtract(sumPoint));
-				detail.setMediaUrl(adSrvConfig.getAdDefaultMediaUrl());
+				if(adDO.getPutWay()==PutWayEnum.PUT_WAY_COMMON.val){
+					detail.setMediaUrl(adSrvConfig.getRedPacketCommonMediaUrl());
+				}else if(adDO.getPutWay()==PutWayEnum.PUT_WAY_LUCK.val){
+					detail.setMediaUrl(adSrvConfig.getRedPacketLuckMediaUrl());
+				}
 			}
 
 		}

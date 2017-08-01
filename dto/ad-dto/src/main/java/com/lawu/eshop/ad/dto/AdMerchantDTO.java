@@ -59,6 +59,9 @@ public class AdMerchantDTO {
 	
 	@ApiModelProperty(value = "广告个数")
 	private Integer adCount;
+	
+	@ApiModelProperty(value = "是否显示下架按钮")
+	private Boolean isShowDown;
 
 	public Long getId() {
 		return id;
@@ -178,6 +181,14 @@ public class AdMerchantDTO {
 
 	public void setAdCount(Integer adCount) {
 		this.adCount = adCount;
+	}
+
+	public Boolean getIsShowDown() {
+		return isShowDown;
+	}
+
+	public void setIsShowDown(Boolean isShowDown) {
+		this.isShowDown = isShowDown;
 	}
 
 	

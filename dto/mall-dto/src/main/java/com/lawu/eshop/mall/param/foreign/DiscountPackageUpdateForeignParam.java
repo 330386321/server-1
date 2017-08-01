@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.lawu.eshop.mall.constants.DiscountPackageUpdateStatusEnum;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -81,23 +83,17 @@ public class DiscountPackageUpdateForeignParam {
 	private Boolean isReservation;
 
 	/**
-	 * 使用规则
-	 */
-	@ApiModelProperty(name = "useRules", value = "使用规则")
-	private String useRules;
-	
-	/**
 	 * 套餐内容
 	 */
 	@NotBlank(message = "套餐内容不能为空")
-	@ApiModelProperty(name = "discountPackageContents", value = "套餐内容", notes = "如果是新增的套餐内容id置空", example = "[{\"id\":null,\"name\":null,\"quantity\":null,\"unit\":null,\"unitPrice\":null}]")
+	@ApiModelProperty(name = "discountPackageContents", value = "套餐内容（如果是新增的套餐内容id置空）<br/> example:[{\"id\":null,\"name\":null,\"quantity\":null,\"unit\":null,\"unitPrice\":null}]", required = true)
 	private String discountPackageContents;
 	
 	/**
 	 * 套餐图片详情
 	 */
 	@NotBlank(message = "套餐图片详情不能为空")
-	@ApiModelProperty(name = "discountPackageImages", value = "套餐图片详情", notes = "如果是新增的图片详情id置空", example = "[{\"description\":null,\"id\":null}]")
+	@ApiModelProperty(name = "discountPackageImages", value = "套餐图片详情（如果是新增的图片详情id置空）<br/> example:[{\"description\":null,\"id\":null}]", required = true)
 	private String discountPackageImages;
 	
     /**
@@ -105,13 +101,25 @@ public class DiscountPackageUpdateForeignParam {
     */
 	@ApiModelProperty(value = "提前预约时间")
     private String advanceBookingTime;
-    
+
     /**
     * 购买须知
     */
 	@ApiModelProperty(value = "购买须知")
     private String purchaseNotes;
-	
+
+	/**
+	 * 使用规则
+	 */
+	@ApiModelProperty(name = "useRules", value = "使用规则")
+	private String useRules;
+
+    /**
+    * 状态
+    */
+	@ApiModelProperty( value = "状态")
+    private DiscountPackageUpdateStatusEnum status;
+
 	public String getName() {
 		return name;
 	}
@@ -184,14 +192,6 @@ public class DiscountPackageUpdateForeignParam {
 		this.isReservation = isReservation;
 	}
 
-	public String getUseRules() {
-		return useRules;
-	}
-
-	public void setUseRules(String useRules) {
-		this.useRules = useRules;
-	}
-
 	public String getDiscountPackageContents() {
 		return discountPackageContents;
 	}
@@ -223,5 +223,21 @@ public class DiscountPackageUpdateForeignParam {
 	public void setPurchaseNotes(String purchaseNotes) {
 		this.purchaseNotes = purchaseNotes;
 	}
-	
+
+	public String getUseRules() {
+		return useRules;
+	}
+
+	public void setUseRules(String useRules) {
+		this.useRules = useRules;
+	}
+
+	public DiscountPackageUpdateStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(DiscountPackageUpdateStatusEnum status) {
+		this.status = status;
+	}
+
 }

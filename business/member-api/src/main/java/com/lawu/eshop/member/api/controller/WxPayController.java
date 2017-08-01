@@ -74,6 +74,7 @@ public class WxPayController extends BaseController {
 
 		// 查询支付金额
 		double money = 0;
+        String rtnMoney = "";
 		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(param.getBizFlagEnum().getVal())) {
 			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
 					.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
@@ -84,6 +85,7 @@ public class WxPayController extends BaseController {
 			}
 			aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
 			money = payOrderCallback.getActualMoney();
+			rtnMoney = String.valueOf(money);
 
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.getVal().equals(param.getBizFlagEnum().getVal())) {
 			/*
@@ -95,17 +97,19 @@ public class WxPayController extends BaseController {
 				return successCreated(result.getRet());
 			}
 			money = result.getModel().getOrderTotalPrice().doubleValue();
-			
+			rtnMoney = result.getModel().getOrderTotalPrice().toString();
+
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.getVal().equals(param.getBizFlagEnum().getVal())
 				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(param.getBizFlagEnum().getVal())) {
 			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
 			money = recharge.getActualMoney();
-			
+			rtnMoney = String.valueOf(money);
+
 		}
 		if (StringUtil.doubleCompareTo(money, 0) == 0) {
 			return successCreated(ResultCode.MONEY_IS_ZERO);
 		}
-		aparam.setTotalAmount(String.valueOf(money));
+		aparam.setTotalAmount(rtnMoney);
 
 		return wxPayService.getPrepayInfo(aparam);
 

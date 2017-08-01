@@ -55,6 +55,12 @@ public class MemberPayOrderInfoDTO {
     @ApiModelProperty(value = "门店Id")
     private Long merchantStoreId;
 
+    @ApiModelProperty(value = "省市区")
+    private String regionName;
+
+    @ApiModelProperty(value = "商家编号")
+    private String userNum;
+
     public Long getId() {
         return id;
     }
@@ -165,5 +171,21 @@ public class MemberPayOrderInfoDTO {
 
     public void setMerchantStoreId(Long merchantStoreId) {
         this.merchantStoreId = merchantStoreId;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
+
+    public String getUserNum() {
+        return userNum;
+    }
+
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
     }
 }

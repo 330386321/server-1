@@ -2,6 +2,7 @@ package com.lawu.eshop.ad.srv.converter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +32,7 @@ import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
+
 import com.lawu.eshop.framework.core.page.Page;
 
 /**
@@ -198,6 +200,15 @@ public class AdConverter {
 			dto.setRadius(adBO.getRadius());
 			dto.setRegionName(adBO.getRegionName());
 			dto.setAdCount(adBO.getAdCount());
+			Calendar calendar = Calendar.getInstance();  //得到日历
+			calendar.setTime(new Date());//把当前时间赋给日历
+			calendar.add(Calendar.DAY_OF_MONTH, -14);  //设置为14天前
+		    Date before14days = calendar.getTime();   //得到14天前的时间
+		    if(adBO.getBeginTime()!=null && before14days.getTime() < adBO.getBeginTime().getTime()){
+		    	dto.setIsShowDown(false);
+		    }else{
+		    	dto.setIsShowDown(true);
+		    }
 			DTOS.add(dto);
 		}
 		return DTOS;

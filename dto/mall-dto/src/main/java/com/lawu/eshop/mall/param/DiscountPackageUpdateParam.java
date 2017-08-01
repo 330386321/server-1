@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.mall.constants.DiscountPackageUpdateStatusEnum;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageContentUpdateForeignParam;
 
 public class DiscountPackageUpdateParam {
@@ -83,12 +84,17 @@ public class DiscountPackageUpdateParam {
     * 提前预约时间
     */
     private String advanceBookingTime;
-    
+
     /**
     * 购买须知
     */
     private String purchaseNotes;
-	
+
+    /**
+    * 状态
+    */
+    private DiscountPackageUpdateStatusEnum status;
+
 	public String getName() {
 		return name;
 	}
@@ -208,5 +214,13 @@ public class DiscountPackageUpdateParam {
 	public void setPurchaseNotes(String purchaseNotes) {
 		this.purchaseNotes = purchaseNotes;
 	}
-	
+
+	public DiscountPackageUpdateStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(DiscountPackageUpdateStatusEnum status) {
+		this.status = status;
+	}
+
 }

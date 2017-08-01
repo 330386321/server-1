@@ -35,7 +35,7 @@ public class RongUserController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "getRongToken", method = RequestMethod.GET)
-    public Result<RongYunTokenDTO> getRongToken(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri) throws Exception {
+    public Result<RongYunTokenDTO> getRongToken(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri){
         TokenResult token = rongUserService.getRongToken(userId, name, portraitUri);
         RongYunTokenDTO rongYunTokenDTO = new RongYunTokenDTO();
         rongYunTokenDTO.setCode(token.getCode());
@@ -52,7 +52,7 @@ public class RongUserController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "checkOnline/{userId}", method = RequestMethod.GET)
-    public Result<RongYunOnlineDTO> checkOnline(@PathVariable("userId") String userId) throws Exception {
+    public Result<RongYunOnlineDTO> checkOnline(@PathVariable("userId") String userId){
         CheckOnlineResult checkOnlineResult = rongUserService.checkOnline(userId);
         RongYunOnlineDTO onlineDTO = new RongYunOnlineDTO();
         onlineDTO.setCode(checkOnlineResult.getCode());
@@ -62,7 +62,7 @@ public class RongUserController extends BaseController {
     }
 
     @RequestMapping(value = "refreshUserInfo", method = RequestMethod.GET)
-    public Result<RongYunRefreshDTO> refreshUserInfo(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri) throws Exception {
+    public Result<RongYunRefreshDTO> refreshUserInfo(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri){
         CodeSuccessResult codeSuccessResult = rongUserService.refreshUserInfo(userId,name,portraitUri);
         RongYunRefreshDTO refreshDTO = new RongYunRefreshDTO();
         refreshDTO.setCode(codeSuccessResult.getCode());

@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.param;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -30,7 +31,8 @@ public class BalancePayDataParam extends BalancePayParam{
 	private String account;
 	
 	@NotBlank(message = "totalAmount不能为空")
-	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "totalAmount格式错误要求数字或小数位不超过2位")
+	@Pattern(regexp = "^\\d{1,9}(\\.\\d{1,2})?$", message = "金额错误(要求最大8位整数且保留2位小数)")
+	@Max(value=10000000,message="金额错误(要求不能超过10000000元)")
 	private String totalAmount;
 	
 	//订单号

@@ -464,6 +464,8 @@ public class MerchantStoreConverter {
         payOrderStoreInfoBO.setAddress(storeInfoView.getAddress());
         payOrderStoreInfoBO.setPrincipalMobile(storeInfoView.getPrincipalMobile());
         payOrderStoreInfoBO.setStoreUrl(storeInfoView.getPath());
+        payOrderStoreInfoBO.setRegionName(storeInfoView.getRegionName());
+        payOrderStoreInfoBO.setUserNum(storeInfoView.getUserNum());
         return payOrderStoreInfoBO;
     }
 

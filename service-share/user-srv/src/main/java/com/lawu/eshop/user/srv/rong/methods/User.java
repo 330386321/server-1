@@ -119,22 +119,35 @@ public class User {
      * @param userId:用户 Id，最大长度 64 字节。是用户在 App 中的唯一标识码，必须保证在同一个 App 内不重复，重复的用户 Id 将被当作是同一用户。（必传）
      * @return CheckOnlineResult
      **/
-    public CheckOnlineResult checkOnline(String userId) throws Exception {
+    public CheckOnlineResult checkOnline(String userId){
         if (userId == null) {
             throw new IllegalArgumentException("Paramer 'userId' is required");
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("&userId=").append(URLEncoder.encode(userId.toString(), UTF8));
+        try {
+            sb.append("&userId=").append(URLEncoder.encode(userId.toString(), UTF8));
+        } catch (UnsupportedEncodingException e) {
+            logger.info("userId change exception :{}",e);
+        }
         String body = sb.toString();
         if (body.indexOf("&") == 0) {
             body = body.substring(1, body.length());
         }
 
-        HttpURLConnection conn = HttpUtil.CreatePostHttpConnection(HostType.API, appKey, appSecret, "/user/checkOnline.json", "application/x-www-form-urlencoded");
-        HttpUtil.setBodyParameter(body, conn);
+        HttpURLConnection conn = null;
+        CheckOnlineResult result = null;
+        try {
+            conn = HttpUtil.CreatePostHttpConnection(HostType.API, appKey, appSecret, "/user/checkOnline.json", "application/x-www-form-urlencoded");
+            HttpUtil.setBodyParameter(body, conn);
+            result = (CheckOnlineResult) GsonUtil.fromJson(HttpUtil.returnResult(conn), CheckOnlineResult.class);
+        } catch (IOException e) {
+            logger.info("IOException :{}",e);
+        } catch (Exception e) {
+            logger.info("checkOnline exception :{}",e);
+        }
+        return result;
 
-        return (CheckOnlineResult) GsonUtil.fromJson(HttpUtil.returnResult(conn), CheckOnlineResult.class);
     }
 
     /**

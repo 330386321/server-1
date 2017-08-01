@@ -37,7 +37,7 @@ public interface RongUserService {
      * @return
      * @throws Exception
      */
-    CheckOnlineResult checkOnline(String userId) throws Exception;
+    CheckOnlineResult checkOnline(String userId);
 
     HistoryMessageResult getHistory(String s);
 }

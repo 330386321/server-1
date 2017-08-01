@@ -602,6 +602,8 @@ public class MerchantStoreController extends BaseController {
 		payOrderMerchantStoreInfoDTO.setPrincipalMobile(payOrderStoreInfoBO.getPrincipalMobile());
 		payOrderMerchantStoreInfoDTO.setAddress(payOrderStoreInfoBO.getAddress());
 		payOrderMerchantStoreInfoDTO.setName(payOrderStoreInfoBO.getName());
+		payOrderMerchantStoreInfoDTO.setRegionName(payOrderStoreInfoBO.getRegionName());
+		payOrderMerchantStoreInfoDTO.setUserNum(payOrderStoreInfoBO.getUserNum());
 		return payOrderMerchantStoreInfoDTO;
 	}
 
@@ -693,6 +695,20 @@ public class MerchantStoreController extends BaseController {
 	public Result<List<RecommendFoodDTO>> listRecommendFoodComment(@PathVariable Integer industryId, @RequestParam String regionPath) {
 		List<RecommendFoodBO> foodBOS = merchantStoreService.listRecommendFoodComment(industryId, regionPath);
 		return successGet(MerchantStoreConverter.convertRecommendStoreDTO(foodBOS));
+	}
+	/**
+	 * 根据商家ID获取商家门店的名称
+	 *
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(value = "getNameBymerchantId/{merchantId}", method = RequestMethod.GET)
+	public Result<String> getNameByMerchantId(@PathVariable("merchantId") Long merchantId) {
+		MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
+		if (merchantStoreInfoBO == null || StringUtils.isEmpty(merchantStoreInfoBO.getName())) {
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
+		}
+		return successGet(merchantStoreInfoBO.getName());
 	}
 
 }

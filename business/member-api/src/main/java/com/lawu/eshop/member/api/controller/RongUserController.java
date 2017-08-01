@@ -36,7 +36,7 @@ public class RongUserController extends BaseController{
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "checkOnline", method = RequestMethod.GET)
-    public Result<RongYunOnlineDTO> checkOnline(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) throws Exception {
+    public Result<RongYunOnlineDTO> checkOnline(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
         String userNum = UserUtil.getCurrentUserNum(getRequest());
 
         Result<RongYunOnlineDTO> onlineDTO = rongUserService.checkOnline(userNum);

@@ -38,7 +38,7 @@ public class RongUserServiceImpl implements RongUserService, InitializingBean, A
     }
 
     @Override
-    public CheckOnlineResult checkOnline(String userId) throws Exception {
+    public CheckOnlineResult checkOnline(String userId){
         CheckOnlineResult userCheckOnlineResult = rongCloud.user.checkOnline(userId);
         return userCheckOnlineResult;
     }
