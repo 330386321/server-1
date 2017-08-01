@@ -106,6 +106,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	}
 
 	@Override
+	@Transactional
 	public int updatePropertyNumbers(String userNum, String column, String flag, BigDecimal number) {
 		if (("B".equals(column) || "P".equals(column) || "L".equals(column))
 				&& ("A".equals(flag) || "M".equals(flag))) {

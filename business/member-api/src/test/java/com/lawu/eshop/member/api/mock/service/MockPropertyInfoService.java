@@ -42,7 +42,9 @@ class MockPropertyInfoService extends BaseController implements PropertyInfoServ
 
 	@Override
 	public Result<PropertyBalanceDTO> getPropertyBalance(@PathVariable("userNum") String userNum) {
-		return null;
+		PropertyBalanceDTO dto = new PropertyBalanceDTO();
+		dto.setBalance(new BigDecimal("1"));
+		return successCreated(dto);
 	}
 
 	@Override

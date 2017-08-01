@@ -34,6 +34,6 @@ public class MockFansMerchantService extends BaseController implements FansMerch
 
     @Override
     public Result<Integer> countFans(@PathVariable("merchantId") Long merchantId) {
-        return null;
+        return successCreated(new Integer(1));
     }
 }

@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.mock.service;
 
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.ShoppingCartService;
 import com.lawu.eshop.order.dto.ShoppingCartDTO;
@@ -8,30 +9,43 @@ import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
-class MockShoppingCartService implements ShoppingCartService {
+class MockShoppingCartService extends BaseController implements ShoppingCartService {
 
 	@Override
 	public Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartSaveParam parm) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result<List<ShoppingCartDTO>> findListByMemberId(@PathVariable(name = "memberId") Long memberId) {
-		return null;
+		ShoppingCartDTO dto = new ShoppingCartDTO();
+		dto.setMerchantStoreId(1L);
+		dto.setProductId(1L);
+		dto.setId(1L);
+		dto.setMerchantId(1L);
+		dto.setMerchantName("nfdf");
+		dto.setProductModelId(1L);
+		dto.setQuantity(1);
+		dto.setSalesPrice(new BigDecimal(1));
+		List<ShoppingCartDTO> list = new ArrayList<>();
+		list.add(dto);
+		return successCreated(list);
 	}
 
 	@Override
 	public Result update(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingCartUpdateParam parm) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result delete(@RequestParam("memberId") Long memberId, @RequestBody List<Long> ids) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
@@ -41,6 +55,6 @@ class MockShoppingCartService implements ShoppingCartService {
 
 	@Override
 	public Result<Long> findListByIds(@PathVariable("memberId") Long memberId) {
-		return null;
+		return successCreated(1L);
 	}
 }

@@ -103,15 +103,16 @@ public class ShoppingCartController extends BaseController {
      	
     	return successGet(result);
     }
-    
-    /**
-     * 根据id更新购物车的商品（使用实时更新不采用批量更新的方式）。
-     * 
-     * @param id
-     * @param token
-     * @param parm
-     * @return
-     */
+
+	/**
+	 * 根据id更新购物车的商品（使用实时更新不采用批量更新的方式）。
+	 *
+	 * @param token
+	 * @param id
+	 * @param param
+	 * @param bindingResult
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "更新购物车商品", notes = "根据id更新购物车的商品（使用实时更新不采用批量更新的方式）。[1004|1100|1024]（蒋鑫俊）", httpMethod = "PUT")
@@ -154,14 +155,16 @@ public class ShoppingCartController extends BaseController {
     	
     	return successDelete();
     }
-    
-    /**
-     * 根据购物车id列表结算购物车的商品生成结算数据
-     * 
-     * @param params 购物车参数
-     * @return
-     */
-    @Audit(date = "2017-04-15", reviewer = "孙林青")
+
+	/**
+	 * 根据购物车id列表结算购物车的商品生成结算数据
+	 *
+	 * @param token
+	 * @param ids
+	 * @param bindingResult
+	 * @return
+	 */
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "购物车的商品结算", notes = "根据购物车id列表结算购物车的商品生成结算数据。[1003]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

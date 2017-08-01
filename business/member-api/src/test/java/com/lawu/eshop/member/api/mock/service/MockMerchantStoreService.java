@@ -20,7 +20,10 @@ public class MockMerchantStoreService extends BaseController implements Merchant
 
     @Override
     public Result<MerchantInfoForShoppingCartDTO> getMerchantInfoForShoppingCart(@PathVariable("merchantId") Long merchantId) {
-        return null;
+        MerchantInfoForShoppingCartDTO dto = new MerchantInfoForShoppingCartDTO();
+        dto.setMerchantStoreId(1L);
+        dto.setMerchantStoreName("name");
+        return successCreated(dto);
     }
 
     @Override
@@ -74,7 +77,14 @@ public class MockMerchantStoreService extends BaseController implements Merchant
 
     @Override
     public Result<MemberProductStoreDTO> getMemberProductDetailStore(@RequestParam("merchantId") Long merchantId) {
-        return null;
+        MemberProductStoreDTO dto = new MemberProductStoreDTO();
+        dto.setFansNum("1");
+        dto.setLogo("1.jpg");
+        dto.setStoreId(1L);
+        dto.setStoreName("storename");
+        dto.setSupportEleven(true);
+        dto.setUpProductNum("111");
+        return successCreated(dto);
     }
 
     @Override

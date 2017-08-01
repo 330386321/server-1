@@ -85,12 +85,18 @@ public class MockCommentMerchantService extends BaseController implements Commen
 
     @Override
     public Result<List<MemberProductCommentDTO>> geNewlyProductComment(@RequestParam("productId") Long productId) {
-        return null;
+        MemberProductCommentDTO dto = new MemberProductCommentDTO();
+        dto.setProductModelId(1L);
+        dto.setMemberId(1L);
+        dto.setIsAnonymous(true);
+        List<MemberProductCommentDTO> list = new ArrayList<>();
+        list.add(dto);
+        return successCreated(list);
     }
 
     @Override
     public Result<Integer> getProductCommentCount(@RequestParam("productId") Long productId) {
-        return null;
+        return successCreated(new Integer(1));
     }
 
     @Override

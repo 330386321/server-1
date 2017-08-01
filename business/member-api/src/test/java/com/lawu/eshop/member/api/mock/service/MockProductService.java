@@ -3,13 +3,17 @@ package com.lawu.eshop.member.api.mock.service;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.ProductService;
+import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.CommentProductInfoDTO;
+import com.lawu.eshop.product.dto.MemberProductModelDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductSearchDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,7 +22,18 @@ class MockProductService extends BaseController implements ProductService {
 
     @Override
     public Result<ProductInfoDTO> selectProductById(@RequestParam("productId") Long productId) {
-        return null;
+        ProductInfoDTO dto = new ProductInfoDTO();
+        dto.setProductStatus(ProductStatusEnum.PRODUCT_STATUS_UP);
+        dto.setMerchantId(1L);
+        List<MemberProductModelDTO> spec = new ArrayList<>();
+        MemberProductModelDTO ddto = new MemberProductModelDTO();
+        ddto.setId(1L);
+        ddto.setInventory(1);
+        ddto.setName("name");
+        ddto.setOriginalPrice(new BigDecimal("1"));
+        ddto.setPrice(new BigDecimal("1"));
+        dto.setSpec(spec);
+        return successCreated(dto);
     }
 
     @Override
@@ -42,6 +57,10 @@ class MockProductService extends BaseController implements ProductService {
 
     @Override
     public Result<List<ProductSearchDTO>> listProductByIds(@RequestParam("ids") List<Long> ids) {
-        return null;
+        ProductSearchDTO dto = new ProductSearchDTO();
+        dto.setProductId(1L);
+        List<ProductSearchDTO> list = new ArrayList<>();
+        list.add(dto);
+        return successCreated(list);
     }
 }

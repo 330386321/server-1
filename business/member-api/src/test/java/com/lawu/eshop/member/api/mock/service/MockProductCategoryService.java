@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,12 +16,14 @@ class MockProductCategoryService implements ProductCategoryService {
 
     @Override
     public List<ProductCategoryDTO> findAll() {
-        return null;
+        List<ProductCategoryDTO> list = new ArrayList<>();
+        return list;
     }
 
     @Override
     public ProductCategoryDTO getById(@RequestParam("id") Integer id) {
-        return null;
+        ProductCategoryDTO dto = new ProductCategoryDTO();
+        return dto;
     }
 
     @Override

@@ -28,7 +28,13 @@ public class MockAdPlatformService extends BaseController implements AdPlatformS
 
     @Override
     public Result<List<AdPlatformProductDTO>> getAdPlatformByTypePosition(@RequestParam("typeEnum") TypeEnum typeEnum, @RequestParam("positionEnum") PositionEnum positionEnum) {
-        return null;
+        AdPlatformProductDTO dto = new AdPlatformProductDTO();
+        dto.setMediaUrl("1.jpg");
+        dto.setProductId(1L);
+        dto.setTitle("title");
+        List<AdPlatformProductDTO> list = new ArrayList<>();
+        list.add(dto);
+        return successCreated(list);
     }
 
     @Override
