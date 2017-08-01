@@ -123,6 +123,7 @@ public class StoreSolrController extends BaseController {
         return successGet(storeSolrDTOS);
     }
 
+    @Audit(date = "2017-08-01", reviewer = "孙林青")
     @ApiOperation(value = "新店推荐", notes = "新店推荐(前50)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listNewMerchant", method = RequestMethod.GET)
@@ -135,6 +136,7 @@ public class StoreSolrController extends BaseController {
         return successGet(storeDTOS);
     }
 
+    @Audit(date = "2017-08-01", reviewer = "孙林青")
     @ApiOperation(value = "专属特惠", notes = "专属特惠(优惠系数升序)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "discountStore", method = RequestMethod.GET)
@@ -152,6 +154,7 @@ public class StoreSolrController extends BaseController {
         return result;
     }
 
+    @Audit(date = "2017-08-01", reviewer = "孙林青")
     @ApiOperation(value = "优选美食", notes = "优选美食(人气最高和评分最高各5个)。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listRecommendFood", method = RequestMethod.GET)

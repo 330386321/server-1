@@ -20,6 +20,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.MemberApiConfig;
 
 import io.swagger.annotations.Api;
@@ -45,6 +46,7 @@ public class UploadController extends BaseController {
     @Autowired
     private MemberApiConfig memberApiConfig;
 
+    @Audit(date = "2017-08-01", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "统一上传接口", notes = "上传接口(李洪军)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
