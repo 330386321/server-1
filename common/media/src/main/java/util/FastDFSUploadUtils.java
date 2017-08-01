@@ -47,7 +47,7 @@ public class FastDFSUploadUtils {
 			InputStream in = null;
 			if (part.getContentType() != null) {
 				long fileSize = part.getSize();
-				if (fileSize > 0 && fileSize < FileUploadConstant.VIEDO_MAX_SIZE) {
+				if (fileSize > 0 && fileSize < FileUploadConstant.VIDEO_MAX_SIZE) {
 					String fileName = part.getSubmittedFileName();
 					String extName = fileName.substring(fileName.lastIndexOf(".") + 1);
 					try {
@@ -61,7 +61,7 @@ public class FastDFSUploadUtils {
 							String fileUrl = FastDFSClient.getInstance(param)
 									.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName);
 							result.setFileUrl(fileUrl);
-						} else if (uparam.getType().equals(FileUploadConstant.VIEDO)) {// 视频文件
+						} else if (uparam.getType().equals(FileUploadConstant.VIDEO)) {// 视频文件
 							if (StringUtils.isEmpty(uparam.getFfmpegUrl())) {
 								result.setFenum(FastDFSResultEnum.FD_FILE_ERROR);
 								return result;
@@ -117,7 +117,7 @@ public class FastDFSUploadUtils {
 						}
 					}
 				} else {
-					log.error("上传文件大于" + FileUploadConstant.VIEDO_MAX_SIZE + "M");
+					log.error("上传文件大于" + FileUploadConstant.VIDEO_MAX_SIZE + "M");
 					result.setFenum(FastDFSResultEnum.UPLOAD_SIZE_BIGER);
 					return result;
 				}
@@ -138,20 +138,15 @@ public class FastDFSUploadUtils {
 		if (!file.exists()) {
 			file.mkdirs();
 		}
-		FileOutputStream out = new FileOutputStream(new File(file, newName));
 		byte[] b = new byte[1024 * 1024];
-		try{
+		try (InputStream in = part.getInputStream();
+				FileOutputStream out = new FileOutputStream(new File(file, newName));) {
 			int index = 0;
-			InputStream fileIn = part.getInputStream();
-			while ((index = fileIn.read(b)) != -1) {
+			while ((index = in.read(b)) != -1) {
 				out.write(b, 0, index);
 			}
-		}catch (IOException e){
+		} catch (Exception e) {
 			throw e;
-		}finally {
-			if(null != out){
-				out.close();
-			}
 		}
 	}
 

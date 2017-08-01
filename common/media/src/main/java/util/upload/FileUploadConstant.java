@@ -12,12 +12,12 @@ public class FileUploadConstant {
 	/**
 	 * 上传文件为视频类型
 	 */
-	public static String VIEDO = "viedo";
+	public static String VIDEO = "video";
 
 	/**
 	 * 视频文件最大长度限制
 	 */
-	public static int VIEDO_MAX_SIZE = 50 * 1048576;
+	public static int VIDEO_MAX_SIZE = 50 * 1048576;
 
 	/**
 	 * 图片文件最大长度限制

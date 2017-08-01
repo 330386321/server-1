@@ -14,7 +14,7 @@ public class UploadParam {
 	private String dir;
 	private String baseImageDir;
 	/**
-	 * 上传文件类型 图片 img 视频 viedo 其他 随便传
+	 * 上传文件类型 图片 img 视频 video 其他 随便传
 	 */
 	private String type;
 
