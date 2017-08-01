@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.srv.bo.GetRedPacketBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.AdDOExample;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
@@ -43,17 +44,26 @@ public class PointPoolServiceImpl implements PointPoolService {
 	}
 
 	@Override
-	public Boolean isGetRedPacket(Long merchantId, String userNum) {
+	public GetRedPacketBO isGetRedPacket(Long merchantId, String userNum) {
+
 		AdDOExample adDOExample = new AdDOExample();
-		adDOExample.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+		adDOExample.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.getVal()).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
 		List<AdDO> list = adDOMapper.selectByExample(adDOExample);
-		Long count=0l;
-		if(!list.isEmpty()){
-			PointPoolDOExample example=new PointPoolDOExample();
-			example.createCriteria().andAdIdEqualTo(list.get(0).getId()).andMemberNumEqualTo(userNum);
-			count=pointPoolDOMapper.countByExample(example);
+		GetRedPacketBO bo=new GetRedPacketBO();
+		if(list.isEmpty()){
+			bo.setNullRedPacket(true);
+			return bo;
+		}else{
+			PointPoolDOExample example2=new PointPoolDOExample();
+			example2.createCriteria().andAdIdEqualTo(list.get(0).getId()).andMemberNumEqualTo(userNum);
+			Long count=pointPoolDOMapper.countByExample(example2);
+			if(count.intValue()>0){
+				bo.setGetRedPacket(true);
+			}else{
+				bo.setGetRedPacket(false);
+			}
+			return bo;
 		}
-		return count.intValue()>0 ? true:false;
 
 	}
 

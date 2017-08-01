@@ -25,6 +25,9 @@ public class AdSrvConfig {
     @Value(value = "${image.red_packet_luck}")
     private String redPacketLuckMediaUrl;
 
+    @Value(value = "${ad_praise_allot_prob}")
+    private Integer adPraiseAllotProb;
+
     public String getSolrUrl() {
         return solrUrl;
     }
@@ -45,7 +48,9 @@ public class AdSrvConfig {
 		return redPacketLuckMediaUrl;
 	}
 
-
+    public Integer getAdPraiseAllotProb() {
+        return adPraiseAllotProb;
+    }
 
     
 }

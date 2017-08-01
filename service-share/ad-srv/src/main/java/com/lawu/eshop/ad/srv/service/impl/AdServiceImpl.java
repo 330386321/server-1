@@ -115,6 +115,10 @@ public class AdServiceImpl implements AdService {
 	@Autowired
 	private SolrService solrService;
 
+	private int currentPage = 1;
+
+	private int reportCurrentPage = 1;
+
 
 	/**
 	 * 商家发布E赚
@@ -298,7 +302,7 @@ public class AdServiceImpl implements AdService {
 		 }
 		 example.setOrderByClause("gmt_create "+adMerchantParam.getOrderType()+"");
 		 RowBounds rowBounds = new RowBounds(adMerchantParam.getOffset(), adMerchantParam.getPageSize());
-		 int count=adDOMapper.countByExample(example);
+		 int count = (int) (adDOMapper.countByExample(example));
 		 List<AdDO> DOS=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		 for (AdDO adDO : DOS) {
 			if(adDO.getType()==AdTypeEnum.AD_TYPE_PACKET.getVal() && adDO.getPutWay()==PutWayEnum.PUT_WAY_COMMON.val){
@@ -712,7 +716,7 @@ public class AdServiceImpl implements AdService {
 		while (true) {
 			currentPage ++;
 			AdDOExample example =new AdDOExample();
-			example.createCriteria().andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
+			example.createCriteria().andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.getVal()).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
 			RowBounds rowBounds = new RowBounds((currentPage-1)*100, 100);
 			List<AdDO> list=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 
