@@ -674,11 +674,19 @@ public class MerchantStoreControllerTest {
     @Rollback
     @Test
     public void rebuildStoreIndex() {
-        RequestBuilder request = get("/merchantStore/rebuildStoreIndex");
+        List<StoreIndexParam> indexParamList = new ArrayList<>();
+        StoreIndexParam indexParam = new StoreIndexParam();
+        indexParam.setMerchantStoreId(300L);
+        indexParam.setFavoreInfo("满100减10");
+        indexParam.setDiscountPackage("两人豪华午餐");
+        indexParam.setDiscountOrdinal(0.9);
+        indexParamList.add(indexParam);
+        String requestJson = JSONObject.toJSONString(indexParamList);
+        RequestBuilder request = post("/merchantStore/rebuildStoreIndex").contentType(MediaType.APPLICATION_JSON).content(requestJson);
         try {
             ResultActions perform = mvc.perform(request);
-            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
-            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());

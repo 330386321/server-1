@@ -4,6 +4,7 @@ import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.StoreIndexParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.*;
@@ -253,7 +254,14 @@ public class MerchantStoreServiceImplTest {
         profileDO.setCertifType(DataTransUtil.intToByte(2));
         merchantStoreProfileDOMapper.insertSelective(profileDO);
 
-        merchantStoreService.rebuildStoreIndex();
+        List<StoreIndexParam> indexParamList = new ArrayList<>();
+        StoreIndexParam indexParam = new StoreIndexParam();
+        indexParam.setMerchantStoreId(storeDO.getId());
+        indexParam.setFavoreInfo("满100减10");
+        indexParam.setDiscountPackage("两人豪华午餐");
+        indexParam.setDiscountOrdinal(0.9);
+        indexParamList.add(indexParam);
+        merchantStoreService.rebuildStoreIndex(indexParamList);
         SolrDocument solrDocument = solrService.getSolrDocsById(storeDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         Assert.assertNull(solrDocument);
     }
