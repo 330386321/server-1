@@ -13,17 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Service
 public class MockRongUserService implements RongUserService {
     @Override
-    public Result<RongYunTokenDTO> getRongToken(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri) throws Exception {
+    public Result<RongYunTokenDTO> getRongToken(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri)  {
         return null;
     }
 
     @Override
-    public Result<RongYunOnlineDTO> checkOnline(@PathVariable("userId") String userId) throws Exception {
+    public Result<RongYunOnlineDTO> checkOnline(@PathVariable("userId") String userId)  {
         return null;
     }
 
     @Override
-    public Result<RongYunRefreshDTO> refreshUserInfo(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri) throws Exception {
+    public Result<RongYunRefreshDTO> refreshUserInfo(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri)  {
         return null;
     }
 }
