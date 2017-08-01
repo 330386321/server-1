@@ -25,6 +25,6 @@
        FROM favorite_merchant FM 
 	LEFT JOIN merchant_store MS ON FM.merchant_id=MS.merchant_id  
 	WHERE  FM.member_id=#{memberId,jdbcType=BIGINT} AND FM.manage_type=#{type,jdbcType=TINYINT}
-	ORDER BY FM.gmt_create desc
+	ORDER BY  MS.status asc , FM.gmt_create desc 
   </select>
 </mapper>

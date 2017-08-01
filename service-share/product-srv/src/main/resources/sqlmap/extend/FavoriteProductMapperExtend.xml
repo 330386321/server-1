@@ -20,9 +20,8 @@
     	pd.feature_image as feature_image
     from favorite_product fp  
     	left join product pd on fp.product_id=pd.id
-    <where>
+    where
     	fp.member_id=#{memberId,jdbcType=BIGINT}
-    	ORDER BY fp.gmt_create desc
-    </where>
+    	ORDER BY  pd.status asc,fp.gmt_create desc
   </select>
 </mapper>
