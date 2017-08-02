@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.MerchantStoreImageBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreImageConverter;
 import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
@@ -21,6 +22,9 @@ public class MerchantStoreImageServiceImpl implements MerchantStoreImageService 
 
     @Autowired
     private MerchantStoreImageDOMapper merchantStoreImageDOMapper;
+    
+    @Autowired
+    private UserSrvConfig userSrvConfig;
 
     @Override
     public List<MerchantStoreImageBO> listMerchantStoreImageByType(Long merchantId, MerchantStoreImageEnum merchantStoreImageEnum) {
@@ -38,7 +42,7 @@ public class MerchantStoreImageServiceImpl implements MerchantStoreImageService 
 	     if(!merchantStoreImageDOS.isEmpty()){
 	    	 return merchantStoreImageDOS.get(0).getPath();
 	     }else{
-	    	 return null;
+	    	 return userSrvConfig.getDefaultHeadimg();
 	     }
 		
 	}
