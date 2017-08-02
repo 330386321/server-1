@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,7 +25,8 @@ public class MockShoppingOrderService extends BaseController implements Shopping
 
 	@Override
 	public Result<List<Long>> save(@RequestBody List<ShoppingOrderSettlementParam> params) {
-		return null;
+		List<Long> ids = new ArrayList<>();
+		return successCreated(ids);
 	}
 
 	@Override
@@ -36,42 +38,42 @@ public class MockShoppingOrderService extends BaseController implements Shopping
 
 	@Override
 	public Result<Page<ShoppingOrderExtendQueryDTO>> selectPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingOrderQueryForeignToMemberParam param) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result cancelOrder(@PathVariable("memberId") Long memberId, @PathVariable("id") Long id) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result deleteOrder(@PathVariable("memberId") Long memberId, @PathVariable("id") Long id) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result tradingSuccess(@PathVariable("id") Long id) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result requestRefund(@PathVariable("shoppingOrderitemId") Long shoppingOrderitemId, @RequestParam("memberId") Long memberId, @RequestBody ShoppingOrderRequestRefundParam param) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
 	public Result<Page<ShoppingOrderItemRefundDTO>> selectRefundPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingRefundQueryForeignParam param) {
-		return null;
+		return successCreated();
 	}
 
 	@Override
@@ -94,6 +96,10 @@ public class MockShoppingOrderService extends BaseController implements Shopping
 
 	@Override
 	public Result<ShoppingOrderPaymentDTO> orderPayment(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
-		return null;
+		ShoppingOrderPaymentDTO dto = new ShoppingOrderPaymentDTO();
+		dto.setId(1L);
+		dto.setOrderNum("M0003");
+		dto.setOrderTotalPrice(new BigDecimal(1));
+		return successCreated(dto);
 	}
 }

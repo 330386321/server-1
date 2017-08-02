@@ -39,6 +39,16 @@ public class MockAdPlatformService extends BaseController implements AdPlatformS
 
     @Override
     public Result<List<AdPlatformDTO>> getAdPlatformByTypePositionRegionPath(@RequestParam("typeEnum") TypeEnum typeEnum, @RequestParam("positionEnum") PositionEnum positionEnum, @RequestParam("regionPath") String regionPath) {
-        return null;
+        AdPlatformDTO dto = new AdPlatformDTO();
+        dto.setId(1L);
+        dto.setContent("ccdf");
+        dto.setLinkUrl("343");
+        dto.setMediaUrl("343");
+        dto.setMerchantStoreId(1L);
+        dto.setProductId(1L);
+        dto.setTitle("rere");
+        List<AdPlatformDTO> list = new ArrayList<>();
+        list.add(dto);
+        return successCreated(list);
     }
 }

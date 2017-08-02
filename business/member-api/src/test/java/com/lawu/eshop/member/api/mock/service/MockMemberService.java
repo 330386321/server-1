@@ -128,7 +128,7 @@ public class MockMemberService extends BaseController implements MemberService {
 
     @Override
     public Result<Boolean> isExistsMobile(@RequestParam("mobile") String mobile) {
-        return null;
+        return successCreated(true);
     }
 
     @Override

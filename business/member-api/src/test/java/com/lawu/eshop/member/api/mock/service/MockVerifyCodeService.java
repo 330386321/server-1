@@ -30,11 +30,11 @@ class MockVerifyCodeService extends BaseController implements VerifyCodeService 
 
     @Override
     public Result verifyPicCode(@PathVariable("mobile") String mobile, @RequestParam("picCode") String picCode) {
-        return null;
+        return successCreated();
     }
 
     @Override
     public Result getVerifyCodeById(@PathVariable("id") Long id) {
-        return null;
+        return successCreated();
     }
 }

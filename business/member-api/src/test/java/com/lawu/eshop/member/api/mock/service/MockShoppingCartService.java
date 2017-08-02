@@ -50,7 +50,14 @@ class MockShoppingCartService extends BaseController implements ShoppingCartServ
 
 	@Override
 	public Result<List<ShoppingCartDTO>> findListByIds(@PathVariable("memberId") Long memberId, @RequestParam(name = "ids") List<Long> ids) {
-		return null;
+		ShoppingCartDTO dto = new ShoppingCartDTO();
+		dto.setProductModelId(1L);
+		dto.setSalesPrice(new BigDecimal("1"));
+		dto.setQuantity(1);
+		dto.setMerchantId(1L);
+		List<ShoppingCartDTO> list = new ArrayList<>();
+		list.add(dto);
+		return successCreated(list);
 	}
 
 	@Override

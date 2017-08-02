@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.CashManageFrontService;
+import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.dto.WithdrawCashDetailDTO;
 import com.lawu.eshop.property.dto.WithdrawCashQueryDTO;
 import com.lawu.eshop.property.dto.WithdrawCashStatusDTO;
@@ -43,7 +44,12 @@ public class MockCashManageFrontService extends BaseController implements CashMa
 
 	@Override
 	public Result<List<WithdrawCashStatusDTO>> findCashDetailStatus(@RequestParam("ids") List<Long> ids) {
-		return null;
+		WithdrawCashStatusDTO dto = new WithdrawCashStatusDTO();
+		dto.setId(1L);
+		dto.setStatus(CashStatusEnum.ACCEPT);
+		List<WithdrawCashStatusDTO> list = new ArrayList<>();
+		list.add(dto);
+		return successCreated(list);
 	}
 
 	@Override

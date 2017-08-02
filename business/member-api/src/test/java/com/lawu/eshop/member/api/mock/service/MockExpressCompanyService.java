@@ -33,7 +33,11 @@ public class MockExpressCompanyService extends BaseController implements Express
 
 	@Override
 	public Result<ExpressCompanyDTO> get(@PathVariable("id") Integer id) {
-		return null;
+		ExpressCompanyDTO dto = new ExpressCompanyDTO();
+		dto.setCode("fd");
+		dto.setId(1);
+		dto.setName("yto");
+		return successCreated(dto);
 	}
 
 	@Override

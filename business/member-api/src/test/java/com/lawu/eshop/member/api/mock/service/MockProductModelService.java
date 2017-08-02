@@ -36,6 +36,7 @@ class MockProductModelService extends BaseController implements ProductModelServ
 		dto.setId(1L);
 		dto.setMerchantId(1L);
 		dto.setFeatureImage("1.jpg");
+		dto.setInventory(100);
 		dto.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP);
 		List<ShoppingCartProductModelDTO> list = new ArrayList<>();
 		list.add(dto);

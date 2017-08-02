@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.authorization.interceptor.AuthorizationInterceptor;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.member.api.MemberApiApplicationTest;
+import com.lawu.eshop.order.param.ShoppingCartParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderBuyNowCreateOrderForeignParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderSettlementForeignParam;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,18 +99,92 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
          }
      }
 
-//     @Test
-//     public void delete1() {
-//         List<Long> ids = new ArrayList<>();
-//         ids.add(1L);
-//         String requestJson = JSONObject.toJSONString(ids);
-//         RequestBuilder request = delete("/shoppingCart/delete").contentType(MediaType.APPLICATION_JSON).content(requestJson).header("authorization","");
-//         try {
-//             ResultActions perform = mvc.perform(request);
-//             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_NO_CONTENT)).andDo(MockMvcResultHandlers.print()).andReturn();
-//         } catch (Exception e) {
-//             e.printStackTrace();
-//             Assert.fail(e.getMessage());
-//         }
-//     }
+     @Test
+     public void delete1() {
+         List<Long> ids = new ArrayList<>();
+         ids.add(1L);
+         String requestJson = JSONObject.toJSONString(ids);
+         RequestBuilder request = delete("/shoppingCart/delete").header("authorization","").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+         try {
+             ResultActions perform = mvc.perform(request);
+             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_NO_CONTENT)).andDo(MockMvcResultHandlers.print()).andReturn();
+         } catch (Exception e) {
+             e.printStackTrace();
+             Assert.fail(e.getMessage());
+         }
+     }
+
+     @Test
+     public void settlement() {
+         List<Long> ids = new ArrayList<>();
+
+         ids.add(1L);
+         String requestJson = JSONObject.toJSONString(ids);
+         RequestBuilder request = post("/shoppingCart/settlement").header("authorization","").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+         try {
+             ResultActions perform = mvc.perform(request);
+             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+         } catch (Exception e) {
+             e.printStackTrace();
+             Assert.fail(e.getMessage());
+         }
+     }
+
+     @Test
+     public void createOrder() {
+         List<ShoppingOrderSettlementForeignParam> params = new ArrayList<>();
+         ShoppingOrderSettlementForeignParam param = new ShoppingOrderSettlementForeignParam();
+         param.setMerchantId(1L);
+         param.setAddressId(1L);
+         param.setFreightPrice(new BigDecimal("1"));
+         List<Long> ids = new ArrayList<>();
+         ids.add(1L);
+         param.setIds(ids);
+         param.setMessage("messgae");
+         params.add(param);
+         String requestJson = JSONObject.toJSONString(params);
+         RequestBuilder request = post("/shoppingCart/createOrder").header("authorization","").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+         try {
+             ResultActions perform = mvc.perform(request);
+             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+         } catch (Exception e) {
+             e.printStackTrace();
+             Assert.fail(e.getMessage());
+         }
+     }
+
+     @Test
+     public void buyNow() {
+         ShoppingCartParam param = new ShoppingCartParam();
+         param.setProductModelId(1L);
+         param.setQuantity(1);
+         String requestJson = JSONObject.toJSONString(param);
+         RequestBuilder request = post("/shoppingCart/buyNow").header("authorization","").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+         try {
+             ResultActions perform = mvc.perform(request);
+             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+         } catch (Exception e) {
+             e.printStackTrace();
+             Assert.fail(e.getMessage());
+         }
+     }
+
+     @Test
+     public void buyNowCreateOrder() {
+         ShoppingOrderBuyNowCreateOrderForeignParam param = new ShoppingOrderBuyNowCreateOrderForeignParam();
+         param.setProductModelId(1L);
+         param.setQuantity(1);
+         param.setAddressId(1L);
+         param.setFreightPrice(new BigDecimal("1"));
+         param.setMessage("gun");
+         String requestJson = JSONObject.toJSONString(param);
+         RequestBuilder request = post("/shoppingCart/buyNowCreateOrder").header("authorization","").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+         try {
+             ResultActions perform = mvc.perform(request);
+             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+         } catch (Exception e) {
+             e.printStackTrace();
+             Assert.fail(e.getMessage());
+         }
+     }
  }

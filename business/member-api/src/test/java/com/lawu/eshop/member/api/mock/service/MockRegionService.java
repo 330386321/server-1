@@ -24,6 +24,6 @@ public class MockRegionService extends BaseController implements RegionService {
 
     @Override
     public Result<String> getAreaName(@RequestParam("regionPath") String regionPath) {
-        return null;
+        return successCreated(new String("dfdf"));
     }
 }

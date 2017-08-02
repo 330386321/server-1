@@ -33,7 +33,19 @@ public class MockMerchantStoreService extends BaseController implements Merchant
 
     @Override
     public Result<ShoppingOrderFindUserInfoDTO> shoppingOrderFindUserInfo(@RequestBody ShoppingOrderFindUserInfoParam param) {
-        return null;
+        ShoppingOrderFindUserInfoDTO dto = new ShoppingOrderFindUserInfoDTO();
+        dto.setMemberNum("Mfdfdf");
+        List<ShoppingOrderFindMerchantInfoDTO> ddtos = new ArrayList<>();
+        ShoppingOrderFindMerchantInfoDTO ddto = new ShoppingOrderFindMerchantInfoDTO();
+        ddto.setMerchantId(1L);
+        ddto.setIsFans(true);
+        ddto.setIsNoReasonReturn(true);
+        ddto.setMerchantNum("M4343");
+        ddto.setMerchantStoreId(1L);
+        ddto.setMerchantStoreName("fdfdf");
+        ddtos.add(ddto);
+        dto.setShoppingOrderFindMerchantInfoDTOList(ddtos);
+        return successCreated(dto);
     }
 
     @Override
@@ -105,7 +117,14 @@ public class MockMerchantStoreService extends BaseController implements Merchant
 
     @Override
     public Result<List<StoreSolrInfoDTO>> getMerchantStoreByIds(@RequestParam("merchantStoreIds") List<Long> merchantStoreIds) {
-        return null;
+        StoreSolrInfoDTO dto = new StoreSolrInfoDTO();
+        dto.setMerchantStoreId(1L);
+        dto.setIndustryName("fdfd");
+        dto.setIndustryPath("fdfd");
+        dto.setMerchantId(1L);
+        List<StoreSolrInfoDTO> list = new ArrayList<>();
+        list.add(dto);
+        return successCreated(list);
     }
 
     @Override

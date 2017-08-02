@@ -120,7 +120,6 @@ public class TransactionDetailController extends BaseController {
      * 获取用户的所有交易类型。
      * 
      * @param token 
-     * @param param 查询参数
      * @return
      */
 	@Audit(date = "2017-04-21", reviewer = "孙林青")
