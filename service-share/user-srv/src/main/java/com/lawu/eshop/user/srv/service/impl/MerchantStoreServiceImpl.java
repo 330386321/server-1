@@ -1,7 +1,6 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.solr.service.SolrService;
-import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
@@ -26,7 +25,6 @@ import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.discovery.ManagementServerPortUtils.ManagementServerPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,11 +60,11 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         MerchantStoreDOExample example = new MerchantStoreDOExample();
         example.createCriteria().andMerchantIdEqualTo(merchantId);
         List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(example);
-        MerchantStoreDO merchantStoreDO = null;
-        if (!list.isEmpty()) {
-            merchantStoreDO = list.get(0);
-           
+        if(list.isEmpty()){
+            return null;
         }
+
+        MerchantStoreDO merchantStoreDO = list.get(0);
         MerchantStoreProfileDOExample mpExample = new  MerchantStoreProfileDOExample();
         mpExample.createCriteria().andMerchantIdEqualTo(list.get(0).getMerchantId());
         List<MerchantStoreProfileDO>  mpList = merchantStoreProfileDOMapper.selectByExample(mpExample);		
