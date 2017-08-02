@@ -11,7 +11,7 @@ public class MockRecommendStoreCacheService extends BaseController implements Re
 
     @Override
     public Result<String> getNewMerchant(@RequestParam("regionPath") String regionPath) {
-        return successCreated(new String("fdf"));
+        return successCreated("{[\"merchantId\":1,\"merchantStoreId\":1,\"name\":\"2\",\"industryName\":\"3\",\"regionName\":\"1\",\"address\":\"1\",\"storePic\":\"dd\"]}");
     }
 
     @Override

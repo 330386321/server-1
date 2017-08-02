@@ -17,7 +17,7 @@ public class MockFavoriteAdService extends BaseController implements FavoriteAdS
 
 	@Override
 	public Result save(@RequestParam("memberId") Long memberId, @RequestParam("adId") Long adId, @RequestParam("userNum") String userNum) {
-		return null;
+		return successCreated();
 	}
 
 	@Override

@@ -72,31 +72,4 @@ public class DiscountPackageControllerTest {
         }
     }
 
-    @Test
-    public void getCommentProductsWithImgs() {
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-        params.add("productId","1");
-        params.add("currentPage","1");
-        params.add("pageSize","10");
-        RequestBuilder request = get("/commentProduct/getCommentProductsWithImgs").header("authorization","").params(params);
-        try {
-            ResultActions perform = mvc.perform(request);
-            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    public void getCommentAvgGrade() {
-        RequestBuilder request = get("/commentProduct/getCommentProductAvgGrade/1").param("productId","1");
-        try {
-            ResultActions perform = mvc.perform(request);
-            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail(e.getMessage());
-        }
-    }
 }

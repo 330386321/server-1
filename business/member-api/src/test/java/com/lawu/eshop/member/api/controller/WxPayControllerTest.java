@@ -61,6 +61,27 @@
              e.printStackTrace();
              Assert.fail(e.getMessage());
          }
+
+
+         params.add("bizFlagEnum", ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.name());
+         request = post("/wxPay/getPrepayInfo").header("authorization","").params(params);
+         try {
+             ResultActions perform = mvc.perform(request);
+             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+         } catch (Exception e) {
+             e.printStackTrace();
+             Assert.fail(e.getMessage());
+         }
+
+         params.add("bizFlagEnum", ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.name());
+         request = post("/wxPay/getPrepayInfo").header("authorization","").params(params);
+         try {
+             ResultActions perform = mvc.perform(request);
+             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+         } catch (Exception e) {
+             e.printStackTrace();
+             Assert.fail(e.getMessage());
+         }
      }
 
  }

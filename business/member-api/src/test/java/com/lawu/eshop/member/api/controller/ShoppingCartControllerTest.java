@@ -62,7 +62,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
          MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
          params.add("productModelId","1");
          params.add("quantity","10");
-         RequestBuilder request = post("/shoppingCart/save").params(params);
+         RequestBuilder request = post("/shoppingCart/save").header("authorization","").params(params);
          try {
              ResultActions perform = mvc.perform(request);
              MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
