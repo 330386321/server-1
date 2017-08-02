@@ -57,7 +57,7 @@ public class ReportUserIncomeExpenditureControllerTest {
 		param.setIncome(new BigDecimal(10));
 		param.setUserNum("MMM");
 		String requestJson = JSONObject.toJSONString(param);
-		RequestBuilder request = post("/reportUserIncomeExpenditure/save").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+		RequestBuilder request = post("/reportUserIncomeExpenditure/").contentType(MediaType.APPLICATION_JSON).content(requestJson);
 		try {
 			ResultActions perform = mvc.perform(request);
 			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED))
