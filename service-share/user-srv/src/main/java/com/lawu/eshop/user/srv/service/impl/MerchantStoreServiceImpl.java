@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.solr.service.SolrService;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
@@ -19,11 +20,13 @@ import com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.ManagementServerPortUtils.ManagementServerPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +52,9 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 
     @Autowired
     private SolrService solrService;
+    
+    @Autowired
+    private MerchantStoreProfileDOMapper merchantStoreProfileDOMapper;
 
     @Override
     public MerchantStoreBO selectMerchantStore(Long merchantId) {
@@ -59,8 +65,16 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         MerchantStoreDO merchantStoreDO = null;
         if (!list.isEmpty()) {
             merchantStoreDO = list.get(0);
+           
         }
+        MerchantStoreProfileDOExample mpExample = new  MerchantStoreProfileDOExample();
+        mpExample.createCriteria().andMerchantIdEqualTo(list.get(0).getMerchantId());
+        List<MerchantStoreProfileDO>  mpList = merchantStoreProfileDOMapper.selectByExample(mpExample);		
+        
         MerchantStoreBO bo = MerchantStoreConverter.convertStoreBO(merchantStoreDO);
+		if(!mpList.isEmpty()){
+			bo.setManageTypeEnum(MerchantStoreTypeEnum.getEnum(mpList.get(0).getManageType()));
+		}
         return bo;
     }
 
