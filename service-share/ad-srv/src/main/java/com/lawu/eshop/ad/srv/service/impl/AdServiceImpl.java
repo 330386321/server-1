@@ -158,7 +158,7 @@ public class AdServiceImpl implements AdService {
 			adDO.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val); //视频广告默认为审核中
 		}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){
 			Integer praiseCount=adSaveParam.getCount();
-			piontCount=praiseCount%10==0?praiseCount/10:praiseCount/10+1 ;
+			piontCount =(int)Math.ceil(praiseCount * (adSrvConfig.getAdPraiseAllotProb()/100));
 			if(piontCount<=10){
 				 piontCount=10;
 			}
@@ -189,10 +189,8 @@ public class AdServiceImpl implements AdService {
 	 */
 	public void savePointPool(AdDO adDO, Integer count) {
 		// 算法生成积分明细
-		Integer piontCount =(int)Math.ceil(count * (adSrvConfig.getAdPraiseAllotProb()/100));
-
-		double[] points = AdArithmeticUtil.getMoney(adDO.getTotalPoint().doubleValue(), piontCount);
-		for (int j = 0; j < piontCount; j++) {
+		double[] points = AdArithmeticUtil.getMoney(adDO.getTotalPoint().doubleValue(), count);
+		for (int j = 0; j < count; j++) {
 			PointPoolDO pointPool = new PointPoolDO();
 			pointPool.setAdId(adDO.getId());
 			pointPool.setMerchantId(adDO.getMerchantId());
