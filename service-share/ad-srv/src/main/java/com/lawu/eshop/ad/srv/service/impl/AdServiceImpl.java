@@ -330,6 +330,9 @@ public class AdServiceImpl implements AdService {
 		adDO.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
 		Integer i = adDOMapper.updateByPrimaryKeySelective(adDO);
 		AdDO ad = adDOMapper.selectByPrimaryKey(id);
+		if(ad.getType()==AdTypeEnum.AD_TYPE_PACKET.getVal() || ad.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal() ){
+			pointPoolDOMapperExtend.updatePointOut(id);
+		}
 		matransactionMainAddService.sendNotice(ad.getId());
 		// 删除solr中的数据
 		solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
@@ -349,6 +352,9 @@ public class AdServiceImpl implements AdService {
 		adDO.setId(id);
 		adDO.setStatus(AdStatusEnum.AD_STATUS_DELETE.val);
 		Integer i = adDOMapper.updateByPrimaryKeySelective(adDO);
+		if(adDO.getType()==AdTypeEnum.AD_TYPE_PACKET.getVal() || adDO.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal() ){
+			pointPoolDOMapperExtend.updatePointOut(id);
+		}
 		// 删除solr中的数据
 		solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		return i;
@@ -662,7 +668,7 @@ public class AdServiceImpl implements AdService {
 			pointPoolDO.setGmtModified(new Date());
 			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
 			// 给用户加积分
-			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
+			userSweepRedtransactionMainAddService.sendNotice(pointPoolDO.getId());
 			if (list.size() == 1) { // 红包领取完成 将红包下架
 				AdDO ad = new AdDO();
 				ad.setId(pointPoolDO.getAdId());

@@ -29,7 +29,7 @@ import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 
-@FeignClient(value = "ad-srv", path = "ad/")
+@FeignClient(value = "ad-srv")
 public interface AdService {
 	
 
@@ -63,8 +63,8 @@ public interface AdService {
 	 * @param adId
 	 * @return
 	 */
-	@RequestMapping(value = "pointPool/selectMemberList", method = RequestMethod.GET)
-    public Result<List<PointPoolDTO>> selectMemberList(@RequestParam("id") Long id);
+	@RequestMapping(value = "pointPool/selectMemberList/{id}", method = RequestMethod.GET)
+    public Result<List<PointPoolDTO>> selectMemberList(@PathVariable("id") Long id);
 	
 	/**
 	 * 抢赞

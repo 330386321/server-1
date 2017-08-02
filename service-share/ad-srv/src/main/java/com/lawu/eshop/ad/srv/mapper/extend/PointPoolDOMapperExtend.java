@@ -14,4 +14,7 @@ public interface PointPoolDOMapperExtend {
 	
 	
 	PointPoolDOView getTotlePoint(Long  adId);
+	
+	
+	void updatePointOut(Long  adId);
 }
