@@ -16,7 +16,7 @@ public class WorkOrderParam {
 	@NotBlank(message = "编号不能为空")
 	private String userNum;
 	
-	@ApiModelProperty(name = "workOrderTypeEnum", required = true, value = "工单类型：0--用户提交的，1--商家提交的")
+	@ApiModelProperty(name = "workOrderTypeEnum", required = true, value = "工单类型：MEMBER--用户提交的，MERCHANT--商家提交的")
 	@NotBlank(message = "工单类型不能为空")
 	private WorkOrderTypeEnum workOrderTypeEnum;
 	
