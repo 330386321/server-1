@@ -58,11 +58,14 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDOExample;
+import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO;
+import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDOExample;
 import com.lawu.eshop.order.srv.mapper.PropertyDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingRefundDetailDOMapper;
+import com.lawu.eshop.order.srv.mapper.ShoppingRefundProcessDOMapper;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.RandomUtil;
@@ -93,7 +96,10 @@ public class ShoppingOrderServiceImplTest {
 	
 	@Autowired
 	private PropertyDOMapper propertyDOMapper;
-
+	
+	@Autowired
+	private ShoppingRefundProcessDOMapper shoppingRefundProcessDOMapper;
+	
     @Transactional
     @Rollback
     @Test
@@ -2165,6 +2171,14 @@ public class ShoppingOrderServiceImplTest {
     	Assert.assertEquals(param.getDescription(), actualShoppingRefundDetailDO.getDescription());
     	Assert.assertEquals(param.getType().getValue(), actualShoppingRefundDetailDO.getType());
     	Assert.assertEquals(StatusEnum.VALID.getValue(), actualShoppingRefundDetailDO.getStatus());
+    	
+    	ShoppingRefundProcessDOExample shoppingRefundProcessDOExample = new ShoppingRefundProcessDOExample();
+    	shoppingRefundProcessDOExample.createCriteria().andShoppingRefundDetailIdEqualTo(actualShoppingRefundDetailDO.getId());
+    	ShoppingRefundProcessDO shoppingRefundProcessDO = shoppingRefundProcessDOMapper.selectByExample(shoppingRefundProcessDOExample).get(0);
+    	Assert.assertNotNull(shoppingRefundProcessDO);
+    	Assert.assertNotNull(shoppingRefundProcessDO.getGmtCreate());
+    	Assert.assertEquals(actualShoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getShoppingRefundDetailId());
+    	Assert.assertEquals(actual.getRefundStatus(), shoppingRefundProcessDO.getRefundStatus());
     }
     
     @Transactional
