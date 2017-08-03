@@ -2,12 +2,7 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
-import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.constants.UserInviterTypeEnum;
-import com.lawu.eshop.user.constants.UserSexEnum;
-import com.lawu.eshop.user.constants.UserStatusEnum;
-import com.lawu.eshop.user.constants.UserTypeEnum;
+import com.lawu.eshop.user.constants.*;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
@@ -29,7 +24,6 @@ import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.RandomUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -168,39 +162,6 @@ public class MemberServiceImpl implements MemberService {
         		memberDO.setHeadimg(userSrvConfig.getDefaultHeadimg());
         	}
         	MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
-            if (memberProfileDO != null)
-                mpList.add(memberProfileDO);
-        }
-        Page<MemberBO> pageMember = new Page<MemberBO>();
-        pageMember.setTotalCount(count);
-        List<MemberBO> memberBOS = MemberConverter.convertListBOS(memberDOS, mpList);
-        pageMember.setRecords(memberBOS);
-        pageMember.setCurrentPage(memberQuery.getCurrentPage());
-        return pageMember;
-    }
-
-//    @Override
-    public Page<MemberBO> findMemberListByUser_bak(Long inviterId, MemberQuery memberQuery, byte inviterType) {
-        MemberDOExample example = new MemberDOExample();
-        Criteria c1 = example.createCriteria();
-        c1.andInviterIdEqualTo(inviterId).andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val).andInviterTypeEqualTo(inviterType);
-        int count = memberDOMapper.countByExample(example);
-        if (memberQuery.getAccountOrNickName() != null) { //存在模糊查询
-            c1.andAccountLike("%" + memberQuery.getAccountOrNickName() + "%");
-            Criteria c2 = example.createCriteria();
-            c2.andInviterIdEqualTo(inviterId).andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val).andInviterTypeEqualTo(inviterType)
-            .andNicknameLike("%" + memberQuery.getAccountOrNickName() + "%");
-            example.or(c2);
-        }
-        RowBounds rowBounds = new RowBounds(memberQuery.getOffset(), memberQuery.getPageSize());
-        List<MemberDO> memberDOS = memberDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-
-        List<MemberProfileDO> mpList = new ArrayList<MemberProfileDO>();
-        for (MemberDO memberDO : memberDOS) {
-        	if(memberDO.getHeadimg()==null){
-        		memberDO.setHeadimg(userSrvConfig.getDefaultHeadimg());
-        	}
-        	MemberProfileDO  memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
             if (memberProfileDO != null)
                 mpList.add(memberProfileDO);
         }
