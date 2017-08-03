@@ -157,9 +157,10 @@ public class ShoppingOrderController extends BaseController {
 		return successCreated();
 	}
 
+	@Deprecated
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "申请退款", notes = "根据购物订单项id申请退款。[1002|1003|4005]（蒋鑫俊）", httpMethod = "POST")
+	@ApiOperation(value = "申请退款[Deprecated]", notes = "根据购物订单项id申请退款。[1002|1003|4005]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "requestRefund/{shoppingOrderitemId}", method = RequestMethod.POST)
@@ -198,6 +199,26 @@ public class ShoppingOrderController extends BaseController {
 		shoppingOrderRequestRefundParam.setReason(param.getReason());
 		shoppingOrderRequestRefundParam.setType(param.getType());
 		shoppingOrderRequestRefundParam.setVoucherPicture(headImg.toString());
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result result = shoppingOrderService.requestRefund(shoppingOrderitemId, memberId, shoppingOrderRequestRefundParam);
+		return successCreated(result);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@ApiOperation(value = "申请退款", notes = "申请退款。[1002|1003|4005]（蒋鑫俊）", httpMethod = "POST")
+	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+	@Authorization
+	@RequestMapping(value = "applyrefund/{shoppingOrderitemId}", method = RequestMethod.POST)
+	public Result applyrefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("shoppingOrderitemId") @ApiParam(name = "shoppingOrderitemId", value = "购物订单项id", required = true) Long shoppingOrderitemId, @ModelAttribute @ApiParam(name = "param", value = "退款参数") @Validated ShoppingOrderRequestRefundForeignParam param, BindingResult bindingResult) {
+		String message = validate(bindingResult);
+		if (message != null) {
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+		}
+		ShoppingOrderRequestRefundParam shoppingOrderRequestRefundParam = new ShoppingOrderRequestRefundParam();
+		shoppingOrderRequestRefundParam.setDescription(param.getDescription());
+		shoppingOrderRequestRefundParam.setReason(param.getReason());
+		shoppingOrderRequestRefundParam.setType(param.getType());
+		shoppingOrderRequestRefundParam.setVoucherPicture(param.getVoucherPicture());
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		Result result = shoppingOrderService.requestRefund(shoppingOrderitemId, memberId, shoppingOrderRequestRefundParam);
 		return successCreated(result);

@@ -211,7 +211,7 @@ public abstract class BaseController {
 	}
 
 	/**
-	 * 验证参数同意入口
+	 * 验证参数统一入口
 	 * 
 	 * @param bindingResult
 	 *            验证参数结果
