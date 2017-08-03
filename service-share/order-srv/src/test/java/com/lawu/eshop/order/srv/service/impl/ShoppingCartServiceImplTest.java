@@ -165,7 +165,7 @@ public class ShoppingCartServiceImplTest {
     @Transactional
     @Rollback
     @Test
-    public void remove1() {
+    public void removeById() {
     	ShoppingCartDO expected = new ShoppingCartDO();
     	expected.setGmtCreate(new Date());
     	expected.setGmtModified(new Date());
@@ -216,15 +216,8 @@ public class ShoppingCartServiceImplTest {
     	Assert.assertNotNull(result);
     	Assert.assertEquals(1, result.size());
     	for (ShoppingCartDO actual : result) {
-    		Assert.assertEquals(actual.getProductModelId(), expected.getProductModelId());
-    		Assert.assertEquals(actual.getQuantity(), expected.getQuantity());
-    		Assert.assertEquals(actual.getMerchantId(), expected.getMerchantId());
-    		Assert.assertEquals(actual.getMerchantName(), expected.getMerchantName());
-    		Assert.assertEquals(actual.getMerchantStoreId(), expected.getMerchantStoreId());
-    		Assert.assertEquals(actual.getProductId(), expected.getProductId());
-    		Assert.assertEquals(actual.getProductModelId(), expected.getProductModelId());
-    		Assert.assertEquals(actual.getQuantity(), expected.getQuantity());
-    		Assert.assertEquals(actual.getSalesPrice().doubleValue(), expected.getSalesPrice().doubleValue(), 0D);
+    		Assert.assertEquals(memberId, actual.getMemberId());
+    		assertShoppingCartDO(expected, actual);
     	}
     }
     
@@ -263,5 +256,16 @@ public class ShoppingCartServiceImplTest {
     		Assert.assertEquals(actual.getQuantity(), expected.getQuantity());
     	}
     }
-
+    
+    public static void assertShoppingCartDO(ShoppingCartSaveParam expected, ShoppingCartDO actual) {
+    	Assert.assertEquals(actual.getProductModelId(), expected.getProductModelId());
+		Assert.assertEquals(actual.getQuantity(), expected.getQuantity());
+		Assert.assertEquals(actual.getMerchantId(), expected.getMerchantId());
+		Assert.assertEquals(actual.getMerchantName(), expected.getMerchantName());
+		Assert.assertEquals(actual.getMerchantStoreId(), expected.getMerchantStoreId());
+		Assert.assertEquals(actual.getProductId(), expected.getProductId());
+		Assert.assertEquals(actual.getProductModelId(), expected.getProductModelId());
+		Assert.assertEquals(actual.getQuantity(), expected.getQuantity());
+		Assert.assertEquals(actual.getSalesPrice().doubleValue(), expected.getSalesPrice().doubleValue(), 0D);
+    }
 }
