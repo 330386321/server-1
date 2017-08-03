@@ -116,6 +116,7 @@ public class ProductController extends BaseController {
 
 	}
 
+	@Deprecated
 	@Audit(date = "2017-04-25", reviewer = "孙林青")
 	@SuppressWarnings({ "rawtypes", "deprecation" })
 	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，[]，（杨清华）", httpMethod = "POST")
@@ -226,7 +227,6 @@ public class ProductController extends BaseController {
 		dataProduct.setImageContents((imageContents == null || "".equals(imageContents)) ? "[]" : imageContents);
 		dataProduct.setFeatureImage(featureImage);
 		dataProduct.setProductImages(productImage);
-		dataProduct.setDetailImageMap(detailImageMap);
 		dataProduct.setDetailImages(productDetailImage);
 		dataProduct.setIsAllowRefund(product.getIsAllowRefund());
 		dataProduct.setDeleteSpecIds(product.getDeleteSpecIds());
@@ -245,6 +245,58 @@ public class ProductController extends BaseController {
 									 @RequestParam @ApiParam(required = true, value = "关键词") String keywords) {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		return productService.updateKeywordsById(id, merchantId, keywords);
+	}
+
+	/**
+	 *
+	 * @param token
+	 * @param product
+	 * @return
+	 * @since V2.4.0
+	 * @throws IOException
+	 * @throws ServletException
+	 */
+	@Audit(date = "2017-04-25", reviewer = "孙林青")
+	@SuppressWarnings({ "rawtypes", "deprecation" })
+	@ApiOperation(value = "添加编辑商品", notes = "添加编辑商品接口，[]，（杨清华）", httpMethod = "POST")
+	@Authorization
+	@RequestMapping(value = "saveProductInfo", method = RequestMethod.POST)
+	public Result saveProductInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam EditProductParam product) {
+
+		String imageContents = product.getImageContents();
+		imageContents = URLDecoder.decode (imageContents);
+
+		String productImages = product.getBackProductImageUrls();
+		productImages = URLDecoder.decode(productImages);
+		if (productImages == null || "[]".equals(productImages) || "".equals(productImages)) {
+			return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
+		}
+		productImages = StringUtil.getJsonListToString(productImages);
+
+		String productDetailImages = product.getBackProductDetailImageUrls();
+		productDetailImages = URLDecoder.decode(productDetailImages);
+		productDetailImages = StringUtil.getJsonListToString(productDetailImages);
+
+		String featureImage = productImages.split(",")[0];
+
+		EditProductDataParam dataProduct = new EditProductDataParam();
+		dataProduct.setProductId(product.getProductId());
+		dataProduct.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
+		dataProduct.setMerchantNum(UserUtil.getCurrentUserNum(getRequest()));
+		dataProduct.setName(product.getName());
+		dataProduct.setCategoryId(product.getCategoryId());
+		dataProduct.setContent(product.getContent());
+		dataProduct.setSpec(URLDecoder.decode(product.getSpec()));
+		dataProduct.setImageContents((imageContents == null || "".equals(imageContents)) ? "[]" : imageContents);
+		dataProduct.setFeatureImage(featureImage);
+		dataProduct.setProductImages(productImages);
+		dataProduct.setDetailImages(productDetailImages);
+		dataProduct.setIsAllowRefund(product.getIsAllowRefund());
+		dataProduct.setDeleteSpecIds(product.getDeleteSpecIds());
+		dataProduct.setProductStatus(product.getProductStatus());
+
+		return productService.saveProduct(dataProduct);
+
 	}
 
 	/**

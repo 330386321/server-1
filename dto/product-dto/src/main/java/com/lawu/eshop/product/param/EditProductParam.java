@@ -34,21 +34,21 @@ public class EditProductParam {
 	@NotBlank(message="content不能为空")
 	private String content;
 
-	@ApiParam(value = "商品型号信息，json格式：[{id,name,originalPrice,price,inventory,inventoryTrans,salesVolume},{},...],新增时id=0,inventoryTrans=0,salesVolume=0，修改时inventoryTrans透传不做修改", required = true)
+	@ApiParam(value = "商品型号信息，格式：[{id,name,originalPrice,price,inventory,inventoryTrans,salesVolume}],新增时id=0,inventoryTrans=0,salesVolume=0，修改时inventoryTrans、salesVolume透传不做修改", required = true)
 	@NotBlank(message="spec不能为空")
 	private String spec;
 	
 	@ApiParam(value = "删除的型号ID(多个用英文逗号分开)", required = false)
 	private String deleteSpecIds;
 	
-	@ApiParam(value = "新增为空，修改时回显的滚动图片url(新增时传空,格式：[url1,url2,...])")
+	@ApiParam(value = "商品图片url(格式：[url1,url2,...])", required = true)
 	private String backProductImageUrls;
 	
-	@ApiParam(value = "详情图片描述(以json字符串的格式传输，格式：[xxx,zzz,...]，其顺序要和其详情图片index一致)")
-	private String imageContents;
-	
-	@ApiParam(value = "新增为空，修改时回显的详情图片url(新增时传空,格式：[url1,url2,...])")
+	@ApiParam(value = "商品描述图片url(格式：[url1,url2,...])", required = false)
 	private String backProductDetailImageUrls;
+
+	@ApiParam(value = "详情图片描述(以json字符串的格式传输，格式：[xxx,zzz,...]，顺序要与backProductDetailImageUrls一致)", required = false)
+	private String imageContents;
 	
 	@ApiParam(value = "是否支持退换货(true|false)", required = true)
 	@NotNull(message="isAllowRefund不能为空")

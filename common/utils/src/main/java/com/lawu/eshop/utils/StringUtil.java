@@ -123,7 +123,9 @@ public class StringUtil {
             str.append(o.toString()).append(',');
         }
         String st = str.toString();
-        st = st.substring(0, st.lastIndexOf(','));
+        if(!"".equals(st) && st.indexOf(',') > 0){
+            st = st.substring(0, st.lastIndexOf(','));
+        }
         return st;
     }
 
