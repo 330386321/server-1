@@ -341,4 +341,25 @@ public class MerchantStoreController extends BaseController {
         return merchantStoreService.findIsNoReasonReturnById(merchantId);
     }
 
+    @ApiOperation(value = "新增店铺(new)", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "addMerchantStoreInfo", method = RequestMethod.POST)
+    public Result addMerchantStoreInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                       @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam ) {
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam);
+    }
+
+    @ApiOperation(value = "修改门店信息(new)", notes = "错误信息 [2008]（章勇）", httpMethod = "POST")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "addMerchantStoreAuditInfo/{merchantStoreId}", method = RequestMethod.POST)
+    public Result addMerchantStoreAuditInfo( @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                              @PathVariable("merchantStoreId") Long merchantStoreId,
+                                             @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam) {
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId, merchantStoreParam);
+    }
+
 }
