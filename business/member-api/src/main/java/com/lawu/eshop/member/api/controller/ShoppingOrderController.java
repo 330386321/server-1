@@ -208,8 +208,8 @@ public class ShoppingOrderController extends BaseController {
 	@ApiOperation(value = "申请退款", notes = "申请退款。[1002|1003|4005]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
-	@RequestMapping(value = "applyrefund/{shoppingOrderitemId}", method = RequestMethod.POST)
-	public Result applyrefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("shoppingOrderitemId") @ApiParam(name = "shoppingOrderitemId", value = "购物订单项id", required = true) Long shoppingOrderitemId, @ModelAttribute @ApiParam(name = "param", value = "退款参数") @Validated ShoppingOrderRequestRefundForeignParam param, BindingResult bindingResult) {
+	@RequestMapping(value = "applyRefund/{shoppingOrderitemId}", method = RequestMethod.POST)
+	public Result applyRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("shoppingOrderitemId") @ApiParam(name = "shoppingOrderitemId", value = "购物订单项id", required = true) Long shoppingOrderitemId, @ModelAttribute @ApiParam(name = "param", value = "退款参数") @Validated ShoppingOrderRequestRefundForeignParam param, BindingResult bindingResult) {
 		String message = validate(bindingResult);
 		if (message != null) {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
