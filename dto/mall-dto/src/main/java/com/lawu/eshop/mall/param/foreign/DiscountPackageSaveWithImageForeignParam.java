@@ -1,4 +1,4 @@
-package com.lawu.eshop.mall.param;
+package com.lawu.eshop.mall.param.foreign;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,19 +10,19 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lawu.eshop.mall.constants.DiscountPackageUpdateStatusEnum;
-import com.lawu.eshop.mall.param.foreign.DiscountPackageContentUpdateForeignParam;
+import com.lawu.eshop.mall.param.DiscountPackageImageSaveParam;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * 优惠套餐更新参数-对外
+ * 优惠套餐更新对外参数
  * 
  * @author jiangxinjun
  * @date 2017年8月3日
  */
-public class DiscountPackageUpdateParam {
+@ApiModel
+public class DiscountPackageSaveWithImageForeignParam {
 	
 	/**
 	 * 套餐名称
@@ -51,7 +51,6 @@ public class DiscountPackageUpdateParam {
 	@NotNull(message = "有效期-开始不能为空")
 	@ApiModelProperty(value = "有效期-开始(yyyy-MM-dd)", required = true)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date validityPeriodBegin;
 
 	/**
@@ -60,7 +59,6 @@ public class DiscountPackageUpdateParam {
 	@NotNull(message  = "有效期-结束不能为空")
 	@ApiModelProperty(value = "有效期-结束(yyyy-MM-dd)", required = true)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date validityPeriodEnd;
 
 	/**
@@ -76,7 +74,6 @@ public class DiscountPackageUpdateParam {
 	@NotNull(message = "使用时间-开始不能为空")
 	@ApiModelProperty(value = "使用时间-开始(HH:mm)", required = true)
 	@DateTimeFormat(pattern = "HH:mm")
-	@JsonFormat(pattern = "HH:mm")
 	private Date useTimeBegin;
 
 	/**
@@ -85,7 +82,6 @@ public class DiscountPackageUpdateParam {
 	@NotNull(message = "使用时间-结束不能为空")
 	@ApiModelProperty(value = "使用时间-结束(HH:mm)", required = true)
 	@DateTimeFormat(pattern = "HH:mm")
-	@JsonFormat(pattern = "HH:mm")
 	private Date useTimeEnd;
 
 	/**
@@ -112,15 +108,15 @@ public class DiscountPackageUpdateParam {
 	 * 套餐内容
 	 */
 	@NotNull(message = "套餐内容不能为空")
-	@ApiModelProperty(value = "套餐内容（如果是新增的套餐内容id置空）", required = true)
-	private List<DiscountPackageContentUpdateForeignParam> discountPackageContents;
+	@ApiModelProperty(name = "discountPackageContents", value = "套餐内容", required = true)
+	private List<DiscountPackageContentSaveForeignParam> discountPackageContents;
 	
 	/**
 	 * 套餐图片详情
 	 */
 	@NotNull(message = "套餐图片详情不能为空")
-	@ApiModelProperty(value = "套餐图片详情（如果是新增的图片详情id置空）", required = true)
-	private List<DiscountPackageImageUpdateParam> discountPackageImages;
+	@ApiModelProperty(name = "discountPackageImages", value = "套餐图片详情", required = true)
+	private List<DiscountPackageImageSaveParam> discountPackageImages;
 	
     /**
     *
@@ -128,19 +124,13 @@ public class DiscountPackageUpdateParam {
     */
 	@ApiModelProperty(value = "提前预约时间")
     private String advanceBookingTime;
-
+    
     /**
     * 购买须知
     */
-    @ApiModelProperty(value = "购买须知")
+	@ApiModelProperty(value = "购买须知")
     private String purchaseNotes;
-
-    /**
-    * 状态
-    */
-    @ApiModelProperty( value = "状态")
-    private DiscountPackageUpdateStatusEnum status;
-
+	
 	public String getName() {
 		return name;
 	}
@@ -229,19 +219,19 @@ public class DiscountPackageUpdateParam {
 		this.coverImage = coverImage;
 	}
 
-	public List<DiscountPackageContentUpdateForeignParam> getDiscountPackageContents() {
+	public List<DiscountPackageContentSaveForeignParam> getDiscountPackageContents() {
 		return discountPackageContents;
 	}
 
-	public void setDiscountPackageContents(List<DiscountPackageContentUpdateForeignParam> discountPackageContents) {
+	public void setDiscountPackageContents(List<DiscountPackageContentSaveForeignParam> discountPackageContents) {
 		this.discountPackageContents = discountPackageContents;
 	}
 
-	public List<DiscountPackageImageUpdateParam> getDiscountPackageImages() {
+	public List<DiscountPackageImageSaveParam> getDiscountPackageImages() {
 		return discountPackageImages;
 	}
 
-	public void setDiscountPackageImages(List<DiscountPackageImageUpdateParam> discountPackageImages) {
+	public void setDiscountPackageImages(List<DiscountPackageImageSaveParam> discountPackageImages) {
 		this.discountPackageImages = discountPackageImages;
 	}
 
@@ -260,13 +250,5 @@ public class DiscountPackageUpdateParam {
 	public void setPurchaseNotes(String purchaseNotes) {
 		this.purchaseNotes = purchaseNotes;
 	}
-
-	public DiscountPackageUpdateStatusEnum getStatus() {
-		return status;
-	}
-
-	public void setStatus(DiscountPackageUpdateStatusEnum status) {
-		this.status = status;
-	}
-
+	
 }

@@ -1,7 +1,5 @@
 package com.lawu.eshop.mall.param.foreign;
 
-import javax.validation.constraints.NotNull;
-
 import io.swagger.annotations.ApiModelProperty;
 
 public class DiscountPackageImageUpdateForeignParam extends DiscountPackageImageSaveForeignParam {
@@ -9,7 +7,6 @@ public class DiscountPackageImageUpdateForeignParam extends DiscountPackageImage
 	/**
 	 * 图片详情id
 	 */
-	@NotNull
 	@ApiModelProperty(name = "id", value = "图片详情id", required = true)
 	private Long id;
 

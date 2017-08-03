@@ -9,8 +9,8 @@ public class DiscountPackageImageSaveForeignParam {
 	/**
 	 * 图片文字描述
 	 */
-	@NotBlank(message = "图片文字描述")
-	@ApiModelProperty(name = "description", value = "图片文字描述", required = true)
+	@NotBlank(message = "图片文字描述不能为空")
+	@ApiModelProperty(value = "图片文字描述", required = true)
 	private String description;
 
 	public String getDescription() {

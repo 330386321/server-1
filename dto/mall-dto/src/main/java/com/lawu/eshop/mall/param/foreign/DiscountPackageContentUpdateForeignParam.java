@@ -1,7 +1,5 @@
 package com.lawu.eshop.mall.param.foreign;
 
-import javax.validation.constraints.NotNull;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -11,7 +9,6 @@ public class DiscountPackageContentUpdateForeignParam extends DiscountPackageCon
 	/**
 	 * 套餐内容id
 	 */
-	@NotNull
 	@ApiModelProperty(name = "id", value = "套餐内容id", required = true)
 	private Long id;
 

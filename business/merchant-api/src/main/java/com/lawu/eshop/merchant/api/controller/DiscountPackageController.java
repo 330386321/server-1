@@ -51,6 +51,7 @@ import com.lawu.eshop.mall.param.foreign.DiscountPackageImageSaveForeignParam;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageImageUpdateForeignParam;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageQueryForeignParam;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageSaveForeignParam;
+import com.lawu.eshop.mall.param.foreign.DiscountPackageSaveWithImageForeignParam;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageUpdateForeignParam;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.DiscountPackageService;
@@ -136,9 +137,10 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Deprecated
 	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "保存优惠套餐详情", notes = "保存优惠套餐。[]（蒋鑫俊）", httpMethod = "POST")
+	@ApiOperation(value = "保存优惠套餐详情[Deprecated]", notes = "保存优惠套餐。[]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "", method = RequestMethod.POST)
@@ -218,6 +220,49 @@ public class DiscountPackageController extends BaseController {
 	}
 	
 	/**
+	 * 保存优惠套餐
+	 * 
+	 * @param merchantId 商家id
+	 * @param param 保存参数
+	 * @return
+	 * @author Sunny
+	 * @date 2017年8月03日
+	 */
+	@SuppressWarnings("rawtypes")
+	@ApiOperation(value = "保存优惠套餐详情", notes = "保存优惠套餐。[]（蒋鑫俊）", httpMethod = "POST")
+	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+	@Authorization
+	@RequestMapping(method = RequestMethod.POST)
+	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ApiParam(value = "优惠套餐保存参数", required = true) @RequestBody @Validated DiscountPackageSaveWithImageForeignParam param, BindingResult bindingResult) {
+		String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	Long merchantId = UserUtil.getCurrentUserId(getRequest());
+    	Result<Long> getMerchantStoreIdResult = merchantStoreService.getMerchantStoreId(merchantId);
+    	if (!isSuccess(getMerchantStoreIdResult)) {
+    		return successCreated(getMerchantStoreIdResult);
+    	}
+		DiscountPackageSaveParam discountPackageSaveParam = new DiscountPackageSaveParam();
+		discountPackageSaveParam.setCoverImage(param.getCoverImage());
+		discountPackageSaveParam.setIsReservation(param.getIsReservation());
+		discountPackageSaveParam.setMerchantStoreId(getMerchantStoreIdResult.getModel());
+		discountPackageSaveParam.setName(param.getName());
+		discountPackageSaveParam.setOtherInstructions(param.getOtherInstructions());
+		discountPackageSaveParam.setPrice(param.getPrice());
+		discountPackageSaveParam.setUseRules(param.getUseRules());
+		discountPackageSaveParam.setUseTimeBegin(param.getUseTimeBegin());
+		discountPackageSaveParam.setUseTimeEnd(param.getUseTimeEnd());
+		discountPackageSaveParam.setUseTimeWeek(param.getUseTimeWeek());
+		discountPackageSaveParam.setValidityPeriodBegin(param.getValidityPeriodBegin());
+		discountPackageSaveParam.setValidityPeriodEnd(param.getValidityPeriodEnd());
+		discountPackageSaveParam.setDiscountPackageContents(param.getDiscountPackageContents());
+		discountPackageSaveParam.setDiscountPackageImages(param.getDiscountPackageImages());
+		Result result = discountPackageService.save(merchantId, discountPackageSaveParam);
+		return successCreated(result);
+	}
+	
+	/**
 	 * 更新优惠套餐
 	 * 
 	 * @param id
@@ -226,9 +271,10 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Deprecated
 	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "更新优惠套餐", notes = "更新优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "POST")
+	@ApiOperation(value = "更新优惠套餐[Deprecated]", notes = "更新优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "{id}", method = RequestMethod.POST)
@@ -300,6 +346,30 @@ public class DiscountPackageController extends BaseController {
     	
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		Result result = discountPackageService.update(merchantId, id, discountPackageUpdateParam);
+		return successCreated(result);
+	}
+	
+	/**
+	 * 更新优惠套餐
+	 * 
+	 * @param id
+	 * @param param
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月26日
+	 */
+	@SuppressWarnings("rawtypes")
+	@ApiOperation(value = "更新优惠套餐", notes = "更新优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "PUT")
+	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+	@Authorization
+	@RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+	public Result update(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ApiParam(value = "优惠套餐id", required = true) @PathVariable("id") Long id, @ApiParam(value = "优惠套餐更新参数", required = true) @RequestBody  @Validated DiscountPackageUpdateParam param, BindingResult bindingResult) {
+		String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		Result result = discountPackageService.update(merchantId, id, param);
 		return successCreated(result);
 	}
 	
