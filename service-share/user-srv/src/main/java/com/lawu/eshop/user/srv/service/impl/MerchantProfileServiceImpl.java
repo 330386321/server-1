@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.param.MerchantProfileParam;
 import com.lawu.eshop.user.srv.bo.MerchantInfoFromPublishAdBO;
 import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
@@ -15,14 +14,9 @@ import com.lawu.eshop.user.srv.bo.MerchantSizeLinkBO;
 import com.lawu.eshop.user.srv.converter.MerchantInfoConverter;
 import com.lawu.eshop.user.srv.converter.MerchantProfileConverter;
 import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample.Criteria;
+import com.lawu.eshop.user.srv.domain.extend.MerchantInfoFromPublishAdDOView;
 import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.extend.MerchantInfoFromPublishAdDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantProfileService;
 
 /**
@@ -36,10 +30,7 @@ public class MerchantProfileServiceImpl implements MerchantProfileService {
     private MerchantProfileDOMapper merchantProfileDOMapper;
 
     @Autowired
-    private MerchantStoreImageDOMapper merchantStoreImageDOMapper;
-    
-    @Autowired
-    private MerchantStoreDOMapper merchantStoreDOMapper;
+    private MerchantInfoFromPublishAdDOMapperExtend merchantInfoFromPublishAdDOMapperExtend;
     
     @Override
     public int updateMerchantSizeLink(MerchantProfileParam merchantProfileParamd, @RequestParam Long id) {
@@ -73,27 +64,17 @@ public class MerchantProfileServiceImpl implements MerchantProfileService {
 
 	@Override
 	public MerchantInfoFromPublishAdBO getMerchantInfoFromPublishAd(Long merchantId) {
-		MerchantProfileDO merchantProfileDO = merchantProfileDOMapper.selectByPrimaryKey(merchantId);
-		MerchantStoreImageDOExample example = new MerchantStoreImageDOExample();
-		Criteria criteria = example.createCriteria();
-		criteria.andMerchantIdEqualTo(merchantId);
-		criteria.andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
-		List<MerchantStoreImageDO> list = merchantStoreImageDOMapper.selectByExample(example);
-		MerchantStoreDOExample merchantStoreDOExample = new MerchantStoreDOExample();
-		com.lawu.eshop.user.srv.domain.MerchantStoreDOExample.Criteria storeCriteria = merchantStoreDOExample.createCriteria();
-		storeCriteria.andMerchantIdEqualTo(merchantId);
-		List<MerchantStoreDO> storeList = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
+		List<MerchantInfoFromPublishAdDOView> list = merchantInfoFromPublishAdDOMapperExtend.getMerchantInfoFromPublishAd(merchantId);
 		MerchantInfoFromPublishAdBO result = new MerchantInfoFromPublishAdBO();
-		if(merchantProfileDO != null) {
-			result.setJdUrl(merchantProfileDO.getJdUrl());
-			result.setTbUrl(merchantProfileDO.getTaobaoUrl());
-			result.setTmUrl(merchantProfileDO.getTmallUrl());
-			result.setWebsiteUrl(merchantProfileDO.getWebsiteUrl());
+		if(list != null && !list.isEmpty()) {
+			MerchantInfoFromPublishAdDOView merchantInfoFromPublishAdDOView = list.get(0);
+			result.setJdUrl(merchantInfoFromPublishAdDOView.getJdUrl());
+			result.setLogoUrl(merchantInfoFromPublishAdDOView.getLogoUrl());
+			result.setStoreName(merchantInfoFromPublishAdDOView.getStoreName());
+			result.setTbUrl(merchantInfoFromPublishAdDOView.getTaobaoUrl());
+			result.setTmUrl(merchantInfoFromPublishAdDOView.getTmUrl());
+			result.setWebsiteUrl(merchantInfoFromPublishAdDOView.getWebsiteUrl());
 		}
-		if(list != null && !list.isEmpty()) 
-			result.setLogoUrl(list.get(0).getPath());
-		if(storeList != null && !storeList.isEmpty())
-			result.setStoreName(storeList.get(0).getName());
 		return result;
 	}
 }
