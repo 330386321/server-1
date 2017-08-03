@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
 import com.lawu.eshop.ad.dto.AdPointDTO;
+import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
@@ -49,6 +50,13 @@ public interface AdService {
 	  */
 	@RequestMapping(method = RequestMethod.GET, value = "ad/selectAbById/{id}")
 	Result<AdDTO> selectAbById(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId);
+	
+	 /**
+	  * 单个查询广告
+	  * @return
+	  */
+	@RequestMapping(method = RequestMethod.GET, value = "ad/selectAdPraiseById/{id}")
+	Result<AdPraiseDTO> selectAdPraiseById(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId);
 	
 	/**
 	 * E赞查询

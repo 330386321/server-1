@@ -290,21 +290,13 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	public Result<AdPraiseDTO> selectAbPraiseById(Long id) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
-		Result<AdDTO> adDTO = adService.selectAbById(id, memberId);
-		AdDTO ad = adDTO.getModel();
-		Result<MerchantStoreDTO> merchantStoreDTO = merchantStoreService.selectMerchantStoreByMId(ad.getMerchantId());
-		Result<ManageTypeEnum> manageType = merchantStoreService.getManageType(ad.getMerchantId());
-		AdPraiseDTO praise = new AdPraiseDTO();
-		if (merchantStoreDTO.getModel() != null) {
-			praise.setName(merchantStoreDTO.getModel().getName());
-			praise.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-			praise.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-		} else {
+		Result<AdPraiseDTO> resultAd = adService.selectAdPraiseById(id, memberId);
+		
+		AdPraiseDTO praise = resultAd.getModel();
+		if (StringUtils.isEmpty(praise.getName())) {
 			praise.setName("E店商家");
+		} else if(StringUtils.isEmpty(praise.getLogoUrl())) {
 			praise.setLogoUrl(memberApiConfig.getDefaultHeadimg());
-		}
-		if (manageType.getModel() != null) {
-			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val));
 		}
 		PointDetailQueryData1Param param = new PointDetailQueryData1Param();
 		param.setBizId(id.toString());
@@ -317,16 +309,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			else
 				praise.setIsDoHanlderMinusPoint(false);
 		}
-		praise.setId(ad.getId());
-		praise.setTitle(ad.getTitle());
-		praise.setBeginTime(ad.getBeginTime());
-		praise.setTotalPoint(ad.getTotalPoint());
-		praise.setMerchantStoreId(ad.getMerchantStoreId());
-		praise.setCount(ad.getNumber());
-		praise.setNeedBeginTime(ad.getNeedBeginTime());
-		praise.setIsPraise(ad.getIsPraise());
-		praise.setMediaUrl(ad.getMediaUrl());
-		praise.setMerchantId(ad.getMerchantId());
 		praise.setClickPraiseAdTimes(memberApiConfig.getClickPraiseAdTimes());
 		praise.setPraiseProb(memberApiConfig.getClickPraiseProb());
 		return successGet(praise);

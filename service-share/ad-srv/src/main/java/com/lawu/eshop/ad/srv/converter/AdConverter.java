@@ -30,9 +30,9 @@ import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
+import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
-
 import com.lawu.eshop.framework.core.page.Page;
 
 /**
@@ -613,5 +613,70 @@ public class AdConverter {
 			rtn.getRecords().add(choicenessAdDTO);
 		}
         return rtn;
+	}
+	
+	
+	/**
+	 * DO转BO
+	 * @param adDO
+	 * @return
+	 */
+	public static AdPraiseBO convertPraiseBO(AdDO adDO){
+		AdPraiseBO adBO=new AdPraiseBO();
+		if(adDO==null){
+			return adBO;
+		}
+		adBO.setId(adDO.getId());
+		adBO.setBeginTime(adDO.getBeginTime());
+		adBO.setMediaUrl(adDO.getMediaUrl());
+		adBO.setMerchantId(adDO.getMerchantId());
+		adBO.setTitle(adDO.getTitle());
+		adBO.setTotalPoint(adDO.getTotalPoint());
+		adBO.setContent(adDO.getContent());
+		adBO.setLogoUrl(adDO.getLogoUrl());
+		adBO.setName(adDO.getMerchantStoreName());
+		adBO.setManageTypeEnum(ManageTypeEnum.getEnum(adDO.getManageType()));
+		adBO.setMerchantStoreId(adDO.getMerchantStoreId());
+		adBO.setStatusEnum(AdStatusEnum.getEnum(adDO.getStatus()));
+        return adBO;
+		
+	}
+	
+	
+	/**
+	 * DO转BO
+	 * @param adDO
+	 * @return
+	 */
+	public static AdPraiseDTO convertPraiseDTO(AdPraiseBO adBO){
+		AdPraiseDTO dto=new AdPraiseDTO();
+		dto.setId(adBO.getId());
+		dto.setBeginTime(adBO.getBeginTime());
+		dto.setMediaUrl(adBO.getMediaUrl());
+		dto.setMerchantId(adBO.getMerchantId());
+		dto.setTitle(adBO.getTitle());
+		dto.setTotalPoint(adBO.getTotalPoint());
+		dto.setContent(adBO.getContent());
+		dto.setLogoUrl(adBO.getLogoUrl());
+		dto.setName(adBO.getName());
+		dto.setManageTypeEnum(adBO.getManageTypeEnum());
+		dto.setMerchantStoreId(adBO.getMerchantStoreId());
+		dto.setIsFavorite(adBO.getIsFavorite());
+		dto.setIsPraise(adBO.getIsPraise());
+		Date date=new Date();
+		if(adBO.getStatusEnum().val==2){ //结束倒计时
+			Long time=adBO.getBeginTime().getTime()+ (20*60*1000)-date.getTime();
+			if(time>0){
+				dto.setNeedBeginTime(time);
+			}else{
+				dto.setNeedBeginTime(Long.parseLong("0"));
+			}
+		}else if( adBO.getStatusEnum().val==1){ //开枪倒计时
+			Long time=adBO.getBeginTime().getTime()-date.getTime();
+			dto.setNeedBeginTime(time);
+			
+		}
+        return dto;
+		
 	}
 }

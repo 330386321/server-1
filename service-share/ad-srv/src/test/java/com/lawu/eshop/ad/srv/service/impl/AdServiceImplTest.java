@@ -33,6 +33,7 @@ import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
+import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
@@ -1756,4 +1757,57 @@ public class AdServiceImplTest {
         Assert.assertNotNull(page.getRecords());
         Assert.assertTrue(page.getRecords().size()>0);
     }*/
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void selectAdPraiseById() {
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1003l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+        Integer id=adDOMapper.insertSelective(ad);
+        
+        FavoriteAdDO favoriteAdDO=new FavoriteAdDO();
+        favoriteAdDO.setAdId(ad.getId());
+        favoriteAdDO.setMemberId(1l);
+        favoriteAdDO.setMemberNum("M000001");
+        favoriteAdDO.setGmtCreate(new Date());
+        favoriteAdDO.setIsSend(false);
+        favoriteAdDOMapper.insert(favoriteAdDO);
+        
+        PointPoolDO pointPoolDO=new PointPoolDO();
+        pointPoolDO.setAdId(ad.getId());
+        pointPoolDO.setGmtCreate(new Date());
+        pointPoolDO.setGmtModified(new Date());
+        pointPoolDO.setMerchantId(1002l);
+        pointPoolDO.setOrdinal(0);
+        pointPoolDO.setPoint(BigDecimal.valueOf(15));
+        pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+        pointPoolDO.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+        pointPoolDOMapper.insert(pointPoolDO);
+        
+        AdPraiseBO bo= adService.selectAdPraiseById(ad.getId(), 1l);
+        
+        Assert.assertNotNull(bo);
+
+    }
 }

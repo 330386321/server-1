@@ -432,28 +432,41 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andAdIdEqualTo(adDO.getId()).andMemberIdEqualTo(memberId);
 		Long count = favoriteAdDOMapper.countByExample(example);
 		AdBO adBO = AdConverter.convertBO(adDO);
-		if (adDO.getType() == 3) { // 获取E赞的抢赞人数
-			PointPoolDOExample ppexample = new PointPoolDOExample();
-			ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
-					.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val);
-			Long praiseCount = pointPoolDOMapper.countByExample(ppexample);
-			adBO.setNumber(praiseCount.intValue());
+		
+		MemberAdRecordDOExample memberAdRecordDOExample=new MemberAdRecordDOExample();
+		memberAdRecordDOExample.createCriteria().andAdIdEqualTo(id).andMemberIdEqualTo(memberId)
+								.andClickDateEqualTo(new Date());
+		Long clickCount= memberAdRecordDOMapper.countByExample(memberAdRecordDOExample);
+		adBO.setIsClickAd(clickCount.intValue()>0);
+		adBO.setIsFavorite(count.intValue() > 0);
+		return adBO;
+	}
+	
+	/**
+	 * 查看E赚详情
+	 *
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public AdPraiseBO selectAdPraiseById(Long id,Long memberId) {
+		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+		FavoriteAdDOExample example = new FavoriteAdDOExample();
+		example.createCriteria().andAdIdEqualTo(adDO.getId()).andMemberIdEqualTo(memberId);
+		Long count = favoriteAdDOMapper.countByExample(example);
+		AdPraiseBO adBO = AdConverter.convertPraiseBO(adDO);
+		PointPoolDOExample ppexample = new PointPoolDOExample();
+		ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
+				.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val);
+		Long praiseCount = pointPoolDOMapper.countByExample(ppexample);
+		adBO.setNumber(praiseCount.intValue());
 
-			PointPoolDOExample ppexample2 = new PointPoolDOExample();
-			ppexample2.createCriteria().andAdIdEqualTo(adDO.getId())
-					.andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
-					.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val).andMemberIdEqualTo(memberId);
-			Long number = pointPoolDOMapper.countByExample(ppexample2);
-			adBO.setIsPraise(number>0);
-		}else{
-
-			MemberAdRecordDOExample memberAdRecordDOExample=new MemberAdRecordDOExample();
-			memberAdRecordDOExample.createCriteria().andAdIdEqualTo(id).andMemberIdEqualTo(memberId)
-									.andClickDateEqualTo(new Date());
-			Long clickCount= memberAdRecordDOMapper.countByExample(memberAdRecordDOExample);
-			adBO.setIsClickAd(clickCount.intValue()>0);
-		}
-
+		PointPoolDOExample ppexample2 = new PointPoolDOExample();
+		ppexample2.createCriteria().andAdIdEqualTo(adDO.getId())
+				.andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
+				.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val).andMemberIdEqualTo(memberId);
+		Long number = pointPoolDOMapper.countByExample(ppexample2);
+		adBO.setIsPraise(number>0);
 		adBO.setIsFavorite(count.intValue() > 0);
 		return adBO;
 	}
