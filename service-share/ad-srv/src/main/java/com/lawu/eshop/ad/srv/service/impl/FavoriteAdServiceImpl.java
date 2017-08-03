@@ -55,6 +55,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 		favoriteAd.setMemberId(memberId);
 		favoriteAd.setGmtCreate(new Date());
 		favoriteAd.setMemberNum(userNum);
+		favoriteAd.setIsSend(false);
 		int row=favoriteAdDOMapper.insert(favoriteAd);
 		return row;
 	}
