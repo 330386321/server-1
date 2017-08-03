@@ -61,6 +61,7 @@ public class MerchantStoreController extends BaseController {
     }
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
+    @Deprecated
     @ApiOperation(value = "新增门店信息", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -154,6 +155,7 @@ public class MerchantStoreController extends BaseController {
     }
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
+    @Deprecated
     @ApiOperation(value = "修改门店信息TO审核", notes = "错误信息 [2008]（章勇）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -259,6 +261,7 @@ public class MerchantStoreController extends BaseController {
     @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "申请实体店铺", notes = "申请实体店铺 [2008,1100]（章勇）", httpMethod = "POST")
     @Authorization
+    @Deprecated
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "applyPhysicalStore", method = RequestMethod.POST)
     public Result applyPhysicalStore(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
