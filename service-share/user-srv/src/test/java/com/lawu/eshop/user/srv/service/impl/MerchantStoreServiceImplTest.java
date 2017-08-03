@@ -426,4 +426,24 @@ public class MerchantStoreServiceImplTest {
         Assert.assertEquals(0, foodBOS.size());
     }
 
+    @Transactional
+    @Rollback
+    @Test
+    public void selectMerchantStoreAdInfo() {
+        MerchantStoreDO storeDO = new MerchantStoreDO();
+        storeDO.setMerchantId(200L);
+        storeDO.setName("测试店铺");
+        storeDO.setRegionPath("44/4403/440303");
+        storeDO.setRegionName("广东省深圳市南山区");
+        storeDO.setAddress("大冲商务中心");
+        storeDO.setLongitude(new BigDecimal(104.23));
+        storeDO.setLatitude(new BigDecimal(22.36));
+        storeDO.setIntro("店铺介绍");
+        storeDO.setStatus(DataTransUtil.intToByte(1));
+        storeDO.setIsNoReasonReturn(true);
+        merchantStoreDOMapper.insertSelective(storeDO);
+
+        MerchantStoreAdInfoBO merchantStoreBO = merchantStoreService.selectMerchantStoreAdInfo(200L);
+        Assert.assertNotNull(merchantStoreBO);
+    }
 }

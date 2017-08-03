@@ -1,5 +1,17 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
@@ -10,24 +22,31 @@ import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreIndexParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
+import com.lawu.eshop.user.srv.bo.NewMerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.RecommendFoodBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
 import com.lawu.eshop.user.srv.domain.extend.MerchantAdInfoView;
 import com.lawu.eshop.user.srv.domain.extend.NewMerchantStoreDOView;
 import com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreService;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 @Service
 public class MerchantStoreServiceImpl implements MerchantStoreService {
@@ -49,6 +68,9 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 
     @Autowired
     private SolrService solrService;
+    
+    @Autowired
+    private MerchantStoreProfileDOMapper  merchantStoreProfileDOMapper;
 
     @Override
     public MerchantStoreBO selectMerchantStore(Long merchantId) {
@@ -271,5 +293,28 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         List<RecommendFoodDOview> foodDOviews = merchantStoreDOMapperExtend.listRecommendFoodComment(map);
         return MerchantStoreConverter.convertRecommendStoreBO(foodDOviews);
     }
+
+	@Override
+	public MerchantStoreAdInfoBO selectMerchantStoreAdInfo(Long merchantId) {
+		MerchantStoreDOExample example = new MerchantStoreDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(example);
+        MerchantStoreAdInfoBO bo = new MerchantStoreAdInfoBO();
+        if (!list.isEmpty()) {
+        	MerchantStoreDO merchantStoreDO = list.get(0);
+            MerchantStoreProfileDOExample mpExample = new  MerchantStoreProfileDOExample();
+            mpExample.createCriteria().andMerchantIdEqualTo(list.get(0).getMerchantId());
+            List<MerchantStoreProfileDO>  mpList = merchantStoreProfileDOMapper.selectByExample(mpExample);		
+            bo.setMerchantStoreId(merchantStoreDO.getId());
+            bo.setName(merchantStoreDO.getName());
+            bo.setLatitude(merchantStoreDO.getLatitude());
+            bo.setLongitude(merchantStoreDO.getLongitude());
+    		if(!mpList.isEmpty()){
+    			bo.setManageType(MerchantStoreTypeEnum.getEnum(mpList.get(0).getManageType()));
+    		}
+    		
+        }
+		return bo;
+	}
 
 }

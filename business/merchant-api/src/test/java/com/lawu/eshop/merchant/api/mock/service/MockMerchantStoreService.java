@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
+import com.lawu.eshop.user.dto.MerchantStoreAdInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.ApplyStoreParam;
@@ -85,4 +86,9 @@ public class MockMerchantStoreService extends BaseController implements Merchant
     public Result<Long> getMerchantStoreId(@PathVariable("merchantId") Long merchantId) {
         return successGet();
     }
+
+	@Override
+	public Result<MerchantStoreAdInfoDTO> selectMerchantStoreAdInfo(@PathVariable("merchantId") Long merchantId) {
+		return successGet();
+	}
 }

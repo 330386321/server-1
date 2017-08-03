@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
@@ -45,6 +45,7 @@ import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.user.dto.MerchantStoreAdInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 
 import io.swagger.annotations.Api;
@@ -159,6 +160,64 @@ public class AdController extends BaseController {
     	adSave.setCount(count);
     	adSave.setMediaUrl(mediaUrl);
     	adSave.setVideoImgUrl(videoImgUrl);
+    	adSave.setMerchantId(merchantId);
+    	adSave.setUserNum(userNum);
+        return adService.saveAd(adSave);
+    }
+    
+    
+    @Authorization
+    @ApiOperation(value = "添加广告(2.4)", notes = "添加广告[1011|5000|5003|5010|6024|6026]（张荣成）", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "saveAdvert", method = RequestMethod.POST)
+    public Result saveAdvert(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
+    	Long merchantId = UserUtil.getCurrentUserId(getRequest());
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+		if(adParam.getTypeEnum().getVal() != 4){
+			if(StringUtils.isEmpty(adParam.getBeginTime())){
+				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
+			}
+		}
+    	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
+    	if (isSuccess(resultFreeze)){
+    		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel().getStatus())){
+    			return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
+    		}
+    	} else {
+    		return successCreated(resultFreeze.getRet());
+    	}
+    	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
+    	PropertyPointDTO propertyPointDTO=rs.getModel();
+    	if(adParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
+    		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
+    	}
+    	Integer count=0;
+    	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==1){
+    		String areas=adParam.getAreas();
+    		if(areas==null || areas==""){
+    			areas=ALL_PLACE;
+    		}
+    		count=memberCountService.findMemberCount(areas);
+    	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==2){
+    		count=memberCountService.findFensCount(merchantId);
+    	}
+    	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
+    	AdSaveParam adSave=new AdSaveParam();
+    	adSave.setAdParam(adParam);
+    	if(isSuccess(storeRs)){
+    		MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();
+        	if(storeDTO!=null){
+        		adSave.setLatitude(storeDTO.getLatitude());
+            	adSave.setLongitude(storeDTO.getLongitude());
+            	adSave.setLogoUrl(storeDTO.getLogoUrl());
+            	adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
+            	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
+            	adSave.setMerchantStoreName(storeDTO.getName());
+        	}
+    	}
+    	adSave.setCount(count);
+    	adSave.setMediaUrl(adParam.getMediaUrl());
+    	adSave.setVideoImgUrl(adParam.getVideoImgUrl());
     	adSave.setMerchantId(merchantId);
     	adSave.setUserNum(userNum);
         return adService.saveAd(adSave);
@@ -413,4 +472,83 @@ public class AdController extends BaseController {
     public Result<AdDetailDTO> selectDetail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	return adService.selectDetail(id);
     }
+	
+	
+	@ApiOperation(value = "广告再次投放(2.4)", notes = "广告再次投放,[1011|5000|5003|5010|6024|6026](张荣成)", httpMethod = "POST")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "againSaveAd/{id}", method = RequestMethod.POST)
+    public Result againPutAdvert(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    		@PathVariable @ApiParam(required = true, value = "广告id") Long id,
+    		@ModelAttribute @ApiParam(required = true, value = "广告信息") AdAgainPutParam adAgainParam) {
+		Result<AdMerchantDetailDTO> result= adService.selectById(id);
+    	if(!isSuccess(result)){
+    		return successCreated(result.getRet());
+    	}
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	if(StringUtils.isEmpty(adAgainParam.getBeginTime())){
+			return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
+		}
+    	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
+    	if (isSuccess(resultFreeze)){
+    		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel())){
+    			return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
+    		}
+    	} else {
+    		return successCreated(resultFreeze.getRet());
+    	}
+    	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
+    	PropertyPointDTO propertyPointDTO=rs.getModel();
+    	if(adAgainParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
+    		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
+    	}
+    	Integer count=0;
+    	if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum()==PutWayEnum.PUT_WAY_AREAS){
+    		String areas=adAgainParam.getAreas();
+    		if(areas==null || areas==""){
+    			areas=ALL_PLACE;
+    		}
+    		count=memberCountService.findMemberCount(areas);
+    	}else if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum()==PutWayEnum.PUT_WAY_FENS){
+    		count=memberCountService.findFensCount(merchantId);
+    	}
+    	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
+    	AdSaveParam adSave=new AdSaveParam();
+    	AdParam adParam=new AdParam();
+    	adParam.setTitle(adAgainParam.getTitle());
+    	adParam.setAdCount(adAgainParam.getAdCount());
+    	adParam.setAreas(adAgainParam.getAreas());
+    	adParam.setBeginTime(adAgainParam.getBeginTime());
+    	adParam.setContent(adAgainParam.getContent());
+    	adParam.setPoint(adAgainParam.getPoint());
+    	adParam.setTotalPoint(adAgainParam.getTotalPoint());
+    	adParam.setPutWayEnum(adAgainParam.getPutWayEnum());
+    	adParam.setRadius(adAgainParam.getRadius());
+    	adParam.setTypeEnum(result.getModel().getTypeEnum());
+    	adParam.setRegionName(adAgainParam.getRegionName());
+    	adSave.setAdParam(adParam);
+    	if(isSuccess(storeRs)){
+    		MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();
+        	if(storeDTO!=null){
+        		adSave.setLatitude(storeDTO.getLatitude());
+            	adSave.setLongitude(storeDTO.getLongitude());
+            	adSave.setLogoUrl(storeDTO.getLogoUrl());
+            	adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
+            	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
+            	adSave.setMerchantStoreName(storeDTO.getName());
+        	}
+    	}
+    	adSave.setCount(count);
+    	adSave.setMediaUrl(adAgainParam.getMediaUrl());
+    	adSave.setVideoImgUrl(adAgainParam.getVideoImgUrl());
+    	adSave.setMerchantId(merchantId);
+    	adSave.setUserNum(userNum);
+    	Result rsAd = adService.saveAd(adSave);
+    	if (!isSuccess(rsAd)) {
+    		return successCreated(result.getRet());
+    	}
+    	return successCreated();
+	}
+
 }

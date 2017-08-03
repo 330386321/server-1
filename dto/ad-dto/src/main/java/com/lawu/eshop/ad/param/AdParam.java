@@ -46,6 +46,12 @@ public class AdParam {
 	
 	@ApiParam (name="regionName", value = "区域名称")
 	private String regionName;
+	
+	@ApiParam (name="mediaUrl", value = "附件路径(平面和视频路径)")
+	private String mediaUrl;
+	
+	@ApiParam (name="videoImgUrl", value = "视频封面图片")
+	private String videoImgUrl;
 
 
 	public String getTitle() {
@@ -170,6 +176,26 @@ public class AdParam {
 	}
 
 
+	public String getMediaUrl() {
+		return mediaUrl;
+	}
+
+
+	public void setMediaUrl(String mediaUrl) {
+		this.mediaUrl = mediaUrl;
+	}
+
+
+	public String getVideoImgUrl() {
+		return videoImgUrl;
+	}
+
+
+	public void setVideoImgUrl(String videoImgUrl) {
+		this.videoImgUrl = videoImgUrl;
+	}
+
+	
 
 	
 

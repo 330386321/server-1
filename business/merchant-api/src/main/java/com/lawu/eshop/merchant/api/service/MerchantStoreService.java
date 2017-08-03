@@ -4,6 +4,7 @@ package com.lawu.eshop.merchant.api.service;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
+import com.lawu.eshop.user.dto.MerchantStoreAdInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
@@ -123,5 +124,15 @@ public interface MerchantStoreService {
 	 */
 	@RequestMapping(value = "merchantStore/merchantStoreId/{merchantId}", method = RequestMethod.GET)
 	Result<Long> getMerchantStoreId(@PathVariable("merchantId") Long merchantId); 
+	
+	/**
+	 * 
+	 * @param merchantId
+	 * @return
+	 * @author zhangrc
+	 * @date 2017年8月3日
+	 */
+	@RequestMapping(value = "merchantStore/selectMerchantStoreAdInfo/{merchantId}", method = RequestMethod.GET)
+	Result<MerchantStoreAdInfoDTO> selectMerchantStoreAdInfo(@PathVariable("merchantId") Long merchantId);
 
 }

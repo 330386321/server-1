@@ -1065,5 +1065,43 @@ public class MerchantStoreControllerTest {
             Assert.fail(e.getMessage());
         }
     }
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void selectMerchantStoreAdInfo() {
+        MerchantStoreDO storeDO = new MerchantStoreDO();
+        storeDO.setMerchantId(200L);
+        storeDO.setName("测试店铺");
+        storeDO.setRegionPath("44/4403/440303");
+        storeDO.setRegionName("广东省深圳市南山区");
+        storeDO.setAddress("大冲商务中心");
+        storeDO.setLongitude(new BigDecimal(104.23));
+        storeDO.setLatitude(new BigDecimal(22.36));
+        storeDO.setIntro("店铺介绍");
+        storeDO.setStatus(DataTransUtil.intToByte(1));
+        storeDO.setIsNoReasonReturn(true);
+        merchantStoreDOMapper.insertSelective(storeDO);
+
+        MerchantStoreImageDO storeImageDO = new MerchantStoreImageDO();
+        storeImageDO.setMerchantId(200L);
+        storeImageDO.setMerchantStoreId(storeDO.getId());
+        storeImageDO.setStatus(true);
+        storeImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
+        storeImageDO.setPath("pic");
+        storeImageDO.setGmtModified(new Date());
+        storeImageDO.setGmtCreate(new Date());
+        merchantStoreImageDOMapper.insertSelective(storeImageDO);
+
+        RequestBuilder request = get("/merchantStore/selectMerchantStoreAdInfo/"+storeDO.getMerchantId());
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
 
 }

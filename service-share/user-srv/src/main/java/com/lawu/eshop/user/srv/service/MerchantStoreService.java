@@ -1,12 +1,18 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreIndexParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
-import com.lawu.eshop.user.srv.bo.*;
-
-import java.util.List;
+import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
+import com.lawu.eshop.user.srv.bo.NewMerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.RecommendFoodBO;
 
 /**
  * 店面信息获取
@@ -118,4 +124,11 @@ public interface MerchantStoreService {
      * @author meishuquan
      */
     List<RecommendFoodBO> listRecommendFoodComment(Integer industryId, String regionPath);
+    
+    /**
+     * 
+     * @param merchantId
+     * @return
+     */
+    MerchantStoreAdInfoBO selectMerchantStoreAdInfo(Long merchantId);
 }

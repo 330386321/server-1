@@ -697,5 +697,19 @@ public class MerchantStoreController extends BaseController {
 		return successGet(MerchantStoreConverter.convertRecommendStoreDTO(foodBOS));
 	}
 
+	
+	@RequestMapping(value = "selectMerchantStoreAdInfo/{merchantId}", method = RequestMethod.GET)
+	public Result<MerchantStoreAdInfoDTO> selectMerchantStoreAdInfo(@PathVariable Long merchantId){
+		 MerchantStoreAdInfoBO  bo=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
+		 MerchantStoreAdInfoDTO dto =new MerchantStoreAdInfoDTO();
+		 dto.setManageType(bo.getManageType());
+		 dto.setMerchantStoreId(bo.getMerchantStoreId());
+		 dto.setName(bo.getName());
+		 String path=merchantStoreImageService.selectLogoPath(merchantId);
+		 dto.setLogoUrl(path);
+		 dto.setLatitude(bo.getLatitude());
+		 dto.setLongitude(bo.getLongitude());
+		 return successGet(dto);
+	}
 }
 
