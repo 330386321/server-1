@@ -102,4 +102,11 @@ public interface AdPlatformService {
      */
     List<AdPlatformBO> getAdPlatformByTypePosition(TypeEnum typeEnum, PositionEnum positionEnum);
 
+    /**
+     * 根据商品ID查询该商品是否已上架广告位
+     *
+     * @param productId
+     * @return
+     */
+    boolean selectByProductIdAndStatus(Long productId);
 }

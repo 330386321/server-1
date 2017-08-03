@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
+import com.lawu.eshop.merchant.api.service.AdPlatformService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,9 @@ public class ProductController extends BaseController {
 	@Autowired
 	private MerchantApiConfig merchantApiConfig;
 
+	@Autowired
+	private AdPlatformService adPlatformService;
+
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "分页查询商品", notes = "分页查询商品，[]。(杨清华)", httpMethod = "POST")
@@ -97,6 +101,18 @@ public class ProductController extends BaseController {
 			@RequestParam @ApiParam(required = true, value = "商家ID(多个英文逗号分开)") String ids,
 			ProductStatusEnum productStatus) {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+
+		//下架、删除商品时需要判断该商品是否存在广告位
+		if(!productStatus.getVal().equals(ProductStatusEnum.PRODUCT_STATUS_UP.getVal())){
+			List<String> idsList = Arrays.asList(ids.split(","));
+			for(String id : idsList){
+				Result<Boolean> result = adPlatformService.selectByProductIdAndStatus(Long.parseLong(id));
+				if(result.getModel()){
+					return successCreated(ResultCode.GOODS_PRODUCT_EXIST_ADFLAT);
+				}
+			}
+		}
+
 		return productService.updateProductStatus(ids, productStatus,merchantId);
 	}
 

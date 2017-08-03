@@ -189,4 +189,15 @@ public class AdPlatformController extends BaseController {
         return successGet(AdPlatformConverter.convertDTOS(adPlatformBOS));
     }
 
+    /**
+     * 根据商品ID查询该商品是否已上架广告位.y
+     *
+     * @param productId
+     * @return
+     */
+    @RequestMapping(value = "selectByProductIdAndStatus", method = RequestMethod.GET)
+    public Result<Boolean> selectByProductIdAndStatus(@RequestParam Long productId) {
+        boolean flag = adPlatformService.selectByProductIdAndStatus(productId);
+        return successGet(flag);
+    }
 }

@@ -78,6 +78,7 @@ public class ResultCode {
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL = 3001;
     public static final int GOODS_PRODUCT_FACORITE_EXIST = 3003;
     public static final int GOODS_PRODUCT_INVENTORY = 3004;
+    public static final int GOODS_PRODUCT_EXIST_ADFLAT = 3005;
 
     // 订单模块代码 4xxx
     public static final int PRODUCT_EVALUATE_TRUE = 4001;
@@ -263,6 +264,7 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL, "请上传商品描述图片");
         ResultCode.messageMap.put(GOODS_PRODUCT_FACORITE_EXIST, "商品已经被收藏");
         ResultCode.messageMap.put(GOODS_PRODUCT_INVENTORY, "存在商品库存为0无法上架");
+        ResultCode.messageMap.put(GOODS_PRODUCT_EXIST_ADFLAT, "商品存在广告位中无法下架，请联系后台管理员。");
 
         // 订单模块 4xxx
         ResultCode.messageMap.put(PRODUCT_EVALUATE_TRUE, "该订单已评价");

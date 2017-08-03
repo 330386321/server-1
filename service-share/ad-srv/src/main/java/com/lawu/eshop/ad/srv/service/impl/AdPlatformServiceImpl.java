@@ -169,4 +169,16 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         return AdPlatformConverter.convertBO(adPlatformDOViews);
     }
 
+    @Override
+    public boolean selectByProductIdAndStatus(Long productId) {
+        AdPlatformDOExample example = new AdPlatformDOExample();
+        example.createCriteria().andProductIdEqualTo(productId).andStatusEqualTo(AdPlatformStatusEnum.UP.val);
+        List<AdPlatformDO> adPlatformDOS = adPlatformDOMapper.selectByExample(example);
+        if(adPlatformDOS == null || adPlatformDOS.isEmpty()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 }
