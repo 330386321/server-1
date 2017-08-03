@@ -1,5 +1,28 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import javax.validation.constraints.NotNull;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
@@ -20,26 +43,12 @@ import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForei
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailRerurnAddressForeignParam;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.AddressDTO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-import javax.validation.constraints.NotNull;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * @author Sunny 
@@ -83,9 +92,10 @@ public class ShoppingRefundDetailController extends BaseController {
     	return successCreated(result);
     }
 	
+	@Deprecated
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@ApiOperation(value = "商家确认买家的退货申请", notes = "商家是否同意买家的退货申请。[1004|1100|1024|4027]（蒋鑫俊）", httpMethod = "PUT")
+	@ApiOperation(value = "商家确认买家的退货申请[Deprecated]", notes = "商家是否同意买家的退货申请。[1004|1100|1024|4027]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "agreeToApply/{id}", method = RequestMethod.PUT)
@@ -141,6 +151,7 @@ public class ShoppingRefundDetailController extends BaseController {
     	return successCreated(result);
     }
 
+	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-08-01", reviewer = "孙林青")
 	@ApiOperation(value = "商家拒绝退款", notes = "商家拒绝退款。。[1002|1003|4011|4013|4028]（章勇）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
