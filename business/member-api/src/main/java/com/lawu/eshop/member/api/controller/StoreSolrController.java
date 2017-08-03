@@ -124,15 +124,16 @@ public class StoreSolrController extends BaseController {
     }
 
     @Audit(date = "2017-08-01", reviewer = "孙林青")
-    @ApiOperation(value = "新店推荐", notes = "新店推荐(前50)。[1100] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "新店推荐", notes = "新店推荐(前50)。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listNewMerchant", method = RequestMethod.GET)
     public Result<List<NewMerchantStoreDTO>> listNewMerchant(@RequestParam @ApiParam(name = "regionPath", required = true, value = "区域路径") String regionPath) {
+        List<NewMerchantStoreDTO> storeDTOS = new ArrayList<>();
         Result<String> result = recommendStoreCacheService.getNewMerchant(regionPath);
         if (StringUtils.isEmpty(result.getModel())) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
+            return successGet(storeDTOS);
         }
-        List<NewMerchantStoreDTO> storeDTOS = JSON.parseArray(result.getModel(), NewMerchantStoreDTO.class);
+        storeDTOS = JSON.parseArray(result.getModel(), NewMerchantStoreDTO.class);
         return successGet(storeDTOS);
     }
 
