@@ -244,6 +244,7 @@ public class MerchantController extends BaseController {
         return successGet(dto);
     }
 
+    @Deprecated
     @Audit(date = "2017-05-02", reviewer = "孙林青")
     @ApiOperation(value = "修改头像", notes = "修改头像。 (章勇)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -321,6 +322,16 @@ public class MerchantController extends BaseController {
         }else{
             return merchantService.getRongYunInfoByNum(num);
         }
+    }
+
+    @ApiOperation(value = "修改头像", notes = "修改头像。 (梅述全)", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "updateHeadImg", method = RequestMethod.PUT)
+    public Result updateHeadImg(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                @RequestParam @ApiParam(required = true, value = "头像路径") String headImg) {
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        return merchantService.saveHeadImage(merchantId, headImg);
     }
 
 }
