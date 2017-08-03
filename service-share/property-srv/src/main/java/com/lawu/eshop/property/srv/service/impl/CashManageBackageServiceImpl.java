@@ -235,13 +235,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		// 失败的情况要回滚数据
 		for (int i = 0; i < idsArray.length; i++) {
 
-			// 余额新增
 			WithdrawCashDO wcdo = withdrawCashDOMapper.selectByPrimaryKey(Long.valueOf(idsArray[i]));
-			PropertyInfoDOEiditView infoView = new PropertyInfoDOEiditView();
-			infoView.setBalance(wcdo.getCashMoney());
-			infoView.setUserNum(wcdo.getUserNum());
-			infoView.setGmtModified(new Date());
-			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoView);
 
 			// 新增退回交易明细
 			TransactionDetailDO transactionDetailDO = new TransactionDetailDO();
@@ -261,6 +255,13 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			transactionDetailDO.setRemark("");
 			transactionDetailDO.setGmtCreate(new Date());
 			transactionDetailDOMapper.insertSelective(transactionDetailDO);
+
+			// 余额新增
+			PropertyInfoDOEiditView infoView = new PropertyInfoDOEiditView();
+			infoView.setBalance(wcdo.getCashMoney());
+			infoView.setUserNum(wcdo.getUserNum());
+			infoView.setGmtModified(new Date());
+			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoView);
 		}
 
 		return ResultCode.SUCCESS;

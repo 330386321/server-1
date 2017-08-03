@@ -141,7 +141,7 @@ public class ProductServiceImpl implements ProductService {
 
         	ProductDO productDO = productDOMapper.selectByPrimaryKey(Long.valueOf(idArray[i]));
         	if(productStatus.getVal().equals(ProductStatusEnum.PRODUCT_STATUS_UP.getVal())){
-        		if(productDO.getTotalInventory() < 0){
+        		if(productDO.getTotalInventory() < 1){
         			return -1;
         		}
         	}
