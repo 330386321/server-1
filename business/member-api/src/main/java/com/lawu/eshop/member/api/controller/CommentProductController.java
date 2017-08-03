@@ -69,6 +69,7 @@ public class CommentProductController extends BaseController {
     private MemberApiConfig memberApiConfig;
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
+    @Deprecated
     @ApiOperation(value = "用户评价商品", notes = "用户评价商品 [1005，1000,4100]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -221,6 +222,20 @@ public class CommentProductController extends BaseController {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         return commentProductService.getCommentAvgGrade(productId);
+    }
+
+    @ApiOperation(value = "用户评价商品(new)", notes = "用户评价商品 [1005，1000,4100]（章勇）", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "addCommentProductInfo", method = RequestMethod.POST)
+    public Result addCommentProductInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                         @ModelAttribute @ApiParam CommentProductParam param,
+                                        @RequestParam(required = false) @ApiParam(value = "图片路径") String imageUrls) {
+        Long memberId = UserUtil.getCurrentUserId(getRequest());
+        if(imageUrls == null){
+            imageUrls =",";
+        }
+        return commentProductService.saveCommentProductInfo(memberId, param, imageUrls);
     }
 
 }

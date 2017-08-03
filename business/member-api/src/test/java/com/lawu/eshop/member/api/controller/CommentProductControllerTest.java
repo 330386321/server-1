@@ -111,4 +111,25 @@ public class CommentProductControllerTest {
             Assert.fail(e.getMessage());
         }
     }
+
+    @Test
+    public void addCommentProductInfo() {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+        params.add("content","烂东西");
+        params.add("gradeEnum", CommentGradeEnum.COMMENT_STAR_LEVEL_FIVE.name());
+        params.add("productId","1");
+        params.add("shoppingOrderItemId","1");
+        params.add("anonymousEnum", CommentAnonymousEnum.UN_COMMENT_ANONYMOUS.name());
+        params.add("merchantId","1");
+        params.add("productModelId","1");
+        RequestBuilder request = post("/commentProduct/addCommentProductInfo").header("authorization","").params(params);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
 }

@@ -58,6 +58,7 @@ public class CommentMerchantController extends BaseController {
     private MemberApiConfig memberApiConfig;
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
+    @Deprecated
     @ApiOperation(value = "用户评价商家", notes = "用户评价商家 [1005，1000]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -191,4 +192,19 @@ public class CommentMerchantController extends BaseController {
         }
         return commentMerchantService.getCommentAvgGrade(merchantId);
     }
+
+    @ApiOperation(value = "用户评价商家(new)", notes = "用户评价商家 [1005，1000]（章勇）", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "addCommentMerchantInfo", method = RequestMethod.POST)
+    public Result addCommentMerchantInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                          @ModelAttribute CommentMerchantParam param,
+                                          @RequestParam(required = false) @ApiParam(value = "图片路径") String imageUrls ) {
+        Long memberId = UserUtil.getCurrentUserId(getRequest());
+        if(StringUtils.isEmpty(imageUrls)){
+            imageUrls = ",";
+        }
+        return commentMerchantService.saveCommentMerchantInfo(memberId, param, imageUrls);
+    }
+
 }
