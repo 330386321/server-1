@@ -190,4 +190,16 @@ public class MemberControllerTest {
             Assert.fail(e.getMessage());
         }
     }
+
+    @Test
+    public void updateHeadImg() {
+        RequestBuilder request = put("/member/updateHeadImg").header("authorization", "").param("headImg", "pic");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
 }

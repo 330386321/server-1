@@ -5,7 +5,6 @@ package com.lawu.eshop.member.api.mock.service;/**
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.MemberQuery;
@@ -84,7 +83,7 @@ public class MockMemberService extends BaseController implements MemberService {
 
     @Override
     public Result<UserHeadImgDTO> saveHeadImage(@PathVariable("memberId") Long memberId, @RequestParam("headimg") String headimg) {
-        return null;
+        return successCreated();
     }
 
     @Override
