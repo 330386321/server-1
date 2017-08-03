@@ -77,7 +77,7 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
                 for (RecommendFoodDTO foodDTO : commentResult.getModel()) {
                     getDiscountInfo(foodDTO);
                 }
-                String jsonStr = JSONArray.toJSONString(consumeResult.getModel());
+                String jsonStr = JSONArray.toJSONString(commentResult.getModel());
                 recommendStoreCacheService.saveRecommendFoodComment(regionDTO.getPath(), jsonStr);
             }
         }
