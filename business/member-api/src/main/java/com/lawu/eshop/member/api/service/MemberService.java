@@ -134,7 +134,6 @@ public interface MemberService {
      * 增加推送、融云 CID，token
      * @param id
      * @param cid
-     * @param ryToken
      * @return
      */
     @RequestMapping(value = "setGtAndRongYunInfo/{id}",method = RequestMethod.PUT)

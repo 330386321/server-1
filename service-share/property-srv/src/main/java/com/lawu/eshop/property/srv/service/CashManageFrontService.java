@@ -30,7 +30,7 @@ public interface CashManageFrontService {
 	 * 5、校验银行卡（是否存在、是否是该用户的）
 	 * 6、校验用户余额、支付密码
 	 * 
-	 * @param cashMoney
+	 * @param cash
 	 */
 	int save(CashDataParam cash);
 

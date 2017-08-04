@@ -72,7 +72,7 @@
         </table>
         <table tableName="transaction_detail" domainObjectName="TransactionDetailDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table> 
+        </table>
         <table tableName="property_info" domainObjectName="PropertyInfoDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>

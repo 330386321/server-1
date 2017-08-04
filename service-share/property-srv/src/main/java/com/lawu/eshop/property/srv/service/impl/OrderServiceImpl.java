@@ -195,6 +195,12 @@ public class OrderServiceImpl implements OrderService {
 		freezeDO.setDays(Integer.valueOf(days));
 		freezeDOMapper.insertSelective(freezeDO);
 
+		PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
+		infoDoView.setUserNum(param.getUserNum());
+		infoDoView.setFreezeMoney(new BigDecimal(param.getTotalOrderMoney()));
+		infoDoView.setGmtModified(new Date());
+		propertyInfoDOMapperExtend.updatePropertyInfoAddFreeze(infoDoView);
+
 		return ResultCode.SUCCESS;
 	}
 
@@ -240,6 +246,12 @@ public class OrderServiceImpl implements OrderService {
 					freezeDOMapperExtend.updateMinusMoney(freezeDoView);
 				}
 			}
+
+			PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
+			infoDoView.setUserNum(param.getUserNum());
+			infoDoView.setFreezeMoney(new BigDecimal(param.getRefundMoney()));
+			infoDoView.setGmtModified(new Date());
+			propertyInfoDOMapperExtend.updatePropertyInfoMinusFreeze(infoDoView);
 		}
 
 		// 新增会员订单退款交易记录
@@ -357,12 +369,14 @@ public class OrderServiceImpl implements OrderService {
 				freezeDO.setGmtModified(new Date());
 				freezeDOMapper.updateByPrimaryKeySelective(freezeDO);
 				
-				// 加会员财产余额
+				// 加商家财产余额，减冻结资金
 				PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
 				infoDoView.setUserNum(userNums[i]);
 				infoDoView.setBalance(freeze.getMoney());
+				infoDoView.setFreezeMoney(freeze.getMoney());
 				infoDoView.setGmtModified(new Date());
-				propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
+				propertyInfoDOMapperExtend.updatePropertyInfoAddBalanceMinusFreeze(infoDoView);
+
 				finishOrderIds.add(orderIds[i]);
 			}
 		}
