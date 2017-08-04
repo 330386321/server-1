@@ -19,6 +19,9 @@ public class PropertyBalanceDTO implements Serializable {
 	@ApiModelProperty(name = "balance", value= "余额", required = true)
     private BigDecimal balance;
 
+	@ApiModelProperty(name = "freeze", value= "冻结资金", required = true)
+	private BigDecimal freeze;
+
 	public BigDecimal getBalance() {
 		return balance;
 	}
@@ -26,5 +29,12 @@ public class PropertyBalanceDTO implements Serializable {
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
-	
+
+	public BigDecimal getFreeze() {
+		return freeze;
+	}
+
+	public void setFreeze(BigDecimal freeze) {
+		this.freeze = freeze;
+	}
 }

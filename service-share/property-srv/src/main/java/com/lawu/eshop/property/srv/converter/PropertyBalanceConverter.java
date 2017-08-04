@@ -26,6 +26,7 @@ public class PropertyBalanceConverter {
         }
         PropertyBalanceBO propertyBalanceBO = new PropertyBalanceBO();
         propertyBalanceBO.setBalance(propertyInfoDO.getBalance());
+        propertyBalanceBO.setFreeze(propertyInfoDO.getFreezeMoney());
         return  propertyBalanceBO;
     }
     
@@ -42,6 +43,7 @@ public class PropertyBalanceConverter {
         }
         PropertyBalanceDTO propertyBalanceDTO = new PropertyBalanceDTO();
         propertyBalanceDTO.setBalance(propertyBalanceBO.getBalance().setScale(2,BigDecimal.ROUND_DOWN));
+        propertyBalanceDTO.setFreeze(propertyBalanceBO.getFreeze().setScale(2,BigDecimal.ROUND_DOWN));
         return  propertyBalanceDTO;
     }
 }
