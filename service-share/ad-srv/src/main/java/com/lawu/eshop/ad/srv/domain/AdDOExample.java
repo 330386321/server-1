@@ -376,6 +376,126 @@ public class AdDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andProductIdIsNull() {
+            addCriterion("product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdIsNotNull() {
+            addCriterion("product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdEqualTo(Long value) {
+            addCriterion("product_id =", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdNotEqualTo(Long value) {
+            addCriterion("product_id <>", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdGreaterThan(Long value) {
+            addCriterion("product_id >", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("product_id >=", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdLessThan(Long value) {
+            addCriterion("product_id <", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdLessThanOrEqualTo(Long value) {
+            addCriterion("product_id <=", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdIn(List<Long> values) {
+            addCriterion("product_id in", values, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdNotIn(List<Long> values) {
+            addCriterion("product_id not in", values, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdBetween(Long value1, Long value2) {
+            addCriterion("product_id between", value1, value2, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdNotBetween(Long value1, Long value2) {
+            addCriterion("product_id not between", value1, value2, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateTypeIsNull() {
+            addCriterion("relate_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateTypeIsNotNull() {
+            addCriterion("relate_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateTypeEqualTo(Byte value) {
+            addCriterion("relate_type =", value, "relateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateTypeNotEqualTo(Byte value) {
+            addCriterion("relate_type <>", value, "relateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateTypeGreaterThan(Byte value) {
+            addCriterion("relate_type >", value, "relateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("relate_type >=", value, "relateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateTypeLessThan(Byte value) {
+            addCriterion("relate_type <", value, "relateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("relate_type <=", value, "relateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateTypeIn(List<Byte> values) {
+            addCriterion("relate_type in", values, "relateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateTypeNotIn(List<Byte> values) {
+            addCriterion("relate_type not in", values, "relateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateTypeBetween(Byte value1, Byte value2) {
+            addCriterion("relate_type between", value1, value2, "relateType");
+            return (Criteria) this;
+        }
+
+        public Criteria andRelateTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("relate_type not between", value1, value2, "relateType");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchantStoreNameIsNull() {
             addCriterion("merchant_store_name is null");
             return (Criteria) this;

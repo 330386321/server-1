@@ -95,8 +95,11 @@
         <table tableName="ad" domainObjectName="AdDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        -->
          <table tableName="favorite_ad" domainObjectName="FavoriteAdDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        -->
+         <table tableName="ad" domainObjectName="AdDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

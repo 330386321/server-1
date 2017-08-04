@@ -477,7 +477,7 @@ public class AdController extends BaseController {
 	@ApiOperation(value = "广告再次投放(2.4)", notes = "广告再次投放,[1011|5000|5003|5010|6024|6026](张荣成)", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "againSaveAd/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "againPutAdvert/{id}", method = RequestMethod.POST)
     public Result againPutAdvert(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     		@PathVariable @ApiParam(required = true, value = "广告id") Long id,
     		@ModelAttribute @ApiParam(required = true, value = "广告信息") AdAgainPutParam adAgainParam) {
