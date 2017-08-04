@@ -1,5 +1,8 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.property.dto.FreezeDTO;
+import com.lawu.eshop.property.param.FreezeQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -104,5 +107,16 @@ public class PropertyInfoController extends BaseController {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         Result<PropertyInfoFreezeDTO> result = propertyInfoService.getPropertyinfoFreeze(userNum);
         return successGet(result);
+    }
+
+    @ApiOperation(value = "获取冻结资金列表", notes = "获取冻结资金列表。[]（杨清华）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "getFreezeList", method = RequestMethod.GET)
+    public Result<Page<FreezeDTO>> getFreezeList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        FreezeQueryParam param = new FreezeQueryParam();
+        param.setUserNum(userNum);
+        return successGet(propertyInfoService.getFreezeList(param));
     }
 }

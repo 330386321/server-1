@@ -4,6 +4,12 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.constants.FreezeStatusEnum;
+import com.lawu.eshop.property.param.FreezeQueryParam;
+import com.lawu.eshop.property.srv.bo.FreezeBO;
+import com.lawu.eshop.property.srv.domain.FreezeDO;
+import com.lawu.eshop.property.srv.domain.FreezeDOExample;
+import com.lawu.eshop.property.srv.mapper.FreezeDOMapper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +65,8 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	private TransactionDetailService transactionDetailService;
 	@Autowired
 	private PointDetailService pointDetailService;
+	@Autowired
+	private FreezeDOMapper freezeDOMapper;
 
 	@Override
 	public PropertyInfoBO getPropertyInfoByUserNum(String userNum) {
@@ -322,6 +330,20 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		}
 		rtn = PropertyinfoFreezeEnum.getEnum(dos.get(0).getFreeze());
 		return rtn;
+	}
+
+	@Override
+	public Page<FreezeBO> getFreezeList(FreezeQueryParam param) {
+		FreezeDOExample example = new FreezeDOExample();
+		example.createCriteria().andUserNumEqualTo(param.getUserNum()).andStatusEqualTo(FreezeStatusEnum.FREEZE.getVal());
+		example.setOrderByClause(" id desc ");
+		Page<FreezeBO> page = new Page<>();
+		page.setCurrentPage(param.getCurrentPage());
+		page.setTotalCount(freezeDOMapper.countByExample(example));
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		List<FreezeDO> freezeDOS = freezeDOMapper.selectByExampleWithRowbounds(example,rowBounds);
+		page.setRecords(PropertyInfoConverter.freezeConvertBO(freezeDOS));
+		return page;
 	}
 
 }

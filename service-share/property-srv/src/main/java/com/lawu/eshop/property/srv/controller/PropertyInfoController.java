@@ -2,6 +2,9 @@ package com.lawu.eshop.property.srv.controller;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.property.dto.FreezeDTO;
+import com.lawu.eshop.property.param.FreezeQueryParam;
+import com.lawu.eshop.property.srv.bo.FreezeBO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -294,5 +297,21 @@ public class PropertyInfoController extends BaseController {
 		PropertyInfoFreezeDTO rtn = new PropertyInfoFreezeDTO();
 		rtn.setStatus(freeze);
 		return successGet(rtn);
+	}
+
+	/**
+	 * 冻结资金列表y
+	 *
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "getFreezeList", method = RequestMethod.POST)
+	public Result<Page<FreezeDTO>> getFreezeList(@RequestBody FreezeQueryParam param)  {
+		Page<FreezeBO>  freezeBOPage = propertyInfoService.getFreezeList(param);
+		Page<FreezeDTO> page = new Page<>();
+		page.setCurrentPage(freezeBOPage.getCurrentPage());
+		page.setTotalCount(freezeBOPage.getTotalCount());
+		page.setRecords(PropertyInfoConverter.freezeConvertDTO(freezeBOPage.getRecords()));
+		return successGet(page);
 	}
 }

@@ -1,8 +1,12 @@
 package com.lawu.eshop.merchant.api.service;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.property.dto.FreezeDTO;
+import com.lawu.eshop.property.param.FreezeQueryParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -131,4 +135,11 @@ public interface PropertyInfoService {
 	@RequestMapping(value = "propertyInfo/getPropertyinfoFreeze/{userNum}", method = RequestMethod.GET)
 	Result<PropertyInfoFreezeDTO> getPropertyinfoFreeze(@PathVariable("userNum") String userNum);
 
+    /**
+     * 获取冻结资金列表
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "propertyInfo/getFreezeList", method = RequestMethod.POST)
+    Result<Page<FreezeDTO>> getFreezeList(@RequestBody FreezeQueryParam param);
 }

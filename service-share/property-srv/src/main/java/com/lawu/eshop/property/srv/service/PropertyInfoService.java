@@ -3,7 +3,9 @@ package com.lawu.eshop.property.srv.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
+import com.lawu.eshop.property.param.FreezeQueryParam;
 import com.lawu.eshop.property.param.PropertyInfoBackageParam;
+import com.lawu.eshop.property.srv.bo.FreezeBO;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointAndBalanceBO;
@@ -139,4 +141,10 @@ public interface PropertyInfoService {
      */
     PropertyinfoFreezeEnum getPropertyinfoFreeze(String userNum);
 
+    /**
+     * 获取商家冻结资金列表y     *
+     * @param param
+     * @return
+     */
+    Page<FreezeBO> getFreezeList(FreezeQueryParam param);
 }
