@@ -88,6 +88,6 @@ public class MockPropertyInfoService extends BaseController implements PropertyI
 
     @Override
     public Result<Page<FreezeDTO>> getFreezeList(@RequestBody FreezeQueryParam param) {
-        return null;
+        return successCreated();
     }
 }
