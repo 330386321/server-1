@@ -15,6 +15,8 @@ public class LoginUserDTO {
 
     private String ryToken;
 
+    private Boolean isFreeze;
+
 
     public Long getId() {
         return id;
@@ -46,5 +48,13 @@ public class LoginUserDTO {
 
     public void setRyToken(String ryToken) {
         this.ryToken = ryToken;
+    }
+
+    public Boolean getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Boolean freeze) {
+        isFreeze = freeze;
     }
 }

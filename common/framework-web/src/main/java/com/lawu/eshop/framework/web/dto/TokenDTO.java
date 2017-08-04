@@ -17,6 +17,9 @@ public class TokenDTO {
     @ApiModelProperty(value = "融云token")
     private String ryToken;
 
+    @ApiModelProperty(value = "true:冻结，false未冻结")
+    private Boolean isFreeze;
+
     public String getUserNum() {
         return userNum;
     }
@@ -39,5 +42,13 @@ public class TokenDTO {
 
     public void setRyToken(String ryToken) {
         this.ryToken = ryToken;
+    }
+
+    public Boolean getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Boolean freeze) {
+        isFreeze = freeze;
     }
 }

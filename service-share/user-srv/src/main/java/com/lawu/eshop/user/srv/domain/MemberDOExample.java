@@ -1092,6 +1092,66 @@ public class MemberDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsFreezeIsNull() {
+            addCriterion("is_freeze is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeIsNotNull() {
+            addCriterion("is_freeze is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeEqualTo(Boolean value) {
+            addCriterion("is_freeze =", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeNotEqualTo(Boolean value) {
+            addCriterion("is_freeze <>", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeGreaterThan(Boolean value) {
+            addCriterion("is_freeze >", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_freeze >=", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeLessThan(Boolean value) {
+            addCriterion("is_freeze <", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_freeze <=", value, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeIn(List<Boolean> values) {
+            addCriterion("is_freeze in", values, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeNotIn(List<Boolean> values) {
+            addCriterion("is_freeze not in", values, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_freeze between", value1, value2, "isFreeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFreezeNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_freeze not between", value1, value2, "isFreeze");
+            return (Criteria) this;
+        }
+
         public Criteria andInviterIdIsNull() {
             addCriterion("inviter_id is null");
             return (Criteria) this;
@@ -1269,66 +1329,6 @@ public class MemberDOExample {
 
         public Criteria andLevelNotBetween(Integer value1, Integer value2) {
             addCriterion("level not between", value1, value2, "level");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdIsNull() {
-            addCriterion("property_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdIsNotNull() {
-            addCriterion("property_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdEqualTo(Long value) {
-            addCriterion("property_id =", value, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdNotEqualTo(Long value) {
-            addCriterion("property_id <>", value, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdGreaterThan(Long value) {
-            addCriterion("property_id >", value, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("property_id >=", value, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdLessThan(Long value) {
-            addCriterion("property_id <", value, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdLessThanOrEqualTo(Long value) {
-            addCriterion("property_id <=", value, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdIn(List<Long> values) {
-            addCriterion("property_id in", values, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdNotIn(List<Long> values) {
-            addCriterion("property_id not in", values, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdBetween(Long value1, Long value2) {
-            addCriterion("property_id between", value1, value2, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdNotBetween(Long value1, Long value2) {
-            addCriterion("property_id not between", value1, value2, "propertyId");
             return (Criteria) this;
         }
 
@@ -1589,6 +1589,66 @@ public class MemberDOExample {
 
         public Criteria andGmtCreateNotBetween(Date value1, Date value2) {
             addCriterion("gmt_create not between", value1, value2, "gmtCreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyIdIsNull() {
+            addCriterion("property_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyIdIsNotNull() {
+            addCriterion("property_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyIdEqualTo(Long value) {
+            addCriterion("property_id =", value, "propertyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyIdNotEqualTo(Long value) {
+            addCriterion("property_id <>", value, "propertyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyIdGreaterThan(Long value) {
+            addCriterion("property_id >", value, "propertyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("property_id >=", value, "propertyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyIdLessThan(Long value) {
+            addCriterion("property_id <", value, "propertyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyIdLessThanOrEqualTo(Long value) {
+            addCriterion("property_id <=", value, "propertyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyIdIn(List<Long> values) {
+            addCriterion("property_id in", values, "propertyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyIdNotIn(List<Long> values) {
+            addCriterion("property_id not in", values, "propertyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyIdBetween(Long value1, Long value2) {
+            addCriterion("property_id between", value1, value2, "propertyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPropertyIdNotBetween(Long value1, Long value2) {
+            addCriterion("property_id not between", value1, value2, "propertyId");
             return (Criteria) this;
         }
     }

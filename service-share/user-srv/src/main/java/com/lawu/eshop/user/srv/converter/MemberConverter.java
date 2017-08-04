@@ -55,6 +55,7 @@ public class MemberConverter {
         memberBO.setGtCid(memberDO.getGtCid());
         memberBO.setRyToken(memberDO.getRyToken());
         memberBO.setRegionName(memberDO.getRegionName());
+        memberBO.setIsFreeze(memberDO.getIsFreeze());
         return memberBO;
     }
 

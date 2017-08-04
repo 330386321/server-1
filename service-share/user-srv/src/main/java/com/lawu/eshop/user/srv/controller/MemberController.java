@@ -1,42 +1,14 @@
 package com.lawu.eshop.user.srv.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.user.dto.AdQueryMemberInfoDTO;
-import com.lawu.eshop.user.dto.CashUserInfoDTO;
-import com.lawu.eshop.user.dto.EfriendDTO;
-import com.lawu.eshop.user.dto.LoginUserDTO;
-import com.lawu.eshop.user.dto.MemberDTO;
-import com.lawu.eshop.user.dto.MemberInfoForShoppingOrderDTO;
-import com.lawu.eshop.user.dto.MemberMineInfoDTO;
-import com.lawu.eshop.user.dto.MessagePushDTO;
-import com.lawu.eshop.user.dto.RongYunDTO;
-import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.dto.UserHeadImgDTO;
-import com.lawu.eshop.user.dto.UserRedPacketDTO;
-import com.lawu.eshop.user.dto.VisitUserInfoDTO;
+import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
-import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
-import com.lawu.eshop.user.srv.bo.MemberBO;
-import com.lawu.eshop.user.srv.bo.MemberProfileBO;
-import com.lawu.eshop.user.srv.bo.MessagePushBO;
-import com.lawu.eshop.user.srv.bo.RongYunBO;
+import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.converter.MemberProfileConverter;
@@ -46,6 +18,12 @@ import com.lawu.eshop.user.srv.service.MemberProfileService;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.PwdUtil;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Leach
@@ -76,6 +54,9 @@ public class MemberController extends BaseController {
         MemberBO memberBO = memberService.find(account, pwd);
         if (memberBO == null) {
             return successGet(ResultCode.MEMBER_WRONG_PWD);
+        }
+        if(memberBO.getIsFreeze()){
+            return successGet(ResultCode.ACCOUNT_IS_FREEZE);
         }
         return successGet(LoginUserConverter.convert(memberBO));
     }

@@ -26,6 +26,7 @@ public class LoginUserConverter {
         loginUserDTO.setNum(memberBO.getNum());
         loginUserDTO.setAccount(memberBO.getAccount());
         loginUserDTO.setRyToken(memberBO.getRyToken());
+        loginUserDTO.setIsFreeze(memberBO.getIsFreeze());
         return loginUserDTO;
     }
 
@@ -44,6 +45,7 @@ public class LoginUserConverter {
         loginUserDTO.setId(merchantBO.getId());
         loginUserDTO.setNum(merchantBO.getNum());
         loginUserDTO.setAccount(merchantBO.getAccount());
+        loginUserDTO.setIsFreeze(merchantBO.getIsFreeze());
         loginUserDTO.setRyToken(merchantBO.getRyToken());
         return loginUserDTO;
     }

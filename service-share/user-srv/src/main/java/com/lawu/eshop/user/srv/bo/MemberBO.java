@@ -57,6 +57,8 @@ public class MemberBO {
 
     private String regionName;
 
+    private Boolean isFreeze;
+
     public UserSexEnum getUserSex() {
         return userSex;
     }
@@ -235,5 +237,13 @@ public class MemberBO {
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    public Boolean getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Boolean freeze) {
+        isFreeze = freeze;
     }
 }

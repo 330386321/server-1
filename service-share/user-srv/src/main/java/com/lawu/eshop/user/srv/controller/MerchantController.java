@@ -38,6 +38,9 @@ public class MerchantController extends BaseController {
         if (merchantBO == null) {
             return successGet(ResultCode.MEMBER_WRONG_PWD);
         }
+        if(merchantBO.getIsFreeze()){
+            return successGet(ResultCode.ACCOUNT_IS_FREEZE);
+        }
         return successGet(LoginUserConverter.convert(merchantBO));
     }
 

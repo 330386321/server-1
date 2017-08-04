@@ -44,6 +44,7 @@ public class MerchantConverter {
         merchantBO.setGmtCreate(merchantDO.getGmtCreate());
         merchantBO.setGtCid(merchantDO.getGtCid());
         merchantBO.setRyToken(merchantDO.getRyToken());
+        merchantBO.setIsFreeze(merchantDO.getIsFreeze());
         return merchantBO;
     }
 

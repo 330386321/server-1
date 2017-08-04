@@ -39,6 +39,8 @@ public class MerchantBO {
     
     private String principalName;
 
+    private Boolean isFreeze;
+
     public Long getId() {
         return id;
     }
@@ -158,6 +160,12 @@ public class MerchantBO {
 	public void setPrincipalName(String principalName) {
 		this.principalName = principalName;
 	}
-    
-    
+
+    public Boolean getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Boolean freeze) {
+        isFreeze = freeze;
+    }
 }
