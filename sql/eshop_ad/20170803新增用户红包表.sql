@@ -13,7 +13,7 @@ CREATE TABLE `user_red_packet` (
 
 CREATE TABLE `user_taked_red_packet` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `user_num` int(11) DEFAULT NULL COMMENT '领取用户num',
+  `user_num` varchar(19) DEFAULT NULL COMMENT '领取用户num',
   `user_red_pack_id` bigint(20) DEFAULT NULL COMMENT '红包id',
   `type` tinyint(2) DEFAULT NULL COMMENT '红包类型',
   `ordinal` int(8) DEFAULT NULL COMMENT '序号',
