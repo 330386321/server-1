@@ -205,6 +205,7 @@ CREATE TABLE `merchant_store` (
 	`latitude` DECIMAL(10,7) UNSIGNED NOT NULL COMMENT '纬度',
 	`industry_path` VARCHAR(10) NULL DEFAULT NULL COMMENT '主营业务' ,
 	`industry_name` VARCHAR(50) NULL DEFAULT NULL COMMENT '主营业务名称' ,
+	`keywords` VARCHAR(100) NULL DEFAULT NULL COMMENT '关键词',
 	`intro` VARCHAR(500) NOT NULL COMMENT '店铺介绍' ,
 	`status` TINYINT(2) UNSIGNED NOT NULL COMMENT '0：待审核，1：审核通过，2：审核不通过，3：未提交保证金，4：已提交保证金待财务核实，5：财务审核不通过，6：注销',
 	`principal_name` VARCHAR(20) NULL DEFAULT NULL COMMENT '负责人名字',

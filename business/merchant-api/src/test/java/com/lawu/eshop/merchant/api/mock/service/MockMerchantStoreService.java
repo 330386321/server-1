@@ -91,4 +91,9 @@ public class MockMerchantStoreService extends BaseController implements Merchant
 	public Result<MerchantStoreAdInfoDTO> selectMerchantStoreAdInfo(@PathVariable("merchantId") Long merchantId) {
 		return successGet();
 	}
+
+    @Override
+    public Result updateKeywordsById(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestParam("keywords") String keywords) {
+        return successCreated();
+    }
 }
