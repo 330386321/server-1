@@ -605,25 +605,19 @@ public class ProductServiceImpl implements ProductService {
             SolrInputDocument document = new SolrInputDocument();
             document.addField("id", solrDocument.get("id"));
             document.addField("featureImage_s", solrDocument.get("featureImage_s"));
-            document.setField("name_s", solrDocument.get("name_s"));
+            document.setField("name", solrDocument.get("name"));
             document.addField("categoryId_i", solrDocument.get("categoryId_i"));
-            document.addField("content_s", solrDocument.get("content_s"));
             document.addField("averageDailySales_d", averageDailySales == null ? 0 : averageDailySales.doubleValue());
             document.addField("originalPrice_d", solrDocument.get("originalPrice_d"));
             document.addField("price_d", solrDocument.get("price_d"));
             document.addField("inventory_i", solrDocument.get("inventory_i"));
             document.addField("salesVolume_i", solrDocument.get("salesVolume_i"));
-            ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(Integer.valueOf(solrDocument.get("categoryId_i").toString()));
-            if (productCategoryeDO != null) {
-                String[] categoryIdArr = productCategoryeDO.getPath().split("/");
-                for (String categoryId : categoryIdArr) {
-                    document.addField("categoryId_is", categoryId);
-                }
-            }
+            document.addField("keywords", solrDocument.get("keywords"));
             solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
 
+    @Deprecated
     @Override
     public void updateProductIndex(Long id) {
         ProductDO productDO = productDOMapper.selectByPrimaryKey(id);
@@ -742,4 +736,28 @@ public class ProductServiceImpl implements ProductService {
         return ProductConverter.convertBOS(productDOViewList);
     }
 
+    @Override
+    public void updateKeywordsById(Long id, Long merchantId, String keywords) {
+        ProductDO productDO = new ProductDO();
+        productDO.setKeywords(keywords);
+        ProductDOExample example = new ProductDOExample();
+        example.createCriteria().andIdEqualTo(id).andMerchantIdEqualTo(merchantId);
+        productDOMapper.updateByExampleSelective(productDO, example);
+
+        SolrDocument solrDocument = solrService.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        if (solrDocument != null) {
+            SolrInputDocument document = new SolrInputDocument();
+            document.addField("id", solrDocument.get("id"));
+            document.addField("featureImage_s", solrDocument.get("featureImage_s"));
+            document.setField("name", solrDocument.get("name"));
+            document.addField("categoryId_i", solrDocument.get("categoryId_i"));
+            document.addField("averageDailySales_d", solrDocument.get("averageDailySales_d"));
+            document.addField("originalPrice_d", solrDocument.get("originalPrice_d"));
+            document.addField("price_d", solrDocument.get("price_d"));
+            document.addField("inventory_i", solrDocument.get("inventory_i"));
+            document.addField("salesVolume_i", solrDocument.get("salesVolume_i"));
+            document.addField("keywords", keywords);
+            solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        }
+    }
 }

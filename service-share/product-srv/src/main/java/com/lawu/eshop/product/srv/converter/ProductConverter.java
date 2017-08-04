@@ -269,13 +269,16 @@ public class ProductConverter {
         SolrInputDocument document = new SolrInputDocument();
         document.addField("id", productDO.getId());
         document.addField("featureImage_s", productDO.getFeatureImage());
-        document.setField("name_s", productDO.getName());
+        document.setField("name", productDO.getName());
         document.addField("categoryId_i", productDO.getCategoryId());
         document.addField("averageDailySales_d", productDO.getAverageDailySales() == null ? 0 : productDO.getAverageDailySales().doubleValue());
         document.addField("originalPrice_d", productDO.getMaxPrice() == null ? 0 : productDO.getMaxPrice().doubleValue());
         document.addField("price_d", productDO.getMinPrice() == null ? 0 : productDO.getMinPrice().doubleValue());
         document.addField("inventory_i", productDO.getTotalInventory());
         document.addField("salesVolume_i", productDO.getTotalSalesVolume());
+        if(org.apache.commons.lang.StringUtils.isNotEmpty(productDO.getKeywords())){
+            document.addField("keywords", productDO.getKeywords());
+        }
         return document;
     }
 
@@ -295,7 +298,7 @@ public class ProductConverter {
             ProductSearchDTO productSearchDTO = new ProductSearchDTO();
             productSearchDTO.setProductId(solrDocument.get("id") == null ? 0 : Long.valueOf(solrDocument.get("id").toString()));
             productSearchDTO.setFeatureImage(solrDocument.get("featureImage_s") == null ? "" : solrDocument.get("featureImage_s").toString());
-            productSearchDTO.setName(solrDocument.get("name_s") == null ? "" : solrDocument.get("name_s").toString());
+            productSearchDTO.setName(solrDocument.get("name") == null ? "" : solrDocument.get("name").toString());
             productSearchDTO.setOriginalPrice(solrDocument.get("originalPrice_d") == null ? 0.0 : Double.valueOf(solrDocument.get("originalPrice_d").toString()));
             productSearchDTO.setPrice(solrDocument.get("price_d") == null ? 0.0 : Double.valueOf(solrDocument.get("price_d").toString()));
             productSearchDTO.setSalesVolume(solrDocument.get("salesVolume_i") == null ? 0 : Integer.valueOf(solrDocument.get("salesVolume_i").toString()));

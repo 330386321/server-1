@@ -159,4 +159,14 @@ public interface ProductService {
      */
     List<ProductBO> listProductByIds(List<Long> ids);
 
+    /**
+     * 根据ID更新商品关键词
+     *
+     * @param id
+     * @param merchantId
+     * @param keywords
+     * @author meishuquan
+     */
+    void updateKeywordsById(Long id, Long merchantId, String keywords);
+
 }

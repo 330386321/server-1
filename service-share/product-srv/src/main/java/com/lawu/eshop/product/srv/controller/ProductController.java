@@ -276,6 +276,7 @@ public class ProductController extends BaseController {
      * @param id
      * @return
      */
+    @Deprecated
     @SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updateProductIndex/{id}", method = RequestMethod.PUT)
     public Result updateProductIndex(@PathVariable Long id) {
@@ -331,6 +332,24 @@ public class ProductController extends BaseController {
     public Result<List<ProductSearchDTO>> listProductByIds(@RequestParam List<Long> ids) {
         List<ProductBO> productBOS = productService.listProductByIds(ids);
         return successGet(ProductConverter.convertSearchDTO(productBOS));
+    }
+
+    /**
+     * 根据ID更新商品关键词
+     *
+     * @param id
+     * @param keywords
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "updateKeywordsById/{id}", method = RequestMethod.PUT)
+    public Result updateKeywordsById(@PathVariable Long id, @RequestParam Long merchantId, @RequestParam String keywords) {
+        ProductInfoBO productInfoBO = productService.selectProductById(id);
+        if (productInfoBO == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        productService.updateKeywordsById(id, merchantId, keywords);
+        return successCreated();
     }
 
 }
