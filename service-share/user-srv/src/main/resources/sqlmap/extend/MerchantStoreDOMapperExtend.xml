@@ -47,7 +47,8 @@
     <select id="listInvalidMerchantStore" resultType="com.lawu.eshop.user.srv.domain.MerchantStoreDO" parameterType="com.lawu.eshop.user.param.ListMerchantStoreParam">
         SELECT ms.id
         FROM merchant_store ms INNER JOIN merchant_store_profile msp on ms.merchant_id = msp.merchant_id
-        WHERE ms.status != #{status} or msp.manage_type != #{manageType}
+        INNER JOIN merchant m on ms.merchant_id = m.id
+        WHERE ms.status != #{status} or msp.manage_type != #{manageType} or m.is_freeze = 1
         limit #{offset} , #{pageSize}
     </select>
 
