@@ -737,6 +737,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void updateKeywordsById(Long id, Long merchantId, String keywords) {
         ProductDO productDO = new ProductDO();
         productDO.setKeywords(keywords);
