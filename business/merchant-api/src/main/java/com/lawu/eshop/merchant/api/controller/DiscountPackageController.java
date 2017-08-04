@@ -232,7 +232,7 @@ public class DiscountPackageController extends BaseController {
 	@ApiOperation(value = "保存优惠套餐详情", notes = "保存优惠套餐。[]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ApiParam(value = "优惠套餐保存参数", required = true) @RequestBody @Validated DiscountPackageSaveWithImageForeignParam param, BindingResult bindingResult) {
 		String message = validate(bindingResult);
     	if (message != null) {
