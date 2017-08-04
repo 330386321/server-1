@@ -65,4 +65,10 @@ public class MockProductService extends BaseController implements ProductService
     public Result updateKeywordsById(@PathVariable("id") Long id, @RequestParam("keywords") Long merchantId, @RequestParam("keywords") String keywords) {
         return successCreated();
     }
+
+    @Override
+    public Result<Integer> selectProductCount(@RequestParam("merchantId") Long merchantId) {
+        return successCreated(new Integer(1));
+    }
+
 }

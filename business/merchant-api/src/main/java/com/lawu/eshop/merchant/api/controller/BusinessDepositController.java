@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.merchant.api.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -15,10 +16,6 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
-import com.lawu.eshop.merchant.api.service.BusinessDepositService;
-import com.lawu.eshop.merchant.api.service.MerchantStoreService;
-import com.lawu.eshop.merchant.api.service.OrderService;
-import com.lawu.eshop.merchant.api.service.VerifyCodeService;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
@@ -54,6 +51,8 @@ public class BusinessDepositController extends BaseController {
 	private MerchantStoreService merchantStoreService;
 	@Autowired
     private VerifyCodeService verifyCodeService;
+	@Autowired
+	private ProductService productService;
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
@@ -94,28 +93,33 @@ public class BusinessDepositController extends BaseController {
 	@ApiOperation(value = "申请退保证金操作", notes = "申请退保证金,[]（杨清华）", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "refundDeposit", method = RequestMethod.POST)
-	public Result refundDeposit(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam BusinessRefundDepositParam param) {
+	public Result refundDeposit(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam BusinessRefundDepositParam param) {
 
 		//校验短信验证码
 		Result<VerifyCodeDTO> smsResult = verifyCodeService.verifySmsCode(Long.valueOf(param.getMsgId()), param.getMsg());
-        if (!isSuccess(smsResult)) {
-            return successCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
-        }
+		if (!isSuccess(smsResult)) {
+			return successCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
+		}
+
+		//判断是否存在在售商品
+		Result<Integer> resultProduct = productService.selectProductCount(UserUtil.getCurrentUserId(getRequest()));
+		if(resultProduct.getModel() > 0){
+			return successCreated(ResultCode.DEPOSIT_EXIST_UP_PRODUCT);
+		}
 		
-		// 需要判断是否满足退保证金条件：无未完结订单、三个月(已财务核实时间为准)
-		Result<ShoppingOrderIsNoOnGoingOrderDTO> dto = orderService
-				.isNoOnGoingOrder(UserUtil.getCurrentUserId(getRequest()));
+		// 需要判断是否满足退保证金条件：无未完结订单
+		Result<ShoppingOrderIsNoOnGoingOrderDTO> dto = orderService.isNoOnGoingOrder(UserUtil.getCurrentUserId(getRequest()));
 		if (!dto.getModel().getIsNoOnGoingOrder()) {
 			return successCreated(ResultCode.DEPOSIT_EXIST_ING_ORDER);
 		}
-		
+
 		BusinessRefundDepositDataParam dparam = new BusinessRefundDepositDataParam();
 		dparam.setId(param.getId());
 		dparam.setBusinessBankAccountId(param.getBusinessBankAccountId());
 		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		dparam.setPayPwd(param.getPayPwd());
 
+		//校验三个月以内不允许退款(已财务核实时间为准)
 		return businessDepositService.refundDeposit(dparam);
 	}
 

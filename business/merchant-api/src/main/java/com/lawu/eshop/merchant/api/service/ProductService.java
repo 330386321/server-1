@@ -92,4 +92,12 @@ public interface ProductService {
     @RequestMapping(value = "product/updateKeywordsById/{id}", method = RequestMethod.PUT)
     Result updateKeywordsById(@PathVariable("id") Long id, @RequestParam("keywords") Long merchantId, @RequestParam("keywords") String keywords);
 
+     /* 查询商家上架商品的总数量
+     *
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "product/selectProductCount")
+    Result<Integer> selectProductCount(@RequestParam("merchantId") Long merchantId);
+
 }

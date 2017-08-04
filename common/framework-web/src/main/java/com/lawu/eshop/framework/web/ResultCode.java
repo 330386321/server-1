@@ -155,6 +155,7 @@ public class ResultCode {
     public static final int PROPERTYINFO_FREEZE_YES = 6024;
     public static final int PROCESSED_RETURN_SUCCESS = 6025;
     public static final int PROPERTYINFO_FREEZE_EXCEPITON = 6026;
+    public static final int DEPOSIT_EXIST_UP_PRODUCT = 6027;
 
 
 
@@ -331,7 +332,7 @@ public class ResultCode {
         ResultCode.messageMap.put(FREEZE_ROWS_OUT, "冻结资金记录条数已大于1");
         ResultCode.messageMap.put(FREEZE_MONEY_LESS_REFUND_MONEY, "冻结金额不能小于退款金额");
         ResultCode.messageMap.put(DEPOSIT_IN_SYSTEM_DAYS, "不满足申请退保证金要求(保证金核实后90天)");
-        ResultCode.messageMap.put(DEPOSIT_EXIST_ING_ORDER, "不满足申请退保证金要求(存在未完结订单)");
+        ResultCode.messageMap.put(DEPOSIT_EXIST_ING_ORDER, "有未完成订单，完成后才可申请。");
         ResultCode.messageMap.put(MONEY_IS_ZERO, "查询出金额为0");
         ResultCode.messageMap.put(PAY_ORDER_NULL, "买单记录为空");
         ResultCode.messageMap.put(PAY_ORDER_IS_SUCCESS, "重复买单");
@@ -341,6 +342,7 @@ public class ResultCode {
         ResultCode.messageMap.put(PROPERTYINFO_FREEZE_YES, "资金已冻结");
         ResultCode.messageMap.put(PROCESSED_RETURN_SUCCESS, "重复处理，成功返回");
         ResultCode.messageMap.put(PROPERTYINFO_FREEZE_EXCEPITON, "资金出现异常");
+        ResultCode.messageMap.put(DEPOSIT_EXIST_UP_PRODUCT, "有未下架商品，完成后才可申请。");
 
 
         // 商城模块 7xxx
