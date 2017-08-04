@@ -1,9 +1,13 @@
 package com.lawu.eshop.property.srv.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.property.constants.FreezeStatusEnum;
+import com.lawu.eshop.property.param.FreezeQueryParam;
 import com.lawu.eshop.property.srv.PropertySrvApplicationTest;
+import com.lawu.eshop.property.srv.domain.FreezeDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.mapper.FreezeDOMapper;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.utils.PwdUtil;
 import org.junit.Before;
@@ -11,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -26,6 +31,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,6 +51,9 @@ public class PropertyInfoControllerTest {
 
     @Autowired
     private PropertyInfoDOMapper propertyInfoDOMapper;
+
+    @Autowired
+    private FreezeDOMapper freezeDOMapper;
 
     @Before
     public void setUp() throws Exception {
@@ -181,6 +190,36 @@ public class PropertyInfoControllerTest {
         propertyInfoDOMapper.insertSelective(propertyInfoDO);
 
         RequestBuilder request = get("/propertyInfo/getPropertyinfoFreeze/M10001");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getFreezeList() {
+        FreezeDO fdo = new FreezeDO();
+        fdo.setOrderNum("1111111111");
+        fdo.setUserNum("M34343");
+        fdo.setGmtCreate(new Date());
+        fdo.setMoney(new BigDecimal(1));
+        fdo.setBizId(1L);
+        fdo.setDays(7);
+        fdo.setFundType(new Byte("1"));
+        fdo.setOriginalMoney(new BigDecimal(1));
+        fdo.setStatus(new Byte("0"));
+        freezeDOMapper.insert(fdo);
+
+        FreezeQueryParam param = new FreezeQueryParam();
+        param.setUserNum("M34343");
+        param.setCurrentPage(1);
+        param.setPageSize(10);
+        String requestJson = JSONObject.toJSONString(param);
+        RequestBuilder request = post("/propertyInfo/getFreezeList").contentType(MediaType.APPLICATION_JSON).content(requestJson);
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();

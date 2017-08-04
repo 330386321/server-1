@@ -1,14 +1,17 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.*;
+import com.lawu.eshop.property.param.FreezeQueryParam;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
@@ -81,5 +84,10 @@ public class MockPropertyInfoService extends BaseController implements PropertyI
         PropertyInfoFreezeDTO dto = new PropertyInfoFreezeDTO();
         dto.setStatus(PropertyinfoFreezeEnum.NO);
         return successGet(dto);
+    }
+
+    @Override
+    public Result<Page<FreezeDTO>> getFreezeList(@RequestBody FreezeQueryParam param) {
+        return null;
     }
 }

@@ -4,13 +4,17 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.*;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
+import com.lawu.eshop.property.param.FreezeQueryParam;
 import com.lawu.eshop.property.param.PropertyInfoBackageParam;
+import com.lawu.eshop.property.srv.bo.FreezeBO;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointAndBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointBO;
+import com.lawu.eshop.property.srv.domain.FreezeDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
+import com.lawu.eshop.property.srv.mapper.FreezeDOMapper;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.service.CommissionUtilService;
@@ -41,7 +45,8 @@ public class PropertyInfoServiceImplTest {
 
     @Autowired
     private PropertyInfoDOMapper propertyInfoDOMapper;
-
+    @Autowired
+    private FreezeDOMapper freezeDOMapper;
 
     @Transactional
     @Rollback
@@ -343,6 +348,31 @@ public class PropertyInfoServiceImplTest {
 
         PropertyinfoFreezeEnum bean = propertyInfoService.getPropertyinfoFreeze("M10001");
         Assert.assertNotNull(bean);
+
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getFreezeList(){
+        FreezeDO fdo = new FreezeDO();
+        fdo.setOrderNum("1111111111");
+        fdo.setUserNum("M34343");
+        fdo.setGmtCreate(new Date());
+        fdo.setMoney(new BigDecimal(1));
+        fdo.setBizId(1L);
+        fdo.setDays(7);
+        fdo.setFundType(new Byte("1"));
+        fdo.setOriginalMoney(new BigDecimal(1));
+        fdo.setStatus(new Byte("0"));
+        freezeDOMapper.insert(fdo);
+
+        FreezeQueryParam param = new FreezeQueryParam();
+        param.setUserNum("M34343");
+        param.setCurrentPage(1);
+        param.setPageSize(10);
+        Page<FreezeBO> rtnPage = propertyInfoService.getFreezeList(param);
+        Assert.assertEquals(1,rtnPage.getTotalCount().intValue());
 
     }
 }
