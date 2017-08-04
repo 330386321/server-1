@@ -64,8 +64,8 @@ public class AdEgainDTO {
 	@ApiModelProperty(value = "是否点击过广告")
 	private Boolean isClickAd;
 	
-	@ApiModelProperty (name="productId", value = "商品id")
-	private Long productId;
+	@ApiModelProperty (name="relateId", value = "关联id")
+	private Long relateId;
 	
 	@ApiModelProperty (name="relateType", value = "PRODUCT_TYPE 商品  | MERCHANT_STORE_TYPE 店铺")
 	private RelateTypeEnum relateType;
@@ -214,12 +214,12 @@ public class AdEgainDTO {
 		this.isClickAd = isClickAd;
 	}
 
-	public Long getProductId() {
-		return productId;
+	public Long getRelateId() {
+		return relateId;
 	}
 
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	public void setRelateId(Long relateId) {
+		this.relateId = relateId;
 	}
 
 	public RelateTypeEnum getRelateType() {

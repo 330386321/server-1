@@ -76,7 +76,7 @@ public class AdEgainDetailBO {
 	 
 	private Long merchantId;
 	
-	private Long productId;
+	private Long relateId;
 	
 	private RelateTypeEnum relateType;
 
@@ -200,12 +200,12 @@ public class AdEgainDetailBO {
 		this.merchantId = merchantId;
 	}
 
-	public Long getProductId() {
-		return productId;
+	public Long getRelateId() {
+		return relateId;
 	}
 
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	public void setRelateId(Long relateId) {
+		this.relateId = relateId;
 	}
 
 	public RelateTypeEnum getRelateType() {

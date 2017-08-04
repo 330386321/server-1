@@ -50,12 +50,20 @@ public class AdAgainPutParam {
 	@ApiParam (name="videoImgUrl", value = "视频封面图片")
 	private String videoImgUrl;
 	
-	@ApiModelProperty (name="productId", value = "商品id")
-	private Long productId;
+	@ApiModelProperty (name="relateId", value = "商品id")
+	private Long relateId;
 	
 	@ApiModelProperty (name="relateType", value = "PRODUCT_TYPE 商品  | MERCHANT_STORE_TYPE 店铺")
 	private RelateTypeEnum relateType;
 
+	public Long getRelateId() {
+		return relateId;
+	}
+
+
+	public void setRelateId(Long relateId) {
+		this.relateId = relateId;
+	}
 
 	public String getTitle() {
 		return title;
@@ -187,18 +195,7 @@ public class AdAgainPutParam {
 	public void setVideoImgUrl(String videoImgUrl) {
 		this.videoImgUrl = videoImgUrl;
 	}
-
-
-	public Long getProductId() {
-		return productId;
-	}
-
-
-	public void setProductId(Long productId) {
-		this.productId = productId;
-	}
-
-
+	
 	public RelateTypeEnum getRelateType() {
 		return relateType;
 	}

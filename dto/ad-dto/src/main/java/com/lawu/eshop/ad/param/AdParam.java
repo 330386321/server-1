@@ -54,8 +54,8 @@ public class AdParam {
 	@ApiParam (name="videoImgUrl", value = "视频封面图片")
 	private String videoImgUrl;
 	
-	@ApiParam (name="productId", value = "商品id")
-	private Long productId;
+	@ApiParam (name="relateId", value = "关联id")
+	private Long relateId;
 	
 	@ApiParam (name="relateType", value = "PRODUCT_TYPE 商品  | MERCHANT_STORE_TYPE 店铺")
 	private RelateTypeEnum relateType;
@@ -203,13 +203,13 @@ public class AdParam {
 	}
 
 
-	public Long getProductId() {
-		return productId;
+	public Long getRelateId() {
+		return relateId;
 	}
 
 
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	public void setRelateId(Long relateId) {
+		this.relateId = relateId;
 	}
 
 

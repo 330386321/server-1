@@ -637,7 +637,7 @@ public class AdConverter {
 		rtn.setContent(adDO.getContent());
 		rtn.setStatusEnum(AdStatusEnum.getEnum(adDO.getStatus()));
 		rtn.setMerchantId(adDO.getMerchantId());
-		rtn.setProductId(adDO.getProductId());
+		rtn.setRelateId(adDO.getRelateId());
 		rtn.setRelateType(RelateTypeEnum.getEnum(adDO.getRelateType()));
 		return rtn;
 	}
@@ -664,7 +664,7 @@ public class AdConverter {
 		rtn.setMerchantId(adBO.getMerchantId());
 		rtn.setIsClickAd(adBO.getIsClickAd());
 		rtn.setIsFavorite(adBO.getIsFavorite());
-		rtn.setProductId(adBO.getProductId());
+		rtn.setRelateId(adBO.getRelateId());
 		rtn.setRelateType(adBO.getRelateType());
 		return rtn;
 	}

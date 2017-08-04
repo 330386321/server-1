@@ -561,7 +561,7 @@ public class AdConverterTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
-        ad.setProductId(1001l);
+        ad.setRelateId(1001l);
         ad.setRelateType(RelateTypeEnum.PRODUCT_TYPE.getVal());
         
         AdEgainDetailBO  bo = AdConverter.convertAdEgainDetailBO(ad);
@@ -585,7 +585,7 @@ public class AdConverterTest {
 		ad.setVideoImgUrl("ad_image/1494582624025648401.png");
 		ad.setContent("广告测试内容");
 		ad.setTitle("广告测试标题");
-        ad.setProductId(1001l);
+		ad.setRelateId(1001l);
         ad.setMerchantStoreName("E店商家");
         ad.setType(AdEgainTypeEnum.AD_TYPE_FLAT);
         ad.setRelateType(RelateTypeEnum.MERCHANT_STORE_TYPE);

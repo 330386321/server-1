@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.ad.constants.AdEgainTypeEnum;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -31,10 +32,12 @@ import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.ListAdParam;
+import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
+import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
@@ -1757,4 +1760,40 @@ public class AdServiceImplTest {
         Assert.assertNotNull(page.getRecords());
         Assert.assertTrue(page.getRecords().size()>0);
     }*/
+	
+	@Transactional
+	@Rollback
+    @Test
+    public void selectOperatorAdAll() {
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setHits(0);
+        ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+        Integer id=adDOMapper.insertSelective(ad);
+        
+        OperatorAdParam operatorAdParam = new OperatorAdParam();
+        operatorAdParam.setAdEgainType(AdEgainTypeEnum.AD_TYPE_FLAT);
+        List<OperatorAdBO> list=adService.selectOperatorAdAll(operatorAdParam);
+        Assert.assertNotNull(list);
+        Assert.assertTrue(list.size()>0);
+    }
 }

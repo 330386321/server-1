@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.ad.constants.AdEgainTypeEnum;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -46,6 +47,7 @@ import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.AdSolrParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.param.ListAdParam;
+import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDO;
@@ -1041,5 +1043,25 @@ public class AdControllerTest {
             Assert.fail(e.getMessage());
         }
         
+    }
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void selectOperatorAdAll() {
+    	OperatorAdParam operatorAdParam=new OperatorAdParam();
+    	operatorAdParam.setAdEgainType(AdEgainTypeEnum.AD_TYPE_FLAT);
+        String requestListJson = JSONObject.toJSONString(operatorAdParam);
+        
+        try {
+            RequestBuilder request = post("/ad/selectOperatorAdAll/").contentType(MediaType.APPLICATION_JSON).content(requestListJson);
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
     }
 }
