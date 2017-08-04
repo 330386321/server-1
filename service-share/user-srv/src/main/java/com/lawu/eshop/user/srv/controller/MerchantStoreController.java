@@ -59,9 +59,6 @@ public class MerchantStoreController extends BaseController {
 		}
 		String path=merchantStoreImageService.selectLogoPath(merchantId);
 		MerchantStoreDTO merchantStoreDTO = MerchantStoreConverter.convertStoreDTO(merchantStoreBO);
-		if(path==null){
-			
-		}
 		merchantStoreDTO.setLogoUrl(path);
 		return successGet(merchantStoreDTO);
 

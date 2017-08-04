@@ -217,5 +217,111 @@ public class UploadFileUtil {
 
     }
     
+    
+    /**
+     * 文件上传图片和视频
+     *
+     * @param request
+     * @param dir     文件存放目录
+     * @return
+     */
+    public static Map<String, String> uploadImageAndVideo(HttpServletRequest request,
+                                                     String dirImg,String dirVideo, String baseImageDir,String basevideoDir) {
+        Map<String, String> valsMap = new HashMap<>();
+        // 设置默认返回类型成功
+        valsMap.put(MAP_KEY, MAP_VALUE);
+        byte[] b = new byte[1024 * 1024];
+        Collection<Part> parts = null;
+
+        String urlImg = "";
+        String videoUrl = "";
+        try {
+            parts = request.getParts();
+        } catch (IOException ie) {
+            logger.info("IOException {}",ie);
+        } catch (ServletException e) {
+            logger.info("ServletException {}",e);
+        }
+        for (Part part : parts) {
+        	String fileName = part.getName();
+        	if (part.getContentType() == null) {
+                    valsMap.put(fileName, request.getParameter(fileName));
+                } else {
+                	
+                	if(fileName.equals("ad_video_thumb")){
+                		String extension = part.getSubmittedFileName();
+	                     extension = extension.substring(extension.lastIndexOf("."));
+	                     String newfileName = RandomUtil.buildFileName(extension);
+	                     if (!ValidateUtil.validateImageFormat(extension)) {
+	                         valsMap.put(MAP_KEY, IMAGE_FORMAT_WRONG_UPLOAD);
+	                         valsMap.put(MAP_KEY_MSG, IMAGE_FORMAT_WRONG_UPLOAD_MSG);
+	                         return valsMap;
+	                     }
+	                     // 1M=1024k=1048576字节
+	                     long fileSize = part.getSize();
+	                     if (fileSize > 5 * 1048576) {
+	                         valsMap.put(MAP_KEY, IMAGE_SIZE_ERROR);
+	                         valsMap.put(MAP_KEY_MSG, UPLOAD_SIZE_BIGER_MSG);
+	                         return valsMap;
+	                     }
+	                     File file = new File(baseImageDir, dirImg);
+	                     if (!file.exists()) {
+	                         file.mkdirs();
+	                     }
+
+	                     try (InputStream in = part.getInputStream();
+	                     FileOutputStream out = new FileOutputStream(new File(file, newfileName))) {
+	                         int index;
+	                         while ((index = in.read(b)) != -1) {
+	                             out.write(b, 0, index);
+	                         }
+	                     } catch (FileNotFoundException e) {
+	                         logger.info("FileNotFoundException {}",e);
+	                     } catch (IOException e) {
+	                         logger.info("IOException {}",e);
+	                     }
+	                     //文件路径，文件类型
+	                     urlImg =   dirImg + File.separator + newfileName;
+	                 	 
+	       		    }else{
+		       			  String extension = part.getSubmittedFileName();
+		                   extension = extension.substring(extension.lastIndexOf("."));
+		                   String newfileName = RandomUtil.buildFileName(extension);
+		
+		                   // 1M=1024k=1048576字节
+		                   long fileSize = part.getSize();
+		                   if (fileSize > 50 * 1048576) {
+		                       valsMap.put(MAP_KEY, UPLOAD_SIZE_BIGER);
+		                       valsMap.put(MAP_KEY_MSG, UPLOAD_SIZE_BIGER_MSG);
+		                       return valsMap;
+		                   }
+		                   File file = new File(basevideoDir, dirVideo);
+		                   if (!file.exists()) {
+		                       file.mkdirs();
+		                   }
+		
+		                   try (InputStream in = part.getInputStream();
+		                        FileOutputStream  out = new FileOutputStream(new File(file, newfileName))) {
+		                       int index = 0;
+		                       while ((index = in.read(b)) != -1) {
+		                           out.write(b, 0, index);
+		                       }
+		                   } catch (IOException e) {
+		                       logger.info("out stream close exception {}",e);
+		                   }
+		
+		                   //文件路径，文件类型
+		                   videoUrl =  dirVideo + File.separator + newfileName;
+	       		    }
+
+            }
+        }
+	    valsMap.put(UPLOAD_IMG_URL, urlImg);
+	    valsMap.put(UPLOAD_VIDEO_URL, videoUrl);
+	    valsMap.put(MAP_KEY, MAP_VALUE);
+	    return valsMap;
+
+    }
+
 
 }

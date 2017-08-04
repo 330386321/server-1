@@ -70,7 +70,7 @@ import util.VideoCutImgUtil;
 @RequestMapping(value = "ad/")
 public class AdController extends BaseController {
 	
-	 private static Logger logger = LoggerFactory.getLogger(AdController.class);
+	private static Logger logger = LoggerFactory.getLogger(AdController.class);
 
     @Autowired
     private AdService adService;
@@ -124,42 +124,20 @@ public class AdController extends BaseController {
             	mediaUrl = retMap.get("imgUrl");
             }
     	}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_VIDEO){//视频投放
-    		Collection<Part> parts = null;
-	        try {
-	            parts = request.getParts();
-
-	        } catch (IOException e) {
-	            logger.info("stackTrace:{}",e);
-	            return successCreated(e.getMessage());
-	        } catch (ServletException ex) {
-	            logger.info("ServletException:{}",ex);
-	        }
-	        if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
-	        	for (Part part : parts){
-	        		String fileName = part.getName();
-	        		if(fileName.contains("ad_video")){
-	        			Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
-			    		if(!"".equals(retMap.get("videoUrl"))){
-			            	mediaUrl = retMap.get("videoUrl");
-			            }
-	        		}
-	        		if(fileName.contains("ad_video_thumb")){
-	        			Map<String, String> retVideoMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
-			            if(!"".equals(retVideoMap.get("imgUrl"))){
-			            	videoImgUrl = retVideoMap.get("imgUrl");
-			            }
-	        		}
-		    		
-		            if(StringUtils.isEmpty(videoImgUrl) || videoImgUrl == ""){ //商家没有上传图片，系统默认自动截取一张
-		            	String ffmpegUrl=merchantApiConfig.getFfmpegUrl();  //ffmpeg安装路径
-		            	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
-		            	//截取视频图片
-		            	videoImgUrl=VideoCutImgUtil.processImg(veido_path,FileDirConstant.DIR_AD_VIDEO_IMAGE, merchantApiConfig.getImageUploadUrl(),ffmpegUrl);
-		            }
-	        	}
-	        	
-	        }
-
+	        Map<String, String> retMap = UploadFileUtil.uploadImageAndVideo(request, FileDirConstant.DIR_AD_IMAGE,FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getImageUploadUrl(),merchantApiConfig.getVideoUploadUrl());
+	        if(!"".equals(retMap.get("videoUrl"))){
+            	mediaUrl = retMap.get("videoUrl");
+            }
+	        if(!"".equals(retMap.get("imgUrl"))){
+            	videoImgUrl = retMap.get("imgUrl");
+            }
+	        
+	        if(StringUtils.isEmpty(videoImgUrl) || videoImgUrl == ""){ //商家没有上传图片，系统默认自动截取一张
+            	String ffmpegUrl=merchantApiConfig.getFfmpegUrl();  //ffmpeg安装路径
+            	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
+            	//截取视频图片
+            	videoImgUrl=VideoCutImgUtil.processImg(veido_path,FileDirConstant.DIR_AD_VIDEO_IMAGE, merchantApiConfig.getImageUploadUrl(),ffmpegUrl);
+            }
     	}
     	Integer count=0;
     	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_AREAS){
