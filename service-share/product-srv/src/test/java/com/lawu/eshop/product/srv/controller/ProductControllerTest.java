@@ -571,7 +571,7 @@ public class ProductControllerTest {
 	@Rollback
 	@Test
 	public void updateKeywordsById() {
-		RequestBuilder request = put("/product/updateKeywordsById/10").param("keywords", "test");
+		RequestBuilder request = put("/product/updateKeywordsById/10").param("merchantId", "200").param("keywords", "test");
 		try {
 			ResultActions perform = mvc.perform(request);
 			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
