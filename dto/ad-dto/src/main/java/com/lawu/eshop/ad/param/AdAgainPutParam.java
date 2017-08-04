@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 
 public class AdAgainPutParam {
@@ -47,6 +49,12 @@ public class AdAgainPutParam {
 	
 	@ApiParam (name="videoImgUrl", value = "视频封面图片")
 	private String videoImgUrl;
+	
+	@ApiModelProperty (name="productId", value = "商品id")
+	private Long productId;
+	
+	@ApiModelProperty (name="relateType", value = "PRODUCT_TYPE 商品  | MERCHANT_STORE_TYPE 店铺")
+	private RelateTypeEnum relateType;
 
 
 	public String getTitle() {
@@ -178,6 +186,26 @@ public class AdAgainPutParam {
 
 	public void setVideoImgUrl(String videoImgUrl) {
 		this.videoImgUrl = videoImgUrl;
+	}
+
+
+	public Long getProductId() {
+		return productId;
+	}
+
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+
+	public RelateTypeEnum getRelateType() {
+		return relateType;
+	}
+
+
+	public void setRelateType(RelateTypeEnum relateType) {
+		this.relateType = relateType;
 	}
 
 	

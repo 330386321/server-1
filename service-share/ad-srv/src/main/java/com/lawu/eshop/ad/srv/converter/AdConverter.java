@@ -17,8 +17,10 @@ import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.constants.RelateTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
+import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
@@ -29,10 +31,10 @@ import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
+import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
-
 import com.lawu.eshop.framework.core.page.Page;
 
 /**
@@ -613,5 +615,57 @@ public class AdConverter {
 			rtn.getRecords().add(choicenessAdDTO);
 		}
         return rtn;
+	}
+
+	public static AdEgainDetailBO convertAdEgainDetailBO(AdDO adDO) {
+		AdEgainDetailBO rtn = null;
+		if (adDO == null) {
+			return rtn;
+		}
+		rtn = new AdEgainDetailBO();
+		rtn.setId(adDO.getId());
+		rtn.setMediaUrl(adDO.getMediaUrl());
+		rtn.setTitle(adDO.getTitle());
+		rtn.setType(AdEgainTypeEnum.getEnum(adDO.getType()));
+		rtn.setContent(adDO.getContent());
+		rtn.setVideoImgUrl(adDO.getVideoImgUrl());
+		rtn.setViewCount(adDO.getViewcount());
+		rtn.setLogoUrl(adDO.getLogoUrl());
+		rtn.setManageType(ManageTypeEnum.getEnum(adDO.getManageType()));
+		rtn.setMerchantStoreId(adDO.getMerchantStoreId());
+		rtn.setMerchantStoreName(adDO.getMerchantStoreName());
+		rtn.setContent(adDO.getContent());
+		rtn.setStatusEnum(AdStatusEnum.getEnum(adDO.getStatus()));
+		rtn.setMerchantId(adDO.getMerchantId());
+		rtn.setProductId(adDO.getProductId());
+		rtn.setRelateType(RelateTypeEnum.getEnum(adDO.getRelateType()));
+		return rtn;
+	}
+	
+	
+	public static AdEgainDTO convertAdEgainDTO(AdEgainDetailBO adBO) {
+		AdEgainDTO rtn = null;
+		if (adBO == null) {
+			return rtn;
+		}
+		rtn = new AdEgainDTO();
+		rtn.setId(adBO.getId());
+		rtn.setMediaUrl(adBO.getMediaUrl());
+		rtn.setTitle(adBO.getTitle());
+		rtn.setContent(adBO.getContent());
+		rtn.setVideoImgUrl(adBO.getVideoImgUrl());
+		rtn.setViewCount(adBO.getViewCount());
+		rtn.setLogoUrl(adBO.getLogoUrl());
+		rtn.setManageTypeEnum(adBO.getManageType());
+		rtn.setMerchantStoreId(adBO.getMerchantStoreId());
+		rtn.setName(adBO.getMerchantStoreName());
+		rtn.setContent(adBO.getContent());
+		rtn.setStatusEnum(adBO.getStatusEnum());
+		rtn.setMerchantId(adBO.getMerchantId());
+		rtn.setIsClickAd(adBO.getIsClickAd());
+		rtn.setIsFavorite(adBO.getIsFavorite());
+		rtn.setProductId(adBO.getProductId());
+		rtn.setRelateType(adBO.getRelateType());
+		return rtn;
 	}
 }

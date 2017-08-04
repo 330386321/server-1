@@ -78,6 +78,7 @@ public class AdBO {
    
    
    private Boolean isClickAd;
+   
 	
 
 	public Boolean getIsPraise() {

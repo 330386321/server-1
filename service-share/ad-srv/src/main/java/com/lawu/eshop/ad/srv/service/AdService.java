@@ -17,6 +17,7 @@ import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
+import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
@@ -100,7 +101,7 @@ public interface AdService {
      * @param id
      * @return
      */
-    AdBO selectAbById(Long id, Long memberId);
+    AdEgainDetailBO selectAbById(Long id, Long memberId);
 
 
     /**

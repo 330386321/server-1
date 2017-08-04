@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
 import com.lawu.eshop.ad.dto.AdPointDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
@@ -48,7 +49,7 @@ public interface AdService {
 	  * @return
 	  */
 	@RequestMapping(method = RequestMethod.GET, value = "selectAbById/{id}")
-	Result<AdDTO> selectAbById(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId);
+	Result<AdEgainDTO> selectAbById(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId);
 	
 	/**
 	 * E赞查询

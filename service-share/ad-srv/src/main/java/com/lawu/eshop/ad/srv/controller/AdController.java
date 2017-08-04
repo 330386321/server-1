@@ -138,9 +138,9 @@ public class AdController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "selectAbById/{id}", method = RequestMethod.GET)
-	public Result<AdDTO> selectAbById(@PathVariable Long id, @RequestParam Long memberId) {
-		AdBO bo = adService.selectAbById(id, memberId);
-		return successAccepted(AdConverter.convertDTO(bo));
+	public Result<AdEgainDTO> selectAbById(@PathVariable Long id, @RequestParam Long memberId) {
+		AdEgainDetailBO bo = adService.selectAbById(id, memberId);
+		return successAccepted(AdConverter.convertAdEgainDTO(bo));
 	}
 
 	/**

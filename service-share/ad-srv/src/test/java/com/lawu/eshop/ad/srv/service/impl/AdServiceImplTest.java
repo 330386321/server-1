@@ -33,6 +33,7 @@ import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
+import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
@@ -583,7 +584,7 @@ public class AdServiceImplTest {
         favoriteAdDO.setGmtCreate(new Date());
         favoriteAdDOMapper.insert(favoriteAdDO);
         
-        AdBO bo= adService.selectAbById(ad.getId(), 1l);
+        AdEgainDetailBO bo= adService.selectAbById(ad.getId(), 1l);
         
         Assert.assertNotNull(bo);
 

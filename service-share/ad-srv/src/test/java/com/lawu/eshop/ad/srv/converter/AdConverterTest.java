@@ -17,8 +17,10 @@ import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.constants.RelateTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
+import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.AdPointDTO;
@@ -27,6 +29,7 @@ import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
+import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
@@ -531,6 +534,65 @@ public class AdConverterTest {
 		Page<ChoicenessAdDTO>  page = AdConverter.convertChoicenessAdDTOPage(pageChoicenessAdBO);
         
         Assert.assertNotNull(page.getRecords());
+    }
+	
+	@Test
+    public void convertAdEgainDetailBO(){
+		
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setProductId(1001l);
+        ad.setRelateType(RelateTypeEnum.PRODUCT_TYPE.getVal());
+        
+        AdEgainDetailBO  bo = AdConverter.convertAdEgainDetailBO(ad);
+        
+        Assert.assertNotNull(bo);
+    }
+	
+	@Test
+    public void convertAdEgainDTO(){
+		
+		AdEgainDetailBO ad=new AdEgainDetailBO();
+		
+		ad.setMerchantId(1002l);
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName(("E店商家"));
+		ad.setManageType(ManageTypeEnum.COMMON);
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setIsClickAd(true);
+		ad.setIsFavorite(false);
+		ad.setVideoImgUrl("ad_image/1494582624025648401.png");
+		ad.setContent("广告测试内容");
+		ad.setTitle("广告测试标题");
+        ad.setProductId(1001l);
+        ad.setMerchantStoreName("E店商家");
+        ad.setType(AdEgainTypeEnum.AD_TYPE_FLAT);
+        ad.setRelateType(RelateTypeEnum.MERCHANT_STORE_TYPE);
+        ad.setViewCount(100);
+        AdEgainDTO  dto = AdConverter.convertAdEgainDTO(ad);
+        
+        Assert.assertNotNull(dto);
     }
 	
 }

@@ -2,23 +2,43 @@ package com.lawu.eshop.member.api.mock.service;/**
  * Created by ${Yangqh} on 2017/7/24.
  */
 
-import com.lawu.eshop.ad.constants.*;
-import com.lawu.eshop.ad.dto.*;
-import com.lawu.eshop.ad.param.*;
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.member.api.service.AdService;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdEgainDTO;
+import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
+import com.lawu.eshop.ad.dto.AdPointDTO;
+import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
+import com.lawu.eshop.ad.dto.ClickAdPointDTO;
+import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
+import com.lawu.eshop.ad.dto.PointPoolDTO;
+import com.lawu.eshop.ad.dto.PraisePointDTO;
+import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
+import com.lawu.eshop.ad.param.AdChoicenessInternalParam;
+import com.lawu.eshop.ad.param.AdEgainInternalParam;
+import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.param.AdPointInternalParam;
+import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdsolrFindParam;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.member.api.service.AdService;
 
 /**
  * <p> </p>
@@ -73,8 +93,8 @@ public class MockAdService extends BaseController implements AdService{
     }
 
     @Override
-    public Result<AdDTO> selectAbById(Long id, Long memberId) {
-        AdDTO addto = new AdDTO();
+    public Result<AdEgainDTO> selectAbById(Long id, Long memberId) {
+    	AdEgainDTO addto = new AdEgainDTO();
         addto.setId(1L);
         addto.setViewCount(1);
         addto.setContent("content");
@@ -86,11 +106,6 @@ public class MockAdService extends BaseController implements AdService{
         addto.setMerchantStoreId(1L);
         addto.setStatusEnum(AdStatusEnum.AD_STATUS_PUTING);
         addto.setIsClickAd(false);
-        addto.setIsPraise(true);
-        addto.setNeedBeginTime(100L);
-        addto.setBeginTime(new Date());
-        addto.setTotalPoint(new BigDecimal("100"));
-        addto.setNumber(1);
         return successCreated(addto);
     }
 

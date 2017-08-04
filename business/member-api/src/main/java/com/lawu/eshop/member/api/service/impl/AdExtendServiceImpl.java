@@ -27,6 +27,7 @@ import com.lawu.eshop.ad.constants.AdPage;
 import com.lawu.eshop.ad.constants.AdPraiseConfig;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
 import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
@@ -290,8 +291,8 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	public Result<AdPraiseDTO> selectAbPraiseById(Long id) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
-		Result<AdDTO> adDTO = adService.selectAbById(id, memberId);
-		AdDTO ad = adDTO.getModel();
+		Result<AdEgainDTO> adDTO = adService.selectAbById(id, memberId);
+		AdEgainDTO ad = adDTO.getModel();
 		Result<MerchantStoreDTO> merchantStoreDTO = merchantStoreService.selectMerchantStoreByMId(ad.getMerchantId());
 		Result<ManageTypeEnum> manageType = merchantStoreService.getManageType(ad.getMerchantId());
 		AdPraiseDTO praise = new AdPraiseDTO();
@@ -319,12 +320,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		}
 		praise.setId(ad.getId());
 		praise.setTitle(ad.getTitle());
-		praise.setBeginTime(ad.getBeginTime());
-		praise.setTotalPoint(ad.getTotalPoint());
 		praise.setMerchantStoreId(ad.getMerchantStoreId());
-		praise.setCount(ad.getNumber());
-		praise.setNeedBeginTime(ad.getNeedBeginTime());
-		praise.setIsPraise(ad.getIsPraise());
 		praise.setMediaUrl(ad.getMediaUrl());
 		praise.setMerchantId(ad.getMerchantId());
 		praise.setClickPraiseAdTimes(memberApiConfig.getClickPraiseAdTimes());

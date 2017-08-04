@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -178,47 +179,20 @@ public class AdController extends BaseController {
                                   @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());
     	
-        Result<AdDTO> adRs = adService.selectAbById(id,memberId);
-        AdEgainDTO adEgainDTO=new AdEgainDTO();
+        Result<AdEgainDTO> adRs = adService.selectAbById(id,memberId);
         
         if(!isSuccess(adRs)){
         	return successCreated(adRs.getRet());
         }
-        AdDTO  adDTO=adRs.getModel();
-    	adEgainDTO.setId(adDTO.getId());
-    	adEgainDTO.setViewCount(adDTO.getViewCount());
-    	adEgainDTO.setContent(adDTO.getContent());
-    	adEgainDTO.setIsFavorite(adDTO.getIsFavorite());
-    	adEgainDTO.setTitle(adDTO.getTitle());
-    	adEgainDTO.setMediaUrl(adDTO.getMediaUrl());
-    	adEgainDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
-    	adEgainDTO.setMerchantId(adDTO.getMerchantId());
-    	adEgainDTO.setStatusEnum(adDTO.getStatusEnum());
-    	adEgainDTO.setIsClickAd(adDTO.getIsClickAd());
-    	Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
-    	Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
+        AdEgainDTO  adEgainDTO=adRs.getModel();
+        
+        if(StringUtils.isEmpty(adEgainDTO.getName())){
+        	adEgainDTO.setName("E店商家");
+		}else if(StringUtils.isEmpty(adEgainDTO.getLogoUrl())){
+        	adEgainDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
+		}
     	
-    	if(isSuccess(merchantStoreDTO)){
-    		if(merchantStoreDTO.getModel()!=null){
-    			adEgainDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-            	adEgainDTO.setName(merchantStoreDTO.getModel().getName());
-            	adEgainDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-            	
-    		}else{
-    			adEgainDTO.setName("E店商家");
-            	adEgainDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
-    		}
-    		
-    	}
-    	if(!isSuccess(manageType)){
-    		return successCreated(manageType.getRet());
-    	}
-    	
-    	if(manageType.getModel()!=null){
-    		adEgainDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
- 		}
-    	
-    	Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
+    	Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adEgainDTO.getMerchantId());
     	if(isSuccess(mpRs)){
     		adEgainDTO.setJdUrl(mpRs.getModel().getJdUrl());
     		adEgainDTO.setTaobaoUrl(mpRs.getModel().getTaobaoUrl());
@@ -231,7 +205,6 @@ public class AdController extends BaseController {
 		 if(!isSuccess(rs)){
 			 return successCreated(rs.getRet());
     	 }
-		 
 		 if(!rs.getModel().isEmpty()){
 			boolean flag = false;
 			for (String str : rs.getModel()) {
@@ -240,9 +213,9 @@ public class AdController extends BaseController {
 			if (!flag) {
 				adViewService.setAdView(id.toString(), memberId.toString());
 			}
-		 }else{
+		  }else{
 			 adViewService.setAdView(id.toString(), memberId.toString());
-		 }
+		  }
        
         return successAccepted(adEgainDTO);
     }
