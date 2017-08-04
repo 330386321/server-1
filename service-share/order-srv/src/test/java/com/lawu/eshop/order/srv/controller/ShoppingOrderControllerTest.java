@@ -127,7 +127,8 @@ public class ShoppingOrderControllerTest {
     	ShoppingOrderItemConverterTest.assertShoppingOrderItemDO(item, shoppingOrderItemDO, shoppingOrderDO.getId());
     }
     
-    @Transactional
+    @SuppressWarnings("unchecked")
+	@Transactional
     @Rollback
     @Test
     public void selectPageByMemberId() throws Exception {
@@ -236,6 +237,51 @@ public class ShoppingOrderControllerTest {
 				Assert.assertEquals(shoppingOrderItemDO.getRegularPrice().doubleValue(), item.getRegularPrice().doubleValue(), 0D);
 			 }
     	}
+    }
+    
+	@Transactional
+    @Rollback
+    @Test
+    public void cancelOrder() throws Exception {
+    	ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setIsDone(false);
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.put("/shoppingOrder/cancelOrder/" + expected.getMemberId() + "/" + expected.getId());    	
+        ResultActions perform = mvc.perform(request);
+        perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+    	ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
+    	Assert.assertNotNull(actual);
+    	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actual.getOrderStatus());
     }
     
     @Ignore
