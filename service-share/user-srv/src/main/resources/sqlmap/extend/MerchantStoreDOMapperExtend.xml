@@ -39,7 +39,8 @@
         ms.industry_path as industryPath,ms.industry_name as industryName,ms.favorite_number as favoriteNumber,ms.average_consume_amount as averageConsumeAmount,
         ms.average_score as averageScore
         FROM merchant_store ms INNER JOIN merchant_store_profile msp on ms.merchant_id = msp.merchant_id
-        WHERE ms.status = #{status} and msp.manage_type = #{manageType}
+        INNER JOIN  merchant m on ms.merchant_id = m.id
+        WHERE ms.status = #{status} and msp.manage_type = #{manageType} and m.status = 1 and m.is_freeze = 0
         limit #{offset} , #{pageSize}
     </select>
 
