@@ -51,6 +51,7 @@ CREATE TABLE `product` (
   `num` varchar(25) DEFAULT '' COMMENT '编号',
   `name` varchar(100) NOT NULL COMMENT '名称',
   `content` text  COMMENT '详细描述',
+  `keywords` VARCHAR(100) NULL DEFAULT NULL COMMENT '关键词',
   `feature_image` varchar(120) NOT NULL DEFAULT '' COMMENT '特征图片',
   `average_daily_sales` decimal(10,2) unsigned DEFAULT '0.00' COMMENT '平均日销售',
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '状态(1-删除2-上架3-下架)',

@@ -101,4 +101,17 @@ public class ProductControllerTest {
         }
     }
 
+    @Test
+    public void updateKeywordsById() {
+        RequestBuilder request = put("/product/updateKeywordsById/10").header("authorization", "8888").param("keywords", "test");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
 }

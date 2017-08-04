@@ -3,24 +3,6 @@
  */
 package com.lawu.eshop.product.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.lawu.eshop.framework.core.page.OrderType;
@@ -36,8 +18,27 @@ import com.lawu.eshop.product.srv.bo.ProductBO;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductModelDO;
+import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
 import com.lawu.eshop.product.srv.service.ProductService;
+import org.apache.log4j.Logger;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lihj
@@ -52,6 +53,9 @@ public class ProductServiceTest {
 	private Logger log = Logger.getLogger(ProductServiceTest.class);
 	@Autowired
 	private ProductService productService;
+
+	@Autowired
+	private ProductDOMapper productDOMapper;
 
 	@Before
 	public void setUp() throws Exception {
@@ -411,6 +415,21 @@ public class ProductServiceTest {
 		List<ProductBO> list = productService.listProductByIds(ids);
 		log.info(JSON.toJSON(list));
 		Assert.assertEquals(list.size(), 2);
+	}
+
+	@Transactional
+	@Rollback
+	@Test
+	public void updateKeywordsById() {
+		ProductDO productDO = new ProductDO();
+		productDO.setMerchantId(200L);
+		productDO.setKeywords("test");
+		productDOMapper.insertSelective(productDO);
+		productService.updateKeywordsById(productDO.getId(), 200L, "keywords");
+
+		productDO = productDOMapper.selectByPrimaryKey(productDO.getId());
+		Assert.assertNotNull(productDO);
+		Assert.assertEquals(productDO.getKeywords(), "keywords");
 	}
 
 	/**

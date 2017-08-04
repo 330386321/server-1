@@ -60,4 +60,9 @@ public class MockProductService extends BaseController implements ProductService
         dto.setFeatureImage("pic");
         return successGet(dto);
     }
+
+    @Override
+    public Result updateKeywordsById(@PathVariable("id") Long id, @RequestParam("keywords") Long merchantId, @RequestParam("keywords") String keywords) {
+        return successCreated();
+    }
 }

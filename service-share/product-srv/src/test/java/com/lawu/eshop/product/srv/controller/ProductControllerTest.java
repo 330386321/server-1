@@ -3,16 +3,18 @@
  */
 package com.lawu.eshop.product.srv.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.framework.core.page.OrderType;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.product.constant.ProductSortFieldEnum;
+import com.lawu.eshop.product.constant.ProductStatusEnum;
+import com.lawu.eshop.product.param.EditProductDataParam;
+import com.lawu.eshop.product.param.ListProductParam;
+import com.lawu.eshop.product.param.ProductParam;
+import com.lawu.eshop.product.query.ProductDataQuery;
+import com.lawu.eshop.product.srv.ProductSrvApplicationTest;
+import com.lawu.eshop.product.srv.domain.ProductModelDO;
 import org.apache.log4j.Logger;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
@@ -33,18 +35,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.framework.core.page.OrderType;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.product.constant.ProductSortFieldEnum;
-import com.lawu.eshop.product.constant.ProductStatusEnum;
-import com.lawu.eshop.product.param.EditProductDataParam;
-import com.lawu.eshop.product.param.ListProductParam;
-import com.lawu.eshop.product.param.ProductParam;
-import com.lawu.eshop.product.query.ProductDataQuery;
-import com.lawu.eshop.product.srv.ProductSrvApplicationTest;
-import com.lawu.eshop.product.srv.domain.ProductModelDO;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author lihj
@@ -550,8 +546,8 @@ public class ProductControllerTest {
 	/**
 	 * 根据ids查询商品信息
 	 */
-	@Transactional
-/*	@Rollback
+/*	@Transactional
+	@Rollback
 	@Test
 	public void listProductByIds() {
 		List<Long> list =Lists.newArrayList();
@@ -571,6 +567,20 @@ public class ProductControllerTest {
 			Assert.fail(e.getMessage());
 		}
 	}*/
+	@Transactional
+	@Rollback
+	@Test
+	public void updateKeywordsById() {
+		RequestBuilder request = put("/product/updateKeywordsById/10").param("keywords", "test");
+		try {
+			ResultActions perform = mvc.perform(request);
+			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+			Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+	}
 
 	private void addProduct() throws Exception {
 		EditProductDataParam product1 = initProduct("1");
