@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.constants.AdPage;
 import com.lawu.eshop.ad.constants.AdPraiseConfig;
+import com.lawu.eshop.ad.constants.AdPraiseWords;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
@@ -311,6 +312,12 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		}
 		praise.setClickPraiseAdTimes(memberApiConfig.getClickPraiseAdTimes());
 		praise.setPraiseProb(memberApiConfig.getClickPraiseProb());
+		List<String> list = new ArrayList<>();
+		list.add(AdPraiseWords.WORD_A);
+		list.add(AdPraiseWords.WORD_B);
+		list.add(AdPraiseWords.WORD_C);
+		list.add(AdPraiseWords.WORD_D);
+		praise.setWords(list);
 		return successGet(praise);
 	}
 
