@@ -1,17 +1,23 @@
 package com.lawu.eshop.operator.api.service;
 
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.dto.MerchantDTO;
-import com.lawu.eshop.user.dto.MerchantSNSDTO;
-import com.lawu.eshop.user.dto.MerchantViewDTO;
-import com.lawu.eshop.user.dto.MessagePushDTO;
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.dto.AccountDTO;
+import com.lawu.eshop.user.dto.MerchantDTO;
+import com.lawu.eshop.user.dto.MerchantSNSDTO;
+import com.lawu.eshop.user.dto.MerchantStoreProfileDTO;
+import com.lawu.eshop.user.dto.MerchantViewDTO;
+import com.lawu.eshop.user.dto.MessagePushDTO;
+import com.lawu.eshop.user.param.AccountParam;
 
 /**
  * @author zhangyong
@@ -62,4 +68,12 @@ public interface MerchantService {
     @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchantView/{id}")
     Result<MerchantViewDTO> getMerchantView(@PathVariable("id") Long id);
 
+    @RequestMapping(value = "merchant/getAccountList", method = RequestMethod.POST)
+     Result<Page<AccountDTO>> getAccountList(@RequestBody AccountParam param);
+
+    @RequestMapping(value = "merchant/freezeAccount", method = RequestMethod.PUT)
+    Result freezeAccount(@RequestParam(value ="num" ) String num, @RequestParam(value ="isFreeze" ) Boolean isFreeze);
+
+    @RequestMapping(value = "merchant/getMerchantStoreProfileInfo", method = RequestMethod.GET)
+    Result<MerchantStoreProfileDTO> getMerchantStoreProfileInfo(@RequestParam(value ="id" )  Long id);
 }

@@ -332,11 +332,13 @@ public interface AdService {
 	 * @date 2017年7月18日
 	 */
 	Page<ChoicenessAdBO> selectPageChoicenessAd(Long memberId, AdChoicenessInternalParam param);
-	
+
 	/**
 	 * 运营平台查询广告
 	 * @param adEgainType 视频|平面
 	 * @return
 	 */
 	List<OperatorAdBO> selectOperatorAdAll(OperatorAdParam operatorAdParam);
+
+    void soldOutAdByMerchantId(Long merchantId);
 }

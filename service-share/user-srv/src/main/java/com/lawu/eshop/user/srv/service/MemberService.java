@@ -1,6 +1,11 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.PathVariable;
+
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
@@ -8,9 +13,6 @@ import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
 import com.lawu.eshop.user.srv.bo.RongYunBO;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.List;
 
 /**
  * 会员服务接口
@@ -138,7 +140,7 @@ public interface MemberService {
     
     /**
      * 判断会员手机号是否存在
-     * @param account
+     * @param mobile
      * @return
      */
     Boolean isExistsMobile(String mobile);
@@ -151,4 +153,8 @@ public interface MemberService {
     String getMemberAccountById(Long memberId);
 
     Integer getTotalCount();
+
+    Page<MemberBO> getAccountList(AccountParam param);
+
+    void freezeAccount(String num, Boolean isFreeze);
 }

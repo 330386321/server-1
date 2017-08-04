@@ -1,5 +1,15 @@
 package com.lawu.eshop.operator.api.service;
 
+import java.util.List;
+
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
@@ -9,10 +19,6 @@ import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @FeignClient(value = "ad-srv")
 public interface AdService {
@@ -118,4 +124,11 @@ public interface AdService {
 	@RequestMapping(value = "ad/selectOperatorAdAll", method = RequestMethod.POST)
 	Result<List<OperatorAdDTO>> selectOperatorAdAll(@RequestBody OperatorAdParam operatorAdParam);
 
+	/**
+	 * 下架商家所有广告
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.PUT, value = "ad/soldOutAdByMerchantId")
+	Result soldOutAdByMerchantId(@RequestParam(value = "merchantId") Long merchantId);
 }

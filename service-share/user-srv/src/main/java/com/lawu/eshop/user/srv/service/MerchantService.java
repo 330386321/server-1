@@ -1,12 +1,18 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
+import com.lawu.eshop.user.srv.bo.MessagePushBO;
+import com.lawu.eshop.user.srv.bo.RongYunBO;
 import com.lawu.eshop.user.srv.domain.extend.MerchantDOView;
-
-import java.util.List;
 
 /**
  * 商户服务接口
@@ -133,4 +139,8 @@ public interface MerchantService {
     MerchantDOView getMerchantView(Long id);
 
     Integer getTotalCount();
+
+    Page<MerchantBO> getAccountList(AccountParam param);
+
+    void freezeAccount(String num, Boolean isFreeze);
 }

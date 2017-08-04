@@ -1,23 +1,76 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.MemberProductStoreDTO;
+import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
-import com.lawu.eshop.user.dto.*;
-import com.lawu.eshop.user.param.*;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.dto.CashUserInfoDTO;
+import com.lawu.eshop.user.dto.MerchantAdInfoDTO;
+import com.lawu.eshop.user.dto.MerchantInfoForShoppingCartDTO;
+import com.lawu.eshop.user.dto.MerchantStoreAdInfoDTO;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
+import com.lawu.eshop.user.dto.MerchantStoreStatusDTO;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.NewMerchantStoreDTO;
+import com.lawu.eshop.user.dto.OperatorMerchantInfoDTO;
+import com.lawu.eshop.user.dto.PayOrderMerchantStoreInfoDTO;
+import com.lawu.eshop.user.dto.PayOrderStoreInfoDTO;
+import com.lawu.eshop.user.dto.RecommendFoodDTO;
+import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreSolrInfoDTO;
+import com.lawu.eshop.user.dto.VisitUserInfoDTO;
+import com.lawu.eshop.user.param.ApplyStoreParam;
+import com.lawu.eshop.user.param.ListMerchantStoreParam;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
+import com.lawu.eshop.user.param.StoreIndexParam;
+import com.lawu.eshop.user.param.StoreStatisticsParam;
+import com.lawu.eshop.user.srv.UserSrvConfig;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
+import com.lawu.eshop.user.srv.bo.MemberBO;
+import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreImageBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
+import com.lawu.eshop.user.srv.bo.NewMerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.PayOrderStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.RecommendFoodBO;
+import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreSolrInfoBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.service.*;
+import com.lawu.eshop.user.srv.service.MemberService;
+import com.lawu.eshop.user.srv.service.MerchantAuditService;
+import com.lawu.eshop.user.srv.service.MerchantStoreImageService;
+import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
+import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import com.lawu.eshop.utils.BeanUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 商家门店 Created by Administrator on 2017/3/24.
@@ -43,6 +96,12 @@ public class MerchantStoreController extends BaseController {
 	
 	@Autowired
 	private MerchantStoreProfileService merchantStoreProfileService;
+
+	@Autowired
+	private SolrService solrService;
+
+	@Autowired
+	private UserSrvConfig userSrvConfig;
 
 	/**
 	 * 门店信息查询
@@ -728,6 +787,12 @@ public class MerchantStoreController extends BaseController {
 		}
 		merchantStoreService.updateKeywordsById(id, merchantId, keywords);
 		return successCreated();
+	}
+
+	@RequestMapping(value = "delSolrDocsById", method = RequestMethod.DELETE)
+	public Result delSolrDocsById(@RequestParam(value = "merchantStoreId") Long merchantStoreId){
+		solrService.delSolrDocsById(merchantStoreId, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+		return successDelete();
 	}
 }
 

@@ -1,7 +1,14 @@
 package com.lawu.eshop.user.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.core.type.UserType;
 import com.lawu.eshop.user.constants.UserSexEnum;
+import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.EfriendDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MemberInfoForShoppingOrderDTO;
@@ -10,10 +17,6 @@ import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MemberProfileDO;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 会员信息转换器
@@ -56,6 +59,7 @@ public class MemberConverter {
         memberBO.setRyToken(memberDO.getRyToken());
         memberBO.setRegionName(memberDO.getRegionName());
         memberBO.setIsFreeze(memberDO.getIsFreeze());
+        memberBO.setGmtCreate(memberDO.getGmtCreate());
         return memberBO;
     }
 
@@ -273,4 +277,22 @@ public class MemberConverter {
     	return rtn;
     }
 
+    public static List<AccountDTO> convertAccountDOTS(List<MemberBO> records) {
+        if (records.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<AccountDTO> list = new ArrayList<>();
+        AccountDTO accountDTO;
+        for (MemberBO memberBO : records) {
+            accountDTO = new AccountDTO();
+            accountDTO.setAccount(memberBO.getAccount());
+            accountDTO.setId(memberBO.getId());
+            accountDTO.setNum(memberBO.getNum());
+            accountDTO.setUserType(UserType.MEMBER);
+            accountDTO.setGmtCreate(memberBO.getGmtCreate());
+            accountDTO.setFreeze(memberBO.getIsFreeze());
+            list.add(accountDTO);
+        }
+        return list;
+    }
 }

@@ -1,25 +1,50 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.user.dto.*;
+import com.lawu.eshop.user.dto.AccountDTO;
+import com.lawu.eshop.user.dto.LoginUserDTO;
+import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
+import com.lawu.eshop.user.dto.MerchantDTO;
+import com.lawu.eshop.user.dto.MerchantInviterDTO;
+import com.lawu.eshop.user.dto.MerchantSNSDTO;
+import com.lawu.eshop.user.dto.MerchantStoreProfileDTO;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.MerchantViewDTO;
+import com.lawu.eshop.user.dto.MessagePushDTO;
+import com.lawu.eshop.user.dto.MobileDTO;
+import com.lawu.eshop.user.dto.RongYunDTO;
+import com.lawu.eshop.user.dto.UserHeadImgDTO;
+import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.MessagePushBO;
+import com.lawu.eshop.user.srv.bo.RongYunBO;
 import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
 import com.lawu.eshop.user.srv.converter.RongYunConverter;
 import com.lawu.eshop.user.srv.domain.extend.MerchantDOView;
 import com.lawu.eshop.user.srv.service.MerchantService;
+import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
 import com.lawu.eshop.utils.PwdUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -31,6 +56,9 @@ public class MerchantController extends BaseController {
 
     @Autowired
     private MerchantService merchantService;
+
+    @Autowired
+    private MerchantStoreProfileService merchantStoreProfileService;
 
     @RequestMapping(value = "withPwd/{account}", method = RequestMethod.GET)
     public Result<LoginUserDTO> find(@PathVariable String account, @RequestParam String pwd) {
@@ -304,4 +332,35 @@ public class MerchantController extends BaseController {
         return merchantService.getTotalCount();
     }
 
+    @RequestMapping(value = "getAccountList", method = RequestMethod.POST)
+    public Result<Page<AccountDTO>> getAccountList(@RequestBody AccountParam param) {
+        Page<MerchantBO> merchantBOPage = merchantService.getAccountList(param);
+        if (merchantBOPage.getRecords().isEmpty()) {
+            return successGet(new Page<>());
+        }
+        List<AccountDTO> accountDTOS = MerchantConverter.convertAccountDOTS(merchantBOPage.getRecords());
+        Page<AccountDTO> pages = new Page<>();
+        pages.setCurrentPage(merchantBOPage.getCurrentPage());
+        pages.setTotalCount(merchantBOPage.getTotalCount());
+        pages.setRecords(accountDTOS);
+        return successGet(pages);
+    }
+
+    @RequestMapping(value = "freezeAccount", method = RequestMethod.PUT)
+    Result freezeAccount(@RequestParam(value ="num" ) String num, @RequestParam(value ="isFreeze" ) Boolean isFreeze){
+        merchantService.freezeAccount(num, isFreeze);
+        return successCreated();
+    }
+
+    @RequestMapping(value = "getMerchantStoreProfileInfo", method = RequestMethod.GET)
+    Result<MerchantStoreProfileDTO> getMerchantStoreProfileInfo(@RequestParam(value ="id" ) Long id) {
+        MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreProfileService.findMerchantStoreInfo(id);
+        if (merchantStoreProfileBO == null) {
+            return successGet(ResultCode.MERCHANT_STORE_NO_EXIST);
+        }
+        MerchantStoreProfileDTO profileDTO = new MerchantStoreProfileDTO();
+        profileDTO.setTypeEnum(MerchantStoreTypeEnum.getEnum(merchantStoreProfileBO.getManageType()));
+        profileDTO.setMerchantStoreId(merchantStoreProfileBO.getMerchantStoreId());
+        return successGet(profileDTO);
+    }
 }

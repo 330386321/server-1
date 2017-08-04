@@ -1,5 +1,22 @@
 package com.lawu.eshop.product.srv.service.impl;
 
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
@@ -14,33 +31,36 @@ import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.ProductSrvConfig;
-import com.lawu.eshop.product.srv.bo.*;
+import com.lawu.eshop.product.srv.bo.ProductBO;
+import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
+import com.lawu.eshop.product.srv.bo.ProductInfoBO;
+import com.lawu.eshop.product.srv.bo.ProductModelBO;
+import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
-import com.lawu.eshop.product.srv.domain.*;
+import com.lawu.eshop.product.srv.domain.ProductCategoryeDO;
+import com.lawu.eshop.product.srv.domain.ProductDO;
+import com.lawu.eshop.product.srv.domain.ProductDOExample;
 import com.lawu.eshop.product.srv.domain.ProductDOExample.Criteria;
+import com.lawu.eshop.product.srv.domain.ProductImageDO;
+import com.lawu.eshop.product.srv.domain.ProductImageDOExample;
+import com.lawu.eshop.product.srv.domain.ProductModelDO;
+import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
+import com.lawu.eshop.product.srv.domain.ProductModelInventoryDO;
 import com.lawu.eshop.product.srv.domain.extend.ProductDOView;
 import com.lawu.eshop.product.srv.domain.extend.ProductModelDOView;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
-import com.lawu.eshop.product.srv.mapper.*;
+import com.lawu.eshop.product.srv.mapper.ProductCategoryeDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductModelInventoryDOMapper;
 import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.mapper.extend.ProductModelDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.utils.StringUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -761,4 +781,22 @@ public class ProductServiceImpl implements ProductService {
             solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
+    @Override
+    @Transactional
+    public void soldOutProductByMerchantId(Long merchantId) {
+        ProductDO productDO = new ProductDO();
+        productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal());
+        ProductDOExample example = new ProductDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        productDOMapper.updateByExampleSelective(productDO, example);
+
+        ProductDOExample example2 = new ProductDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
+        List<ProductDO> productDOS = productDOMapper.selectByExample(example2);
+        if (!productDOS.isEmpty()) {
+            for (ProductDO product : productDOS)
+                solrService.delSolrDocsById(product.getId(), productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        }
+    }
+
 }

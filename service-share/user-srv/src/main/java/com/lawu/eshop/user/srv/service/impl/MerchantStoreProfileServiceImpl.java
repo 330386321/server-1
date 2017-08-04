@@ -1,5 +1,10 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
@@ -11,10 +16,6 @@ import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  *
@@ -44,6 +45,7 @@ public class MerchantStoreProfileServiceImpl implements MerchantStoreProfileServ
         MerchantStoreProfileBO merchantStoreProfileBO = MerchantStoreConverter.convertBO(merchantStoreDOS.get(0));
         if(!imageDOS.isEmpty()){
             merchantStoreProfileBO.setLogoUrl(imageDOS.get(0).getPath());
+            merchantStoreProfileBO.setMerchantStoreId(imageDOS.get(0).getMerchantStoreId());
         }
         return  merchantStoreProfileBO;
     }

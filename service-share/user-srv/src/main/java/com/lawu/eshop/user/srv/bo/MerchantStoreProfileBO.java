@@ -46,6 +46,8 @@ public class MerchantStoreProfileBO {
 
     private String logoUrl;
 
+    private Long merchantStoreId;
+
 
 
     public Long getMerchantId() {
@@ -110,5 +112,13 @@ public class MerchantStoreProfileBO {
 
     public void setLogoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
+    }
+
+    public Long getMerchantStoreId() {
+        return merchantStoreId;
+    }
+
+    public void setMerchantStoreId(Long merchantStoreId) {
+        this.merchantStoreId = merchantStoreId;
     }
 }

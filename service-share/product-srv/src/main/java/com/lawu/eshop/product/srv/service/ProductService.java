@@ -1,5 +1,8 @@
 package com.lawu.eshop.product.srv.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditProductDataParam;
@@ -10,9 +13,6 @@ import com.lawu.eshop.product.srv.bo.ProductBO;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * Created by Yangqh on 2017/3/23.
@@ -169,4 +169,5 @@ public interface ProductService {
      */
     void updateKeywordsById(Long id, Long merchantId, String keywords);
 
+    void soldOutProductByMerchantId(Long merchantId);
 }

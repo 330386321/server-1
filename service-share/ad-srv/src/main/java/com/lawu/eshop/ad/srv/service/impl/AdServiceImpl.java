@@ -460,7 +460,7 @@ public class AdServiceImpl implements AdService {
 								.andClickDateEqualTo(new Date());
 		Long clickCount= memberAdRecordDOMapper.countByExample(memberAdRecordDOExample);
 		adBO.setIsClickAd(clickCount.intValue()>0);
-		
+
 		adBO.setIsFavorite(count.intValue() > 0);
 		return adBO;
 	}
@@ -1171,24 +1171,24 @@ public class AdServiceImpl implements AdService {
 			List<Byte> typeList = new ArrayList<>();
 			typeList.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
 			typeList.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
-			
+
 			List<Byte> statusList = new ArrayList<>();
 			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
 			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
-			
+
 			adDOExample.createCriteria().andTypeIn(typeList).andStatusIn(statusList);
 		}else{
-			
+
 			List<Byte> statusList = new ArrayList<>();
 			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
 			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
-			
+
 			adDOExample.createCriteria().andStatusIn(statusList).andTypeEqualTo(operatorAdParam.getAdEgainType().getVal());
-			
+
 		}
-		
+
 		List<AdDO> list = adDOMapper.selectByExample(adDOExample);
-		
+
 		List<OperatorAdBO> boList = new ArrayList<>();
 		for (AdDO adDO : list) {
 			OperatorAdBO bo = new OperatorAdBO();
@@ -1196,7 +1196,26 @@ public class AdServiceImpl implements AdService {
 			bo.setTitle(adDO.getTitle());
 			boList.add(bo);
 		}
-		
+
 		return boList;
+	}
+
+	@Override
+	@Transactional
+	public void soldOutAdByMerchantId(Long merchantId) {
+		AdDO adDO = new AdDO();
+		adDO.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
+		AdDOExample example = new AdDOExample();
+		example.createCriteria().andMerchantIdEqualTo(merchantId);
+		adDOMapper.updateByExampleSelective(adDO, example);
+		AdDOExample example2 = new AdDOExample();
+		example2.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
+		List<AdDO> list = adDOMapper.selectByExample(example2);
+		if (!list.isEmpty()) {
+			for (AdDO ad : list) {
+				// 删除solr中的数据
+				solrService.delSolrDocsById(ad.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			}
+		}
 	}
 }

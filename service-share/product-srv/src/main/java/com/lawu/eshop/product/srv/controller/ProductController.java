@@ -1,11 +1,30 @@
 package com.lawu.eshop.product.srv.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
-import com.lawu.eshop.product.dto.*;
+import com.lawu.eshop.product.dto.ProductEditInfoDTO;
+import com.lawu.eshop.product.dto.ProductInfoDTO;
+import com.lawu.eshop.product.dto.ProductPlatDTO;
+import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
@@ -17,14 +36,6 @@ import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.utils.BeanUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Yangqh
@@ -349,6 +360,12 @@ public class ProductController extends BaseController {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
         productService.updateKeywordsById(id, merchantId, keywords);
+        return successCreated();
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "soldOutProductByMerchantId")
+    Result soldOutProductByMerchantId(@RequestParam(value = "id")  Long id){
+        productService.soldOutProductByMerchantId(id);
         return successCreated();
     }
 

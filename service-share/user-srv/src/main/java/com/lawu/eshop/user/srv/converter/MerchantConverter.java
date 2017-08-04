@@ -1,14 +1,16 @@
 package com.lawu.eshop.user.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.core.type.UserType;
+import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 商户信息转换器
@@ -154,6 +156,25 @@ public class MerchantConverter {
             DTOS.add(convertDTO(merchantBO));
         }
         return pageDTO;
+    }
+
+    public static List<AccountDTO> convertAccountDOTS(List<MerchantBO> records) {
+        if (records.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<AccountDTO> list = new ArrayList<>();
+        AccountDTO accountDTO;
+        for (MerchantBO merchantBO : records) {
+            accountDTO = new AccountDTO();
+            accountDTO.setAccount(merchantBO.getAccount());
+            accountDTO.setNum(merchantBO.getNum());
+            accountDTO.setId(merchantBO.getId());
+            accountDTO.setUserType(UserType.MERCHANT);
+            accountDTO.setFreeze(merchantBO.getIsFreeze());
+            accountDTO.setGmtCreate(merchantBO.getGmtCreate());
+            list.add(accountDTO);
+        }
+        return list;
     }
 
 

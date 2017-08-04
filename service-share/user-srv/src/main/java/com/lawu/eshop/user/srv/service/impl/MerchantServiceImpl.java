@@ -1,5 +1,16 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -7,17 +18,43 @@ import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
+import com.lawu.eshop.user.srv.bo.MessagePushBO;
+import com.lawu.eshop.user.srv.bo.RongYunBO;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
-import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.domain.InviteRelationDO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MemberDOExample;
+import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
 import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
 import com.lawu.eshop.user.srv.domain.extend.MerchantDOView;
 import com.lawu.eshop.user.srv.domain.extend.MerchantPushView;
-import com.lawu.eshop.user.srv.mapper.*;
+import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
@@ -27,16 +64,6 @@ import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.RandomUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 商户服务实现
@@ -529,6 +556,51 @@ public class MerchantServiceImpl implements MerchantService {
         example.createCriteria().andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
         Integer count = merchantDOMapper.countByExample(example);
         return count;
+    }
+
+    @Override
+    public Page<MerchantBO> getAccountList(AccountParam param) {
+        MerchantDOExample example = new MerchantDOExample();
+        RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+        Page<MerchantBO> pages = new Page<>();
+        List<MerchantBO> merchantBOS = new ArrayList<>();
+        int total ;
+        if (StringUtils.isEmpty(param.getAccount())) {
+            example.setOrderByClause("id desc");
+            List<MerchantDO> merchantDOS = merchantDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+            if (merchantDOS.isEmpty()) {
+                return pages;
+            }
+            for (MerchantDO merchantDO : merchantDOS) {
+                MerchantBO merchantBO = MerchantConverter.convertBO(merchantDO);
+                merchantBOS.add(merchantBO);
+            }
+            total = merchantDOMapper.countByExample(example);
+        } else {
+            example.createCriteria().andAccountEqualTo(param.getAccount());
+            List<MerchantDO> merchantDOS = merchantDOMapper.selectByExample(example);
+            if (merchantDOS.isEmpty()) {
+                return pages;
+            }
+            MerchantBO memberBO = MerchantConverter.convertBO(merchantDOS.get(0));
+            merchantBOS.add(memberBO);
+
+            total = 1;
+        }
+        pages.setCurrentPage(param.getCurrentPage());
+        pages.setTotalCount(total);
+        pages.setRecords(merchantBOS);
+        return pages;
+    }
+
+    @Override
+    @Transactional
+    public void freezeAccount(String num, Boolean isFreeze) {
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setIsFreeze(isFreeze);
+        MerchantDOExample example = new MerchantDOExample();
+        example.createCriteria().andNumEqualTo(num);
+        merchantDOMapper.updateByExampleSelective(merchantDO, example);
     }
 
 }

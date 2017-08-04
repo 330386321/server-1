@@ -1,5 +1,15 @@
 package com.lawu.eshop.operator.api.service;
 
+import java.util.List;
+
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
@@ -7,10 +17,6 @@ import com.lawu.eshop.user.dto.OperatorMerchantInfoDTO;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStorePlatParam;
 import com.lawu.eshop.user.param.StoreIndexParam;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @FeignClient(value = "user-srv")
 public interface MerchantStoreService {
@@ -69,4 +75,7 @@ public interface MerchantStoreService {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "merchantStore/getPayOrderMerchantInfo")
 	OperatorMerchantInfoDTO getPayOrderMerchantInfo(@RequestParam("merchantId")  Long merchantId);
+
+	@RequestMapping(value = "merchantStore/delSolrDocsById", method = RequestMethod.DELETE)
+	Result delSolrDocsById(@RequestParam(value = "merchantStoreId") Long merchantStoreId);
 }

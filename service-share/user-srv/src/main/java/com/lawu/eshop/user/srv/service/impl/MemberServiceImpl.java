@@ -1,5 +1,16 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
@@ -8,6 +19,7 @@ import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.constants.UserTypeEnum;
+import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
@@ -17,27 +29,30 @@ import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
 import com.lawu.eshop.user.srv.bo.RongYunBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
-import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.domain.FansMerchantDO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MemberDOExample;
 import com.lawu.eshop.user.srv.domain.MemberDOExample.Criteria;
+import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
 import com.lawu.eshop.user.srv.domain.extend.InviterUserDOView;
 import com.lawu.eshop.user.srv.domain.extend.MemberDOView;
-import com.lawu.eshop.user.srv.mapper.*;
+import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.MemberDOMapperExtend;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongUserService;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.RandomUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 会员信息服务实现
@@ -620,6 +635,51 @@ public class MemberServiceImpl implements MemberService {
          example.createCriteria().andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
         Integer count = memberDOMapper.countByExample(example);
         return count;
+    }
+
+    @Override
+    public Page<MemberBO> getAccountList(AccountParam param) {
+        MemberDOExample example = new MemberDOExample();
+        RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+        Page<MemberBO> pages = new Page<>();
+        List<MemberBO> memberBOS = new ArrayList<>();
+        int total ;
+        if (StringUtils.isEmpty(param.getAccount())) {
+            example.setOrderByClause("id desc");
+            List<MemberDO> memberDOS = memberDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+            if (memberDOS.isEmpty()) {
+                return pages;
+            }
+            for (MemberDO memberDO : memberDOS) {
+                MemberBO memberBO = MemberConverter.convertBO(memberDO);
+                memberBOS.add(memberBO);
+            }
+            total = memberDOMapper.countByExample(example);
+        } else {
+            example.createCriteria().andAccountEqualTo(param.getAccount());
+            List<MemberDO> memberDOS = memberDOMapper.selectByExample(example);
+            if (memberDOS.isEmpty()) {
+                return pages;
+            }
+            MemberBO memberBO = MemberConverter.convertBO(memberDOS.get(0));
+            memberBOS.add(memberBO);
+
+            total = 1;
+        }
+        pages.setCurrentPage(param.getCurrentPage());
+        pages.setTotalCount(total);
+        pages.setRecords(memberBOS);
+        return pages;
+    }
+
+    @Override
+    @Transactional
+    public void freezeAccount(String num, Boolean isFreeze) {
+        MemberDO memberDO = new MemberDO();
+        memberDO.setIsFreeze(isFreeze);
+        MemberDOExample example = new MemberDOExample();
+        example.createCriteria().andNumEqualTo(num);
+        memberDOMapper.updateByExampleSelective(memberDO, example);
     }
 
 }
