@@ -193,6 +193,7 @@ public class OrderServiceImpl implements OrderService {
 		freezeDO.setGmtCreate(new Date());
 		String days = propertyService.getValue(PropertyType.PRODUCT_ORDER_MONEY_FREEZE_DAYS);
 		freezeDO.setDays(Integer.valueOf(days));
+		freezeDO.setOrderNum(param.getOrderNum());
 		freezeDOMapper.insertSelective(freezeDO);
 
 		PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
@@ -402,7 +403,7 @@ public class OrderServiceImpl implements OrderService {
 			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 			transactionDetailService.save(tdsParam);
 
-			// 加会员财产余额
+			// 加商家财产余额
 			PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
 			infoDoView.setUserNum(userNums[i]);
 			infoDoView.setBalance(new BigDecimal(orderActualMoneys[i]));

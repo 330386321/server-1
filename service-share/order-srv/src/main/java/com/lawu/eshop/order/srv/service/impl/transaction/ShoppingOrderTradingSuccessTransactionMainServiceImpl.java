@@ -46,6 +46,7 @@ public class ShoppingOrderTradingSuccessTransactionMainServiceImpl extends Abstr
     	rtn.setShoppingOrderId(shoppingOrderId);
     	rtn.setOrderTotalPrice(NumberUtil.format(shoppingOrderBO.getOrderTotalPrice()));
     	rtn.setIsAutoReceipt(shoppingOrderBO.getIsAutomaticReceipt());
+	    rtn.setOrderNum(shoppingOrderBO.getOrderNum());
     	
         return rtn;
     }

@@ -36,6 +36,11 @@ public class ShoppingOrderTradingSuccessNotification extends Notification {
      * 支付方式
      */
     private TransactionPayTypeEnum paymentMethod;
+
+	/**
+	 * 订单号（资金冻结表新增订单号字段）
+	 */
+	private String orderNum;
     
 	public Long getShoppingOrderId() {
 		return shoppingOrderId;
@@ -76,5 +81,12 @@ public class ShoppingOrderTradingSuccessNotification extends Notification {
 	public void setPaymentMethod(TransactionPayTypeEnum paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
-	
+
+	public String getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(String orderNum) {
+		this.orderNum = orderNum;
+	}
 }
