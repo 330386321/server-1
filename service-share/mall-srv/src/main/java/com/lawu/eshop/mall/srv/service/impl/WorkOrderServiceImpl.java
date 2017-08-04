@@ -49,8 +49,7 @@ public class WorkOrderServiceImpl implements WorkOrderService{
 		record.setAuditorId(dealWorkOrderParam.getAuditorId());
 		record.setAuditorName(dealWorkOrderParam.getAuditorName());
 		record.setStatus(dealWorkOrderParam.getWorkOrderStatusEnum().val);
-		if(dealWorkOrderParam.getWorkOrderStatusEnum().val == 2)
-			record.setReplyContent(dealWorkOrderParam.getReplyContent());
+		record.setReplyContent(dealWorkOrderParam.getReplyContent());
 		return workOrderDOMapper.updateByPrimaryKeySelective(record);
 	}
 
