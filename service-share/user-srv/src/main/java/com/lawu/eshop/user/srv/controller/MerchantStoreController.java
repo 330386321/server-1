@@ -696,7 +696,6 @@ public class MerchantStoreController extends BaseController {
 		List<RecommendFoodBO> foodBOS = merchantStoreService.listRecommendFoodComment(industryId, regionPath);
 		return successGet(MerchantStoreConverter.convertRecommendStoreDTO(foodBOS));
 	}
-
 	
 	@RequestMapping(value = "selectMerchantStoreAdInfo/{merchantId}", method = RequestMethod.GET)
 	public Result<MerchantStoreAdInfoDTO> selectMerchantStoreAdInfo(@PathVariable Long merchantId){
@@ -710,6 +709,25 @@ public class MerchantStoreController extends BaseController {
 		 dto.setLatitude(bo.getLatitude());
 		 dto.setLongitude(bo.getLongitude());
 		 return successGet(dto);
+	}
+
+	/**
+	 * 根据ID更新门店关键词
+	 *
+	 * @param id
+	 * @param merchantId
+	 * @param keywords
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "updateKeywordsById/{id}", method = RequestMethod.PUT)
+	public Result updateKeywordsById(@PathVariable Long id, @RequestParam Long merchantId, @RequestParam String keywords) {
+		MerchantStoreBO merchantStoreBO = merchantStoreService.getMerchantStoreById(id);
+		if (merchantStoreBO == null) {
+			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+		}
+		merchantStoreService.updateKeywordsById(id, merchantId, keywords);
+		return successCreated();
 	}
 }
 

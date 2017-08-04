@@ -365,4 +365,15 @@ public class MerchantStoreController extends BaseController {
         return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId, merchantStoreParam);
     }
 
+    @ApiOperation(value = "更新门店关键词", notes = "更新门店关键词。 [1002]（梅述全）", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "updateKeywordsById/{id}", method = RequestMethod.PUT)
+    public Result updateKeywordsById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                     @PathVariable @ApiParam(required = true, value = "门店ID") Long id,
+                                     @RequestParam @ApiParam(required = true, value = "关键词") String keywords) {
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        return merchantStoreService.updateKeywordsById(id, merchantId, keywords);
+    }
+
 }

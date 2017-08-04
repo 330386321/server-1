@@ -1,17 +1,5 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
@@ -22,22 +10,9 @@ import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreIndexParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
-import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreAdInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
-import com.lawu.eshop.user.srv.bo.NewMerchantStoreBO;
-import com.lawu.eshop.user.srv.bo.RecommendFoodBO;
+import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
+import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.extend.MerchantAdInfoView;
 import com.lawu.eshop.user.srv.domain.extend.NewMerchantStoreDOView;
 import com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview;
@@ -47,6 +22,13 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreService;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 public class MerchantStoreServiceImpl implements MerchantStoreService {
@@ -139,7 +121,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             SolrInputDocument document = new SolrInputDocument();
             document.addField("id", solrDocument.get("id"));
             document.addField("merchantId_l", solrDocument.get("merchantId_l"));
-            document.addField("name_s", solrDocument.get("name_s"));
+            document.addField("name", solrDocument.get("name"));
             document.addField("regionPath_s", solrDocument.get("regionPath_s"));
             document.addField("latLon_p", solrDocument.get("latLon_p"));
             document.addField("industryPath_s", solrDocument.get("industryPath_s"));
@@ -151,6 +133,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d"));
             document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
             document.addField("discountPackage_s", solrDocument.get("discountPackage_s"));
+            document.addField("keywords", solrDocument.get("keywords"));
             solrService.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         }
     }
@@ -317,4 +300,34 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 		return bo;
 	}
 
+    @Override
+    @Transactional
+    public void updateKeywordsById(Long id, Long merchantId, String keywords) {
+        MerchantStoreDO merchantStoreDO = new MerchantStoreDO();
+        merchantStoreDO.setKeywords(keywords);
+        MerchantStoreDOExample example = new MerchantStoreDOExample();
+        example.createCriteria().andIdEqualTo(id).andMerchantIdEqualTo(merchantId);
+        merchantStoreDOMapper.updateByExampleSelective(merchantStoreDO, example);
+
+        SolrDocument solrDocument = solrService.getSolrDocsById(id, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+        if (solrDocument != null) {
+            SolrInputDocument document = new SolrInputDocument();
+            document.addField("id", solrDocument.get("id"));
+            document.addField("merchantId_l", solrDocument.get("merchantId_l"));
+            document.addField("name", solrDocument.get("name"));
+            document.addField("regionPath_s", solrDocument.get("regionPath_s"));
+            document.addField("latLon_p", solrDocument.get("latLon_p"));
+            document.addField("industryPath_s", solrDocument.get("industryPath_s"));
+            document.addField("industryName_s", solrDocument.get("industryName_s"));
+            document.addField("storePic_s", solrDocument.get("storePic_s"));
+            document.addField("averageConsumeAmount_d", solrDocument.get("averageConsumeAmount_d"));
+            document.addField("averageScore_d", solrDocument.get("averageScore_d"));
+            document.addField("favoriteNumber_i", solrDocument.get("favoriteNumber_i"));
+            document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d"));
+            document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
+            document.addField("discountPackage_s", solrDocument.get("discountPackage_s"));
+            document.addField("keywords", keywords);
+            solrService.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+        }
+    }
 }
