@@ -405,6 +405,11 @@ public class AdServiceImpl implements AdService {
 		}
 		if (adMemberParam.getOrderTypeEnum() != null) { // 积分榜、人气榜
 			adView.setTopType(adMemberParam.getOrderTypeEnum().getVal());
+			Calendar calendar = Calendar.getInstance(); // 得到日历
+			calendar.setTime(new Date());// 把当前时间赋给日历
+			calendar.add(Calendar.DAY_OF_MONTH, -14); // 设置为14天前
+			Date before14days = calendar.getTime(); // 得到14天前的时间
+			adView.setBeginAfterTime(before14days);
 		}
 
 		List<AdDO> DOS = adDOMapperExtend.selectAdAll(adView);

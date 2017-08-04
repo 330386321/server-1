@@ -170,15 +170,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		} else {
 			newList = newList.subList(0, newList.size());
 		}
-		for (int i = 0; i < newList.size(); i++) {
-			Calendar calendar = Calendar.getInstance(); // 得到日历
-			calendar.setTime(new Date());// 把当前时间赋给日历
-			calendar.add(Calendar.DAY_OF_MONTH, -14); // 设置为14天前
-			Date before14days = calendar.getTime(); // 得到14天前的时间
-			if (before14days.getTime() > newList.get(i).getBeginTime().getTime()) {
-				newList.remove(i);
-			}
-		}
 		List<Long> merchantIds = new ArrayList<>();
 		for (AdDTO adDTO : newList) {
 			merchantIds.add(adDTO.getMerchantId());
