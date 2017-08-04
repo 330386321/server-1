@@ -315,6 +315,66 @@ public class AdPlatformDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andAdIdIsNull() {
+            addCriterion("ad_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdIdIsNotNull() {
+            addCriterion("ad_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdIdEqualTo(Long value) {
+            addCriterion("ad_id =", value, "adId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdIdNotEqualTo(Long value) {
+            addCriterion("ad_id <>", value, "adId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdIdGreaterThan(Long value) {
+            addCriterion("ad_id >", value, "adId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("ad_id >=", value, "adId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdIdLessThan(Long value) {
+            addCriterion("ad_id <", value, "adId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdIdLessThanOrEqualTo(Long value) {
+            addCriterion("ad_id <=", value, "adId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdIdIn(List<Long> values) {
+            addCriterion("ad_id in", values, "adId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdIdNotIn(List<Long> values) {
+            addCriterion("ad_id not in", values, "adId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdIdBetween(Long value1, Long value2) {
+            addCriterion("ad_id between", value1, value2, "adId");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdIdNotBetween(Long value1, Long value2) {
+            addCriterion("ad_id not between", value1, value2, "adId");
+            return (Criteria) this;
+        }
+
         public Criteria andTitleIsNull() {
             addCriterion("title is null");
             return (Criteria) this;

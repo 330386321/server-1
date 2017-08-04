@@ -53,8 +53,9 @@ public class AdPlatformServiceImplTest {
 		adPlatformParam.setLinkUrl("www.baidu.com");
 		adPlatformParam.setContent("测试");
 		adPlatformParam.setTypeEnum(TypeEnum.TYPE_LINK);
+		adPlatformParam.setMediaUrl("ad_image/1494897983991428080.jpg");
 
-		adPlatformService.saveAdPlatform(adPlatformParam, "ad_image/1494897983991428080.jpg");
+		adPlatformService.saveAdPlatform(adPlatformParam);
 
         List<AdPlatformDO> adPlatformDOS = adPlatformDOMapper.selectByExample(null);
         Assert.assertNotNull(adPlatformDOS);
@@ -73,8 +74,9 @@ public class AdPlatformServiceImplTest {
 		adPlatformParam.setContent("测试");
 		adPlatformParam.setTypeEnum(TypeEnum.TYPE_PRODUCT);
 		adPlatformParam.setProductId(10061l);
+		adPlatformParam.setMediaUrl("ad_image/1494897983991428080.jpg");
 
-		adPlatformService.saveAdPlatform(adPlatformParam, "ad_image/1494240515322705608.jpg");
+		adPlatformService.saveAdPlatform(adPlatformParam);
 		
 		List<AdPlatformDO> list = adPlatformDOMapper.selectByExample(null);
 		
@@ -103,8 +105,9 @@ public class AdPlatformServiceImplTest {
 		adPlatformParam.setContent("测试");
 		adPlatformParam.setTypeEnum(TypeEnum.TYPE_PRODUCT);
 		adPlatformParam.setProductId(10061l);
+		adPlatformParam.setMediaUrl("ad_image/1494897983991428080.jpg");
 
-		adPlatformService.saveAdPlatform(adPlatformParam, "ad_image/1494240515322705608.jpg");
+		adPlatformService.saveAdPlatform(adPlatformParam);
 
 		List<AdPlatformBO> list=adPlatformService.selectByPosition(PositionEnum.SHOPPING_HOT);
 		
@@ -125,8 +128,9 @@ public class AdPlatformServiceImplTest {
 		adPlatformParam.setContent("测试");
 		adPlatformParam.setTypeEnum(TypeEnum.TYPE_PRODUCT);
 		adPlatformParam.setProductId(10061l);
+		adPlatformParam.setMediaUrl("ad_image/1494897983991428080.jpg");
 
-		adPlatformService.saveAdPlatform(adPlatformParam, "ad_image/1494240515322705608.jpg");
+		adPlatformService.saveAdPlatform(adPlatformParam);
 		
 		
 		AdPlatformFindParam param=new AdPlatformFindParam();
@@ -153,8 +157,9 @@ public class AdPlatformServiceImplTest {
 		adPlatformParam.setContent("测试");
 		adPlatformParam.setTypeEnum(TypeEnum.TYPE_PRODUCT);
 		adPlatformParam.setProductId(10061l);
+		adPlatformParam.setMediaUrl("ad_image/1494897983991428080.jpg");
 
-		adPlatformService.saveAdPlatform(adPlatformParam, "ad_image/1494240515322705608.jpg");
+		adPlatformService.saveAdPlatform(adPlatformParam);
 		
 
 		List<AdPlatformBO> list=adPlatformService.selectByPosition(PositionEnum.SHOPPING_HOT);
@@ -176,7 +181,7 @@ public class AdPlatformServiceImplTest {
 		adPlatformParam.setContent("测试");
 		adPlatformParam.setTypeEnum(TypeEnum.TYPE_LINK);
 
-		adPlatformService.saveAdPlatform(adPlatformParam, "ad_image/1494897983991428080.jpg");
+		adPlatformService.saveAdPlatform(adPlatformParam);
 		
 		AdPlatformParam adPlatform=new AdPlatformParam();
 		adPlatform.setTitle("要购物热门商品");
@@ -187,7 +192,7 @@ public class AdPlatformServiceImplTest {
 		
 		List<AdPlatformDO> list = adPlatformDOMapper.selectByExample(null);
 		
-		adPlatformService.update(list.get(0).getId(), adPlatform, "ad_image/1494897983991428080.jpg");
+		adPlatformService.update(list.get(0).getId(), adPlatform);
 		
 		AdPlatformDOExample example=new AdPlatformDOExample();
 		example.createCriteria().andPositionEqualTo(PositionEnum.SHOPPING_HOT.val);
@@ -209,7 +214,7 @@ public class AdPlatformServiceImplTest {
 		adPlatformParam.setContent("测试");
 		adPlatformParam.setTypeEnum(TypeEnum.TYPE_LINK);
 
-		adPlatformService.saveAdPlatform(adPlatformParam, "ad_image/1494897983991428080.jpg");
+		adPlatformService.saveAdPlatform(adPlatformParam);
 		
 		List<AdPlatformDO> list = adPlatformDOMapper.selectByExample(null);
 		
@@ -231,7 +236,7 @@ public class AdPlatformServiceImplTest {
 		adPlatformParam.setTypeEnum(TypeEnum.TYPE_PRODUCT);
 		adPlatformParam.setProductId(10061l);
 
-		adPlatformService.saveAdPlatform(adPlatformParam, "ad_image/1494240515322705608.jpg");
+		adPlatformService.saveAdPlatform(adPlatformParam);
 		
 		List<AdPlatformDO> list = adPlatformDOMapper.selectByExample(null);
 		adPlatformService.unShelve(list.get(0).getId());

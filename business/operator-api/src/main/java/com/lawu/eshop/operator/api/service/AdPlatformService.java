@@ -1,13 +1,17 @@
 package com.lawu.eshop.operator.api.service;
 
-import com.lawu.eshop.ad.constants.PositionEnum;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * 平台广告管理
@@ -25,7 +29,7 @@ public interface AdPlatformService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "adPlatform/saveAdPlatform")
-	Result saveAdPlatform(@RequestBody AdPlatformParam adPlatform,@RequestParam("url") String url);
+	Result saveAdPlatform(@RequestBody AdPlatformParam adPlatform);
 	
 	/**
 	 * 删除广告
@@ -71,7 +75,7 @@ public interface AdPlatformService {
 	 * @return
 	 */
 	@RequestMapping(value = "adPlatform/update/{id}", method = RequestMethod.POST)
-    Result update(@PathVariable("id") Long id, @RequestBody AdPlatformParam adPlatformParam,@RequestParam("url") String url); 
+    Result update(@PathVariable("id") Long id, @RequestBody AdPlatformParam adPlatformParam); 
 	
 	
 	/**

@@ -3,8 +3,10 @@ package com.lawu.eshop.operator.api.service;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.OperatorAdDTO;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.ListAdParam;
+import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -106,5 +108,14 @@ public interface AdService {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "ad/delInvalidAdIndex")
 	Result delInvalidAdIndex();
+	
+	
+	/**
+	 * 查询所有广告(上架|投放中  平面|视频)
+	 * @param operatorAdParam
+	 * @return
+	 */
+	@RequestMapping(value = "ad/selectOperatorAdAll", method = RequestMethod.POST)
+	Result<List<OperatorAdDTO>> selectOperatorAdAll(@RequestBody OperatorAdParam operatorAdParam);
 
 }

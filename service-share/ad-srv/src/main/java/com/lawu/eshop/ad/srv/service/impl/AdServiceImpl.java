@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.ad.constants.AdEgainTypeEnum;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -26,13 +27,6 @@ import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PropertyType;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.constants.RedPacketArithmetic;
-import com.lawu.eshop.ad.param.AdFindParam;
-import com.lawu.eshop.ad.param.AdMemberParam;
-import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdParam;
-import com.lawu.eshop.ad.param.AdPraiseParam;
-import com.lawu.eshop.ad.param.AdSaveParam;
-import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.*;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.*;
@@ -1144,5 +1138,41 @@ public class AdServiceImpl implements AdService {
 		}
 		page.setRecords(choicenessAdBOList);
 		return page;
+	}
+
+	@Override
+	public List<OperatorAdBO> selectOperatorAdAll(OperatorAdParam operatorAdParam) {
+		AdDOExample adDOExample = new AdDOExample();
+		if(operatorAdParam.getAdEgainType()==null){
+			List<Byte> typeList = new ArrayList<>();
+			typeList.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
+			typeList.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
+			
+			List<Byte> statusList = new ArrayList<>();
+			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
+			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
+			
+			adDOExample.createCriteria().andTypeIn(typeList).andStatusIn(statusList);
+		}else{
+			
+			List<Byte> statusList = new ArrayList<>();
+			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
+			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
+			
+			adDOExample.createCriteria().andStatusIn(statusList).andTypeEqualTo(operatorAdParam.getAdEgainType().getVal());
+			
+		}
+		
+		List<AdDO> list = adDOMapper.selectByExample(adDOExample);
+		
+		List<OperatorAdBO> boList = new ArrayList<>();
+		for (AdDO adDO : list) {
+			OperatorAdBO bo = new OperatorAdBO();
+			bo.setId(adDO.getId());
+			bo.setTitle(adDO.getTitle());
+			boList.add(bo);
+		}
+		
+		return boList;
 	}
 }

@@ -10,7 +10,10 @@ public enum PositionEnum {
 	    SHOPPING_BUY((byte) 0x06, "E店必购"), // E店必够
 	    SHOPPING_GOODS((byte) 0x07, "特色好货"), // 特色好货
 	    SHOPPING_BENEFIT((byte) 0x08, "实惠单品"), // 实惠单品
-	    SHOPPING_HOT((byte) 0x09, "热门商品");  //热门商品
+	    SHOPPING_HOT((byte) 0x09, "热门商品"),  //热门商品
+	    AD_POSITION_TWO((byte) 0x0A, "广告模块位置2") ,
+	    AD_POSITION_THREE((byte) 0x0B, "广告模块位置3") ,
+	    AD_POSITION_FOUR((byte) 0x0C, "广告模块位置4") ;
 	    public Byte val;
 	    private String name;
 
@@ -23,18 +26,18 @@ public enum PositionEnum {
 	}
 
 	PositionEnum(Byte val, String name) {
-	        this.val = val;
-	        this.name = name;
-	    }
+        this.val = val;
+        this.name = name;
+    }
 
-	    public static PositionEnum getEnum(Byte val) {
-	    	PositionEnum[] values = PositionEnum.values();
-	        for (PositionEnum object : values) {
-	            if (object.val.equals(val)) {
-	                return object;
-	            }
-	        }
-	        return null;
-	    }
+    public static PositionEnum getEnum(Byte val) {
+    	PositionEnum[] values = PositionEnum.values();
+        for (PositionEnum object : values) {
+            if (object.val.equals(val)) {
+                return object;
+            }
+        }
+        return null;
+    }
 
 }

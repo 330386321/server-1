@@ -71,7 +71,7 @@ public class AdPlatformControllerTest {
 		adPlatformParam.setProductId(10061l);
 		adPlatformParam.setRegionPath("44/4403/440305");
     	String requestJson = JSONObject.toJSONString(adPlatformParam);
-        RequestBuilder request = post("/adPlatform/saveAdPlatform").contentType(MediaType.APPLICATION_JSON).content(requestJson).param("url", "ad_image/1494898117327258307.png");
+        RequestBuilder request = post("/adPlatform/saveAdPlatform").contentType(MediaType.APPLICATION_JSON);
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -239,7 +239,7 @@ public class AdPlatformControllerTest {
     	String requestJson = JSONObject.toJSONString(adPlatformParam);
 		
         try {
-            RequestBuilder request = post("/adPlatform/update/"+adPlatformDO.getId()).contentType(MediaType.APPLICATION_JSON).content(requestJson).param("url", "ad_image/1494898117327258307.png");
+            RequestBuilder request = post("/adPlatform/update/"+adPlatformDO.getId()).contentType(MediaType.APPLICATION_JSON);
             ResultActions perform= mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED )).andDo(MockMvcResultHandlers.print()).andReturn();
 

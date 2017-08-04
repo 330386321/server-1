@@ -638,4 +638,25 @@ public class AdController extends BaseController {
 		Page<ChoicenessAdDTO> rtn = AdConverter.convertChoicenessAdDTOPage(pageChoicenessAdBO);
 		return successCreated(rtn);
 	}
+	
+	/**
+	 * 运营平台查询广告
+	 * @param operatorAdParam
+	 * @return
+	 */
+	@RequestMapping(value = "selectOperatorAdAll", method = RequestMethod.POST)
+	public Result<List<OperatorAdDTO>> selectOperatorAdAll(@RequestBody OperatorAdParam operatorAdParam) {
+		List<OperatorAdBO> list = adService.selectOperatorAdAll(operatorAdParam);
+		
+		List<OperatorAdDTO>  dtoList = new ArrayList<>();
+		
+		for (OperatorAdBO operatorAdBO : list) {
+			OperatorAdDTO dto = new OperatorAdDTO();
+			dto.setId(operatorAdBO.getId());
+			dto.setTitle(operatorAdBO.getTitle());
+			dtoList.add(dto);
+		}
+		
+		return successCreated(dtoList);
+	}
 }

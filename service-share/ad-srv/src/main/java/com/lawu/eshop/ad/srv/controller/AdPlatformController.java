@@ -1,5 +1,17 @@
 package com.lawu.eshop.ad.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
@@ -14,11 +26,6 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 运营平台接口提供
@@ -40,8 +47,8 @@ public class AdPlatformController extends BaseController {
      * @return
      */
     @RequestMapping(value = "saveAdPlatform", method = RequestMethod.POST)
-    public Result saveAdPlatform(@RequestBody AdPlatformParam adPlatformParam, @RequestParam String url) {
-        Integer id = adPlatformService.saveAdPlatform(adPlatformParam, url);
+    public Result saveAdPlatform(@RequestBody AdPlatformParam adPlatformParam) {
+        Integer id = adPlatformService.saveAdPlatform(adPlatformParam);
         if (id > 0) {
             return successCreated(ResultCode.SUCCESS);
         } else {
@@ -138,8 +145,8 @@ public class AdPlatformController extends BaseController {
      * @return
      */
     @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
-    public Result update(@PathVariable Long id, @RequestBody AdPlatformParam adPlatformParam, @RequestParam String url) {
-        Integer i = adPlatformService.update(id, adPlatformParam, url);
+    public Result update(@PathVariable Long id, @RequestBody AdPlatformParam adPlatformParam) {
+        Integer i = adPlatformService.update(id, adPlatformParam);
         if (i > 0) {
             return successCreated(ResultCode.SUCCESS);
         } else {

@@ -1,9 +1,27 @@
 package com.lawu.eshop.operator.api.controller;
 
-import com.lawu.eshop.ad.constants.PositionEnum;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
+import com.lawu.eshop.ad.dto.OperatorAdDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
+import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -12,6 +30,7 @@ import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.operator.api.OperatorApiConfig;
 import com.lawu.eshop.operator.api.service.AdPlatformService;
+import com.lawu.eshop.operator.api.service.AdService;
 import com.lawu.eshop.operator.api.service.MerchantStoreService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
 import com.lawu.eshop.operator.api.service.ProductService;
@@ -21,20 +40,12 @@ import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
 import com.lawu.eshop.user.param.MerchantStorePlatParam;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 描述：广告管理
@@ -61,6 +72,9 @@ public class AdPlatformController extends BaseController {
 
     @Autowired
     private OperatorApiConfig operatorApiConfig;
+    
+    @Autowired
+    private AdService adService;
 
     @PageBody
     @ApiOperation(value = "广告信息查询", notes = "广告信息查询[]（张荣成）", httpMethod = "POST")
@@ -126,13 +140,7 @@ public class AdPlatformController extends BaseController {
     @RequiresPermissions("adPlatForm:add")
     @RequestMapping(value = "saveAdPlatform", method = RequestMethod.POST)
     public Result saveAdPlatform(@ModelAttribute @ApiParam(required = true, value = "广告信息") AdPlatformParam adPlatform) {
-    	 HttpServletRequest request = getRequest();
-         Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, operatorApiConfig.getImageUploadUrl());
-        if(!"0".equals(retMap.get("resultFlag"))){
-            return successCreated(Integer.parseInt(retMap.get("resultFlag").toString()));
-        }
-        String mediaUrl = retMap.get("imgUrl").toString();
-        return adPlatformService.saveAdPlatform(adPlatform,mediaUrl);
+        return adPlatformService.saveAdPlatform(adPlatform);
     }
     
     @ApiOperation(value = "修改广告", notes = "修改广告[1011|1015|1010]（张荣成）", httpMethod = "POST")
@@ -140,18 +148,8 @@ public class AdPlatformController extends BaseController {
     @RequiresPermissions("adPlatForm:edit")
     @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
     public Result update(@PathVariable @ApiParam(required = true, value = "广告id") Long id,
-                         @ModelAttribute @ApiParam(required = true, value = "广告信息") AdPlatformParam adPlatform,
-                         @RequestParam @ApiParam(required = true, value = "附件路径") String mediaUrl) {
-    	 HttpServletRequest request = getRequest();
-    	 if(StringUtils.isEmpty(mediaUrl) || !mediaUrl.startsWith(FileDirConstant.DIR_AD_IMAGE)){
-             Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, operatorApiConfig.getImageUploadUrl());
-             if(!"0".equals(retMap.get("resultFlag"))){
-                 return successCreated(Integer.parseInt(retMap.get("resultFlag").toString()));
-             }
-             mediaUrl = retMap.get("imgUrl").toString();
-         }
-
-        return adPlatformService.update(id, adPlatform, mediaUrl);
+                         @ModelAttribute @ApiParam(required = true, value = "广告信息") AdPlatformParam adPlatform) {
+        return adPlatformService.update(id, adPlatform);
     }
 
     
@@ -173,13 +171,25 @@ public class AdPlatformController extends BaseController {
         return productService.selectProductByPlat(param);
     }
     
-    
 
     @ApiOperation(value = "查询所有店铺", notes = "查询所有店铺  [](张荣成)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "selectAllMerchantStore", method = RequestMethod.GET)
     public Result<List<MerchantStorePlatDTO>> selectAllMerchantStore(@ModelAttribute @ApiParam MerchantStorePlatParam param) {
         return merchantStoreService.selectAllMerchantStore(param);
+    }
+
+    
+    @ApiOperation(value = "广告列表", notes = "查询广告列表（张荣成）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "selectOperatorAdAll", method = RequestMethod.GET)
+    public Result<List<OperatorAdDTO>> selectOperatorAdAll(@ModelAttribute @ApiParam OperatorAdParam operatorAdParam) {
+        Result<List<OperatorAdDTO>> result = adService.selectOperatorAdAll(operatorAdParam);
+        
+        if(!isSuccess(result)){
+        	return successCreated(result.getRet());
+        }
+        return result;
     }
 
 }

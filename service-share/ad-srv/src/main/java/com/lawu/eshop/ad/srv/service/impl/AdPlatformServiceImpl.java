@@ -37,20 +37,16 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 
     @Override
     @Transactional
-    public Integer saveAdPlatform(AdPlatformParam adPlatformParam, String url) {
+    public Integer saveAdPlatform(AdPlatformParam adPlatformParam) {
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setTitle(adPlatformParam.getTitle());
-        adPlatformDO.setMediaUrl(url);
+        adPlatformDO.setMediaUrl(adPlatformParam.getMediaUrl());
         adPlatformDO.setType(adPlatformParam.getTypeEnum().val);
         adPlatformDO.setPosition(adPlatformParam.getPositionEnum().val);
-        //纯链接
-        if (adPlatformParam.getTypeEnum().equals(TypeEnum.TYPE_LINK)) {
-            adPlatformDO.setLinkUrl(adPlatformParam.getLinkUrl());
-        } else if (adPlatformParam.getTypeEnum().equals(TypeEnum.TYPE_PRODUCT)) { //商品
-            adPlatformDO.setProductId(adPlatformParam.getProductId());
-        } else {
-            adPlatformDO.setMerchantStoreId(adPlatformParam.getMerchantStoreId());
-        }
+        adPlatformDO.setAdId(adPlatformParam.getAdId());
+        adPlatformDO.setLinkUrl(adPlatformParam.getLinkUrl());
+        adPlatformDO.setProductId(adPlatformParam.getProductId());
+        adPlatformDO.setMerchantStoreId(adPlatformParam.getMerchantStoreId());
         adPlatformDO.setRegionPath(adPlatformParam.getRegionPath());
         adPlatformDO.setStatus(AdPlatformStatusEnum.UP.val);
         adPlatformDO.setGmtCreate(new Date());
@@ -113,18 +109,19 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 
     @Override
     @Transactional
-    public Integer update(Long id, AdPlatformParam adPlatformParam, String url) {
+    public Integer update(Long id, AdPlatformParam adPlatformParam) {
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setId(id);
         adPlatformDO.setTitle(adPlatformParam.getTitle());
         adPlatformDO.setContent(adPlatformParam.getContent());
-        adPlatformDO.setMediaUrl(url);
+        adPlatformDO.setMediaUrl(adPlatformParam.getMediaUrl());
         adPlatformDO.setType(adPlatformParam.getTypeEnum().val);
         adPlatformDO.setLinkUrl(adPlatformParam.getLinkUrl());
         adPlatformDO.setProductId(adPlatformParam.getProductId());
         adPlatformDO.setMerchantStoreId(adPlatformParam.getMerchantStoreId());
         adPlatformDO.setPosition(adPlatformParam.getPositionEnum().val);
         adPlatformDO.setRegionPath(adPlatformParam.getRegionPath());
+        adPlatformDO.setAdId(adPlatformParam.getAdId());
         return adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
     }
 

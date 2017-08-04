@@ -24,7 +24,7 @@ public interface AdPlatformService {
      * @param url
      * @return
      */
-    Integer saveAdPlatform(AdPlatformParam adPlatformParam, String url);
+    Integer saveAdPlatform(AdPlatformParam adPlatformParam);
 
     /**
      * 删除广告
@@ -58,7 +58,7 @@ public interface AdPlatformService {
      * @param url
      * @return
      */
-    Integer update(Long id, AdPlatformParam adPlatformParam, String url);
+    Integer update(Long id, AdPlatformParam adPlatformParam);
 
     /**
      * 单个查询
