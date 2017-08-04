@@ -1,32 +1,6 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.lawu.eshop.ad.constants.AdEgainTypeEnum;
-import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.AuditEnum;
-import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
-import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
-import com.lawu.eshop.ad.constants.PropertyType;
-import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.constants.RedPacketArithmetic;
+import com.lawu.eshop.ad.constants.*;
 import com.lawu.eshop.ad.param.*;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.*;
@@ -49,6 +23,18 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.utils.AdArithmeticUtil;
 import com.lawu.eshop.utils.DateUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 /**
  * E赚接口实现类
@@ -818,13 +804,10 @@ public class AdServiceImpl implements AdService {
 			currentPage++;
 			listAdParam.setCurrentPage(currentPage);
 			AdDOExample adDOExample = new AdDOExample();
-			List<Byte> statusList = new ArrayList<>();
-			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
-			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
 			List<Byte> typeList = new ArrayList<>();
 			typeList.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
 			typeList.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
-			adDOExample.createCriteria().andStatusIn(statusList).andTypeIn(typeList);
+			adDOExample.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeIn(typeList);
 			RowBounds rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
 			List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
 			if (adDOS == null || adDOS.isEmpty()) {
@@ -850,13 +833,10 @@ public class AdServiceImpl implements AdService {
 			currentPage++;
 			listAdParam.setCurrentPage(currentPage);
 			AdDOExample adDOExample = new AdDOExample();
-			List<Byte> statusList = new ArrayList<>();
-			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
-			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
 			List<Byte> typeList = new ArrayList<>();
 			typeList.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
 			typeList.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
-			adDOExample.createCriteria().andStatusNotIn(statusList).andTypeIn(typeList);
+			adDOExample.createCriteria().andStatusNotEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeIn(typeList);
 			RowBounds rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
 			List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
 			if (adDOS == null || adDOS.isEmpty()) {
