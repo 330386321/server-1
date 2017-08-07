@@ -44,9 +44,24 @@ public class FansMerchantControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(fansMerchantController).addInterceptors(authorizationInterceptor).build();
     }
 
-    @Test
+    @SuppressWarnings("unused")
+	@Test
     public void saveFansMerchant() {
         RequestBuilder request = put("/fansMerchant/saveFansMerchant").header("authorization","").param("merchantId","1").param("channelEnum", FansMerchantChannelEnum.ORDER_PAY.name());
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+    
+    
+    @SuppressWarnings("unused")
+	@Test
+    public void dealFansInvite() {
+    	RequestBuilder request = put("/fansMerchant/dealFansInvite").header("authorization","").param("merchantId","100").param("messageId", "1").param("dealWay", "true");
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();

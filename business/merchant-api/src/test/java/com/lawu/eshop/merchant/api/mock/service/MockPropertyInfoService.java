@@ -3,6 +3,7 @@ package com.lawu.eshop.merchant.api.mock.service;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.*;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
@@ -53,7 +54,11 @@ public class MockPropertyInfoService extends BaseController implements PropertyI
 
     @Override
     public Result inviteFans(@ModelAttribute PropertyInfoDataParam propertyInfoDataParam) {
-        return successCreated();
+    	if (propertyInfoDataParam.getMerchantTransactionTypeEnum() != null && propertyInfoDataParam.getMerchantTransactionTypeEnum()
+				.getValue() == MerchantTransactionTypeEnum.INVITE_FANS.getValue()) {
+			return successCreated((Object)100);
+		}
+    	return successCreated();
     }
 
     @Override

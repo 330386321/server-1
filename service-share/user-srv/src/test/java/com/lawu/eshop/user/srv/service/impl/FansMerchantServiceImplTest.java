@@ -10,6 +10,7 @@ import com.lawu.eshop.user.param.PageListInviteFansParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.domain.FansMerchantDO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.mapper.FansInviteResultDOMapper;
 import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.service.FansMerchantService;
@@ -43,6 +44,8 @@ public class FansMerchantServiceImplTest {
 
     @Autowired
     private MemberDOMapper memberDOMapper;
+    
+    private FansInviteResultDOMapper fansInviteResultDOMapper;
 
     @Transactional
     @Rollback
@@ -174,5 +177,18 @@ public class FansMerchantServiceImplTest {
         Assert.assertNotNull(fansMerchantDOS);
         Assert.assertEquals(1, fansMerchantDOS.size());
     }
-
+    
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void saveFansMerchantFromInvite() {
+        fansMerchantService.saveFansMerchantFromInvite(1L, 1L, 10L, true);
+        List<FansMerchantDO> fansMerchantDOS = fansMerchantDOMapper.selectByExample(null);
+        Assert.assertNotNull(fansMerchantDOS);
+        Assert.assertEquals(1, fansMerchantDOS.size());
+        int i = fansInviteResultDOMapper.countByExample(null);
+        Assert.assertEquals(1, i);
+    }
+    
 }

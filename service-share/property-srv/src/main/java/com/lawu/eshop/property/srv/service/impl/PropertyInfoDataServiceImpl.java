@@ -82,6 +82,10 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		pointDetailSaveDataParam.setBizId(param.getBizId());
 		pointDetailService.save(pointDetailSaveDataParam);
 
+		// 更新用户资产
+		BigDecimal point = new BigDecimal(param.getPoint());
+		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "M", point);
+
 		// 插入邀请粉丝记录
 		if (param.getMerchantTransactionTypeEnum() != null && param.getMerchantTransactionTypeEnum()
 				.getValue() == MerchantTransactionTypeEnum.INVITE_FANS.getValue()) {
@@ -94,13 +98,10 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			fansInviteDetailDO.setInviteFansCount(param.getInviteFansCount());
 			fansInviteDetailDO.setConsumePoint(new BigDecimal(param.getPoint()));
 			fansInviteDetailDO.setGmtCreate(new Date());
-			fansInviteDetailDOMapper.insertSelective(fansInviteDetailDO);
+			int i = fansInviteDetailDOMapper.insertSelective(fansInviteDetailDO);
+			return i;
 		}
-
-		// 更新用户资产
-		BigDecimal point = new BigDecimal(param.getPoint());
-		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "M", point);
-
+		
 		return ResultCode.SUCCESS;
 	}
 

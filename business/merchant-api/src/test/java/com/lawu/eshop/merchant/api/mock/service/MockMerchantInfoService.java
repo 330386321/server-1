@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.MerchantInfoService;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
+import com.lawu.eshop.user.dto.MerchantInfoFromInviteFansDTO;
 import com.lawu.eshop.user.dto.MerchantInfoFromPublishAdDTO;
 import com.lawu.eshop.user.dto.MerchantStoreImageDTO;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
@@ -41,6 +42,13 @@ public class MockMerchantInfoService extends BaseController implements MerchantI
 
 	@Override
 	public Result<MerchantInfoFromPublishAdDTO> getMerchantInfoFromPublishAd(Long merchantId) {
-		return null;
+		MerchantInfoFromPublishAdDTO merchantInfoFromPublishAdDTO = new MerchantInfoFromPublishAdDTO();
+		return successGet(merchantInfoFromPublishAdDTO);
+	}
+
+	@Override
+	public Result<MerchantInfoFromInviteFansDTO> getMerchantInfoFromInviteFans(Long merchantId) {
+		MerchantInfoFromInviteFansDTO merchantInfoFromInviteFansDTO = new MerchantInfoFromInviteFansDTO();
+		return successGet(merchantInfoFromInviteFansDTO);
 	}
 }

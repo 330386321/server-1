@@ -142,5 +142,20 @@ public class FansMerchantController extends BaseController {
         fansMerchantService.saveFansMerchant(merchantId, memberId, channelEnum);
         return successCreated();
     }
-
+    
+    
+    /**
+     * 用户处理粉丝邀请
+     *
+     * @param merchantId
+     * @param memberId
+     * @param channelEnum
+     * @return
+     */
+    @RequestMapping(value = "saveFansMerchantFromInvite/{merchantId}", method = RequestMethod.PUT)
+    public Result saveFansMerchantFromInvite(@PathVariable Long merchantId, @RequestParam Long memberId, @RequestParam Long messageId, @RequestParam Boolean dealWay) {
+        fansMerchantService.saveFansMerchantFromInvite(merchantId, memberId, messageId, dealWay);
+        return successCreated();
+    }
+    
 }

@@ -2,6 +2,9 @@ package com.lawu.eshop.merchant.api.controller;
 
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.merchant.api.MerchantApiApplicationTest;
+
+import io.swagger.annotations.ApiModelProperty;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -122,4 +125,28 @@ public class FansMerchantControllerTest {
         }
     }
 
+    
+    @Test
+    public void inviteFansWithContent() {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("nums", "B0001");
+        map.add("userSexEnum", "SEX_SECRET");
+        map.add("isAgeLimit", "false");
+        map.add("payPwd", "123456");
+        map.add("Url", "urlurlurl");
+        map.add("logoUrl", "logoUrlLogoUrl");
+        map.add("merchantStoreName", "merchantStoreName");
+        map.add("inviteContent", "inviteContent");
+        map.add("merchantStoreIntro", "merchantStoreIntro");
+        RequestBuilder request = post("/fansMerchant/inviteFansWithContent").header("authorization", "8888").params(map);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+    
 }

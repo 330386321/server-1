@@ -18,6 +18,7 @@ import com.lawu.eshop.merchant.api.service.MerchantInfoService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
+import com.lawu.eshop.user.dto.MerchantInfoFromInviteFansDTO;
 import com.lawu.eshop.user.dto.MerchantInfoFromPublishAdDTO;
 import com.lawu.eshop.user.dto.param.MerchantSizeLinkDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
@@ -87,6 +88,17 @@ public class MerchantInfoController extends BaseController {
     public Result<MerchantInfoFromPublishAdDTO> getMerchantInfoFromPublishAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         Result<MerchantInfoFromPublishAdDTO> result =  merchantProfileService.getMerchantInfoFromPublishAd(merchantId);
+        return result;
+    }
+    
+    
+    @ApiOperation(value = "邀请粉丝时时查询的商家信息", notes = "邀请粉丝时时查询的商家信息 []（洪钦明）", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getMerchantInfoFromInviteFans", method = RequestMethod.GET)
+    public Result<MerchantInfoFromInviteFansDTO> getMerchantInfoFromInviteFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        Result<MerchantInfoFromInviteFansDTO> result =  merchantProfileService.getMerchantInfoFromInviteFans(merchantId);
         return result;
     }
 }

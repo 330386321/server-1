@@ -81,5 +81,32 @@ public class MerchantInfoControllerTest {
             Assert.fail(e.getMessage());
         }
     }
+    
+    @Test
+    public void getMerchantInfoFromPublishAd() {
+        RequestBuilder request = get("/merchantInfo/getMerchantInfoFromPublishAd").header("authorization", "8888");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
 
+    
+    @Test
+    public void getMerchantInfoFromInviteFans() {
+        RequestBuilder request = get("/merchantInfo/getMerchantInfoFromInviteFans").header("authorization", "8888");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+    
 }

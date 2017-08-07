@@ -36,4 +36,9 @@ public class MockFansMerchantService extends BaseController implements FansMerch
     public Result<Integer> countFans(@PathVariable("merchantId") Long merchantId) {
         return null;
     }
+
+	@Override
+	public Result saveFansMerchantFromInvite(Long merchantId, Long memberId, Long messageId, Boolean dealWay) {
+		return successCreated(true);
+	}
 }

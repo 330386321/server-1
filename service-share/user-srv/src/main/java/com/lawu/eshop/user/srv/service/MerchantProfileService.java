@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.user.param.MerchantProfileParam;
+import com.lawu.eshop.user.srv.bo.MerchantInfoFromInviteFansBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoFromPublishAdBO;
 import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
 import com.lawu.eshop.user.srv.bo.MerchantSizeLinkBO;
@@ -39,4 +40,10 @@ public interface MerchantProfileService {
      */
     MerchantInfoFromPublishAdBO getMerchantInfoFromPublishAd(Long merchantId);
     
+    /**
+     * 商家邀请粉丝需要查询的信息
+     * @param merchantId
+     * @return
+     */
+    MerchantInfoFromInviteFansBO getMerchantInfoFromInviteFans(Long merchantId);
 }

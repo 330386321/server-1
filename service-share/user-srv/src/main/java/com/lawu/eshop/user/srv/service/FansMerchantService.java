@@ -76,4 +76,14 @@ public interface FansMerchantService {
      */
     void saveFansMerchant(Long merchantId, Long memberId, FansMerchantChannelEnum channelEnum);
 
+    /**
+     * 用户处理粉丝邀请
+     *
+     * @param merchantId
+     * @param memberId
+     * @param messageId
+     * @param dealWay
+     */ 
+	void saveFansMerchantFromInvite(Long merchantId, Long memberId, Long messageId, Boolean dealWay);
+
 }

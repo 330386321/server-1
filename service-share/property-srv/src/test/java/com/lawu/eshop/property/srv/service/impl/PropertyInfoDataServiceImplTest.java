@@ -63,7 +63,7 @@ public class PropertyInfoDataServiceImplTest {
         PropertyInfoDataParam param = new PropertyInfoDataParam();
         param.setUserNum("M10001");
         param.setPoint("50");
-        param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INVITE_FANS);
+        param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.ADD_AD);
         param.setBizId("1");
         int ret = propertyInfoDataService.doHanlderMinusPoint(param);
         Assert.assertEquals(ResultCode.SUCCESS,ret);

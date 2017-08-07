@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.dto.MerchantInfoFromInviteFansDTO;
 import com.lawu.eshop.user.dto.MerchantInfoFromPublishAdDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoFromInviteFansBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoFromPublishAdBO;
 import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
 import com.lawu.eshop.user.srv.converter.MerchantProfileConverter;
@@ -48,6 +50,18 @@ public class MerchantProfileController extends BaseController{
 	   dto.setTaobaoUrl(merchantInfoFromPublishAdBO.getTbUrl());
 	   dto.setTmallUrl(merchantInfoFromPublishAdBO.getTmUrl());
 	   dto.setWebsiteUrl(merchantInfoFromPublishAdBO.getWebsiteUrl());
+	   return successGet(dto);
+   }
+   
+   
+   @RequestMapping(value = "getMerchantInfoFromInviteFans/{merchantId}", method = RequestMethod.GET)
+   public Result<MerchantInfoFromInviteFansDTO> getMerchantInfoFromInviteFans(@PathVariable("merchantId") Long merchantId){
+	   MerchantInfoFromInviteFansBO merchantInfoFromInviteFansBO=merchantProfileService.getMerchantInfoFromInviteFans(merchantId);
+	   MerchantInfoFromInviteFansDTO dto = new MerchantInfoFromInviteFansDTO();
+	   dto.setMerchantStoreIntro(merchantInfoFromInviteFansBO.getMerchantStoreIntro());
+	   dto.setMerchantStoreLogo(merchantInfoFromInviteFansBO.getMerchantStoreLogo());
+	   dto.setMerchantStoreName(merchantInfoFromInviteFansBO.getMerchantStoreName());
+	   dto.setMerchantStoreUrl(merchantInfoFromInviteFansBO.getMerchantStoreUrl());
 	   return successGet(dto);
    }
    

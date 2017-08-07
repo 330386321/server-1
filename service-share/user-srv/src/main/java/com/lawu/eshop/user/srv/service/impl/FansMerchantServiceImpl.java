@@ -1,23 +1,33 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
-import com.lawu.eshop.user.param.*;
-import com.lawu.eshop.user.srv.bo.FansMerchantBO;
-import com.lawu.eshop.user.srv.converter.FansMerchantConverter;
-import com.lawu.eshop.user.srv.domain.FansMerchantDO;
-import com.lawu.eshop.user.srv.domain.FansMerchantDOExample;
-import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOView;
-import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.extend.FansMerchantDOMapperExtend;
-import com.lawu.eshop.user.srv.service.FansMerchantService;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.constants.FansInviteResultEnum;
+import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
+import com.lawu.eshop.user.param.ListFansParam;
+import com.lawu.eshop.user.param.ListFansRealParam;
+import com.lawu.eshop.user.param.ListInviteFansParam;
+import com.lawu.eshop.user.param.ListInviteFansRealParam;
+import com.lawu.eshop.user.param.PageListInviteFansParam;
+import com.lawu.eshop.user.srv.bo.FansMerchantBO;
+import com.lawu.eshop.user.srv.converter.FansMerchantConverter;
+import com.lawu.eshop.user.srv.domain.FansInviteResultDO;
+import com.lawu.eshop.user.srv.domain.FansInviteResultDOExample;
+import com.lawu.eshop.user.srv.domain.FansInviteResultDOExample.Criteria;
+import com.lawu.eshop.user.srv.domain.FansMerchantDO;
+import com.lawu.eshop.user.srv.domain.FansMerchantDOExample;
+import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOView;
+import com.lawu.eshop.user.srv.mapper.FansInviteResultDOMapper;
+import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.extend.FansMerchantDOMapperExtend;
+import com.lawu.eshop.user.srv.service.FansMerchantService;
 
 /**
  * @author meishuquan
@@ -32,6 +42,9 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     @Autowired
     private FansMerchantDOMapper fansMerchantDOMapper;
 
+    @Autowired
+    private FansInviteResultDOMapper fansInviteResultDOMapper;
+    
     @Override
     public List<FansMerchantBO> listInviteFans(Long merchantId, ListInviteFansParam param) {
         ListInviteFansRealParam listInviteFansRealParam = new ListInviteFansRealParam();
@@ -121,4 +134,32 @@ public class FansMerchantServiceImpl implements FansMerchantService {
         fansMerchantDOMapper.insertSelective(fansMerchantDO);
     }
 
+    
+    @Override
+    @Transactional
+    public void saveFansMerchantFromInvite(Long merchantId, Long memberId, Long messageId, Boolean dealWay) {
+    	FansInviteResultDOExample fansInviteResultDOExample = new FansInviteResultDOExample();
+    	Criteria criteria = fansInviteResultDOExample.createCriteria();
+    	FansInviteResultDO fansInviteResultDO = new FansInviteResultDO();
+    	Date date = new Date();
+	    fansInviteResultDO.setMemberId(memberId);
+	    fansInviteResultDO.setMerchantId(merchantId);
+	    fansInviteResultDO.setMessageId(messageId);
+	    fansInviteResultDO.setGmtCreate(date);
+	    fansInviteResultDO.setGmtModified(date);
+    	if(dealWay) {
+    		FansMerchantDO fansMerchantDO = new FansMerchantDO();
+            fansMerchantDO.setMemberId(memberId);
+            fansMerchantDO.setMerchantId(merchantId);
+            fansMerchantDO.setChannel(FansMerchantChannelEnum.INVITE.getValue());
+            fansMerchantDO.setGmtCreate(new Date());
+            fansMerchantDOMapper.insertSelective(fansMerchantDO);
+            criteria.andMessageIdEqualTo(messageId);
+            fansInviteResultDO.setStatus(FansInviteResultEnum.AGREE.getValue());
+            fansInviteResultDOMapper.insert(fansInviteResultDO);
+    	} else {
+    		fansInviteResultDO.setStatus(FansInviteResultEnum.REFUSE.getValue());
+    		fansInviteResultDOMapper.insert(fansInviteResultDO);
+    	}
+    }
 }

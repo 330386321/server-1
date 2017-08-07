@@ -8,14 +8,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.user.param.MerchantProfileParam;
+import com.lawu.eshop.user.srv.bo.MerchantInfoFromInviteFansBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoFromPublishAdBO;
 import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
 import com.lawu.eshop.user.srv.bo.MerchantSizeLinkBO;
 import com.lawu.eshop.user.srv.converter.MerchantInfoConverter;
 import com.lawu.eshop.user.srv.converter.MerchantProfileConverter;
 import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
+import com.lawu.eshop.user.srv.domain.extend.MerchantInfoFromInviteFansDOView;
 import com.lawu.eshop.user.srv.domain.extend.MerchantInfoFromPublishAdDOView;
 import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.extend.MerchantInfoFromInviteFansDOMapperExtend;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantInfoFromPublishAdDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantProfileService;
 
@@ -31,6 +34,9 @@ public class MerchantProfileServiceImpl implements MerchantProfileService {
 
     @Autowired
     private MerchantInfoFromPublishAdDOMapperExtend merchantInfoFromPublishAdDOMapperExtend;
+    
+    @Autowired
+    private MerchantInfoFromInviteFansDOMapperExtend merchantInfoFromInviteFansDOMapperExtend;
     
     @Override
     public int updateMerchantSizeLink(MerchantProfileParam merchantProfileParamd, @RequestParam Long id) {
@@ -77,4 +83,19 @@ public class MerchantProfileServiceImpl implements MerchantProfileService {
 		}
 		return result;
 	}
+
+	@Override
+	public MerchantInfoFromInviteFansBO getMerchantInfoFromInviteFans(Long merchantId) {
+		List<MerchantInfoFromInviteFansDOView> list = merchantInfoFromInviteFansDOMapperExtend.getMerchantInfoFromInviteFans(merchantId);
+		MerchantInfoFromInviteFansBO merchantInfoFromInviteFansBO = new MerchantInfoFromInviteFansBO();
+		if(list != null && !list.isEmpty()) {
+			MerchantInfoFromInviteFansDOView view = list.get(0);
+			merchantInfoFromInviteFansBO.setMerchantStoreIntro(view.getMerchantStoreIntro());
+			merchantInfoFromInviteFansBO.setMerchantStoreLogo(view.getMerchantStoreLogo());
+			merchantInfoFromInviteFansBO.setMerchantStoreName(view.getMerchantStoreName());
+			merchantInfoFromInviteFansBO.setMerchantStoreUrl(view.getMerchantStoreUrl());
+		}
+		return merchantInfoFromInviteFansBO;
+	}
+	
 }
