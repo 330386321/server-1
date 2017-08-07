@@ -1,22 +1,22 @@
 package com.lawu.eshop.mall.srv.converter;
 
-import com.lawu.eshop.mall.constants.StatusEnum;
-import com.lawu.eshop.mall.dto.DiscountPackageContentDTO;
-import com.lawu.eshop.mall.param.foreign.DiscountPackageContentSaveForeignParam;
-import com.lawu.eshop.mall.param.foreign.DiscountPackageContentUpdateForeignParam;
-import com.lawu.eshop.mall.srv.bo.DiscountPackageContentBO;
-import com.lawu.eshop.mall.srv.converter.DiscountPackageContentConverter;
-import com.lawu.eshop.mall.srv.domain.DiscountPackageContentDO;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.mall.constants.StatusEnum;
+import com.lawu.eshop.mall.dto.DiscountPackageContentDTO;
+import com.lawu.eshop.mall.param.foreign.DiscountPackageContentSaveForeignParam;
+import com.lawu.eshop.mall.param.foreign.DiscountPackageContentUpdateForeignParam;
+import com.lawu.eshop.mall.srv.bo.DiscountPackageContentBO;
+import com.lawu.eshop.mall.srv.domain.DiscountPackageContentDO;
 
 /**
  * @author zhangyong
@@ -103,7 +103,7 @@ public class DiscountPackageContentConverterTest {
         DiscountPackageContentDO discountPackageContentDO = DiscountPackageContentConverter.convert(1L, param);
         Assert.assertTrue(param.getName().equals(discountPackageContentDO.getName()));
         Assert.assertTrue(param.getQuantity().equals(discountPackageContentDO.getQuantity()));
-        Assert.assertTrue(param.getUnitPrice().add(new BigDecimal(param.getQuantity())).equals(discountPackageContentDO.getSubtotal()));
+        Assert.assertTrue(param.getUnitPrice().multiply(new BigDecimal(param.getQuantity())).equals(discountPackageContentDO.getSubtotal()));
     }
 
     @Test
@@ -119,7 +119,7 @@ public class DiscountPackageContentConverterTest {
         Assert.assertTrue(param.getUnit().equals(discountPackageContentDO.getUnit()));
         Assert.assertTrue(param.getId().equals(discountPackageContentDO.getId()));
         Assert.assertTrue(param.getQuantity().equals(discountPackageContentDO.getQuantity()));
-        Assert.assertTrue(param.getUnitPrice().add(new BigDecimal(param.getQuantity())).equals(discountPackageContentDO.getSubtotal()));
+        Assert.assertTrue(param.getUnitPrice().multiply(new BigDecimal(param.getQuantity())).equals(discountPackageContentDO.getSubtotal()));
     }
 
     @Test
