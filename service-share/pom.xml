@@ -21,6 +21,7 @@
         <module>user-srv</module>
         <module>operator-srv</module>
         <module>statistics-srv</module>
+        <module>agent-srv</module>
     </modules>
 
     <properties>
