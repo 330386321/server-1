@@ -1,5 +1,17 @@
 package com.lawu.eshop.product.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocumentList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -11,13 +23,6 @@ import com.lawu.eshop.product.param.ProductSearchRealParam;
 import com.lawu.eshop.product.srv.ProductSrvConfig;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.solr.service.SolrService;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocumentList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -118,7 +123,7 @@ public class ProductSolrController extends BaseController {
     @RequestMapping(value = "listProductByName", method = RequestMethod.POST)
     public Result<Page<ProductSearchDTO>> listProductByName(@RequestBody ProductSearchRealParam param) {
         SolrQuery query = new SolrQuery();
-        query.setQuery("name_s:*" + param.getName() + "*");
+        query.setQuery("text:" + param.getName());
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
