@@ -1,17 +1,9 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.param.MerchantInviterParam;
-import com.lawu.eshop.user.param.RegisterRealParam;
-import com.lawu.eshop.user.srv.bo.*;
-import com.lawu.eshop.user.srv.domain.*;
-import com.lawu.eshop.user.srv.domain.extend.MerchantDOView;
-import com.lawu.eshop.user.srv.mapper.*;
-import com.lawu.eshop.user.srv.service.MerchantService;
-import com.lawu.eshop.utils.DataTransUtil;
-import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.RandomUtil;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,9 +13,35 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.core.type.UserType;
+import com.lawu.eshop.user.constants.StatusEnum;
+import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.user.param.AccountParam;
+import com.lawu.eshop.user.param.MerchantInviterParam;
+import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
+import com.lawu.eshop.user.srv.bo.MessagePushBO;
+import com.lawu.eshop.user.srv.bo.RongYunBO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDO;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.extend.MerchantDOView;
+import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.service.MerchantService;
+import com.lawu.eshop.utils.DataTransUtil;
+import com.lawu.eshop.utils.PwdUtil;
+import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * @author meishuquan
@@ -579,6 +597,48 @@ public class MerchantServiceImplTest {
 
         int result = merchantService.getTotalCount();
         Assert.assertEquals(1, result);
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getAccountList(){
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setId(1L);
+        merchantDO.setStatus(StatusEnum.VALID.getValue());
+        merchantDO.setAccount("123456");
+        merchantDO.setIsFreeze(false);
+        merchantDO.setNum("123");
+        merchantDO.setGmtCreate(new Date());
+        merchantDOMapper.insertSelective(merchantDO);
+
+        AccountParam param = new AccountParam();
+        param.setCurrentPage(1);
+        param.setPageSize(10);
+        param.setAccount("123456");
+        param.setUserType(UserType.MEMBER);
+
+        Page<MerchantBO> page = merchantService.getAccountList(param);
+
+        Assert.assertEquals(1, page.getRecords().size());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void freezeAccount(){
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setId(1L);
+        merchantDO.setStatus(StatusEnum.VALID.getValue());
+        merchantDO.setAccount("123456");
+        merchantDO.setIsFreeze(false);
+        merchantDO.setNum("123");
+        merchantDO.setGmtCreate(new Date());
+        merchantDOMapper.insertSelective(merchantDO);
+        merchantService.freezeAccount("123",true);
+        List<MerchantDO> list = merchantDOMapper.selectByExample(null);
+        Assert.assertEquals(1, list.size());
+        Assert.assertEquals(true, list.get(0).getIsFreeze());
     }
 
 }

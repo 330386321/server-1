@@ -1,18 +1,11 @@
 package com.lawu.eshop.user.srv.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.param.MerchantInviterParam;
-import com.lawu.eshop.user.param.RegisterRealParam;
-import com.lawu.eshop.user.srv.UserSrvApplicationTest;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
-import com.lawu.eshop.utils.DataTransUtil;
-import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.RandomUtil;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,11 +24,28 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.framework.core.type.UserType;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
+import com.lawu.eshop.user.constants.StatusEnum;
+import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.param.AccountParam;
+import com.lawu.eshop.user.param.MerchantInviterParam;
+import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.srv.UserSrvApplicationTest;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
+import com.lawu.eshop.utils.DataTransUtil;
+import com.lawu.eshop.utils.PwdUtil;
+import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * @author meishuquan
@@ -56,6 +66,12 @@ public class MerchantControllerTest {
 
     @Autowired
     private MerchantStoreDOMapper merchantStoreDOMapper;
+
+    @Autowired
+    private MerchantStoreProfileDOMapper merchantStoreProfileDOMapper;
+
+    @Autowired
+    private MerchantStoreImageDOMapper merchantStoreImageDOMapper;
 
     @Before
     public void setUp() throws Exception {
@@ -447,6 +463,77 @@ public class MerchantControllerTest {
     @Test
     public void getTotalCount() {
         RequestBuilder request = get("/merchant/getTotalCount");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getAccountList(){
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setId(1L);
+        merchantDO.setStatus(StatusEnum.VALID.getValue());
+        merchantDO.setAccount("123456");
+        merchantDO.setIsFreeze(false);
+        merchantDO.setNum("123");
+        merchantDO.setGmtCreate(new Date());
+        merchantDOMapper.insertSelective(merchantDO);
+
+        AccountParam param = new AccountParam();
+        param.setCurrentPage(1);
+        param.setPageSize(10);
+        param.setAccount("123456");
+        param.setUserType(UserType.MEMBER);
+        String json = JSONObject.toJSONString(param);
+        RequestBuilder request = post("/merchant/getAccountList").contentType(MediaType.APPLICATION_JSON).content(json);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void freezeAccount(){
+        RequestBuilder request = put("/merchant/freezeAccount").param("num","123").param("isFreeze","true");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getMerchantStoreProfileInfo(){
+        MerchantStoreProfileDO profileDO = new MerchantStoreProfileDO();
+        profileDO.setId(1L);
+        profileDO.setManageType(ManageTypeEnum.ENTITY.val);
+        profileDO.setMerchantId(1L);
+        merchantStoreProfileDOMapper.insertSelective(profileDO);
+        MerchantStoreImageDO imageDO = new MerchantStoreImageDO();
+        imageDO.setMerchantId(1L);
+        imageDO.setMerchantStoreId(1L);
+        imageDO.setStatus(true);
+        imageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
+        merchantStoreImageDOMapper.insertSelective(imageDO);
+        RequestBuilder request = get("/merchant/getMerchantStoreProfileInfo").param("id","1");
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();

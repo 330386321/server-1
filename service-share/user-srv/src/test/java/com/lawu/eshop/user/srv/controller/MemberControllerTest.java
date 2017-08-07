@@ -1,20 +1,10 @@
 package com.lawu.eshop.user.srv.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.constants.UserSexEnum;
-import com.lawu.eshop.user.param.MemberQuery;
-import com.lawu.eshop.user.param.RegisterRealParam;
-import com.lawu.eshop.user.param.UserParam;
-import com.lawu.eshop.user.srv.UserSrvApplicationTest;
-import com.lawu.eshop.user.srv.domain.MemberDO;
-import com.lawu.eshop.user.srv.domain.MemberProfileDO;
-import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
-import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
-import com.lawu.eshop.utils.DataTransUtil;
-import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.RandomUtil;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,10 +23,24 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.framework.core.type.UserType;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.user.constants.StatusEnum;
+import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.user.constants.UserSexEnum;
+import com.lawu.eshop.user.param.AccountParam;
+import com.lawu.eshop.user.param.MemberQuery;
+import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserParam;
+import com.lawu.eshop.user.srv.UserSrvApplicationTest;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
+import com.lawu.eshop.utils.DataTransUtil;
+import com.lawu.eshop.utils.PwdUtil;
+import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * @author meishuquan
@@ -558,4 +562,48 @@ public class MemberControllerTest {
         }
     }
 
+    @Transactional
+    @Rollback
+    @Test
+    public void getAccountList(){
+        MemberDO memberDO = new MemberDO();
+        memberDO.setId(1L);
+        memberDO.setStatus(StatusEnum.VALID.getValue());
+        memberDO.setAccount("123456");
+        memberDO.setIsFreeze(false);
+        memberDO.setNum("123");
+        memberDO.setGmtCreate(new Date());
+        memberDOMapper.insertSelective(memberDO);
+
+        AccountParam param = new AccountParam();
+        param.setCurrentPage(1);
+        param.setPageSize(10);
+        param.setAccount("123456");
+        param.setUserType(UserType.MEMBER);
+        String json = JSONObject.toJSONString(param);
+        RequestBuilder request = post("/member/getAccountList").contentType(MediaType.APPLICATION_JSON).content(json);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void freezeAccount(){
+        RequestBuilder request = put("/member/freezeAccount").param("num","123").param("isFreeze","true");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
 }

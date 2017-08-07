@@ -23,6 +23,8 @@ public class MerchantDTO {
     @ApiModelProperty(value = "等级")
     private Integer level;
 
+    private Boolean isFreeze;
+
     public Long getId() {
         return id;
     }
@@ -61,5 +63,13 @@ public class MerchantDTO {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public Boolean getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Boolean freeze) {
+        isFreeze = freeze;
     }
 }

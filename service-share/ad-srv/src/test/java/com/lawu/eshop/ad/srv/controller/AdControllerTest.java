@@ -1064,4 +1064,19 @@ public class AdControllerTest {
         }
 
     }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void soldOutAdByMerchantId(){
+        try {
+            RequestBuilder request = put("/ad/soldOutAdByMerchantId").param("merchantId","1");
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
 }

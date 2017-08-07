@@ -794,5 +794,6 @@ public class MerchantStoreController extends BaseController {
 		solrService.delSolrDocsById(merchantStoreId, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
 		return successDelete();
 	}
+
 }
 

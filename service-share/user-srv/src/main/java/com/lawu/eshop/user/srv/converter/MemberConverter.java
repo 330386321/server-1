@@ -118,6 +118,7 @@ public class MemberConverter {
         userDTO.setGtCid(memberBO.getGtCid());
         userDTO.setRyToken(memberBO.getRyToken());
         userDTO.setRegionName(memberBO.getRegionName());
+        userDTO.setIsFreeze(memberBO.getIsFreeze());
         return userDTO;
     }
 

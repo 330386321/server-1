@@ -3,6 +3,24 @@
  */
 package com.lawu.eshop.product.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.lawu.eshop.framework.core.page.OrderType;
@@ -22,23 +40,6 @@ import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductModelDO;
 import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
 import com.lawu.eshop.product.srv.service.ProductService;
-import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author lihj
@@ -466,5 +467,22 @@ public class ProductServiceTest {
 		product.setDetailImages("['描述111','描述222']");
 		return product;
 	}
-	
+
+	@Transactional
+	@Rollback
+	@Test
+	public void soldOutProductByMerchantId(){
+		ProductDO productDO = new ProductDO();
+		productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
+		productDO.setId(1l);
+		productDO.setMerchantId(1L);
+		productDO.setContent("test");
+		productDOMapper.insertSelective(productDO);
+		productService.soldOutProductByMerchantId(1L);
+
+		List<ProductDO> productDOS = productDOMapper.selectByExample(null);
+		Assert.assertNotNull(productDOS);
+		Assert.assertEquals(productDOS.get(0).getStatus(), ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal());
+
+	}
 }

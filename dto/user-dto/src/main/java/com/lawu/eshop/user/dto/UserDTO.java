@@ -1,10 +1,11 @@
 package com.lawu.eshop.user.dto;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.user.constants.UserSexEnum;
-import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author Leach
@@ -44,6 +45,8 @@ public class UserDTO {
 
     @ApiModelProperty(name = "level",value = "融云token")
     private String ryToken;
+
+    private Boolean isFreeze;
 
     public UserSexEnum getUserSex() {
         return userSex;
@@ -131,5 +134,13 @@ public class UserDTO {
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    public Boolean getIsFreeze() {
+        return isFreeze;
+    }
+
+    public void setIsFreeze(Boolean freeze) {
+        isFreeze = freeze;
     }
 }

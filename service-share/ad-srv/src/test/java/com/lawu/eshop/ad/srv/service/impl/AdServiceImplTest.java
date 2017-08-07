@@ -1796,4 +1796,21 @@ public class AdServiceImplTest {
         Assert.assertNotNull(list);
         Assert.assertTrue(list.size()>0);
     }
+
+	@Transactional
+	@Rollback
+	@Test
+	public void soldOutAdByMerchantId() {
+		AdDO adDO = new AdDO();
+		adDO.setId(1L);
+		adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+		adDO.setMerchantId(1L);
+		adDO.setTitle("test");
+		adDOMapper.insertSelective(adDO);
+		adService.soldOutAdByMerchantId(1L);
+
+		List<AdDO> list = adDOMapper.selectByExample(null);
+		Assert.assertNotNull(list);
+		Assert.assertTrue(list.get(0).getStatus() == AdStatusEnum.AD_STATUS_OUT.val);
+	}
 }

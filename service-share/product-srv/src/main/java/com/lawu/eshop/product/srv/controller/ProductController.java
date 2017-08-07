@@ -364,7 +364,7 @@ public class ProductController extends BaseController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "soldOutProductByMerchantId")
-    Result soldOutProductByMerchantId(@RequestParam(value = "id")  Long id){
+    public Result soldOutProductByMerchantId(@RequestParam(value = "id")  Long id){
         productService.soldOutProductByMerchantId(id);
         return successCreated();
     }

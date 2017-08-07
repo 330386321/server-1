@@ -105,29 +105,30 @@ CREATE TABLE `follow_transaction_record` (
 -- ----------------------------
 DROP TABLE IF EXISTS `member`;
 CREATE TABLE `member` (
-	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-	`num` VARCHAR(19) NULL DEFAULT NULL COMMENT '会员编号',
-	`account` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '登录账号' ,
-	`pwd` CHAR(57) NOT NULL DEFAULT '' COMMENT '登录密码' ,
-	`mobile` VARCHAR(15) NOT NULL DEFAULT '' COMMENT '手机号码' ,
-	`name` VARCHAR(50) NULL DEFAULT NULL COMMENT '姓名',
-	`nickname` VARCHAR(50) NULL DEFAULT NULL COMMENT '昵称',
-	`region_path` VARCHAR(25) NULL DEFAULT NULL COMMENT '地区路径',
-	`region_name` VARCHAR(100) NULL DEFAULT NULL COMMENT '区域名称',
-	`sex` TINYINT(2) NULL DEFAULT NULL COMMENT '性别 (0--男，2--女，1--保密)',
-	`birthday` DATE NULL DEFAULT NULL COMMENT '出生年月',
-	`headimg` VARCHAR(200) NULL DEFAULT NULL COMMENT '头像',
-	`status` TINYINT(2) NOT NULL COMMENT '状态 (0--无效，1--有效)',
-	`inviter_id` BIGINT(20) NULL DEFAULT NULL COMMENT '邀请者ID',
-	`inviter_type` TINYINT(2) NULL DEFAULT NULL COMMENT '邀请者类型 (0--无推荐，1--会员，2--商户)',
-	`level` INT(3) NULL DEFAULT NULL COMMENT '等级',
-	`gt_cid` VARCHAR(100) NULL DEFAULT NULL COMMENT '个推CID',
-	`ry_token` VARCHAR(200) NULL DEFAULT NULL COMMENT '融云token',
-	`gmt_modified` DATETIME NULL DEFAULT NULL COMMENT '修改时间',
-	`gmt_create` DATETIME NOT NULL COMMENT '创建时间',
-	`property_id` BIGINT(20) NULL DEFAULT NULL,
-	PRIMARY KEY (`id`)
-);
+	`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `num` varchar(19) DEFAULT NULL COMMENT '会员编号',
+  `account` varchar(20) NOT NULL DEFAULT '' COMMENT '登录账号',
+  `pwd` char(57)  NOT NULL DEFAULT '' COMMENT '登录密码',
+  `mobile` varchar(15) NOT NULL DEFAULT '' COMMENT '手机号码',
+  `name` varchar(50) DEFAULT NULL COMMENT '姓名',
+  `nickname` varchar(50) DEFAULT NULL COMMENT '昵称',
+  `region_path` varchar(25) DEFAULT NULL COMMENT '地区路径',
+  `region_name` varchar(100) DEFAULT NULL COMMENT '区域名称',
+  `sex` tinyint(2) DEFAULT NULL COMMENT '性别 (0--男，2--女，1--保密)',
+  `birthday` date DEFAULT NULL COMMENT '出生年月',
+  `headimg` varchar(200) DEFAULT NULL COMMENT '头像',
+  `status` tinyint(2) NOT NULL COMMENT '状态 (0--无效，1--有效)',
+  `is_freeze` tinyint(1) DEFAULT '0' COMMENT '是否冻结（0：未冻结 1：冻结）',
+  `inviter_id` bigint(20) DEFAULT NULL COMMENT '邀请者ID',
+  `inviter_type` tinyint(2) DEFAULT NULL COMMENT '邀请者类型 (0--无推荐，1--会员，2--商户)',
+  `level` int(3) DEFAULT NULL COMMENT '等级',
+  `gt_cid` varchar(100) DEFAULT NULL COMMENT '个推CID',
+  `ry_token` varchar(200) DEFAULT NULL COMMENT '融云token',
+  `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
+  `property_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ;
 
 -- ----------------------------
 -- Table structure for member_profile
@@ -151,23 +152,24 @@ CREATE TABLE `member_profile` (
 -- ----------------------------
 DROP TABLE IF EXISTS `merchant`;
 CREATE TABLE `merchant` (
-	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-	`num` VARCHAR(19) NULL DEFAULT '' COMMENT '商家编号',
-	`account` VARCHAR(20) NOT NULL DEFAULT '' COMMENT '账号',
-	`pwd` CHAR(57) NOT NULL COMMENT '登录密码',
-	`mobile` VARCHAR(15) NOT NULL DEFAULT '' COMMENT '手机号码',
-	`headimg` VARCHAR(200) NULL DEFAULT NULL COMMENT '头像',
-	`status` TINYINT(2) NOT NULL COMMENT '状态 (0--无效，1--有效)',
-	`inviter_id` BIGINT(20) NULL DEFAULT NULL COMMENT '邀请者ID',
-	`inviter_type` TINYINT(2) NULL DEFAULT NULL COMMENT '邀请者类型 (1--会员，2--商户)',
-	`level` INT(3) NULL DEFAULT NULL COMMENT '等级',
-	`gt_cid` VARCHAR(100) NULL DEFAULT NULL COMMENT '个推CID',
-	`ry_token` VARCHAR(200) NULL DEFAULT NULL COMMENT '融云token',
-	`gmt_modified` DATETIME NULL DEFAULT NULL COMMENT '修改时间',
-	`gmt_create` DATETIME NULL DEFAULT NULL COMMENT '创建时间',
-	`property_id` BIGINT(20) NULL DEFAULT NULL,
-	PRIMARY KEY (`id`)
-);
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `num` varchar(19) DEFAULT '' COMMENT '商家编号',
+  `account` varchar(20) NOT NULL DEFAULT '' COMMENT '账号',
+  `pwd` char(57) NOT NULL COMMENT '登录密码',
+  `mobile` varchar(15) NOT NULL DEFAULT '' COMMENT '手机号码',
+  `headimg` varchar(200) DEFAULT NULL COMMENT '头像',
+  `status` tinyint(2) NOT NULL COMMENT '状态 (0--无效，1--有效)',
+  `is_freeze` tinyint(1) DEFAULT '0' COMMENT '是否冻结（0：未冻结 1：冻结）',
+  `inviter_id` bigint(20) DEFAULT NULL COMMENT '邀请者ID',
+  `inviter_type` tinyint(2) DEFAULT NULL COMMENT '邀请者类型 (1--会员，2--商户)',
+  `level` int(3) DEFAULT NULL COMMENT '等级',
+  `gt_cid` varchar(100) DEFAULT NULL COMMENT '个推CID',
+  `ry_token` varchar(200) DEFAULT NULL COMMENT '融云token',
+  `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
+  `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
+  `property_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ;
 
 -- ----------------------------
 -- Table structure for merchant_profile

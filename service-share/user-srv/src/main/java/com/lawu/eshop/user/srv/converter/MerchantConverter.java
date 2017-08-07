@@ -67,6 +67,7 @@ public class MerchantConverter {
         merchantDTO.setNum(merchantBO.getNum());
         merchantDTO.setHeadimg(merchantBO.getHeadimg());
         merchantDTO.setLevel(merchantBO.getLevel());
+        merchantDTO.setIsFreeze(merchantBO.getIsFreeze());
         return merchantDTO;
     }
     

@@ -1,5 +1,9 @@
 package com.lawu.eshop.operator.api.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +18,13 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.annotation.PageBody;
+import com.lawu.eshop.mall.constants.MerchantFavoredTypeEnum;
+import com.lawu.eshop.mall.dto.DiscountPackageQueryDTO;
+import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
 import com.lawu.eshop.operator.api.service.AdService;
+import com.lawu.eshop.operator.api.service.DiscountPackageService;
 import com.lawu.eshop.operator.api.service.MemberService;
+import com.lawu.eshop.operator.api.service.MerchantFavoredService;
 import com.lawu.eshop.operator.api.service.MerchantService;
 import com.lawu.eshop.operator.api.service.MerchantStoreService;
 import com.lawu.eshop.operator.api.service.ProductService;
@@ -23,10 +32,13 @@ import com.lawu.eshop.operator.api.service.TokenService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantStoreProfileDTO;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.AccountFreezeParam;
 import com.lawu.eshop.user.param.AccountParam;
+import com.lawu.eshop.user.param.StoreIndexParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -60,6 +72,12 @@ public class MemberController extends BaseController{
     @Autowired
     private AdService adService;
 
+    @Autowired
+    private MerchantFavoredService merchantFavoredService;
+
+    @Autowired
+    private DiscountPackageService discountPackageService;
+
     @ApiOperation(value = "根据会员账号查询会员信息", notes = "根据会员账号查询会员信息。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     //@RequiresPermissions("index:store")
@@ -85,13 +103,24 @@ public class MemberController extends BaseController{
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "freezeAccount", method = RequestMethod.PUT)
     public Result freezeAccount(@ModelAttribute AccountFreezeParam param){
+
         if (param.getNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+            //查询用户冻结状态
+            Result<UserDTO> user = memberService.getMemberByNum(param.getNum());
+            if (user.getModel() != null && user.getModel().getIsFreeze().equals(param.getNum())) {
+                return successCreated(ResultCode.FAIL);
+            }
             //修改用户冻结状态
-            memberService.freezeAccount(param.getNum(),param.getFreeze());
-            if(param.getFreeze()){//冻结
+            memberService.freezeAccount(param.getNum(), param.getFreeze());
+            if (param.getFreeze()) {//冻结
                 tokenService.delMemberRelationshipByAccount(param.getAccount());//删除token
             }
             return successCreated();
+        }
+        //查询商家冻结状态
+        Result<MerchantDTO> merchant = merchantService.getMerchantByNum(param.getNum());
+        if (merchant.getModel() != null && merchant.getModel().getIsFreeze().equals(param.getFreeze())) {
+            return successCreated(ResultCode.FAIL);
         }
         //冻结商家
         merchantService.freezeAccount(param.getNum(),param.getFreeze());
@@ -124,9 +153,44 @@ public class MemberController extends BaseController{
             tokenService.delMerchantRelationshipByAccount(param.getAccount());//删除token
         }else{
             //解冻
-            //TODO 添加solr门店信息
+            // 添加solr门店信息
+
+            Result<MerchantFavoredDTO> favoredDTOResult;
+            Result<Page<DiscountPackageQueryDTO>> discountResult;
+            List<StoreIndexParam> indexParamList = new ArrayList<>();
+            StoreIndexParam storeIndexParam = new StoreIndexParam();
+            favoredDTOResult = merchantFavoredService.findFavoredByMerchantId(param.getId());
+            String favoredInfo = "";
+            double discountOrdinal = 100;
+            if (isSuccess(favoredDTOResult)) {
+                if (MerchantFavoredTypeEnum.TYPE_FULL.equals(favoredDTOResult.getModel().getTypeEnum())) {
+                    favoredInfo = "买单每满" + favoredDTOResult.getModel().getReachAmount() + "减" + favoredDTOResult.getModel().getFavoredAmount() + "元";
+                    discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                } else if (MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.equals(favoredDTOResult.getModel().getTypeEnum())) {
+                    favoredInfo = "买单满" + favoredDTOResult.getModel().getReachAmount() + "减" + favoredDTOResult.getModel().getFavoredAmount() + "元";
+                    discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                } else if (MerchantFavoredTypeEnum.TYPE_DISCOUNT.equals(favoredDTOResult.getModel().getTypeEnum())) {
+                    favoredInfo = "买单" + favoredDTOResult.getModel().getDiscountRate() + "折";
+                    discountOrdinal = favoredDTOResult.getModel().getDiscountRate().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                }
+            }
+
+            //查询商家优惠套餐
+            discountResult = discountPackageService.listForMember(param.getId());
+            String discountPackage = "";
+            if (isSuccess(discountResult) && !discountResult.getModel().getRecords().isEmpty()) {
+                discountPackage = discountResult.getModel().getRecords().get(0).getName();
+            }
+
+            storeIndexParam.setMerchantStoreId(result.getModel().getMerchantStoreId());
+            storeIndexParam.setFavoreInfo(favoredInfo);
+            storeIndexParam.setDiscountPackage(discountPackage);
+            storeIndexParam.setDiscountOrdinal(discountOrdinal);
+            indexParamList.add(storeIndexParam);
+            
+            merchantStoreService.rebuildStoreIndex(indexParamList);
         }
-        return successGet();
+        return successCreated();
 
     }
 

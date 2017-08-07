@@ -3,18 +3,13 @@
  */
 package com.lawu.eshop.product.srv.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.framework.core.page.OrderType;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.product.constant.ProductSortFieldEnum;
-import com.lawu.eshop.product.constant.ProductStatusEnum;
-import com.lawu.eshop.product.param.EditProductDataParam;
-import com.lawu.eshop.product.param.ListProductParam;
-import com.lawu.eshop.product.param.ProductParam;
-import com.lawu.eshop.product.query.ProductDataQuery;
-import com.lawu.eshop.product.srv.ProductSrvApplicationTest;
-import com.lawu.eshop.product.srv.domain.ProductModelDO;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
@@ -35,12 +30,18 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.framework.core.page.OrderType;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.product.constant.ProductSortFieldEnum;
+import com.lawu.eshop.product.constant.ProductStatusEnum;
+import com.lawu.eshop.product.param.EditProductDataParam;
+import com.lawu.eshop.product.param.ListProductParam;
+import com.lawu.eshop.product.param.ProductParam;
+import com.lawu.eshop.product.query.ProductDataQuery;
+import com.lawu.eshop.product.srv.ProductSrvApplicationTest;
+import com.lawu.eshop.product.srv.domain.ProductModelDO;
 
 /**
  * @author lihj
@@ -626,6 +627,21 @@ public class ProductControllerTest {
 		product.setProductImages("www.163.com");
 		product.setDetailImages("['描述111','描述222']");
 		return product;
+	}
+
+	@Transactional
+	@Rollback
+	@Test
+	public void soldOutProductByMerchantId(){
+		RequestBuilder request = put("/product/soldOutProductByMerchantId").param("id","1");
+		try {
+			ResultActions perform = mvc.perform(request);
+			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+			Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
 	}
 
 }

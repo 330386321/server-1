@@ -694,6 +694,7 @@ public class MerchantStoreInfoServiceImplTest {
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
         merchantDO.setStatus(DataTransUtil.intToByte(1));
+        merchantDO.setIsFreeze(false);
         merchantDO.setGmtCreate(new Date());
         merchantDOMapper.insertSelective(merchantDO);
 

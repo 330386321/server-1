@@ -1,8 +1,25 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.core.type.UserType;
+import com.lawu.eshop.user.constants.StatusEnum;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserTypeEnum;
+import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
@@ -22,18 +39,6 @@ import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.RandomUtil;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -608,4 +613,45 @@ public class MemberServiceImplTest {
         Assert.assertEquals(2, result);
     }
 
+    @Transactional
+    @Rollback
+    @Test
+    public void getAccountList(){
+        MemberDO memberDO = new MemberDO();
+        memberDO.setId(1L);
+        memberDO.setStatus(StatusEnum.VALID.getValue());
+        memberDO.setAccount("123456");
+        memberDO.setIsFreeze(false);
+        memberDO.setNum("123");
+        memberDO.setGmtCreate(new Date());
+        memberDOMapper.insertSelective(memberDO);
+
+        AccountParam param = new AccountParam();
+        param.setCurrentPage(1);
+        param.setPageSize(10);
+        param.setAccount("123456");
+        param.setUserType(UserType.MEMBER);
+
+        Page<MemberBO> page = memberService.getAccountList(param);
+
+        Assert.assertEquals(1, page.getRecords().size());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void freezeAccount(){
+        MemberDO memberDO = new MemberDO();
+        memberDO.setId(1L);
+        memberDO.setStatus(StatusEnum.VALID.getValue());
+        memberDO.setAccount("123456");
+        memberDO.setIsFreeze(false);
+        memberDO.setNum("123");
+        memberDO.setGmtCreate(new Date());
+        memberDOMapper.insertSelective(memberDO);
+        memberService.freezeAccount("123",true);
+        List<MemberDO> list = memberDOMapper.selectByExample(null);
+        Assert.assertEquals(1, list.size());
+        Assert.assertEquals(true, list.get(0).getIsFreeze());
+    }
 }
