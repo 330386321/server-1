@@ -355,8 +355,12 @@ public class MerchantStoreServiceImplTest {
     @Rollback
     @Test
     public void merchantStoreIsExist() {
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setIsFreeze(false);
+        merchantDO.setStatus(StatusEnum.VALID.getValue());
+        merchantDOMapper.insertSelective(merchantDO);
         MerchantStoreDO storeDO = new MerchantStoreDO();
-        storeDO.setMerchantId(200L);
+        storeDO.setMerchantId(merchantDO.getId());
         storeDO.setName("测试店铺");
         storeDO.setRegionPath("44/4403/440303");
         storeDO.setRegionName("广东省深圳市南山区");
