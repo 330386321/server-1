@@ -293,8 +293,8 @@ public class AdController extends BaseController {
 			return successCreated(resultUser.getRet());
 		}
 		List<MemberDTO> listUser=resultUser.getModel();
-		for (MemberDTO memberDTO : listUser) {
-			for (PointPoolDTO pointPoolDTO : top3) {
+		for (PointPoolDTO pointPoolDTO : top3) {
+			for (MemberDTO memberDTO : listUser) {
 				if(memberDTO.getId().intValue()==pointPoolDTO.getMemberId().intValue()){
 					UserTopDTO userTop = new UserTopDTO();
 					userTop.setMoney(pointPoolDTO.getPoint());
