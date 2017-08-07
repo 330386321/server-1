@@ -6,6 +6,7 @@
 		parameterType="com.lawu.eshop.property.srv.domain.extend.FreezeDOView">
 		update freeze set
 		money = money - #{money,jdbcType=DECIMAL},
+		previous_money = #{previousMoney,jdbcType=DECIMAL},
 		gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
 		where id = #{id,jdbcType=BIGINT}
 	</update>

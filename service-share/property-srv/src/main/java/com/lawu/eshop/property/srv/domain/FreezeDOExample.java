@@ -386,6 +386,66 @@ public class FreezeDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andPreviousMoneyIsNull() {
+            addCriterion("previous_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousMoneyIsNotNull() {
+            addCriterion("previous_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousMoneyEqualTo(BigDecimal value) {
+            addCriterion("previous_money =", value, "previousMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("previous_money <>", value, "previousMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousMoneyGreaterThan(BigDecimal value) {
+            addCriterion("previous_money >", value, "previousMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("previous_money >=", value, "previousMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousMoneyLessThan(BigDecimal value) {
+            addCriterion("previous_money <", value, "previousMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("previous_money <=", value, "previousMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousMoneyIn(List<BigDecimal> values) {
+            addCriterion("previous_money in", values, "previousMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("previous_money not in", values, "previousMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("previous_money between", value1, value2, "previousMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("previous_money not between", value1, value2, "previousMoney");
+            return (Criteria) this;
+        }
+
         public Criteria andOriginalMoneyIsNull() {
             addCriterion("original_money is null");
             return (Criteria) this;
@@ -503,6 +563,66 @@ public class FreezeDOExample {
 
         public Criteria andFundTypeNotBetween(Byte value1, Byte value2) {
             addCriterion("fund_type not between", value1, value2, "fundType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundBizTypeIsNull() {
+            addCriterion("fund_biz_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundBizTypeIsNotNull() {
+            addCriterion("fund_biz_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundBizTypeEqualTo(Byte value) {
+            addCriterion("fund_biz_type =", value, "fundBizType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundBizTypeNotEqualTo(Byte value) {
+            addCriterion("fund_biz_type <>", value, "fundBizType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundBizTypeGreaterThan(Byte value) {
+            addCriterion("fund_biz_type >", value, "fundBizType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundBizTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("fund_biz_type >=", value, "fundBizType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundBizTypeLessThan(Byte value) {
+            addCriterion("fund_biz_type <", value, "fundBizType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundBizTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("fund_biz_type <=", value, "fundBizType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundBizTypeIn(List<Byte> values) {
+            addCriterion("fund_biz_type in", values, "fundBizType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundBizTypeNotIn(List<Byte> values) {
+            addCriterion("fund_biz_type not in", values, "fundBizType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundBizTypeBetween(Byte value1, Byte value2) {
+            addCriterion("fund_biz_type between", value1, value2, "fundBizType");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundBizTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("fund_biz_type not between", value1, value2, "fundBizType");
             return (Criteria) this;
         }
 

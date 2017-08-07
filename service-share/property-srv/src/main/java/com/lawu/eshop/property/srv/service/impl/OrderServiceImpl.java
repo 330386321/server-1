@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.constants.FreezeBizTypeEnum;
+import com.lawu.eshop.property.srv.domain.PropertyDOExample;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +71,6 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private PropertyService propertyService;
 	@Autowired
-	private FreezeDOMapperExtend freezeDOMapperExtend;
-	@Autowired
 	private TransactionDetailDOMapper transactionDetailDOMapper;
 
 	@Autowired
@@ -80,6 +83,9 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	@Qualifier("shoppingOrderPaymentTransactionMainServiceImpl")
 	private TransactionMainService<Reply> shoppingOrderPaymentTransactionMainServiceImpl;
+
+	@Autowired
+	private PropertyInfoDOMapper propertyInfoDOMapper;
 
 	/**
 	 * 商品订单第三方付款后回调处理：新增会员交易记录，<更新订单状态>
@@ -183,17 +189,27 @@ public class OrderServiceImpl implements OrderService {
 		if (count > 0) {
 			return ResultCode.SUCCESS;
 		}
+
+		PropertyInfoDOExample propertyDOExample = new PropertyInfoDOExample();
+		propertyDOExample.createCriteria().andUserNumEqualTo(param.getUserNum());
+		List<PropertyInfoDO> propertyInfoList = propertyInfoDOMapper.selectByExample(propertyDOExample);
+		if(propertyInfoList == null || propertyInfoList.isEmpty()){
+			return ResultCode.PROPERTY_INFO_NULL;
+		}
+
 		FreezeDO freezeDO = new FreezeDO();
 		freezeDO.setUserNum(param.getUserNum());
 		freezeDO.setMoney(new BigDecimal(param.getTotalOrderMoney()));
 		freezeDO.setOriginalMoney(new BigDecimal(param.getTotalOrderMoney()));
 		freezeDO.setFundType(FreezeTypeEnum.PRODUCT_ORDER.getVal());
+		freezeDO.setFundBizType(FreezeBizTypeEnum.PRODUCT_ORDER_COMFIRM_DELIVERY.getVal());
 		freezeDO.setBizId(Long.valueOf(param.getBizId()));
 		freezeDO.setStatus(FreezeStatusEnum.FREEZE.getVal());
 		freezeDO.setGmtCreate(new Date());
 		String days = propertyService.getValue(PropertyType.PRODUCT_ORDER_MONEY_FREEZE_DAYS);
 		freezeDO.setDays(Integer.valueOf(days));
 		freezeDO.setOrderNum(param.getOrderNum());
+		freezeDO.setPreviousMoney(propertyInfoList.get(0).getFreezeMoney());
 		freezeDOMapper.insertSelective(freezeDO);
 
 		PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
@@ -215,37 +231,56 @@ public class OrderServiceImpl implements OrderService {
 		// 第三方支付：处理商家冻结资金，新增会员交易订单退款交易记录，原路退回会员支付账户
 		// <异步通知修改订单状态>
 		if (OrderRefundStatusEnum.FINISH.getVal().equals(param.getOrderRefundStatusEnum().getVal())) {
+			PropertyInfoDOExample propertyDOExample = new PropertyInfoDOExample();
+			propertyDOExample.createCriteria().andUserNumEqualTo(param.getUserNum());
+			List<PropertyInfoDO> propertyInfoList = propertyInfoDOMapper.selectByExample(propertyDOExample);
+			if(propertyInfoList == null || propertyInfoList.isEmpty()){
+				return ResultCode.PROPERTY_INFO_NULL;
+			}
+
 			FreezeDOExample example = new FreezeDOExample();
-			if (param.isLast()) {
-				FreezeDO freezeDO = new FreezeDO();
-				freezeDO.setMoney(new BigDecimal("0"));
-				freezeDO.setStatus(FreezeStatusEnum.RELEASE.getVal());
-				freezeDO.setGmtModified(new Date());
-				example.createCriteria().andUserNumEqualTo(param.getUserNum())
-						.andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.getVal())
-						.andBizIdEqualTo(Long.valueOf(param.getOrderId()))
-						.andStatusEqualTo(FreezeStatusEnum.FREEZE.getVal());
-				freezeDOMapper.updateByExampleSelective(freezeDO, example);
+			example.createCriteria().andUserNumEqualTo(param.getUserNum()).andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.getVal()).andBizIdEqualTo(Long.valueOf(param.getOrderId()));
+			example.setOrderByClause(" id desc ");
+			List<FreezeDO> freezeDOS = freezeDOMapper.selectByExample(example);
+			if (freezeDOS == null || freezeDOS.isEmpty()) {
+				return ResultCode.FREEZE_NULL;
 			} else {
-				// 校验退款金额不能大于冻结金额
-				example.createCriteria().andUserNumEqualTo(param.getUserNum()).andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.getVal()).andBizIdEqualTo(Long.valueOf(param.getOrderId()));
-				List<FreezeDO> freezeDOS = freezeDOMapper.selectByExample(example);
-				if (freezeDOS == null || freezeDOS.isEmpty()) {
-					return ResultCode.FREEZE_NULL;
-				} else if (freezeDOS.size() > 1) {
-					return ResultCode.FREEZE_ROWS_OUT;
-				} else {
-					FreezeDO freeze = freezeDOS.get(0);
-					if (freeze.getMoney().compareTo(new BigDecimal(param.getRefundMoney())) < 0) {
-						return ResultCode.FREEZE_MONEY_LESS_REFUND_MONEY;
-					}
-					Long freezeId = freeze.getId();
-					FreezeDOView freezeDoView = new FreezeDOView();
-					freezeDoView.setId(freezeId);
-					freezeDoView.setMoney(new BigDecimal(param.getRefundMoney()));
-					freezeDoView.setGmtModified(new Date());
-					freezeDOMapperExtend.updateMinusMoney(freezeDoView);
+				FreezeDO freeze = freezeDOS.get(0);
+				if (freeze.getMoney().compareTo(new BigDecimal(param.getRefundMoney())) < 0) {
+					return ResultCode.FREEZE_MONEY_LESS_REFUND_MONEY;
 				}
+
+				//释放历史冻结资金
+				FreezeDO freezeDORelease = new FreezeDO();
+				freezeDORelease.setStatus(FreezeStatusEnum.RELEASE.getVal());
+				freezeDORelease.setGmtModified(new Date());
+				FreezeDOExample exampleRelease = new FreezeDOExample();
+				exampleRelease.createCriteria().andUserNumEqualTo(param.getUserNum()).andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.getVal()).andBizIdEqualTo(Long.valueOf(param.getOrderId()));
+				freezeDOMapper.updateByExampleSelective(freezeDORelease,exampleRelease);
+
+				FreezeDO freezeDO = new FreezeDO();
+				if (param.isLast()) {
+					freezeDO.setMoney(new BigDecimal("0"));
+					freezeDO.setStatus(FreezeStatusEnum.RELEASE.getVal());
+				} else {
+					BigDecimal money = freeze.getMoney().subtract(new BigDecimal(param.getRefundMoney()));
+					freezeDO.setMoney(money);
+					if(money.compareTo(BigDecimal.ZERO) == 0 || money.compareTo(BigDecimal.ZERO) == -1){
+						freezeDO.setStatus(FreezeStatusEnum.RELEASE.getVal());
+					}else{
+						freezeDO.setStatus(FreezeStatusEnum.FREEZE.getVal());
+					}
+				}
+				freezeDO.setUserNum(param.getUserNum());
+				freezeDO.setOriginalMoney(freeze.getOriginalMoney());
+				freezeDO.setFundType(FreezeTypeEnum.PRODUCT_ORDER.getVal());
+				freezeDO.setFundBizType(FreezeBizTypeEnum.PRODUCT_ORDER_MERCHANT_DOREFUND.getVal());
+				freezeDO.setBizId(freeze.getBizId());
+				freezeDO.setGmtCreate(new Date());
+				freezeDO.setDays(freeze.getDays());
+				freezeDO.setOrderNum(freeze.getOrderNum());
+				freezeDO.setPreviousMoney(propertyInfoList.get(0).getFreezeMoney());
+				freezeDOMapper.insertSelective(freezeDO);
 			}
 
 			PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
@@ -347,6 +382,7 @@ public class OrderServiceImpl implements OrderService {
 			example.clear();
 			example.createCriteria().andUserNumEqualTo(userNums[i]).andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.getVal())
 					.andBizIdEqualTo(Long.valueOf(orderIds[i])).andStatusEqualTo(FreezeStatusEnum.FREEZE.getVal());
+			example.setOrderByClause(" id desc ");
 			List<FreezeDO> freezeDOS = freezeDOMapper.selectByExample(example);
 			if (freezeDOS != null && !freezeDOS.isEmpty() && freezeDOS.size() == 1) {
 				FreezeDO freeze = freezeDOS.get(0);
@@ -368,6 +404,7 @@ public class OrderServiceImpl implements OrderService {
 				freezeDO.setId(freezeId);
 				freezeDO.setStatus(FreezeStatusEnum.RELEASE.getVal());
 				freezeDO.setGmtModified(new Date());
+				freezeDO.setRemark("Release by Timed task!");
 				freezeDOMapper.updateByPrimaryKeySelective(freezeDO);
 				
 				// 加商家财产余额，减冻结资金

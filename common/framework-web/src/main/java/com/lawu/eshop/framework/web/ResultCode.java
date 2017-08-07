@@ -142,7 +142,7 @@ public class ResultCode {
 
     public static final int CASH_BACKAGE_FAILURE_REASON_NULL = 6012;
     public static final int FREEZE_NULL = 6013;
-    public static final int FREEZE_ROWS_OUT = 6014;
+//    public static final int FREEZE_ROWS_OUT = 6014;
     public static final int FREEZE_MONEY_LESS_REFUND_MONEY = 6015;
     public static final int DEPOSIT_IN_SYSTEM_DAYS = 6016;
     public static final int DEPOSIT_EXIST_ING_ORDER = 6017;
@@ -329,7 +329,7 @@ public class ResultCode {
         ResultCode.messageMap.put(CASH_BACKAGE_FAILURE_REASON_NULL, "操作失败时原因不能为空");
         ResultCode.messageMap.put(BIZ_TYPE_NULL, "业务类型不能为空");
         ResultCode.messageMap.put(FREEZE_NULL, "冻结资金记录为空");
-        ResultCode.messageMap.put(FREEZE_ROWS_OUT, "冻结资金记录条数已大于1");
+//        ResultCode.messageMap.put(FREEZE_ROWS_OUT, "冻结资金记录条数已大于1");
         ResultCode.messageMap.put(FREEZE_MONEY_LESS_REFUND_MONEY, "冻结金额不能小于退款金额");
         ResultCode.messageMap.put(DEPOSIT_IN_SYSTEM_DAYS, "不满足申请退保证金要求(保证金核实后90天)");
         ResultCode.messageMap.put(DEPOSIT_EXIST_ING_ORDER, "有未完成订单，完成后才可申请。");
