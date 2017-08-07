@@ -23,7 +23,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
-@ComponentScan(basePackages = {"com.lawu.eshop.operator.api.controller"})
+@ComponentScan(basePackages = {"com.lawu.eshop.agent.api.controller"})
 public class SwaggerConfig {
 	
 	@Value(value="${swagger.api.audit}")
