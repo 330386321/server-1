@@ -1,5 +1,19 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocumentList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -12,15 +26,6 @@ import com.lawu.eshop.user.param.DiscountStoreParam;
 import com.lawu.eshop.user.param.StoreSolrParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocumentList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -50,7 +55,7 @@ public class StoreSolrController extends BaseController {
         StringBuilder sb = new StringBuilder("regionPath_s:");
         sb.append(storeSolrParam.getRegionPath()).append("*");
         if (StringUtils.isNotEmpty(storeSolrParam.getName())) {
-            sb.append(" AND name_s:*").append(storeSolrParam.getName()).append("*");
+            sb.append(" AND text:").append(storeSolrParam.getName());
         }
         if (StringUtils.isNotEmpty(storeSolrParam.getIndustryPath())) {
             sb.append(" AND industryPath_s:").append(storeSolrParam.getIndustryPath()).append("*");
