@@ -663,6 +663,7 @@ public class AdConverter {
 		dto.setMerchantStoreId(adBO.getMerchantStoreId());
 		dto.setIsFavorite(adBO.getIsFavorite());
 		dto.setIsPraise(adBO.getIsPraise());
+		dto.setCount(adBO.getNumber());
 		Date date=new Date();
 		if(adBO.getStatusEnum().val==2){ //结束倒计时
 			Long time=adBO.getBeginTime().getTime()+ (20*60*1000)-date.getTime();
