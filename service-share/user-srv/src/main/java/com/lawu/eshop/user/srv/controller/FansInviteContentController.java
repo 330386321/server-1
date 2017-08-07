@@ -11,7 +11,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.constants.FansInviteResultEnum;
 import com.lawu.eshop.user.dto.FansInviteContentDTO;
-import com.lawu.eshop.user.param.FansInviteContentParam;
+import com.lawu.eshop.user.param.FansInviteContentExtendParam;
 import com.lawu.eshop.user.srv.bo.FansInviteContentBO;
 import com.lawu.eshop.user.srv.converter.FansInviteContentConverter;
 import com.lawu.eshop.user.srv.service.FansInviteContentService;
@@ -34,7 +34,7 @@ public class FansInviteContentController extends BaseController {
 	 */
     @SuppressWarnings("rawtypes")
 	@RequestMapping(value = "saveInviteContentService", method = RequestMethod.POST)
-    public Result listInviteFans(@RequestBody FansInviteContentParam param) {
+    public Result listInviteFans(@RequestBody FansInviteContentExtendParam param) {
     	Long i = fansInviteContentService.saveInviteContentService(param);
 		return successCreated((Object)i);
     }

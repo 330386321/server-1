@@ -45,6 +45,7 @@ CREATE TABLE `fans_merchant` (
 	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
 	`merchant_id` BIGINT(20) UNSIGNED NOT NULL COMMENT '商家',
 	`member_id` BIGINT(20) UNSIGNED NOT NULL COMMENT '会员',
+	`status` TINYINT(2) NOT NULL DEFAULT '1' COMMENT '粉丝状态: 0--邀请了未成为粉丝, 1--成为粉丝',
 	`gmt_create` DATETIME NOT NULL COMMENT '创建日期',
 	`channel` TINYINT(3) NOT NULL COMMENT '成为粉丝的途径(1-注册|2-邀请|3-买单消费|4-订单消费|5-抢红包|6-关注)',
 	PRIMARY KEY (`id`)

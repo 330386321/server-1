@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -45,6 +46,7 @@ public class FansMerchantServiceImplTest {
     @Autowired
     private MemberDOMapper memberDOMapper;
     
+    @Autowired
     private FansInviteResultDOMapper fansInviteResultDOMapper;
 
     @Transactional
@@ -119,6 +121,7 @@ public class FansMerchantServiceImplTest {
         FansMerchantDO fansMerchantDO = new FansMerchantDO();
         fansMerchantDO.setMerchantId(200L);
         fansMerchantDO.setMemberId(memberDO.getId());
+        fansMerchantDO.setStatus((byte)1);
         fansMerchantDOMapper.insertSelective(fansMerchantDO);
 
         ListFansParam param = new ListFansParam();
@@ -135,7 +138,6 @@ public class FansMerchantServiceImplTest {
         fansMerchantDO.setMerchantId(200L);
         fansMerchantDO.setMemberId(100L);
         fansMerchantDOMapper.insertSelective(fansMerchantDO);
-
         FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchant(100L, 200L);
         Assert.assertNotNull(fansMerchantBO);
     }

@@ -91,7 +91,7 @@
 		select
 		mem.account,mem.region_path,mem.region_name,mem.nickname,mem.headimg,mem.level,fm.gmt_create
 		from fans_merchant fm inner join member mem on fm.member_id = mem.id
-		where fm.merchant_id = #{merchantId,jdbcType=BIGINT}
+		where fm.merchant_id = #{merchantId,jdbcType=BIGINT} and fm.`status` = 1 
 		<if test="regionPath != null and regionPath != ''">
 			and mem.region_path like
 			CONCAT(#{regionPath,jdbcType=VARCHAR},'%')
@@ -107,7 +107,7 @@
 		from fans_merchant fm inner join member mem on
 		fm.member_id = mem.id
 		where fm.merchant_id =
-		#{merchantId,jdbcType=BIGINT}
+		#{merchantId,jdbcType=BIGINT} and fm.`status` = 1 
 		<if test="regionPath != null and regionPath != ''">
 			and mem.region_path like
 			CONCAT(#{regionPath,jdbcType=VARCHAR},'%')

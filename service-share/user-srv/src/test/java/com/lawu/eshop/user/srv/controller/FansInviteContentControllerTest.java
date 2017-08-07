@@ -25,8 +25,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gexin.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.user.param.FansInviteContentParam;
+import com.lawu.eshop.user.param.FansInviteContentExtendParam;
 import com.lawu.eshop.user.srv.UserSrvApplicationTest;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
+import com.lawu.eshop.utils.DataTransUtil;
+import com.lawu.eshop.utils.PwdUtil;
 
 /**
  * @author hongqm
@@ -42,6 +46,9 @@ public class FansInviteContentControllerTest {
     @Autowired
     private FansInviteContentController fansInviteContentController;
 
+    @Autowired
+    private MemberDOMapper memberDOMapper;
+    
     @Before
     public void setUp() throws Exception {
         mvc = MockMvcBuilders.standaloneSetup(fansInviteContentController).build();
@@ -51,7 +58,24 @@ public class FansInviteContentControllerTest {
     @Rollback
     @Test
     public void saveInviteContentService() {
-    	FansInviteContentParam fansInviteContentParam = new FansInviteContentParam();
+    	MemberDO memberDO = new MemberDO();
+		memberDO.setNum("1");
+        memberDO.setAccount("13666666666");
+        memberDO.setPwd(PwdUtil.generate("123456"));
+        memberDO.setMobile("13666666666");
+        memberDO.setStatus(DataTransUtil.intToByte(1));
+        memberDO.setGmtCreate(new Date());
+		memberDOMapper.insertSelective(memberDO);
+		
+		memberDO.setNum("2");
+        memberDO.setAccount("13666666667");
+        memberDO.setPwd(PwdUtil.generate("123456"));
+        memberDO.setMobile("13666666667");
+        memberDO.setStatus(DataTransUtil.intToByte(1));
+        memberDO.setGmtCreate(new Date());
+        memberDOMapper.insertSelective(memberDO);
+    	
+    	FansInviteContentExtendParam fansInviteContentParam = new FansInviteContentExtendParam();
     	fansInviteContentParam.setFansInviteDetailId(1L);
     	fansInviteContentParam.setGmtCreate(new Date());
     	fansInviteContentParam.setGmtModified(new Date());
@@ -62,6 +86,7 @@ public class FansInviteContentControllerTest {
     	fansInviteContentParam.setMerchantStoreIntro("intro");
     	fansInviteContentParam.setMerchantStoreName("storeName");
     	fansInviteContentParam.setUrl("url");
+    	fansInviteContentParam.setNums("1,2");
     	String str = JSONObject.toJSONString(fansInviteContentParam);
         RequestBuilder request = post("/fansInviteContent/saveInviteContentService").contentType(MediaType.APPLICATION_JSON).content(str);
         try {

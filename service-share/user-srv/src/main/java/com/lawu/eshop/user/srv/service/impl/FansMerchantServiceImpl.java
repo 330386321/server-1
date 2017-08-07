@@ -98,7 +98,7 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     @Override
     public FansMerchantBO getFansMerchant(Long memberId, Long merchantId) {
         FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
-        fansMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantId);
+        fansMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantId).andStatusEqualTo((byte)1);
         List<FansMerchantDO> fansMerchantDOS = fansMerchantDOMapper.selectByExample(fansMerchantDOExample);
         return fansMerchantDOS.isEmpty() ? null : FansMerchantConverter.convertBO(fansMerchantDOS.get(0));
     }
@@ -159,6 +159,12 @@ public class FansMerchantServiceImpl implements FansMerchantService {
             fansInviteResultDOMapper.insert(fansInviteResultDO);
     	} else {
     		fansInviteResultDO.setStatus(FansInviteResultEnum.REFUSE.getValue());
+    		FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
+    		com.lawu.eshop.user.srv.domain.FansMerchantDOExample.Criteria cta = fansMerchantDOExample.createCriteria();
+    		cta.andMemberIdEqualTo(memberId);
+    		cta.andMerchantIdEqualTo(merchantId);
+    		cta.andStatusEqualTo((byte)0);
+    		fansMerchantDOMapper.deleteByExample(fansMerchantDOExample);
     		fansInviteResultDOMapper.insert(fansInviteResultDO);
     	}
     }

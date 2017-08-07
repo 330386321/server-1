@@ -36,7 +36,7 @@ import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.param.FansInviteContentParam;
+import com.lawu.eshop.user.param.FansInviteContentExtendParam;
 import com.lawu.eshop.user.param.InviteFansParam;
 import com.lawu.eshop.user.param.InviteFansWithContentParam;
 import com.lawu.eshop.user.param.ListFansParam;
@@ -241,22 +241,21 @@ public class FansMerchantController extends BaseController {
 		if (!isSuccess(result)) {
 			return result;
 		}
-
 		
-		FansInviteContentParam fansInviteContentParam = new FansInviteContentParam();
-		fansInviteContentParam.setFansInviteDetailId(Long.valueOf(result.getModel().toString()));
-		fansInviteContentParam.setInviteContent(param.getInviteContent());
-		fansInviteContentParam.setLogoUrl(param.getLogoUrl());
-		fansInviteContentParam.setMerchantId(merchantId);
-		fansInviteContentParam.setMerchantNum(userNum);
-		fansInviteContentParam.setMerchantStoreIntro(param.getMerchantStoreIntro());
-		fansInviteContentParam.setMerchantStoreName(param.getMerchantStoreName());
-		fansInviteContentParam.setUrl(param.getUrl());
-		result = fansInviteContentService.saveFansInviteContent(fansInviteContentParam);
+		FansInviteContentExtendParam fansInviteContentExtendParam = new FansInviteContentExtendParam();
+		fansInviteContentExtendParam.setFansInviteDetailId(Long.valueOf(result.getModel().toString()));
+		fansInviteContentExtendParam.setInviteContent(param.getInviteContent());
+		fansInviteContentExtendParam.setLogoUrl(param.getLogoUrl());
+		fansInviteContentExtendParam.setMerchantId(merchantId);
+		fansInviteContentExtendParam.setMerchantNum(userNum);
+		fansInviteContentExtendParam.setMerchantStoreIntro(param.getMerchantStoreIntro());
+		fansInviteContentExtendParam.setMerchantStoreName(param.getMerchantStoreName());
+		fansInviteContentExtendParam.setUrl(param.getUrl());
+		fansInviteContentExtendParam.setNums(param.getNums());
+		result = fansInviteContentService.saveFansInviteContent(fansInviteContentExtendParam);
 		if (!isSuccess(result)) {
 			return result;
 		}
-		
 		
 		Result<String> stringResult = merchantStoreService.getNameBymerchantId(merchantId);
 		// 给会员发送站内消息
@@ -277,7 +276,6 @@ public class FansMerchantController extends BaseController {
 			messageInfoParam.setMessageParam(messageTempParam);
 			messageService.saveMessage(num, messageInfoParam);
 		}
-
 		// 给商家发送站内消息
 		Result<PropertyPointDTO> propertyPointDTOResult = propertyInfoService.getPropertyPoint(userNum);
 		messageInfoParam = new MessageInfoParam();
@@ -288,10 +286,6 @@ public class FansMerchantController extends BaseController {
 		messageTempParam.setPoint(propertyPointDTOResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
 		messageInfoParam.setMessageParam(messageTempParam);
 		messageService.saveMessage(userNum, messageInfoParam);
-		
-		
-		
-		
 		return successCreated();
 	}
 	

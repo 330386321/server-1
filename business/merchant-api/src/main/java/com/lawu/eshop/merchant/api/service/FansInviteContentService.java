@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.param.FansInviteContentParam;
+import com.lawu.eshop.user.param.FansInviteContentExtendParam;
 
 /**
  * 邀请粉丝内容表接口
@@ -21,6 +21,6 @@ public interface FansInviteContentService {
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.POST, value = "fansInviteContent/saveInviteContentService")
-	Result saveFansInviteContent(@RequestBody FansInviteContentParam address);
+	Result saveFansInviteContent(@RequestBody FansInviteContentExtendParam fansInviteContentExtendParam);
 	
 }
