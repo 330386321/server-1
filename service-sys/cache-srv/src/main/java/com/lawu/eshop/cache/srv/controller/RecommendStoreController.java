@@ -1,10 +1,15 @@
 package com.lawu.eshop.cache.srv.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.cache.srv.service.RecommendStoreService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan
@@ -90,6 +95,42 @@ public class RecommendStoreController extends BaseController {
     public Result<String> getRecommendFoodComment(@RequestParam String regionPath) {
         String storeInfo = recommendStoreService.getRecommendFoodComment(regionPath);
         return successGet(storeInfo);
+    }
+
+    /**
+     * 新店推荐
+     *
+     * @param regionPath
+     * @return
+     */
+    @RequestMapping(value = "delNewMerchant", method = RequestMethod.DELETE)
+    public Result delNewMerchant(@RequestParam String regionPath) {
+        recommendStoreService.delNewMerchant(regionPath);
+        return successDelete();
+    }
+
+    /**
+     * 优选美食-人气最高
+     *
+     * @param regionPath
+     * @return
+     */
+    @RequestMapping(value = "delRecommendFoodConsume", method = RequestMethod.DELETE)
+    public Result delRecommendFoodConsume(@RequestParam String regionPath) {
+        recommendStoreService.delRecommendFoodConsume(regionPath);
+        return successDelete();
+    }
+
+    /**
+     * 优选美食-评价最高
+     *
+     * @param regionPath
+     * @return
+     */
+    @RequestMapping(value = "delRecommendFoodComment", method = RequestMethod.DELETE)
+    public Result delRecommendFoodComment(@RequestParam String regionPath) {
+        recommendStoreService.delRecommendFoodComment(regionPath);
+        return successDelete();
     }
 
 }

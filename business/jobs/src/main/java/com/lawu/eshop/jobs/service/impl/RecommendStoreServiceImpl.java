@@ -1,21 +1,27 @@
 package com.lawu.eshop.jobs.service.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSONArray;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.jobs.JobsConfig;
-import com.lawu.eshop.jobs.service.*;
+import com.lawu.eshop.jobs.service.DiscountPackageService;
+import com.lawu.eshop.jobs.service.MerchantFavoredService;
+import com.lawu.eshop.jobs.service.MerchantStoreService;
+import com.lawu.eshop.jobs.service.RecommendStoreCacheService;
+import com.lawu.eshop.jobs.service.RecommendStoreService;
+import com.lawu.eshop.jobs.service.RegionService;
 import com.lawu.eshop.mall.constants.MerchantFavoredTypeEnum;
 import com.lawu.eshop.mall.dto.DiscountPackageQueryDTO;
 import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
 import com.lawu.eshop.mall.dto.RegionDTO;
 import com.lawu.eshop.user.dto.NewMerchantStoreDTO;
 import com.lawu.eshop.user.dto.RecommendFoodDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -61,6 +67,8 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
             if (!storeResult.getModel().isEmpty()) {
                 String jsonStr = JSONArray.toJSONString(storeResult.getModel());
                 recommendStoreCacheService.saveNewMerchant(regionDTO.getPath(), jsonStr);
+            } else {
+                recommendStoreCacheService.delNewMerchant(regionDTO.getPath());
             }
 
             //优选美食-人气最高
@@ -70,6 +78,8 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
                 }
                 String jsonStr = JSONArray.toJSONString(consumeResult.getModel());
                 recommendStoreCacheService.saveRecommendFoodConsume(regionDTO.getPath(), jsonStr);
+            } else {
+                recommendStoreCacheService.delRecommendFoodConsume(regionDTO.getPath());
             }
 
             //优选美食-评价最高
@@ -79,6 +89,8 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
                 }
                 String jsonStr = JSONArray.toJSONString(commentResult.getModel());
                 recommendStoreCacheService.saveRecommendFoodComment(regionDTO.getPath(), jsonStr);
+            } else {
+                recommendStoreCacheService.delRecommendFoodComment(regionDTO.getPath());
             }
         }
     }

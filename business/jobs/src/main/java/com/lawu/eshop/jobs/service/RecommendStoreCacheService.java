@@ -1,11 +1,12 @@
 package com.lawu.eshop.jobs.service;
 
-import com.lawu.eshop.framework.web.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.lawu.eshop.framework.web.Result;
 
 /**
  * @author meishuquan
@@ -43,5 +44,32 @@ public interface RecommendStoreCacheService {
      */
     @RequestMapping(value = "recommendStore/saveRecommendFoodComment", method = RequestMethod.POST)
     Result saveRecommendFoodComment(@RequestParam("regionPath") String regionPath, @RequestBody String storeInfo);
+
+    /**
+     * 新店推荐
+     *
+     * @param regionPath
+     * @return
+     */
+    @RequestMapping(value = "recommendStore/delNewMerchant", method = RequestMethod.DELETE)
+    Result delNewMerchant(@RequestParam("regionPath") String regionPath);
+
+    /**
+     * 优选美食-人气最高
+     *
+     * @param regionPath
+     * @return
+     */
+    @RequestMapping(value = "recommendStore/delRecommendFoodConsume", method = RequestMethod.DELETE)
+    Result delRecommendFoodConsume(@RequestParam("regionPath") String regionPath);
+
+    /**
+     * 优选美食-评价最高
+     *
+     * @param regionPath
+     * @return
+     */
+    @RequestMapping(value = "recommendStore/delRecommendFoodComment", method = RequestMethod.DELETE)
+    Result delRecommendFoodComment(@RequestParam("regionPath") String regionPath);
 
 }

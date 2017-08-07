@@ -57,7 +57,7 @@ public class KeyConstant {
     /**
      * 优选美食-人气最高
      */
-    public static final String REDIS_KEY_MERCHANT_HOT_STORE = "MERCHANT_HOT_STORE_";
+    public static final String REDIS_KEY_MERCHANT_CONSUME_STORE = "MERCHANT_CONSUME_STORE_";
 
     /**
      * 优选美食-评价最高
