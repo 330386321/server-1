@@ -125,7 +125,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 	@Override
 	public void updateIsSend(Long id) {
 		FavoriteAdDO record = new FavoriteAdDO();
-		record.setAdId(id);
+		record.setId(id);
 		record.setIsSend(true);
 		favoriteAdDOMapper.updateByPrimaryKey(record);
 	}
