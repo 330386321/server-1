@@ -1,18 +1,20 @@
 package com.lawu.eshop.user.srv.converter;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.utils.DataTransUtil;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -137,4 +139,18 @@ public class MerchantConverterTest {
         Assert.assertEquals(merchantBO.getId(), pageDTO.getRecords().get(0).getId());
     }
 
+    @Test
+    public void convertAccountDOTS(){
+        List<MerchantBO> records = new ArrayList<>();
+        MerchantBO merchantBO = new MerchantBO();
+        merchantBO.setAccount("123");
+        merchantBO.setId(1L);
+        merchantBO.setNum("123");
+        merchantBO.setGmtCreate(new Date());
+        merchantBO.setIsFreeze(false);
+        records.add(merchantBO);
+        List<AccountDTO> list = MerchantConverter.convertAccountDOTS(records);
+        Assert.assertNotNull(list);
+        Assert.assertEquals(merchantBO.getNum(), list.get(0).getNum());
+    }
 }

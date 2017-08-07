@@ -1,7 +1,15 @@
 package com.lawu.eshop.user.srv.converter;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserSexEnum;
+import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.EfriendDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MemberInfoForShoppingOrderDTO;
@@ -11,12 +19,6 @@ import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MemberProfileDO;
 import com.lawu.eshop.utils.DataTransUtil;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -209,6 +211,21 @@ public class MemberConverterTest {
         MemberInfoForShoppingOrderDTO shoppingOrderDTO = MemberConverter.convert(memberBO);
         Assert.assertNotNull(shoppingOrderDTO);
         Assert.assertEquals(memberBO.getNum(), shoppingOrderDTO.getNum());
+    }
+
+    @Test
+    public void convertAccountDOTS(){
+        List<MemberBO> records = new ArrayList<>();
+        MemberBO memberBO = new MemberBO();
+        memberBO.setAccount("123");
+        memberBO.setId(1L);
+        memberBO.setNum("123");
+        memberBO.setGmtCreate(new Date());
+        memberBO.setIsFreeze(false);
+        records.add(memberBO);
+        List<AccountDTO> list = MemberConverter.convertAccountDOTS(records);
+        Assert.assertNotNull(list);
+        Assert.assertEquals(memberBO.getNum(), list.get(0).getNum());
     }
 
 }
