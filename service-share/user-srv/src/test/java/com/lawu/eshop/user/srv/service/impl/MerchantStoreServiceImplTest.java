@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.solr.service.SolrService;
+import com.lawu.eshop.user.constants.StatusEnum;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
@@ -155,8 +156,12 @@ public class MerchantStoreServiceImplTest {
     @Rollback
     @Test
     public void listMerchantStore() {
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setStatus(StatusEnum.VALID.getValue());
+        merchantDO.setIsFreeze(false);
+        merchantDOMapper.insertSelective(merchantDO);
         MerchantStoreDO storeDO = new MerchantStoreDO();
-        storeDO.setMerchantId(200L);
+        storeDO.setMerchantId(merchantDO.getId());
         storeDO.setName("测试店铺");
         storeDO.setRegionPath("44/4403/440303");
         storeDO.setRegionName("广东省深圳市南山区");
@@ -170,7 +175,7 @@ public class MerchantStoreServiceImplTest {
 
         MerchantStoreProfileDO profileDO = new MerchantStoreProfileDO();
         profileDO.setId(storeDO.getId());
-        profileDO.setMerchantId(200L);
+        profileDO.setMerchantId(merchantDO.getId());
         profileDO.setManageType(DataTransUtil.intToByte(2));
         profileDO.setCertifType(DataTransUtil.intToByte(2));
         merchantStoreProfileDOMapper.insertSelective(profileDO);

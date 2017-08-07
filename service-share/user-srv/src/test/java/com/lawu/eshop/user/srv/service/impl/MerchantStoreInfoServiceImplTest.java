@@ -1,19 +1,10 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.user.constants.ManageTypeEnum;
-import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.dto.CertifTypeEnum;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
-import com.lawu.eshop.user.param.ApplyStoreParam;
-import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
-import com.lawu.eshop.user.srv.bo.*;
-import com.lawu.eshop.user.srv.domain.*;
-import com.lawu.eshop.user.srv.mapper.*;
-import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-import com.lawu.eshop.utils.DataTransUtil;
-import com.lawu.eshop.utils.RandomUtil;
-import net.sf.json.JSONObject;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,10 +14,43 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
+import com.lawu.eshop.user.constants.StatusEnum;
+import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.param.ApplyStoreParam;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.PayOrderStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreSolrInfoBO;
+import com.lawu.eshop.user.srv.domain.FansMerchantDO;
+import com.lawu.eshop.user.srv.domain.FavoriteMerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
+import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.utils.DataTransUtil;
+import com.lawu.eshop.utils.RandomUtil;
+
+import net.sf.json.JSONObject;
 
 /**
  * @author meishuquan
@@ -656,8 +680,12 @@ public class MerchantStoreInfoServiceImplTest {
     @Rollback
     @Test
     public void getPayOrderDetailStoreInfo() {
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setStatus(StatusEnum.VALID.getValue());
+        merchantDO.setIsFreeze(false);
+        merchantDOMapper.insertSelective(merchantDO);
         MerchantStoreDO storeDO = new MerchantStoreDO();
-        storeDO.setMerchantId(200L);
+        storeDO.setMerchantId(merchantDO.getId());
         storeDO.setName("测试店铺");
         storeDO.setRegionPath("44/4403/440303");
         storeDO.setRegionName("广东省深圳市南山区");
@@ -670,7 +698,7 @@ public class MerchantStoreInfoServiceImplTest {
         merchantStoreDOMapper.insertSelective(storeDO);
 
         MerchantStoreImageDO storeImageDO = new MerchantStoreImageDO();
-        storeImageDO.setMerchantId(200L);
+        storeImageDO.setMerchantId(merchantDO.getId());
         storeImageDO.setMerchantStoreId(storeDO.getId());
         storeImageDO.setPath("pic");
         storeImageDO.setStatus(true);
@@ -679,7 +707,7 @@ public class MerchantStoreInfoServiceImplTest {
             merchantStoreImageDOMapper.insertSelective(storeImageDO);
         }
 
-        PayOrderStoreInfoBO payOrderStoreInfoBO = merchantStoreInfoService.getPayOrderDetailStoreInfo(200L);
+        PayOrderStoreInfoBO payOrderStoreInfoBO = merchantStoreInfoService.getPayOrderDetailStoreInfo(merchantDO.getId());
         Assert.assertNotNull(payOrderStoreInfoBO);
         Assert.assertEquals(storeDO.getName(), payOrderStoreInfoBO.getName());
     }
