@@ -101,4 +101,5 @@ public interface AdDOMapperExtend {
 	 * @date 2017年7月19日
 	 */
 	Long selectChoicenessAdCount(SelectChoicenessAdIdExample example);
+	
 }

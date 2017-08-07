@@ -1,9 +1,13 @@
 package com.lawu.eshop.member.api.service;
 
+import com.lawu.eshop.ad.constants.AdPlatformFlatTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
+import com.lawu.eshop.ad.dto.AdPlatformFlatDTO;
 import com.lawu.eshop.ad.dto.AdPlatformProductDTO;
+import com.lawu.eshop.ad.dto.AdPlatformVideoDTO;
+import com.lawu.eshop.ad.param.AdPlatformInternalParam;
 import com.lawu.eshop.framework.web.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,4 +56,17 @@ public interface AdPlatformService {
     @RequestMapping(method = RequestMethod.GET, value = "adPlatform/getAdPlatformByTypePositionRegionPath")
     Result<List<AdPlatformDTO>> getAdPlatformByTypePositionRegionPath(@RequestParam("typeEnum") TypeEnum typeEnum, @RequestParam("positionEnum") PositionEnum positionEnum, @RequestParam("regionPath") String regionPath);
 
+    /**
+     * 广告位 三个视频
+     * @return
+     */
+    @RequestMapping(value = "adPlatform/selAdPlatformPositionTwo", method = RequestMethod.POST)
+    Result<List<AdPlatformVideoDTO>> selAdPlatformPositionTwo(@RequestBody AdPlatformInternalParam param);
+    
+    /**
+     * 广告位 五个平面 | 一个平面
+     * @return
+     */
+    @RequestMapping(value = "adPlatform/selAdPlatformPositionFour", method = RequestMethod.POST)
+    Result<List<AdPlatformFlatDTO>> selAdPlatformPositionFour(@RequestBody AdPlatformInternalParam param);
 }

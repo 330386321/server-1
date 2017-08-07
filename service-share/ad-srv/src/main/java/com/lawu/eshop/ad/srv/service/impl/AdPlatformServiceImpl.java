@@ -1,30 +1,43 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
-import com.lawu.eshop.ad.constants.AdPlatformStatusEnum;
-import com.lawu.eshop.ad.constants.PositionEnum;
-import com.lawu.eshop.ad.constants.TypeEnum;
-import com.lawu.eshop.ad.param.AdPlatformExtendParam;
-import com.lawu.eshop.ad.param.AdPlatformFindParam;
-import com.lawu.eshop.ad.param.AdPlatformParam;
-import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
-import com.lawu.eshop.ad.srv.converter.AdPlatformConverter;
-import com.lawu.eshop.ad.srv.domain.AdPlatformDO;
-import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample;
-import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample.Criteria;
-import com.lawu.eshop.ad.srv.domain.extend.AdPlatformDOView;
-import com.lawu.eshop.ad.srv.mapper.AdPlatformDOMapper;
-import com.lawu.eshop.ad.srv.mapper.extend.AdPlatformDOMapperExtend;
-import com.lawu.eshop.ad.srv.service.AdPlatformService;
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.utils.DateUtil;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.ad.constants.AdPlatformFlatTypeEnum;
+import com.lawu.eshop.ad.constants.AdPlatformStatusEnum;
+import com.lawu.eshop.ad.constants.PositionEnum;
+import com.lawu.eshop.ad.constants.TypeEnum;
+import com.lawu.eshop.ad.param.AdEgainInternalParam;
+import com.lawu.eshop.ad.param.AdPlatformExtendParam;
+import com.lawu.eshop.ad.param.AdPlatformFindParam;
+import com.lawu.eshop.ad.param.AdPlatformInternalParam;
+import com.lawu.eshop.ad.param.AdPlatformParam;
+import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
+import com.lawu.eshop.ad.srv.bo.AdPlatformFlatBO;
+import com.lawu.eshop.ad.srv.bo.AdPlatformVideoBO;
+import com.lawu.eshop.ad.srv.converter.AdPlatformConverter;
+import com.lawu.eshop.ad.srv.domain.AdPlatformDO;
+import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample;
+import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample.Criteria;
+import com.lawu.eshop.ad.srv.domain.extend.AdPlatformDOView;
+import com.lawu.eshop.ad.srv.domain.extend.AdPlatformFlatView;
+import com.lawu.eshop.ad.srv.domain.extend.AdPlatformVideoView;
+import com.lawu.eshop.ad.srv.domain.extend.SelectAdEgainIdExample;
+import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
+import com.lawu.eshop.ad.srv.mapper.AdPlatformDOMapper;
+import com.lawu.eshop.ad.srv.mapper.extend.AdDOMapperExtend;
+import com.lawu.eshop.ad.srv.mapper.extend.AdPlatformDOMapperExtend;
+import com.lawu.eshop.ad.srv.service.AdPlatformService;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.utils.DateUtil;
 
 @Service
 public class AdPlatformServiceImpl implements AdPlatformService {
@@ -34,6 +47,12 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 
     @Autowired
     private AdPlatformDOMapperExtend adPlatformDOMapperExtend;
+    
+    @Autowired
+	private AdDOMapper adDOMapper;
+
+	@Autowired
+	private AdDOMapperExtend adDOMapperExtend;
 
     @Override
     @Transactional
@@ -177,5 +196,51 @@ public class AdPlatformServiceImpl implements AdPlatformService {
             return true;
         }
     }
+
+	@Override
+	public List<AdPlatformVideoBO> selAdPlatformPositionTwo(AdPlatformInternalParam param) {
+		// 组装查询参数
+		SelectAdEgainIdExample example = new SelectAdEgainIdExample();
+		example.setLatitude(new BigDecimal(param.getLatitude()));
+		example.setLongitude(new BigDecimal(param.getLongitude()));
+		example.setMerchantIds(param.getMerchantIds());
+		example.setAreas(param.getAreas());
+		
+		List<AdPlatformVideoView> list = adPlatformDOMapperExtend.selAdPlatformPositionTwo(example);
+		
+		List<AdPlatformVideoBO> listBO = new ArrayList<>();
+		for (AdPlatformVideoView adPlatformVideoView : list) {
+			AdPlatformVideoBO bo = new  AdPlatformVideoBO();
+			bo.setAdId(adPlatformVideoView.getAdId());
+			bo.setContent(adPlatformVideoView.getContent());
+			bo.setId(adPlatformVideoView.getId());
+			bo.setName(adPlatformVideoView.getName());
+			bo.setTitle(adPlatformVideoView.getTitle());
+			bo.setVideoImgUrl(adPlatformVideoView.getVideoImgUrl());
+			listBO.add(bo);
+		}
+		return listBO;
+	}
+
+	@Override
+	public List<AdPlatformFlatBO> selAdPlatformPositionFour(AdPlatformInternalParam param) {
+		// 组装查询参数
+		SelectAdEgainIdExample example = new SelectAdEgainIdExample();
+		example.setLatitude(new BigDecimal(param.getLatitude()));
+		example.setLongitude(new BigDecimal(param.getLongitude()));
+		example.setMerchantIds(param.getMerchantIds());
+		example.setAreas(param.getAreas());
+		example.setType(param.getAdPlatformFlatTypeEnum().getVal());
+		List<AdPlatformFlatView> list = adPlatformDOMapperExtend.selAdPlatformPositionFour(example);
+		
+		List<AdPlatformFlatBO> listBO = new ArrayList<>();
+		for (AdPlatformFlatView adPlatformFlatView : list) {
+			AdPlatformFlatBO bo = new  AdPlatformFlatBO();
+			bo.setAdId(adPlatformFlatView.getAdId());
+			bo.setMediaUrl(adPlatformFlatView.getMediaUrl());
+			listBO.add(bo);
+		}
+		return listBO;
+	}
 
 }

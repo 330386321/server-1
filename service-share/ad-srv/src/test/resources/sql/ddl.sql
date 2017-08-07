@@ -74,6 +74,7 @@ DROP TABLE IF EXISTS `ad_platform`;
 CREATE TABLE `ad_platform` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `product_id` bigint(20) unsigned DEFAULT NULL COMMENT '商品ID',
+  `ad_id` bigint(20)  COMMENT '广告id',
   `title` varchar(100) DEFAULT NULL COMMENT '名称',
   `media_url` varchar(120) DEFAULT NULL COMMENT '广附件路径',
   `link_url` varchar(120) DEFAULT NULL COMMENT '链接地址',

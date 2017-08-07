@@ -1,5 +1,6 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -12,12 +13,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.ad.constants.AdPlatformFlatTypeEnum;
 import com.lawu.eshop.ad.constants.AdPlatformStatusEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
+import com.lawu.eshop.ad.param.AdPlatformInternalParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
+import com.lawu.eshop.ad.srv.bo.AdPlatformVideoBO;
 import com.lawu.eshop.ad.srv.domain.AdPlatformDO;
 import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample;
 import com.lawu.eshop.ad.srv.mapper.AdPlatformDOMapper;
@@ -332,5 +336,6 @@ public class AdPlatformServiceImplTest {
         Assert.assertTrue(list.size() == 1);
 		
     }
+
 	
 }

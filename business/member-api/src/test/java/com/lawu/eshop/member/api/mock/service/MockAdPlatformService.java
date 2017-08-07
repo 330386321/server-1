@@ -1,9 +1,13 @@
 package com.lawu.eshop.member.api.mock.service;
 
+import com.lawu.eshop.ad.constants.AdPlatformFlatTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
+import com.lawu.eshop.ad.dto.AdPlatformFlatDTO;
 import com.lawu.eshop.ad.dto.AdPlatformProductDTO;
+import com.lawu.eshop.ad.dto.AdPlatformVideoDTO;
+import com.lawu.eshop.ad.param.AdPlatformInternalParam;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.AdPlatformService;
@@ -51,4 +55,20 @@ public class MockAdPlatformService extends BaseController implements AdPlatformS
         list.add(dto);
         return successCreated(list);
     }
+
+	@Override
+	public Result<List<AdPlatformVideoDTO>> selAdPlatformPositionTwo(AdPlatformInternalParam param) {
+		AdPlatformVideoDTO dto = new AdPlatformVideoDTO();
+        List<AdPlatformVideoDTO> list = new ArrayList<>();
+        list.add(dto);
+        return successCreated(list);
+	}
+
+	@Override
+	public Result<List<AdPlatformFlatDTO>> selAdPlatformPositionFour(AdPlatformInternalParam param) {
+		AdPlatformFlatDTO dto = new AdPlatformFlatDTO();
+        List<AdPlatformFlatDTO> list = new ArrayList<>();
+        list.add(dto);
+        return successCreated(list);
+	}
 }

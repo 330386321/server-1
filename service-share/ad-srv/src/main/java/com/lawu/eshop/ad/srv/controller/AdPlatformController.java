@@ -12,14 +12,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.ad.constants.AdPlatformFlatTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
+import com.lawu.eshop.ad.dto.AdPlatformFlatDTO;
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.dto.AdPlatformProductDTO;
+import com.lawu.eshop.ad.dto.AdPlatformVideoDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
+import com.lawu.eshop.ad.param.AdPlatformInternalParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
+import com.lawu.eshop.ad.srv.bo.AdPlatformFlatBO;
+import com.lawu.eshop.ad.srv.bo.AdPlatformVideoBO;
 import com.lawu.eshop.ad.srv.converter.AdPlatformConverter;
 import com.lawu.eshop.ad.srv.service.AdPlatformService;
 import com.lawu.eshop.framework.core.page.Page;
@@ -206,5 +212,47 @@ public class AdPlatformController extends BaseController {
     public Result<Boolean> selectByProductIdAndStatus(@RequestParam Long productId) {
         boolean flag = adPlatformService.selectByProductIdAndStatus(productId);
         return successGet(flag);
+    }
+    
+    /**
+     * 广告模块广告位二查询
+     * @return
+     */
+    @RequestMapping(value = "selAdPlatformPositionTwo", method = RequestMethod.POST)
+    public Result<List<AdPlatformVideoDTO>> selAdPlatformPositionTwo(@RequestBody AdPlatformInternalParam param) {
+        List<AdPlatformVideoBO> BOS = adPlatformService.selAdPlatformPositionTwo(param);
+        List<AdPlatformVideoDTO> list = new ArrayList<>();
+        
+        for (AdPlatformVideoBO adPlatformVideoBO : BOS) {
+        	AdPlatformVideoDTO dto = new  AdPlatformVideoDTO();
+        	dto.setAdId(adPlatformVideoBO.getAdId());
+        	dto.setContent(adPlatformVideoBO.getContent());
+        	dto.setId(adPlatformVideoBO.getId());
+        	dto.setName(adPlatformVideoBO.getName());
+        	dto.setTitle(adPlatformVideoBO.getTitle());
+        	dto.setVideoImgUrl(adPlatformVideoBO.getVideoImgUrl());
+        	list.add(dto);
+		}
+        
+        return successGet(list);
+    }
+    
+    /**
+     * 广告模块广告位四查询
+     * @return
+     */
+    @RequestMapping(value = "selAdPlatformPositionFour", method = RequestMethod.POST)
+    public Result<List<AdPlatformFlatDTO>> selAdPlatformPositionFour(@RequestBody AdPlatformInternalParam param) {
+        List<AdPlatformFlatBO> BOS = adPlatformService.selAdPlatformPositionFour(param);
+        List<AdPlatformFlatDTO> list = new ArrayList<>();
+        
+        for (AdPlatformFlatBO adPlatformFlatBO : BOS) {
+        	AdPlatformFlatDTO dto = new  AdPlatformFlatDTO();
+        	dto.setAdId(adPlatformFlatBO.getAdId());
+        	dto.setMediaUrl(adPlatformFlatBO.getMediaUrl());
+        	list.add(dto);
+		}
+        
+        return successGet(list);
     }
 }

@@ -1,9 +1,12 @@
 package com.lawu.eshop.ad.srv.mapper.extend;
 
+import java.util.List;
+
 import com.lawu.eshop.ad.param.AdPlatformExtendParam;
 import com.lawu.eshop.ad.srv.domain.extend.AdPlatformDOView;
-
-import java.util.List;
+import com.lawu.eshop.ad.srv.domain.extend.AdPlatformFlatView;
+import com.lawu.eshop.ad.srv.domain.extend.AdPlatformVideoView;
+import com.lawu.eshop.ad.srv.domain.extend.SelectAdEgainIdExample;
 
 /**
  * @author meishuquan
@@ -12,4 +15,8 @@ import java.util.List;
 public interface AdPlatformDOMapperExtend {
 
     List<AdPlatformDOView> getAdPlatformByTypePosition(AdPlatformExtendParam param);
+
+	List<AdPlatformVideoView> selAdPlatformPositionTwo(SelectAdEgainIdExample example);
+	
+	List<AdPlatformFlatView> selAdPlatformPositionFour(SelectAdEgainIdExample example);
 }

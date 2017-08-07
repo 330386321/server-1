@@ -1,13 +1,17 @@
 package com.lawu.eshop.ad.srv.service;
 
+import java.util.List;
+
+import com.lawu.eshop.ad.constants.AdPlatformFlatTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
+import com.lawu.eshop.ad.param.AdPlatformInternalParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
+import com.lawu.eshop.ad.srv.bo.AdPlatformFlatBO;
+import com.lawu.eshop.ad.srv.bo.AdPlatformVideoBO;
 import com.lawu.eshop.framework.core.page.Page;
-
-import java.util.List;
 
 /**
  * 平台广告管理
@@ -109,4 +113,18 @@ public interface AdPlatformService {
      * @return
      */
     boolean selectByProductIdAndStatus(Long productId);
+    
+    /**
+     * 广告模块 广告位二
+     * @return
+     */
+    List<AdPlatformVideoBO> selAdPlatformPositionTwo(AdPlatformInternalParam param);
+    
+    /**
+     * 广告模块 广告位四
+     * @return
+     */
+    List<AdPlatformFlatBO> selAdPlatformPositionFour(AdPlatformInternalParam param);
+    
+    
 }
