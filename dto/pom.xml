@@ -20,6 +20,7 @@
 		<module>mq-dto</module>
         <module>operator-dto</module>
         <module>statistics-dto</module>
+        <module>agent-dto</module>
     </modules>
 	<dependencies>
 
