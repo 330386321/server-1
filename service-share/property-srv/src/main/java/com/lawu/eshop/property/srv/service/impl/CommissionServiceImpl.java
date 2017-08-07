@@ -1,6 +1,5 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -12,13 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.ad.param.CommissionJobParam;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.LoveTypeEnum;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
-import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
-import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.domain.LoveDetailDO;
 import com.lawu.eshop.property.srv.domain.PointDetailDO;
@@ -33,7 +28,6 @@ import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.service.CommissionService;
 import com.lawu.eshop.property.srv.service.PointDetailService;
-import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.StringUtil;
@@ -43,8 +37,6 @@ public class CommissionServiceImpl implements CommissionService {
 	
 	private static Logger logger = LoggerFactory.getLogger(CommissionServiceImpl.class);
 
-	@Autowired
-	private PropertyService propertyService;
 	@Autowired
 	private TransactionDetailService transactionDetailService;
 	@Autowired

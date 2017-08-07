@@ -586,6 +586,66 @@ public class PointDetailDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andPreviousPointIsNull() {
+            addCriterion("previous_point is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousPointIsNotNull() {
+            addCriterion("previous_point is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousPointEqualTo(BigDecimal value) {
+            addCriterion("previous_point =", value, "previousPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousPointNotEqualTo(BigDecimal value) {
+            addCriterion("previous_point <>", value, "previousPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousPointGreaterThan(BigDecimal value) {
+            addCriterion("previous_point >", value, "previousPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousPointGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("previous_point >=", value, "previousPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousPointLessThan(BigDecimal value) {
+            addCriterion("previous_point <", value, "previousPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousPointLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("previous_point <=", value, "previousPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousPointIn(List<BigDecimal> values) {
+            addCriterion("previous_point in", values, "previousPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousPointNotIn(List<BigDecimal> values) {
+            addCriterion("previous_point not in", values, "previousPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousPointBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("previous_point between", value1, value2, "previousPoint");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousPointNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("previous_point not between", value1, value2, "previousPoint");
+            return (Criteria) this;
+        }
+
         public Criteria andDirectionIsNull() {
             addCriterion("direction is null");
             return (Criteria) this;

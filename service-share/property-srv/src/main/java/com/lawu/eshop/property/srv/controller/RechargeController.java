@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.PayTypeEnum;
 import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.BalanceAndPointListQueryDTO;
 import com.lawu.eshop.property.dto.RechargeReportDTO;
@@ -167,6 +168,17 @@ public class RechargeController extends BaseController {
 		return successGet(payType);
 	}
 
+	/**
+	 * 根据充值ID查询充值状态
+	 *
+	 * @param rechargeId
+	 * @return
+	 */
+	@RequestMapping(value = "getRechargeById/{rechargeId}", method = RequestMethod.GET)
+	public Result<ThirdPayStatusEnum> getRechargeById(@PathVariable Long rechargeId) {
+		ThirdPayStatusEnum status = rechargeService.getRechargeById(rechargeId);
+		return successGet(status);
+	}
 
 	// -------------------------------统计报表
 

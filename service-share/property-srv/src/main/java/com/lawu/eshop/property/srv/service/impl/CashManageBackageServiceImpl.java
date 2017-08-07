@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,6 @@ import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQuerySumBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashReportBO;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
-import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
 import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
 import com.lawu.eshop.property.srv.domain.WithdrawCashDOExample;
 import com.lawu.eshop.property.srv.domain.WithdrawCashDOExample.Criteria;
@@ -57,7 +58,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 	@Autowired
 	private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
 	@Autowired
-	private TransactionDetailDOMapper transactionDetailDOMapper;
+	private TransactionDetailService transactionDetailService;
 
 	@Override
 	public Page<WithdrawCashBackageQueryBO> findCashInfo(CashBackageQueryDataParam param) {
@@ -237,30 +238,29 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 
 			// 余额新增
 			WithdrawCashDO wcdo = withdrawCashDOMapper.selectByPrimaryKey(Long.valueOf(idsArray[i]));
+
+			// 新增交易明细
+			TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+			tdsParam.setTitle(TransactionTitleEnum.CASH_FAIL_BACK.getVal());
+			tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
+			tdsParam.setUserNum(wcdo.getUserNum());
+			if (wcdo.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+				tdsParam.setTransactionType(MemberTransactionTypeEnum.WITHDRAW_BACK.getValue());
+			} else if (wcdo.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+				tdsParam.setTransactionType(MerchantTransactionTypeEnum.WITHDRAW_BACK.getValue());
+			}
+			tdsParam.setTransactionAccount(wcdo.getAccount());
+			tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
+			tdsParam.setAmount(wcdo.getCashMoney());
+			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
+			tdsParam.setBizId(wcdo.getId() == null ? "" : wcdo.getId().toString());
+			transactionDetailService.save(tdsParam);
+
 			PropertyInfoDOEiditView infoView = new PropertyInfoDOEiditView();
 			infoView.setBalance(wcdo.getCashMoney());
 			infoView.setUserNum(wcdo.getUserNum());
 			infoView.setGmtModified(new Date());
 			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoView);
-
-			// 新增退回交易明细
-			TransactionDetailDO transactionDetailDO = new TransactionDetailDO();
-			transactionDetailDO.setTitle(TransactionTitleEnum.CASH_FAIL_BACK.getVal());
-			transactionDetailDO.setTransactionNum(StringUtil.getRandomNum(""));
-			transactionDetailDO.setUserNum(wcdo.getUserNum());
-			if (wcdo.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
-				transactionDetailDO.setTransactionType(MemberTransactionTypeEnum.WITHDRAW_BACK.getValue());
-			} else if (wcdo.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
-				transactionDetailDO.setTransactionType(MerchantTransactionTypeEnum.WITHDRAW_BACK.getValue());
-			}
-			transactionDetailDO.setTransactionAccount(wcdo.getAccount());
-			transactionDetailDO.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
-			transactionDetailDO.setAmount(wcdo.getCashMoney());
-			transactionDetailDO.setDirection(PropertyInfoDirectionEnum.IN.getVal());
-			transactionDetailDO.setBizId(wcdo.getId() == null ? "" : wcdo.getId().toString());
-			transactionDetailDO.setRemark("");
-			transactionDetailDO.setGmtCreate(new Date());
-			transactionDetailDOMapper.insertSelective(transactionDetailDO);
 		}
 
 		return ResultCode.SUCCESS;

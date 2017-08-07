@@ -1,6 +1,8 @@
 package com.lawu.eshop.merchant.api.service;
 
+import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,9 +35,17 @@ public interface RechargeService {
 
 	/**
 	 * 获取需要充值的金额
-	 * @param bizIds
+	 * @param rechargeId
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "recharge/getRechargeMoney")
 	ThirdPayCallBackQueryPayOrderDTO getRechargeMoney(@RequestParam("rechargeId") String rechargeId);
+
+	/**
+	 * 根据充值ID查询充值状态
+	 * @param rechargeId
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "recharge/getRechargeById/{rechargeId}")
+	Result<ThirdPayStatusEnum> getRechargeById(@PathVariable("rechargeId") Long rechargeId);
 }

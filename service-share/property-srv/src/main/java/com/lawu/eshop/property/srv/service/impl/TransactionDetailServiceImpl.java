@@ -1,9 +1,14 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.srv.domain.PropertyDOExample;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +58,9 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 	
 	@Autowired
 	private TransactionDetailExtendDOMapper transactionDetailExtendDOMapper;
+
+	@Autowired
+	private PropertyInfoDOMapper propertyInfoDOMapper;
 
 	/**
 	 * 根据用户编号、查询参数分页查询交易明细  - 商家
@@ -130,6 +138,11 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 	@Override
 	@Transactional
 	public int save(TransactionDetailSaveDataParam param) {
+
+		PropertyInfoDOExample example = new PropertyInfoDOExample();
+		example.createCriteria().andUserNumEqualTo(param.getUserNum());
+		List<PropertyInfoDO> propertyInfoList = propertyInfoDOMapper.selectByExample(example);
+
 		TransactionDetailDO transactionDetailDO = new TransactionDetailDO();
 		transactionDetailDO.setTitle(param.getTitle());
 		transactionDetailDO.setTransactionNum(StringUtil.getRandomNum(""));
@@ -144,6 +157,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		transactionDetailDO.setRemark(param.getRemark());
 		transactionDetailDO.setGmtCreate(new Date());
 		transactionDetailDO.setBizNum(param.getBizNum() == null ? "" : param.getBizNum());
+		transactionDetailDO.setPreviousAmount((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getBalance());
 		transactionDetailDOMapper.insertSelective(transactionDetailDO);
 		param.setId(transactionDetailDO.getId());
 		return ResultCode.SUCCESS;

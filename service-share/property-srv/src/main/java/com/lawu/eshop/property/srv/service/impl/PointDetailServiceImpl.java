@@ -1,9 +1,13 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +44,8 @@ public class PointDetailServiceImpl implements PointDetailService {
 
 	@Autowired
 	private PointDetailDOMapper pointDetailDOMapper;
+	@Autowired
+	private PropertyInfoDOMapper propertyInfoDOMapper;
 
 	/**
 	 * 根据用户编号、查询参数分页查询积分明细
@@ -56,7 +62,7 @@ public class PointDetailServiceImpl implements PointDetailService {
 		Criteria criteria = pointDetailDOExample.createCriteria();
 		criteria.andUserNumEqualTo(userNum);
 
-		Long count = pointDetailDOMapper.countByExample(pointDetailDOExample);
+		Integer count = pointDetailDOMapper.countByExample(pointDetailDOExample);
 		
 		Page<PointDetailBO> page = new Page<>();
 		page.setCurrentPage(pointDetailQueryParam.getCurrentPage());
@@ -81,6 +87,10 @@ public class PointDetailServiceImpl implements PointDetailService {
 	@Override
 	@Transactional
 	public int save(PointDetailSaveDataParam param) {
+		PropertyInfoDOExample example = new PropertyInfoDOExample();
+		example.createCriteria().andUserNumEqualTo(param.getUserNum());
+		List<PropertyInfoDO> propertyInfoList = propertyInfoDOMapper.selectByExample(example);
+
 		PointDetailDO pointDetailDO = new PointDetailDO();
 		pointDetailDO.setTitle(param.getTitle());
 		pointDetailDO.setPointNum(StringUtil.getRandomNum(""));
@@ -91,6 +101,7 @@ public class PointDetailServiceImpl implements PointDetailService {
 		pointDetailDO.setBizId(param.getBizId());
 		pointDetailDO.setRemark(param.getRemark());
 		pointDetailDO.setGmtCreate(new Date());
+		pointDetailDO.setPreviousPoint((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getPoint());
 		pointDetailDOMapper.insertSelective(pointDetailDO);
 		return ResultCode.SUCCESS;
 	}
@@ -123,7 +134,7 @@ public class PointDetailServiceImpl implements PointDetailService {
 			}
 		}
 
-		Long count = pointDetailDOMapper.countByExample(pointDetailDOExample);
+		Integer count = pointDetailDOMapper.countByExample(pointDetailDOExample);
 
 		Page<PointDetailBO> page = new Page<>();
 		page.setCurrentPage(param.getCurrentPage());

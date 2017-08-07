@@ -262,4 +262,13 @@ public class RechargeServiceImpl implements RechargeService {
 		return bos;
 	}
 
+	@Override
+	public ThirdPayStatusEnum getRechargeById(Long id) {
+		RechargeDO recharge = rechargeDOMapper.selectByPrimaryKey(id);
+		if(recharge == null){
+			return null;
+		}
+		return ThirdPayStatusEnum.getEnum(recharge.getStatus());
+	}
+
 }
