@@ -21,7 +21,7 @@ public class InviteFansWithContentExtendParam extends InviteFansParam{
 	@ApiModelProperty(value = "门店简介", required = true)
 	private String merchantStoreIntro;
 
-	@ApiModelProperty(value = "类型:ALL--全选，--取消了几个，3--只选了几个", required = false)
+	@ApiModelProperty(value = "类型:ALL--全选，CANCEL_SOME--取消了几个，CHOOSE_SOME--只选了几个", required = false)
 	private InviteTypeEnum inviteTypeEnum;
 	
 	@ApiModelProperty(value = "邀请人数", required = false)
