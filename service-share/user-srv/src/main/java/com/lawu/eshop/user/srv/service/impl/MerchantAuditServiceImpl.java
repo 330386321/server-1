@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -272,8 +273,16 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                         isEntity = true;
                     }
                     if(MerchantAuditTypeEnum.AUDIT_TYPE_STORE.val.byteValue() == auditParam.getTypeEnum().val || isEntity){
-                        SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
-                        document.addField("discountOrdinal_d", 1000);
+                        MerchantStoreDO indexStore = merchantStoreDOMapper.selectByPrimaryKey(merchantStoreDO.getId());
+                        SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(indexStore, storePic);
+                        SolrDocument solrDocument = solrService.getSolrDocsById(merchantStoreDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+                        if (solrDocument != null) {
+                            document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
+                            document.addField("discountPackage_s", solrDocument.get("discountPackage_s"));
+                            document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d"));
+                        } else {
+                            document.addField("discountOrdinal_d", 1000);
+                        }
                         solrService.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
                     }
                 } else {
