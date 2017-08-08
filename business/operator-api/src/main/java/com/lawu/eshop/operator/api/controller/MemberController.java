@@ -162,18 +162,21 @@ public class MemberController extends BaseController{
                 StoreIndexParam storeIndexParam = new StoreIndexParam();
                 favoredDTOResult = merchantFavoredService.findFavoredByMerchantId(param.getId());
                 String favoredInfo = "";
-                double discountOrdinal = 1.0;
+                double discountOrdinal = 1000;
                 if (isSuccess(favoredDTOResult)) {
                     if (MerchantFavoredTypeEnum.TYPE_FULL.equals(favoredDTOResult.getModel().getTypeEnum())) {
                         favoredInfo = "买单每满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
                         discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        discountOrdinal = discountOrdinal * 1000 + 2;
                     } else if (MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.equals(favoredDTOResult.getModel().getTypeEnum())) {
                         favoredInfo = "买单满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
                         discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        discountOrdinal = discountOrdinal * 1000 + 3;
                     } else if (MerchantFavoredTypeEnum.TYPE_DISCOUNT.equals(favoredDTOResult.getModel().getTypeEnum())) {
                         NumberFormat numberFormat = NumberFormat.getInstance();
                         favoredInfo = "买单" + numberFormat.format(favoredDTOResult.getModel().getDiscountRate()) + "折";
                         discountOrdinal = favoredDTOResult.getModel().getDiscountRate().divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                        discountOrdinal = discountOrdinal * 1000 + 1;
                     }
                 }
 
