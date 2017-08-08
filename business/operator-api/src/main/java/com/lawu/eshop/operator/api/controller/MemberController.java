@@ -1,6 +1,7 @@
 package com.lawu.eshop.operator.api.controller;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,17 +162,18 @@ public class MemberController extends BaseController{
             StoreIndexParam storeIndexParam = new StoreIndexParam();
             favoredDTOResult = merchantFavoredService.findFavoredByMerchantId(param.getId());
             String favoredInfo = "";
-            double discountOrdinal = 100;
+            double discountOrdinal = 1.0;
             if (isSuccess(favoredDTOResult)) {
                 if (MerchantFavoredTypeEnum.TYPE_FULL.equals(favoredDTOResult.getModel().getTypeEnum())) {
-                    favoredInfo = "买单每满" + favoredDTOResult.getModel().getReachAmount() + "减" + favoredDTOResult.getModel().getFavoredAmount() + "元";
+                    favoredInfo = "买单每满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
                     discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 } else if (MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.equals(favoredDTOResult.getModel().getTypeEnum())) {
-                    favoredInfo = "买单满" + favoredDTOResult.getModel().getReachAmount() + "减" + favoredDTOResult.getModel().getFavoredAmount() + "元";
+                    favoredInfo = "买单满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
                     discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 } else if (MerchantFavoredTypeEnum.TYPE_DISCOUNT.equals(favoredDTOResult.getModel().getTypeEnum())) {
-                    favoredInfo = "买单" + favoredDTOResult.getModel().getDiscountRate() + "折";
-                    discountOrdinal = favoredDTOResult.getModel().getDiscountRate().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    NumberFormat numberFormat = NumberFormat.getInstance();
+                    favoredInfo = "买单" + numberFormat.format(favoredDTOResult.getModel().getDiscountRate()) + "折";
+                    discountOrdinal = favoredDTOResult.getModel().getDiscountRate().divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 }
             }
 
