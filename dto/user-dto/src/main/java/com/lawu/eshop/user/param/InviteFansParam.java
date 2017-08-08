@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class InviteFansParam {
 
-    @ApiModelProperty(value = "会员编号,以逗号分隔", required = true)
+    @ApiModelProperty(value = "会员编号,以逗号分隔", required = false)
     private String nums;
 
     @ApiModelProperty(value = "邀请区域,全国为空字符串", required = false)

@@ -1,5 +1,21 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
@@ -10,21 +26,26 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.member.api.service.*;
-import com.lawu.eshop.user.dto.*;
+import com.lawu.eshop.member.api.service.AdPlatformService;
+import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.member.api.service.RecommendStoreCacheService;
+import com.lawu.eshop.member.api.service.RegionService;
+import com.lawu.eshop.member.api.service.StoreSolrService;
+import com.lawu.eshop.user.dto.NewMerchantStoreDTO;
+import com.lawu.eshop.user.dto.RecommendFoodDTO;
+import com.lawu.eshop.user.dto.RecommendFoodStoreDTO;
+import com.lawu.eshop.user.dto.StoreSearchWordDTO;
+import com.lawu.eshop.user.dto.StoreSolrDTO;
+import com.lawu.eshop.user.dto.StoreSolrInfoDTO;
 import com.lawu.eshop.user.param.DiscountStoreParam;
 import com.lawu.eshop.user.param.RecommendFoodParam;
 import com.lawu.eshop.user.param.StoreSolrParam;
 import com.lawu.eshop.utils.DistanceUtil;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
 
 /**
  * @author meishuquan
@@ -169,6 +190,10 @@ public class StoreSolrController extends BaseController {
             for (RecommendFoodDTO foodDTO : consumeDTOS) {
                 double distance = DistanceUtil.getDistance(recommendFoodParam.getLongitude().doubleValue(), recommendFoodParam.getLatitude().doubleValue(), foodDTO.getLongitude().doubleValue(), foodDTO.getLatitude().doubleValue());
                 foodDTO.setDistance(distance / 1000);
+                foodDTO.setAverageConsumeAmount(BigDecimal.valueOf(foodDTO.getAverageConsumeAmount().intValue()));
+                if (foodDTO.getAverageScore().compareTo(BigDecimal.valueOf(0)) == 0) {
+                    foodDTO.setAverageScore(BigDecimal.valueOf(4));
+                }
             }
         }
         if (!StringUtils.isEmpty(commentResult.getModel())) {
@@ -176,6 +201,10 @@ public class StoreSolrController extends BaseController {
             for (RecommendFoodDTO foodDTO : commentDTOS) {
                 double distance = DistanceUtil.getDistance(recommendFoodParam.getLongitude().doubleValue(), recommendFoodParam.getLatitude().doubleValue(), foodDTO.getLongitude().doubleValue(), foodDTO.getLatitude().doubleValue());
                 foodDTO.setDistance(distance / 1000);
+                foodDTO.setAverageConsumeAmount(BigDecimal.valueOf(foodDTO.getAverageConsumeAmount().intValue()));
+                if (foodDTO.getAverageScore().compareTo(BigDecimal.valueOf(0)) == 0) {
+                    foodDTO.setAverageScore(BigDecimal.valueOf(4));
+                }
             }
         }
         storeDTO.setRecommendConsume(consumeDTOS);

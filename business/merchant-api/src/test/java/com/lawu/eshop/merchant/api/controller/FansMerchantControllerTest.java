@@ -1,7 +1,9 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.merchant.api.MerchantApiApplicationTest;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,9 +21,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.merchant.api.MerchantApiApplicationTest;
 
 /**
  * @author meishuquan
@@ -122,4 +123,56 @@ public class FansMerchantControllerTest {
         }
     }
 
+    
+    @Test
+    public void inviteFansWithContent() {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("nums", "B0001");
+        map.add("userSexEnum", "SEX_SECRET");
+        map.add("isAgeLimit", "false");
+        map.add("payPwd", "123456");
+        map.add("Url", "urlurlurl");
+        map.add("logoUrl", "logoUrlLogoUrl");
+        map.add("merchantStoreName", "merchantStoreName");
+        map.add("inviteContent", "inviteContent");
+        map.add("merchantStoreIntro", "merchantStoreIntro");
+        RequestBuilder request = post("/fansMerchant/inviteFansWithContent").header("authorization", "8888").params(map);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+    
+    
+    @Test
+    public void inviteFansWithContentExtend() {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("nums", "B0001");
+        map.add("userSexEnum", "SEX_SECRET");
+        map.add("isAgeLimit", "false");
+        map.add("payPwd", "123456");
+        map.add("Url", "urlurlurl");
+        map.add("logoUrl", "logoUrlLogoUrl");
+        map.add("merchantStoreName", "merchantStoreName");
+        map.add("inviteContent", "inviteContent");
+        map.add("merchantStoreIntro", "merchantStoreIntro");
+        map.add("inviteCount", "10");
+        map.add("inviteType", "1");
+        map.add("regionPath", "");
+        RequestBuilder request = post("/fansMerchant/inviteFansWithContentExtend").header("authorization", "8888").params(map);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+    
+    
 }

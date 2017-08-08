@@ -68,7 +68,7 @@ import util.UploadFileUtil;
  * @author Sunny
  * @date 2017/3/27
  */
-@Api(tags = "discountPackage", value = "优惠套餐")
+@Api(tags = "discountPackage")
 @RestController
 @RequestMapping(value = "discountPackage/")
 public class DiscountPackageController extends BaseController {
@@ -149,7 +149,6 @@ public class DiscountPackageController extends BaseController {
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-//    	discountPackageImages
     	HttpServletRequest request = getRequest();
         Map<String, String> images = new HashMap<>();
         
@@ -194,6 +193,8 @@ public class DiscountPackageController extends BaseController {
 		discountPackageSaveParam.setUseTimeWeek(discountPackageSaveForeignParam.getUseTimeWeek());
 		discountPackageSaveParam.setValidityPeriodBegin(discountPackageSaveForeignParam.getValidityPeriodBegin());
 		discountPackageSaveParam.setValidityPeriodEnd(discountPackageSaveForeignParam.getValidityPeriodEnd());
+		discountPackageSaveParam.setAdvanceBookingTime(discountPackageSaveForeignParam.getAdvanceBookingTime());
+		discountPackageSaveParam.setPurchaseNotes(discountPackageSaveForeignParam.getPurchaseNotes());
 		String discountPackageContentsStr = null;
 		String discountPackageImagesStr = null;
 		try {
@@ -322,6 +323,8 @@ public class DiscountPackageController extends BaseController {
 		discountPackageUpdateParam.setValidityPeriodBegin(discountPackageUpdateForeignParam.getValidityPeriodBegin());
 		discountPackageUpdateParam.setValidityPeriodEnd(discountPackageUpdateForeignParam.getValidityPeriodEnd());
 		discountPackageUpdateParam.setStatus(discountPackageUpdateForeignParam.getStatus());
+		discountPackageUpdateParam.setAdvanceBookingTime(discountPackageUpdateForeignParam.getAdvanceBookingTime());
+		discountPackageUpdateParam.setPurchaseNotes(discountPackageUpdateForeignParam.getPurchaseNotes());
 		String discountPackageContentsStr = null;
 		String discountPackageImagesStr = null;
 		try {

@@ -202,6 +202,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	 * @author jiangxinjun
 	 * @date 2017年7月11日
 	 */
+	@Deprecated
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "agreeToApply/{id}", method = RequestMethod.PUT)
 	public Result agreeToApply(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestBody ShoppingRefundDetailAgreeToApplyForeignParam param) {

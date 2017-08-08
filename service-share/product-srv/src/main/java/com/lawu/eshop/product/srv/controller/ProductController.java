@@ -79,6 +79,9 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "updateProductStatus", method = RequestMethod.PUT)
     public Result updateProductStatus(@RequestParam String ids, @RequestParam ProductStatusEnum productStatus,@RequestParam Long merchantId) {
         int counts = productService.updateProductStatus(ids, productStatus,merchantId);
+        if(counts == -1){
+            return successCreated(ResultCode.GOODS_PRODUCT_INVENTORY);
+        }
         if (counts == 0 || counts != ids.split(",").length) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }

@@ -58,7 +58,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 
 			for (ShoppingOrderCommissionDTO order : orders) {
 				
-				logger.info("[{}]，订单ID={}，用户编号={}，商家编号={}，金额={}",msg,order.getId(),order.getMemberNum(),order.getMerchantNum(),order.getActualAmount());
+//				logger.info("[{}]，订单ID={}，用户编号={}，商家编号={}，金额={}",msg,order.getId(),order.getMemberNum(),order.getMerchantNum(),order.getActualAmount());
 				
 				if((order.getMemberNum() == null || "".equals(order.getMemberNum())) 
 					&& (order.getMerchantNum() == null || "".equals(order.getMerchantNum()))){
@@ -98,7 +98,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 							saleCommission = property.get("sale_commission_3");
 						}
 
-						logger.info("[{}-memberInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,saleCommission,saleCommissionAddScope,level);
+//						logger.info("[{}-memberInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,saleCommission,saleCommissionAddScope,level);
 						
 						BigDecimal actualCommission = saleCommission.add(saleCommissionAddScope.multiply(level.subtract(new BigDecimal("1"))));//没升一个级别+0.005
 						BigDecimal actureMoneyIn;
@@ -133,8 +133,8 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						param.setLoveTypeVal(LoveTypeEnum.SALES_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.SALES_COMMISSION.getName());
 
-						logger.info("[{}-memberInviters],actualCommission={},actualCommissionScope={},loveAccountScale={}",msg,actualCommission,actualCommissionScope,loveAccountScale);
-						logger.info("[{}-memberInviters],actualMoney={},actureMoneyIn={},actureLoveIn={}",msg,actualMoney,param.getActureMoneyIn(),param.getActureLoveIn());
+//						logger.info("[{}-memberInviters],actualCommission={},actualCommissionScope={},loveAccountScale={}",msg,actualCommission,actualCommissionScope,loveAccountScale);
+//						logger.info("[{}-memberInviters],actualMoney={},actureMoneyIn={},actureLoveIn={}",msg,actualMoney,param.getActureMoneyIn(),param.getActureLoveIn());
 						
 						retCode1 = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode1) {
@@ -172,7 +172,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 							saleCommission = property.get("sale_commission_3");
 						}
 						
-						logger.info("[{}-merchantInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,saleCommission,saleCommissionAddScope,level);
+//						logger.info("[{}-merchantInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,saleCommission,saleCommissionAddScope,level);
 						
 						BigDecimal actualCommission = saleCommission.add(saleCommissionAddScope.multiply(level.subtract(new BigDecimal("1"))));
 						BigDecimal actureMoneyIn;
@@ -207,8 +207,8 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						param.setLoveTypeVal(LoveTypeEnum.VOLUME_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.VOLUME_COMMISSION.getName());
 
-						logger.info("[{}-merchantInviters],actualCommission={},actualCommissionScope={},loveAccountScale={}",msg,actualCommission,actualCommissionScope,loveAccountScale);
-						logger.info("[{}-merchantInviters],actualMoney={},actureMoneyIn={},actureLoveIn={}",msg,actualMoney,param.getActureMoneyIn(),param.getActureLoveIn());
+//						logger.info("[{}-merchantInviters],actualCommission={},actualCommissionScope={},loveAccountScale={}",msg,actualCommission,actualCommissionScope,loveAccountScale);
+//						logger.info("[{}-merchantInviters],actualMoney={},actureMoneyIn={},actureLoveIn={}",msg,actualMoney,param.getActureMoneyIn(),param.getActureLoveIn());
 						
 						retCode2 = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode2) {

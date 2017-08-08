@@ -20,6 +20,7 @@ import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
+import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
@@ -104,6 +105,14 @@ public interface AdService {
      * @return
      */
     AdEgainDetailBO selectAbById(Long id, Long memberId);
+
+    /**
+     * 抢赞详情
+     * @param id
+     * @param memberId
+     * @return
+     */
+    AdPraiseBO selectAdPraiseById(Long id, Long memberId);
 
 
     /**

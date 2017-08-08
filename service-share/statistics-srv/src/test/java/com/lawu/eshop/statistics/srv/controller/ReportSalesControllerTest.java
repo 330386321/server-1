@@ -57,7 +57,7 @@ public class ReportSalesControllerTest {
 		param.setShoppingOrderAmount(new BigDecimal(10));
 		param.setType(ReportTypeEnum.DAILY);
 		String requestJson = JSONObject.toJSONString(param);
-		RequestBuilder request = post("/reportSales/save").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+		RequestBuilder request = post("/reportSales/").contentType(MediaType.APPLICATION_JSON).content(requestJson);
 		try {
 			ResultActions perform = mvc.perform(request);
 			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED))

@@ -20,6 +20,6 @@ public class MockWorkOrderService extends BaseController implements WorkOrderSer
 
 	@Override
 	public Result saveWorkOrder(@RequestBody WorkOrderParam workOrderParam) {
-		return null;
+		return successCreated();
 	}
 }

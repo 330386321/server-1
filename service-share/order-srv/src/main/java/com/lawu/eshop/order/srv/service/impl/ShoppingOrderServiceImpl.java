@@ -769,7 +769,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingRefundDetailDOMapper.insertSelective(shoppingRefundDetailDO);
 		// 把当前的退款状态加入记录到退款流程
 		ShoppingRefundProcessDO shoppingRefundProcessDO = new ShoppingRefundProcessDO();
-		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemDO.getRefundStatus());
+		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemUpdateDO.getRefundStatus());
 		shoppingRefundProcessDO.setGmtCreate(new Date());
 		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);

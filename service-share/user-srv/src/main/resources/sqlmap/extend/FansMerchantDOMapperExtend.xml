@@ -44,6 +44,41 @@
 	</select>
 
 	<select resultMap="BaseResultMap"
+		parameterType="com.lawu.eshop.user.param.ListInviteFansRealWithContentParam" id="listInviteFansWithContent">
+		select id as
+		memberId,num,account,region_path,region_name,nickname,headimg,level
+		from member where id not in(select member_id from fans_merchant where merchant_id = #{merchantId,jdbcType=BIGINT})
+		<if test="regionPath != null and regionPath != ''">
+			and region_path like CONCAT(#{regionPath,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="sex != 1">
+			and sex = #{sex,jdbcType=TINYINT}
+		</if>
+		<if test="ageLimit == true">
+			and TIMESTAMPDIFF(YEAR,birthday,CURRENT_DATE) &gt;=
+			#{startAge,jdbcType=INTEGER} and
+			TIMESTAMPDIFF(YEAR,birthday,CURRENT_DATE) &lt;=
+			#{endAge,jdbcType=INTEGER}
+		</if>
+		<if test="inviteType == 2">
+			and num not in
+			<foreach item="num" index="index" collection="nums" open="(" separator="," close=")">  
+ 				#{num,jdbcType=VARCHAR}  
+			</foreach>  
+		</if>
+		<if test="inviteType == 3">
+			and num in
+			<foreach item="num" index="index" collection="nums" open="(" separator="," close=")">  
+ 				#{num,jdbcType=VARCHAR}  
+			</foreach>  
+		</if>
+		<if test="inviteCount != null">
+			limit #{inviteCount,jdbcType=INTEGER}
+		</if>
+	</select>
+	
+
+	<select resultMap="BaseResultMap"
 			parameterType="com.lawu.eshop.user.param.ListInviteFansRealParam" id="pageListInviteFans">
 		select id as
 		memberId,num,account,region_path,region_name,nickname,headimg,level
@@ -91,7 +126,7 @@
 		select
 		mem.account,mem.region_path,mem.region_name,mem.nickname,mem.headimg,mem.level,fm.gmt_create
 		from fans_merchant fm inner join member mem on fm.member_id = mem.id
-		where fm.merchant_id = #{merchantId,jdbcType=BIGINT}
+		where fm.merchant_id = #{merchantId,jdbcType=BIGINT} and fm.`status` = 1 
 		<if test="regionPath != null and regionPath != ''">
 			and mem.region_path like
 			CONCAT(#{regionPath,jdbcType=VARCHAR},'%')
@@ -107,7 +142,7 @@
 		from fans_merchant fm inner join member mem on
 		fm.member_id = mem.id
 		where fm.merchant_id =
-		#{merchantId,jdbcType=BIGINT}
+		#{merchantId,jdbcType=BIGINT} and fm.`status` = 1 
 		<if test="regionPath != null and regionPath != ''">
 			and mem.region_path like
 			CONCAT(#{regionPath,jdbcType=VARCHAR},'%')

@@ -236,4 +236,19 @@ public class MerchantAuditControllerTest {
         }
     }
 
+    @Transactional
+    @Rollback
+    @Test
+    public void getRecentMerchantAuditRecord() {
+        RequestBuilder request = get("/audit/getRecentMerchantAuditRecord").param("merchantId", "200");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
 }

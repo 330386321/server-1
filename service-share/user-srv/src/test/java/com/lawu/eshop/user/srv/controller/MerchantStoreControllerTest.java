@@ -127,7 +127,7 @@ public class MerchantStoreControllerTest {
     @Transactional
     @Rollback
     @Test
-    public void findMerchantStoreInfo() {
+    public void selectMerchantStore() {
         MerchantStoreDO storeDO = new MerchantStoreDO();
         storeDO.setMerchantId(200L);
         storeDO.setName("测试店铺");
@@ -275,7 +275,7 @@ public class MerchantStoreControllerTest {
     @Transactional
     @Rollback
     @Test
-    public void shoppingCart() {
+    public void getMerchantInfoForShoppingCart() {
         MerchantStoreDO storeDO = new MerchantStoreDO();
         storeDO.setMerchantId(200L);
         storeDO.setName("测试店铺");
@@ -851,7 +851,7 @@ public class MerchantStoreControllerTest {
     @Transactional
     @Rollback
     @Test
-    public void merchantStoreId() {
+    public void getMerchantStoreById() {
         RequestBuilder request = get("/merchantStore/merchantStoreId/200");
         try {
             ResultActions perform = mvc.perform(request);
@@ -1079,7 +1079,7 @@ public class MerchantStoreControllerTest {
             Assert.fail(e.getMessage());
         }
     }
-    
+
     @Transactional
     @Rollback
     @Test

@@ -105,7 +105,7 @@ public interface AdService {
 	 * @param merchantId
 	 * @return
 	 */
-	@RequestMapping(value = "ad/isMyDate/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "ad/isMyData/{id}", method = RequestMethod.GET)
 	Result<IsMyDateDTO> isMyData(@PathVariable("id") Long id,@RequestParam("merchantId") Long merchantId);
 
 }

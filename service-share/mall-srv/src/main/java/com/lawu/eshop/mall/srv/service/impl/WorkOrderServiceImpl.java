@@ -6,9 +6,12 @@ import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.DealWorkOrderParam;
+import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.WorkOrderParam;
 import com.lawu.eshop.mall.query.WorkOrderQuery;
 import com.lawu.eshop.mall.srv.bo.WorkOrderBO;
@@ -17,6 +20,7 @@ import com.lawu.eshop.mall.srv.domain.WorkOrderDO;
 import com.lawu.eshop.mall.srv.domain.WorkOrderDOExample;
 import com.lawu.eshop.mall.srv.domain.WorkOrderDOExample.Criteria;
 import com.lawu.eshop.mall.srv.mapper.WorkOrderDOMapper;
+import com.lawu.eshop.mall.srv.service.MessageService;
 import com.lawu.eshop.mall.srv.service.WorkOrderService;
 
 @Service
@@ -25,6 +29,8 @@ public class WorkOrderServiceImpl implements WorkOrderService{
 	@Autowired
 	private WorkOrderDOMapper workOrderDOMapper;
 	
+	@Autowired
+	private MessageService messageService;
 	
 	@Override
 	public Integer saveWorkOrder(WorkOrderParam param) {
@@ -39,8 +45,15 @@ public class WorkOrderServiceImpl implements WorkOrderService{
 		return i;
 	}
 
+	@Transactional
 	@Override
 	public Integer updateWorkOrder(DealWorkOrderParam dealWorkOrderParam) {
+		if(dealWorkOrderParam.getWorkOrderStatusEnum().val == 2) {
+			WorkOrderDO DO = workOrderDOMapper.selectByPrimaryKey(dealWorkOrderParam.getId());
+			MessageInfoParam messageInfoParam = new MessageInfoParam();
+			messageInfoParam.setTypeEnum(MessageTypeEnum.getEnum(MessageTypeEnum.MESSAGE_TYPE_REPLIED_WORK_ORDER.getVal()));
+			messageService.saveMessage(DO.getUserNum(), messageInfoParam);
+		}
 		WorkOrderDO record = new WorkOrderDO();
 		record.setId(dealWorkOrderParam.getId());
 		Date date = new Date();
@@ -49,8 +62,7 @@ public class WorkOrderServiceImpl implements WorkOrderService{
 		record.setAuditorId(dealWorkOrderParam.getAuditorId());
 		record.setAuditorName(dealWorkOrderParam.getAuditorName());
 		record.setStatus(dealWorkOrderParam.getWorkOrderStatusEnum().val);
-		if(dealWorkOrderParam.getWorkOrderStatusEnum().val == 2)
-			record.setReplyContent(dealWorkOrderParam.getReplyContent());
+		record.setReplyContent(dealWorkOrderParam.getReplyContent());
 		return workOrderDOMapper.updateByPrimaryKeySelective(record);
 	}
 

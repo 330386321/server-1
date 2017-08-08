@@ -166,7 +166,7 @@ public class MemberControllerTest {
     @Transactional
     @Rollback
     @Test
-    public void getMember() {
+    public void getMemberByAccount() {
         RequestBuilder request = get("/member/getMember/13666666666");
         try {
             ResultActions perform = mvc.perform(request);
@@ -552,6 +552,31 @@ public class MemberControllerTest {
     @Test
     public void getTotalCount() {
         RequestBuilder request = get("/member/getTotalCount");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void adQueryMemberInfo() {
+        MemberDO memberDO = new MemberDO();
+        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setAccount("13666666666");
+        memberDO.setPwd(PwdUtil.generate("123456"));
+        memberDO.setMobile("13666666666");
+        memberDO.setStatus(DataTransUtil.intToByte(1));
+        memberDO.setRegionPath("44/4403/440303");
+        memberDO.setGmtCreate(new Date());
+        memberDOMapper.insertSelective(memberDO);
+
+        RequestBuilder request = get("/member/adQueryMemberInfo/" + memberDO.getId());
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();

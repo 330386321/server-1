@@ -53,4 +53,25 @@ public interface RecommendStoreService {
      * @return
      */
     String getRecommendFoodComment(String regionPath);
+
+    /**
+     * 新店推荐
+     *
+     * @param regionPath
+     */
+    void delNewMerchant(String regionPath);
+
+    /**
+     * 优选美食-人气最高
+     *
+     * @param regionPath
+     */
+    void delRecommendFoodConsume(String regionPath);
+
+    /**
+     * 优选美食-评价最高
+     *
+     * @param regionPath
+     */
+    void delRecommendFoodComment(String regionPath);
 }

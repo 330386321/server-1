@@ -1,10 +1,11 @@
 package com.lawu.eshop.cache.srv.service.impl;
 
-import com.lawu.eshop.cache.srv.constants.KeyConstant;
-import com.lawu.eshop.cache.srv.service.RecommendStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
+import com.lawu.eshop.cache.srv.constants.KeyConstant;
+import com.lawu.eshop.cache.srv.service.RecommendStoreService;
 
 /**
  * @author meishuquan
@@ -24,7 +25,7 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
 
     @Override
     public void setRecommendFoodConsume(String regionPath, String storeInfo) {
-        String key = KeyConstant.REDIS_KEY_MERCHANT_HOT_STORE.concat(regionPath);
+        String key = KeyConstant.REDIS_KEY_MERCHANT_CONSUME_STORE.concat(regionPath);
         stringRedisTemplate.opsForValue().set(key, storeInfo);
     }
 
@@ -42,7 +43,7 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
 
     @Override
     public String getRecommendFoodConsume(String regionPath) {
-        String key = KeyConstant.REDIS_KEY_MERCHANT_HOT_STORE.concat(regionPath);
+        String key = KeyConstant.REDIS_KEY_MERCHANT_CONSUME_STORE.concat(regionPath);
         return stringRedisTemplate.opsForValue().get(key);
     }
 
@@ -50,5 +51,23 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
     public String getRecommendFoodComment(String regionPath) {
         String key = KeyConstant.REDIS_KEY_MERCHANT_COMMENT_STORE.concat(regionPath);
         return stringRedisTemplate.opsForValue().get(key);
+    }
+
+    @Override
+    public void delNewMerchant(String regionPath) {
+        String key = KeyConstant.REDIS_KEY_MERCHANT_NEW_STORE.concat(regionPath);
+        stringRedisTemplate.delete(key);
+    }
+
+    @Override
+    public void delRecommendFoodConsume(String regionPath) {
+        String key = KeyConstant.REDIS_KEY_MERCHANT_CONSUME_STORE.concat(regionPath);
+        stringRedisTemplate.delete(key);
+    }
+
+    @Override
+    public void delRecommendFoodComment(String regionPath) {
+        String key = KeyConstant.REDIS_KEY_MERCHANT_COMMENT_STORE.concat(regionPath);
+        stringRedisTemplate.delete(key);
     }
 }

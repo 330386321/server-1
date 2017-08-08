@@ -236,7 +236,6 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		// 失败的情况要回滚数据
 		for (int i = 0; i < idsArray.length; i++) {
 
-			// 余额新增
 			WithdrawCashDO wcdo = withdrawCashDOMapper.selectByPrimaryKey(Long.valueOf(idsArray[i]));
 
 			// 新增交易明细

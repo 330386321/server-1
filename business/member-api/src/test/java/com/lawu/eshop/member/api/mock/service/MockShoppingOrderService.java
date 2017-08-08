@@ -1,5 +1,13 @@
 package com.lawu.eshop.member.api.mock.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -7,7 +15,11 @@ import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
-import com.lawu.eshop.order.dto.foreign.*;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
@@ -62,7 +74,7 @@ public class MockShoppingOrderService extends BaseController implements Shopping
 	}
 
 	@Override
-	public Result tradingSuccess(@PathVariable("id") Long id) {
+	public Result tradingSuccess(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
 		return successCreated();
 	}
 

@@ -68,7 +68,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 
     @Autowired
     private SolrService solrService;
-    
+
     @Autowired
     private MerchantStoreProfileDOMapper  merchantStoreProfileDOMapper;
 
@@ -78,11 +78,19 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         MerchantStoreDOExample example = new MerchantStoreDOExample();
         example.createCriteria().andMerchantIdEqualTo(merchantId);
         List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(example);
-        MerchantStoreDO merchantStoreDO = null;
-        if (!list.isEmpty()) {
-            merchantStoreDO = list.get(0);
+        if(list.isEmpty()){
+            return null;
         }
+
+        MerchantStoreDO merchantStoreDO = list.get(0);
+        MerchantStoreProfileDOExample mpExample = new  MerchantStoreProfileDOExample();
+        mpExample.createCriteria().andMerchantIdEqualTo(list.get(0).getMerchantId());
+        List<MerchantStoreProfileDO>  mpList = merchantStoreProfileDOMapper.selectByExample(mpExample);
+
         MerchantStoreBO bo = MerchantStoreConverter.convertStoreBO(merchantStoreDO);
+		if(!mpList.isEmpty()){
+			bo.setManageTypeEnum(MerchantStoreTypeEnum.getEnum(mpList.get(0).getManageType()));
+		}
         return bo;
     }
 
@@ -148,7 +156,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             document.addField("averageConsumeAmount_d", param.getAverageConsumeAmount() == null ? 0 : param.getAverageConsumeAmount().toString());
             document.addField("averageScore_d", param.getAverageScore() == null ? 0 : param.getAverageScore().toString());
             document.addField("favoriteNumber_i", solrDocument.get("favoriteNumber_i"));
-            document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d"));
+            document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d") == null ? 1000 : solrDocument.get("discountOrdinal_d"));
             document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
             document.addField("discountPackage_s", solrDocument.get("discountPackage_s"));
             document.addField("keywords", solrDocument.get("keywords"));
@@ -310,7 +318,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         	MerchantStoreDO merchantStoreDO = list.get(0);
             MerchantStoreProfileDOExample mpExample = new  MerchantStoreProfileDOExample();
             mpExample.createCriteria().andMerchantIdEqualTo(list.get(0).getMerchantId());
-            List<MerchantStoreProfileDO>  mpList = merchantStoreProfileDOMapper.selectByExample(mpExample);		
+            List<MerchantStoreProfileDO>  mpList = merchantStoreProfileDOMapper.selectByExample(mpExample);
             bo.setMerchantStoreId(merchantStoreDO.getId());
             bo.setName(merchantStoreDO.getName());
             bo.setLatitude(merchantStoreDO.getLatitude());
@@ -318,7 +326,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
     		if(!mpList.isEmpty()){
     			bo.setManageType(MerchantStoreTypeEnum.getEnum(mpList.get(0).getManageType()));
     		}
-    		
+
         }
 		return bo;
 	}

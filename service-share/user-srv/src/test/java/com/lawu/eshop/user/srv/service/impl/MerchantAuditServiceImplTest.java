@@ -499,11 +499,41 @@ public class MerchantAuditServiceImplTest {
         storeAuditDO.setGmtCreate(new Date());
         merchantStoreAuditDOMapper.insertSelective(storeAuditDO);
 
-
         merchantAuditService.setAuditInfoShow(merchantDO.getId());
         MerchantStoreAuditDO merchantStoreAuditDO = merchantStoreAuditDOMapper.selectByPrimaryKey(storeAuditDO.getId());
         Assert.assertNotNull(merchantStoreAuditDO);
         Assert.assertTrue(merchantStoreAuditDO.getIsShow());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getRecentMerchantAuditRecord() {
+        MerchantStoreParam merchantStoreParam = new MerchantStoreParam();
+        merchantStoreParam.setStoreUrl("pic");
+        merchantStoreParam.setEnvironmentUrl("pic");
+        merchantStoreParam.setLicenseUrl("pic");
+        merchantStoreParam.setOtherUrl("pic");
+        merchantStoreParam.setLogoUrl("pic");
+        merchantStoreParam.setIdcardUrl("pic");
+        merchantStoreParam.setManageType(MerchantStoreTypeEnum.NORMAL_MERCHANT);
+        merchantStoreParam.setCertifType(CertifTypeEnum.CERTIF_TYPE_IDCARD);
+
+        //初始化门店审核
+        MerchantStoreAuditDO storeAuditDO = new MerchantStoreAuditDO();
+        storeAuditDO.setMerchantId(200L);
+        storeAuditDO.setMerchantStoreId(300L);
+        storeAuditDO.setContent(JSONObject.fromObject(merchantStoreParam).toString());
+        storeAuditDO.setStatus(DataTransUtil.intToByte(0));
+        storeAuditDO.setType(DataTransUtil.intToByte(2));
+        storeAuditDO.setIsShow(false);
+        storeAuditDO.setGmtModified(new Date());
+        storeAuditDO.setGmtCreate(new Date());
+        merchantStoreAuditDOMapper.insertSelective(storeAuditDO);
+
+        MerchantStoreAuditBO storeAuditBO = merchantAuditService.getRecentMerchantAuditRecord(200L);
+        Assert.assertNotNull(storeAuditBO);
+        Assert.assertEquals(storeAuditDO.getMerchantId(), storeAuditBO.getMerchantId());
     }
 
 }

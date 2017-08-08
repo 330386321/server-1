@@ -1,8 +1,37 @@
 package com.lawu.eshop.user.srv.converter;
 
-import com.lawu.eshop.user.dto.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
+
+import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantInfoForShoppingCartDTO;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.NewMerchantStoreDTO;
+import com.lawu.eshop.user.dto.RecommendFoodDTO;
+import com.lawu.eshop.user.dto.ShoppingOrderFindMerchantInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreSolrDTO;
+import com.lawu.eshop.user.dto.StoreSolrInfoDTO;
 import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.bo.MemberBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.NewMerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.PayOrderStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.RecommendFoodBO;
+import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreSolrInfoBO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
@@ -11,12 +40,6 @@ import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
 import com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview;
 import com.lawu.eshop.utils.DataTransUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrInputDocument;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 商家门店信息转换
@@ -307,6 +330,7 @@ public class MerchantStoreConverter {
         bo.setIndustryPath(merchantStoreDO.getIndustryPath());
         bo.setIndustryName(merchantStoreDO.getIndustryName());
         bo.setRegionPath(merchantStoreDO.getRegionPath());
+        bo.setId(merchantStoreDO.getId());
         return bo;
     }
 
@@ -323,6 +347,7 @@ public class MerchantStoreConverter {
         dto.setIndustryPath(merchantStoreBO.getIndustryPath());
         dto.setIndustryName(merchantStoreBO.getIndustryName());
         dto.setRegionPath(merchantStoreBO.getRegionPath());
+        dto.setManageType(merchantStoreBO.getManageTypeEnum());
         return dto;
     }
 
@@ -397,8 +422,8 @@ public class MerchantStoreConverter {
             storeSolrDTO.setStorePic(solrDocument.get("storePic_s") == null ? "" : solrDocument.get("storePic_s").toString());
             storeSolrDTO.setDistance(DataTransUtil.objectToDobule(solrDocument.get("distance"), 3));
             storeSolrDTO.setFavoriteNumber(solrDocument.get("favoriteNumber_i") == null ? 0 : Integer.valueOf(solrDocument.get("favoriteNumber_i").toString()));
-            storeSolrDTO.setAverageConsumeAmount(solrDocument.get("averageConsumeAmount_d") == null ? 0.0 : Double.valueOf(solrDocument.get("averageConsumeAmount_d").toString()));
-            storeSolrDTO.setAverageScore(solrDocument.get("averageScore_d") == null ? 0.0 : Double.valueOf(solrDocument.get("averageScore_d").toString()));
+            storeSolrDTO.setAverageConsumeAmount(solrDocument.get("averageConsumeAmount_d") == null ? 0.0 : Double.valueOf(solrDocument.get("averageConsumeAmount_d").toString()).intValue());
+            storeSolrDTO.setAverageScore(solrDocument.get("averageScore_d") == null ? 4.0 : Double.valueOf(solrDocument.get("averageScore_d").toString()));
             storeSolrDTO.setFavoreInfo(solrDocument.get("favoreInfo_s") == null ? "" : solrDocument.get("favoreInfo_s").toString());
             storeSolrDTO.setDiscountPackage(solrDocument.get("discountPackage_s") == null ? "" : solrDocument.get("discountPackage_s").toString());
             storeSolrDTOS.add(storeSolrDTO);

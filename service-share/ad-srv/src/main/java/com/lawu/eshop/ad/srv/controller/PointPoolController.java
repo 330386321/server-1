@@ -6,6 +6,7 @@ import com.lawu.eshop.ad.srv.service.PointPoolService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,8 +33,8 @@ public class PointPoolController extends BaseController{
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "selectMemberList", method = RequestMethod.GET)
-    public Result<List<PointPoolDTO>> selectMemberList(@RequestParam Long id) {
+	@RequestMapping(value = "selectMemberList/{id}", method = RequestMethod.GET)
+    public Result<List<PointPoolDTO>> selectMemberList(@PathVariable Long id) {
 		List<PointPoolDO> memberIds = pointPoolService.selectMemberList(id);
 		List<PointPoolDTO> list=new ArrayList<>();
 		for (PointPoolDO pointPoolDO : memberIds) {

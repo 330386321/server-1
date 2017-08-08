@@ -93,9 +93,10 @@ public class ShoppingRefundDetailController extends BaseController {
     	return successCreated(result);
     }
 	
+	@Deprecated
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@ApiOperation(value = "商家确认买家的退货申请", notes = "商家是否同意买家的退货申请。[1004|1100|1024|4027]（蒋鑫俊）", httpMethod = "PUT")
+	@ApiOperation(value = "商家确认买家的退货申请[Deprecated]", notes = "商家是否同意买家的退货申请。[1004|1100|1024|4027]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "agreeToApply/{id}", method = RequestMethod.PUT)
@@ -201,7 +202,7 @@ public class ShoppingRefundDetailController extends BaseController {
 		Result result = shoppingRefundDetailService.agreeToRefund(id, merchantId, param);
 		return successCreated(result);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "商家拒绝退款", notes = "商家拒绝退款。。[1002|1003|4011|4013|4028]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")

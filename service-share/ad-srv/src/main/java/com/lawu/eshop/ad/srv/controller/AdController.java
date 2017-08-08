@@ -24,17 +24,16 @@ import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
-import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.AdPointDTO;
+import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.IsMyDateDTO;
-import com.lawu.eshop.ad.dto.OperatorAdDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
 import com.lawu.eshop.ad.dto.ReportAdDTO;
@@ -49,6 +48,8 @@ import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.param.ListAdParam;
+import com.lawu.eshop.ad.dto.AdEgainDTO;
+import com.lawu.eshop.ad.dto.OperatorAdDTO;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
@@ -62,6 +63,7 @@ import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
+import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
@@ -184,6 +186,18 @@ public class AdController extends BaseController {
 	public Result<AdEgainDTO> selectAbById(@PathVariable Long id, @RequestParam Long memberId) {
 		AdEgainDetailBO bo = adService.selectAbById(id, memberId);
 		return successAccepted(AdConverter.convertAdEgainDTO(bo));
+	}
+
+	/**
+	 * 抢赞详情
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "selectAdPraiseById/{id}", method = RequestMethod.GET)
+	public Result<AdPraiseDTO> selectAdPraiseById(@PathVariable Long id, @RequestParam Long memberId) {
+		AdPraiseBO bo = adService.selectAdPraiseById(id, memberId);
+		return successAccepted(AdConverter.convertPraiseDTO(bo));
 	}
 
 	/**

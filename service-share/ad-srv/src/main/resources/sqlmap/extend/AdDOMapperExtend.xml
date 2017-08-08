@@ -42,8 +42,8 @@
 	      </if>
 	      <!-- 积分榜 -->
 	      <if test="topType ==1">
-	       type=1 and <![CDATA[ status > 0 and status < 3  ]]>
-	       order by total_point desc
+	       type=1 and <![CDATA[ status > 0 and status < 3 and begin_time > #{beginAfterTime,jdbcType=TIMESTAMP} ]]>
+	       order by total_point desc 
 	      	 
 	      </if>
 	      <!-- 人气榜 -->

@@ -46,6 +46,7 @@ public interface ShoppingRefundDetailService {
 	 * @author jiangxinjun
 	 * @date 2017年7月11日
 	 */
+	@Deprecated
 	void agreeToApply(Long id, Long merchantId, ShoppingRefundDetailAgreeToApplyForeignParam param);
 
 	/**

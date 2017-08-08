@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiResponse;
  * @author jiangxinjun
  * @date 2017年7月31日
  */
-@Api(tags = "discountPackage[优惠套餐购买须知]")
+@Api(tags = "discountPackagePurchaseNotes")
 @RestController
 @RequestMapping(value = "discountPackagePurchaseNotes/")
 public class DiscountPackagePurchaseNotesController extends BaseController {
