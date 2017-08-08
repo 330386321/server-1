@@ -72,6 +72,9 @@ public class ResultCode {
     public static final int MOBILE_IS_NOT_EXIST = 2013;
     public static final int MERCHANT_STORE_IS_FAVORITE = 2014;
     public static final int ACCOUNT_IS_FREEZE = 2015;
+    public static final int MAX_USERREDPACKET_COUNT=2016;
+    public static final int MAX_USERREDPACKET_MONTY=2017;
+    
 
 
     // 商品模块代码 3xxx
@@ -245,6 +248,8 @@ public class ResultCode {
         ResultCode.messageMap.put(MOBILE_IS_NOT_EXIST, "手机号不存在");
         ResultCode.messageMap.put(MERCHANT_STORE_IS_FAVORITE, "门店已被收藏");
         ResultCode.messageMap.put(ACCOUNT_IS_FREEZE, "账户已被冻结");
+        ResultCode.messageMap.put(MAX_USERREDPACKET_COUNT, "单个红包个数不能大于99999");
+        ResultCode.messageMap.put(MAX_USERREDPACKET_MONTY, "单个红包金额不能大于50000");
         
 
         //运营
