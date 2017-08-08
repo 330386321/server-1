@@ -1,13 +1,19 @@
 package com.lawu.eshop.user.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class MerchantProfileDTO {
 
+	@ApiModelProperty(value = "官网链接")
 	private String websiteUrl;
 
+	@ApiModelProperty(value = "淘宝链接")
 	private String taobaoUrl;
 
+	@ApiModelProperty(value = "天猫链接")
 	private String tmallUrl;
 
+	@ApiModelProperty(value = "京东链接")
 	private String jdUrl;
 
 	public String getWebsiteUrl() {

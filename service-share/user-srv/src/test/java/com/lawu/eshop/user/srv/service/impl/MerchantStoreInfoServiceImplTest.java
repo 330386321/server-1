@@ -550,6 +550,24 @@ public class MerchantStoreInfoServiceImplTest {
     @Transactional
     @Rollback
     @Test
+    public void addMerchantStoreCommentsCount() {
+        MerchantStoreDO storeDO = new MerchantStoreDO();
+        storeDO.setMerchantId(200L);
+        storeDO.setBuyNumbers(0);
+        storeDO.setCommentsCount(0);
+        storeDO.setStatus(DataTransUtil.intToByte(1));
+        storeDO.setIsNoReasonReturn(true);
+        merchantStoreDOMapper.insertSelective(storeDO);
+
+        merchantStoreInfoService.addMerchantStoreCommentsCount(200L);
+        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(storeDO.getId());
+        Assert.assertNotNull(merchantStoreDO);
+        Assert.assertEquals(1, merchantStoreDO.getCommentsCount().intValue());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
     public void updateMerchantStoreStatus() {
         MerchantStoreDO storeDO = new MerchantStoreDO();
         storeDO.setMerchantId(200L);
@@ -683,7 +701,14 @@ public class MerchantStoreInfoServiceImplTest {
         MerchantDO merchantDO = new MerchantDO();
         merchantDO.setStatus(StatusEnum.VALID.getValue());
         merchantDO.setIsFreeze(false);
+        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setAccount("13888888888");
+        merchantDO.setPwd("123456");
+        merchantDO.setMobile("13888888888");
+        merchantDO.setStatus(DataTransUtil.intToByte(1));
+        merchantDO.setGmtCreate(new Date());
         merchantDOMapper.insertSelective(merchantDO);
+
         MerchantStoreDO storeDO = new MerchantStoreDO();
         storeDO.setMerchantId(merchantDO.getId());
         storeDO.setName("测试店铺");

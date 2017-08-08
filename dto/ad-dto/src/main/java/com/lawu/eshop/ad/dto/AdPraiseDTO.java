@@ -2,6 +2,7 @@ package com.lawu.eshop.ad.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 
@@ -59,6 +60,12 @@ public class AdPraiseDTO {
 	
 	@ApiModelProperty(value = "概率数")
 	private Integer praiseProb;
+	
+	@ApiModelProperty(value = "内容")
+	private String content;
+	
+	@ApiModelProperty(value = "提示语")
+	private List<String> words;
 	
 
 	public Integer getCount() {
@@ -197,6 +204,23 @@ public class AdPraiseDTO {
 		this.praiseProb = praiseProb;
 	}
 
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public List<String> getWords() {
+		return words;
+	}
+
+	public void setWords(List<String> words) {
+		this.words = words;
+	}
+
+	
 	
 	
 }

@@ -1,13 +1,14 @@
 package com.lawu.eshop.user.srv.mapper.extend;
 
-import com.lawu.eshop.user.param.ListFansRealParam;
-import com.lawu.eshop.user.param.ListInviteFansRealParam;
-import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOReportView;
-import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOView;
-
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+
+import com.lawu.eshop.user.param.ListFansRealParam;
+import com.lawu.eshop.user.param.ListInviteFansRealParam;
+import com.lawu.eshop.user.param.ListInviteFansRealWithContentParam;
+import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOReportView;
+import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOView;
 
 /**
  * @author meishuquan
@@ -17,6 +18,8 @@ public interface FansMerchantDOMapperExtend {
 
 	List<FansMerchantDOView> listInviteFans(ListInviteFansRealParam listInviteFansRealParam);
 
+	List<FansMerchantDOView> listInviteFansWithContent(ListInviteFansRealWithContentParam ListInviteFansRealWithContentParam);
+	
 	List<FansMerchantDOView> pageListInviteFans(ListInviteFansRealParam listInviteFansRealParam);
 
 	int countInviteFans(ListInviteFansRealParam listInviteFansRealParam);

@@ -119,7 +119,7 @@ public interface ShoppingOrderService {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "tradingSuccess/{id}", method = RequestMethod.PUT)
-	Result tradingSuccess(@PathVariable("id") Long id);
+	Result tradingSuccess(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
 
 	/**
 	 * 买家申请退款 修改订单状态为待商家确认

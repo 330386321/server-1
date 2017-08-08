@@ -148,13 +148,9 @@ public class ShoppingOrderController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "tradingSuccess/{id}", method = RequestMethod.PUT)
 	public Result tradingSuccess(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
-
-		Result result = shoppingOrderService.tradingSuccess(id);
-
-		if (!isSuccess(result)) {
-			return successCreated(result.getRet());
-		}
-		return successCreated();
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result result = shoppingOrderService.tradingSuccess(id, memberId);
+		return successCreated(result);
 	}
 
 	@Deprecated

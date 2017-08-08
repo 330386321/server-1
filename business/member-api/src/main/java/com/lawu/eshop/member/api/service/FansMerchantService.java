@@ -45,6 +45,19 @@ public interface FansMerchantService {
     @RequestMapping(value = "fansMerchant/saveFansMerchant/{merchantId}", method = RequestMethod.PUT)
     Result saveFansMerchant(@PathVariable("merchantId") Long merchantId, @RequestParam("memberId") Long memberId, @RequestParam("channelEnum") FansMerchantChannelEnum channelEnum);
 
+    
+    /**
+     * 用户处理粉丝邀请
+     *
+     * @param merchantId
+     * @param memberId
+     * @param channelEnum
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "fansMerchant/saveFansMerchantFromInvite/{merchantId}", method = RequestMethod.PUT)
+    Result saveFansMerchantFromInvite(@PathVariable("merchantId") Long merchantId, @RequestParam("memberId") Long memberId, @RequestParam("messageId") Long messageId, @RequestParam("dealWay") Boolean dealWay);
+    
     /**
      * 查询商家粉丝数量
      *

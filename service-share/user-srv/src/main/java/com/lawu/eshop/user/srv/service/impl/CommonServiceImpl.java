@@ -130,6 +130,8 @@ public class CommonServiceImpl implements CommonService {
 
 	@Override
 	public Page<EFriendInviterBO> selectEFriend(EFriendQueryDataParam dataParam) {
+		Page<EFriendInviterBO> page = new Page<>();
+		List<EFriendInviterBO> rtnList = new ArrayList<>();
 		List<String> userNumList = new ArrayList<>();
 		if(dataParam.getQueryContent() != null && !"".equals(dataParam.getQueryContent())){
 			//用户：账号或昵称、商家：账号或店铺名称
@@ -137,6 +139,12 @@ public class CommonServiceImpl implements CommonService {
 			List<String> merchantNumList = merchantDOMapperExtend.selectNumLikeContent("%" + dataParam.getQueryContent() + "%");
 			userNumList.addAll(memberNumList);
 			userNumList.addAll(merchantNumList);
+			if(userNumList.isEmpty()){
+				page.setTotalCount(0);
+				page.setCurrentPage(dataParam.getCurrentPage());
+				page.setRecords(rtnList);
+				return page;
+			}
 		}
 
 		RowBounds rowBounds = new RowBounds(dataParam.getOffset(), dataParam.getPageSize());
@@ -149,7 +157,6 @@ public class CommonServiceImpl implements CommonService {
 		List<InviteRelationDO> inviteUserList = inviteRelationDOMapper.selectByExampleWithRowbounds(example,rowBounds);
 		Integer totalCount = inviteRelationDOMapper.countByExample(example);
 
-		List<EFriendInviterBO> rtnList = new ArrayList<>();
 		MemberDOExample memberDOExample = new MemberDOExample();
 		for(InviteRelationDO invite : inviteUserList){
 			EFriendInviterBO bo = new EFriendInviterBO();
@@ -195,7 +202,7 @@ public class CommonServiceImpl implements CommonService {
 				bo.setLevel(merchant.getLevel() == null ? 1 : merchant.getLevel());
 				bo.setName(merchant.getPrincipalName() == null ? "" : merchant.getPrincipalName());
 				bo.setAccount(merchant.getAccount().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
-				String detailAddress = merchant.getRegionName() == null ? "" : merchant.getRegionName() + merchant.getAddress() == null ? "" : merchant.getAddress();
+				String detailAddress = merchant.getRegionName() == null ? (merchant.getAddress() == null ? "" : merchant.getAddress()) : merchant.getRegionName() + (merchant.getAddress() == null ? "" : merchant.getAddress());
 				bo.setRegionAddress(detailAddress);
 				bo.setMerchantStatus(MerchantStatusEnum.getEnum(merchant.getStatus()));
 
@@ -218,7 +225,6 @@ public class CommonServiceImpl implements CommonService {
 			}
 			rtnList.add(bo);
 		}
-		Page<EFriendInviterBO> page = new Page<>();
 		page.setTotalCount(totalCount);
 		page.setCurrentPage(dataParam.getCurrentPage());
 		page.setRecords(rtnList);

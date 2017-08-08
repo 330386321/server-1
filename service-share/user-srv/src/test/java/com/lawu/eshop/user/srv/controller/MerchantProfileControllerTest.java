@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -46,6 +46,21 @@ public class MerchantProfileControllerTest {
     @Test
     public void getMerchantProfile() {
         RequestBuilder request = get("/merchantProfile/getMerchantProfile").param("merchantId", "200");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getMerchantInfoFromPublishAd() {
+        RequestBuilder request = post("/merchantProfile/getMerchantInfoFromPublishAd/200");
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();

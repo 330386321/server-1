@@ -282,4 +282,26 @@ public class MockAdService extends BaseController implements AdService{
         page.setRecords(rtnList);
         return successCreated(page);
     }
+
+	@Override
+	public Result<AdPraiseDTO> selectAdPraiseById(Long id, Long memberId) {
+		AdPraiseDTO addto = new AdPraiseDTO();
+        addto.setId(1L);
+        addto.setContent("content");
+        addto.setIsFavorite(false);
+        addto.setTitle("title");
+        addto.setMediaUrl("/mediaurl/1.jpg");
+        addto.setMerchantId(1L);
+        addto.setMerchantStoreId(1L);
+        addto.setIsPraise(true);
+        addto.setNeedBeginTime(100L);
+        addto.setBeginTime(new Date());
+        addto.setTotalPoint(new BigDecimal("100"));
+        addto.setClickPraiseAdTimes(20);
+        addto.setIsDoHanlderMinusPoint(true);
+        addto.setLogoUrl("/logourl/1.jpg");
+        addto.setName("E店商家");
+        addto.setManageTypeEnum(ManageTypeEnum.COMMON);
+        return successCreated(addto);
+	}
 }

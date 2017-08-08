@@ -672,7 +672,7 @@ public class MerchantStoreController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "getPayOrderMerchantInfo")
-	OperatorMerchantInfoDTO getPayOrderMerchantInfo(@RequestParam("merchantId") Long merchantId) {
+	public OperatorMerchantInfoDTO getPayOrderMerchantInfo(@RequestParam("merchantId") Long merchantId) {
 
 		MerchantInfoBO merchantInfoBO = merchantStoreInfoService.getPayOrderMerchantInfo(merchantId);
 		if (merchantInfoBO == null) {
@@ -691,7 +691,7 @@ public class MerchantStoreController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "findAccountAndRegionPathByNum")
-	VisitUserInfoDTO findAccountAndRegionPathByNum(@RequestParam("merchantNum") String merchantNum){
+	public VisitUserInfoDTO findAccountAndRegionPathByNum(@RequestParam("merchantNum") String merchantNum){
 		MerchantInfoBO merchantInfoBO = merchantStoreService.findAccountAndRegionPathByNum(merchantNum);
 		VisitUserInfoDTO visitUserInfoDTO = new VisitUserInfoDTO();
 		if(merchantInfoBO != null){
@@ -755,7 +755,7 @@ public class MerchantStoreController extends BaseController {
 		List<RecommendFoodBO> foodBOS = merchantStoreService.listRecommendFoodComment(industryId, regionPath);
 		return successGet(MerchantStoreConverter.convertRecommendStoreDTO(foodBOS));
 	}
-	
+
 	@RequestMapping(value = "selectMerchantStoreAdInfo/{merchantId}", method = RequestMethod.GET)
 	public Result<MerchantStoreAdInfoDTO> selectMerchantStoreAdInfo(@PathVariable Long merchantId){
 		 MerchantStoreAdInfoBO  bo=merchantStoreService.selectMerchantStoreAdInfo(merchantId);

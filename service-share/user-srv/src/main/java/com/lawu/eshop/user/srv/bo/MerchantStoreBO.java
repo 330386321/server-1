@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.bo;
 import java.math.BigDecimal;
 
 import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 
 /**
  * 商家门店信息
@@ -92,7 +93,19 @@ public class MerchantStoreBO {
 
     private CertifTypeEnum certifType;
     
-    public CertifTypeEnum getCertifType() {
+    
+    private MerchantStoreTypeEnum  manageTypeEnum;
+    
+
+	public MerchantStoreTypeEnum getManageTypeEnum() {
+		return manageTypeEnum;
+	}
+
+	public void setManageTypeEnum(MerchantStoreTypeEnum manageTypeEnum) {
+		this.manageTypeEnum = manageTypeEnum;
+	}
+
+	public CertifTypeEnum getCertifType() {
 		return certifType;
 	}
 

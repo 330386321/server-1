@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.constants.AdPage;
 import com.lawu.eshop.ad.constants.AdPraiseConfig;
+import com.lawu.eshop.ad.constants.AdPraiseWords;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
@@ -170,15 +171,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		} else {
 			newList = newList.subList(0, newList.size());
 		}
-		for (int i = 0; i < newList.size(); i++) {
-			Calendar calendar = Calendar.getInstance(); // 得到日历
-			calendar.setTime(new Date());// 把当前时间赋给日历
-			calendar.add(Calendar.DAY_OF_MONTH, -14); // 设置为14天前
-			Date before14days = calendar.getTime(); // 得到14天前的时间
-			if (before14days.getTime() > newList.get(i).getBeginTime().getTime()) {
-				newList.remove(i);
-			}
-		}
 		List<Long> merchantIds = new ArrayList<>();
 		for (AdDTO adDTO : newList) {
 			merchantIds.add(adDTO.getMerchantId());
@@ -256,6 +248,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 						praise.setMediaUrl(adDTO.getMediaUrl());
 						praise.setIsPraise(adDTO.getIsPraise());
 						praise.setMerchantId(adDTO.getMerchantId());
+						praise.setCount(adDTO.getNumber());
 						Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
 						if (isSuccess(resultFavoriteAd)) {
 							praise.setIsFavorite(resultFavoriteAd.getModel());
@@ -291,21 +284,13 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	public Result<AdPraiseDTO> selectAbPraiseById(Long id) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
-		Result<AdEgainDTO> adDTO = adService.selectAbById(id, memberId);
-		AdEgainDTO ad = adDTO.getModel();
-		Result<MerchantStoreDTO> merchantStoreDTO = merchantStoreService.selectMerchantStoreByMId(ad.getMerchantId());
-		Result<ManageTypeEnum> manageType = merchantStoreService.getManageType(ad.getMerchantId());
-		AdPraiseDTO praise = new AdPraiseDTO();
-		if (merchantStoreDTO.getModel() != null) {
-			praise.setName(merchantStoreDTO.getModel().getName());
-			praise.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-			praise.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-		} else {
+		Result<AdPraiseDTO> resultAd = adService.selectAdPraiseById(id, memberId);
+
+		AdPraiseDTO praise = resultAd.getModel();
+		if (StringUtils.isEmpty(praise.getName())) {
 			praise.setName("E店商家");
+		} else if(StringUtils.isEmpty(praise.getLogoUrl())) {
 			praise.setLogoUrl(memberApiConfig.getDefaultHeadimg());
-		}
-		if (manageType.getModel() != null) {
-			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val));
 		}
 		PointDetailQueryData1Param param = new PointDetailQueryData1Param();
 		param.setBizId(id.toString());
@@ -318,13 +303,14 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			else
 				praise.setIsDoHanlderMinusPoint(false);
 		}
-		praise.setId(ad.getId());
-		praise.setTitle(ad.getTitle());
-		praise.setMerchantStoreId(ad.getMerchantStoreId());
-		praise.setMediaUrl(ad.getMediaUrl());
-		praise.setMerchantId(ad.getMerchantId());
 		praise.setClickPraiseAdTimes(memberApiConfig.getClickPraiseAdTimes());
 		praise.setPraiseProb(memberApiConfig.getClickPraiseProb());
+		List<String> list = new ArrayList<>();
+		list.add(AdPraiseWords.WORD_A);
+		list.add(AdPraiseWords.WORD_B);
+		list.add(AdPraiseWords.WORD_C);
+		list.add(AdPraiseWords.WORD_D);
+		praise.setWords(list);
 		return successGet(praise);
 	}
 

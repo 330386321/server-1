@@ -43,13 +43,12 @@ public class FavoriteAdPraiseWarnServiceImpl extends BaseController implements F
 			messageInfoParam.setRelateId(favoriteAdPraiseWarnDTO.getAdId());
 			messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_AD_PRAISE_NOTICE);
 			messageInfoParam.setMessageParam(messageTempParam);
-			Result msgResult =  messageService.saveMessage(favoriteAdPraiseWarnDTO.getMemberNum(), messageInfoParam); 
-			
-		    if(!isSuccess(msgResult)){
-		    	 return ;
-		    }
-		    
-		    favoriteAdService.updateIsSend(favoriteAdPraiseWarnDTO.getId());
+			                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+			favoriteAdService.updateIsSend(favoriteAdPraiseWarnDTO.getId());
+			 
+			messageService.saveMessage(favoriteAdPraiseWarnDTO.getMemberNum(), messageInfoParam); 
+		     
+		   
 
 		 }
 		 

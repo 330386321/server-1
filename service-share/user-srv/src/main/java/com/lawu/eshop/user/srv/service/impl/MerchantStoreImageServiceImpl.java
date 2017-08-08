@@ -22,7 +22,7 @@ public class MerchantStoreImageServiceImpl implements MerchantStoreImageService 
 
     @Autowired
     private MerchantStoreImageDOMapper merchantStoreImageDOMapper;
-    
+
     @Autowired
     private UserSrvConfig userSrvConfig;
 

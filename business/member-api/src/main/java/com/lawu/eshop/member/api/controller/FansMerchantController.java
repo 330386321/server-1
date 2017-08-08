@@ -45,4 +45,22 @@ public class FansMerchantController extends BaseController {
         return fansMerchantService.saveFansMerchant(merchantId, memberId, channelEnum);
     }
 
+    
+    
+    @SuppressWarnings("rawtypes")
+	@ApiOperation(value = "用户处理商家邀请粉丝", notes = "用户处理商家邀请粉丝。 [2012] (洪钦明)", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "dealFansInvite", method = RequestMethod.PUT)
+    public Result dealFansInvite(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                   @RequestParam @ApiParam(required = true, value = "商家ID") Long merchantId,
+                                   @RequestParam @ApiParam(required = true, value = "邀请的信息的ID") Long messageId,
+                                   @RequestParam @ApiParam(required = true, value = "处理方式true同意,false拒绝") Boolean dealWay) {
+        long memberId = UserUtil.getCurrentUserId(getRequest());
+    	Result<Boolean> result = fansMerchantService.isFansMerchant(merchantId, memberId);
+        if(result.getModel()){
+            return successCreated(ResultCode.FANS_MERCHANT);
+        }
+        return fansMerchantService.saveFansMerchantFromInvite(merchantId, memberId, messageId, dealWay);
+    }
 }

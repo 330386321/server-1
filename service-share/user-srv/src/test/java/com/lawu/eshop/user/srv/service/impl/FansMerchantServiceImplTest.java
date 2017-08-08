@@ -1,5 +1,17 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -10,22 +22,12 @@ import com.lawu.eshop.user.param.PageListInviteFansParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.domain.FansMerchantDO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.mapper.FansInviteResultDOMapper;
 import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.service.FansMerchantService;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.RandomUtil;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -43,6 +45,9 @@ public class FansMerchantServiceImplTest {
 
     @Autowired
     private MemberDOMapper memberDOMapper;
+    
+    @Autowired
+    private FansInviteResultDOMapper fansInviteResultDOMapper;
 
     @Transactional
     @Rollback
@@ -116,6 +121,7 @@ public class FansMerchantServiceImplTest {
         FansMerchantDO fansMerchantDO = new FansMerchantDO();
         fansMerchantDO.setMerchantId(200L);
         fansMerchantDO.setMemberId(memberDO.getId());
+        fansMerchantDO.setStatus((byte)1);
         fansMerchantDOMapper.insertSelective(fansMerchantDO);
 
         ListFansParam param = new ListFansParam();
@@ -132,7 +138,6 @@ public class FansMerchantServiceImplTest {
         fansMerchantDO.setMerchantId(200L);
         fansMerchantDO.setMemberId(100L);
         fansMerchantDOMapper.insertSelective(fansMerchantDO);
-
         FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchant(100L, 200L);
         Assert.assertNotNull(fansMerchantBO);
     }
@@ -174,5 +179,18 @@ public class FansMerchantServiceImplTest {
         Assert.assertNotNull(fansMerchantDOS);
         Assert.assertEquals(1, fansMerchantDOS.size());
     }
-
+    
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void saveFansMerchantFromInvite() {
+        fansMerchantService.saveFansMerchantFromInvite(1L, 1L, 10L, true);
+        List<FansMerchantDO> fansMerchantDOS = fansMerchantDOMapper.selectByExample(null);
+        Assert.assertNotNull(fansMerchantDOS);
+        Assert.assertEquals(0, fansMerchantDOS.size());
+        int i = fansInviteResultDOMapper.countByExample(null);
+        Assert.assertEquals(1, i);
+    }
+    
 }

@@ -1,5 +1,12 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
@@ -11,14 +18,15 @@ import com.lawu.eshop.merchant.api.service.MerchantInfoService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
+import com.lawu.eshop.user.dto.MerchantInfoFromInviteFansDTO;
+import com.lawu.eshop.user.dto.MerchantInfoFromPublishAdDTO;
 import com.lawu.eshop.user.dto.param.MerchantSizeLinkDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * 商家扩展信息
@@ -33,7 +41,7 @@ public class MerchantInfoController extends BaseController {
     private MerchantInfoService merchantProfileService;
     @Autowired
     private PropertyInfoService propertyInfoService;
-
+    
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "设置网站链接", notes = "设置网站链接，成功返回merchantInfo。[2100] （章勇）", httpMethod = "PUT")
     @Authorization
@@ -72,5 +80,25 @@ public class MerchantInfoController extends BaseController {
         return result;
     }
 
-
+    @Audit(date = "2017-08-03", reviewer = "孙林青")
+    @ApiOperation(value = "创建广告时查询的商家信息", notes = "创建广告时查询的商家信息 []（洪钦明）", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getMerchantInfoFromPublishAd", method = RequestMethod.GET)
+    public Result<MerchantInfoFromPublishAdDTO> getMerchantInfoFromPublishAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        Result<MerchantInfoFromPublishAdDTO> result =  merchantProfileService.getMerchantInfoFromPublishAd(merchantId);
+        return result;
+    }
+    
+    
+    @ApiOperation(value = "邀请粉丝时时查询的商家信息", notes = "邀请粉丝时时查询的商家信息 []（洪钦明）", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getMerchantInfoFromInviteFans", method = RequestMethod.GET)
+    public Result<MerchantInfoFromInviteFansDTO> getMerchantInfoFromInviteFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        Result<MerchantInfoFromInviteFansDTO> result =  merchantProfileService.getMerchantInfoFromInviteFans(merchantId);
+        return result;
+    }
 }
