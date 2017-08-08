@@ -130,6 +130,8 @@ public class CommonServiceImpl implements CommonService {
 
 	@Override
 	public Page<EFriendInviterBO> selectEFriend(EFriendQueryDataParam dataParam) {
+		Page<EFriendInviterBO> page = new Page<>();
+		List<EFriendInviterBO> rtnList = new ArrayList<>();
 		List<String> userNumList = new ArrayList<>();
 		if(dataParam.getQueryContent() != null && !"".equals(dataParam.getQueryContent())){
 			//用户：账号或昵称、商家：账号或店铺名称
@@ -137,6 +139,12 @@ public class CommonServiceImpl implements CommonService {
 			List<String> merchantNumList = merchantDOMapperExtend.selectNumLikeContent("%" + dataParam.getQueryContent() + "%");
 			userNumList.addAll(memberNumList);
 			userNumList.addAll(merchantNumList);
+			if(userNumList.isEmpty()){
+				page.setTotalCount(0);
+				page.setCurrentPage(dataParam.getCurrentPage());
+				page.setRecords(rtnList);
+				return page;
+			}
 		}
 
 		RowBounds rowBounds = new RowBounds(dataParam.getOffset(), dataParam.getPageSize());
@@ -149,7 +157,6 @@ public class CommonServiceImpl implements CommonService {
 		List<InviteRelationDO> inviteUserList = inviteRelationDOMapper.selectByExampleWithRowbounds(example,rowBounds);
 		Integer totalCount = inviteRelationDOMapper.countByExample(example);
 
-		List<EFriendInviterBO> rtnList = new ArrayList<>();
 		MemberDOExample memberDOExample = new MemberDOExample();
 		for(InviteRelationDO invite : inviteUserList){
 			EFriendInviterBO bo = new EFriendInviterBO();
@@ -218,7 +225,6 @@ public class CommonServiceImpl implements CommonService {
 			}
 			rtnList.add(bo);
 		}
-		Page<EFriendInviterBO> page = new Page<>();
 		page.setTotalCount(totalCount);
 		page.setCurrentPage(dataParam.getCurrentPage());
 		page.setRecords(rtnList);
