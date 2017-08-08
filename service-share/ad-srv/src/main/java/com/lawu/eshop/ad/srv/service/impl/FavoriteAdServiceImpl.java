@@ -106,8 +106,8 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 	public List<FavoriteAdPraiseWarnBO> selectFavoriteAdPraise() {
 		FavoriteAdExtendDOView view = new FavoriteAdExtendDOView();
 		Calendar nowTime = Calendar.getInstance();
-		nowTime.add(Calendar.MINUTE, 10);
-		view.setWarnDate(DateUtil.getDateFormat(nowTime.getTime()));
+		nowTime.add(Calendar.MINUTE, -10);
+		view.setWarnDate(DateUtil.getDateTimeFormat(nowTime.getTime()));
 		List<FavoriteAdPraiseWarnView> list=favoriteAdDOMapperExtend.selectFavoriteAdPraise(view);
 		List<FavoriteAdPraiseWarnBO> listBO = new ArrayList<>();
 		for (FavoriteAdPraiseWarnView favoriteAdPraiseWarnView : list) {
@@ -127,7 +127,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 		FavoriteAdDO record = new FavoriteAdDO();
 		record.setId(id);
 		record.setIsSend(true);
-		favoriteAdDOMapper.updateByPrimaryKey(record);
+		favoriteAdDOMapper.updateByPrimaryKeySelective(record);
 	}
 	
 
