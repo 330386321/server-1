@@ -193,6 +193,7 @@ public class CommentMerchantController extends BaseController {
         return commentMerchantService.getCommentAvgGrade(merchantId);
     }
 
+    @Audit(date = "2017-08-08", reviewer = "孙林青")
     @ApiOperation(value = "用户评价商家(new)", notes = "用户评价商家 [1005，1000]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization

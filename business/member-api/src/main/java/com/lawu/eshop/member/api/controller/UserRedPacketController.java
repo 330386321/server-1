@@ -34,6 +34,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.UserRedPacketService;
@@ -65,6 +66,7 @@ public class UserRedPacketController extends BaseController {
 	@Autowired
 	private MemberApiConfig memberApiConfig;
 
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "新增用户红包", notes = "新增用户红包（李洪军）", httpMethod = "POST")
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -96,6 +98,7 @@ public class UserRedPacketController extends BaseController {
 		return successCreated(result);
 	}
 
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "查询用户红包列表信息", notes = "查询用户红包列表信息(李洪军)", httpMethod = "GET")
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -106,6 +109,7 @@ public class UserRedPacketController extends BaseController {
 		return userRedPacketService.selectUserRedPacketList(param);
 	}
 
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "生成用户红包二维码", notes = "生成用户红包二维码(李洪军)", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserQrCode", method = RequestMethod.GET)
@@ -127,6 +131,7 @@ public class UserRedPacketController extends BaseController {
 		}
 	}
 
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "扫描用户分享红包二维码", notes = "扫描用户分享红包二维码(李洪军)", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserQrCodeContent/{redPacketId}", method = RequestMethod.GET)
@@ -150,6 +155,7 @@ public class UserRedPacketController extends BaseController {
 		}
 	}
 
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "获取红包中最大值", notes = "获取红包中最大值", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.GET)
@@ -159,6 +165,7 @@ public class UserRedPacketController extends BaseController {
 		return successGet(result);
 	}
 
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "领取用户红包", notes = "领取用户红包", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserRedpacketMoney", method = RequestMethod.POST)

@@ -199,7 +199,8 @@ public class ShoppingOrderController extends BaseController {
 		Result result = shoppingOrderService.requestRefund(shoppingOrderitemId, memberId, shoppingOrderRequestRefundParam);
 		return successCreated(result);
 	}
-	
+
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "申请退款", notes = "申请退款。[1002|1003|4005]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")

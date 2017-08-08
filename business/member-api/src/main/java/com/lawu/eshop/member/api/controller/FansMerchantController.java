@@ -45,8 +45,9 @@ public class FansMerchantController extends BaseController {
         return fansMerchantService.saveFansMerchant(merchantId, memberId, channelEnum);
     }
 
-    
-    
+
+
+    @Audit(date = "2017-08-08", reviewer = "孙林青")
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "用户处理商家邀请粉丝", notes = "用户处理商家邀请粉丝。 [2012] (洪钦明)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")

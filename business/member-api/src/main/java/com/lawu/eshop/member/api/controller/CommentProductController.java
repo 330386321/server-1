@@ -224,6 +224,7 @@ public class CommentProductController extends BaseController {
         return commentProductService.getCommentAvgGrade(productId);
     }
 
+    @Audit(date = "2017-08-08", reviewer = "孙林青")
     @ApiOperation(value = "用户评价商品(new)", notes = "用户评价商品 [1005，1000,4100]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization

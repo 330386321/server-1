@@ -63,7 +63,7 @@ public class AdPlatformController extends BaseController {
 			+ "要购物今日推荐  POSITON_SHOP_GOODS 要购物精品 POSITON_AD_TOP 看广告顶部广告") PositionEnum positionEnum) {
         return adPlatformService.selectByPosition(positionEnum);
     }
-    
+
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "广告位 (广告模块三个视频) ", notes = "广告位 (三个视频)[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
