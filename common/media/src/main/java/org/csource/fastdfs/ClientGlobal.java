@@ -80,7 +80,7 @@ public class ClientGlobal {
 		}
 		g_tracker_group = new TrackerGroup(tracker_servers);
 
-		g_tracker_http_port = param.getTrackerTttpPport();// iniReader.getIntValue("http.tracker_http_port",
+		g_tracker_http_port = param.getTrackerHttpPort();// iniReader.getIntValue("http.tracker_http_port",
 															// 80);
 		g_anti_steal_token = param.getAntiStealToken(); // iniReader.getBoolValue("http.anti_steal_token",
 														// false);
