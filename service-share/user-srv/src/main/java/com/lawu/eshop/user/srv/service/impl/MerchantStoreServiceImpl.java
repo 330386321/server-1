@@ -1,5 +1,17 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
@@ -10,9 +22,21 @@ import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreIndexParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
+import com.lawu.eshop.user.srv.bo.NewMerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.RecommendFoodBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
 import com.lawu.eshop.user.srv.domain.extend.MerchantAdInfoView;
 import com.lawu.eshop.user.srv.domain.extend.NewMerchantStoreDOView;
 import com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview;
@@ -22,13 +46,6 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreService;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 @Service
 public class MerchantStoreServiceImpl implements MerchantStoreService {
@@ -138,7 +155,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             document.addField("averageConsumeAmount_d", param.getAverageConsumeAmount() == null ? 0 : param.getAverageConsumeAmount().toString());
             document.addField("averageScore_d", param.getAverageScore() == null ? 0 : param.getAverageScore().toString());
             document.addField("favoriteNumber_i", solrDocument.get("favoriteNumber_i"));
-            document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d"));
+            document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d") == null ? 1000 : solrDocument.get("discountOrdinal_d"));
             document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
             document.addField("discountPackage_s", solrDocument.get("discountPackage_s"));
             solrService.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
