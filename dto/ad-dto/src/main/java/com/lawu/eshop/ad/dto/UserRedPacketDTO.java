@@ -20,7 +20,7 @@ public class UserRedPacketDTO {
 	@ApiModelProperty(value = "主键")
 	private Long id;
 
-	@ApiModelProperty(value = "红包类型[0普通红包,1拼手气红包]")
+	@ApiModelProperty(value = "红包类型 PUT_WAY_COMMON 普通红包、PUT_WAY_LUCK 手气红包")
 	private RedPacketPutWayEnum redPacketPutWayEnum;
 
 	@ApiModelProperty(value = "红包类型中文")
@@ -31,7 +31,7 @@ public class UserRedPacketDTO {
 	@ApiModelProperty(value = "总金额")
 	private BigDecimal totalMoney;
 
-	@ApiModelProperty(value = "红包状态 1有效 2领取完 3过期")
+	@ApiModelProperty(value = "红包状态 [USER_STATUS_EFFECTIVE 有效、USER_STATUS_OVER 领取完、USER_STATUS_OUT 过期] ")
 	private UserRedPacketEnum userRedPacketEnum;
 	@ApiModelProperty(value = "红包创建时间")
 	private Date gmtCreate;
