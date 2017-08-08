@@ -94,8 +94,8 @@ public class MockAdService extends BaseController implements AdService{
     }
 
     @Override
-    public Result<AdDTO> selectAbById(Long id, Long memberId) {
-        AdDTO addto = new AdDTO();
+    public Result<AdEgainDTO> selectAbById(Long id, Long memberId) {
+    	AdEgainDTO addto = new AdEgainDTO();
         addto.setId(1L);
         addto.setViewCount(1);
         addto.setContent("content");
