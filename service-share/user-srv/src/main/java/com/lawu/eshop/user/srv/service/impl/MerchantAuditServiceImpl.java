@@ -272,7 +272,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                     }
                     if(MerchantAuditTypeEnum.AUDIT_TYPE_STORE.val.byteValue() == auditParam.getTypeEnum().val || isEntity){
                         SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
-                        document.addField("discountOrdinal_d", 1.0);
+                        document.addField("discountOrdinal_d", 1000);
                         solrService.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
                     }
                 } else {

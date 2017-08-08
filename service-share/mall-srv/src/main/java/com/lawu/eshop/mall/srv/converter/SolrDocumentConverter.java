@@ -47,7 +47,7 @@ public class SolrDocumentConverter {
         document.addField("favoriteNumber_i", solrDocument.get("favoriteNumber_i") == null ? 0 : solrDocument.get("favoriteNumber_i"));
         document.addField("averageConsumeAmount_d", solrDocument.get("averageConsumeAmount_d") == null ? 0.0 : solrDocument.get("averageConsumeAmount_d"));
         document.addField("averageScore_d", solrDocument.get("averageScore_d") == null ? 0.0 : solrDocument.get("averageScore_d"));
-        document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d") == null ? 1.0 : solrDocument.get("discountOrdinal_d"));
+        document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d") == null ? 1000 : solrDocument.get("discountOrdinal_d"));
         document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s") == null ? "" : solrDocument.get("favoreInfo_s"));
         return document;
     }
