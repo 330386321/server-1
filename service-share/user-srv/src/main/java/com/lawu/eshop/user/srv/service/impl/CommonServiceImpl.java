@@ -195,7 +195,7 @@ public class CommonServiceImpl implements CommonService {
 				bo.setLevel(merchant.getLevel() == null ? 1 : merchant.getLevel());
 				bo.setName(merchant.getPrincipalName() == null ? "" : merchant.getPrincipalName());
 				bo.setAccount(merchant.getAccount().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
-				String detailAddress = merchant.getRegionName() == null ? "" : merchant.getRegionName() + merchant.getAddress() == null ? "" : merchant.getAddress();
+				String detailAddress = merchant.getRegionName() == null ? (merchant.getAddress() == null ? "" : merchant.getAddress()) : merchant.getRegionName() + (merchant.getAddress() == null ? "" : merchant.getAddress());
 				bo.setRegionAddress(detailAddress);
 				bo.setMerchantStatus(MerchantStatusEnum.getEnum(merchant.getStatus()));
 
