@@ -305,7 +305,7 @@ public class FansMerchantController extends BaseController {
 		ListInviteFansWithContentParam listInviteFansWithContentParam = new ListInviteFansWithContentParam();
 		listInviteFansWithContentParam.setEndAge(param.getEndAge());
 		listInviteFansWithContentParam.setInviteCount(param.getInviteCount());
-		listInviteFansWithContentParam.setInviteType(param.getInviteType());
+		listInviteFansWithContentParam.setInviteType(param.getInviteTypeEnum().getVal());
 		listInviteFansWithContentParam.setIsAgeLimit(param.getIsAgeLimit());
 		listInviteFansWithContentParam.setNums(param.getNums());
 		listInviteFansWithContentParam.setRegionPath(param.getRegionPath());

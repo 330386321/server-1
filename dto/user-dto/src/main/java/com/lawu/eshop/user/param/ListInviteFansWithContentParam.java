@@ -5,16 +5,18 @@ import io.swagger.annotations.ApiModelProperty;
 public class ListInviteFansWithContentParam extends ListInviteFansParam{
 
 	@ApiModelProperty(value = "邀请类型：1——全选，2——取消几个不选其他都选的，3——只选勾中的", required = true)
-	private Integer inviteType;
+	private byte inviteType;
 	
 	@ApiModelProperty(value = "选中的会员编号逗号拼接", required = false)
 	private String nums;
 
-	public Integer getInviteType() {
+
+	
+	public byte getInviteType() {
 		return inviteType;
 	}
 
-	public void setInviteType(Integer inviteType) {
+	public void setInviteType(byte inviteType) {
 		this.inviteType = inviteType;
 	}
 

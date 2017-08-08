@@ -75,7 +75,7 @@ public class FansMerchantControllerTest {
         param.setUserSexEnum(UserSexEnum.SEX_SECRET);
         param.setIsAgeLimit(false);
         param.setNums("1,2");
-        param.setInviteType(3);
+        param.setInviteType((byte)3);
         String requestJson = JSONObject.toJSONString(param);
         RequestBuilder request = post("/fansMerchant/listInviteFansWithContent/200").contentType(MediaType.APPLICATION_JSON).content(requestJson);
         try {

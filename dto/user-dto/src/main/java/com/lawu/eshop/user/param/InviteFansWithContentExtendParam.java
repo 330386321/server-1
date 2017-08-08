@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.param;
 
+import com.lawu.eshop.user.constants.InviteTypeEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class InviteFansWithContentExtendParam extends InviteFansParam{
@@ -19,8 +21,8 @@ public class InviteFansWithContentExtendParam extends InviteFansParam{
 	@ApiModelProperty(value = "门店简介", required = true)
 	private String merchantStoreIntro;
 
-	@ApiModelProperty(value = "类型:1--全选，2--取消了几个，3--只选了几个", required = false)
-	private Integer inviteType;
+	@ApiModelProperty(value = "类型:ALL--全选，--取消了几个，3--只选了几个", required = false)
+	private InviteTypeEnum inviteTypeEnum;
 	
 	@ApiModelProperty(value = "邀请人数", required = false)
 	private Integer inviteCount;
@@ -68,12 +70,13 @@ public class InviteFansWithContentExtendParam extends InviteFansParam{
 		this.merchantStoreIntro = merchantStoreIntro;
 	}
 
-	public Integer getInviteType() {
-		return inviteType;
+
+	public InviteTypeEnum getInviteTypeEnum() {
+		return inviteTypeEnum;
 	}
 
-	public void setInviteType(Integer inviteType) {
-		this.inviteType = inviteType;
+	public void setInviteTypeEnum(InviteTypeEnum inviteTypeEnum) {
+		this.inviteTypeEnum = inviteTypeEnum;
 	}
 
 	public Integer getInviteCount() {

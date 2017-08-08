@@ -72,7 +72,7 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     	listInviteFansRealWithContentParam.setStartAge(param.getStartAge());
         listInviteFansRealWithContentParam.setEndAge(param.getEndAge());
         listInviteFansRealWithContentParam.setInviteCount(param.getInviteCount());
-        listInviteFansRealWithContentParam.setInviteType(param.getInviteType());
+        listInviteFansRealWithContentParam.setInviteType((int)param.getInviteType());
         String[] num = param.getNums().split(",");
         List<String> numList = Arrays.asList(num);
         listInviteFansRealWithContentParam.setNums(numList);
