@@ -22,6 +22,7 @@ import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
 import com.lawu.eshop.ad.dto.AdPointDTO;
+import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
@@ -93,8 +94,8 @@ public class MockAdService extends BaseController implements AdService{
     }
 
     @Override
-    public Result<AdEgainDTO> selectAbById(Long id, Long memberId) {
-    	AdEgainDTO addto = new AdEgainDTO();
+    public Result<AdDTO> selectAbById(Long id, Long memberId) {
+        AdDTO addto = new AdDTO();
         addto.setId(1L);
         addto.setViewCount(1);
         addto.setContent("content");

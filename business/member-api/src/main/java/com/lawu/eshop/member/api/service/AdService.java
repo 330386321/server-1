@@ -50,7 +50,7 @@ public interface AdService {
 	  * @return
 	  */
 	@RequestMapping(method = RequestMethod.GET, value = "ad/selectAbById/{id}")
-	Result<AdDTO> selectAbById(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId);
+	Result<AdEgainDTO> selectAbById(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId);
 	
 	 /**
 	  * 单个查询广告
