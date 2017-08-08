@@ -61,7 +61,7 @@ public class UploadController extends BaseController {
         uparam.setType(type);
         ClientParams cp = new ClientParams();
         cp.setTrackerServer(merchantApiConfig.getTrackerServers());
-        cp.setTrackerTttpPport(merchantApiConfig.getTrackerTttpPport());
+        cp.setTrackerHttpPort(merchantApiConfig.getTrackerHttpPort());
         uparam.setCparam(cp);
         FastDFSResult fastResult = FastDFSUploadUtils.upload(request, uparam);
         Result<FileUploadDTO> result = new Result<FileUploadDTO>();

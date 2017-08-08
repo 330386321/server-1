@@ -140,7 +140,7 @@ public class UserRedPacketController extends BaseController {
 		}
 		Result<IsExistsRedPacketDTO> result = userRedPacketService.isExistsRedPacket(redPacketId);
 		if (result.getModel().getIsExistsRedPacket()) {// 还可以领取
-			response.sendRedirect(memberApiConfig.getMemberShareRedpackerUrl() + "?memberId=" + memberId
+			response.sendRedirect(memberApiConfig.getMemberShareRedpacketUrl() + "?memberId=" + memberId
 					+ "&redPacketId=" + redPacketId);
 		} else {
 			// 不能领取了

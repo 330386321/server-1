@@ -486,7 +486,7 @@ public class AdServiceImpl implements AdService {
         AdDO adDO = adDOMapper.selectByPrimaryKey(id);
         FavoriteAdDOExample example = new FavoriteAdDOExample();
         example.createCriteria().andAdIdEqualTo(adDO.getId()).andMemberIdEqualTo(memberId);
-        Long count = favoriteAdDOMapper.countByExample(example);
+        int count = favoriteAdDOMapper.countByExample(example);
         AdPraiseBO adBO = AdConverter.convertPraiseBO(adDO);
         PointPoolDOExample ppexample = new PointPoolDOExample();
         ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
@@ -500,7 +500,7 @@ public class AdServiceImpl implements AdService {
                 .andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val).andMemberIdEqualTo(memberId);
         Long number = pointPoolDOMapper.countByExample(ppexample2);
         adBO.setIsPraise(number>0);
-        adBO.setIsFavorite(count.intValue() > 0);
+        adBO.setIsFavorite(count > 0);
         return adBO;
     }
 

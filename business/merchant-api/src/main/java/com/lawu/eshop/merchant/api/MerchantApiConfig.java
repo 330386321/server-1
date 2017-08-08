@@ -49,8 +49,8 @@ public class MerchantApiConfig {
     @Value(value="${fastdfs.trackerServers}")
     private String trackerServers;
     
-    @Value(value="${fastdfs.trackerTttpPport}")
-    private Integer trackerTttpPport;
+    @Value(value="${fastdfs.trackerHttpPort}")
+    private Integer trackerHttpPort;
     
     public String getImageUrl() {
         return imageUrl;
@@ -114,19 +114,13 @@ public class MerchantApiConfig {
 		this.trackerServers = trackerServers;
 	}
 
-	/**
-	 * @return the trackerTttpPport
-	 */
-	public Integer getTrackerTttpPport() {
-		return trackerTttpPport;
+	public Integer getTrackerHttpPort() {
+		return trackerHttpPort;
 	}
 
-	/**
-	 * @param trackerTttpPport the trackerTttpPport to set
-	 */
-	public void setTrackerTttpPport(Integer trackerTttpPport) {
-		this.trackerTttpPport = trackerTttpPport;
+	public void setTrackerHttpPort(Integer trackerHttpPort) {
+		this.trackerHttpPort = trackerHttpPort;
 	}
 
-    
+	
 }

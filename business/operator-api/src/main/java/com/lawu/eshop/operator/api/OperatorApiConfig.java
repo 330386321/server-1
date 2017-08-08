@@ -25,16 +25,16 @@ public class OperatorApiConfig {
     @Value(value="${fastdfs.trackerServers}")
     private String trackerServers;
     
-    @Value(value="${fastdfs.trackerTttpPport}")
-    private Integer trackerTttpPport;
+    @Value(value="${fastdfs.trackerHttpPort}")
+    private int trackerHttpPort;
     
 
     public String getTrackerServers() {
 		return trackerServers;
 	}
 
-	public Integer getTrackerTttpPport() {
-		return trackerTttpPport;
+	public int getTrackerHttpPort() {
+		return trackerHttpPort;
 	}
 
 	public String getImageUrl() {

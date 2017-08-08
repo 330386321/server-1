@@ -35,7 +35,7 @@ public class ClientParams {
 	/**
 	 * 设置http访问端口
 	 */
-	private int trackerTttpPport;
+	private int trackerHttpPort;
 	/**
 	 * 开启token
 	 */
@@ -105,19 +105,12 @@ public class ClientParams {
 		this.trackerServer = trackerServer;
 	}
 
-	/**
-	 * @return the trackerTttpPport
-	 */
-	public int getTrackerTttpPport() {
-		return trackerTttpPport;
+	public int getTrackerHttpPort() {
+		return trackerHttpPort;
 	}
 
-	/**
-	 * @param trackerTttpPport
-	 *            the trackerTttpPport to set
-	 */
-	public void setTrackerTttpPport(int trackerTttpPport) {
-		this.trackerTttpPport = trackerTttpPport;
+	public void setTrackerHttpPort(int trackerHttpPort) {
+		this.trackerHttpPort = trackerHttpPort;
 	}
 
 	/**

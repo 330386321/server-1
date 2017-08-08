@@ -45,14 +45,14 @@ public class MemberApiConfig {
 	@Value(value = "${fastdfs.trackerServers}")
 	private String trackerServers;
 
-	@Value(value = "${fastdfs.trackerTttpPport}")
-	private Integer trackerTttpPport;
+	@Value(value = "${fastdfs.trackerHttpPort}")
+	private Integer trackerHttpPort;
 
 	@Value(value = "${member.qr.code}")
 	private String memberQrCode;
 
-	@Value(value = "${member.share.redpacker.url}")
-	private String memberShareRedpackerUrl;
+	@Value(value = "${member.share.redpacket.url}")
+	private String memberShareRedpacketUrl;
 
 	@Value(value = "${member.share.over.url}")
 	private String memberShareOverUrl;
@@ -128,19 +128,12 @@ public class MemberApiConfig {
 		this.trackerServers = trackerServers;
 	}
 
-	/**
-	 * @return the trackerTttpPport
-	 */
-	public Integer getTrackerTttpPport() {
-		return trackerTttpPport;
+	public Integer getTrackerHttpPort() {
+		return trackerHttpPort;
 	}
 
-	/**
-	 * @param trackerTttpPport
-	 *            the trackerTttpPport to set
-	 */
-	public void setTrackerTttpPport(Integer trackerTttpPport) {
-		this.trackerTttpPport = trackerTttpPport;
+	public void setTrackerHttpPort(Integer trackerHttpPort) {
+		this.trackerHttpPort = trackerHttpPort;
 	}
 
 	/**
@@ -160,15 +153,15 @@ public class MemberApiConfig {
 	/**
 	 * @return the memberShareRedpackerUrl
 	 */
-	public String getMemberShareRedpackerUrl() {
-		return memberShareRedpackerUrl;
+	public String getMemberShareRedpacketUrl() {
+		return memberShareRedpacketUrl;
 	}
 
 	/**
 	 * @param memberShareRedpackerUrl the memberShareRedpackerUrl to set
 	 */
-	public void setMemberShareRedpackerUrl(String memberShareRedpackerUrl) {
-		this.memberShareRedpackerUrl = memberShareRedpackerUrl;
+	public void setMemberShareRedpacketUrl(String memberShareRedpacketUrl) {
+		this.memberShareRedpacketUrl = memberShareRedpacketUrl;
 	}
 
 	/**
