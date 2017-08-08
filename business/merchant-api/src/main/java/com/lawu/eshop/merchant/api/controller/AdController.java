@@ -434,7 +434,7 @@ public class AdController extends BaseController {
     	}else if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum()==PutWayEnum.PUT_WAY_FENS){
     		count=memberCountService.findFensCount(merchantId);
     	}
-    	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStoreByMId(merchantId);
+    	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
     	AdSaveParam adSave=new AdSaveParam();
     	AdParam adParam=new AdParam();
     	adParam.setTitle(adAgainParam.getTitle());
@@ -450,7 +450,7 @@ public class AdController extends BaseController {
     	adParam.setRegionName(adAgainParam.getRegionName());
     	adSave.setAdParam(adParam);
     	if(isSuccess(storeRs)){
-    		MerchantStoreDTO storeDTO= storeRs.getModel();
+    		MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();
         	if(storeDTO!=null){
         		adSave.setLatitude(storeDTO.getLatitude());
             	adSave.setLongitude(storeDTO.getLongitude());
