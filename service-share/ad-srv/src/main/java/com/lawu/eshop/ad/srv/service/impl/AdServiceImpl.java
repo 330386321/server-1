@@ -560,6 +560,11 @@ public class AdServiceImpl implements AdService {
 		List<AdBO> BOS = new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
 			AdBO BO = AdConverter.convertBO(adDO);
+			PointPoolDOExample ppexample = new PointPoolDOExample();
+			ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
+					.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val);
+			Long praiseCount = pointPoolDOMapper.countByExample(ppexample);
+			BO.setNumber(praiseCount.intValue());
 			BOS.add(BO);
 		}
 		Page<AdBO> page = new Page<AdBO>();

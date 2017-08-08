@@ -247,6 +247,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 						praise.setMediaUrl(adDTO.getMediaUrl());
 						praise.setIsPraise(adDTO.getIsPraise());
 						praise.setMerchantId(adDTO.getMerchantId());
+						praise.setCount(adDTO.getNumber());
 						Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
 						if (isSuccess(resultFavoriteAd)) {
 							praise.setIsFavorite(resultFavoriteAd.getModel());
