@@ -349,15 +349,15 @@ public class AdController extends BaseController {
             	mediaUrl = retMap.get("imgUrl");
             }
     	}else if(result.getModel().getTypeEnum()==AdTypeEnum.AD_TYPE_VIDEO){//视频投放
-    		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
-    		if(!"".equals(retMap.get("videoUrl"))){
+	        Map<String, String> retMap = UploadFileUtil.uploadImageAndVideo(request, FileDirConstant.DIR_AD_IMAGE,FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getImageUploadUrl(),merchantApiConfig.getVideoUploadUrl());
+	        if(!"".equals(retMap.get("videoUrl"))){
             	mediaUrl = retMap.get("videoUrl");
             }
-    		Map<String, String> retVideoMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
-            if(!"".equals(retVideoMap.get("imgUrl"))){
-            	videoImgUrl = retVideoMap.get("imgUrl");
+	        if(!"".equals(retMap.get("imgUrl"))){
+            	videoImgUrl = retMap.get("imgUrl");
             }
-            if(StringUtils.isEmpty(videoImgUrl) || videoImgUrl == ""){ //商家没有上传图片，系统默认自动截取一张
+	        
+	        if(StringUtils.isEmpty(videoImgUrl) || videoImgUrl == ""){ //商家没有上传图片，系统默认自动截取一张
             	String ffmpegUrl=merchantApiConfig.getFfmpegUrl();  //ffmpeg安装路径
             	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
             	//截取视频图片
