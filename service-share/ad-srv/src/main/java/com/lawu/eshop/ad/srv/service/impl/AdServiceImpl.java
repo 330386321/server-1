@@ -462,7 +462,7 @@ public class AdServiceImpl implements AdService {
 		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
 		FavoriteAdDOExample example = new FavoriteAdDOExample();
 		example.createCriteria().andAdIdEqualTo(adDO.getId()).andMemberIdEqualTo(memberId);
-		Long count = favoriteAdDOMapper.countByExample(example);
+		int count = favoriteAdDOMapper.countByExample(example);
 		AdEgainDetailBO adBO = AdConverter.convertAdEgainDetailBO(adDO);
 
 		MemberAdRecordDOExample memberAdRecordDOExample=new MemberAdRecordDOExample();
@@ -471,7 +471,7 @@ public class AdServiceImpl implements AdService {
 		Long clickCount= memberAdRecordDOMapper.countByExample(memberAdRecordDOExample);
 		adBO.setIsClickAd(clickCount.intValue()>0);
 
-		adBO.setIsFavorite(count.intValue() > 0);
+		adBO.setIsFavorite(count > 0);
 		return adBO;
 	}
 

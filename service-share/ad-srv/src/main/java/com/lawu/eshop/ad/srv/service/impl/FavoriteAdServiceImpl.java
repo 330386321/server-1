@@ -46,7 +46,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 	public Integer save(Long memberId,Long adId,String userNum ) {
 		FavoriteAdDOExample example=new FavoriteAdDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andAdIdEqualTo(adId);
-		Long count=favoriteAdDOMapper.countByExample(example);
+		int count=favoriteAdDOMapper.countByExample(example);
 		if(count==1){
 			return 0;
 		}
@@ -77,7 +77,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 	public Page<FavoriteAdDOViewBO> selectMyFavoriteAd(FavoriteAdParam param,Long memberId) {
 		FavoriteAdDOExample example=new FavoriteAdDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId);
-		Long count=favoriteAdDOMapper.countByExample(example);
+		int count=favoriteAdDOMapper.countByExample(example);
         RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
         FavoriteAdDOView view=new FavoriteAdDOView();
         view.setMemberId(memberId);
@@ -85,7 +85,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
         List<FavoriteAdDOView> views = favoriteAdDOMapperExtend.selectMyFavoriteAdByRowbounds(view, rowBounds);
         Page<FavoriteAdDOViewBO> page=new Page<FavoriteAdDOViewBO>();
         page.setCurrentPage(param.getCurrentPage());
-        page.setTotalCount(count.intValue());
+        page.setTotalCount(count);
         page.setRecords(FavoriteAdConverter.convertBOS(views));
 		return page;
 	}
@@ -94,8 +94,8 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 	public Boolean isFavoriteAd(Long adId, Long memberId) {
 		FavoriteAdDOExample fAexample = new FavoriteAdDOExample();
 		fAexample.createCriteria().andAdIdEqualTo(adId).andMemberIdEqualTo(memberId);
-		Long count = favoriteAdDOMapper.countByExample(fAexample);
-		if (count.intValue() > 0) { // 是否收藏
+		int count = favoriteAdDOMapper.countByExample(fAexample);
+		if (count > 0) { // 是否收藏
 			return true;
 		} else {
 			return false;

@@ -98,7 +98,17 @@
          <table tableName="favorite_ad" domainObjectName="FavoriteAdDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        -->
+       
+        <table tableName="favorite_ad" domainObjectName="FavoriteAdDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+         -->
+         <table tableName="favorite_ad" domainObjectName="FavoriteAdDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="transaction_record" domainObjectName="TransactionRecordDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
          <table tableName="user_red_packet" domainObjectName="UserRedPacketDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>

@@ -10,7 +10,7 @@ import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.ad.UserRedPacketNotification;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
-import com.lawu.eshop.property.srv.service.impl.PropertyInfoDataServiceImpl;
+import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 
 /**
  * 返还用户红包金额
@@ -24,7 +24,7 @@ public class UserRedpackerAddMoneyTransactionFollowServiceImpl
 		extends AbstractTransactionFollowService<UserRedPacketNotification, Reply> {
 
 	@Autowired
-	private PropertyInfoDataServiceImpl propertyInfoDataServiceImpl;
+	private PropertyInfoDataService propertyInfoDataService;
 
 	@Override
 	public void execute(UserRedPacketNotification notification) {
@@ -32,6 +32,6 @@ public class UserRedpackerAddMoneyTransactionFollowServiceImpl
 		param.setPoint(notification.getMoney().toString());
 		param.setUserNum(notification.getUserNum());
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.USER_REDPACKET_ADD);
-		propertyInfoDataServiceImpl.doHanlderAddBalance(param);
+		propertyInfoDataService.doHanlderAddBalance(param);
 	}
 }
