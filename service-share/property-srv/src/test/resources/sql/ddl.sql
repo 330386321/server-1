@@ -110,12 +110,13 @@ CREATE TABLE `follow_transaction_record` (
 -- Table structure for freeze
 -- ----------------------------
 DROP TABLE IF EXISTS `freeze`;
-CREATE TABLE `freeze` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+CR`id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_num` varchar(19) NOT NULL COMMENT '用户编号',
   `money` decimal(10,6) NOT NULL COMMENT '冻结金额',
+  `previous_money` decimal(20,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT '操作前冻结资金',
   `original_money` decimal(10,6) NOT NULL COMMENT '冻结金额(原始冗余)',
   `fund_type` tinyint(2) NOT NULL COMMENT '类型(1-订单)',
+  `fund_biz_type` tinyint(2) NOT NULL COMMENT '业务类型(10-(订单)用户确认收货初始化冻结资金|11-(订单)商家同意退款减冻结资金)',
   `days` int(2) NOT NULL COMMENT '冻结周期(天)',
   `biz_id` bigint(20) NOT NULL COMMENT '关联业务表主键',
   `order_num` varchar(30) DEFAULT NULL COMMENT '订单号',
@@ -137,6 +138,7 @@ CREATE TABLE `love_detail` (
   `user_num` varchar(19) NOT NULL DEFAULT '' COMMENT '用户编号',
   `love_type` tinyint(3) unsigned NOT NULL COMMENT '爱心来源类型',
   `amount` decimal(20,6) NOT NULL DEFAULT '0.000000' COMMENT '金额',
+  `previous_amount` decimal(20,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT '操作前爱心账户',
   `remark` varchar(30) DEFAULT '' COMMENT '备注',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   `biz_id` varchar(500) DEFAULT '0' COMMENT '业务类型操作对应的业务表ID',
@@ -154,6 +156,7 @@ CREATE TABLE `point_detail` (
   `user_num` varchar(19) NOT NULL DEFAULT '' COMMENT '用户编号',
   `point_type` tinyint(3) unsigned NOT NULL COMMENT '积分类型',
   `point` decimal(20,6) NOT NULL DEFAULT '0.000000' COMMENT '积分',
+  `previous_point` decimal(20,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT '操作前积分',
   `direction` tinyint(2) NOT NULL COMMENT '1-支出2-收入',
   `biz_id` varchar(20) NOT NULL DEFAULT '0',
   `remark` varchar(30) DEFAULT '' COMMENT '备注',
@@ -227,6 +230,7 @@ CREATE TABLE `transaction_detail` (
   `transaction_account` varchar(50) NOT NULL DEFAULT '' COMMENT '第三方账户(如果是余额记账号，第三方记第三方账号)',
   `transaction_account_type` tinyint(3) unsigned NOT NULL COMMENT '支付方式(1-余额2-支付宝3微信)',
   `amount` decimal(20,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT '金额',
+  `previous_amount` decimal(20,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT '操作前余额',
   `direction` tinyint(2) NOT NULL COMMENT '1-支出2-收入',
   `third_transaction_num` varchar(30) DEFAULT NULL COMMENT '第三方支付交易号',
   `biz_id` varchar(500) DEFAULT '0' COMMENT '业务类型操作对应的业务表ID',
