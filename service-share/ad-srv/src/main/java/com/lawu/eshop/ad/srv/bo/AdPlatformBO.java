@@ -32,6 +32,8 @@ public class AdPlatformBO {
 	private Byte status;
 	
 	 private String regionPath;
+	 
+	 private Long adId;
 	
 	public TypeEnum getTypeEnum() {
 		return typeEnum;
@@ -135,6 +137,14 @@ public class AdPlatformBO {
 
 	public void setRegionPath(String regionPath) {
 		this.regionPath = regionPath;
+	}
+
+	public Long getAdId() {
+		return adId;
+	}
+
+	public void setAdId(Long adId) {
+		this.adId = adId;
 	}
 	
 	

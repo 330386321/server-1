@@ -55,6 +55,9 @@ public class AdPlatformOperatorDTO {
 	@ApiModelProperty(value = "区域")
 	private String regionPath;
 	
+	@ApiModelProperty(value = "广告ID")
+	private Long adId;
+	
 	public String getContent() {
 		return content;
 	}
@@ -174,6 +177,15 @@ public class AdPlatformOperatorDTO {
 	public void setRegionPath(String regionPath) {
 		this.regionPath = regionPath;
 	}
+
+	public Long getAdId() {
+		return adId;
+	}
+
+	public void setAdId(Long adId) {
+		this.adId = adId;
+	}
+	
 	
 	
 }

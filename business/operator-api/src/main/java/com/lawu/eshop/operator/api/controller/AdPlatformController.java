@@ -155,7 +155,7 @@ public class AdPlatformController extends BaseController {
     
     @ApiOperation(value = "单个广告查询", notes = "单个广告查询[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
-    @RequiresAuthentication
+    //@RequiresAuthentication
     @RequestMapping(value = "select/{id}", method = RequestMethod.GET)
     public Result<AdPlatformOperatorDTO> setPositon(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         return adPlatformService.select(id);
