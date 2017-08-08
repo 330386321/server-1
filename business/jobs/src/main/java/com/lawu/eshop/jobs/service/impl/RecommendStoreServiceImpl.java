@@ -1,5 +1,6 @@
 package com.lawu.eshop.jobs.service.impl;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,11 +107,12 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
         String favoreInfo = "";
         if (favoredDTOResult.getRet() == ResultCode.SUCCESS) {
             if (favoredDTOResult.getModel().getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL.val) {
-                favoreInfo = "买单每满" + favoredDTOResult.getModel().getReachAmount() + "减" + favoredDTOResult.getModel().getFavoredAmount() + "元";
+                favoreInfo = "买单每满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
             } else if (favoredDTOResult.getModel().getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val) {
-                favoreInfo = "买单满" + favoredDTOResult.getModel().getReachAmount() + "减" + favoredDTOResult.getModel().getFavoredAmount() + "元";
+                favoreInfo = "买单满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
             } else if (favoredDTOResult.getModel().getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_DISCOUNT.val) {
-                favoreInfo = "买单" + favoredDTOResult.getModel().getDiscountRate() + "折";
+                NumberFormat numberFormat = NumberFormat.getInstance();
+                favoreInfo = "买单" + numberFormat.format(favoredDTOResult.getModel().getDiscountRate()) + "折";
             }
         }
         foodDTO.setFavoreInfo(favoreInfo);
@@ -121,7 +123,7 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
         if (discountResult.getRet() == ResultCode.SUCCESS && !discountResult.getModel().getRecords().isEmpty()) {
             discountPackage = discountResult.getModel().getRecords().get(0).getName();
         }
-        foodDTO.setFavoreInfo(discountPackage);
+        foodDTO.setDiscountPackage(discountPackage);
     }
 
 }
