@@ -35,7 +35,6 @@ import com.lawu.eshop.mq.dto.ad.UserRedPacketNotification;
 import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.utils.DateUtil;
 
-import org.apache.commons.collections.ListUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -182,7 +181,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		cr.andGmtCreateLessThan(date);
 		cr.andStatusEqualTo(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
 		List<UserRedPacketDO> list = userRedPacketDOMapper.selectByExample(example);
-		if (ListUtils.EMPTY_LIST != list) {
+		if (!list.isEmpty()) {
 			for (int i = 0; i < list.size(); i++) {
 				UserRedPacketDO userRed = list.get(i);
 				UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
