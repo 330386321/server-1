@@ -154,43 +154,44 @@ public class MemberController extends BaseController{
             tokenService.delMerchantRelationshipByAccount(param.getAccount());//删除token
         }else{
             //解冻
-            // 添加solr门店信息
-
-            Result<MerchantFavoredDTO> favoredDTOResult;
-            Result<Page<DiscountPackageQueryDTO>> discountResult;
-            List<StoreIndexParam> indexParamList = new ArrayList<>();
-            StoreIndexParam storeIndexParam = new StoreIndexParam();
-            favoredDTOResult = merchantFavoredService.findFavoredByMerchantId(param.getId());
-            String favoredInfo = "";
-            double discountOrdinal = 1.0;
-            if (isSuccess(favoredDTOResult)) {
-                if (MerchantFavoredTypeEnum.TYPE_FULL.equals(favoredDTOResult.getModel().getTypeEnum())) {
-                    favoredInfo = "买单每满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
-                    discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                } else if (MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.equals(favoredDTOResult.getModel().getTypeEnum())) {
-                    favoredInfo = "买单满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
-                    discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                } else if (MerchantFavoredTypeEnum.TYPE_DISCOUNT.equals(favoredDTOResult.getModel().getTypeEnum())) {
-                    NumberFormat numberFormat = NumberFormat.getInstance();
-                    favoredInfo = "买单" + numberFormat.format(favoredDTOResult.getModel().getDiscountRate()) + "折";
-                    discountOrdinal = favoredDTOResult.getModel().getDiscountRate().divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            // 添加solr门店信息-实体店铺
+            if (MerchantStoreTypeEnum.ENTITY_MERCHANT.equals(result.getModel().getTypeEnum())) {
+                Result<MerchantFavoredDTO> favoredDTOResult;
+                Result<Page<DiscountPackageQueryDTO>> discountResult;
+                List<StoreIndexParam> indexParamList = new ArrayList<>();
+                StoreIndexParam storeIndexParam = new StoreIndexParam();
+                favoredDTOResult = merchantFavoredService.findFavoredByMerchantId(param.getId());
+                String favoredInfo = "";
+                double discountOrdinal = 1.0;
+                if (isSuccess(favoredDTOResult)) {
+                    if (MerchantFavoredTypeEnum.TYPE_FULL.equals(favoredDTOResult.getModel().getTypeEnum())) {
+                        favoredInfo = "买单每满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
+                        discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    } else if (MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.equals(favoredDTOResult.getModel().getTypeEnum())) {
+                        favoredInfo = "买单满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
+                        discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    } else if (MerchantFavoredTypeEnum.TYPE_DISCOUNT.equals(favoredDTOResult.getModel().getTypeEnum())) {
+                        NumberFormat numberFormat = NumberFormat.getInstance();
+                        favoredInfo = "买单" + numberFormat.format(favoredDTOResult.getModel().getDiscountRate()) + "折";
+                        discountOrdinal = favoredDTOResult.getModel().getDiscountRate().divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    }
                 }
-            }
 
-            //查询商家优惠套餐
-            discountResult = discountPackageService.listForMember(param.getId());
-            String discountPackage = "";
-            if (isSuccess(discountResult) && !discountResult.getModel().getRecords().isEmpty()) {
-                discountPackage = discountResult.getModel().getRecords().get(0).getName();
-            }
+                //查询商家优惠套餐
+                discountResult = discountPackageService.listForMember(param.getId());
+                String discountPackage = "";
+                if (isSuccess(discountResult) && !discountResult.getModel().getRecords().isEmpty()) {
+                    discountPackage = discountResult.getModel().getRecords().get(0).getName();
+                }
 
-            storeIndexParam.setMerchantStoreId(result.getModel().getMerchantStoreId());
-            storeIndexParam.setFavoreInfo(favoredInfo);
-            storeIndexParam.setDiscountPackage(discountPackage);
-            storeIndexParam.setDiscountOrdinal(discountOrdinal);
-            indexParamList.add(storeIndexParam);
-            
-            merchantStoreService.rebuildStoreIndex(indexParamList);
+                storeIndexParam.setMerchantStoreId(result.getModel().getMerchantStoreId());
+                storeIndexParam.setFavoreInfo(favoredInfo);
+                storeIndexParam.setDiscountPackage(discountPackage);
+                storeIndexParam.setDiscountOrdinal(discountOrdinal);
+                indexParamList.add(storeIndexParam);
+
+                merchantStoreService.rebuildStoreIndex(indexParamList);
+            }
         }
         return successCreated();
 
