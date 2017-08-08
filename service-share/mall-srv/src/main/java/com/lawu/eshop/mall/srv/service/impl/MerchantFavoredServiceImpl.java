@@ -1,6 +1,7 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -68,16 +69,17 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
             return i;
         }
         String favoreInfo = "";
-        double discountOrdinal = 100;
+        double discountOrdinal = 1.0;
         if (param.getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL.val) {
-            favoreInfo = "买单每满" + param.getReachAmount() + "减" + param.getFavoredAmount() + "元";
+            favoreInfo = "买单每满" + param.getReachAmount().intValue() + "减" + param.getFavoredAmount().intValue() + "元";
             discountOrdinal = (param.getReachAmount().subtract(param.getFavoredAmount())).divide(param.getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
         } else if (param.getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val) {
-            favoreInfo = "买单满" + param.getReachAmount() + "减" + param.getFavoredAmount() + "元";
+            favoreInfo = "买单满" + param.getReachAmount().intValue() + "减" + param.getFavoredAmount().intValue() + "元";
             discountOrdinal = (param.getReachAmount().subtract(param.getFavoredAmount())).divide(param.getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
         } else if (param.getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_DISCOUNT.val) {
-            favoreInfo = "买单" + param.getDiscountRate() + "折";
-            discountOrdinal = param.getDiscountRate().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            NumberFormat numberFormat = NumberFormat.getInstance();
+            favoreInfo = "买单" + numberFormat.format(param.getDiscountRate()) + "折";
+            discountOrdinal = param.getDiscountRate().divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
         }
         SolrInputDocument document = SolrDocumentConverter.converFavoredSolrInputDocument(solrDocument);
         document.addField("favoreInfo_s", favoreInfo);
@@ -112,7 +114,7 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
         }
         SolrInputDocument document = SolrDocumentConverter.converFavoredSolrInputDocument(solrDocument);
         document.addField("favoreInfo_s", "");
-        document.addField("discountOrdinal_d", 100);
+        document.addField("discountOrdinal_d", 1.0);
         solrService.addSolrDocs(document, mallSrvConfig.getSolrUrl(), mallSrvConfig.getSolrMerchantCore(), mallSrvConfig.getIsCloudSolr());
     }
 
@@ -156,16 +158,17 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
             return i;
         }
         String favoreInfo = "";
-        double discountOrdinal = 100;
+        double discountOrdinal = 1.0;
         if (param.getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL.val) {
-            favoreInfo = "买单每满" + param.getReachAmount() + "减" + param.getFavoredAmount() + "元";
+            favoreInfo = "买单每满" + param.getReachAmount().intValue() + "减" + param.getFavoredAmount().intValue() + "元";
             discountOrdinal = (param.getReachAmount().subtract(param.getFavoredAmount())).divide(param.getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
         } else if (param.getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val) {
-            favoreInfo = "买单满" + param.getReachAmount() + "减" + param.getFavoredAmount() + "元";
+            favoreInfo = "买单满" + param.getReachAmount().intValue() + "减" + param.getFavoredAmount().intValue() + "元";
             discountOrdinal = (param.getReachAmount().subtract(param.getFavoredAmount())).divide(param.getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
         } else if (param.getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_DISCOUNT.val) {
-            favoreInfo = "买单" + param.getDiscountRate() + "折";
-            discountOrdinal = param.getDiscountRate().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            NumberFormat numberFormat = NumberFormat.getInstance();
+            favoreInfo = "买单" + numberFormat.format(param.getDiscountRate()) + "折";
+            discountOrdinal = param.getDiscountRate().divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
         }
         SolrInputDocument document = SolrDocumentConverter.converFavoredSolrInputDocument(solrDocument);
         document.addField("favoreInfo_s", favoreInfo);
