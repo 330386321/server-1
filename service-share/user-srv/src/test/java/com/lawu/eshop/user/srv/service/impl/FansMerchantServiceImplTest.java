@@ -20,6 +20,7 @@ import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
 import com.lawu.eshop.user.param.PageListInviteFansParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
+import com.lawu.eshop.user.srv.domain.FansInviteResultDOExample;
 import com.lawu.eshop.user.srv.domain.FansMerchantDO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.mapper.FansInviteResultDOMapper;
@@ -185,11 +186,13 @@ public class FansMerchantServiceImplTest {
     @Rollback
     @Test
     public void saveFansMerchantFromInvite() {
-        fansMerchantService.saveFansMerchantFromInvite(1L, 1L, 10L, true);
+        fansMerchantService.saveFansMerchantFromInvite(1L, 2L, 10L, true);
         List<FansMerchantDO> fansMerchantDOS = fansMerchantDOMapper.selectByExample(null);
         Assert.assertNotNull(fansMerchantDOS);
         Assert.assertEquals(0, fansMerchantDOS.size());
-        int i = fansInviteResultDOMapper.countByExample(null);
+        FansInviteResultDOExample fansInviteResultDOExample = new FansInviteResultDOExample();
+        fansInviteResultDOExample.createCriteria().andMerchantIdEqualTo(1L).andMemberIdEqualTo(2L);
+        int i = fansInviteResultDOMapper.countByExample(fansInviteResultDOExample);
         Assert.assertEquals(1, i);
     }
     
