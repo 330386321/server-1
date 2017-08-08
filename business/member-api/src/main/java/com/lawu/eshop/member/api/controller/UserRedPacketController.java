@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
@@ -109,7 +110,7 @@ public class UserRedPacketController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserQrCode", method = RequestMethod.GET)
 	public void getUserQrCode(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@PathVariable @ApiParam(required = true, value = "红包ID") Long redPacketId) throws IOException {
+			@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId) throws IOException {
 		HttpServletRequest request = getRequest();
 		Long memberId = UserUtil.getCurrentUserId(request);
 		if (memberId != 0) {
@@ -128,8 +129,8 @@ public class UserRedPacketController extends BaseController {
 
 	@ApiOperation(value = "扫描用户分享红包二维码", notes = "扫描用户分享红包二维码(李洪军)", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@RequestMapping(value = "getUserQrCodeContent/${redPacketId}", method = RequestMethod.GET)
-	public void getUserQrCodeContent(@PathVariable @ApiParam(required = true, value = "用户ID") Long memberId,
+	@RequestMapping(value = "getUserQrCodeContent/{redPacketId}", method = RequestMethod.GET)
+	public void getUserQrCodeContent(@RequestParam @ApiParam(required = true, value = "用户ID") Long memberId,
 			@PathVariable @ApiParam(required = true, value = "红包ID") Long redPacketId) throws IOException {
 		HttpServletResponse response = getResponse();
 		if (memberId == null || memberId <= 0) {
@@ -153,7 +154,7 @@ public class UserRedPacketController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.GET)
 	public Result getUserRedpacketMaxMoney(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@PathVariable @ApiParam(required = true, value = "红包ID") Long redPacketId) {
+			@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId) {
 		Result result = userRedPacketService.getUserRedpacketMaxMoney(redPacketId);
 		return successGet(result);
 	}
@@ -162,7 +163,7 @@ public class UserRedPacketController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserRedpacketMoney", method = RequestMethod.POST)
 	public Result getUserRedpacketMoney(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@PathVariable @ApiParam(required = true, value = "红包ID") Long redPacketId) {
+			@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId) {
 		HttpServletRequest request = getRequest();
 		String userNum = UserUtil.getCurrentUserNum(request);
 		Result result = userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
