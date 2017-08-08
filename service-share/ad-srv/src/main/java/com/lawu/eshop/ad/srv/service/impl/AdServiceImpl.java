@@ -998,6 +998,11 @@ public class AdServiceImpl implements AdService {
 				detail.setNotGetCount(adDO.getAdCount());
 				detail.setAlreadyGetPoint(BigDecimal.valueOf(0));
 				detail.setNotGetPoint(adDO.getTotalPoint());
+				if(adDO.getPutWay()==PutWayEnum.PUT_WAY_COMMON.val){
+					detail.setMediaUrl(adSrvConfig.getRedPacketCommonMediaUrl());
+				}else if(adDO.getPutWay()==PutWayEnum.PUT_WAY_LUCK.val){
+					detail.setMediaUrl(adSrvConfig.getRedPacketLuckMediaUrl());
+				}
 			}else{
 				BigDecimal sumPoint=new BigDecimal(0);
 				for (PointPoolDO pointPoolDO : ppList) {
