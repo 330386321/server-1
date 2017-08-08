@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
@@ -39,7 +40,6 @@ import com.lawu.eshop.user.srv.domain.extend.NewMerchantStoreDOView;
 import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
 import com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview;
 import com.lawu.eshop.utils.DataTransUtil;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * 商家门店信息转换
@@ -423,9 +423,12 @@ public class MerchantStoreConverter {
             storeSolrDTO.setDistance(DataTransUtil.objectToDobule(solrDocument.get("distance"), 3));
             storeSolrDTO.setFavoriteNumber(solrDocument.get("favoriteNumber_i") == null ? 0 : Integer.valueOf(solrDocument.get("favoriteNumber_i").toString()));
             storeSolrDTO.setAverageConsumeAmount(solrDocument.get("averageConsumeAmount_d") == null ? 0.0 : Double.valueOf(solrDocument.get("averageConsumeAmount_d").toString()).intValue());
-            storeSolrDTO.setAverageScore(solrDocument.get("averageScore_d") == null ? 4.0 : Double.valueOf(solrDocument.get("averageScore_d").toString()));
+            storeSolrDTO.setAverageScore(solrDocument.get("averageScore_d") == null ? 0.0 : Double.valueOf(solrDocument.get("averageScore_d").toString()));
             storeSolrDTO.setFavoreInfo(solrDocument.get("favoreInfo_s") == null ? "" : solrDocument.get("favoreInfo_s").toString());
             storeSolrDTO.setDiscountPackage(solrDocument.get("discountPackage_s") == null ? "" : solrDocument.get("discountPackage_s").toString());
+            if (storeSolrDTO.getAverageScore() == 0.0) {
+                storeSolrDTO.setAverageScore(4.0);
+            }
             storeSolrDTOS.add(storeSolrDTO);
         }
         return storeSolrDTOS;
