@@ -171,8 +171,9 @@ public class AdController extends BaseController {
     	adSave.setUserNum(userNum);
         return adService.saveAd(adSave);
     }
-    
-    
+
+
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "添加广告(2.4)", notes = "添加广告[1011|5000|5003|5010|6024|6026]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -479,8 +480,9 @@ public class AdController extends BaseController {
     public Result<AdDetailDTO> selectDetail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	return adService.selectDetail(id);
     }
-	
-	
+
+
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "广告再次投放(2.4)", notes = "广告再次投放,[1011|5000|5003|5010|6024|6026](张荣成)", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -533,6 +535,7 @@ public class AdController extends BaseController {
     	adParam.setPutWayEnum(adAgainParam.getPutWayEnum());
     	adParam.setRadius(adAgainParam.getRadius());
     	adParam.setTypeEnum(result.getModel().getTypeEnum());
+		adParam.setRelateType(adAgainParam.getRelateType());
     	adParam.setRegionName(adAgainParam.getRegionName());
     	adSave.setAdParam(adParam);
     	if(isSuccess(storeRs)){

@@ -335,6 +335,7 @@ public class MerchantStoreController extends BaseController {
         return merchantStoreService.updateNoReasonReturn(merchantId);
     }
 
+    @Audit(date = "2017-08-08", reviewer = "孙林青")
     @ApiOperation(value = "查询是否加入7天退货保障", notes = "查询是否加入7天退货保障(false--未加入，true--已加入) [1002]（梅述全）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -344,6 +345,7 @@ public class MerchantStoreController extends BaseController {
         return merchantStoreService.findIsNoReasonReturnById(merchantId);
     }
 
+    @Audit(date = "2017-08-08", reviewer = "孙林青")
     @ApiOperation(value = "新增店铺(new)", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -354,6 +356,7 @@ public class MerchantStoreController extends BaseController {
         return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam);
     }
 
+    @Audit(date = "2017-08-08", reviewer = "孙林青")
     @ApiOperation(value = "修改门店信息(new)", notes = "错误信息 [2008]（章勇）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -365,6 +368,7 @@ public class MerchantStoreController extends BaseController {
         return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId, merchantStoreParam);
     }
 
+    @Audit(date = "2017-08-08", reviewer = "孙林青")
     @ApiOperation(value = "更新门店关键词", notes = "更新门店关键词。 [1002]（梅述全）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization

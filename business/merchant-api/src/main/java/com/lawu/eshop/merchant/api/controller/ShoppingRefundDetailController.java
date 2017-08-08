@@ -203,6 +203,7 @@ public class ShoppingRefundDetailController extends BaseController {
 		return successCreated(result);
 	}
 
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "商家拒绝退款", notes = "商家拒绝退款。。[1002|1003|4011|4013|4028]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")

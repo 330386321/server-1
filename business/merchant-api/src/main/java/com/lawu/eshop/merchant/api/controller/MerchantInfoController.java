@@ -90,8 +90,9 @@ public class MerchantInfoController extends BaseController {
         Result<MerchantInfoFromPublishAdDTO> result =  merchantProfileService.getMerchantInfoFromPublishAd(merchantId);
         return result;
     }
-    
-    
+
+
+    @Audit(date = "2017-08-08", reviewer = "孙林青")
     @ApiOperation(value = "邀请粉丝时时查询的商家信息", notes = "邀请粉丝时时查询的商家信息 []（洪钦明）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

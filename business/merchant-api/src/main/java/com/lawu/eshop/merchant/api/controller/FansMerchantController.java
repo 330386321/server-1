@@ -197,7 +197,7 @@ public class FansMerchantController extends BaseController {
 		return fansMerchantService.countFans(merchantId);
 	}
 
-	
+
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "邀请粉丝(含邀请内容)", notes = "邀请会员成为粉丝。[1002|1004|1022|1023|6002|6024] (洪钦明)", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -290,9 +290,10 @@ public class FansMerchantController extends BaseController {
 		messageService.saveMessage(userNum, messageInfoParam);
 		return successCreated();
 	}
-	
-	
-	
+
+
+
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "邀请粉丝(含邀请内容,含邀请条件)", notes = "邀请会员成为粉丝。[1002|1022|1023|1035|6002|6024] (洪钦明)", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")

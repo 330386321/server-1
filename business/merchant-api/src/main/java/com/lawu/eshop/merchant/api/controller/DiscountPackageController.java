@@ -229,6 +229,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年8月03日
 	 */
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "保存优惠套餐详情", notes = "保存优惠套餐。[]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -361,6 +362,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "更新优惠套餐", notes = "更新优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")

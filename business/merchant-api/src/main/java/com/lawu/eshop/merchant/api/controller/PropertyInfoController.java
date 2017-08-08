@@ -109,6 +109,7 @@ public class PropertyInfoController extends BaseController {
         return successGet(result);
     }
 
+    @Audit(date = "2017-08-08", reviewer = "孙林青")
     @ApiOperation(value = "获取冻结资金列表", notes = "获取冻结资金列表。[]（杨清华）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization

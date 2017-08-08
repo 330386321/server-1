@@ -324,6 +324,7 @@ public class MerchantController extends BaseController {
         }
     }
 
+    @Audit(date = "2017-08-08", reviewer = "孙林青")
     @ApiOperation(value = "修改头像", notes = "修改头像。 (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
