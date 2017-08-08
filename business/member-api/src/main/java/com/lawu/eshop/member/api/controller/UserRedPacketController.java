@@ -156,9 +156,9 @@ public class UserRedPacketController extends BaseController {
 	}
 
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
-	@ApiOperation(value = "获取红包中最大值", notes = "获取红包中最大值", httpMethod = "GET")
+	@ApiOperation(value = "获取红包中最大值", notes = "获取红包中最大值", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.GET)
+	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.POST)
 	public Result getUserRedpacketMaxMoney(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId) {
 		Result result = userRedPacketService.getUserRedpacketMaxMoney(redPacketId);

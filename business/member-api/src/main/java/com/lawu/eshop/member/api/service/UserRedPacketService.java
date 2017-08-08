@@ -38,7 +38,7 @@ public interface UserRedPacketService {
 	 * @param param
 	 * @return
 	 */
-	@RequestMapping(value="userRedPacket/selectUserRedPacketList",method=RequestMethod.GET)
+	@RequestMapping(value="userRedPacket/selectUserRedPacketList",method=RequestMethod.POST)
 	Result<Page<UserRedPacketDTO>> selectUserRedPacketList(@RequestBody UserRedPacketSelectParam param);
 
 	/**
@@ -46,7 +46,7 @@ public interface UserRedPacketService {
 	 * @param redPacketId
 	 * @return
 	 */
-	@RequestMapping(value="userRedPacket/isExistsRedPacket/{redPacketId}")
+	@RequestMapping(value="userRedPacket/isExistsRedPacket/{redPacketId}",method=RequestMethod.GET)
 	Result<IsExistsRedPacketDTO> isExistsRedPacket(@PathVariable("redPacketId") Long redPacketId);
 
 	/**
@@ -55,7 +55,7 @@ public interface UserRedPacketService {
 	 * @param userNum 领取人num
 	 * @return
 	 */
-	@RequestMapping(value="userRedPacket/getUserRedpacketMoney")
+	@RequestMapping(value="userRedPacket/getUserRedpacketMoney",method=RequestMethod.POST)
 	Result getUserRedpacketMoney(@RequestParam("redPacketId") Long redPacketId, @RequestParam("userNum") String userNum);
 
 	/**
@@ -63,7 +63,7 @@ public interface UserRedPacketService {
 	 * @param redPacketId
 	 * @return
 	 */
-	@RequestMapping(value="userRedPacket/getUserRedpacketMaxMoney")
+	@RequestMapping(value="userRedPacket/getUserRedpacketMaxMoney",method=RequestMethod.POST)
 	Result getUserRedpacketMaxMoney(@RequestParam("redPacketId") Long redPacketId);
 
 }
