@@ -21,6 +21,16 @@ public enum UserRedPacketEnum {
 		this.name = name;
 	}
 
+	public static UserRedPacketEnum getEnum(Byte val) {
+		UserRedPacketEnum[] values = UserRedPacketEnum.values();
+		for (UserRedPacketEnum object : values) {
+			if (object.val.equals(val)) {
+				return object;
+			}
+		}
+		return null;
+	}
+	
 	public static String getName(Byte val) {
 		UserRedPacketEnum[] values = UserRedPacketEnum.values();
 		for (UserRedPacketEnum object : values) {

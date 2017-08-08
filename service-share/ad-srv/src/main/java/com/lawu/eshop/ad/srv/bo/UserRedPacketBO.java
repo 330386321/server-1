@@ -6,6 +6,9 @@ package com.lawu.eshop.ad.srv.bo;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
+import com.lawu.eshop.ad.constants.UserRedPacketEnum;
+
 /**
  * @author lihj
  * @date 2017年8月4日
@@ -42,7 +45,7 @@ public class UserRedPacketBO {
 	 *
 	 * @mbg.generated
 	 */
-	private Byte type;
+	private RedPacketPutWayEnum redPacketPutWayEnum;
 
 	/**
 	 *
@@ -66,7 +69,7 @@ public class UserRedPacketBO {
 	 *
 	 * @mbg.generated
 	 */
-	private Byte status;
+	private UserRedPacketEnum userRedPacketEnum;
 
 	/**
 	 *
@@ -122,21 +125,6 @@ public class UserRedPacketBO {
 	}
 
 	/**
-	 * @return the type
-	 */
-	public Byte getType() {
-		return type;
-	}
-
-	/**
-	 * @param type
-	 *            the type to set
-	 */
-	public void setType(Byte type) {
-		this.type = type;
-	}
-
-	/**
 	 * @return the totalCount
 	 */
 	public Integer getTotalCount() {
@@ -167,21 +155,6 @@ public class UserRedPacketBO {
 	}
 
 	/**
-	 * @return the status
-	 */
-	public Byte getStatus() {
-		return status;
-	}
-
-	/**
-	 * @param status
-	 *            the status to set
-	 */
-	public void setStatus(Byte status) {
-		this.status = status;
-	}
-
-	/**
 	 * @return the gmtCreate
 	 */
 	public Date getGmtCreate() {
@@ -194,6 +167,22 @@ public class UserRedPacketBO {
 	 */
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
+	}
+
+	public RedPacketPutWayEnum getRedPacketPutWayEnum() {
+		return redPacketPutWayEnum;
+	}
+
+	public void setRedPacketPutWayEnum(RedPacketPutWayEnum redPacketPutWayEnum) {
+		this.redPacketPutWayEnum = redPacketPutWayEnum;
+	}
+
+	public UserRedPacketEnum getUserRedPacketEnum() {
+		return userRedPacketEnum;
+	}
+
+	public void setUserRedPacketEnum(UserRedPacketEnum userRedPacketEnum) {
+		this.userRedPacketEnum = userRedPacketEnum;
 	}
 
 }

@@ -6,6 +6,9 @@ package com.lawu.eshop.ad.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
+import com.lawu.eshop.ad.constants.UserRedPacketEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -18,7 +21,7 @@ public class UserRedPacketDTO {
 	private Long id;
 
 	@ApiModelProperty(value = "红包类型[0普通红包,1拼手气红包]")
-	private Byte type;
+	private RedPacketPutWayEnum redPacketPutWayEnum;
 
 	@ApiModelProperty(value = "红包类型中文")
 	private String typeStr;
@@ -29,7 +32,7 @@ public class UserRedPacketDTO {
 	private BigDecimal totalMoney;
 
 	@ApiModelProperty(value = "红包状态 1有效 2领取完 3过期")
-	private Byte status;
+	private UserRedPacketEnum userRedPacketEnum;
 	@ApiModelProperty(value = "红包创建时间")
 	private Date gmtCreate;
 	@ApiModelProperty(value = "红包创建时间格式化后")
@@ -48,21 +51,6 @@ public class UserRedPacketDTO {
 	 */
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	/**
-	 * @return the type
-	 */
-	public Byte getType() {
-		return type;
-	}
-
-	/**
-	 * @param type
-	 *            the type to set
-	 */
-	public void setType(Byte type) {
-		this.type = type;
 	}
 
 	/**
@@ -111,21 +99,6 @@ public class UserRedPacketDTO {
 	}
 
 	/**
-	 * @return the status
-	 */
-	public Byte getStatus() {
-		return status;
-	}
-
-	/**
-	 * @param status
-	 *            the status to set
-	 */
-	public void setStatus(Byte status) {
-		this.status = status;
-	}
-
-	/**
 	 * @return the gmtCreate
 	 */
 	public Date getGmtCreate() {
@@ -153,6 +126,22 @@ public class UserRedPacketDTO {
 	 */
 	public void setGmtCreateStr(String gmtCreateStr) {
 		this.gmtCreateStr = gmtCreateStr;
+	}
+
+	public RedPacketPutWayEnum getRedPacketPutWayEnum() {
+		return redPacketPutWayEnum;
+	}
+
+	public void setRedPacketPutWayEnum(RedPacketPutWayEnum redPacketPutWayEnum) {
+		this.redPacketPutWayEnum = redPacketPutWayEnum;
+	}
+
+	public UserRedPacketEnum getUserRedPacketEnum() {
+		return userRedPacketEnum;
+	}
+
+	public void setUserRedPacketEnum(UserRedPacketEnum userRedPacketEnum) {
+		this.userRedPacketEnum = userRedPacketEnum;
 	}
 
 }

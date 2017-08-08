@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
+import com.lawu.eshop.ad.constants.UserRedPacketEnum;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
@@ -50,10 +51,10 @@ public class UserRedPacketConverterTest {
         UserRedPacketBO user = UserRedPacketConverter.convertBO(userDO);
         Assert.assertEquals(user.getGmtCreate(), userDO.getGmtCreate());
         Assert.assertEquals(user.getId(), userDO.getId());
-        Assert.assertEquals(user.getStatus(), userDO.getStatus());
+        Assert.assertEquals(user.getUserRedPacketEnum().val, userDO.getStatus());
         Assert.assertEquals(user.getTotalCount(), userDO.getTotalCount());
         Assert.assertEquals(user.getTotalMoney(), userDO.getTotalMoney());
-        Assert.assertEquals(user.getType(), userDO.getType());
+        Assert.assertEquals(user.getRedPacketPutWayEnum().val, userDO.getType());
         Assert.assertEquals(user.getUserAccount(), userDO.getUserAccount());
         Assert.assertEquals(user.getUserNum(), userDO.getUserNum());
     }
@@ -63,18 +64,18 @@ public class UserRedPacketConverterTest {
         UserRedPacketBO bo = new UserRedPacketBO();
         bo.setGmtCreate(new Date());
         bo.setId(1L);
-        bo.setStatus((byte) 1);
+        bo.setRedPacketPutWayEnum(RedPacketPutWayEnum.getEnum((byte) 1));
         bo.setTotalCount(5);
         bo.setTotalMoney(new BigDecimal(1000));
-        bo.setType((byte) 3);
+        bo.setUserRedPacketEnum(UserRedPacketEnum.getEnum((byte) 3));
         UserRedPacketDTO dto = UserRedPacketConverter.coventDTO(bo);
         Assert.assertEquals(dto.getGmtCreate(), bo.getGmtCreate());
         Assert.assertEquals(dto.getGmtCreateStr(), DateUtil.getDateFormat(bo.getGmtCreate()));
         Assert.assertEquals(dto.getId(), bo.getId());
-        Assert.assertEquals(dto.getStatus(), bo.getStatus());
+        Assert.assertEquals(dto.getUserRedPacketEnum().val, bo.getUserRedPacketEnum().val);
         Assert.assertEquals(dto.getTotalCount(), bo.getTotalCount());
         Assert.assertEquals(dto.getTotalMoney(), bo.getTotalMoney());
-        Assert.assertEquals(dto.getType(), bo.getType());
+        Assert.assertEquals(dto.getRedPacketPutWayEnum().val, bo.getRedPacketPutWayEnum().val);
     }
 
 

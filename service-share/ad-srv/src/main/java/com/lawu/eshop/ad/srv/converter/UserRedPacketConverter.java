@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
+import com.lawu.eshop.ad.constants.UserRedPacketEnum;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
@@ -36,10 +37,10 @@ public class UserRedPacketConverter {
 		UserRedPacketBO userBO = new UserRedPacketBO();
 		userBO.setGmtCreate(userDO.getGmtCreate());
 		userBO.setId(userDO.getId());
-		userBO.setStatus(userDO.getStatus());
+		userBO.setUserRedPacketEnum(UserRedPacketEnum.getEnum(userDO.getStatus()));
 		userBO.setTotalCount(userDO.getTotalCount());
 		userBO.setTotalMoney(userDO.getTotalMoney());
-		userBO.setType(userDO.getType());
+		userBO.setRedPacketPutWayEnum(RedPacketPutWayEnum.getEnum(userDO.getType()));
 		userBO.setUserAccount(userDO.getUserAccount());
 		userBO.setUserNum(userDO.getUserNum());
 		return userBO;
@@ -70,11 +71,11 @@ public class UserRedPacketConverter {
 		dto.setGmtCreate(bo.getGmtCreate());
 		dto.setGmtCreateStr(DateUtil.getDateFormat(bo.getGmtCreate()));
 		dto.setId(bo.getId());
-		dto.setStatus(bo.getStatus());
+		dto.setRedPacketPutWayEnum(bo.getRedPacketPutWayEnum());
 		dto.setTotalCount(bo.getTotalCount());
 		dto.setTotalMoney(bo.getTotalMoney());
-		dto.setType(bo.getType());
-		dto.setTypeStr(RedPacketPutWayEnum.getName(bo.getType()));
+		dto.setUserRedPacketEnum(bo.getUserRedPacketEnum());
+		dto.setTypeStr(RedPacketPutWayEnum.getName(bo.getRedPacketPutWayEnum().val));
 		return dto;
 	}
 }
