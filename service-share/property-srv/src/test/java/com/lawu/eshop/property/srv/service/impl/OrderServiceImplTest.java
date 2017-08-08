@@ -4,10 +4,13 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.*;
 import com.lawu.eshop.property.param.*;
 import com.lawu.eshop.property.srv.domain.FreezeDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
 import com.lawu.eshop.property.srv.mapper.FreezeDOMapper;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.service.OrderService;
+import com.lawu.eshop.utils.PwdUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +39,9 @@ public class OrderServiceImplTest {
 
     @Autowired
     private FreezeDOMapper freezeDOMapper;
+
+    @Autowired
+    private PropertyInfoDOMapper propertyInfoDOMapper;
 
 
     @Transactional
@@ -100,7 +106,7 @@ public class OrderServiceImplTest {
         param1.setTotalFee("100");
         param1.setBizIds("1");
         param1.setTradeNo("2222222222");
-        param.setSideUserNum("B10002");
+        param1.setSideUserNum("B10002");
         int ret1 = orderService.doHandlePayOrderNotify(param1);
         Assert.assertEquals(ResultCode.SUCCESS,ret1);
     }
@@ -109,6 +115,16 @@ public class OrderServiceImplTest {
     @Rollback
     @Test
     public void comfirmDelivery(){
+        PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
+        propertyInfoDO.setUserNum("M10001");
+        propertyInfoDO.setGmtCreate(new Date());
+        propertyInfoDO.setPayPassword(PwdUtil.generate("123456"));
+        propertyInfoDO.setBalance(new BigDecimal("200"));
+        propertyInfoDO.setPoint(new BigDecimal("200"));
+        propertyInfoDO.setLoveAccount(new BigDecimal("0"));
+        propertyInfoDO.setFreeze(FreezeStatusEnum.FREEZE.getVal());
+        propertyInfoDOMapper.insertSelective(propertyInfoDO);
+
         OrderComfirmDataParam param = new OrderComfirmDataParam();
         param.setUserNum("M10001");
         param.setBizId("1");
@@ -121,10 +137,20 @@ public class OrderServiceImplTest {
     @Rollback
     @Test
     public void doRefundScopeInside() {
+        PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
+        propertyInfoDO.setUserNum("M10001");
+        propertyInfoDO.setGmtCreate(new Date());
+        propertyInfoDO.setPayPassword(PwdUtil.generate("123456"));
+        propertyInfoDO.setBalance(new BigDecimal("200"));
+        propertyInfoDO.setPoint(new BigDecimal("200"));
+        propertyInfoDO.setLoveAccount(new BigDecimal("0"));
+        propertyInfoDO.setFreeze(FreezeStatusEnum.FREEZE.getVal());
+        propertyInfoDOMapper.insertSelective(propertyInfoDO);
+
         FreezeDO freezeDO = new FreezeDO();
         freezeDO.setUserNum("M10001");
-        freezeDO.setMoney(new BigDecimal("100"));
-        freezeDO.setOriginalMoney(new BigDecimal("100"));
+        freezeDO.setMoney(new BigDecimal("10"));
+        freezeDO.setOriginalMoney(new BigDecimal("1"));
         freezeDO.setFundType(FreezeTypeEnum.PRODUCT_ORDER.getVal());
         freezeDO.setBizId(Long.valueOf("1"));
         freezeDO.setStatus(FreezeStatusEnum.FREEZE.getVal());
@@ -137,7 +163,7 @@ public class OrderServiceImplTest {
         param.setSideUserNum("B10002");
         param.setOrderId("1");
         param.setOrderItemIds("1");
-        param.setRefundMoney("100");
+        param.setRefundMoney("1");
         param.setLast(false);
         param.setTransactionPayTypeEnum(TransactionPayTypeEnum.BALANCE);
         param.setTradeNo("1111111111333");

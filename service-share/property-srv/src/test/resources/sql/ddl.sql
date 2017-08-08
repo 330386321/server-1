@@ -20,11 +20,11 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `bank`;
 CREATE TABLE `bank` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` int(10)  NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(25) NOT NULL COMMENT '银行名称',
   `icon_url` varchar(120) NOT NULL COMMENT '图标路径',
-  `status` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '1为启用,0为停用',
-  `ordinal` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '序号',
+  `status` tinyint(2)  NOT NULL DEFAULT '1' COMMENT '1为启用,0为停用',
+  `ordinal` int(10)  NOT NULL DEFAULT '0' COMMENT '序号',
   `remark` varchar(25)  DEFAULT NULL COMMENT '备注',
   `gmt_modified` datetime NOT NULL COMMENT '修改时间',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
@@ -36,13 +36,13 @@ CREATE TABLE `bank` (
 -- ----------------------------
 DROP TABLE IF EXISTS `bank_account`;
 CREATE TABLE `bank_account` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_num` varchar(19) NOT NULL DEFAULT '' COMMENT '用户编号',
   `account_name` varchar(15) NOT NULL COMMENT '用户名',
   `account_number` varchar(25) NOT NULL COMMENT '账号',
-  `bank_id` int(10) unsigned NOT NULL COMMENT '开户行',
+  `bank_id` int(10)  NOT NULL COMMENT '开户行',
   `sub_branch_name` varchar(50) NOT NULL COMMENT '支行',
-  `status` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '0删除1正常',
+  `status` tinyint(2)  NOT NULL DEFAULT '1' COMMENT '0删除1正常',
   `note` varchar(50) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 );
@@ -82,13 +82,13 @@ CREATE TABLE `business_deposit` (
 -- ----------------------------
 DROP TABLE IF EXISTS `fans_invite_detail`;
 CREATE TABLE `fans_invite_detail` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `merchant_id` bigint(20) unsigned NOT NULL COMMENT '商家ID',
+  `id` bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `merchant_id` bigint(20)  NOT NULL COMMENT '商家ID',
   `point_num` varchar(25) NOT NULL DEFAULT '' COMMENT '积分编号',
   `region_name` text NOT NULL COMMENT '邀请区域名称',
-  `sex` tinyint(2) unsigned DEFAULT NULL COMMENT '性别 (0--男，2--女，1--全部)',
+  `sex` tinyint(2)  DEFAULT NULL COMMENT '性别 (0--男，2--女，1--全部)',
   `age` varchar(10) NOT NULL DEFAULT '' COMMENT '年龄区间',
-  `invite_fans_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '邀请粉丝数量',
+  `invite_fans_count` int(10)  NOT NULL DEFAULT '0' COMMENT '邀请粉丝数量',
   `consume_point` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '消费积分',
   `gmt_create` datetime NOT NULL COMMENT '邀请时间',
   PRIMARY KEY (`id`)
@@ -99,8 +99,8 @@ CREATE TABLE `fans_invite_detail` (
 -- ----------------------------
 DROP TABLE IF EXISTS `follow_transaction_record`;
 CREATE TABLE `follow_transaction_record` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `transation_id` bigint(20) unsigned NOT NULL COMMENT '事务记录id',
+  `id` bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `transation_id` bigint(20)  NOT NULL COMMENT '事务记录id',
   `topic` varchar(30) NOT NULL COMMENT 'MQ消息的topic',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
@@ -110,10 +110,11 @@ CREATE TABLE `follow_transaction_record` (
 -- Table structure for freeze
 -- ----------------------------
 DROP TABLE IF EXISTS `freeze`;
-CR`id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+CREATE TABLE `freeze` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_num` varchar(19) NOT NULL COMMENT '用户编号',
   `money` decimal(10,6) NOT NULL COMMENT '冻结金额',
-  `previous_money` decimal(20,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT '操作前冻结资金',
+  `previous_money` decimal(20,6) NOT NULL DEFAULT '0.000000' COMMENT '操作前冻结资金',
   `original_money` decimal(10,6) NOT NULL COMMENT '冻结金额(原始冗余)',
   `fund_type` tinyint(2) NOT NULL COMMENT '类型(1-订单)',
   `fund_biz_type` tinyint(2) NOT NULL COMMENT '业务类型(10-(订单)用户确认收货初始化冻结资金|11-(订单)商家同意退款减冻结资金)',
@@ -132,13 +133,13 @@ CR`id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
 -- ----------------------------
 DROP TABLE IF EXISTS `love_detail`;
 CREATE TABLE `love_detail` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键',
   `title` varchar(30) NOT NULL DEFAULT '' COMMENT '爱心标题',
   `love_num` varchar(30) NOT NULL DEFAULT '' COMMENT '爱心编号',
   `user_num` varchar(19) NOT NULL DEFAULT '' COMMENT '用户编号',
-  `love_type` tinyint(3) unsigned NOT NULL COMMENT '爱心来源类型',
+  `love_type` tinyint(3)  NOT NULL COMMENT '爱心来源类型',
   `amount` decimal(20,6) NOT NULL DEFAULT '0.000000' COMMENT '金额',
-  `previous_amount` decimal(20,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT '操作前爱心账户',
+  `previous_amount` decimal(20,6)  NOT NULL DEFAULT '0.000000' COMMENT '操作前爱心账户',
   `remark` varchar(30) DEFAULT '' COMMENT '备注',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   `biz_id` varchar(500) DEFAULT '0' COMMENT '业务类型操作对应的业务表ID',
@@ -150,13 +151,13 @@ CREATE TABLE `love_detail` (
 -- ----------------------------
 DROP TABLE IF EXISTS `point_detail`;
 CREATE TABLE `point_detail` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键',
   `title` varchar(30) NOT NULL DEFAULT '' COMMENT '积分标题',
   `point_num` varchar(25) NOT NULL DEFAULT '' COMMENT '积分编号',
   `user_num` varchar(19) NOT NULL DEFAULT '' COMMENT '用户编号',
-  `point_type` tinyint(3) unsigned NOT NULL COMMENT '积分类型',
+  `point_type` tinyint(3)  NOT NULL COMMENT '积分类型',
   `point` decimal(20,6) NOT NULL DEFAULT '0.000000' COMMENT '积分',
-  `previous_point` decimal(20,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT '操作前积分',
+  `previous_point` decimal(20,6)  NOT NULL DEFAULT '0.000000' COMMENT '操作前积分',
   `direction` tinyint(2) NOT NULL COMMENT '1-支出2-收入',
   `biz_id` varchar(20) NOT NULL DEFAULT '0',
   `remark` varchar(30) DEFAULT '' COMMENT '备注',
@@ -183,12 +184,12 @@ CREATE TABLE `property` (
 -- ----------------------------
 DROP TABLE IF EXISTS `property_info`;
 CREATE TABLE `property_info` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_num` varchar(19) NOT NULL DEFAULT '' COMMENT '用户编号',
-  `balance` decimal(20,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT '余额',
+  `balance` decimal(20,6)  NOT NULL DEFAULT '0.000000' COMMENT '余额',
   `point` decimal(20,6) NOT NULL DEFAULT '0.000000' COMMENT '积分',
   `love_account` decimal(20,6) NOT NULL DEFAULT '0.000000' COMMENT '爱心账户',
-  `freeze_money` decimal(20,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT '冻结资金',
+  `freeze_money` decimal(20,6) NOT NULL DEFAULT '0.000000' COMMENT '冻结资金',
   `pay_password` char(57) DEFAULT NULL COMMENT '支付密码',
   `freeze` tinyint(2) NOT NULL DEFAULT '0' COMMENT '是否冻结(0-否1-是)',
   `gmt_modified` datetime DEFAULT NULL COMMENT '修改时间',
@@ -203,12 +204,12 @@ DROP TABLE IF EXISTS `recharge`;
 CREATE TABLE `recharge` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_num` varchar(19) NOT NULL COMMENT '用户编号',
-  `recharge_money` decimal(18,4) unsigned NOT NULL COMMENT '充值金额/积分',
+  `recharge_money` decimal(18,4)  NOT NULL COMMENT '充值金额/积分',
   `current_scale` varchar(15)  NOT NULL COMMENT '当前充值比例',
-  `money` decimal(18,4) unsigned NOT NULL COMMENT '充值所得金额/积分',
-  `recharge_type` tinyint(3) unsigned NOT NULL COMMENT '充值类型：1-余额,2-积分',
-  `channel` tinyint(3) unsigned NOT NULL COMMENT '充值方式：2-支付宝,3微信',
-  `status` tinyint(3) unsigned NOT NULL COMMENT '1-待支付,2-成功,3-失败',
+  `money` decimal(18,4)  NOT NULL COMMENT '充值所得金额/积分',
+  `recharge_type` tinyint(3)  NOT NULL COMMENT '充值类型：1-余额,2-积分',
+  `channel` tinyint(3)  NOT NULL COMMENT '充值方式：2-支付宝,3微信',
+  `status` tinyint(3)  NOT NULL COMMENT '1-待支付,2-成功,3-失败',
   `recharge_number` varchar(25)  DEFAULT NULL COMMENT '充值单号',
   `third_number` varchar(50)  DEFAULT NULL COMMENT '第三方支付的订单号',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
@@ -222,15 +223,15 @@ CREATE TABLE `recharge` (
 -- ----------------------------
 DROP TABLE IF EXISTS `transaction_detail`;
 CREATE TABLE `transaction_detail` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键',
   `title` varchar(30) NOT NULL DEFAULT '' COMMENT '交易标题',
   `transaction_num` varchar(30) NOT NULL DEFAULT '' COMMENT '交易编号',
   `user_num` varchar(19) NOT NULL DEFAULT '' COMMENT '用户编号',
-  `transaction_type` tinyint(3) unsigned NOT NULL COMMENT '交易类型(用户（1-余额充值2-广告3-扫红包4-退款5-下级收益6-买单7-付商品订单8-积分充值9-提现）商家（100-买单101-订单102-下级收益103-余额充值104-投放广告105-积分充值106-退款107-提现）)',
+  `transaction_type` tinyint(3) NOT NULL COMMENT '交易类型(用户（1-余额充值2-广告3-扫红包4-退款5-下级收益6-买单7-付商品订单8-积分充值9-提现）商家（100-买单101-订单102-下级收益103-余额充值104-投放广告105-积分充值106-退款107-提现）)',
   `transaction_account` varchar(50) NOT NULL DEFAULT '' COMMENT '第三方账户(如果是余额记账号，第三方记第三方账号)',
-  `transaction_account_type` tinyint(3) unsigned NOT NULL COMMENT '支付方式(1-余额2-支付宝3微信)',
-  `amount` decimal(20,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT '金额',
-  `previous_amount` decimal(20,6) unsigned NOT NULL DEFAULT '0.000000' COMMENT '操作前余额',
+  `transaction_account_type` tinyint(3)  NOT NULL COMMENT '支付方式(1-余额2-支付宝3微信)',
+  `amount` decimal(20,6) NOT NULL DEFAULT '0.000000' COMMENT '金额',
+  `previous_amount` decimal(20,6) NOT NULL DEFAULT '0.000000' COMMENT '操作前余额',
   `direction` tinyint(2) NOT NULL COMMENT '1-支出2-收入',
   `third_transaction_num` varchar(30) DEFAULT NULL COMMENT '第三方支付交易号',
   `biz_id` varchar(500) DEFAULT '0' COMMENT '业务类型操作对应的业务表ID',
@@ -245,11 +246,11 @@ CREATE TABLE `transaction_detail` (
 -- ----------------------------
 DROP TABLE IF EXISTS `transaction_record`;
 CREATE TABLE `transaction_record` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `relate_id` bigint(20) unsigned NOT NULL COMMENT '关联ID',
-  `type` tinyint(3) unsigned NOT NULL COMMENT '事务类型',
-  `is_processed` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '已处理，0否，1是',
-  `times` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '执行次数',
+  `id` bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `relate_id` bigint(20)  NOT NULL COMMENT '关联ID',
+  `type` tinyint(3)  NOT NULL COMMENT '事务类型',
+  `is_processed` tinyint(1)  NOT NULL DEFAULT '0' COMMENT '已处理，0否，1是',
+  `times` bigint(20)  NOT NULL DEFAULT '0' COMMENT '执行次数',
   `gmt_modified` datetime NOT NULL COMMENT '修改时间',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)

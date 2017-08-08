@@ -29,6 +29,7 @@ public class PropertyBalanceConverterTest {
     public void convert1(){
         PropertyBalanceBO propertyBalanceBO = new PropertyBalanceBO();
         propertyBalanceBO.setBalance(new BigDecimal(("1")));
+        propertyBalanceBO.setFreeze(new BigDecimal(1));
         PropertyBalanceDTO dto = PropertyBalanceConverter.convert(propertyBalanceBO);
         Assert.assertNotNull(dto);
     }
