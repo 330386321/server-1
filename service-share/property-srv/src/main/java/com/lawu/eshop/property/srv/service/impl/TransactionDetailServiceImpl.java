@@ -139,11 +139,15 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 	@Transactional
 	public int save(TransactionDetailSaveDataParam param) {
 
-		PropertyInfoDOExample example = new PropertyInfoDOExample();
-		example.createCriteria().andUserNumEqualTo(param.getUserNum());
-		List<PropertyInfoDO> propertyInfoList = propertyInfoDOMapper.selectByExample(example);
-
 		TransactionDetailDO transactionDetailDO = new TransactionDetailDO();
+		if(param.getPreviousAmount() == null){
+			PropertyInfoDOExample example = new PropertyInfoDOExample();
+			example.createCriteria().andUserNumEqualTo(param.getUserNum());
+			List<PropertyInfoDO> propertyInfoList = propertyInfoDOMapper.selectByExample(example);
+			transactionDetailDO.setPreviousAmount((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getBalance());
+		}else{
+			transactionDetailDO.setPreviousAmount(param.getPreviousAmount());
+		}
 		transactionDetailDO.setTitle(param.getTitle());
 		transactionDetailDO.setTransactionNum(StringUtil.getRandomNum(""));
 		transactionDetailDO.setUserNum(param.getUserNum());
@@ -157,7 +161,6 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		transactionDetailDO.setRemark(param.getRemark());
 		transactionDetailDO.setGmtCreate(new Date());
 		transactionDetailDO.setBizNum(param.getBizNum() == null ? "" : param.getBizNum());
-		transactionDetailDO.setPreviousAmount((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getBalance());
 		transactionDetailDOMapper.insertSelective(transactionDetailDO);
 		param.setId(transactionDetailDO.getId());
 		return ResultCode.SUCCESS;

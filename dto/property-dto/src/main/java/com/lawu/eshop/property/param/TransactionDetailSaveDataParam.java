@@ -60,6 +60,8 @@ public class TransactionDetailSaveDataParam implements Serializable {
 	 */
 	private BigDecimal amount;
 
+	private BigDecimal previousAmount;
+
 	/**
 	 * 业务类型操作对应的业务表ID
 	 */
@@ -178,4 +180,11 @@ public class TransactionDetailSaveDataParam implements Serializable {
 		this.bizNum = bizNum;
 	}
 
+	public BigDecimal getPreviousAmount() {
+		return previousAmount;
+	}
+
+	public void setPreviousAmount(BigDecimal previousAmount) {
+		this.previousAmount = previousAmount;
+	}
 }

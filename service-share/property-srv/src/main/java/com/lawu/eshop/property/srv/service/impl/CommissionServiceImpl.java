@@ -1,8 +1,12 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +53,8 @@ public class CommissionServiceImpl implements CommissionService {
 	private TransactionDetailDOMapper transactionDetailDOMapper;
 	@Autowired
 	private PointDetailDOMapper pointDetailDOMapper;
+	@Autowired
+	private PropertyInfoDOMapper propertyInfoDOMapper;
 
 	@Override
 	@Transactional
@@ -142,25 +148,9 @@ public class CommissionServiceImpl implements CommissionService {
 				return ResultCode.SUCCESS;
 			}
 
-			// 新增点广告的余额交易明细
-			TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-			tdsParam.setTransactionNum(num);
-			tdsParam.setUserNum(param.getUserNum());
-			tdsParam.setTitle(param.getTypeName());
-			tdsParam.setTransactionType(param.getTypeVal());
-			tdsParam.setTransactionAccount("");
-			tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
-			tdsParam.setAmount(param.getActureMoneyIn());
-			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
-			tdsParam.setBizId(param.getBizId().toString());
-			transactionDetailService.save(tdsParam);
-
-			// 加用户（会员或商家）财产余额
-			PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
-			infoDoView.setUserNum(param.getUserNum());
-			infoDoView.setBalance(param.getActureMoneyIn());
-			infoDoView.setGmtModified(new Date());
-			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
+			PropertyInfoDOExample examplePropertyInfo = new PropertyInfoDOExample();
+			examplePropertyInfo.createCriteria().andUserNumEqualTo(param.getUserNum());
+			List<PropertyInfoDO> propertyInfoList = propertyInfoDOMapper.selectByExample(examplePropertyInfo);
 
 			// 计爱心账户
 			LoveDetailDO loveDetailDO = new LoveDetailDO();
@@ -172,6 +162,7 @@ public class CommissionServiceImpl implements CommissionService {
 			loveDetailDO.setRemark("");
 			loveDetailDO.setGmtCreate(new Date());
 			loveDetailDO.setBizId(param.getTempBidId() == null ? "0" : param.getTempBidId().toString());
+			loveDetailDO.setPreviousAmount((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getLoveAccount());
 			loveDetailDOMapper.insertSelective(loveDetailDO);
 
 			// 加会员财产爱心账户
@@ -180,6 +171,27 @@ public class CommissionServiceImpl implements CommissionService {
 			infoDoView1.setLoveAccount(param.getActureLoveIn());
 			infoDoView1.setGmtModified(new Date());
 			propertyInfoDOMapperExtend.updatePropertyInfoAddLove(infoDoView1);
+
+			// 新增点广告的余额交易明细
+			TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+			tdsParam.setTransactionNum(num);
+			tdsParam.setUserNum(param.getUserNum());
+			tdsParam.setTitle(param.getTypeName());
+			tdsParam.setTransactionType(param.getTypeVal());
+			tdsParam.setTransactionAccount("");
+			tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
+			tdsParam.setAmount(param.getActureMoneyIn());
+			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
+			tdsParam.setBizId(param.getBizId().toString());
+			tdsParam.setPreviousAmount((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getBalance());
+			transactionDetailService.save(tdsParam);
+
+			// 加用户（会员或商家）财产余额
+			PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
+			infoDoView.setUserNum(param.getUserNum());
+			infoDoView.setBalance(param.getActureMoneyIn());
+			infoDoView.setGmtModified(new Date());
+			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
 
 		}
 

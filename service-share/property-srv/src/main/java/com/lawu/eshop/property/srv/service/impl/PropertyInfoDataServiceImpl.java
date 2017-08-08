@@ -2,7 +2,11 @@ package com.lawu.eshop.property.srv.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +59,8 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	private CommissionUtilService commissionUtilService;
 	@Autowired
 	private PointDetailDOMapper pointDetailDOMapper;
+	@Autowired
+	private PropertyInfoDOMapper propertyInfoDOMapper;
 
 	@Override
 	@Transactional
@@ -211,7 +217,25 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		}
 		BigDecimal actureMoneyIn = commissionBO.getActureMoneyIn();//实际进余额
 		BigDecimal actureLoveIn = commissionBO.getActureLoveIn();//爱心账户
-		
+
+		PropertyInfoDOExample examplePropertyInfo = new PropertyInfoDOExample();
+		examplePropertyInfo.createCriteria().andUserNumEqualTo(param.getUserNum());
+		List<PropertyInfoDO> propertyInfoList = propertyInfoDOMapper.selectByExample(examplePropertyInfo);
+
+		LoveDetailDO loveDetailDO = new LoveDetailDO();
+		loveDetailDO.setTitle(param.getLoveTypeEnum().getName());
+		loveDetailDO.setLoveNum(StringUtil.getRandomNum(""));
+		loveDetailDO.setUserNum(param.getUserNum());
+		loveDetailDO.setLoveType(param.getLoveTypeEnum().getValue());
+		loveDetailDO.setAmount(actureLoveIn);
+		loveDetailDO.setGmtCreate(new Date());
+		loveDetailDO.setBizId(param.getTempBizId());
+		loveDetailDO.setPreviousAmount((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getLoveAccount());
+		loveDetailDOMapper.insertSelective(loveDetailDO);
+
+		//更新爱心账户
+		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "L", "A", actureLoveIn);
+
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
 		tdsParam.setUserNum(param.getUserNum());
@@ -228,23 +252,11 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		tdsParam.setBizId("");
 		tdsParam.setThirdTransactionNum("");
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
+		tdsParam.setPreviousAmount((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getBalance());
 		transactionDetailService.save(tdsParam);
 		
 		// 更新用户资产余额
 		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "A", actureMoneyIn);
-		
-		LoveDetailDO loveDetailDO = new LoveDetailDO();
-		loveDetailDO.setTitle(param.getLoveTypeEnum().getName());
-		loveDetailDO.setLoveNum(StringUtil.getRandomNum(""));
-		loveDetailDO.setUserNum(param.getUserNum());
-		loveDetailDO.setLoveType(param.getLoveTypeEnum().getValue());
-		loveDetailDO.setAmount(actureLoveIn);
-		loveDetailDO.setGmtCreate(new Date());
-		loveDetailDO.setBizId(param.getTempBizId());
-		loveDetailDOMapper.insertSelective(loveDetailDO);
-		
-		//更新爱心账户
-		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "L", "A", actureLoveIn);
 		
 		return ResultCode.SUCCESS;
 	}

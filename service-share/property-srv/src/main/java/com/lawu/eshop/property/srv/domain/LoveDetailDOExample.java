@@ -586,6 +586,66 @@ public class LoveDetailDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andPreviousAmountIsNull() {
+            addCriterion("previous_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousAmountIsNotNull() {
+            addCriterion("previous_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousAmountEqualTo(BigDecimal value) {
+            addCriterion("previous_amount =", value, "previousAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousAmountNotEqualTo(BigDecimal value) {
+            addCriterion("previous_amount <>", value, "previousAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousAmountGreaterThan(BigDecimal value) {
+            addCriterion("previous_amount >", value, "previousAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("previous_amount >=", value, "previousAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousAmountLessThan(BigDecimal value) {
+            addCriterion("previous_amount <", value, "previousAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("previous_amount <=", value, "previousAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousAmountIn(List<BigDecimal> values) {
+            addCriterion("previous_amount in", values, "previousAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousAmountNotIn(List<BigDecimal> values) {
+            addCriterion("previous_amount not in", values, "previousAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("previous_amount between", value1, value2, "previousAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreviousAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("previous_amount not between", value1, value2, "previousAmount");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;
