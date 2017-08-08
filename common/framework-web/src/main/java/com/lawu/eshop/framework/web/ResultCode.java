@@ -53,7 +53,8 @@ public class ResultCode {
     public static final int FD_FILE_IMG_BIG =1032;
     public static final int FD_FILE_CUT_ERROR=1034;
     
-    
+    //邀请粉丝异常
+    public static final int INVITE_FANS_NOT_EXIST=1035;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -201,7 +202,8 @@ public class ResultCode {
 
         ResultCode.messageMap.put(UPLOAD_VEDIO_FAIL, "上传视频失败");
         ResultCode.messageMap.put(UPLOAD_SIZE_BIGER, "上传文件应小于50M");
-
+        ResultCode.messageMap.put(INVITE_FANS_NOT_EXIST, "可邀请的粉丝不存在");
+        
         ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "一小时内同一手机号超过发送次数");
         ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "同一IP 24小时内超过发送次数");
         ResultCode.messageMap.put(SMS_SEND_MOBILE_LIMIT, "同一手机号24小时内超过发送次数");

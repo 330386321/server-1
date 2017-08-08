@@ -14,4 +14,9 @@ public class MockFansInviteContentService extends BaseController implements Fans
 		return successCreated((Object)10);
 	}
 
+	@Override
+	public Result saveFansInviteExtendContent(FansInviteContentExtendParam fansInviteContentExtendParam) {
+		return successCreated((Object)10);
+	}
+
 }

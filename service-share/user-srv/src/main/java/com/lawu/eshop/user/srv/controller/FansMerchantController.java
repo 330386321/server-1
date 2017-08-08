@@ -8,6 +8,7 @@ import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
+import com.lawu.eshop.user.param.ListInviteFansWithContentParam;
 import com.lawu.eshop.user.param.PageListInviteFansParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.converter.FansMerchantConverter;
@@ -38,6 +39,23 @@ public class FansMerchantController extends BaseController {
     @RequestMapping(value = "listInviteFans/{merchantId}", method = RequestMethod.POST)
     public Result<List<FansMerchantDTO>> listInviteFans(@PathVariable Long merchantId, @RequestBody ListInviteFansParam param) {
         List<FansMerchantBO> fansMerchantBOS = fansMerchantService.listInviteFans(merchantId, param);
+        if(fansMerchantBOS == null || fansMerchantBOS.isEmpty()){
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        return successGet(FansMerchantConverter.convertDTO(fansMerchantBOS));
+    }
+    
+    
+    /**
+     * 查询可邀请的会员
+     *
+     * @param merchantId
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "listInviteFansWithContent/{merchantId}", method = RequestMethod.POST)
+    public Result<List<FansMerchantDTO>> listInviteFans(@PathVariable Long merchantId, @RequestBody ListInviteFansWithContentParam param) {
+        List<FansMerchantBO> fansMerchantBOS = fansMerchantService.listInviteFansWithContent(merchantId, param);
         if(fansMerchantBOS == null || fansMerchantBOS.isEmpty()){
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -88,7 +106,7 @@ public class FansMerchantController extends BaseController {
     @RequestMapping(value = "isFansMerchant/{merchantId}", method = RequestMethod.GET)
     public Result<Boolean> isFansMerchant(@PathVariable Long merchantId, @RequestParam Long memberId) {
         FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchant(memberId, merchantId);
-        if (fansMerchantBO == null) {
+        if (fansMerchantBO == null || fansMerchantBO.getAccount() == null) {
             return successGet(false);
         }
         return successGet(true);

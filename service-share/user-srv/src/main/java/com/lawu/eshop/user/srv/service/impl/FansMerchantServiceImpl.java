@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gexin.fastjson.JSONObject;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.FansInviteResultEnum;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
@@ -15,12 +17,12 @@ import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListFansRealParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
 import com.lawu.eshop.user.param.ListInviteFansRealParam;
+import com.lawu.eshop.user.param.ListInviteFansRealWithContentParam;
+import com.lawu.eshop.user.param.ListInviteFansWithContentParam;
 import com.lawu.eshop.user.param.PageListInviteFansParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.converter.FansMerchantConverter;
 import com.lawu.eshop.user.srv.domain.FansInviteResultDO;
-import com.lawu.eshop.user.srv.domain.FansInviteResultDOExample;
-import com.lawu.eshop.user.srv.domain.FansInviteResultDOExample.Criteria;
 import com.lawu.eshop.user.srv.domain.FansMerchantDO;
 import com.lawu.eshop.user.srv.domain.FansMerchantDOExample;
 import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOView;
@@ -59,6 +61,28 @@ public class FansMerchantServiceImpl implements FansMerchantService {
         return FansMerchantConverter.convertBO(fansMerchantDOViewList);
     }
 
+    @Override
+	public List<FansMerchantBO> listInviteFansWithContent(Long merchantId, ListInviteFansWithContentParam param) {
+    	System.out.println(JSONObject.toJSONString(param));
+    	ListInviteFansRealWithContentParam listInviteFansRealWithContentParam = new ListInviteFansRealWithContentParam();
+    	listInviteFansRealWithContentParam.setMerchantId(merchantId);
+    	listInviteFansRealWithContentParam.setRegionPath(param.getRegionPath());
+    	listInviteFansRealWithContentParam.setSex(param.getUserSexEnum().val);
+    	listInviteFansRealWithContentParam.setAgeLimit(param.getIsAgeLimit());
+    	listInviteFansRealWithContentParam.setStartAge(param.getStartAge());
+        listInviteFansRealWithContentParam.setEndAge(param.getEndAge());
+        listInviteFansRealWithContentParam.setInviteCount(param.getInviteCount());
+        listInviteFansRealWithContentParam.setInviteType(param.getInviteType());
+        String[] num = param.getNums().split(",");
+        List<String> numList = Arrays.asList(num);
+        listInviteFansRealWithContentParam.setNums(numList);
+        List<FansMerchantDOView> list = fansMerchantDOMapperExtend.listInviteFansWithContent(listInviteFansRealWithContentParam);
+        return FansMerchantConverter.convertBO(list);
+		
+	}
+    
+    
+    
     @Override
     public Page<FansMerchantBO> pageListInviteFans(Long merchantId, PageListInviteFansParam param) {
         ListInviteFansRealParam listInviteFansRealParam = new ListInviteFansRealParam();
@@ -106,7 +130,7 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     @Override
     public List<Long> findMerchant(Long memberId) {
         FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
-        fansMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId);
+        fansMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andStatusEqualTo((byte)1);
         List<FansMerchantDO> fansMerchantDOS = fansMerchantDOMapper.selectByExample(fansMerchantDOExample);
         List<Long> merchantIds = new ArrayList<>();
         for (FansMerchantDO fansMerchantDO : fansMerchantDOS) {
@@ -118,7 +142,7 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     @Override
     public Integer findFensCount(Long merchantId) {
         FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
-        fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantId);
+        fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo((byte)1);
         int count = fansMerchantDOMapper.countByExample(fansMerchantDOExample);
         return count;
     }
@@ -126,20 +150,36 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     @Override
     @Transactional
     public void saveFansMerchant(Long merchantId, Long memberId, FansMerchantChannelEnum channelEnum) {
-        FansMerchantDO fansMerchantDO = new FansMerchantDO();
-        fansMerchantDO.setMemberId(memberId);
-        fansMerchantDO.setMerchantId(merchantId);
-        fansMerchantDO.setChannel(channelEnum.getValue());
-        fansMerchantDO.setGmtCreate(new Date());
-        fansMerchantDOMapper.insertSelective(fansMerchantDO);
+    	FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
+		com.lawu.eshop.user.srv.domain.FansMerchantDOExample.Criteria cta = fansMerchantDOExample.createCriteria();
+		cta.andMemberIdEqualTo(memberId);
+		cta.andMerchantIdEqualTo(merchantId);
+		cta.andStatusEqualTo((byte)0);
+		List<FansMerchantDO> list = fansMerchantDOMapper.selectByExample(fansMerchantDOExample);
+		Long i = 0L;
+		if(list != null && !list.isEmpty()) {
+			i = list.get(0).getId();
+		}
+		FansMerchantDO fansMerchantDO = new FansMerchantDO();
+		if(i > 0) {
+			fansMerchantDO.setId(i);
+			fansMerchantDO.setStatus((byte)1);
+			fansMerchantDO.setChannel(channelEnum.getValue());
+			fansMerchantDO.setGmtCreate(new Date());
+			fansMerchantDOMapper.updateByPrimaryKeySelective(fansMerchantDO);
+		} else {
+			fansMerchantDO.setMemberId(memberId);
+	        fansMerchantDO.setMerchantId(merchantId);
+	        fansMerchantDO.setChannel(channelEnum.getValue());
+	        fansMerchantDO.setGmtCreate(new Date());
+	        fansMerchantDOMapper.insertSelective(fansMerchantDO);
+		}
     }
 
     
     @Override
     @Transactional
     public void saveFansMerchantFromInvite(Long merchantId, Long memberId, Long messageId, Boolean dealWay) {
-    	FansInviteResultDOExample fansInviteResultDOExample = new FansInviteResultDOExample();
-    	Criteria criteria = fansInviteResultDOExample.createCriteria();
     	FansInviteResultDO fansInviteResultDO = new FansInviteResultDO();
     	Date date = new Date();
 	    fansInviteResultDO.setMemberId(memberId);
@@ -147,24 +187,27 @@ public class FansMerchantServiceImpl implements FansMerchantService {
 	    fansInviteResultDO.setMessageId(messageId);
 	    fansInviteResultDO.setGmtCreate(date);
 	    fansInviteResultDO.setGmtModified(date);
+	    FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
+		com.lawu.eshop.user.srv.domain.FansMerchantDOExample.Criteria cta = fansMerchantDOExample.createCriteria();
+		cta.andMemberIdEqualTo(memberId);
+		cta.andMerchantIdEqualTo(merchantId);
+		cta.andStatusEqualTo((byte)0);
+		List<FansMerchantDO> list = fansMerchantDOMapper.selectByExample(fansMerchantDOExample);
+		Long i = 0L;
+		if(list != null && !list.isEmpty()) {
+			i = list.get(0).getId();
+		}
     	if(dealWay) {
     		FansMerchantDO fansMerchantDO = new FansMerchantDO();
-            fansMerchantDO.setMemberId(memberId);
-            fansMerchantDO.setMerchantId(merchantId);
-            fansMerchantDO.setChannel(FansMerchantChannelEnum.INVITE.getValue());
-            fansMerchantDO.setGmtCreate(new Date());
-            fansMerchantDOMapper.insertSelective(fansMerchantDO);
-            criteria.andMessageIdEqualTo(messageId);
+    		fansMerchantDO.setId(i);
+    		fansMerchantDO.setStatus((byte)1);
+    		fansMerchantDO.setGmtCreate(new Date());
+            fansMerchantDOMapper.updateByPrimaryKeySelective(fansMerchantDO);
             fansInviteResultDO.setStatus(FansInviteResultEnum.AGREE.getValue());
             fansInviteResultDOMapper.insert(fansInviteResultDO);
     	} else {
+    		fansMerchantDOMapper.deleteByPrimaryKey(i);
     		fansInviteResultDO.setStatus(FansInviteResultEnum.REFUSE.getValue());
-    		FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
-    		com.lawu.eshop.user.srv.domain.FansMerchantDOExample.Criteria cta = fansMerchantDOExample.createCriteria();
-    		cta.andMemberIdEqualTo(memberId);
-    		cta.andMerchantIdEqualTo(merchantId);
-    		cta.andStatusEqualTo((byte)0);
-    		fansMerchantDOMapper.deleteByExample(fansMerchantDOExample);
     		fansInviteResultDOMapper.insert(fansInviteResultDO);
     	}
     }

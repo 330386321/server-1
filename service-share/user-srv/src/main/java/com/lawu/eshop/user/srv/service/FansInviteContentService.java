@@ -8,6 +8,7 @@ public interface FansInviteContentService {
 	
 	Long saveInviteContentService(FansInviteContentExtendParam inviteContentParam);
 	
+	Long saveInviteContentExtendService(FansInviteContentExtendParam inviteContentParam);
 	
 	FansInviteContentBO selectInviteContentById(Long id);
 }

@@ -1,5 +1,12 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -7,12 +14,8 @@ import com.lawu.eshop.merchant.api.service.FansMerchantService;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
+import com.lawu.eshop.user.param.ListInviteFansWithContentParam;
 import com.lawu.eshop.user.param.PageListInviteFansParam;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -39,4 +42,10 @@ public class MockFansMerchantService extends BaseController implements FansMerch
     public Result<Integer> countFans(@PathVariable("merchantId") Long merchantId) {
         return successGet();
     }
+
+	@Override
+	public Result<List<FansMerchantDTO>> listInviteFansWithContent(Long merchantId,
+			ListInviteFansWithContentParam param) {
+		 return successGet(new ArrayList<FansMerchantDTO>());
+	}
 }

@@ -39,6 +39,17 @@ public class FansInviteContentController extends BaseController {
 		return successCreated((Object)i);
     }
     
+    /**
+	 * 保存邀请内容
+	 * @param param
+	 * @return
+	 */
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "saveInviteContentExtendService", method = RequestMethod.POST)
+    public Result saveInviteContentExtendService(@RequestBody FansInviteContentExtendParam param) {
+    	Long i = fansInviteContentService.saveInviteContentExtendService(param);
+		return successCreated((Object)i);
+    }
     
     /**
      * 查询邀请内容

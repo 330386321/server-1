@@ -32,16 +32,6 @@ public class FansInviteContentServiceImpl implements FansInviteContentService{
 	@Autowired
 	private MemberDOMapper memberDOMapper;
 	
-//	@Override
-//	public Long saveInviteContentService(FansInviteContentParam inviteContentParam) {
-//		FansInviteContentDO fansInviteContentDO = FansInviteContentConverter.converterFansInviteContentParam(inviteContentParam);
-//		Date date = new Date();
-//		fansInviteContentDO.setGmtCreate(date);
-//		fansInviteContentDO.setGmtModified(date);
-//		fansInviteContentDOMapper.insertSelective(fansInviteContentDO);
-//		return fansInviteContentDO.getId();
-//	}
-
 	@Override
 	public FansInviteContentBO selectInviteContentById(Long id) {
 		FansInviteContentDO ficDo = fansInviteContentDOMapper.selectByPrimaryKey(id);
@@ -61,6 +51,27 @@ public class FansInviteContentServiceImpl implements FansInviteContentService{
 			List<MemberDO> memberDO = memberDOMapper.selectByExample(memberDOExample);
 			FansMerchantDO fansMerchantDO = new FansMerchantDO();
 			fansMerchantDO.setMemberId(memberDO.get(0).getId());
+			fansMerchantDO.setMerchantId(inviteContentParam.getMerchantId());
+			fansMerchantDO.setChannel((byte)2);
+			fansMerchantDO.setGmtCreate(date);
+			fansMerchantDO.setStatus((byte)0);
+			fansMerchantDOMapper.insert(fansMerchantDO);
+		}
+		FansInviteContentDO fansInviteContentDO = FansInviteContentConverter.converterFansInviteContentParam(inviteContentParam);
+		fansInviteContentDO.setGmtCreate(date);
+		fansInviteContentDO.setGmtModified(date);
+		fansInviteContentDOMapper.insertSelective(fansInviteContentDO);
+		return fansInviteContentDO.getId();
+	}
+	
+	@Transactional
+	@Override
+	public Long saveInviteContentExtendService(FansInviteContentExtendParam inviteContentParam) {
+		String[] id = inviteContentParam.getIds().split(",");
+		Date date = new Date();
+		for(int i = 0; i < id.length; i++) {
+			FansMerchantDO fansMerchantDO = new FansMerchantDO();
+			fansMerchantDO.setMemberId(Long.valueOf(id[i].toString()));
 			fansMerchantDO.setMerchantId(inviteContentParam.getMerchantId());
 			fansMerchantDO.setChannel((byte)2);
 			fansMerchantDO.setGmtCreate(date);

@@ -23,4 +23,7 @@ public interface FansInviteContentService {
 	@RequestMapping(method = RequestMethod.POST, value = "fansInviteContent/saveInviteContentService")
 	Result saveFansInviteContent(@RequestBody FansInviteContentExtendParam fansInviteContentExtendParam);
 	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.POST, value = "fansInviteContent/saveInviteContentExtendService")
+	Result saveFansInviteExtendContent(@RequestBody FansInviteContentExtendParam fansInviteContentExtendParam);
 }
