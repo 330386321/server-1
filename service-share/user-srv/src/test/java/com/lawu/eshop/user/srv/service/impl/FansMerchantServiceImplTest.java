@@ -1,6 +1,17 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -17,17 +28,6 @@ import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.service.FansMerchantService;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.RandomUtil;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -188,7 +188,7 @@ public class FansMerchantServiceImplTest {
         fansMerchantService.saveFansMerchantFromInvite(1L, 1L, 10L, true);
         List<FansMerchantDO> fansMerchantDOS = fansMerchantDOMapper.selectByExample(null);
         Assert.assertNotNull(fansMerchantDOS);
-        Assert.assertEquals(1, fansMerchantDOS.size());
+        Assert.assertEquals(0, fansMerchantDOS.size());
         int i = fansInviteResultDOMapper.countByExample(null);
         Assert.assertEquals(1, i);
     }

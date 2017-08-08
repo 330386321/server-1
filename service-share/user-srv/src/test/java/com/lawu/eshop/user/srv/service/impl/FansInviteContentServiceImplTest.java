@@ -79,6 +79,46 @@ public class FansInviteContentServiceImplTest {
         Assert.assertEquals(1, i);
 	}
 	
+	@Transactional
+    @Rollback
+    @Test
+    public void saveInviteContentExtendService() {
+		MemberDO memberDO = new MemberDO();
+		memberDO.setNum("1");
+        memberDO.setAccount("13666666666");
+        memberDO.setPwd(PwdUtil.generate("123456"));
+        memberDO.setMobile("13666666666");
+        memberDO.setStatus(DataTransUtil.intToByte(1));
+        memberDO.setGmtCreate(new Date());
+		memberDOMapper.insertSelective(memberDO);
+		
+		memberDO.setNum("2");
+        memberDO.setAccount("13666666667");
+        memberDO.setPwd(PwdUtil.generate("123456"));
+        memberDO.setMobile("13666666667");
+        memberDO.setStatus(DataTransUtil.intToByte(1));
+        memberDO.setGmtCreate(new Date());
+        memberDOMapper.insertSelective(memberDO);
+		
+		FansInviteContentExtendParam fansInviteContentParam = new FansInviteContentExtendParam();
+		fansInviteContentParam.setFansInviteDetailId(1L);
+		fansInviteContentParam.setGmtCreate(new Date());
+		fansInviteContentParam.setGmtModified(new Date());
+		fansInviteContentParam.setInviteContent("sdasdad");
+		fansInviteContentParam.setLogoUrl("logoUrl");
+		fansInviteContentParam.setMerchantId(1L);
+		fansInviteContentParam.setMerchantNum("num");
+		fansInviteContentParam.setMerchantStoreIntro("简介");
+		fansInviteContentParam.setMerchantStoreName("mingzi");
+		fansInviteContentParam.setUrl("url");
+		fansInviteContentParam.setNums("1");
+		fansInviteContentParam.setIds("1,2");
+		fansInviteContentService.saveInviteContentExtendService(fansInviteContentParam);
+		List<FansInviteContentDO> list = fansInviteContentDOMapper.selectByExample(null);
+		System.out.println(JSONObject.toJSONString(list));
+		int i = fansInviteContentDOMapper.countByExample(null);
+        Assert.assertEquals(1, i);
+	}
 	
 	@Test
 	@Rollback

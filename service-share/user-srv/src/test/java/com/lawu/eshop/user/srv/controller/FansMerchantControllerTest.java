@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
+import com.lawu.eshop.user.param.ListInviteFansWithContentParam;
 import com.lawu.eshop.user.srv.UserSrvApplicationTest;
 import org.junit.Assert;
 import org.junit.Before;
@@ -65,6 +66,29 @@ public class FansMerchantControllerTest {
         }
     }
 
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void listInviteFansWithContent() {
+    	ListInviteFansWithContentParam param = new ListInviteFansWithContentParam();
+        param.setUserSexEnum(UserSexEnum.SEX_SECRET);
+        param.setIsAgeLimit(false);
+        param.setNums("1,2");
+        param.setInviteType(3);
+        String requestJson = JSONObject.toJSONString(param);
+        RequestBuilder request = post("/fansMerchant/listInviteFansWithContent/200").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+    
+    
     @Transactional
     @Rollback
     @Test
@@ -176,5 +200,20 @@ public class FansMerchantControllerTest {
             Assert.fail(e.getMessage());
         }
     }
-
+    
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void saveFansMerchantFromInvite() {
+        RequestBuilder request = put("/fansMerchant/saveFansMerchantFromInvite/200").param("memberId", "100").param("messageId", "1").param("dealWay", "true");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
 }

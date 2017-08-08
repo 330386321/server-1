@@ -38,9 +38,11 @@ import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.FansInviteContentExtendParam;
 import com.lawu.eshop.user.param.InviteFansParam;
+import com.lawu.eshop.user.param.InviteFansWithContentExtendParam;
 import com.lawu.eshop.user.param.InviteFansWithContentParam;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
+import com.lawu.eshop.user.param.ListInviteFansWithContentParam;
 import com.lawu.eshop.user.param.PageListInviteFansParam;
 
 import io.swagger.annotations.Api;
@@ -289,4 +291,114 @@ public class FansMerchantController extends BaseController {
 		return successCreated();
 	}
 	
+	
+	
+	@SuppressWarnings("rawtypes")
+	@ApiOperation(value = "邀请粉丝(含邀请内容,含邀请条件)", notes = "邀请会员成为粉丝。[1002|1022|1023|1035|6002|6024] (洪钦明)", httpMethod = "POST")
+	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+	@Authorization
+	@RequestMapping(value = "inviteFansWithContentExtend", method = RequestMethod.POST)
+	public Result inviteFansWithContentExtend(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute InviteFansWithContentExtendParam param) {
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		String userNum = UserUtil.getCurrentUserNum(getRequest());
+		ListInviteFansWithContentParam listInviteFansWithContentParam = new ListInviteFansWithContentParam();
+		listInviteFansWithContentParam.setEndAge(param.getEndAge());
+		listInviteFansWithContentParam.setInviteCount(param.getInviteCount());
+		listInviteFansWithContentParam.setInviteType(param.getInviteType());
+		listInviteFansWithContentParam.setIsAgeLimit(param.getIsAgeLimit());
+		listInviteFansWithContentParam.setNums(param.getNums());
+		listInviteFansWithContentParam.setRegionPath(param.getRegionPath());
+		listInviteFansWithContentParam.setStartAge(param.getStartAge());
+		listInviteFansWithContentParam.setUserSexEnum(param.getUserSexEnum());
+		Result<List<FansMerchantDTO>> fmtDTOlist = fansMerchantService.listInviteFansWithContent(merchantId, listInviteFansWithContentParam);
+		String ids = "";
+		String nums = "";
+		if(fmtDTOlist.getModel() == null || fmtDTOlist.getModel().isEmpty()) {
+			return successCreated(ResultCode.INVITE_FANS_NOT_EXIST);
+		}
+		for(FansMerchantDTO dto : fmtDTOlist.getModel()) {
+			ids += dto.getMemberId() + ",";
+			nums += dto.getNum() + ",";
+		}
+		ids = ids.substring(0, ids.length() - 1);
+		nums = nums.substring(0, nums.length() - 1);
+		
+		
+		int inviteFansCount = listInviteFansWithContentParam.getInviteCount();
+		Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
+		if (isSuccess(resultFreeze)) {
+			if (PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel().getStatus())) {
+				return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
+			}
+		} else {
+			return successCreated(resultFreeze.getRet());
+		}
+
+		Result<Boolean> pwdResult = propertyInfoService.varifyPayPwd(userNum, param.getPayPwd());
+		if (!isSuccess(pwdResult)) {
+			return pwdResult;
+		}
+		if (!pwdResult.getModel()) {
+			return successCreated(ResultCode.PAY_PWD_ERROR);
+		}
+
+		// 邀请粉丝扣除积分、插入粉丝邀请记录
+		PropertyInfoDataParam propertyInfoDataParam = new PropertyInfoDataParam();
+		propertyInfoDataParam.setUserNum(userNum);
+		propertyInfoDataParam.setPoint(String.valueOf(inviteFansCount));
+		propertyInfoDataParam.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INVITE_FANS);
+		propertyInfoDataParam.setMerchantId(merchantId);
+		propertyInfoDataParam.setRegionName(StringUtils.isEmpty(param.getRegionName()) ? "全国" : param.getRegionName());
+		propertyInfoDataParam.setInviteFansCount(inviteFansCount);
+		propertyInfoDataParam.setSex(param.getUserSexEnum().val);
+		propertyInfoDataParam.setAge(param.getIsAgeLimit() ? param.getStartAge() + "-" + param.getEndAge() : "");
+		Result result = propertyInfoService.inviteFans(propertyInfoDataParam);
+		if (!isSuccess(result)) {
+			return result;
+		}
+		
+		FansInviteContentExtendParam fansInviteContentExtendParam = new FansInviteContentExtendParam();
+		fansInviteContentExtendParam.setFansInviteDetailId(Long.valueOf(result.getModel().toString()));
+		fansInviteContentExtendParam.setInviteContent(param.getInviteContent());
+		fansInviteContentExtendParam.setLogoUrl(param.getLogoUrl());
+		fansInviteContentExtendParam.setMerchantId(merchantId);
+		fansInviteContentExtendParam.setMerchantNum(userNum);
+		fansInviteContentExtendParam.setMerchantStoreIntro(param.getMerchantStoreIntro());
+		fansInviteContentExtendParam.setMerchantStoreName(param.getMerchantStoreName());
+		fansInviteContentExtendParam.setUrl(param.getUrl());
+		fansInviteContentExtendParam.setIds(ids);
+		result = fansInviteContentService.saveFansInviteExtendContent(fansInviteContentExtendParam);
+		if (!isSuccess(result)) {
+			return result;
+		}
+		
+		// 给会员发送站内消息
+		MessageInfoParam messageInfoParam = new MessageInfoParam();
+		messageInfoParam.setRelateId(Long.valueOf(result.getModel().toString()));
+		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS);
+		MessageTempParam messageTempParam = new MessageTempParam();
+		messageTempParam.setMerchantName("E店商家");
+		messageTempParam.setMerchantName(param.getMerchantStoreName());
+		String[] numSplit = nums.split(",");
+		for (String num : numSplit) {
+			Result<UserDTO> userDTOResult = memberService.getMemberByNum(num);
+			messageTempParam.setUserName("E店会员");
+			if (isSuccess(userDTOResult) && StringUtils.isNotEmpty(userDTOResult.getModel().getNickname())) {
+				messageTempParam.setUserName(userDTOResult.getModel().getNickname());
+			}
+			messageInfoParam.setMessageParam(messageTempParam);
+			messageService.saveMessage(num, messageInfoParam);
+		}
+		// 给商家发送站内消息
+		Result<PropertyPointDTO> propertyPointDTOResult = propertyInfoService.getPropertyPoint(userNum);
+		messageInfoParam = new MessageInfoParam();
+		messageInfoParam.setRelateId(merchantId);
+		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS_MERCHANT);
+		messageTempParam = new MessageTempParam();
+		messageTempParam.setExpendPoint(new BigDecimal(inviteFansCount));
+		messageTempParam.setPoint(propertyPointDTOResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+		messageInfoParam.setMessageParam(messageTempParam);
+		messageService.saveMessage(userNum, messageInfoParam);
+		return successCreated();
+	}
 }

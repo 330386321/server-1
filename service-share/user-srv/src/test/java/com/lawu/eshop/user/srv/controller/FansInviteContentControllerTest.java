@@ -99,6 +99,53 @@ public class FansInviteContentControllerTest {
         }
     }
     
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void saveInviteContentExtendService() {
+    	MemberDO memberDO = new MemberDO();
+		memberDO.setNum("1");
+        memberDO.setAccount("13666666666");
+        memberDO.setPwd(PwdUtil.generate("123456"));
+        memberDO.setMobile("13666666666");
+        memberDO.setStatus(DataTransUtil.intToByte(1));
+        memberDO.setGmtCreate(new Date());
+		memberDOMapper.insertSelective(memberDO);
+		
+		memberDO.setNum("2");
+        memberDO.setAccount("13666666667");
+        memberDO.setPwd(PwdUtil.generate("123456"));
+        memberDO.setMobile("13666666667");
+        memberDO.setStatus(DataTransUtil.intToByte(1));
+        memberDO.setGmtCreate(new Date());
+        memberDOMapper.insertSelective(memberDO);
+    	
+    	FansInviteContentExtendParam fansInviteContentParam = new FansInviteContentExtendParam();
+    	fansInviteContentParam.setFansInviteDetailId(1L);
+    	fansInviteContentParam.setGmtCreate(new Date());
+    	fansInviteContentParam.setGmtModified(new Date());
+    	fansInviteContentParam.setInviteContent("invitecontent");
+    	fansInviteContentParam.setLogoUrl("logourl");
+    	fansInviteContentParam.setMerchantId(1L);
+    	fansInviteContentParam.setMerchantNum("num");
+    	fansInviteContentParam.setMerchantStoreIntro("intro");
+    	fansInviteContentParam.setMerchantStoreName("storeName");
+    	fansInviteContentParam.setUrl("url");
+    	fansInviteContentParam.setIds("1,2");
+    	fansInviteContentParam.setNums("1,2");
+    	String str = JSONObject.toJSONString(fansInviteContentParam);
+        RequestBuilder request = post("/fansInviteContent/saveInviteContentExtendService").contentType(MediaType.APPLICATION_JSON).content(str);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+    
     @Transactional
     @Rollback
     @Test
