@@ -21,8 +21,23 @@ public class OperatorApiConfig {
 
     @Value(value="${video.upload.url}")
     private String videoUploadUrl;
+    
+    @Value(value="${fastdfs.trackerServers}")
+    private String trackerServers;
+    
+    @Value(value="${fastdfs.trackerTttpPport}")
+    private Integer trackerTttpPport;
+    
 
-    public String getImageUrl() {
+    public String getTrackerServers() {
+		return trackerServers;
+	}
+
+	public Integer getTrackerTttpPport() {
+		return trackerTttpPport;
+	}
+
+	public String getImageUrl() {
         return imageUrl;
     }
 

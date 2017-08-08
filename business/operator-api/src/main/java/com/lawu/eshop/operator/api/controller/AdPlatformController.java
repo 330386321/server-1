@@ -137,7 +137,7 @@ public class AdPlatformController extends BaseController {
     
     @ApiOperation(value = "添加广告", notes = "添加广告[1011|1015|1010]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequiresPermissions("adPlatForm:add")
+    //@RequiresPermissions("adPlatForm:add")
     @RequestMapping(value = "saveAdPlatform", method = RequestMethod.POST)
     public Result saveAdPlatform(@ModelAttribute @ApiParam(required = true, value = "广告信息") AdPlatformParam adPlatform) {
         return adPlatformService.saveAdPlatform(adPlatform);

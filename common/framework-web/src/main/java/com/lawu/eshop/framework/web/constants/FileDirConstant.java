@@ -26,6 +26,8 @@ public class FileDirConstant {
     // 优惠套餐图片路径
     public static final String DIR_MALL_DISCOUNT_PACKAGE = "mall_discount_package";
 
+    // 优惠套餐图片路径
+    public static final String AD_PLAT_FORM_URL = "ad_plat_form_url";
     /**
      * 默认图片
      */
