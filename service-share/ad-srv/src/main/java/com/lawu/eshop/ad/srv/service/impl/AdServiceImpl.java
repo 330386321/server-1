@@ -198,8 +198,12 @@ public class AdServiceImpl implements AdService {
 		adDO.setAreas(adParam.getAreas());
 		adDO.setRegionName(adParam.getRegionName());
 		adDO.setContent(adParam.getContent());
-		adDO.setRelateId(adParam.getRelateId());
-		adDO.setRelateType(adParam.getRelateType().getVal());
+		if(adParam.getRelateId()!=null){
+			adDO.setRelateId(adParam.getRelateId());
+		}
+		if(adParam.getRelateType()!=null){
+			adDO.setRelateType(adParam.getRelateType().getVal());
+		}
 		Integer i=adDOMapper.insert(adDO);
 		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //E赞  红包
 			savePointPool(adDO,piontCount);
