@@ -38,6 +38,7 @@ import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.constants.RelateTypeEnum;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
@@ -109,6 +110,7 @@ public class AdControllerTest {
     	param.setTitle("广告测试标题");
     	param.setTotalPoint(BigDecimal.valueOf(100));
     	param.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
+    	param.setRelateType(RelateTypeEnum.PRODUCT_TYPE);
     	adSaveParam.setAdParam(param);
     	String requestJson = JSONObject.toJSONString(adSaveParam);
         RequestBuilder request = post("/ad/saveAd").contentType(MediaType.APPLICATION_JSON).content(requestJson);
@@ -693,6 +695,7 @@ public class AdControllerTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setRelateType(RelateTypeEnum.PRODUCT_TYPE.getVal());
         adDOMapper.insertSelective(ad);
         
         try {

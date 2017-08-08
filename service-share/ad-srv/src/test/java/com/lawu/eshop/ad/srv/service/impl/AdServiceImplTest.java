@@ -25,6 +25,7 @@ import com.lawu.eshop.ad.constants.OrderTypeEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.constants.RelateTypeEnum;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
@@ -106,6 +107,7 @@ public class AdServiceImplTest {
     	param.setTitle("广告测试标题");
     	param.setTotalPoint(BigDecimal.valueOf(100));
     	param.setTypeEnum(AdTypeEnum.AD_TYPE_PRAISE);
+    	param.setRelateType(RelateTypeEnum.PRODUCT_TYPE);
     	adSaveParam.setAdParam(param);
     	adService.saveAd(adSaveParam);
 
@@ -620,6 +622,7 @@ public class AdServiceImplTest {
     	param.setTitle("广告测试标题");
     	param.setTotalPoint(BigDecimal.valueOf(100));
     	param.setTypeEnum(AdTypeEnum.AD_TYPE_PRAISE);
+    	param.setRelateType(RelateTypeEnum.MERCHANT_STORE_TYPE);
     	adSaveParam.setAdParam(param);
     	adService.saveAd(adSaveParam);
         

@@ -236,6 +236,7 @@ public class AdPlatformControllerTest {
 		adPlatformParam.setTypeEnum(TypeEnum.TYPE_PRODUCT);
 		adPlatformParam.setProductId(10061l);
 		adPlatformParam.setRegionPath("44/4403/440305");
+		adPlatformParam.setAdId(1001l);
     	String requestJson = JSONObject.toJSONString(adPlatformParam);
 		
         try {

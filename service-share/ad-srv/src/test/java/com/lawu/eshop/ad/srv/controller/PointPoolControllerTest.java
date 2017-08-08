@@ -44,7 +44,7 @@ public class PointPoolControllerTest {
      @Test
      public void selectMemberList() {
          try {
-             RequestBuilder request = get("/pointPool/selectMemberList/").param("id", "1");
+             RequestBuilder request = get("/pointPool/selectMemberList/"+1);
              ResultActions perform= mvc.perform(request);
              MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_ACCEPTED)).andDo(MockMvcResultHandlers.print()).andReturn();
 
