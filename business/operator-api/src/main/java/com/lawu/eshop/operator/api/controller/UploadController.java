@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.web.BaseController;
@@ -45,12 +46,13 @@ public class UploadController extends BaseController {
     @ApiOperation(value = "统一上传接口", notes = "上传接口(张荣成)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
-    public Result<FileUploadDTO> uploadFile(@RequestParam @ApiParam(required = true, value = "上传类型图片(img)，视频(video),其他(file)") String type) {
+    @ResponseBody
+    public Result<FileUploadDTO> uploadFile(@RequestParam @ApiParam(required = true, value = "上传类型图片(img)，视频(video),其他(file)") String fileType) {
         HttpServletRequest request = getRequest();
         UploadParam uparam = new UploadParam();
         uparam.setBaseImageDir(operatorApiConfig.getImageUploadUrl());
         uparam.setDir(FileDirConstant.AD_PLAT_FORM_URL);
-        uparam.setType(type);
+        uparam.setType(fileType);
         ClientParams cp = new ClientParams();
         cp.setTrackerServer(operatorApiConfig.getTrackerServers());
         cp.setTrackerTttpPport(operatorApiConfig.getTrackerTttpPport());
