@@ -1,6 +1,5 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -79,11 +78,16 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
 
             //查询门店信息记录
             MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(auditParam.getMerchantStoreId());
-            List<MerchantStoreProfileDO> merchantStoreProfileDOS = new ArrayList<>();
+            List<MerchantStoreProfileDO> merchantStoreProfileDOS ;
             if (merchantStoreDO != null && merchantStoreDO.getId() > 0) {
                 MerchantStoreDO newStoreDO = new MerchantStoreDO();
                 newStoreDO.setId(merchantStoreDO.getId());
                 newStoreDO.setGmtModified(new Date());
+
+                //查询商家店铺扩展信息
+                MerchantStoreProfileDOExample merchantStoreProfileDOExample = new MerchantStoreProfileDOExample();
+                merchantStoreProfileDOExample.createCriteria().andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+                merchantStoreProfileDOS = merchantStoreProfileDOMapper.selectByExample(merchantStoreProfileDOExample);
                 if (MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_CHECKED.val == auditParam.getAuditStatusEnum().val) {
                     //审核通过
                     if (MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val == auditParam.getTypeEnum().val) {
@@ -249,10 +253,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                         }
 
-                        //查询商家店铺扩展信息
-                        MerchantStoreProfileDOExample merchantStoreProfileDOExample = new MerchantStoreProfileDOExample();
-                        merchantStoreProfileDOExample.createCriteria().andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
-                        merchantStoreProfileDOS = merchantStoreProfileDOMapper.selectByExample(merchantStoreProfileDOExample);
+                        // 更新店铺类型为实体店铺
                         if(!merchantStoreProfileDOS.isEmpty()){
                             MerchantStoreProfileDO merchantStoreProfileDO = new MerchantStoreProfileDO();
                             merchantStoreProfileDO.setId(merchantStoreProfileDOS.get(0).getId());
