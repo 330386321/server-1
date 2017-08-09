@@ -23,6 +23,7 @@
     <result column="area_id" property="areaId" jdbcType="BIGINT" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_pay" property="gmtPay" jdbcType="TIMESTAMP" />
+    <result column="gmt_verify" property="gmtVerify" jdbcType="TIMESTAMP" />
     <result column="gmt_refund" property="gmtRefund" jdbcType="TIMESTAMP" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
     <result column="oper_user_id" property="operUserId" jdbcType="BIGINT" />
@@ -102,8 +103,8 @@
     -->
     id, business_id, user_num, business_account, business_name, deposit_number, third_number, 
     third_account, payment_method, amount, status, business_bank_account_id, province_id, 
-    city_id, area_id, gmt_create, gmt_pay, gmt_refund, gmt_modified, oper_user_id, oper_user_name, 
-    remark
+    city_id, area_id, gmt_create, gmt_pay, gmt_verify, gmt_refund, gmt_modified, oper_user_id, 
+    oper_user_name, remark
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.BusinessDepositDOExample" >
     <!--
@@ -164,17 +165,17 @@
       third_account, payment_method, amount, 
       status, business_bank_account_id, province_id, 
       city_id, area_id, gmt_create, 
-      gmt_pay, gmt_refund, gmt_modified, 
-      oper_user_id, oper_user_name, remark
-      )
+      gmt_pay, gmt_verify, gmt_refund, 
+      gmt_modified, oper_user_id, oper_user_name, 
+      remark)
     values (#{businessId,jdbcType=BIGINT}, #{userNum,jdbcType=VARCHAR}, #{businessAccount,jdbcType=VARCHAR}, 
       #{businessName,jdbcType=VARCHAR}, #{depositNumber,jdbcType=VARCHAR}, #{thirdNumber,jdbcType=VARCHAR}, 
       #{thirdAccount,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=TINYINT}, #{amount,jdbcType=DECIMAL}, 
       #{status,jdbcType=TINYINT}, #{businessBankAccountId,jdbcType=BIGINT}, #{provinceId,jdbcType=BIGINT}, 
       #{cityId,jdbcType=BIGINT}, #{areaId,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtPay,jdbcType=TIMESTAMP}, #{gmtRefund,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
-      #{operUserId,jdbcType=BIGINT}, #{operUserName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
-      )
+      #{gmtPay,jdbcType=TIMESTAMP}, #{gmtVerify,jdbcType=TIMESTAMP}, #{gmtRefund,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{operUserId,jdbcType=BIGINT}, #{operUserName,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.property.srv.domain.BusinessDepositDO" >
     <!--
@@ -233,6 +234,9 @@
       </if>
       <if test="gmtPay != null" >
         gmt_pay,
+      </if>
+      <if test="gmtVerify != null" >
+        gmt_verify,
       </if>
       <if test="gmtRefund != null" >
         gmt_refund,
@@ -298,6 +302,9 @@
       </if>
       <if test="gmtPay != null" >
         #{gmtPay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtVerify != null" >
+        #{gmtVerify,jdbcType=TIMESTAMP},
       </if>
       <if test="gmtRefund != null" >
         #{gmtRefund,jdbcType=TIMESTAMP},
@@ -384,6 +391,9 @@
       <if test="record.gmtPay != null" >
         gmt_pay = #{record.gmtPay,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.gmtVerify != null" >
+        gmt_verify = #{record.gmtVerify,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.gmtRefund != null" >
         gmt_refund = #{record.gmtRefund,jdbcType=TIMESTAMP},
       </if>
@@ -427,6 +437,7 @@
       area_id = #{record.areaId,jdbcType=BIGINT},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
       gmt_pay = #{record.gmtPay,jdbcType=TIMESTAMP},
+      gmt_verify = #{record.gmtVerify,jdbcType=TIMESTAMP},
       gmt_refund = #{record.gmtRefund,jdbcType=TIMESTAMP},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
       oper_user_id = #{record.operUserId,jdbcType=BIGINT},
@@ -491,6 +502,9 @@
       <if test="gmtPay != null" >
         gmt_pay = #{gmtPay,jdbcType=TIMESTAMP},
       </if>
+      <if test="gmtVerify != null" >
+        gmt_verify = #{gmtVerify,jdbcType=TIMESTAMP},
+      </if>
       <if test="gmtRefund != null" >
         gmt_refund = #{gmtRefund,jdbcType=TIMESTAMP},
       </if>
@@ -531,6 +545,7 @@
       area_id = #{areaId,jdbcType=BIGINT},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_pay = #{gmtPay,jdbcType=TIMESTAMP},
+      gmt_verify = #{gmtVerify,jdbcType=TIMESTAMP},
       gmt_refund = #{gmtRefund,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       oper_user_id = #{operUserId,jdbcType=BIGINT},

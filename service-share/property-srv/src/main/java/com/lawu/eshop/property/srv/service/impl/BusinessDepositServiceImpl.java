@@ -37,81 +37,81 @@ import java.util.List;
 
 @Service
 public class BusinessDepositServiceImpl implements BusinessDepositService {
-	
-	private static Logger logger = LoggerFactory.getLogger(BusinessDepositServiceImpl.class);
-			
-	@Autowired
-	private BusinessDepositDOMapper businessDepositDOMapper;
 
-	@Autowired
-	private BankAccountDOMapper bankAccountDOMapper;
+    private static Logger logger = LoggerFactory.getLogger(BusinessDepositServiceImpl.class);
 
-	@Autowired
-	private PropertyService propertyService;
-	@Autowired
-	private PropertyInfoDOMapper propertyInfoDOMapper;
+    @Autowired
+    private BusinessDepositDOMapper businessDepositDOMapper;
 
-	@Autowired
-	@Qualifier("handleDepositEditStoreStatusTransactionMainServiceImpl")
-	private TransactionMainService<Reply> handleDepositEditStoreStatusTransactionMainServiceImpl;
+    @Autowired
+    private BankAccountDOMapper bankAccountDOMapper;
 
-	@Autowired
-	@Qualifier("handleDepositAuditPassTransactionMainServiceImpl")
-	private TransactionMainService<Reply> handleDepositAuditPassTransactionMainServiceImpl;
+    @Autowired
+    private PropertyService propertyService;
+    @Autowired
+    private PropertyInfoDOMapper propertyInfoDOMapper;
 
-	@Autowired
-	@Qualifier("handleDepositAuditCancelTransactionMainServiceImpl")
-	private TransactionMainService<Reply> handleDepositAuditCancelTransactionMainServiceImpl;
+    @Autowired
+    @Qualifier("handleDepositEditStoreStatusTransactionMainServiceImpl")
+    private TransactionMainService<Reply> handleDepositEditStoreStatusTransactionMainServiceImpl;
 
-	@Override
-	@Transactional
-	public BusinessDepositInitDTO save(BusinessDepositSaveDataParam param) {
-		BusinessDepositDO bddo = new BusinessDepositDO();
-		bddo.setBusinessId(Long.valueOf(param.getBusinessId()));
-		bddo.setUserNum(param.getUserNum());
-		bddo.setBusinessAccount(param.getBusinessAccount());
-		bddo.setBusinessName(param.getBusinessName());
-		bddo.setDepositNumber(StringUtil.getRandomNum(""));
-		bddo.setAmount(new BigDecimal(param.getDeposit()));
-		bddo.setStatus(BusinessDepositStatusEnum.PAYING.getVal());
-		bddo.setProvinceId(Long.valueOf(param.getProvinceId()));
-		bddo.setCityId(Long.valueOf(param.getCityId()));
-		bddo.setAreaId(Long.valueOf(param.getAreaId()));
-		bddo.setGmtCreate(new Date());
-		businessDepositDOMapper.insertSelective(bddo);
+    @Autowired
+    @Qualifier("handleDepositAuditPassTransactionMainServiceImpl")
+    private TransactionMainService<Reply> handleDepositAuditPassTransactionMainServiceImpl;
 
-		BusinessDepositInitDTO dto = new BusinessDepositInitDTO();
-		dto.setId(bddo.getId());
-		dto.setDeposit(param.getDeposit());
-		return dto;
-	}
+    @Autowired
+    @Qualifier("handleDepositAuditCancelTransactionMainServiceImpl")
+    private TransactionMainService<Reply> handleDepositAuditCancelTransactionMainServiceImpl;
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	@Transactional
-	public Result doHandleDepositNotify(NotifyCallBackParam param) {
-		Result result = new Result();
-		BusinessDepositDO deposit = businessDepositDOMapper.selectByPrimaryKey(Long.valueOf(param.getBizIds()));
-		if (deposit == null) {
-			result.setRet(ResultCode.FAIL);
-			result.setMsg("保证金初始记录为空");
-			return result;
-		}else{
-			if(!BusinessDepositStatusEnum.PAYING.getVal().equals(deposit.getStatus())){
-				result.setRet(ResultCode.SUCCESS);
-				logger.info("保证金重复回调(判断幂等)");
-				return result;
-			}
-		}
-		BigDecimal dbMoney = deposit.getAmount();
-		BigDecimal backMoney = new BigDecimal(param.getTotalFee());
-		if (backMoney.compareTo(dbMoney) != 0) {
-			result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
-			result.setMsg("保证金回调金额与保证金表保存的金额不一致(回调金额：" + backMoney + ",表中金额:" + dbMoney + ")");
-			return result;
-		}
+    @Override
+    @Transactional
+    public BusinessDepositInitDTO save(BusinessDepositSaveDataParam param) {
+        BusinessDepositDO bddo = new BusinessDepositDO();
+        bddo.setBusinessId(Long.valueOf(param.getBusinessId()));
+        bddo.setUserNum(param.getUserNum());
+        bddo.setBusinessAccount(param.getBusinessAccount());
+        bddo.setBusinessName(param.getBusinessName());
+        bddo.setDepositNumber(StringUtil.getRandomNum(""));
+        bddo.setAmount(new BigDecimal(param.getDeposit()));
+        bddo.setStatus(BusinessDepositStatusEnum.PAYING.getVal());
+        bddo.setProvinceId(Long.valueOf(param.getProvinceId()));
+        bddo.setCityId(Long.valueOf(param.getCityId()));
+        bddo.setAreaId(Long.valueOf(param.getAreaId()));
+        bddo.setGmtCreate(new Date());
+        businessDepositDOMapper.insertSelective(bddo);
 
-		// 新增交易明细
+        BusinessDepositInitDTO dto = new BusinessDepositInitDTO();
+        dto.setId(bddo.getId());
+        dto.setDeposit(param.getDeposit());
+        return dto;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    @Transactional
+    public Result doHandleDepositNotify(NotifyCallBackParam param) {
+        Result result = new Result();
+        BusinessDepositDO deposit = businessDepositDOMapper.selectByPrimaryKey(Long.valueOf(param.getBizIds()));
+        if (deposit == null) {
+            result.setRet(ResultCode.FAIL);
+            result.setMsg("保证金初始记录为空");
+            return result;
+        } else {
+            if (!BusinessDepositStatusEnum.PAYING.getVal().equals(deposit.getStatus())) {
+                result.setRet(ResultCode.SUCCESS);
+                logger.info("保证金重复回调(判断幂等)");
+                return result;
+            }
+        }
+        BigDecimal dbMoney = deposit.getAmount();
+        BigDecimal backMoney = new BigDecimal(param.getTotalFee());
+        if (backMoney.compareTo(dbMoney) != 0) {
+            result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+            result.setMsg("保证金回调金额与保证金表保存的金额不一致(回调金额：" + backMoney + ",表中金额:" + dbMoney + ")");
+            return result;
+        }
+
+        // 新增交易明细
 //		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 //		tdsParam.setTitle(TransactionTitleEnum.DEPOSIT.val);
 //		tdsParam.setTransactionNum(param.getOutTradeNo());
@@ -125,230 +125,233 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 //		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 //		transactionDetailService.save(tdsParam);
 
-		// 更新保证金记录状态
-		BusinessDepositDO depositDO = new BusinessDepositDO();
-		depositDO.setThirdNumber(param.getTradeNo());
-		depositDO.setThirdAccount(param.getBuyerLogonId());
-		depositDO.setPaymentMethod(param.getTransactionPayTypeEnum().getVal());
-		depositDO.setStatus(BusinessDepositStatusEnum.VERIFY.getVal());
-		depositDO.setGmtPay(new Date());
-		depositDO.setGmtModified(new Date());
-		BusinessDepositDOExample example = new BusinessDepositDOExample();
-		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds())).andStatusEqualTo(BusinessDepositStatusEnum.PAYING.getVal());
-		businessDepositDOMapper.updateByExampleSelective(depositDO, example);
+        // 更新保证金记录状态
+        BusinessDepositDO depositDO = new BusinessDepositDO();
+        depositDO.setThirdNumber(param.getTradeNo());
+        depositDO.setThirdAccount(param.getBuyerLogonId());
+        depositDO.setPaymentMethod(param.getTransactionPayTypeEnum().getVal());
+        depositDO.setStatus(BusinessDepositStatusEnum.VERIFY.getVal());
+        depositDO.setGmtPay(new Date());
+        depositDO.setGmtModified(new Date());
+        BusinessDepositDOExample example = new BusinessDepositDOExample();
+        example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds())).andStatusEqualTo(BusinessDepositStatusEnum.PAYING.getVal());
+        businessDepositDOMapper.updateByExampleSelective(depositDO, example);
 
-		// 回调成功后，发送消息修改门店状态为：已缴保证金待核实
-		handleDepositEditStoreStatusTransactionMainServiceImpl.sendNotice(param.getMerchantId());
+        // 回调成功后，发送消息修改门店状态为：已缴保证金待核实
+        handleDepositEditStoreStatusTransactionMainServiceImpl.sendNotice(param.getMerchantId());
 
-		result.setRet(ResultCode.SUCCESS);
-		return result;
-	}
+        result.setRet(ResultCode.SUCCESS);
+        return result;
+    }
 
-	@Override
-	public Page<BusinessDepositQueryBO> selectDepositList(BusinessDepositQueryDataParam param) {
-		BusinessDepositDOExample example = new BusinessDepositDOExample();
+    @Override
+    public Page<BusinessDepositQueryBO> selectDepositList(BusinessDepositQueryDataParam param) {
+        BusinessDepositDOExample example = new BusinessDepositDOExample();
 
-		if (param.getContent() != null && !"".equals(param.getContent().trim())) {
-			Criteria criteria2 = example.createCriteria();
-			criteria2.andDepositNumberEqualTo(param.getContent());
+        if (param.getContent() != null && !"".equals(param.getContent().trim())) {
+            Criteria criteria2 = example.createCriteria();
+            criteria2.andDepositNumberEqualTo(param.getContent());
 
-			Criteria criteria3 = example.createCriteria();
-			criteria3.andThirdNumberEqualTo(param.getContent());
+            Criteria criteria3 = example.createCriteria();
+            criteria3.andThirdNumberEqualTo(param.getContent());
 
-			example.or(criteria2);
-			example.or(criteria3);
+            example.or(criteria2);
+            example.or(criteria3);
 
-		} else {
-			Criteria criteria1 = example.createCriteria();
-			if (StringUtils.isNotEmpty(param.getBeginDate())){
-				criteria1.andGmtPayGreaterThanOrEqualTo(DateUtil.stringToDate(param.getBeginDate() + " 00:00:00"));
-			}
-			if(StringUtils.isNotEmpty(param.getEndDate())){
-				criteria1.andGmtPayLessThanOrEqualTo(DateUtil.stringToDate(param.getEndDate() + " 23:59:59"));
-			}
-			if (param.getBusinessDepositStatusEnum() != null) {
-				criteria1.andStatusEqualTo(param.getBusinessDepositStatusEnum().getVal());
-			} else {
-				criteria1.andStatusGreaterThan(BusinessDepositStatusEnum.VERIFY.getVal());
-			}
+        } else {
+            Criteria criteria1 = example.createCriteria();
+            if (StringUtils.isNotEmpty(param.getBeginDate())) {
+                criteria1.andGmtPayGreaterThanOrEqualTo(DateUtil.stringToDate(param.getBeginDate() + " 00:00:00"));
+            }
+            if (StringUtils.isNotEmpty(param.getEndDate())) {
+                criteria1.andGmtPayLessThanOrEqualTo(DateUtil.stringToDate(param.getEndDate() + " 23:59:59"));
+            }
+            if (param.getBusinessDepositStatusEnum() != null) {
+                criteria1.andStatusEqualTo(param.getBusinessDepositStatusEnum().getVal());
+            } else {
+                criteria1.andStatusGreaterThan(BusinessDepositStatusEnum.VERIFY.getVal());
+            }
 
-			if (param.getTransactionPayTypeEnum() != null) {
-				criteria1.andPaymentMethodEqualTo(param.getTransactionPayTypeEnum().getVal());
-			}
-			if (param.getRegionPath() != null && !"".equals(param.getRegionPath())) {
-				if (param.getRegionPath().split("/").length == 1) {
-					criteria1.andProvinceIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[0]));
-				} else if (param.getRegionPath().split("/").length == 2) {
-					criteria1.andCityIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[1]));
-				} else if (param.getRegionPath().split("/").length == 3) {
-					criteria1.andAreaIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[2]));
-				}
-			}
-			
-			if (StringUtils.isNotBlank(param.getSortName()) && StringUtils.isNotBlank(param.getSortOrder())) {
-				String sortName = "";
-				if("gmtPay".equals(param.getSortName())){
-					sortName = "gmt_pay";
-				}
-				example.setOrderByClause(sortName + " " + param.getSortOrder());
-			}
-		}
+            if (param.getTransactionPayTypeEnum() != null) {
+                criteria1.andPaymentMethodEqualTo(param.getTransactionPayTypeEnum().getVal());
+            }
+            if (param.getRegionPath() != null && !"".equals(param.getRegionPath())) {
+                if (param.getRegionPath().split("/").length == 1) {
+                    criteria1.andProvinceIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[0]));
+                } else if (param.getRegionPath().split("/").length == 2) {
+                    criteria1.andCityIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[1]));
+                } else if (param.getRegionPath().split("/").length == 3) {
+                    criteria1.andAreaIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[2]));
+                }
+            }
 
-		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
-		Page<BusinessDepositQueryBO> page = new Page<BusinessDepositQueryBO>();
-		page.setTotalCount(businessDepositDOMapper.countByExample(example));
-		page.setCurrentPage(param.getCurrentPage());
-		List<BusinessDepositDO> bddos = businessDepositDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-		List<BusinessDepositQueryBO> newList = new ArrayList<BusinessDepositQueryBO>();
-		for (BusinessDepositDO bddo : bddos) {
-			BusinessDepositQueryBO ddqbo = new BusinessDepositQueryBO();
-			ddqbo.setId(bddo.getId());
-			ddqbo.setBusinessId(bddo.getBusinessId());
-			ddqbo.setGmtPay(
-					bddo.getGmtPay() == null ? "" : DateUtil.getDateFormat(bddo.getGmtPay(), "yyyy-MM-dd HH:mm:ss"));
-			ddqbo.setThirdNumber(bddo.getThirdNumber() == null ? "" : bddo.getThirdNumber());
-			ddqbo.setBusinessAccount(bddo.getBusinessAccount() == null ? "" : bddo.getBusinessAccount());
-			ddqbo.setDepositNumber(bddo.getDepositNumber() == null ? "" : bddo.getDepositNumber());
-			ddqbo.setBusinessName(bddo.getBusinessName() == null ? "" : bddo.getBusinessName());
-			ddqbo.setAmount(bddo.getAmount() == null ? new BigDecimal("0") : bddo.getAmount());
-			ddqbo.setPayMethod(TransactionPayTypeEnum.getEnum(bddo.getPaymentMethod()).getName());
-			ddqbo.setStatus(BusinessDepositStatusEnum.getEnum(bddo.getStatus()).getName());
-			ddqbo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(bddo.getStatus()));
-			ddqbo.setUserNum(bddo.getUserNum());
-			if(bddo.getBusinessBankAccountId() != null){
-				BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(bddo.getBusinessBankAccountId());
-				ddqbo.setBusinessBankAccount(bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName());
-				ddqbo.setBankNo(bankAccountDO.getAccountNumber() == null ? "" : bankAccountDO.getAccountNumber());
-				ddqbo.setBankName(bankAccountDO.getNote() == null ? ""
-						: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf('(')));
-				ddqbo.setBankBranchName(bankAccountDO.getSubBranchName() == null ? "" : bankAccountDO.getSubBranchName());
-			}else{
-				ddqbo.setBusinessBankAccount("");
-				ddqbo.setBankNo("");
-				ddqbo.setBankName("");
-				ddqbo.setBankBranchName("");
-			}
+            if (StringUtils.isNotBlank(param.getSortName()) && StringUtils.isNotBlank(param.getSortOrder())) {
+                String sortName = "";
+                if ("gmtPay".equals(param.getSortName())) {
+                    sortName = "gmt_pay";
+                }
+                example.setOrderByClause(sortName + " " + param.getSortOrder());
+            }
+        }
 
-			ddqbo.setAuditUserName(bddo.getOperUserName() == null ? "" : bddo.getOperUserName());
-			ddqbo.setRemark(bddo.getRemark() == null ? "" : bddo.getRemark());
-			newList.add(ddqbo);
-		}
-		page.setRecords(newList);
-		return page;
-	}
+        RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+        Page<BusinessDepositQueryBO> page = new Page<BusinessDepositQueryBO>();
+        page.setTotalCount(businessDepositDOMapper.countByExample(example));
+        page.setCurrentPage(param.getCurrentPage());
+        List<BusinessDepositDO> bddos = businessDepositDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+        List<BusinessDepositQueryBO> newList = new ArrayList<BusinessDepositQueryBO>();
+        for (BusinessDepositDO bddo : bddos) {
+            BusinessDepositQueryBO ddqbo = new BusinessDepositQueryBO();
+            ddqbo.setId(bddo.getId());
+            ddqbo.setBusinessId(bddo.getBusinessId());
+            ddqbo.setGmtPay(
+                    bddo.getGmtPay() == null ? "" : DateUtil.getDateFormat(bddo.getGmtPay(), "yyyy-MM-dd HH:mm:ss"));
+            ddqbo.setThirdNumber(bddo.getThirdNumber() == null ? "" : bddo.getThirdNumber());
+            ddqbo.setBusinessAccount(bddo.getBusinessAccount() == null ? "" : bddo.getBusinessAccount());
+            ddqbo.setDepositNumber(bddo.getDepositNumber() == null ? "" : bddo.getDepositNumber());
+            ddqbo.setBusinessName(bddo.getBusinessName() == null ? "" : bddo.getBusinessName());
+            ddqbo.setAmount(bddo.getAmount() == null ? new BigDecimal("0") : bddo.getAmount());
+            ddqbo.setPayMethod(TransactionPayTypeEnum.getEnum(bddo.getPaymentMethod()).getName());
+            ddqbo.setStatus(BusinessDepositStatusEnum.getEnum(bddo.getStatus()).getName());
+            ddqbo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(bddo.getStatus()));
+            ddqbo.setUserNum(bddo.getUserNum());
+            if (bddo.getBusinessBankAccountId() != null) {
+                BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(bddo.getBusinessBankAccountId());
+                ddqbo.setBusinessBankAccount(bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName());
+                ddqbo.setBankNo(bankAccountDO.getAccountNumber() == null ? "" : bankAccountDO.getAccountNumber());
+                ddqbo.setBankName(bankAccountDO.getNote() == null ? ""
+                        : bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf('(')));
+                ddqbo.setBankBranchName(bankAccountDO.getSubBranchName() == null ? "" : bankAccountDO.getSubBranchName());
+            } else {
+                ddqbo.setBusinessBankAccount("");
+                ddqbo.setBankNo("");
+                ddqbo.setBankName("");
+                ddqbo.setBankBranchName("");
+            }
 
-	@Override
-	@Transactional
-	public int updateBusinessDeposit(BusinessDepositOperDataParam param) {
-		BusinessDepositDO bddo = new BusinessDepositDO();
-		bddo.setStatus(param.getBusinessDepositOperEnum().getVal());
-		bddo.setOperUserId(param.getOperUserId());
-		bddo.setOperUserName(param.getOperUserName());
-		bddo.setRemark(param.getFailReason() == null ? "" : param.getFailReason());
-		bddo.setGmtModified(new Date());
-		BusinessDepositDOExample example = new BusinessDepositDOExample();
-		example.createCriteria().andIdEqualTo(Long.valueOf(param.getId()));
-		businessDepositDOMapper.updateByExampleSelective(bddo, example);
+            ddqbo.setAuditUserName(bddo.getOperUserName() == null ? "" : bddo.getOperUserName());
+            ddqbo.setRemark(bddo.getRemark() == null ? "" : bddo.getRemark());
+            newList.add(ddqbo);
+        }
+        page.setRecords(newList);
+        return page;
+    }
 
-		HandleDepostMessage message = new HandleDepostMessage();
-		message.setUserNum(param.getUserNum());
-		if (BusinessDepositOperEnum.VERIFYD.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
-			// 核实操作成功后，发送MQ消息修改门店状态为：待审核,并修改门店审核显示状态
-			handleDepositAuditPassTransactionMainServiceImpl.sendNotice(param.getBusinessId());
+    @Override
+    @Transactional
+    public int updateBusinessDeposit(BusinessDepositOperDataParam param) {
+        BusinessDepositDO bddo = new BusinessDepositDO();
+        bddo.setStatus(param.getBusinessDepositOperEnum().getVal());
+        bddo.setOperUserId(param.getOperUserId());
+        bddo.setOperUserName(param.getOperUserName());
+        bddo.setRemark(param.getFailReason() == null ? "" : param.getFailReason());
+        bddo.setGmtModified(new Date());
+        if (BusinessDepositOperEnum.VERIFYD.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
+            bddo.setGmtVerify(new Date());
+        }
+        BusinessDepositDOExample example = new BusinessDepositDOExample();
+        example.createCriteria().andIdEqualTo(Long.valueOf(param.getId()));
+        businessDepositDOMapper.updateByExampleSelective(bddo, example);
 
-		} else if (BusinessDepositOperEnum.REFUND_SUCCESS.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
-			// 退款成功操作后，发送MQ消息修改门店状态为：注销
-			handleDepositAuditCancelTransactionMainServiceImpl.sendNotice(param.getBusinessId());
-		}
-		return ResultCode.SUCCESS;
-	}
+        HandleDepostMessage message = new HandleDepostMessage();
+        message.setUserNum(param.getUserNum());
+        if (BusinessDepositOperEnum.VERIFYD.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
+            // 核实操作成功后，发送MQ消息修改门店状态为：待审核,并修改门店审核显示状态
+            handleDepositAuditPassTransactionMainServiceImpl.sendNotice(param.getBusinessId());
 
-	@Override
-	public int refundDeposit(BusinessRefundDepositDataParam dparam) {
+        } else if (BusinessDepositOperEnum.REFUND_SUCCESS.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
+            // 退款成功操作后，发送MQ消息修改门店状态为：注销
+            handleDepositAuditCancelTransactionMainServiceImpl.sendNotice(param.getBusinessId());
+        }
+        return ResultCode.SUCCESS;
+    }
 
-		// 校验支付密码
-		PropertyInfoDOExample infoExample = new PropertyInfoDOExample();
-		infoExample.createCriteria().andUserNumEqualTo(dparam.getUserNum());
-		List<PropertyInfoDO> infoList = propertyInfoDOMapper.selectByExample(infoExample);
-		if (infoList == null || infoList.isEmpty()) {
-			return ResultCode.PROPERTY_INFO_NULL;
-		} else if (infoList.size() > 1) {
-			return ResultCode.PROPERTY_INFO_OUT_INDEX;
-		} else {
-			PropertyInfoDO info = infoList.get(0);
-			if (!PwdUtil.verify(dparam.getPayPwd(), info.getPayPassword())) {
-				return ResultCode.PAY_PWD_ERROR;
-			}
-		}
-		
-		// 满90天
-		BusinessDepositDO deposit = businessDepositDOMapper.selectByPrimaryKey(Long.valueOf(dparam.getId()));
-		int diffDays = DateUtil.daysOfTwo(deposit.getGmtModified(), new Date());
-		String sysDays = propertyService.getValue(PropertyType.DEPOSIT_REFUND_DIFF_DAYS);
-		if (diffDays <= Integer.parseInt(sysDays)) {
-			return ResultCode.DEPOSIT_IN_SYSTEM_DAYS;
-		}
+    @Override
+    public int refundDeposit(BusinessRefundDepositDataParam dparam) {
 
-		// 校验提交的银行卡是否正确
-		BankAccountDO bankAccountDo = bankAccountDOMapper.selectByPrimaryKey(Long.valueOf(dparam.getBusinessBankAccountId()));
-		if (bankAccountDo == null) {
-			return ResultCode.PROPERTY_CASH_BANK_NOT_EXIST;
-		} else if (!bankAccountDo.getUserNum().trim().equals(dparam.getUserNum())) {
-			return ResultCode.PROPERTY_CASH_BANK_NOT_MATCH;
-		}
+        // 校验支付密码
+        PropertyInfoDOExample infoExample = new PropertyInfoDOExample();
+        infoExample.createCriteria().andUserNumEqualTo(dparam.getUserNum());
+        List<PropertyInfoDO> infoList = propertyInfoDOMapper.selectByExample(infoExample);
+        if (infoList == null || infoList.isEmpty()) {
+            return ResultCode.PROPERTY_INFO_NULL;
+        } else if (infoList.size() > 1) {
+            return ResultCode.PROPERTY_INFO_OUT_INDEX;
+        } else {
+            PropertyInfoDO info = infoList.get(0);
+            if (!PwdUtil.verify(dparam.getPayPwd(), info.getPayPassword())) {
+                return ResultCode.PAY_PWD_ERROR;
+            }
+        }
 
-		BusinessDepositDO bddo = new BusinessDepositDO();
-		bddo.setStatus(BusinessDepositStatusEnum.APPLY_REFUND.getVal());
-		bddo.setBusinessBankAccountId(Long.valueOf(dparam.getBusinessBankAccountId()));
-		bddo.setGmtRefund(new Date());
-		BusinessDepositDOExample example = new BusinessDepositDOExample();
-		example.createCriteria().andIdEqualTo(Long.valueOf(dparam.getId()));
-		businessDepositDOMapper.updateByExampleSelective(bddo, example);
-		return ResultCode.SUCCESS;
-	}
+        // 满90天
+        BusinessDepositDO deposit = businessDepositDOMapper.selectByPrimaryKey(Long.valueOf(dparam.getId()));
+        int diffDays = DateUtil.daysOfTwo(deposit.getGmtVerify() == null ? deposit.getGmtModified() : deposit.getGmtVerify(), new Date());
+        String sysDays = propertyService.getValue(PropertyType.DEPOSIT_REFUND_DIFF_DAYS);
+        if (diffDays <= Integer.parseInt(sysDays)) {
+            return ResultCode.DEPOSIT_IN_SYSTEM_DAYS;
+        }
 
-	@Override
-	public BusinessDepositDetailBO selectDeposit(String businessId) {
-		BusinessDepositDOExample example = new BusinessDepositDOExample();
-		example.createCriteria().andBusinessIdEqualTo(Long.valueOf(businessId));
-		example.setOrderByClause(" id desc ");
-		List<BusinessDepositDO> list = businessDepositDOMapper.selectByExample(example);
-		if (list == null || list.isEmpty()) {
-			return null;
-		}
-		BusinessDepositDetailBO bo = new BusinessDepositDetailBO();
-		bo.setId(list.get(0).getId());
-		bo.setAmount(list.get(0).getAmount().toString());
-		bo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(list.get(0).getStatus()));
-		bo.setRemark(list.get(0).getRemark());
+        // 校验提交的银行卡是否正确
+        BankAccountDO bankAccountDo = bankAccountDOMapper.selectByPrimaryKey(Long.valueOf(dparam.getBusinessBankAccountId()));
+        if (bankAccountDo == null) {
+            return ResultCode.PROPERTY_CASH_BANK_NOT_EXIST;
+        } else if (!bankAccountDo.getUserNum().trim().equals(dparam.getUserNum())) {
+            return ResultCode.PROPERTY_CASH_BANK_NOT_MATCH;
+        }
 
-		if(list.get(0).getBusinessBankAccountId() != null){
-			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(list.get(0).getBusinessBankAccountId());
-			if(bankAccountDO != null){
-				bo.setBankName(bankAccountDO.getNote() == null ? ""
-						: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf('(')));
-				String accountName = bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName();
-				if (accountName.length() == 2) {
-					accountName = "*" + accountName.substring(1);
-				} else if (accountName.length() > 2){
-					accountName = accountName.substring(0, 1) + "*" + accountName.substring(accountName.length() - 1);
-				}
-				bo.setAccountName(accountName);
-				bo.setCardNo(bankAccountDO.getNote() == null ? ""
-						: bankAccountDO.getNote().substring(bankAccountDO.getNote().indexOf('(') + 1,
-								bankAccountDO.getNote().indexOf(')')));
-			}else{
-				bo.setBankName("");
-				bo.setAccountName("");
-				bo.setCardNo("");
-			}
-		}else{
-			bo.setBankName("");
-			bo.setAccountName("");
-			bo.setCardNo("");
-		}
-		
-		return bo;
-	}
+        BusinessDepositDO bddo = new BusinessDepositDO();
+        bddo.setStatus(BusinessDepositStatusEnum.APPLY_REFUND.getVal());
+        bddo.setBusinessBankAccountId(Long.valueOf(dparam.getBusinessBankAccountId()));
+        bddo.setGmtRefund(new Date());
+        BusinessDepositDOExample example = new BusinessDepositDOExample();
+        example.createCriteria().andIdEqualTo(Long.valueOf(dparam.getId()));
+        businessDepositDOMapper.updateByExampleSelective(bddo, example);
+        return ResultCode.SUCCESS;
+    }
+
+    @Override
+    public BusinessDepositDetailBO selectDeposit(String businessId) {
+        BusinessDepositDOExample example = new BusinessDepositDOExample();
+        example.createCriteria().andBusinessIdEqualTo(Long.valueOf(businessId));
+        example.setOrderByClause(" id desc ");
+        List<BusinessDepositDO> list = businessDepositDOMapper.selectByExample(example);
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        BusinessDepositDetailBO bo = new BusinessDepositDetailBO();
+        bo.setId(list.get(0).getId());
+        bo.setAmount(list.get(0).getAmount().toString());
+        bo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(list.get(0).getStatus()));
+        bo.setRemark(list.get(0).getRemark());
+
+        if (list.get(0).getBusinessBankAccountId() != null) {
+            BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(list.get(0).getBusinessBankAccountId());
+            if (bankAccountDO != null) {
+                bo.setBankName(bankAccountDO.getNote() == null ? ""
+                        : bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf('(')));
+                String accountName = bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName();
+                if (accountName.length() == 2) {
+                    accountName = "*" + accountName.substring(1);
+                } else if (accountName.length() > 2) {
+                    accountName = accountName.substring(0, 1) + "*" + accountName.substring(accountName.length() - 1);
+                }
+                bo.setAccountName(accountName);
+                bo.setCardNo(bankAccountDO.getNote() == null ? ""
+                        : bankAccountDO.getNote().substring(bankAccountDO.getNote().indexOf('(') + 1,
+                        bankAccountDO.getNote().indexOf(')')));
+            } else {
+                bo.setBankName("");
+                bo.setAccountName("");
+                bo.setCardNo("");
+            }
+        } else {
+            bo.setBankName("");
+            bo.setAccountName("");
+            bo.setCardNo("");
+        }
+
+        return bo;
+    }
 
 }
