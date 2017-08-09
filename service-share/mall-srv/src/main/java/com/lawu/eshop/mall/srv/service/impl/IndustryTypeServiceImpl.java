@@ -27,13 +27,13 @@ public class IndustryTypeServiceImpl implements IndustryTypeService {
     @Override
     public List<IndustryTypeBO> listIndustryType() {
         IndustryTypeDOExample industryTypeDOExample = new IndustryTypeDOExample();
-        industryTypeDOExample.createCriteria().andParentIdEqualTo(new Short("0")).andStatusEqualTo(DataTransUtil.intToByte(1));
+        industryTypeDOExample.createCriteria().andParentIdEqualTo(new Short("0")).andStatusEqualTo(DataTransUtil.intToByte(1)).andTypeEqualTo(MerchantIndustryTypeEnum.ENTITY_INDUSTRY.getVal());
         List<IndustryTypeDO> industryTypeDOS = industryTypeDOMapper.selectByExample(industryTypeDOExample);
         List<IndustryTypeBO> industryTypeBOS = IndustryTypeConverter.convertBO(industryTypeDOS);
         if (industryTypeBOS != null && !industryTypeBOS.isEmpty()) {
             for (IndustryTypeBO industryTypeBO : industryTypeBOS) {
                 industryTypeDOExample.clear();
-                industryTypeDOExample.createCriteria().andParentIdEqualTo(new Short(String.valueOf(industryTypeBO.getId()))).andStatusEqualTo(DataTransUtil.intToByte(1));
+                industryTypeDOExample.createCriteria().andParentIdEqualTo(new Short(String.valueOf(industryTypeBO.getId()))).andStatusEqualTo(DataTransUtil.intToByte(1)).andTypeEqualTo(MerchantIndustryTypeEnum.ENTITY_INDUSTRY.getVal());
                 industryTypeDOS = industryTypeDOMapper.selectByExample(industryTypeDOExample);
                 industryTypeBO.setIndustryTypeBOList(IndustryTypeConverter.convertBO(industryTypeDOS));
             }
