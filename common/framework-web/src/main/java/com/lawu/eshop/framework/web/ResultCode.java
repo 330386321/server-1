@@ -184,6 +184,9 @@ public class ResultCode {
     public static final int STORE_AUDIT_RECORD_AUDITED = 8109;
     public static final int AD_AUDITED = 8110;
 
+    public static final int AGENT_ACCOUNT_EXIST = 8111;
+    public static final int AGENT_MOBILE_EXIST = 8112;
+
 
 
     // 初始化状态码与文字说明
@@ -266,6 +269,8 @@ public class ResultCode {
         ResultCode.messageMap.put(STORE_AUDIT_RECORD_NOT_EXIST, "审核记录不存在");
         ResultCode.messageMap.put(STORE_AUDIT_RECORD_AUDITED, "该门店已经审核过");
         ResultCode.messageMap.put(AD_AUDITED, "该广告已经审核过");
+        ResultCode.messageMap.put(AGENT_ACCOUNT_EXIST, "该账号已经存在");
+        ResultCode.messageMap.put(AGENT_MOBILE_EXIST, "该手机号已经存在");
 
 
 

@@ -2,12 +2,14 @@ package com.lawu.eshop.agent.srv.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.agent.dto.LoginUserDTO;
+import com.lawu.eshop.agent.param.AgentUserParam;
 import com.lawu.eshop.agent.srv.bo.AgentUserBO;
 import com.lawu.eshop.agent.srv.converter.AgentUserConverter;
 import com.lawu.eshop.agent.srv.service.AgentUserService;
@@ -33,6 +35,22 @@ public class AgentUserController extends BaseController {
             return successGet(ResultCode.MEMBER_WRONG_PWD);
         }
         return successCreated(AgentUserConverter.convertDTO(userBO));
+    }
+
+    @RequestMapping(value = "addAgentUser", method = RequestMethod.POST)
+    public Result addAgentUser(@RequestBody AgentUserParam param){
+        boolean isExitAccount = agentUserService.findUserByAccount(param.getAccount());
+        if(isExitAccount){
+            //存在
+            return successCreated(ResultCode.AGENT_ACCOUNT_EXIST);
+        }
+        boolean isExitMobile = agentUserService.findUserByMobile(param.getMobile());
+        if(isExitMobile){
+            //存在
+            return successCreated(ResultCode.AGENT_MOBILE_EXIST);
+        }
+        agentUserService.addAgentUser(param);
+        return successCreated();
     }
 
 

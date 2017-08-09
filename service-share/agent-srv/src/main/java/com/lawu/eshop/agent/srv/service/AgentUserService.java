@@ -1,5 +1,6 @@
 package com.lawu.eshop.agent.srv.service;
 
+import com.lawu.eshop.agent.param.AgentUserParam;
 import com.lawu.eshop.agent.srv.bo.AgentUserBO;
 
 /**
@@ -9,4 +10,10 @@ import com.lawu.eshop.agent.srv.bo.AgentUserBO;
 public interface AgentUserService {
 
     AgentUserBO find(String account, String pwd);
+
+    void addAgentUser(AgentUserParam param);
+
+    boolean findUserByAccount(String account);
+
+    boolean findUserByMobile(String mobile);
 }
