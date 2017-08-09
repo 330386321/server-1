@@ -816,6 +816,76 @@ public class AdDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andMerchantRegionPathIsNull() {
+            addCriterion("merchant_region_path is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathIsNotNull() {
+            addCriterion("merchant_region_path is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathEqualTo(String value) {
+            addCriterion("merchant_region_path =", value, "merchantRegionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathNotEqualTo(String value) {
+            addCriterion("merchant_region_path <>", value, "merchantRegionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathGreaterThan(String value) {
+            addCriterion("merchant_region_path >", value, "merchantRegionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathGreaterThanOrEqualTo(String value) {
+            addCriterion("merchant_region_path >=", value, "merchantRegionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathLessThan(String value) {
+            addCriterion("merchant_region_path <", value, "merchantRegionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathLessThanOrEqualTo(String value) {
+            addCriterion("merchant_region_path <=", value, "merchantRegionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathLike(String value) {
+            addCriterion("merchant_region_path like", value, "merchantRegionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathNotLike(String value) {
+            addCriterion("merchant_region_path not like", value, "merchantRegionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathIn(List<String> values) {
+            addCriterion("merchant_region_path in", values, "merchantRegionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathNotIn(List<String> values) {
+            addCriterion("merchant_region_path not in", values, "merchantRegionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathBetween(String value1, String value2) {
+            addCriterion("merchant_region_path between", value1, value2, "merchantRegionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantRegionPathNotBetween(String value1, String value2) {
+            addCriterion("merchant_region_path not between", value1, value2, "merchantRegionPath");
+            return (Criteria) this;
+        }
+
         public Criteria andTitleIsNull() {
             addCriterion("title is null");
             return (Criteria) this;

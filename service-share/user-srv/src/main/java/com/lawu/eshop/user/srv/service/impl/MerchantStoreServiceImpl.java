@@ -323,6 +323,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             bo.setName(merchantStoreDO.getName());
             bo.setLatitude(merchantStoreDO.getLatitude());
             bo.setLongitude(merchantStoreDO.getLongitude());
+            bo.setReginPath(merchantStoreDO.getRegionPath());
     		if(!mpList.isEmpty()){
     			bo.setManageType(MerchantStoreTypeEnum.getEnum(mpList.get(0).getManageType()));
     		}

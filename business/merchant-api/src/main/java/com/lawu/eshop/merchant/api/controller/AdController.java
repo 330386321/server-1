@@ -221,6 +221,7 @@ public class AdController extends BaseController {
             	adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
             	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
             	adSave.setMerchantStoreName(storeDTO.getName());
+            	adSave.setMerchantRegionPath(storeDTO.getRegionPath());
         	}
     	}
     	adSave.setCount(count);
@@ -547,6 +548,7 @@ public class AdController extends BaseController {
             	adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
             	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
             	adSave.setMerchantStoreName(storeDTO.getName());
+            	adSave.setMerchantRegionPath(storeDTO.getRegionPath());
         	}
     	}
     	adSave.setCount(count);

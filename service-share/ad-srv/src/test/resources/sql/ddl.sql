@@ -30,6 +30,7 @@ CREATE TABLE `ad` (
   `merchant_num` varchar(19) NOT NULL COMMENT '商家编号',
   `merchant_longitude` decimal(10,7) unsigned DEFAULT NULL COMMENT '经度',
   `merchant_latitude` decimal(10,7) unsigned DEFAULT NULL COMMENT '纬度',
+  `merchant_region_path` varchar(25) COMMENT '商家地区',
   `title` varchar(100) DEFAULT NULL COMMENT '名称',
   `logo_url` varchar(255) NOT NULL COMMENT '门店logo',
   `media_url` varchar(120) DEFAULT NULL COMMENT '广附件路径',

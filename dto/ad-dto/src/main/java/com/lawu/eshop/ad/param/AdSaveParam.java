@@ -59,6 +59,11 @@ public class AdSaveParam {
 	 * 门店logo
 	 */
 	private String logoUrl;
+	
+	/**
+	 * 商家地区
+	 */
+	private String merchantRegionPath;
 
 	public AdParam getAdParam() {
 		return adParam;
@@ -155,5 +160,15 @@ public class AdSaveParam {
 	public void setLogoUrl(String logoUrl) {
 		this.logoUrl = logoUrl;
 	}
+
+	public String getMerchantRegionPath() {
+		return merchantRegionPath;
+	}
+
+	public void setMerchantRegionPath(String merchantRegionPath) {
+		this.merchantRegionPath = merchantRegionPath;
+	}
+	
+	
 
 }

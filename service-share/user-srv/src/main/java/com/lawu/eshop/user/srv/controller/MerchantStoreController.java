@@ -767,6 +767,7 @@ public class MerchantStoreController extends BaseController {
 		 dto.setLogoUrl(path);
 		 dto.setLatitude(bo.getLatitude());
 		 dto.setLongitude(bo.getLongitude());
+		 dto.setRegionPath(bo.getReginPath());
 		 return successGet(dto);
 	}
 

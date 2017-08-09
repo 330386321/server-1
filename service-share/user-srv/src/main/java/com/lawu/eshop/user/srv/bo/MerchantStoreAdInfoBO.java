@@ -18,6 +18,8 @@ public class MerchantStoreAdInfoBO {
 
 	private BigDecimal latitude;
 	
+	private String reginPath;
+	
 
 	public BigDecimal getLongitude() {
 		return longitude;
@@ -65,6 +67,14 @@ public class MerchantStoreAdInfoBO {
 
 	public void setManageType(MerchantStoreTypeEnum manageType) {
 		this.manageType = manageType;
+	}
+
+	public String getReginPath() {
+		return reginPath;
+	}
+
+	public void setReginPath(String reginPath) {
+		this.reginPath = reginPath;
 	}
 	
 	

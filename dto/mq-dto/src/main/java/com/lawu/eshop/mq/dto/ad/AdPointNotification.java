@@ -20,6 +20,8 @@ public class AdPointNotification extends Notification {
 	
 	private Long adId;
 	
+	private String regionPath;
+	
 	public Long getAdId() {
 		return adId;
 	}
@@ -50,6 +52,14 @@ public class AdPointNotification extends Notification {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getRegionPath() {
+		return regionPath;
+	}
+
+	public void setRegionPath(String regionPath) {
+		this.regionPath = regionPath;
 	}
 
 	

@@ -306,6 +306,7 @@ public class AdControllerTest {
         adDOMapper.insertSelective(ad);
         
         try {
+        	
             RequestBuilder request = put("/ad/clickAd/"+ad.getId()).param("memberId", "1").param("num", "aaa");
             ResultActions perform= mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED )).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -690,18 +691,27 @@ public class AdControllerTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
-		ad.setHits(0);
+		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
-        ad.setRelateType(RelateTypeEnum.PRODUCT_TYPE.getVal());
         adDOMapper.insertSelective(ad);
         
+        PointPoolDO pointPoolDO=new PointPoolDO();
+        pointPoolDO.setAdId(ad.getId());
+        pointPoolDO.setGmtCreate(new Date());
+        pointPoolDO.setGmtModified(new Date());
+        pointPoolDO.setMerchantId(1002l);
+        pointPoolDO.setOrdinal(0);
+        pointPoolDO.setPoint(BigDecimal.valueOf(15));
+        pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+        pointPoolDO.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+        pointPoolDOMapper.insert(pointPoolDO);
+		
         try {
-            RequestBuilder request = get("/ad/selectAbPraiseById/"+ad.getId());
+            RequestBuilder request = get("/ad/selectAdPraiseById/"+ad.getId()).param("memberId", "1002");
             ResultActions perform= mvc.perform(request);
-            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_ACCEPTED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_ACCEPTED )).andDo(MockMvcResultHandlers.print()).andReturn();
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -45,7 +45,7 @@ public class UserRedPacketConverterTest {
         userDO.setStatus((byte) 1);
         userDO.setTotalCount(1);
         userDO.setTotalMoney(new BigDecimal(2));
-        userDO.setType((byte) 4);
+        userDO.setType((byte) 1);
         userDO.setUserAccount("15000000000");
         userDO.setUserNum("M00002");
         UserRedPacketBO user = UserRedPacketConverter.convertBO(userDO);

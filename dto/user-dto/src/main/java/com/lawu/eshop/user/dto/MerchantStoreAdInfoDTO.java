@@ -18,6 +18,8 @@ public class MerchantStoreAdInfoDTO {
 
 	private BigDecimal latitude;
 	
+	private String regionPath;
+	
 
 	public BigDecimal getLongitude() {
 		return longitude;
@@ -66,6 +68,14 @@ public class MerchantStoreAdInfoDTO {
 
 	public void setManageType(MerchantStoreTypeEnum manageType) {
 		this.manageType = manageType;
+	}
+
+	public String getRegionPath() {
+		return regionPath;
+	}
+
+	public void setRegionPath(String regionPath) {
+		this.regionPath = regionPath;
 	}
 	
 	
