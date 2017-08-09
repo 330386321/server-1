@@ -64,7 +64,8 @@ public class AdPlatformController extends BaseController {
         return adPlatformService.selectByPosition(positionEnum);
     }
 
-    
+
+    @Audit(date = "2017-08-09", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "广告首页广告位 (广告首页4个广告位) ", notes = "广告首页广告位 (广告首页4个广告位)[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
