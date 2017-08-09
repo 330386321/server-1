@@ -23,6 +23,9 @@ public class BusinessDepositDetailDTO {
 	
 	@ApiModelProperty(value = "卡号后四位")
 	private String cardNo;
+
+	@ApiModelProperty(value = "失败原因")
+	private String remark;
 	
 	public Long getId() {
 		return id;
@@ -72,4 +75,11 @@ public class BusinessDepositDetailDTO {
 		this.cardNo = cardNo;
 	}
 
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }

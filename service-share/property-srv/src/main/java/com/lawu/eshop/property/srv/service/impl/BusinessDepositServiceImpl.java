@@ -320,6 +320,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		bo.setId(list.get(0).getId());
 		bo.setAmount(list.get(0).getAmount().toString());
 		bo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(list.get(0).getStatus()));
+		bo.setRemark(list.get(0).getRemark());
 
 		if(list.get(0).getBusinessBankAccountId() != null){
 			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(list.get(0).getBusinessBankAccountId());

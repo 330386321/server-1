@@ -15,6 +15,9 @@ public class BusinessDepositDetailBO {
 	private String accountName;
 	
 	private String cardNo;
+
+	private String remark;
+
 	public Long getId() {
 		return id;
 	}
@@ -63,4 +66,11 @@ public class BusinessDepositDetailBO {
 		this.cardNo = cardNo;
 	}
 
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }
