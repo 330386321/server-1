@@ -49,7 +49,7 @@ public class UploadController extends BaseController {
 
     @Audit(date = "2017-08-01", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "统一上传接口", notes = "上传接口(李洪军)", httpMethod = "POST")
+    @ApiOperation(value = "统一上传接口", notes = "上传接口(李洪军)[上传类型为图片时返回图片路径是FileUrl、上传类型为视频时返回的视频路径为FileUrl、视频第三秒的截图文件路径是CutImgUrl]", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
     public Result<FileUploadDTO> uploadFile(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
