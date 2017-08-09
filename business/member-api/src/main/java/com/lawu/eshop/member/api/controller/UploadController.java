@@ -52,7 +52,8 @@ public class UploadController extends BaseController {
     @ApiOperation(value = "统一上传接口", notes = "上传接口(李洪军)[上传类型为图片时返回图片路径是FileUrl、上传类型为视频时返回的视频路径为FileUrl、视频第三秒的截图文件路径是CutImgUrl]", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
-    public Result<FileUploadDTO> uploadFile(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestParam @ApiParam(required = true, value = "上传类型图片(IMG)，视频(VIDEO),其他(OTHER)") String uploadType) {
+    public Result<FileUploadDTO> uploadFile(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestParam @ApiParam(required = true, value = "上传类型图片大写(IMG)，视频(VIDEO),其他(OTHER)") String uploadType,
+    		@RequestParam @ApiParam(value = "上传文件下标或标识(非必填)") String fileIndex) {
         HttpServletRequest request = getRequest();
         UploadParam uparam = new UploadParam();
         uparam.setBaseImageDir(memberApiConfig.getImageUploadUrl());
@@ -67,7 +68,7 @@ public class UploadController extends BaseController {
         switch (fastResult.getFenum()) {
             case FD_UPLOAD_SUCCESS:
                 result.setRet(HttpCode.SC_CREATED);
-                result.setModel(new FileUploadDTO(fastResult.getFileUrl(), fastResult.getCutImgUrl()));
+                result.setModel(new FileUploadDTO(fastResult.getFileUrl(), fastResult.getCutImgUrl(),fileIndex));
                 break;
             case FD_FILE_ERROR:
                 result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);

@@ -19,20 +19,31 @@ public class FileUploadDTO {
 	private String cutImgUrl;
 
 	/**
+	 * 图片标识
+	 */
+	private String fileIndex;
+
+	/**
 	 * @return the fileUrl
 	 */
 	public String getFileUrl() {
 		return fileUrl;
 	}
 
-	public FileUploadDTO(){
-		
+	public FileUploadDTO() {
+
 	}
-	public FileUploadDTO(String fileUrl,String cutImgUrl){
-		this.fileUrl=fileUrl;
-		this.cutImgUrl=cutImgUrl;
+
+	public FileUploadDTO(String fileUrl, String cutImgUrl, String fileIndex) {
+		this.fileUrl = fileUrl;
+		this.cutImgUrl = cutImgUrl;
+		this.fileIndex = fileIndex;
 	}
-	
+	public FileUploadDTO(String fileUrl, String cutImgUrl) {
+		this.fileUrl = fileUrl;
+		this.cutImgUrl = cutImgUrl;
+	}
+
 	/**
 	 * @param fileUrl
 	 *            the fileUrl to set
@@ -54,6 +65,14 @@ public class FileUploadDTO {
 	 */
 	public void setCutImgUrl(String cutImgUrl) {
 		this.cutImgUrl = cutImgUrl;
+	}
+
+	public String getFileIndex() {
+		return fileIndex;
+	}
+
+	public void setFileIndex(String fileIndex) {
+		this.fileIndex = fileIndex;
 	}
 
 }
