@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.converter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,6 +196,7 @@ public class MerchantStoreConverter {
         storeDetailDTO.setUserNum(storeDetailBO.getUserNum());
         storeDetailDTO.setName(storeDetailBO.getName());
         storeDetailDTO.setRegionName(storeDetailBO.getRegionName());
+        storeDetailDTO.setRegionPath(storeDetailBO.getRegionPath());
         storeDetailDTO.setAddress(storeDetailBO.getAddress());
         storeDetailDTO.setPrincipalMobile(storeDetailBO.getPrincipalMobile());
         storeDetailDTO.setStorePic(storeDetailBO.getStorePic());
@@ -202,8 +204,8 @@ public class MerchantStoreConverter {
         storeDetailDTO.setIntro(storeDetailBO.getIntro());
         storeDetailDTO.setFavoriteNumber(storeDetailBO.getFavoriteNumber());
         storeDetailDTO.setFavorite(storeDetailBO.getFavorite());
-        storeDetailDTO.setAverageConsumeAmount(storeDetailBO.getAverageConsumeAmount());
-        storeDetailDTO.setAverageScore(storeDetailBO.getAverageScore());
+        storeDetailDTO.setAverageConsumeAmount(BigDecimal.valueOf(storeDetailBO.getAverageConsumeAmount().intValue()));
+        storeDetailDTO.setAverageScore(storeDetailBO.getAverageScore().compareTo(BigDecimal.valueOf(0)) == 0 ? BigDecimal.valueOf(4) : storeDetailBO.getAverageScore());
         storeDetailDTO.setFeedbackRate(storeDetailBO.getFeedbackRate());
         storeDetailDTO.setBuyNumbers(storeDetailBO.getBuyNumbers());
         return storeDetailDTO;
@@ -426,7 +428,7 @@ public class MerchantStoreConverter {
             storeSolrDTO.setAverageScore(solrDocument.get("averageScore_d") == null ? 0.0 : Double.valueOf(solrDocument.get("averageScore_d").toString()));
             storeSolrDTO.setFavoreInfo(solrDocument.get("favoreInfo_s") == null ? "" : solrDocument.get("favoreInfo_s").toString());
             storeSolrDTO.setDiscountPackage(solrDocument.get("discountPackage_s") == null ? "" : solrDocument.get("discountPackage_s").toString());
-            if (storeSolrDTO.getAverageScore() == 0.0) {
+            if (storeSolrDTO.getAverageScore() == 0) {
                 storeSolrDTO.setAverageScore(4.0);
             }
             storeSolrDTOS.add(storeSolrDTO);
@@ -544,6 +546,7 @@ public class MerchantStoreConverter {
             storeBO.setName(storeDOView.getName());
             storeBO.setIndustryName(storeDOView.getIndustryName());
             storeBO.setRegionName(storeDOView.getRegionName());
+            storeBO.setRegionPath(storeDOView.getRegionPath());
             storeBO.setAddress(storeDOView.getAddress());
             storeBO.setStorePic(storeDOView.getStorePic());
             storeBOS.add(storeBO);
@@ -571,6 +574,7 @@ public class MerchantStoreConverter {
             storeDTO.setName(storeBO.getName());
             storeDTO.setIndustryName(storeBO.getIndustryName());
             storeDTO.setRegionName(storeBO.getRegionName());
+            storeDTO.setRegionPath(storeBO.getRegionPath());
             storeDTO.setAddress(storeBO.getAddress());
             storeDTO.setStorePic(storeBO.getStorePic());
             storeDTOS.add(storeDTO);
@@ -598,6 +602,7 @@ public class MerchantStoreConverter {
             foodBO.setName(foodDOview.getName());
             foodBO.setIndustryName(foodDOview.getIndustryName());
             foodBO.setRegionName(foodDOview.getRegionName());
+            foodBO.setRegionPath(foodDOview.getRegionPath());
             foodBO.setAddress(foodDOview.getAddress());
             foodBO.setStorePic(foodDOview.getStorePic());
             foodBO.setLongitude(foodDOview.getLongitude());
@@ -631,6 +636,7 @@ public class MerchantStoreConverter {
             foodDTO.setName(foodBO.getName());
             foodDTO.setIndustryName(foodBO.getIndustryName());
             foodDTO.setRegionName(foodBO.getRegionName());
+            foodDTO.setRegionPath(foodBO.getRegionPath());
             foodDTO.setAddress(foodBO.getAddress());
             foodDTO.setStorePic(foodBO.getStorePic());
             foodDTO.setLongitude(foodBO.getLongitude());

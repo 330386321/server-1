@@ -1,5 +1,17 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
@@ -9,24 +21,46 @@ import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.PayOrderStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreSolrInfoBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.domain.FansMerchantDO;
+import com.lawu.eshop.user.srv.domain.FansMerchantDOExample;
+import com.lawu.eshop.user.srv.domain.FavoriteMerchantDO;
+import com.lawu.eshop.user.srv.domain.FavoriteMerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
 import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
 import com.lawu.eshop.user.srv.domain.extend.ShoppingStoreInfoDOView;
 import com.lawu.eshop.user.srv.domain.extend.StoreDetailDOView;
 import com.lawu.eshop.user.srv.domain.extend.StoreSolrInfoDOView;
-import com.lawu.eshop.user.srv.mapper.*;
+import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.*;
+import net.sf.json.JSONObject;
 
 /**
  * 商家门店service Created by Administrator on 2017/3/24.
@@ -474,13 +508,14 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		storeDetailBO.setPrincipalMobile(storeDetailDOViews.get(0).getPrincipalMobile());
 		storeDetailBO.setUserNum(storeDetailDOViews.get(0).getUserNum());
 		storeDetailBO.setRegionName(storeDetailDOViews.get(0).getRegionName());
+		storeDetailBO.setRegionPath(storeDetailDOViews.get(0).getRegionPath());
 		for (StoreDetailDOView storeDetailDOView :storeDetailDOViews){
 			//门店照
-			if(storeDetailDOView.getType() == MerchantStoreImageEnum.STORE_IMAGE_STORE.val.byteValue()){
+			if(storeDetailDOView.getType() == MerchantStoreImageEnum.STORE_IMAGE_STORE.val){
 				storeDetailBO.setStorePic(storeDetailDOView.getPath());
 			}
 			//环境照
-			if(storeDetailDOView.getType() == MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val.byteValue()){
+			if(storeDetailDOView.getType() == MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val){
 				int picCount = 0;
 				if(StringUtils.isNotEmpty(storeDetailDOView.getPath())){
 					picCount = storeDetailDOView.getPath().split(",").length;

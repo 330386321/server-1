@@ -14,6 +14,8 @@ public class StoreDetailBO {
 
     private String regionName;
 
+    private String regionPath;
+
     private String address;
 
     private String principalMobile;
@@ -156,5 +158,13 @@ public class StoreDetailBO {
 
     public void setUserNum(String userNum) {
         this.userNum = userNum;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
     }
 }

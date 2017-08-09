@@ -1,5 +1,17 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
@@ -9,21 +21,29 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
-import com.lawu.eshop.member.api.service.*;
+import com.lawu.eshop.member.api.service.MerchantFavoredService;
+import com.lawu.eshop.member.api.service.MerchantStoreImageService;
+import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.member.api.service.ProductSolrService;
+import com.lawu.eshop.member.api.service.RegionService;
+import com.lawu.eshop.member.api.service.ShoppingProductService;
+import com.lawu.eshop.member.api.service.StoreSolrService;
 import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.param.ListShoppingProductParam;
 import com.lawu.eshop.product.param.ProductSearchParam;
-import com.lawu.eshop.user.dto.*;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.MerchantStoreImageDTO;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.MerchantStoreStatusDTO;
+import com.lawu.eshop.user.dto.ProductSearchListDTO;
+import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
 import com.lawu.eshop.utils.DateUtil;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -52,6 +72,9 @@ public class MerchantDetailController extends BaseController {
     @Autowired
     private StoreSolrService storeSolrService;
 
+    @Autowired
+    private RegionService regionService;
+
     @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "要买单门店详情", notes = "要买单门店详情(用户评价、更多商家查询其他接口)。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -63,7 +86,7 @@ public class MerchantDetailController extends BaseController {
         if (!storeStatusDTO.isExist()) {
             return successGet(ResultCode.MERCHANT_STORE_NO_EXIST);
         }
-        if (MerchantStatusEnum.MERCHANT_STATUS_CANCEL.val.byteValue() == storeStatusDTO.getStatus()) {
+        if (MerchantStatusEnum.MERCHANT_STATUS_CANCEL.val == storeStatusDTO.getStatus()) {
             //门店状态注销，查询门店的logo
             String storeUrl = merchantStoreService.getStoreUrlByStoreId(id);
             StoreDetailDTO storeDetailDTO = new StoreDetailDTO();
@@ -91,6 +114,11 @@ public class MerchantDetailController extends BaseController {
             storeDetailDTO.setPreferentialTime(merchantFavoredDTO.getValidWeekTime() + merchantFavoredDTO.getValidDayBeginTime() + "-" + merchantFavoredDTO.getValidDayEndTime());
             storeDetailDTO.setValidTime(DateUtil.getDateFormat(merchantFavoredDTO.getEntireBeginTime()) + "至" + DateUtil.getDateFormat(merchantFavoredDTO.getEntireEndTime()));
             storeDetailDTO.setIsOverdue(DateUtil.isOverdue(merchantFavoredDTO.getEntireEndTime()));
+        }
+
+        if (StringUtils.isNotEmpty(storeDetailDTO.getRegionPath())) {
+            String areaName = regionService.getAreaName(storeDetailDTO.getRegionPath()).getModel();
+            storeDetailDTO.setAreaName(areaName);
         }
         return successGet(storeDetailDTO);
     }

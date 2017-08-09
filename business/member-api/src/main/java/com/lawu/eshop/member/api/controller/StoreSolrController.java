@@ -154,6 +154,12 @@ public class StoreSolrController extends BaseController {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
         List<NewMerchantStoreDTO> storeDTOS = JSON.parseArray(result.getModel(), NewMerchantStoreDTO.class);
+        for (NewMerchantStoreDTO storeDTO : storeDTOS) {
+            if (StringUtils.isNotEmpty(storeDTO.getRegionPath())) {
+                String areaName = regionService.getAreaName(storeDTO.getRegionPath()).getModel();
+                storeDTO.setAreaName(areaName);
+            }
+        }
         return successGet(storeDTOS);
     }
 

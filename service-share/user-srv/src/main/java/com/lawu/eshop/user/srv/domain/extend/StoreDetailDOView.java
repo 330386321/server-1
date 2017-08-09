@@ -38,6 +38,8 @@ public class StoreDetailDOView implements Serializable {
 
     private String regionName;
 
+    private String regionPath;
+
     public Long getMerchantId() {
         return merchantId;
     }
@@ -148,5 +150,13 @@ public class StoreDetailDOView implements Serializable {
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
     }
 }

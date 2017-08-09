@@ -18,6 +18,8 @@ public class RecommendFoodDOview {
 
     private String regionName;
 
+    private String regionPath;
+
     private String address;
 
     private String storePic;
@@ -136,5 +138,13 @@ public class RecommendFoodDOview {
 
     public void setCommentsCount(Integer commentsCount) {
         this.commentsCount = commentsCount;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
     }
 }
