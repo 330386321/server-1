@@ -1,5 +1,29 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -22,22 +46,12 @@ import com.lawu.eshop.product.param.EditProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.query.ProductQuery;
 import com.lawu.eshop.utils.StringUtil;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.util.*;
 
 /**
  * @author Yangqh
@@ -295,6 +309,7 @@ public class ProductController extends BaseController {
 		dataProduct.setIsAllowRefund(product.getIsAllowRefund());
 		dataProduct.setDeleteSpecIds(product.getDeleteSpecIds());
 		dataProduct.setProductStatus(product.getProductStatus());
+		dataProduct.setKeywords(product.getKeywords());
 
 		return productService.saveProduct(dataProduct);
 

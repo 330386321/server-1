@@ -2,8 +2,9 @@ package com.lawu.eshop.product.param;
 
 import javax.validation.constraints.NotNull;
 
-import com.lawu.eshop.product.constant.ProductStatusEnum;
 import org.hibernate.validator.constraints.NotBlank;
+
+import com.lawu.eshop.product.constant.ProductStatusEnum;
 
 import io.swagger.annotations.ApiParam;
 
@@ -56,6 +57,9 @@ public class EditProductParam {
 
 	@ApiParam(value = "保存、上架、下架操作枚举（上架：PRODUCT_STATUS_UP、下架：PRODUCT_STATUS_DOWN、保存为空）", required = false)
 	private ProductStatusEnum productStatus;
+
+	@ApiParam(value = "商品关键词，以，分隔")
+	private String keywords;
 	
 	public Integer getCategoryId() {
 		return categoryId;
@@ -143,5 +147,13 @@ public class EditProductParam {
 
 	public void setProductStatus(ProductStatusEnum productStatus) {
 		this.productStatus = productStatus;
+	}
+
+	public String getKeywords() {
+		return keywords;
+	}
+
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
 	}
 }

@@ -1,24 +1,29 @@
 package com.lawu.eshop.product.srv.converter;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
+
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.EditProductDataParam_bak;
-import com.lawu.eshop.product.srv.bo.*;
+import com.lawu.eshop.product.srv.bo.ProductBO;
+import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
+import com.lawu.eshop.product.srv.bo.ProductInfoBO;
+import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+import com.lawu.eshop.product.srv.bo.ProductSearchBO;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.extend.ProductDOView;
 import com.lawu.eshop.product.srv.domain.extend.ShoppingProductDOView;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrInputDocument;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 会员信息转换器
@@ -255,6 +260,7 @@ public class ProductConverter {
             productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
             productDO.setGmtCreate(new Date());
         }
+        productDO.setKeywords(param.getKeywords());
         productDO.setGmtModified(new Date());
         return productDO;
     }
