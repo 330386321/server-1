@@ -12,6 +12,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.DealWorkOrderParam;
 import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.mall.param.WorkOrderParam;
 import com.lawu.eshop.mall.query.WorkOrderQuery;
 import com.lawu.eshop.mall.srv.bo.WorkOrderBO;
@@ -51,7 +52,12 @@ public class WorkOrderServiceImpl implements WorkOrderService{
 		if(dealWorkOrderParam.getWorkOrderStatusEnum().val == 2) {
 			WorkOrderDO DO = workOrderDOMapper.selectByPrimaryKey(dealWorkOrderParam.getId());
 			MessageInfoParam messageInfoParam = new MessageInfoParam();
+			messageInfoParam.setRelateId(DO.getId());
 			messageInfoParam.setTypeEnum(MessageTypeEnum.getEnum(MessageTypeEnum.MESSAGE_TYPE_REPLIED_WORK_ORDER.getVal()));
+			MessageTempParam messageTempParam = new MessageTempParam();
+			messageTempParam.setWorkOrderContent(DO.getContent());
+			messageTempParam.setReplyWorkOrderContent(dealWorkOrderParam.getReplyContent());
+			messageInfoParam.setMessageParam(messageTempParam);
 			messageService.saveMessage(DO.getUserNum(), messageInfoParam);
 		}
 		WorkOrderDO record = new WorkOrderDO();
