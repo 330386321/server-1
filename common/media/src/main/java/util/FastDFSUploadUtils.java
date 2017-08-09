@@ -22,6 +22,7 @@ import util.upload.FastDFSClient;
 import util.upload.FastDFSResult;
 import util.upload.FastDFSResultEnum;
 import util.upload.FileUploadConstant;
+import util.upload.FileUploadTypeEnum;
 
 /**
  * FastDFS上传工具
@@ -53,7 +54,7 @@ public class FastDFSUploadUtils {
 					try {
 						in = part.getInputStream();
 						ClientParams param = uparam.getCparam();
-						if (uparam.getType().equals(FileUploadConstant.IMG)) {// 图片文件
+						if (uparam.getFileUploadTypeEnum().equals(FileUploadTypeEnum.IMG)) {// 图片文件
 							if (fileSize > FileUploadConstant.IMG_MAX_SIZE) {
 								result.setFenum(FastDFSResultEnum.FD_FILE_IMG_BIG);
 								return result;
@@ -61,7 +62,7 @@ public class FastDFSUploadUtils {
 							String fileUrl = FastDFSClient.getInstance(param)
 									.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName);
 							result.setFileUrl(fileUrl);
-						} else if (uparam.getType().equals(FileUploadConstant.VIDEO)) {// 视频文件
+						} else if (uparam.getFileUploadTypeEnum().equals(FileUploadTypeEnum.VIDEO)) {// 视频文件
 							if (StringUtils.isEmpty(uparam.getFfmpegUrl())) {
 								result.setFenum(FastDFSResultEnum.FD_FILE_ERROR);
 								return result;

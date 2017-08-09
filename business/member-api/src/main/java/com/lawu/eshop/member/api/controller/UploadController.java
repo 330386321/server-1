@@ -7,10 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.csource.fastdfs.ClientParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -30,6 +30,7 @@ import io.swagger.annotations.ApiResponse;
 import util.upload.FastDFSResult;
 import util.FastDFSUploadUtils;
 import util.upload.FileUploadDTO;
+import util.upload.FileUploadTypeEnum;
 import util.UploadParam;
 
 /**
@@ -51,12 +52,12 @@ public class UploadController extends BaseController {
     @ApiOperation(value = "统一上传接口", notes = "上传接口(李洪军)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
-    public Result<FileUploadDTO> uploadFile(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestParam @ApiParam(required = true, value = "上传类型图片(img)，视频(video),其他(file)") String type) {
+    public Result<FileUploadDTO> uploadFile(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "上传类型图片(IMG)，视频(VIDEO),其他(OTHER)") FileUploadTypeEnum uploadType) {
         HttpServletRequest request = getRequest();
         UploadParam uparam = new UploadParam();
         uparam.setBaseImageDir(memberApiConfig.getImageUploadUrl());
         uparam.setDir(FileDirConstant.DIR_HEAD);
-        uparam.setType(type);
+        uparam.setFileUploadTypeEnum(uploadType);
         ClientParams cp = new ClientParams();
         cp.setTrackerServer(memberApiConfig.getTrackerServers());
         cp.setTrackerHttpPort(memberApiConfig.getTrackerHttpPort());

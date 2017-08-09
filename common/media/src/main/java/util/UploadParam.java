@@ -5,6 +5,8 @@ package util;
 
 import org.csource.fastdfs.ClientParams;
 
+import util.upload.FileUploadTypeEnum;
+
 /**
  * @author lihj
  * @date 2017年7月26日
@@ -16,7 +18,7 @@ public class UploadParam {
 	/**
 	 * 上传文件类型 图片 img 视频 video 其他 随便传
 	 */
-	private String type;
+	private FileUploadTypeEnum fileUploadTypeEnum;
 
 	/**
 	 * ffmpeg 文件的路径
@@ -53,18 +55,12 @@ public class UploadParam {
 		this.baseImageDir = baseImageDir;
 	}
 
-	/**
-	 * @return the type
-	 */
-	public String getType() {
-		return type;
+	public FileUploadTypeEnum getFileUploadTypeEnum() {
+		return fileUploadTypeEnum;
 	}
 
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(String type) {
-		this.type = type;
+	public void setFileUploadTypeEnum(FileUploadTypeEnum fileUploadTypeEnum) {
+		this.fileUploadTypeEnum = fileUploadTypeEnum;
 	}
 
 	/**
