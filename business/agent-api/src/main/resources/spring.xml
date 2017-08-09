@@ -7,5 +7,33 @@
                             http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 
+       <mvc:interceptors>
+              <!--身份验证的拦截器-->
+              <bean id="authorizationInterceptor" class="com.lawu.eshop.authorization.interceptor.AuthorizationInterceptor">
+                     <!--验证信息存储的Http头-->
+                     <property name="httpHeaderName" value="authorization" />
+                     <!--验证信息通用前缀，例如Bearer-->
+                     <property name="httpHeaderPrefix" value="" />
+                     <!--验证失败时的错误信息-->
+                     <property name="unauthorizedErrorMessage" value="令牌失效，请重新登录" />
+                     <!--管理验证信息的bean-->
+                     <property name="manager" ref="tokenManager" />
+                     <!--debug模式-->
+                     <property name="debug" value="false" />
+                     <property name="testNum" value="M000001"/>
+                     <property name="testId" value="1"/>
+                     <property name="testAccount" value="test" />
+              </bean>
+
+       </mvc:interceptors>
+
+       <!--管理验证信息的bean-->
+       <bean id="tokenManager" class="com.lawu.eshop.authorization.manager.impl.CacheTokenManager">
+              <!--Token失效时间-->
+              <property name="tokenExpireSeconds" value="86400" />
+              <property name="cacheService" ref="redisCacheService" />
+              <property name="singleTokenWithUser" value="false" />
+       </bean>
+       <bean id="redisCacheService" class="com.lawu.eshop.agent.api.service.impl.RedisCacheServiceImpl" />
        <import resource="spring-event.xml" />
 </beans>

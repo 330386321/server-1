@@ -10,5 +10,7 @@ public class UserConstant {
 
     public static final String MERCHANT_TOKEN_TYPE = "MERCHANT";
 
+    public static final String AGENT_TOKEN_TYPE = "AGENT";
+
     public static final String REQ_HEADER_TOKEN = "authorization";
 }
