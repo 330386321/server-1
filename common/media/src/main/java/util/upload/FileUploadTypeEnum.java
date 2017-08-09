@@ -1,5 +1,6 @@
 package util.upload;
 
+
 public enum FileUploadTypeEnum {
 	IMG("img", "图片"), 
 	VIDEO("VIDEO", "视频"), 
@@ -29,6 +30,14 @@ public enum FileUploadTypeEnum {
 		this.name = name;
 	}
 	
-	
+	public static FileUploadTypeEnum getEnum(String val) {
+		FileUploadTypeEnum[] values = FileUploadTypeEnum.values();
+		for (FileUploadTypeEnum object : values) {
+			if (object.val == val) {
+				return object;
+			}
+		}
+		return null;
+	}
 
 }

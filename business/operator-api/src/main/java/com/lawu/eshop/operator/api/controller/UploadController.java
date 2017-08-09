@@ -7,9 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.csource.fastdfs.ClientParams;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,12 +48,12 @@ public class UploadController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
     @ResponseBody
-    public Result<FileUploadDTO> uploadFile(@ModelAttribute @ApiParam(required = true, value = "上传类型图片(IMG)，视频(VIDEO),其他(OTHER)") FileUploadTypeEnum fileType) {
+    public Result<FileUploadDTO> uploadFile(@RequestParam @ApiParam(required = true, value = "上传类型图片(IMG)，视频(VIDEO),其他(OTHER)") String uploadType) {
         HttpServletRequest request = getRequest();
         UploadParam uparam = new UploadParam();
         uparam.setBaseImageDir(operatorApiConfig.getImageUploadUrl());
         uparam.setDir(FileDirConstant.AD_PLAT_FORM_URL);
-        uparam.setFileUploadTypeEnum(fileType);
+        uparam.setFileUploadTypeEnum(FileUploadTypeEnum.getEnum(uploadType));
         ClientParams cp = new ClientParams();
         cp.setTrackerServer(operatorApiConfig.getTrackerServers());
         cp.setTrackerHttpPort(operatorApiConfig.getTrackerHttpPort());
