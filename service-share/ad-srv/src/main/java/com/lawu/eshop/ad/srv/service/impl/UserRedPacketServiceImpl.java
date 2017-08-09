@@ -138,6 +138,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	 * 查询用户红包列表
 	 */
 	@Override
+	@Transactional
 	public Page<UserRedPacketBO> selectUserRedPacketList(UserRedPacketSelectParam param) {
 		UserRedPacketDOExample example = new UserRedPacketDOExample();
 		example.setOrderByClause("gmt_create desc");
@@ -146,6 +147,11 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		List<UserRedPacketBO> listBO = Lists.newArrayList();
 		for (UserRedPacketDO userRed : listDO) {
 			UserRedPacketBO userBO = UserRedPacketConverter.convertBO(userRed);
+			Date overdueDate = DateUtil.getDayAfter(userBO.getGmtCreate());// 获取红包过期时间
+			if(overdueDate.getTime()<new Date().getTime()){
+				userBO.setUserRedPacketEnum(UserRedPacketEnum.USER_STATUS_OUT);
+				setRedpacketOverDue(userBO.getId());
+			}
 			listBO.add(userBO);
 		}
 		Page<UserRedPacketBO> page = new Page<UserRedPacketBO>();
@@ -162,16 +168,24 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	 */
 	@Override
 	public boolean isExistsRedPacket(Long redPacketId) {
-		UserTakedRedPacketDOExample example = new UserTakedRedPacketDOExample();
-		example.createCriteria().andUserRedPackIdEqualTo(redPacketId)
-				.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-		int count = userTakedRedPacketDOMapper.countByExample(example);
-		return count > 0 ? true : false;
+		UserRedPacketDO userRedpacket =userRedPacketDOMapper.selectByPrimaryKey(redPacketId);
+		Date overdueDate = DateUtil.getDayAfter(userRedpacket.getGmtCreate());// 获取红包过期时间
+		if(overdueDate.getTime()<new Date().getTime()){//过期
+			setRedpacketOverDue(redPacketId);
+			return false;
+		}else{
+			UserTakedRedPacketDOExample example = new UserTakedRedPacketDOExample();
+			example.createCriteria().andUserRedPackIdEqualTo(redPacketId)
+			.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+			int count = userTakedRedPacketDOMapper.countByExample(example);
+			return count > 0 ? true : false;
+		}
 	}
 
 	/**
 	 * 红包过期定时任务
 	 */
+	@Deprecated
 	@Override
 	@Transactional
 	public void executeUserRedPacketData() {
@@ -202,6 +216,30 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 						notification);
 			}
 		}
+	}
+	
+	/**
+	 * 设置红包过期
+	 * @param userRedpacketId
+	 */
+	private void setRedpacketOverDue(Long userRedpacketId) {
+		UserRedPacketDO userRedpacket =userRedPacketDOMapper.selectByPrimaryKey(userRedpacketId);
+		userRedpacket.setGmtModified(new Date());
+		userRedpacket.setStatus(UserRedPacketEnum.USER_STATUS_OVER.val);
+		UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
+		userTakedExample.createCriteria().andUserRedPackIdEqualTo(userRedpacketId)
+		.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+		List<UserTakedRedPacketDO> listTaked = userTakedRedPacketDOMapper.selectByExample(userTakedExample);
+		BigDecimal totalBackMoney = getTotalBackMoney(listTaked);
+		userRedPacketDOMapper.updateByPrimaryKeySelective(userRedpacket);
+		UserRedPacketNotification notification = new UserRedPacketNotification();
+		notification.setId(userRedpacket.getId());
+		notification.setMoney(totalBackMoney);
+		notification.setUserNum(userRedpacket.getUserNum());
+		// 退款
+		transactionStatusService.save(userRedpacket.getId(), TransactionConstant.USER_REDPACKED_MONEY_ADD);
+		messageProducerService.sendMessage(MqConstant.TOPIC_AD_SRV, MqConstant.TAG_AD_USER_REDPACKET_ADD_MONTY,
+				notification);
 	}
 
 	/**

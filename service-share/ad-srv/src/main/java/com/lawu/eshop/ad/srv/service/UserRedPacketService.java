@@ -39,6 +39,7 @@ public interface UserRedPacketService {
 	/**
 	 * 
 	 */
+	@Deprecated
 	void executeUserRedPacketData();
 
 	/**

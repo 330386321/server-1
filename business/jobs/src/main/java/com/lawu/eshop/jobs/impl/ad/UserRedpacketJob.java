@@ -17,6 +17,7 @@ import com.lawu.eshop.jobs.service.UserRedPacketJobService;
  * @author lihj
  * @date 2017年8月7日
  */
+@Deprecated
 public class UserRedpacketJob implements SimpleJob {
 
 	private static Logger logger = LoggerFactory.getLogger(UserRedpacketJob.class);
