@@ -167,6 +167,7 @@ public interface ProductService {
      * @param keywords
      * @author meishuquan
      */
+    @Deprecated
     void updateKeywordsById(Long id, Long merchantId, String keywords);
 
     void soldOutProductByMerchantId(Long merchantId);

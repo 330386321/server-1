@@ -756,6 +756,7 @@ public class ProductServiceImpl implements ProductService {
         return ProductConverter.convertBOS(productDOViewList);
     }
 
+    @Deprecated
     @Override
     @Transactional
     public void updateKeywordsById(Long id, Long merchantId, String keywords) {

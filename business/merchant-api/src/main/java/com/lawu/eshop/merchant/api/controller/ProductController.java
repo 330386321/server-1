@@ -250,6 +250,7 @@ public class ProductController extends BaseController {
 
 	}
 
+	@Deprecated
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "更新商品关键词", notes = "更新商品关键词。[1002]（梅述全）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")

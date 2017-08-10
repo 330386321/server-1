@@ -58,7 +58,7 @@ public class EditProductParam {
 	@ApiParam(value = "保存、上架、下架操作枚举（上架：PRODUCT_STATUS_UP、下架：PRODUCT_STATUS_DOWN、保存为空）", required = false)
 	private ProductStatusEnum productStatus;
 
-	@ApiParam(value = "商品关键词，以，分隔")
+	@ApiParam(value = "关键词")
 	private String keywords;
 	
 	public Integer getCategoryId() {

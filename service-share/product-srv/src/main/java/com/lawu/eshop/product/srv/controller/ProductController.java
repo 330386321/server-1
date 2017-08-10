@@ -356,6 +356,8 @@ public class ProductController extends BaseController {
      * @return
      * @author meishuquan
      */
+
+    @Deprecated
     @RequestMapping(value = "updateKeywordsById/{id}", method = RequestMethod.PUT)
     public Result updateKeywordsById(@PathVariable Long id, @RequestParam Long merchantId, @RequestParam String keywords) {
         ProductInfoBO productInfoBO = productService.selectProductById(id);
