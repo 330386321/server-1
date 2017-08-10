@@ -779,6 +779,7 @@ public class MerchantStoreController extends BaseController {
 	 * @return
 	 * @author meishuquan
 	 */
+	@Deprecated
 	@RequestMapping(value = "updateKeywordsById/{id}", method = RequestMethod.PUT)
 	public Result updateKeywordsById(@PathVariable Long id, @RequestParam Long merchantId, @RequestParam String keywords) {
 		MerchantStoreBO merchantStoreBO = merchantStoreService.getMerchantStoreById(id);

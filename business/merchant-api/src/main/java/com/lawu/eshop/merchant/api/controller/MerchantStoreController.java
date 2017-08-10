@@ -1,5 +1,25 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
@@ -16,23 +36,12 @@ import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.param.ApplyPhysicalStoreParam;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * 商家扩展信息
@@ -368,6 +377,7 @@ public class MerchantStoreController extends BaseController {
         return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId, merchantStoreParam);
     }
 
+    @Deprecated
     @Audit(date = "2017-08-08", reviewer = "孙林青")
     @ApiOperation(value = "更新门店关键词", notes = "更新门店关键词。 [1002]（梅述全）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")

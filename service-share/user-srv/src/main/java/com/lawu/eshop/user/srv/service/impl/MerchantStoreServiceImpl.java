@@ -331,6 +331,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 		return bo;
 	}
 
+	@Deprecated
     @Override
     @Transactional
     public void updateKeywordsById(Long id, Long merchantId, String keywords) {
