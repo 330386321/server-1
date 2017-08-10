@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -59,6 +60,18 @@ public class AdMerchantDetailDTO {
 	
 	@ApiModelProperty(value = "区域名称")
 	private String regionName;
+	
+	@ApiModelProperty(value = "商品id")
+	private Long  productId;
+	
+	@ApiModelProperty(value = "关联类型")
+	private RelateTypeEnum relateType;
+	
+	@ApiModelProperty(value = "商品图片")
+	private String  productImgUrl;
+	
+	@ApiModelProperty(value = "商品名称")
+	private String  productName;
 
 	public Long getId() {
 		return id;
@@ -180,6 +193,38 @@ public class AdMerchantDetailDTO {
 
 	public void setRegionName(String regionName) {
 		this.regionName = regionName;
+	}
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	public RelateTypeEnum getRelateType() {
+		return relateType;
+	}
+
+	public void setRelateType(RelateTypeEnum relateType) {
+		this.relateType = relateType;
+	}
+
+	public String getProductImgUrl() {
+		return productImgUrl;
+	}
+
+	public void setProductImgUrl(String productImgUrl) {
+		this.productImgUrl = productImgUrl;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 	
 	

@@ -14,6 +14,7 @@ import com.lawu.eshop.product.dto.CommentProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.dto.ProductRelateAdInfoDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 
@@ -105,5 +106,9 @@ public interface ProductService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "product/selectProductCount")
     Result<Integer> selectProductCount(@RequestParam("merchantId") Long merchantId);
+    
+    @RequestMapping(value = "product/selectProductRelateAdInfo/{id}", method = RequestMethod.GET)
+    Result<ProductRelateAdInfoDTO> selectProductRelateAdInfo(@PathVariable("id") Long id);
 
 }
+

@@ -79,6 +79,15 @@ public class AdDetailDTO {
 	@ApiModelProperty(value = "开始时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date beginTime;
+	
+	@ApiModelProperty(value = "商品id")
+	private Long  productId;
+	
+	@ApiModelProperty(value = "商品图片")
+	private String  productImgUrl;
+	
+	@ApiModelProperty(value = "商品名称")
+	private String  productName;
 
 	public Long getId() {
 		return id;
@@ -248,6 +257,30 @@ public class AdDetailDTO {
 
 	public void setBeginTime(Date beginTime) {
 		this.beginTime = beginTime;
+	}
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	public String getProductImgUrl() {
+		return productImgUrl;
+	}
+
+	public void setProductImgUrl(String productImgUrl) {
+		this.productImgUrl = productImgUrl;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 	
 	

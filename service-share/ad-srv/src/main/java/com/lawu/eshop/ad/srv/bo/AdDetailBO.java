@@ -50,6 +50,8 @@ public class AdDetailBO {
 	private Date auditTime;
 	
 	private Date beginTime;
+	
+	private Long productId;
 
 	public Long getId() {
 		return id;
@@ -217,6 +219,14 @@ public class AdDetailBO {
 
 	public void setBeginTime(Date beginTime) {
 		this.beginTime = beginTime;
+	}
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	

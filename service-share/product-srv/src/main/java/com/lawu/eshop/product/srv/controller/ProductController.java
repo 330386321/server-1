@@ -24,6 +24,7 @@ import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductPlatDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.dto.ProductRelateAdInfoDTO;
 import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.ListProductParam;
@@ -33,6 +34,7 @@ import com.lawu.eshop.product.srv.bo.ProductBO;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+import com.lawu.eshop.product.srv.bo.ProductRelateAdInfoBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.utils.BeanUtil;
@@ -374,4 +376,23 @@ public class ProductController extends BaseController {
         return successCreated();
     }
 
+    /**
+     * 根据商品ID查询商品
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "selectProductRelateAdInfo/{id}", method = RequestMethod.GET)
+    public Result<ProductRelateAdInfoDTO> selectProductRelateAdInfo(@PathVariable Long id) {
+    	ProductRelateAdInfoBO bo = productService.selectProductRelateAdInfo(id);
+        if (bo == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        
+        ProductRelateAdInfoDTO dto = new ProductRelateAdInfoDTO();
+        dto.setImgUrl(bo.getImgUrl());
+        dto.setName(bo.getName());
+        
+        return successGet(dto);
+    }
 }

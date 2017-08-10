@@ -36,6 +36,7 @@ import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductModelBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+import com.lawu.eshop.product.srv.bo.ProductRelateAdInfoBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
 import com.lawu.eshop.product.srv.domain.ProductCategoryeDO;
@@ -799,5 +800,14 @@ public class ProductServiceImpl implements ProductService {
                 solrService.delSolrDocsById(product.getId(), productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
+
+	@Override
+	public ProductRelateAdInfoBO selectProductRelateAdInfo(Long id) {
+		ProductDO productDO = productDOMapper.selectByPrimaryKey(id);
+		ProductRelateAdInfoBO bo = new ProductRelateAdInfoBO();
+		bo.setName(productDO.getName());
+		bo.setImgUrl(productDO.getFeatureImage());
+		return bo;
+	}
 
 }

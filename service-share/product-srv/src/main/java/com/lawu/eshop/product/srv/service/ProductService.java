@@ -13,6 +13,7 @@ import com.lawu.eshop.product.srv.bo.ProductBO;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+import com.lawu.eshop.product.srv.bo.ProductRelateAdInfoBO;
 
 /**
  * Created by Yangqh on 2017/3/23.
@@ -171,4 +172,13 @@ public interface ProductService {
     void updateKeywordsById(Long id, Long merchantId, String keywords);
 
     void soldOutProductByMerchantId(Long merchantId);
+    
+    /**
+     * 根据商品id查询商品名称和图片
+     * @param id
+     * @return
+     * @author zhangrc
+     * @data 2017/08/10
+     */
+    ProductRelateAdInfoBO selectProductRelateAdInfo(Long id);
 }

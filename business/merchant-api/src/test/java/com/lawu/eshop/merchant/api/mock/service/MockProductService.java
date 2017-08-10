@@ -9,6 +9,7 @@ import com.lawu.eshop.product.dto.CommentProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.dto.ProductRelateAdInfoDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import org.springframework.stereotype.Service;
@@ -70,5 +71,10 @@ public class MockProductService extends BaseController implements ProductService
     public Result<Integer> selectProductCount(@RequestParam("merchantId") Long merchantId) {
         return successCreated(new Integer(1));
     }
+
+	@Override
+	public Result<ProductRelateAdInfoDTO> selectProductRelateAdInfo(Long id) {
+		return successGet(new ProductRelateAdInfoDTO());
+	}
 
 }

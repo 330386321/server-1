@@ -81,6 +81,8 @@ public class AdConverter {
 		adBO.setRegionName(adDO.getRegionName());
 		adBO.setAuditorId(adDO.getAuditorId());
 		adBO.setRemark(adDO.getRemark());
+		adBO.setRelateId(adDO.getRelateId());
+		adBO.setRelateType(RelateTypeEnum.getEnum(adDO.getRelateType()));
         return adBO;
 		
 	}
@@ -336,6 +338,8 @@ public class AdConverter {
 		dto.setContent(adBO.getContent());
 		dto.setVideoImgUrl(adBO.getVideoImgUrl());
 		dto.setRegionName(adBO.getRegionName());
+		dto.setProductId(adBO.getRelateId());
+		dto.setRelateType(adBO.getRelateType());
 		return dto;
 	}
 	
@@ -389,6 +393,7 @@ public class AdConverter {
 		adDetailBO.setRemark(adDO.getRemark());
 		adDetailBO.setAuditTime(adDO.getAuditTime());
 		adDetailBO.setBeginTime(adDO.getBeginTime());
+		adDetailBO.setProductId(adDO.getRelateId());
         return adDetailBO;
 		
 		
@@ -422,6 +427,7 @@ public class AdConverter {
 		adDetailDTO.setAlreadyGetPoint(adDetailBO.getAlreadyGetPoint());
 		adDetailDTO.setNotGetPoint(adDetailBO.getNotGetPoint());
 		adDetailDTO.setBeginTime(adDetailBO.getBeginTime());
+		adDetailDTO.setProductId(adDetailBO.getProductId());
         return adDetailDTO;
 		
 		
