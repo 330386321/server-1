@@ -1,5 +1,7 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -52,6 +54,8 @@ public class AlipayController extends BaseController {
     private RechargeService rechargeService;
     @Autowired
     private PayOrderService payOrderService;
+    @Autowired
+    private MerchantStoreService merchantStoreService;
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @SuppressWarnings("rawtypes")
@@ -69,7 +73,6 @@ public class AlipayController extends BaseController {
         aparam.setSubject(param.getThirdPayBodyEnum().getVal());
         aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
         aparam.setUserTypeEnum(UserTypeEnum.MEMBER);
-        aparam.setRegionPath(param.getRegionPath());
 
         // 查询支付金额
         double money = 0;
@@ -84,6 +87,9 @@ public class AlipayController extends BaseController {
             aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
             money = payOrderCallback.getActualMoney();
             rtnMoney = String.valueOf(money);
+
+            VisitUserInfoDTO visitUserInfoDTO = merchantStoreService.findAccountAndRegionPathByNum(payOrderCallback.getBusinessUserNum());
+            aparam.setRegionPath(visitUserInfoDTO.getRegionPath());
 
         } else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.getVal().equals(param.getBizFlagEnum().getVal())) {
             // 考虑商品可能有减库存失败可能

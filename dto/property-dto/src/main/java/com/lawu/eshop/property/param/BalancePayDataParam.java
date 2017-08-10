@@ -43,6 +43,9 @@ public class BalancePayDataParam extends BalancePayParam{
 	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
 	private String title;
 
+	//代理商区域统计，11/1101/110101
+	private String regionPath;
+
 	public String getUserNum() {
 		return userNum;
 	}
@@ -107,4 +110,11 @@ public class BalancePayDataParam extends BalancePayParam{
 		this.orderNum = orderNum;
 	}
 
+	public String getRegionPath() {
+		return regionPath;
+	}
+
+	public void setRegionPath(String regionPath) {
+		this.regionPath = regionPath;
+	}
 }

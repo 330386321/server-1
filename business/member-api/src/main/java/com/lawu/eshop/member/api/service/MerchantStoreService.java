@@ -164,4 +164,12 @@ public interface MerchantStoreService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchantStore/getPayOrderDetailStoreInfo")
     PayOrderMerchantStoreInfoDTO getPayOrderDetailStoreInfo(@RequestParam("merchantId") Long merchantId);
+
+    /**
+     * 根据商家编号获取商家账号和区域路径
+     * @param merchantNum
+     * @return
+     */
+    @RequestMapping(value = "merchantStore/findAccountAndRegionPathByNum", method = RequestMethod.GET)
+    VisitUserInfoDTO findAccountAndRegionPathByNum(@RequestParam("merchantNum") String merchantNum);
 }

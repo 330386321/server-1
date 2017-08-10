@@ -3,6 +3,8 @@ package com.lawu.eshop.member.api.controller;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
+import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -65,6 +67,8 @@ public class BalancePayController extends BaseController {
 	private MessageService messageService;
 	@Autowired
 	private PropertyInfoService propertyInfoService;
+	@Autowired
+	private MerchantStoreService merchantStoreService;
 
 	/**
 	 * 余额支付订单
@@ -108,7 +112,6 @@ public class BalancePayController extends BaseController {
 		dparam.setBizIds(param.getBizIds());
 		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
-		dparam.setRegionPaths(param.getRegionPaths());
 		ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
 				.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
 		if (payOrderCallback == null) {
@@ -119,6 +122,9 @@ public class BalancePayController extends BaseController {
 		dparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
 		dparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
 		dparam.setOrderNum(payOrderCallback.getOrderNum());
+
+		VisitUserInfoDTO visitUserInfoDTO = merchantStoreService.findAccountAndRegionPathByNum(payOrderCallback.getBusinessUserNum());
+		dparam.setRegionPath(visitUserInfoDTO.getRegionPath());
 
 		return balancePayService.billPay(dparam);
 	}

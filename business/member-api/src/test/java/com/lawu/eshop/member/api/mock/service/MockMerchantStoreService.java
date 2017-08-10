@@ -164,4 +164,12 @@ public class MockMerchantStoreService extends BaseController implements Merchant
         dto.setName("name");
         return dto;
     }
+
+    @Override
+    public VisitUserInfoDTO findAccountAndRegionPathByNum(@RequestParam("merchantNum") String merchantNum) {
+        VisitUserInfoDTO dto = new VisitUserInfoDTO();
+        dto.setRegionPath("1/11/111");
+        dto.setAccount("1122212");
+        return dto;
+    }
 }

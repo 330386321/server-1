@@ -21,9 +21,6 @@ public class BalancePayParam {
 	@ApiParam (name="bizIds",required = true, value = "业务表ID(支持多个,用英文逗号分割)")
 	private String bizIds;
 
-	@ApiParam(name = "regionPaths", required = false, value = "商家省市区ID(格式：省ID/市ID/区ID，用于代理商系统区域统计)")
-	private String regionPaths;
-
 	public String getBizIds() {
 		return bizIds;
 	}
@@ -32,11 +29,4 @@ public class BalancePayParam {
 		this.bizIds = bizIds;
 	}
 
-	public String getRegionPaths() {
-		return regionPaths;
-	}
-
-	public void setRegionPaths(String regionPaths) {
-		this.regionPaths = regionPaths;
-	}
 }

@@ -127,7 +127,7 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam1.setBizId(param.getBizIds());
         tdsParam1.setDirection(PropertyInfoDirectionEnum.IN.getVal());
         tdsParam1.setBizNum(transactionNum);
-        tdsParam1.setRegionPath(param.getRegionPaths());
+        tdsParam1.setRegionPath(param.getRegionPath());
         transactionDetailService.save(tdsParam1);
         //加商家财产余额
         PropertyInfoDOEiditView infoDoView1 = new PropertyInfoDOEiditView();
