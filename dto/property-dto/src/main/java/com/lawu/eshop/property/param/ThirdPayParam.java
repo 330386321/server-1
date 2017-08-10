@@ -33,6 +33,9 @@ public class ThirdPayParam {
 	@NotNull(message = "bizFlagEnum不能为空")
 	private ThirdPartyBizFlagEnum bizFlagEnum;
 
+	@ApiParam(name = "regionPath", required = false, value = "商家省市区ID(格式：省ID/市ID/区ID，用于代理商系统区域统计)")
+	private String regionPath;
+
 	public ThirdPayBodyEnum getThirdPayBodyEnum() {
 		return thirdPayBodyEnum;
 	}
@@ -57,4 +60,11 @@ public class ThirdPayParam {
 		this.bizFlagEnum = bizFlagEnum;
 	}
 
+	public String getRegionPath() {
+		return regionPath;
+	}
+
+	public void setRegionPath(String regionPath) {
+		this.regionPath = regionPath;
+	}
 }

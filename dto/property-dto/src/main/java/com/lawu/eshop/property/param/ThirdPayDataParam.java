@@ -55,9 +55,6 @@ public class ThirdPayDataParam extends ThirdPayParam {
 	//商家缴纳保证金时需要回调发送消息改门店状态（事务）
 	private Long merchantId;
 
-	//商家省/市/区ID(用于代理商系统区域统计)
-	private String regionPath;
-	
 	public Long getMerchantId() {
 		return merchantId;
 	}
@@ -101,11 +98,4 @@ public class ThirdPayDataParam extends ThirdPayParam {
 		this.totalAmount = totalAmount;
 	}
 
-	public String getRegionPath() {
-		return regionPath;
-	}
-
-	public void setRegionPath(String regionPath) {
-		this.regionPath = regionPath;
-	}
 }

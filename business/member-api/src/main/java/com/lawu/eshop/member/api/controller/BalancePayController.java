@@ -108,6 +108,7 @@ public class BalancePayController extends BaseController {
 		dparam.setBizIds(param.getBizIds());
 		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+		dparam.setRegionPaths(param.getRegionPaths());
 		ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
 				.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
 		if (payOrderCallback == null) {

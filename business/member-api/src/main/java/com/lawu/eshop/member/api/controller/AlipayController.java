@@ -32,83 +32,82 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 /**
- * 
  * <p>
  * Description: 支付宝
  * </p>
- * 
+ *
  * @author Yangqh
  * @date 2017年4月7日 上午9:12:31
- *
  */
 @Api(tags = "alipay")
 @RestController
 @RequestMapping(value = "alipay/")
 public class AlipayController extends BaseController {
 
-	@Autowired
-	private AlipayService alipayService;
-	@Autowired
-	private ShoppingOrderService shoppingOrderService;
-	@Autowired
-	private RechargeService rechargeService;
-	@Autowired
-	private PayOrderService payOrderService;
+    @Autowired
+    private AlipayService alipayService;
+    @Autowired
+    private ShoppingOrderService shoppingOrderService;
+    @Autowired
+    private RechargeService rechargeService;
+    @Autowired
+    private PayOrderService payOrderService;
 
-	@Audit(date = "2017-04-15", reviewer = "孙林青")
-	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "app调用支付宝获取请求参数，已签名加密", notes = "app调用支付宝时需要的请求参数，[4020|4021]，(杨清华)", httpMethod = "POST")
-	@Authorization
-	@RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.POST)
-	public Result getAppAlipayReqParams(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam ThirdPayParam param) {
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
+    @SuppressWarnings("rawtypes")
+    @ApiOperation(value = "app调用支付宝获取请求参数，已签名加密", notes = "app调用支付宝时需要的请求参数，[4020|4021]，(杨清华)", httpMethod = "POST")
+    @Authorization
+    @RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.POST)
+    public Result getAppAlipayReqParams(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                        @ModelAttribute @ApiParam ThirdPayParam param) {
 
-		ThirdPayDataParam aparam = new ThirdPayDataParam();
-		aparam.setBizIds(param.getBizIds());
-		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
-		aparam.setBizFlagEnum(param.getBizFlagEnum());
-		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
-		aparam.setSubject(param.getThirdPayBodyEnum().getVal());
-		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
-		aparam.setUserTypeEnum(UserTypeEnum.MEMBER);
+        ThirdPayDataParam aparam = new ThirdPayDataParam();
+        aparam.setBizIds(param.getBizIds());
+        aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
+        aparam.setBizFlagEnum(param.getBizFlagEnum());
+        aparam.setOutTradeNo(StringUtil.getRandomNum(""));
+        aparam.setSubject(param.getThirdPayBodyEnum().getVal());
+        aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+        aparam.setUserTypeEnum(UserTypeEnum.MEMBER);
+        aparam.setRegionPath(param.getRegionPath());
 
-		// 查询支付金额
-		double money = 0;
+        // 查询支付金额
+        double money = 0;
         String rtnMoney = "";
-		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(param.getBizFlagEnum().getVal())) {
-			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
-			if(payOrderCallback == null){
-				return successCreated(ResultCode.PAY_ORDER_NULL);
-			}else if(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal().equals(payOrderCallback.getPayOrderStatusEnum().getVal())){
-				return successCreated(ResultCode.PAY_ORDER_IS_SUCCESS);
-			}
-			aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
-			money = payOrderCallback.getActualMoney();
-			rtnMoney = String.valueOf(money);
+        if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(param.getBizFlagEnum().getVal())) {
+            ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+            if (payOrderCallback == null) {
+                return successCreated(ResultCode.PAY_ORDER_NULL);
+            } else if (PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal().equals(payOrderCallback.getPayOrderStatusEnum().getVal())) {
+                return successCreated(ResultCode.PAY_ORDER_IS_SUCCESS);
+            }
+            aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
+            money = payOrderCallback.getActualMoney();
+            rtnMoney = String.valueOf(money);
 
-		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.getVal().equals(param.getBizFlagEnum().getVal())) {
-			// 考虑商品可能有减库存失败可能
-			Result<ShoppingOrderMoneyDTO> result = shoppingOrderService.selectOrderMoney(param.getBizIds());
-			if (!isSuccess(result)) {
-				return successCreated(result.getRet());
-			}
-			money = result.getModel().getOrderTotalPrice().doubleValue();
+        } else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.getVal().equals(param.getBizFlagEnum().getVal())) {
+            // 考虑商品可能有减库存失败可能
+            Result<ShoppingOrderMoneyDTO> result = shoppingOrderService.selectOrderMoney(param.getBizIds());
+            if (!isSuccess(result)) {
+                return successCreated(result.getRet());
+            }
+            money = result.getModel().getOrderTotalPrice().doubleValue();
             rtnMoney = result.getModel().getOrderTotalPrice().toString();
 
         } else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.getVal().equals(param.getBizFlagEnum().getVal())
-				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(param.getBizFlagEnum().getVal())) {
-			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
-			money = recharge.getActualMoney();
-			rtnMoney = String.valueOf(money);
+                || ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(param.getBizFlagEnum().getVal())) {
+            ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
+            money = recharge.getActualMoney();
+            rtnMoney = String.valueOf(money);
 
-		}
-		if(StringUtil.doubleCompareTo(money, 0) == 0){
-			return successCreated(ResultCode.MONEY_IS_ZERO);
-		}
-		aparam.setTotalAmount(rtnMoney);
-		
-		return successCreated(alipayService.getAppAlipayReqParams(aparam));
+        }
+        if (StringUtil.doubleCompareTo(money, 0) == 0) {
+            return successCreated(ResultCode.MONEY_IS_ZERO);
+        }
+        aparam.setTotalAmount(rtnMoney);
 
-	}
+        return successCreated(alipayService.getAppAlipayReqParams(aparam));
+
+    }
 
 }
