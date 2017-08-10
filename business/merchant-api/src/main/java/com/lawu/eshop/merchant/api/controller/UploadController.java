@@ -54,7 +54,7 @@ public class UploadController extends BaseController {
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
     public Result<FileUploadDTO> uploadFile(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     		@RequestParam @ApiParam(required = true, value = "上传类型图片大写(IMG)，视频(VIDEO),其他(OTHER)") String uploadType,
-    		@RequestParam @ApiParam(value = "上传文件下标或标识(非必填)") String fileIndex) {
+    		@RequestParam(required = false) @ApiParam(value = "上传文件下标或标识(非必填)") String fileIndex) {
         HttpServletRequest request = getRequest();
         UploadParam uparam = new UploadParam();
         uparam.setBaseImageDir(merchantApiConfig.getImageUploadUrl());
