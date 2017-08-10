@@ -1,7 +1,9 @@
 package com.lawu.eshop.agent.srv.service;
 
+import com.lawu.eshop.agent.param.AgentUserListParam;
 import com.lawu.eshop.agent.param.AgentUserParam;
 import com.lawu.eshop.agent.srv.bo.AgentUserBO;
+import com.lawu.eshop.framework.core.page.Page;
 
 /**
  * @author zhangyong
@@ -16,4 +18,14 @@ public interface AgentUserService {
     boolean findUserByAccount(String account);
 
     boolean findUserByMobile(String mobile);
+
+    Page<AgentUserBO> getAgentUserList(AgentUserListParam param);
+
+    AgentUserBO getAgentUser(Long id);
+
+    void editAgentUser(Long id, AgentUserParam param);
+
+    boolean findUserByAccountAndId(Long id, String account);
+
+    boolean findUserByMobileAndId(Long id, String mobile);
 }

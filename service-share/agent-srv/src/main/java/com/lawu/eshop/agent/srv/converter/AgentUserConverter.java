@@ -1,5 +1,9 @@
 package com.lawu.eshop.agent.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.lawu.eshop.agent.dto.AgentUserListDTO;
 import com.lawu.eshop.agent.dto.LoginUserDTO;
 import com.lawu.eshop.agent.srv.bo.AgentUserBO;
 import com.lawu.eshop.agent.srv.domain.AgentUserDO;
@@ -37,5 +41,25 @@ public class AgentUserConverter {
         userDTO.setAccount(userBO.getAccount());
         userDTO.setMobile(userBO.getMobile());
         return userDTO;
+    }
+
+    public static List<AgentUserListDTO> convertDTOS(List<AgentUserBO> records) {
+        if (records.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<AgentUserListDTO> listDTOS = new ArrayList<>();
+        AgentUserListDTO userListDTO;
+        for (AgentUserBO agentUserBO : records) {
+            userListDTO = new AgentUserListDTO();
+            userListDTO.setId(agentUserBO.getId());
+            userListDTO.setGmtCreate(agentUserBO.getGmtCreate());
+            userListDTO.setAccount(agentUserBO.getAccount());
+            userListDTO.setMobile(agentUserBO.getMobile());
+            userListDTO.setName(agentUserBO.getName());
+            userListDTO.setRegionName(agentUserBO.getRegionName());
+            userListDTO.setRegionPath(agentUserBO.getRegionPath());
+            listDTOS.add(userListDTO);
+        }
+        return listDTOS;
     }
 }

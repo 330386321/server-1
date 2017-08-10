@@ -1,14 +1,18 @@
 package com.lawu.eshop.agent.srv.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.agent.constants.AgentUserCommonConstant;
 import com.lawu.eshop.agent.constants.StatusEnum;
+import com.lawu.eshop.agent.param.AgentUserListParam;
 import com.lawu.eshop.agent.param.AgentUserParam;
 import com.lawu.eshop.agent.srv.bo.AgentUserBO;
 import com.lawu.eshop.agent.srv.converter.AgentUserConverter;
@@ -16,6 +20,7 @@ import com.lawu.eshop.agent.srv.domain.AgentUserDO;
 import com.lawu.eshop.agent.srv.domain.AgentUserDOExample;
 import com.lawu.eshop.agent.srv.mapper.AgentUserDOMapper;
 import com.lawu.eshop.agent.srv.service.AgentUserService;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.RandomUtil;
 
@@ -78,6 +83,76 @@ public class AgentUserServiceImpl implements AgentUserService {
     public boolean findUserByMobile(String mobile) {
         AgentUserDOExample example = new AgentUserDOExample();
         example.createCriteria().andMobileEqualTo(mobile).andStatusEqualTo(StatusEnum.STATUS_VALID.getVal());
+        List<AgentUserDO> userDOS = agentUserDOMapper.selectByExample(example);
+        if(!userDOS.isEmpty()){
+            //存在
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Page<AgentUserBO> getAgentUserList(AgentUserListParam param) {
+        AgentUserDOExample example = new AgentUserDOExample();
+        if (StringUtils.isNotEmpty(param.getAccount())) {
+            example.createCriteria().andAccountEqualTo(param.getAccount());
+        }
+        example.setOrderByClause("id desc");
+        Page<AgentUserBO> pages = new Page<>();
+        pages.setCurrentPage(param.getCurrentPage());
+        pages.setTotalCount(agentUserDOMapper.countByExample(example));
+        RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+
+        List<AgentUserDO> list = agentUserDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+        if (list.isEmpty()) {
+            pages.setRecords(new ArrayList<>());
+            return pages;
+        }
+        List<AgentUserBO> agentUserBOS = new ArrayList<>();
+        for (AgentUserDO agentUserDO : list) {
+            AgentUserBO agentUserBO = AgentUserConverter.convertBO(agentUserDO);
+            agentUserBOS.add(agentUserBO);
+        }
+        pages.setRecords(agentUserBOS);
+        return pages;
+    }
+
+    @Override
+    public AgentUserBO getAgentUser(Long id) {
+        AgentUserDO agentUserDO = agentUserDOMapper.selectByPrimaryKey(id);
+        return AgentUserConverter.convertBO(agentUserDO);
+    }
+
+    @Override
+    @Transactional
+    public void editAgentUser(Long id, AgentUserParam param) {
+        AgentUserDO agentUserDO = new AgentUserDO();
+        agentUserDO.setRegionPath(param.getRegionPath());
+        agentUserDO.setRegionName(param.getRegionName());
+        agentUserDO.setName(param.getName());
+        agentUserDO.setAccount(param.getAccount());
+        agentUserDO.setMobile(param.getMobile());
+        agentUserDO.setGmtModified(new Date());
+        agentUserDO.setId(id);
+        agentUserDOMapper.updateByPrimaryKeySelective(agentUserDO);
+    }
+
+    @Override
+    public boolean findUserByAccountAndId(Long id, String account) {
+        AgentUserDOExample example = new AgentUserDOExample();
+        example.createCriteria().andAccountEqualTo(account).andStatusEqualTo(StatusEnum.STATUS_VALID.getVal()).andIdNotEqualTo(id);
+        List<AgentUserDO> userDOS = agentUserDOMapper.selectByExample(example);
+        if(!userDOS.isEmpty()){
+            //存在
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean findUserByMobileAndId(Long id, String mobile) {
+        AgentUserDOExample example = new AgentUserDOExample();
+        example.createCriteria().andMobileEqualTo(mobile).andStatusEqualTo(StatusEnum.STATUS_VALID.getVal()).andIdNotEqualTo(id);
         List<AgentUserDO> userDOS = agentUserDOMapper.selectByExample(example);
         if(!userDOS.isEmpty()){
             //存在
