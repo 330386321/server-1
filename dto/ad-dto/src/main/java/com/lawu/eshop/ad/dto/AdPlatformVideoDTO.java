@@ -21,6 +21,9 @@ public class AdPlatformVideoDTO {
 	
 	@ApiModelProperty(value = "视频封面图片")
 	private String videoImgUrl ;
+	
+	@ApiModelProperty(value = "商家logo")
+	private String logoUrl;
 
 	public Long getId() {
 		return id;
@@ -68,6 +71,14 @@ public class AdPlatformVideoDTO {
 
 	public void setVideoImgUrl(String videoImgUrl) {
 		this.videoImgUrl = videoImgUrl;
+	}
+
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
 	}
 	
 	

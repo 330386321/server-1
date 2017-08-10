@@ -258,6 +258,7 @@ public class AdPlatformController extends BaseController {
         	dto.setName(adPlatformVideoBO.getName());
         	dto.setTitle(adPlatformVideoBO.getTitle());
         	dto.setVideoImgUrl(adPlatformVideoBO.getVideoImgUrl());
+        	dto.setLogoUrl(adPlatformVideoBO.getLogoUrl());
         	listDTOVideo.add(dto);
 		}
         AdPlatformVideoFlatDTO dto = new AdPlatformVideoFlatDTO();

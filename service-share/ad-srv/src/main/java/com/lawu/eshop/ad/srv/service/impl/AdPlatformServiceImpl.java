@@ -233,6 +233,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 				bo.setName(adPlatformVideoView.getName());
 				bo.setTitle(adPlatformVideoView.getTitle());
 				bo.setVideoImgUrl(adPlatformVideoView.getVideoImgUrl());
+				bo.setLogoUrl(adPlatformVideoView.getLogoUrl());
 				listVideo.add(bo);
 			}else if(adPlatformVideoView.getPosition()==PositionEnum.AD_POSITION_THREE.val){
 				if(listOneFlat.size()>1) continue;

@@ -16,6 +16,7 @@
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="media_url" jdbcType="VARCHAR" property="mediaUrl" />
     <result column="position" jdbcType="TINYINT" property="position" />
+    <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
   </resultMap>
   <!--广告位二  -->
   <select id="selAdPlatformPositionAd" resultMap="BaseResultAdTwoMap" parameterType="com.lawu.eshop.ad.srv.domain.extend.SelectAdPlatformPositionExample">
@@ -27,7 +28,8 @@
 		a.content AS content,
 		a.video_img_url as video_img_url ,
 		a.merchant_store_name as name,
-		a.media_url as media_url 
+		a.logo_url as logo_url,
+		a.media_url as media_url
 	FROM
 		ad_platform ap
 	LEFT JOIN ad a ON ap.ad_id = a.id

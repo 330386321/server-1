@@ -17,6 +17,8 @@ public class AdPlatformVideoView {
 	private String mediaUrl;
 	
 	private Byte position ;
+	
+	private String logoUrl;
 
 	public Long getId() {
 		return id;
@@ -80,6 +82,14 @@ public class AdPlatformVideoView {
 
 	public void setPosition(Byte position) {
 		this.position = position;
+	}
+
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
 	}
 
 	
