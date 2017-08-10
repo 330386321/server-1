@@ -1,11 +1,12 @@
 package com.lawu.eshop.mall.dto;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.mall.constants.MessageStatusReturnEnum;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
-import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 信息返回
@@ -48,6 +49,9 @@ public class MessageDTO {
 
     @ApiModelProperty(name = "relateId",value = "关联商家ID")
     private Long relateId;
+
+    @ApiModelProperty(value = "时间")
+    private String createTime;
 
     public Long getId() {
         return id;
@@ -103,5 +107,13 @@ public class MessageDTO {
 
     public void setRelateId(Long relateId) {
         this.relateId = relateId;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }
