@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.service;
 
 import java.util.List;
 
+import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.user.param.EFriendQueryDataParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -91,7 +92,7 @@ public interface MemberService {
      * @date 2017/03/23
      */
     @RequestMapping(method = RequestMethod.POST, value = "findMemberListByUser")
-    Result<Page<EfriendDTO>> findMemberListByUser(@RequestParam("userId") Long id, @RequestBody MemberQuery query,@RequestParam("inviterType") Byte inviterType);
+    Result<Page<EfriendDTO>> findMemberListByUser(@RequestParam("userId") Long id, @RequestBody MemberQuery query, @RequestParam("inviterType") Byte inviterType);
 
     /**
      * 会员注册
@@ -132,37 +133,39 @@ public interface MemberService {
 
     /**
      * 增加推送、融云 CID，token
+     *
      * @param id
      * @param cid
      * @return
      */
-    @RequestMapping(value = "setGtAndRongYunInfo/{id}",method = RequestMethod.PUT)
-    Result setGtAndRongYunInfo(@PathVariable("id") Long id,@RequestParam("cid") String cid);
+    @RequestMapping(value = "setGtAndRongYunInfo/{id}", method = RequestMethod.PUT)
+    Result setGtAndRongYunInfo(@PathVariable("id") Long id, @RequestParam("cid") String cid);
 
-	/**
-	 * 创建商品订单需要添加用户的一些信息
-	 * 
-	 * @param id
-	 *            用户id
-	 * @return
-	 */
-	@RequestMapping(value = "getMemberInfoForShoppingOrder/{id}", method = RequestMethod.GET)
-	Result<MemberInfoForShoppingOrderDTO> getMemberInfoForShoppingOrder(@PathVariable("id") Long id);
-	
-	/**
-	 * 查询用户信息
-	 * @param memberId
-	 * @return
-	 */
-	@RequestMapping(method = RequestMethod.GET, value = "findMember/{memberId}")
+    /**
+     * 创建商品订单需要添加用户的一些信息
+     *
+     * @param id 用户id
+     * @return
+     */
+    @RequestMapping(value = "getMemberInfoForShoppingOrder/{id}", method = RequestMethod.GET)
+    Result<MemberInfoForShoppingOrderDTO> getMemberInfoForShoppingOrder(@PathVariable("id") Long id);
+
+    /**
+     * 查询用户信息
+     *
+     * @param memberId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "findMember/{memberId}")
     Result<MemberDTO> findMemberInfoById(@PathVariable("memberId") Long memberId);
-	
-	/**
-	 * 查询用户是否注册
-	 * @param moblie
-	 * @return
-	 */
-	@RequestMapping(value = "isRegister", method = RequestMethod.GET)
+
+    /**
+     * 查询用户是否注册
+     *
+     * @param moblie
+     * @return
+     */
+    @RequestMapping(value = "isRegister", method = RequestMethod.GET)
     Result<UserRedPacketDTO> isRegister(@RequestParam("moblie") String moblie);
 
     /**
@@ -173,9 +176,10 @@ public interface MemberService {
      */
     @RequestMapping(value = "getRongYunInfo/{num}", method = RequestMethod.GET)
     Result<RongYunDTO> getRongYunInfoByNum(@PathVariable("num") String num);
-    
+
     /**
      * 判断手机号是否存在
+     *
      * @param mobile
      * @return
      */
@@ -184,18 +188,19 @@ public interface MemberService {
 
     @RequestMapping(value = "delUserGtPush", method = RequestMethod.PUT)
     Result delUserGtPush(@RequestParam("memberId") Long memberId);
-    
+
     /**
      * 广告top3排行榜
+     *
      * @param memberIds
      * @return
      */
     @RequestMapping(value = "getMemberByIds", method = RequestMethod.GET)
-   	Result<List<MemberDTO>> getMemberByIds(@RequestParam("memberIds") List<Long> memberIds);
-    
+    Result<List<MemberDTO>> getMemberByIds(@RequestParam("memberIds") List<Long> memberIds);
+
     /**
      * 返回我的页面所需要的资料
-     * 
+     *
      * @param memberId
      * @return
      * @author Sunny
@@ -203,16 +208,24 @@ public interface MemberService {
      */
     @RequestMapping(value = "findMemberMineInfo/{memberId}", method = RequestMethod.GET)
     Result<MemberMineInfoDTO> findMemberMineInfo(@PathVariable("memberId") Long memberId);
-    
-	/**
-	 * 查询广告所需要的用户信息
-	 * 
-	 * @return
-	 * @author jiangxinjun
-	 * @date 2017年7月18日
-	 */
-	@RequestMapping(value = "adQueryMemberInfo/{memberId}", method = RequestMethod.GET)
-	Result<AdQueryMemberInfoDTO> adQueryMemberInfo(@PathVariable("memberId") Long memberId);
+
+    /**
+     * 查询广告所需要的用户信息
+     *
+     * @return
+     * @author jiangxinjun
+     * @date 2017年7月18日
+     */
+    @RequestMapping(value = "adQueryMemberInfo/{memberId}", method = RequestMethod.GET)
+    Result<AdQueryMemberInfoDTO> adQueryMemberInfo(@PathVariable("memberId") Long memberId);
+
+    /**
+     * 根据用户编号获取用户账号和区域路径
+     * @param userNum
+     * @return
+     */
+    @RequestMapping(value = "findUserAccountAndRegionPathByNum", method = RequestMethod.GET)
+    VisitUserInfoDTO findUserAccountAndRegionPathByNum(@RequestParam("userNum") String userNum);
 
 
 }

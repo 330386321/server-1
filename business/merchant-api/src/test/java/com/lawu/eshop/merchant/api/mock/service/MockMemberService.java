@@ -7,6 +7,7 @@ import com.lawu.eshop.merchant.api.service.MemberService;
 import com.lawu.eshop.user.dto.EfriendDTO;
 import com.lawu.eshop.user.dto.RongYunDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.user.param.MemberQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,5 +42,13 @@ public class MockMemberService extends BaseController implements MemberService {
     @Override
     public Result<RongYunDTO> getRongYunInfoByNum(@PathVariable("num") String num) {
         return successGet();
+    }
+
+    @Override
+    public VisitUserInfoDTO findUserAccountAndRegionPathByNum(@PathVariable("userNum") String userNum) {
+        VisitUserInfoDTO dto = new VisitUserInfoDTO();
+        dto.setAccount("11111111111111");
+        dto.setRegionPath("1/11/111");
+        return dto;
     }
 }

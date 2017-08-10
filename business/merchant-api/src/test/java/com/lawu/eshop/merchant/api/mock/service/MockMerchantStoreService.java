@@ -8,6 +8,7 @@ import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreAdInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import org.springframework.stereotype.Service;
@@ -95,5 +96,13 @@ public class MockMerchantStoreService extends BaseController implements Merchant
     @Override
     public Result updateKeywordsById(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestParam("keywords") String keywords) {
         return successCreated();
+    }
+
+    @Override
+    public VisitUserInfoDTO findAccountAndRegionPathByNum(@PathVariable("merchantNum") String merchantNum) {
+        VisitUserInfoDTO dto = new VisitUserInfoDTO();
+        dto.setAccount("11111111111111");
+        dto.setRegionPath("1/11/111");
+        return dto;
     }
 }

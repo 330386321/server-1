@@ -6,6 +6,7 @@ import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreAdInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -147,4 +148,11 @@ public interface MerchantStoreService {
     @RequestMapping(value = "merchantStore/updateKeywordsById/{id}", method = RequestMethod.PUT)
     Result updateKeywordsById(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestParam("keywords") String keywords);
 
+    /**
+     * 根据商家编号获取商家账号和区域路径
+     * @param merchantNum
+     * @return
+     */
+    @RequestMapping(value = "merchantStore/findAccountAndRegionPathByNum", method = RequestMethod.GET)
+    VisitUserInfoDTO findAccountAndRegionPathByNum(@RequestParam("merchantNum") String merchantNum);
 }

@@ -70,6 +70,13 @@ public class RechargeServiceImpl implements RechargeService {
         recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
         recharge.setRechargeNumber(StringUtil.getRandomNum(""));
         recharge.setGmtCreate(new Date());
+        //保存省市区用于代理商区域统计
+        if(param.getRegionPath() != null && !"".equals(param.getRegionPath())){
+            String[] regions = param.getRegionPath().split("/");
+            recharge.setProvinceId(regions.length > 0 ? Integer.valueOf(regions[0]) : 0);
+            recharge.setCityId(regions.length > 1 ? Integer.valueOf(regions[1]) : 0);
+            recharge.setAreaId(regions.length > 2 ? Integer.valueOf(regions[2]) : 0);
+        }
         rechargeDOMapper.insertSelective(recharge);
 
         if (recharge.getId() == null) {

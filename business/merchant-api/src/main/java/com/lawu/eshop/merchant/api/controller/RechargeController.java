@@ -1,6 +1,8 @@
 package com.lawu.eshop.merchant.api.controller;
 
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.merchant.api.service.MerchantStoreService;
+import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -40,6 +42,8 @@ public class RechargeController extends BaseController {
 
 	@Autowired
 	private RechargeService rechargeService;
+	@Autowired
+	private MerchantStoreService merchantStoreService;
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
@@ -54,6 +58,8 @@ public class RechargeController extends BaseController {
 		dparam.setPayTypeEnum(param.getPayTypeEnum());
 		dparam.setTransactionPayTypeEnum(param.getTransactionPayTypeEnum());
 		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		VisitUserInfoDTO visitUserInfoDTO = merchantStoreService.findAccountAndRegionPathByNum(UserUtil.getCurrentUserNum(getRequest()));
+		dparam.setRegionPath(visitUserInfoDTO.getRegionPath());
 		if(TransactionPayTypeEnum.BALANCE.getVal().equals(param.getTransactionPayTypeEnum().getVal())
 				&& (param.getPayPwd() == null || "".equals(param.getPayPwd()) )){
 			return successCreated(ResultCode.PAY_PWD_NULL);

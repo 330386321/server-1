@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.EfriendDTO;
 import com.lawu.eshop.user.dto.RongYunDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.user.param.MemberQuery;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -51,4 +52,12 @@ public interface MemberService {
      */
     @RequestMapping(value = "member/getRongYunInfo/{num}", method = RequestMethod.GET)
     Result<RongYunDTO> getRongYunInfoByNum(@PathVariable("num") String num);
+
+    /**
+     * 根据用户编号获取用户账号和区域路径
+     * @param userNum
+     * @return
+     */
+    @RequestMapping(value = "findUserAccountAndRegionPathByNum", method = RequestMethod.GET)
+    VisitUserInfoDTO findUserAccountAndRegionPathByNum(@PathVariable("userNum") String userNum);
 }

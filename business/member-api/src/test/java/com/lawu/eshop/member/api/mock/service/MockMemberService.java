@@ -166,4 +166,12 @@ public class MockMemberService extends BaseController implements MemberService {
         dto.setFansList(list);
         return successCreated(dto);
     }
+
+    @Override
+    public VisitUserInfoDTO findUserAccountAndRegionPathByNum(@PathVariable("userNum") String userNum) {
+        VisitUserInfoDTO dto = new VisitUserInfoDTO();
+        dto.setRegionPath("1/11/11");
+        dto.setAccount("17512036361");
+        return dto;
+    }
 }

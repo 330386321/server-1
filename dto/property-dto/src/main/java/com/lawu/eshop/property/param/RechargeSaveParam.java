@@ -36,7 +36,7 @@ public class RechargeSaveParam {
 
 	@ApiParam (name="payPwd",value = "支付密码(余额充值积分时必填)")
 	private String payPwd;
-	
+
 	public String getRechargeMoney() {
 		return rechargeMoney;
 	}

@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.param;
 
+import io.swagger.annotations.ApiParam;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -17,6 +18,9 @@ public class RechargeSaveDataParam extends RechargeSaveParam{
 	private String userNum;
 	
 	private String rechargeScale;
+
+	//充值账户省/市/区ID，非必填
+	private String regionPath;
 	
 	public String getUserNum() {
 		return userNum;
@@ -34,6 +38,11 @@ public class RechargeSaveDataParam extends RechargeSaveParam{
 		this.rechargeScale = rechargeScale;
 	}
 
-	
+	public String getRegionPath() {
+		return regionPath;
+	}
 
+	public void setRegionPath(String regionPath) {
+		this.regionPath = regionPath;
+	}
 }
