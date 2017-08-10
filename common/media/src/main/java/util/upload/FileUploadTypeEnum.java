@@ -2,7 +2,7 @@ package util.upload;
 
 
 public enum FileUploadTypeEnum {
-	IMG("img", "图片"), 
+	IMG("IMG", "图片"),
 	VIDEO("VIDEO", "视频"), 
 	OTHER("OTHER", "其他");
 
@@ -33,7 +33,7 @@ public enum FileUploadTypeEnum {
 	public static FileUploadTypeEnum getEnum(String val) {
 		FileUploadTypeEnum[] values = FileUploadTypeEnum.values();
 		for (FileUploadTypeEnum object : values) {
-			if (object.val == val) {
+			if (object.val.equals(val)){
 				return object;
 			}
 		}
