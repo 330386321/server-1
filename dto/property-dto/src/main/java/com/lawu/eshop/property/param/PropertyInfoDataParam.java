@@ -18,28 +18,31 @@ import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
  */
 public class PropertyInfoDataParam {
 
-	// 用户编号-api传入
-	@NotBlank(message = "userNum不能为空")
-	private String userNum;
-	
-	//积分
-	@NotBlank(message = "point不能为空")
-	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "point格式错误或小数位不超过2位")
-	private String point;
-	
-	//业务类型：根据业务需要传，如果是会员业务传memberTransactionTypeEnum
-	private MemberTransactionTypeEnum memberTransactionTypeEnum;
-	
-	//业务类型：根据业务需要传，如果是商家业务传merchantTransactionTypeEnum
-	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
-	
-	private String bizId;
-	
-	private String tempBizId;
+    // 用户编号-api传入
+    @NotBlank(message = "userNum不能为空")
+    private String userNum;
 
-	//爱心账户类型
-	private LoveTypeEnum loveTypeEnum;
-	
+    //积分
+    @NotBlank(message = "point不能为空")
+    @Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "point格式错误或小数位不超过2位")
+    private String point;
+
+    //业务类型：根据业务需要传，如果是会员业务传memberTransactionTypeEnum
+    private MemberTransactionTypeEnum memberTransactionTypeEnum;
+
+    //业务类型：根据业务需要传，如果是商家业务传merchantTransactionTypeEnum
+    private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
+
+    private String bizId;
+
+    private String tempBizId;
+
+    //省市区ID
+    private String regionPath;
+
+    //爱心账户类型
+    private LoveTypeEnum loveTypeEnum;
+
     //商家ID(邀请粉丝添加邀请记录参数)
     private Long merchantId;
 
@@ -56,14 +59,14 @@ public class PropertyInfoDataParam {
     private String age;
 
     public String getTempBizId() {
-		return tempBizId;
-	}
+        return tempBizId;
+    }
 
-	public void setTempBizId(String tempBizId) {
-		this.tempBizId = tempBizId;
-	}
+    public void setTempBizId(String tempBizId) {
+        this.tempBizId = tempBizId;
+    }
 
-	public String getUserNum() {
+    public String getUserNum() {
         return userNum;
     }
 
@@ -76,14 +79,14 @@ public class PropertyInfoDataParam {
     }
 
     public String getBizId() {
-		return bizId;
-	}
+        return bizId;
+    }
 
-	public void setBizId(String bizId) {
-		this.bizId = bizId;
-	}
+    public void setBizId(String bizId) {
+        this.bizId = bizId;
+    }
 
-	public void setPoint(String point) {
+    public void setPoint(String point) {
         this.point = point;
     }
 
@@ -104,14 +107,14 @@ public class PropertyInfoDataParam {
     }
 
     public LoveTypeEnum getLoveTypeEnum() {
-		return loveTypeEnum;
-	}
+        return loveTypeEnum;
+    }
 
-	public void setLoveTypeEnum(LoveTypeEnum loveTypeEnum) {
-		this.loveTypeEnum = loveTypeEnum;
-	}
+    public void setLoveTypeEnum(LoveTypeEnum loveTypeEnum) {
+        this.loveTypeEnum = loveTypeEnum;
+    }
 
-	public Long getMerchantId() {
+    public Long getMerchantId() {
         return merchantId;
     }
 
@@ -149,5 +152,13 @@ public class PropertyInfoDataParam {
 
     public void setAge(String age) {
         this.age = age;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
     }
 }

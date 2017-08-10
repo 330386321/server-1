@@ -33,7 +33,7 @@ public interface RechargeService {
 
 	/**
 	 * 获取需要充值的金额
-	 * @param bizIds
+	 * @param rechargeId
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "recharge/getRechargeMoney")

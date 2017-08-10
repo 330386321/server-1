@@ -35,6 +35,9 @@ public class OrderSysJobParam {
 	@NotBlank(message = "orderActualMoney不能为空")
 	private String orderActualMoney;
 
+	//商家门店省/市/区ID,多个以英文逗号分隔
+	private String regionPaths;
+
 	public String getUserNums() {
 		return userNums;
 	}
@@ -75,4 +78,11 @@ public class OrderSysJobParam {
 		this.orderActualMoney = orderActualMoney;
 	}
 
+	public String getRegionPaths() {
+		return regionPaths;
+	}
+
+	public void setRegionPaths(String regionPaths) {
+		this.regionPaths = regionPaths;
+	}
 }

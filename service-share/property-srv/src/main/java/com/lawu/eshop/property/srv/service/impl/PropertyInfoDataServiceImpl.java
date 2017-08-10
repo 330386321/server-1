@@ -86,6 +86,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
 		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
 		pointDetailSaveDataParam.setBizId(param.getBizId());
+		pointDetailSaveDataParam.setRegionPath(param.getRegionPath());
 		pointDetailService.save(pointDetailSaveDataParam);
 
 		// 更新用户资产

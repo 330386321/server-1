@@ -51,6 +51,8 @@ public class PointDetailSaveDataParam implements Serializable {
 	
 	private String bizId;
 
+	private String regionPath;
+
 	public String getBizId() {
 		return bizId;
 	}
@@ -115,4 +117,11 @@ public class PointDetailSaveDataParam implements Serializable {
 		this.direction = direction;
 	}
 
+	public String getRegionPath() {
+		return regionPath;
+	}
+
+	public void setRegionPath(String regionPath) {
+		this.regionPath = regionPath;
+	}
 }

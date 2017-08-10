@@ -158,6 +158,7 @@ public class OrderServiceImpl implements OrderService {
         tdsParam1.setThirdTransactionNum(param.getTradeNo());
         tdsParam1.setDirection(PropertyInfoDirectionEnum.IN.getVal());
         tdsParam.setBizNum(param.getOutTradeNo());
+        tdsParam1.setRegionPath(param.getRegionPath());
         transactionDetailService.save(tdsParam1);
 
         // 加商家财产余额
@@ -372,6 +373,7 @@ public class OrderServiceImpl implements OrderService {
     public int comfirmReleaseFreeze(OrderReleaseFreezeParam param) {
         String[] userNums = param.getUserNums().split(",");
         String[] orderIds = param.getOrderIds().split(",");
+        String[] regionPaths = param.getRegionPaths().split(",");
         Byte[] payWays = param.getPayWays();
         FreezeDOExample example = new FreezeDOExample();
         List<String> finishOrderIds = new ArrayList<String>();//成功处理的订单ID
@@ -394,6 +396,7 @@ public class OrderServiceImpl implements OrderService {
                 tdsParam.setAmount(freeze.getMoney());
                 tdsParam.setBizId(orderIds[i]);
                 tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
+                tdsParam.setRegionPath(regionPaths[i]);
                 transactionDetailService.save(tdsParam);
 
                 // 释放冻结资金
@@ -423,6 +426,7 @@ public class OrderServiceImpl implements OrderService {
     public int comfirmSysJob(OrderSysJobParam param) {
         String[] userNums = param.getUserNums().split(",");
         String[] orderIds = param.getOrderIds().split(",");
+        String[] regionPaths = param.getRegionPaths().split(",");
         Byte[] payWays = param.getPayWays();
         String[] orderActualMoneys = param.getOrderActualMoney().split(",");
         for (int i = 0; i < userNums.length; i++) {
@@ -435,6 +439,7 @@ public class OrderServiceImpl implements OrderService {
             tdsParam.setAmount(new BigDecimal(orderActualMoneys[i]));
             tdsParam.setBizId(orderIds[i]);
             tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
+            tdsParam.setRegionPath(regionPaths[i]);
             transactionDetailService.save(tdsParam);
 
             // 加商家财产余额

@@ -189,6 +189,7 @@ public class AlipayNotifyController extends BaseController {
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
 						ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
 						if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), dTotalMoney) == 0) {
+							param.setRegionPath(extra[6]);
 							result = orderService.doHandlePayOrderNotify(param);
 						} else {
 							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);

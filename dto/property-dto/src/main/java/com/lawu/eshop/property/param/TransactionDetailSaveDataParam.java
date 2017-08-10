@@ -76,6 +76,9 @@ public class TransactionDetailSaveDataParam implements Serializable {
 	
 	private String bizNum;
 
+	//省市区ID
+	private String regionPath;
+
 	public String getTitle() {
 		return title;
 	}
@@ -186,5 +189,13 @@ public class TransactionDetailSaveDataParam implements Serializable {
 
 	public void setPreviousAmount(BigDecimal previousAmount) {
 		this.previousAmount = previousAmount;
+	}
+
+	public String getRegionPath() {
+		return regionPath;
+	}
+
+	public void setRegionPath(String regionPath) {
+		this.regionPath = regionPath;
 	}
 }

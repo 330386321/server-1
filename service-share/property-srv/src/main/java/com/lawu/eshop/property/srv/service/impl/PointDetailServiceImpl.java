@@ -102,6 +102,13 @@ public class PointDetailServiceImpl implements PointDetailService {
 		pointDetailDO.setRemark(param.getRemark());
 		pointDetailDO.setGmtCreate(new Date());
 		pointDetailDO.setPreviousPoint((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getPoint());
+		//保存省市区用于代理商区域统计
+		if(param.getRegionPath() != null && !"".equals(param.getRegionPath())){
+			String[] regions = param.getRegionPath().split("/");
+			pointDetailDO.setProvinceId(regions.length > 0 ? Integer.valueOf(regions[0]) : 0);
+			pointDetailDO.setCityId(regions.length > 1 ? Integer.valueOf(regions[1]) : 0);
+			pointDetailDO.setAreaId(regions.length > 2 ? Integer.valueOf(regions[2]) : 0);
+		}
 		pointDetailDOMapper.insertSelective(pointDetailDO);
 		return ResultCode.SUCCESS;
 	}

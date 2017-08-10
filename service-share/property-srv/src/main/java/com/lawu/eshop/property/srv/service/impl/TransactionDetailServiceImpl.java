@@ -148,6 +148,13 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		}else{
 			transactionDetailDO.setPreviousAmount(param.getPreviousAmount());
 		}
+		//保存省市区用于代理商区域统计
+		if(param.getRegionPath() != null && !"".equals(param.getRegionPath())){
+			String[] regions = param.getRegionPath().split("/");
+			transactionDetailDO.setProvinceId(regions.length > 0 ? Integer.valueOf(regions[0]) : 0);
+			transactionDetailDO.setCityId(regions.length > 1 ? Integer.valueOf(regions[1]) : 0);
+			transactionDetailDO.setAreaId(regions.length > 2 ? Integer.valueOf(regions[2]) : 0);
+		}
 		transactionDetailDO.setTitle(param.getTitle());
 		transactionDetailDO.setTransactionNum(StringUtil.getRandomNum(""));
 		transactionDetailDO.setUserNum(param.getUserNum());

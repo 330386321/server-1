@@ -45,6 +45,9 @@ public class NotifyCallBackParam {
 	
 	//商家缴纳保证金时需要回调发送消息改门店状态（事务）
 	private Long merchantId;
+
+	//用于代理商系统预期统计买单
+	private String regionPath;
 	
 	public Long getMerchantId() {
 		return merchantId;
@@ -113,5 +116,12 @@ public class NotifyCallBackParam {
 	public void setSideUserNum(String sideUserNum) {
 		this.sideUserNum = sideUserNum;
 	}
-	
+
+	public String getRegionPath() {
+		return regionPath;
+	}
+
+	public void setRegionPath(String regionPath) {
+		this.regionPath = regionPath;
+	}
 }

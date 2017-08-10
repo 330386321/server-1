@@ -28,125 +28,123 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * 
  * <p>
  * Description:
  * </p>
- * 
+ *
  * @author Yangqh
  * @date 2017年4月7日 下午8:00:00
- *
  */
 @RestController
 @RequestMapping(value = "wxPay/")
 public class WxPayController extends BaseController {
 
-	private static Logger logger = LoggerFactory.getLogger(WxPayController.class);
+    private static Logger logger = LoggerFactory.getLogger(WxPayController.class);
 
-	public static final String split = "|";
-	public static final String splitStr = "\\|";
+    public static final String split = "|";
+    public static final String splitStr = "\\|";
 
-	@Autowired
-	private PropertySrvConfig propertySrvConfig;
+    @Autowired
+    private PropertySrvConfig propertySrvConfig;
 
-	/**
-	 * app和PC获取预支付订单返回的信息 1、app端通过后台服务获取prepay_id、pc获取预支付订单二维码 2、组装app调用支付接口参数
-	 * 
-	 * @param param
-	 * @return
-	 * @throws IOException
-	 * @throws JDOMException
-	 */
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "getPrepayInfo", method = RequestMethod.POST)
-	public Result getPrepayInfo(@RequestBody @Valid ThirdPayDataParam param, BindingResult result)
-			throws JDOMException, IOException {
+    /**
+     * app和PC获取预支付订单返回的信息 1、app端通过后台服务获取prepay_id、pc获取预支付订单二维码 2、组装app调用支付接口参数
+     *
+     * @param param
+     * @return
+     * @throws IOException
+     * @throws JDOMException
+     */
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "getPrepayInfo", method = RequestMethod.POST)
+    public Result getPrepayInfo(@RequestBody @Valid ThirdPayDataParam param, BindingResult result)
+            throws JDOMException, IOException {
 
-		String message = validate(result);
-    	if (message != null) {
-    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
-    	}
+        String message = validate(result);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
 
-		String key = propertySrvConfig.getWxpayKeyApp();
-		SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
-		packageParams.put("trade_type", "APP");
-		packageParams.put("notify_url", propertySrvConfig.getWxpayNotifyUrl());
-		if (UserTypeEnum.MEMBER.getVal() == param.getUserTypeEnum().getVal()) {
-			packageParams.put("appid", propertySrvConfig.getWxpayAppIdMember());
-			packageParams.put("mch_id", propertySrvConfig.getWxpayMchIdMember());
-		} else if (UserTypeEnum.MEMCHANT.getVal() == param.getUserTypeEnum().getVal()) {
-			packageParams.put("appid", propertySrvConfig.getWxpayAppIdBusiness());
-			packageParams.put("mch_id", propertySrvConfig.getWxpayMchIdBusiness());
-		} else if (UserTypeEnum.MEMCHANT_PC.getVal() == param.getUserTypeEnum().getVal()) {
-			packageParams.put("appid", propertySrvConfig.getWxpayAppId());
-			packageParams.put("mch_id", propertySrvConfig.getWxpayMchId());
-			packageParams.put("trade_type", "NATIVE");
-			packageParams.put("notify_url", propertySrvConfig.getWxpayNotifyUrlPc());
-			key = propertySrvConfig.getWxpayKey();
-		}
-		packageParams.put("nonce_str", RandomStringGenerator.getRandomStringByLength(32));
-		packageParams.put("body", param.getThirdPayBodyEnum().getVal());
-		packageParams.put("out_trade_no", param.getOutTradeNo());
-		String totalFee = new BigDecimal(param.getTotalAmount()).multiply(new BigDecimal("100")).toString();
-		if(totalFee.indexOf('.') > 0){
-			totalFee = totalFee.substring(0,totalFee.indexOf('.'));
-		}
-		packageParams.put("total_fee", totalFee);
-		packageParams.put("spbill_create_ip", propertySrvConfig.getWxpayIp());
-		packageParams.put("attach", param.getBizFlagEnum().getVal() + split + param.getUserNum() + split
-				+ param.getThirdPayBodyEnum().getVal() + split + param.getBizIds() + split + param.getSideUserNum() + split + param.getMerchantId());
+        String key = propertySrvConfig.getWxpayKeyApp();
+        SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
+        packageParams.put("trade_type", "APP");
+        packageParams.put("notify_url", propertySrvConfig.getWxpayNotifyUrl());
+        if (UserTypeEnum.MEMBER.getVal() == param.getUserTypeEnum().getVal()) {
+            packageParams.put("appid", propertySrvConfig.getWxpayAppIdMember());
+            packageParams.put("mch_id", propertySrvConfig.getWxpayMchIdMember());
+        } else if (UserTypeEnum.MEMCHANT.getVal() == param.getUserTypeEnum().getVal()) {
+            packageParams.put("appid", propertySrvConfig.getWxpayAppIdBusiness());
+            packageParams.put("mch_id", propertySrvConfig.getWxpayMchIdBusiness());
+        } else if (UserTypeEnum.MEMCHANT_PC.getVal() == param.getUserTypeEnum().getVal()) {
+            packageParams.put("appid", propertySrvConfig.getWxpayAppId());
+            packageParams.put("mch_id", propertySrvConfig.getWxpayMchId());
+            packageParams.put("trade_type", "NATIVE");
+            packageParams.put("notify_url", propertySrvConfig.getWxpayNotifyUrlPc());
+            key = propertySrvConfig.getWxpayKey();
+        }
+        packageParams.put("nonce_str", RandomStringGenerator.getRandomStringByLength(32));
+        packageParams.put("body", param.getThirdPayBodyEnum().getVal());
+        packageParams.put("out_trade_no", param.getOutTradeNo());
+        String totalFee = new BigDecimal(param.getTotalAmount()).multiply(new BigDecimal("100")).toString();
+        if (totalFee.indexOf('.') > 0) {
+            totalFee = totalFee.substring(0, totalFee.indexOf('.'));
+        }
+        packageParams.put("total_fee", totalFee);
+        packageParams.put("spbill_create_ip", propertySrvConfig.getWxpayIp());
+        packageParams.put("attach", param.getBizFlagEnum().getVal() + split + param.getUserNum() + split
+                + param.getThirdPayBodyEnum().getVal() + split + param.getBizIds() + split + param.getSideUserNum() + split + param.getMerchantId() + split + param.getRegionPath());
 
-		String sign = PayCommonUtil.createSign("UTF-8", packageParams, key);
-		packageParams.put("sign", sign);
+        String sign = PayCommonUtil.createSign("UTF-8", packageParams, key);
+        packageParams.put("sign", sign);
 
-		String requestXML = PayCommonUtil.getRequestXml(packageParams);
+        String requestXML = PayCommonUtil.getRequestXml(packageParams);
 
-		String resXml = HttpUtil.postData(propertySrvConfig.getWxpayNativePayApi(), requestXML);
-		Map map = XMLUtil.doXMLParse(resXml);
+        String resXml = HttpUtil.postData(propertySrvConfig.getWxpayNativePayApi(), requestXML);
+        Map map = XMLUtil.doXMLParse(resXml);
 
-		String return_code = map.get("return_code") == null ? "" : map.get("return_code").toString();
-		if ("FAIL".equals(return_code)) {
-			String return_msg = map.get("return_msg") == null ? "" : map.get("return_msg").toString();
-			logger.error("微信支付预支付订单失败，return_code={},return_msg={}", return_code, return_msg);
-			return successCreated(ResultCode.FAIL, return_code + ":" + return_msg);
+        String return_code = map.get("return_code") == null ? "" : map.get("return_code").toString();
+        if ("FAIL".equals(return_code)) {
+            String return_msg = map.get("return_msg") == null ? "" : map.get("return_msg").toString();
+            logger.error("微信支付预支付订单失败，return_code={},return_msg={}", return_code, return_msg);
+            return successCreated(ResultCode.FAIL, return_code + ":" + return_msg);
 
-		} else {
-			String result_code = map.get("result_code") == null ? "" : map.get("result_code").toString();
-			if ("FAIL".equals(result_code)) {
-				String err_code = map.get("err_code") == null ? "" : map.get("err_code").toString();
-				String err_code_des = map.get("err_code_des") == null ? "" : map.get("err_code_des").toString();
-				logger.error("微信支付预支付订单失败，result_code={},err_code={},err_code_des={}", result_code, err_code,
-						err_code_des);
-				return successCreated(ResultCode.FAIL, err_code + ":" + err_code_des);
+        } else {
+            String result_code = map.get("result_code") == null ? "" : map.get("result_code").toString();
+            if ("FAIL".equals(result_code)) {
+                String err_code = map.get("err_code") == null ? "" : map.get("err_code").toString();
+                String err_code_des = map.get("err_code_des") == null ? "" : map.get("err_code_des").toString();
+                logger.error("微信支付预支付订单失败，result_code={},err_code={},err_code_des={}", result_code, err_code,
+                        err_code_des);
+                return successCreated(ResultCode.FAIL, err_code + ":" + err_code_des);
 
-			} else {
-				if (UserTypeEnum.MEMCHANT_PC.getVal() == param.getUserTypeEnum().getVal()) {
-					String code_url = map.get("code_url") == null ? "" : map.get("code_url").toString();
-					packageParams.clear();
-					packageParams.put("codeUrl", code_url);
+            } else {
+                if (UserTypeEnum.MEMCHANT_PC.getVal() == param.getUserTypeEnum().getVal()) {
+                    String code_url = map.get("code_url") == null ? "" : map.get("code_url").toString();
+                    packageParams.clear();
+                    packageParams.put("codeUrl", code_url);
 
-				} else {
-					String prepay_id = map.get("prepay_id") == null ? "" : map.get("prepay_id").toString();
-					packageParams.clear();
-					if (UserTypeEnum.MEMBER.getVal() == param.getUserTypeEnum().getVal()) {
-						packageParams.put("appid", propertySrvConfig.getWxpayAppIdMember());
-						packageParams.put("partnerid", propertySrvConfig.getWxpayMchIdMember());
-					} else if (UserTypeEnum.MEMCHANT.getVal() == param.getUserTypeEnum().getVal()) {
-						packageParams.put("appid", propertySrvConfig.getWxpayAppIdBusiness());
-						packageParams.put("partnerid", propertySrvConfig.getWxpayMchIdBusiness());
-					}
-					packageParams.put("prepayid", prepay_id);
-					packageParams.put("package", "Sign=WXPay");
-					packageParams.put("noncestr", RandomStringGenerator.getRandomStringByLength(32));
-					String timestamp = String.valueOf(System.currentTimeMillis());
-					packageParams.put("timestamp", timestamp.substring(0, 10));
-					sign = PayCommonUtil.createSign("UTF-8", packageParams, key);
-					packageParams.put("sign", sign);
-				}
+                } else {
+                    String prepay_id = map.get("prepay_id") == null ? "" : map.get("prepay_id").toString();
+                    packageParams.clear();
+                    if (UserTypeEnum.MEMBER.getVal() == param.getUserTypeEnum().getVal()) {
+                        packageParams.put("appid", propertySrvConfig.getWxpayAppIdMember());
+                        packageParams.put("partnerid", propertySrvConfig.getWxpayMchIdMember());
+                    } else if (UserTypeEnum.MEMCHANT.getVal() == param.getUserTypeEnum().getVal()) {
+                        packageParams.put("appid", propertySrvConfig.getWxpayAppIdBusiness());
+                        packageParams.put("partnerid", propertySrvConfig.getWxpayMchIdBusiness());
+                    }
+                    packageParams.put("prepayid", prepay_id);
+                    packageParams.put("package", "Sign=WXPay");
+                    packageParams.put("noncestr", RandomStringGenerator.getRandomStringByLength(32));
+                    String timestamp = String.valueOf(System.currentTimeMillis());
+                    packageParams.put("timestamp", timestamp.substring(0, 10));
+                    sign = PayCommonUtil.createSign("UTF-8", packageParams, key);
+                    packageParams.put("sign", sign);
+                }
 
-			}
-		}
-		return successCreated(packageParams);
-	}
-	
+            }
+        }
+        return successCreated(packageParams);
+    }
+
 }

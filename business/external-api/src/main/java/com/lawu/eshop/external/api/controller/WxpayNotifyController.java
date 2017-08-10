@@ -44,320 +44,319 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 /**
- * 
  * <p>
  * Description: 微信第三方回调入口
  * </p>
- * 
+ *
  * @author Yangqh
  * @date 2017年4月13日 下午12:57:56
- *
  */
 @RestController
 @RequestMapping(value = "wxpay/")
 public class WxpayNotifyController extends BaseController {
 
-	private static Logger logger = LoggerFactory.getLogger(WxpayNotifyController.class);
+    private static Logger logger = LoggerFactory.getLogger(WxpayNotifyController.class);
 
-	public static final String splitStr = "\\|";
+    public static final String splitStr = "\\|";
 
-	@Autowired
-	private RechargeService rechargeService;
-	@Autowired
-	private OrderService orderService;
-	@Autowired
-	private DepositService depositService;
-	@Autowired
-	private ExternalApiConfig externalApiConfig;
-	@Autowired
-	private MessageService messageService;
-	@Autowired
-	private PayOrderService payOrderService;
-	@Autowired
-	private PropertySrvService propertyService;
+    @Autowired
+    private RechargeService rechargeService;
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    private DepositService depositService;
+    @Autowired
+    private ExternalApiConfig externalApiConfig;
+    @Autowired
+    private MessageService messageService;
+    @Autowired
+    private PayOrderService payOrderService;
+    @Autowired
+    private PropertySrvService propertyService;
 
-	/**
-	 * APP微信异步回调接口
-	 * 
-	 * @throws Exception
-	 */
-	@SuppressWarnings({ "rawtypes" })
-	@RequestMapping(value = "appNotifyHandle", method = RequestMethod.POST)
-	public void appNotifyHandle() throws Exception {
-		logger.info("#####################APP微信回调开始#####################");
-		HttpServletRequest request = getRequest();
-		HttpServletResponse response = getResponse();
-		Result result = successCreated();
+    /**
+     * APP微信异步回调接口
+     *
+     * @throws Exception
+     */
+    @SuppressWarnings({"rawtypes"})
+    @RequestMapping(value = "appNotifyHandle", method = RequestMethod.POST)
+    public void appNotifyHandle() throws Exception {
+        logger.info("#####################APP微信回调开始#####################");
+        HttpServletRequest request = getRequest();
+        HttpServletResponse response = getResponse();
+        Result result = successCreated();
 
-		boolean isSendMsg = false;
-		double dmoney = 0;
-		int bizFlagInt = 0;
-		String extra[] = null;
-		SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
-		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpayKeyApp())) {
-			String return_code = packageParams.get("return_code") == null ? "" : packageParams.get("return_code").toString();
-			if ("SUCCESS".equals(return_code)) {
-				String result_code = packageParams.get("result_code") == null ? "" : packageParams.get("result_code").toString();
-				if ("SUCCESS".equals(result_code)) {
-					String attach = packageParams.get("attach") == null ? "" : packageParams.get("attach").toString();
-					String transaction_id = packageParams.get("transaction_id") == null ? "" : packageParams.get("transaction_id").toString();
-					String total_fee = packageParams.get("total_fee") == null ? "" : packageParams.get("total_fee").toString();
-					String out_trade_no = packageParams.get("out_trade_no") == null ? "" : packageParams.get("out_trade_no").toString();
+        boolean isSendMsg = false;
+        double dmoney = 0;
+        int bizFlagInt = 0;
+        String extra[] = null;
+        SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
+        if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpayKeyApp())) {
+            String return_code = packageParams.get("return_code") == null ? "" : packageParams.get("return_code").toString();
+            if ("SUCCESS".equals(return_code)) {
+                String result_code = packageParams.get("result_code") == null ? "" : packageParams.get("result_code").toString();
+                if ("SUCCESS".equals(result_code)) {
+                    String attach = packageParams.get("attach") == null ? "" : packageParams.get("attach").toString();
+                    String transaction_id = packageParams.get("transaction_id") == null ? "" : packageParams.get("transaction_id").toString();
+                    String total_fee = packageParams.get("total_fee") == null ? "" : packageParams.get("total_fee").toString();
+                    String out_trade_no = packageParams.get("out_trade_no") == null ? "" : packageParams.get("out_trade_no").toString();
 
-					extra = attach.split(splitStr);
-					dmoney = Double.parseDouble(total_fee);
-					dmoney = dmoney / 100;
-					// 1-商家充值余额、2-商家充值积分、3-缴纳保证金、4-用户充值余额、5-用户充值积分、6-订单付款、7-买单
-					String bizFlag = extra[0];
-					NotifyCallBackParam param = new NotifyCallBackParam();
-					param.setBizFlag(bizFlag);
-					param.setUserNum(extra[1]);
-					param.setBody(extra[2]);
-					param.setBizIds(extra[3]);
-					param.setSideUserNum(extra[4]);
-					param.setTotalFee(String.valueOf(dmoney));
-					param.setOutTradeNo(out_trade_no);
-					param.setTradeNo(transaction_id);
-					param.setBuyerLogonId("回调没返回");
-					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.WX);
+                    extra = attach.split(splitStr);
+                    dmoney = Double.parseDouble(total_fee);
+                    dmoney = dmoney / 100;
+                    // 1-商家充值余额、2-商家充值积分、3-缴纳保证金、4-用户充值余额、5-用户充值积分、6-订单付款、7-买单
+                    String bizFlag = extra[0];
+                    NotifyCallBackParam param = new NotifyCallBackParam();
+                    param.setBizFlag(bizFlag);
+                    param.setUserNum(extra[1]);
+                    param.setBody(extra[2]);
+                    param.setBizIds(extra[3]);
+                    param.setSideUserNum(extra[4]);
+                    param.setTotalFee(String.valueOf(dmoney));
+                    param.setOutTradeNo(out_trade_no);
+                    param.setTradeNo(transaction_id);
+                    param.setBuyerLogonId("回调没返回");
+                    param.setTransactionPayTypeEnum(TransactionPayTypeEnum.WX);
 
-					bizFlagInt = Integer.parseInt(bizFlag);
-					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))
-							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))
-							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))
-							|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-						isSendMsg = true;
-						result = rechargeService.doHandleRechargeNotify(param);
-						
-					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-						param.setMerchantId(Long.valueOf(extra[5]));
-						result = depositService.doHandleDepositNotify(param);
-						
-					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-						Result<ShoppingOrderMoneyDTO> order = payOrderService.selectOrderMoney(param.getBizIds());
-						if (order == null || order.getModel() == null) {
-							result = successCreated(ResultCode.FAIL, "找不到订单:" + param.getBizIds());
-						} else {
-							double money = order.getModel().getOrderTotalPrice().doubleValue();
-							if (StringUtil.doubleCompareTo(money, dmoney) == 0) {
-								result = orderService.doHandleOrderPayNotify(param);
-							} else {
-								result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
-								result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
-							}
-						}
-					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-						ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
-								.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
-						if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), dmoney) == 0) {
-							result = orderService.doHandlePayOrderNotify(param);
-						} else {
-							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
-							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
-						}
-					} else {
-						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
-					}
+                    bizFlagInt = Integer.parseInt(bizFlag);
+                    if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))
+                            || ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))
+                            || ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))
+                            || ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                        isSendMsg = true;
+                        result = rechargeService.doHandleRechargeNotify(param);
 
-				} else {
+                    } else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                        param.setMerchantId(Long.valueOf(extra[5]));
+                        result = depositService.doHandleDepositNotify(param);
 
-					result = successCreated(ResultCode.FAIL, "APP端微信回调失败，return_code成功，但业务结果失败，err_code="
-							+ packageParams.get("err_code") + "，err_code_des=" + packageParams.get("err_code_des"));
-				}
-			} else {
-				result = successCreated(ResultCode.FAIL,
-						"APP端微信回调失败，返回代码return_code=" + return_code + "，return_msg=" + packageParams.get("return_msg"));
-			}
-		} else {
-			result = successCreated(ResultCode.FAIL, "APP微信回调验签失败！");
-		}
-		
-		//成功过处理或已处理过(重复处理)
-		if (ResultCode.SUCCESS == result.getRet() || ResultCode.PROCESSED_RETURN_SUCCESS == result.getRet()) {
-			logger.info("APP微信回调成功");
-			PrintWriter out = response.getWriter();
-			out.print("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");// 请不要修改或删除
-			out.flush();
-			out.close();
+                    } else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                        Result<ShoppingOrderMoneyDTO> order = payOrderService.selectOrderMoney(param.getBizIds());
+                        if (order == null || order.getModel() == null) {
+                            result = successCreated(ResultCode.FAIL, "找不到订单:" + param.getBizIds());
+                        } else {
+                            double money = order.getModel().getOrderTotalPrice().doubleValue();
+                            if (StringUtil.doubleCompareTo(money, dmoney) == 0) {
+                                result = orderService.doHandleOrderPayNotify(param);
+                            } else {
+                                result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+                                result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+                            }
+                        }
+                    } else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                        ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
+                                .selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+                        if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), dmoney) == 0) {
+                            param.setRegionPath(extra[6]);
+                            result = orderService.doHandlePayOrderNotify(param);
+                        } else {
+                            result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+                            result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+                        }
+                    } else {
+                        result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
+                    }
 
-			// ------------------------------发送站内消息
-			if(isSendMsg && ResultCode.SUCCESS == result.getRet()){
-				DecimalFormat df = new DecimalFormat("######0.00");
-				MessageInfoParam messageInfoParam = new MessageInfoParam();
-				messageInfoParam.setRelateId(0L);
-				MessageTempParam messageTempParam = new MessageTempParam();
-				messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
-				Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
-				if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))
-						|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
-					messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
-				} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))
-						|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
-					messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
-				}
-				if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
-					messageTempParam.setUserName("E店会员");
-				} else if (extra[1].startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
-					messageTempParam.setUserName("E店商家");
-				}
-				messageInfoParam.setMessageParam(messageTempParam);
-				messageService.saveMessage(extra[1], messageInfoParam);
-			}
-			// ------------------------------发送站内消息
+                } else {
 
-		} else {
-			logger.error("APP微信回调失败,错误码:{},错误信息：{},回调参数：{}", result.getRet(), result.getMsg(), packageParams);
-		}
-		logger.info("#####################APP微信回调结束#####################");
-	}
+                    result = successCreated(ResultCode.FAIL, "APP端微信回调失败，return_code成功，但业务结果失败，err_code="
+                            + packageParams.get("err_code") + "，err_code_des=" + packageParams.get("err_code_des"));
+                }
+            } else {
+                result = successCreated(ResultCode.FAIL,
+                        "APP端微信回调失败，返回代码return_code=" + return_code + "，return_msg=" + packageParams.get("return_msg"));
+            }
+        } else {
+            result = successCreated(ResultCode.FAIL, "APP微信回调验签失败！");
+        }
 
-	/**
-	 * PC微信异步回调接口
-	 * 
-	 * @throws Exception
-	 */
-	@SuppressWarnings({ "rawtypes" })
-	@RequestMapping(value = "pcNotifyHandle", method = RequestMethod.POST)
-	public void pcNotifyHandle() throws Exception {
-		logger.info("#####################PC微信回调开始#####################");
-		HttpServletRequest request = getRequest();
-		HttpServletResponse response = getResponse();
-		Result result;
+        //成功过处理或已处理过(重复处理)
+        if (ResultCode.SUCCESS == result.getRet() || ResultCode.PROCESSED_RETURN_SUCCESS == result.getRet()) {
+            logger.info("APP微信回调成功");
+            PrintWriter out = response.getWriter();
+            out.print("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");// 请不要修改或删除
+            out.flush();
+            out.close();
 
-		boolean isSendMsg = false;
-		double dmoney = 0;
-		int bizFlagInt = 0;
-		String extra[] = null;
-		SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
-		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpayKey())) {
-			String return_code = packageParams.get("return_code") == null ? "" : packageParams.get("return_code").toString();
-			if ("SUCCESS".equals(return_code)) {
-				String result_code = packageParams.get("result_code") == null ? "" : packageParams.get("result_code").toString();
-				if ("SUCCESS".equals(result_code)) {
-					String attach = packageParams.get("attach") == null ? "" : packageParams.get("attach").toString();
-					String transaction_id = packageParams.get("transaction_id") == null ? "" : packageParams.get("transaction_id").toString();
-					String total_fee = packageParams.get("total_fee") == null ? "" : packageParams.get("total_fee").toString();
-					String out_trade_no = packageParams.get("out_trade_no") == null ? "" : packageParams.get("out_trade_no").toString();
+            // ------------------------------发送站内消息
+            if (isSendMsg && ResultCode.SUCCESS == result.getRet()) {
+                DecimalFormat df = new DecimalFormat("######0.00");
+                MessageInfoParam messageInfoParam = new MessageInfoParam();
+                messageInfoParam.setRelateId(0L);
+                MessageTempParam messageTempParam = new MessageTempParam();
+                messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
+                Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
+                if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))
+                        || ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
+                    messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
+                } else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))
+                        || ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+                    messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
+                if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+                    messageTempParam.setUserName("E店会员");
+                } else if (extra[1].startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+                    messageTempParam.setUserName("E店商家");
+                }
+                messageInfoParam.setMessageParam(messageTempParam);
+                messageService.saveMessage(extra[1], messageInfoParam);
+            }
+            // ------------------------------发送站内消息
 
-					extra = attach.split(splitStr);
-					dmoney = Double.parseDouble(total_fee);
-					dmoney = dmoney / 100;
-					// 1-商家充值余额、2-商家充值积分、3-缴纳保证金
-					String bizFlag = extra[0];
-					NotifyCallBackParam param = new NotifyCallBackParam();
-					param.setBizFlag(bizFlag);
-					param.setUserNum(extra[1]);
-					param.setBody(extra[2]);
-					param.setBizIds(extra[3]);
-					param.setTotalFee(String.valueOf(dmoney));
-					param.setOutTradeNo(out_trade_no);
-					param.setTradeNo(transaction_id);
-					param.setBuyerLogonId("回调没返回");
-					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.WX);
+        } else {
+            logger.error("APP微信回调失败,错误码:{},错误信息：{},回调参数：{}", result.getRet(), result.getMsg(), packageParams);
+        }
+        logger.info("#####################APP微信回调结束#####################");
+    }
 
-					bizFlagInt = Integer.parseInt(bizFlag);
-					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))
-							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-						isSendMsg = true;
-						result = rechargeService.doHandleRechargeNotify(param);
-						
-					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-						param.setMerchantId(Long.valueOf(extra[5]));
-						result = depositService.doHandleDepositNotify(param);
+    /**
+     * PC微信异步回调接口
+     *
+     * @throws Exception
+     */
+    @SuppressWarnings({"rawtypes"})
+    @RequestMapping(value = "pcNotifyHandle", method = RequestMethod.POST)
+    public void pcNotifyHandle() throws Exception {
+        logger.info("#####################PC微信回调开始#####################");
+        HttpServletRequest request = getRequest();
+        HttpServletResponse response = getResponse();
+        Result result;
 
-					} else {
-						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
-					}
+        boolean isSendMsg = false;
+        double dmoney = 0;
+        int bizFlagInt = 0;
+        String extra[] = null;
+        SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
+        if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpayKey())) {
+            String return_code = packageParams.get("return_code") == null ? "" : packageParams.get("return_code").toString();
+            if ("SUCCESS".equals(return_code)) {
+                String result_code = packageParams.get("result_code") == null ? "" : packageParams.get("result_code").toString();
+                if ("SUCCESS".equals(result_code)) {
+                    String attach = packageParams.get("attach") == null ? "" : packageParams.get("attach").toString();
+                    String transaction_id = packageParams.get("transaction_id") == null ? "" : packageParams.get("transaction_id").toString();
+                    String total_fee = packageParams.get("total_fee") == null ? "" : packageParams.get("total_fee").toString();
+                    String out_trade_no = packageParams.get("out_trade_no") == null ? "" : packageParams.get("out_trade_no").toString();
 
-				} else {
+                    extra = attach.split(splitStr);
+                    dmoney = Double.parseDouble(total_fee);
+                    dmoney = dmoney / 100;
+                    // 1-商家充值余额、2-商家充值积分、3-缴纳保证金
+                    String bizFlag = extra[0];
+                    NotifyCallBackParam param = new NotifyCallBackParam();
+                    param.setBizFlag(bizFlag);
+                    param.setUserNum(extra[1]);
+                    param.setBody(extra[2]);
+                    param.setBizIds(extra[3]);
+                    param.setTotalFee(String.valueOf(dmoney));
+                    param.setOutTradeNo(out_trade_no);
+                    param.setTradeNo(transaction_id);
+                    param.setBuyerLogonId("回调没返回");
+                    param.setTransactionPayTypeEnum(TransactionPayTypeEnum.WX);
 
-					result = successCreated(ResultCode.FAIL, "PC端微信回调失败，return_code成功，但业务结果失败，err_code="
-							+ packageParams.get("err_code") + "，err_code_des=" + packageParams.get("err_code_des"));
-				}
-			} else {
-				result = successCreated(ResultCode.FAIL,
-						"APP端微信回调失败，返回代码return_code=" + return_code + "，return_msg=" + packageParams.get("return_msg"));
-			}
-		} else {
-			result = successCreated(ResultCode.FAIL, "PC微信回调验签失败！");
-		}
-		
-		//成功过处理或已处理过(重复处理)
-		if (ResultCode.SUCCESS == result.getRet() || ResultCode.PROCESSED_RETURN_SUCCESS == result.getRet()) {
-			logger.info("APP微信回调成功");
-			PrintWriter out = response.getWriter();
-			out.print("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");// 请不要修改或删除
-			out.flush();
-			out.close();
+                    bizFlagInt = Integer.parseInt(bizFlag);
+                    if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))
+                            || ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                        isSendMsg = true;
+                        result = rechargeService.doHandleRechargeNotify(param);
 
-			// ------------------------------发送站内消息
-			if(isSendMsg && ResultCode.SUCCESS == result.getRet()){
-				DecimalFormat df = new DecimalFormat("######0.00");
-				MessageInfoParam messageInfoParam = new MessageInfoParam();
-				messageInfoParam.setRelateId(0L);
-				MessageTempParam messageTempParam = new MessageTempParam();
-				messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
-				Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
-				if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
-					messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
-				} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
-					messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
-				}
-				messageTempParam.setUserName("E店商家");
-				messageInfoParam.setMessageParam(messageTempParam);
-				messageService.saveMessage(extra[1], messageInfoParam);
-			}
-			// ------------------------------发送站内消息
+                    } else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                        param.setMerchantId(Long.valueOf(extra[5]));
+                        result = depositService.doHandleDepositNotify(param);
 
-		} else {
-			logger.error("PC微信回调失败,错误码:{},错误信息：{},回调参数：{}", result.getRet(), result.getMsg(), packageParams);
-		}
-		logger.info("#####################PC微信回调结束#####################");
-	}
+                    } else {
+                        result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
+                    }
 
-	/**
-	 * 获取微信异步post回调数据，并封装map
-	 * 
-	 * @param request
-	 * @return
-	 * @throws IOException 
-	 * @throws JDOMException 
-	 * @throws Exception
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SortedMap<Object, Object> parseWxNotifyData(HttpServletRequest request) throws JDOMException, IOException {
-		// 读取参数
-		InputStream inputStream;
-		StringBuilder sb = new StringBuilder();
-		inputStream = request.getInputStream();
-		String s;
-		BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-		while ((s = in.readLine()) != null) {
-			sb.append(s);
-		}
-		in.close();
-		inputStream.close();
+                } else {
 
-		// 解析xml成map
-		Map<String, String> m = XMLUtil.doXMLParse(sb.toString());
+                    result = successCreated(ResultCode.FAIL, "PC端微信回调失败，return_code成功，但业务结果失败，err_code="
+                            + packageParams.get("err_code") + "，err_code_des=" + packageParams.get("err_code_des"));
+                }
+            } else {
+                result = successCreated(ResultCode.FAIL,
+                        "APP端微信回调失败，返回代码return_code=" + return_code + "，return_msg=" + packageParams.get("return_msg"));
+            }
+        } else {
+            result = successCreated(ResultCode.FAIL, "PC微信回调验签失败！");
+        }
 
-		// 过滤空 设置 TreeMap
-		SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
-		Iterator it = m.keySet().iterator();
-		while (it.hasNext()) {
-			String parameter = (String) it.next();
-			String parameterValue = m.get(parameter);
+        //成功过处理或已处理过(重复处理)
+        if (ResultCode.SUCCESS == result.getRet() || ResultCode.PROCESSED_RETURN_SUCCESS == result.getRet()) {
+            logger.info("APP微信回调成功");
+            PrintWriter out = response.getWriter();
+            out.print("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");// 请不要修改或删除
+            out.flush();
+            out.close();
 
-			String v = "";
-			if (null != parameterValue) {
-				v = parameterValue.trim();
-			}
-			packageParams.put(parameter, v);
-		}
-		return packageParams;
-	}
+            // ------------------------------发送站内消息
+            if (isSendMsg && ResultCode.SUCCESS == result.getRet()) {
+                DecimalFormat df = new DecimalFormat("######0.00");
+                MessageInfoParam messageInfoParam = new MessageInfoParam();
+                messageInfoParam.setRelateId(0L);
+                MessageTempParam messageTempParam = new MessageTempParam();
+                messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
+                Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
+                if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
+                    messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
+                } else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+                    messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+                }
+                messageTempParam.setUserName("E店商家");
+                messageInfoParam.setMessageParam(messageTempParam);
+                messageService.saveMessage(extra[1], messageInfoParam);
+            }
+            // ------------------------------发送站内消息
+
+        } else {
+            logger.error("PC微信回调失败,错误码:{},错误信息：{},回调参数：{}", result.getRet(), result.getMsg(), packageParams);
+        }
+        logger.info("#####################PC微信回调结束#####################");
+    }
+
+    /**
+     * 获取微信异步post回调数据，并封装map
+     *
+     * @param request
+     * @return
+     * @throws IOException
+     * @throws JDOMException
+     * @throws Exception
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private SortedMap<Object, Object> parseWxNotifyData(HttpServletRequest request) throws JDOMException, IOException {
+        // 读取参数
+        InputStream inputStream;
+        StringBuilder sb = new StringBuilder();
+        inputStream = request.getInputStream();
+        String s;
+        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+        while ((s = in.readLine()) != null) {
+            sb.append(s);
+        }
+        in.close();
+        inputStream.close();
+
+        // 解析xml成map
+        Map<String, String> m = XMLUtil.doXMLParse(sb.toString());
+
+        // 过滤空 设置 TreeMap
+        SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
+        Iterator it = m.keySet().iterator();
+        while (it.hasNext()) {
+            String parameter = (String) it.next();
+            String parameterValue = m.get(parameter);
+
+            String v = "";
+            if (null != parameterValue) {
+                v = parameterValue.trim();
+            }
+            packageParams.put(parameter, v);
+        }
+        return packageParams;
+    }
 }
