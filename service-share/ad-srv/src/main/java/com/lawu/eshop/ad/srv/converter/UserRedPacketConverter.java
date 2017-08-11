@@ -92,7 +92,10 @@ public class UserRedPacketConverter {
 	public static UserRedPacketDO convertDO(UserRedPacketUpdateParam param) {
 		UserRedPacketDO user =new UserRedPacketDO();
 		user.setPayType(param.getPayType());
-		user.setThirdNumber(param.getThirdNum());
+		user.setThirdNumber(param.getThirdNum() == null ? "" : param.getThirdNum());
+		user.setId(param.getRedId());
+		user.setStatus(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
+		user.setGmtModified(new Date());
 		return user;
 	}
 }

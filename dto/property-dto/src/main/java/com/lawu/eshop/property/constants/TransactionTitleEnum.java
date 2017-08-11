@@ -18,7 +18,8 @@ public enum TransactionTitleEnum {
 	RECHARGE("余额充值"),
 	DEPOSIT("缴纳保证金"),
 	DEPOSIT_REFUND("保证金退款"),
-	BACKAGE("平台处理");
+	BACKAGE("平台处理"),
+	MEMBER_RED_PACKET("发红包");
 	
 	private String val;
 

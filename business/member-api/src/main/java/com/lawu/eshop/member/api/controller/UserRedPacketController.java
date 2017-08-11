@@ -11,6 +11,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.lawu.eshop.member.api.service.UserRedPacketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,7 +38,6 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
-import com.lawu.eshop.member.api.service.UserRedPacketService;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.utils.QrCodeUtil;
 import com.lawu.eshop.utils.StringUtil;

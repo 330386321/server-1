@@ -6,7 +6,9 @@ import com.lawu.eshop.external.api.service.MessageService;
 import com.lawu.eshop.external.api.service.OrderService;
 import com.lawu.eshop.external.api.service.PayOrderService;
 import com.lawu.eshop.external.api.service.PropertySrvService;
+import com.lawu.eshop.external.api.service.PropertyinfoUserRedPacketService;
 import com.lawu.eshop.external.api.service.RechargeService;
+import com.lawu.eshop.external.api.service.AdUserRedPacketService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -75,6 +77,10 @@ public class WxpayNotifyController extends BaseController {
 	private PayOrderService payOrderService;
 	@Autowired
 	private PropertySrvService propertyService;
+	@Autowired
+	private AdUserRedPacketService userRedPacketService;
+	@Autowired
+	private PropertyinfoUserRedPacketService propertyinfoUserRedPacketService;
 
 	/**
 	 * APP微信异步回调接口
@@ -151,6 +157,14 @@ public class WxpayNotifyController extends BaseController {
 								.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
 						if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), dmoney) == 0) {
 							result = orderService.doHandlePayOrderNotify(param);
+						} else {
+							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+						}
+					}else if (ThirdPartyBizFlagEnum.MEMBER_RED_PACKET.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+						Result<ThirdPayCallBackQueryPayOrderDTO> moneyResult = userRedPacketService.selectUserRedPacketInfoForThrid(Long.valueOf(param.getBizIds()));
+						if (StringUtil.doubleCompareTo(moneyResult.getModel().getActualMoney(), dmoney) == 0) {
+							result = propertyinfoUserRedPacketService.doHandleMemberRedPacketNotify(param);
 						} else {
 							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
 							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));

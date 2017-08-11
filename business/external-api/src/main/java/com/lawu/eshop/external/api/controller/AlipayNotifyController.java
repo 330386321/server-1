@@ -11,6 +11,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.lawu.eshop.external.api.service.AdUserRedPacketService;
+import com.lawu.eshop.external.api.service.PropertyinfoUserRedPacketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +78,10 @@ public class AlipayNotifyController extends BaseController {
 	private PayOrderService payOrderService;
 	@Autowired
 	private PropertySrvService propertyService;
+	@Autowired
+	private AdUserRedPacketService userRedPacketService;
+	@Autowired
+	private PropertyinfoUserRedPacketService propertyinfoUserRedPacketService;
 
 	/**
 	 * 支付宝异步回调接口
@@ -194,7 +200,15 @@ public class AlipayNotifyController extends BaseController {
 							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
 							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
 						}
-					} else {
+					} else if (ThirdPartyBizFlagEnum.MEMBER_RED_PACKET.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+						Result<ThirdPayCallBackQueryPayOrderDTO> moneyResult = userRedPacketService.selectUserRedPacketInfoForThrid(Long.valueOf(param.getBizIds()));
+						if (StringUtil.doubleCompareTo(moneyResult.getModel().getActualMoney(), dTotalMoney) == 0) {
+							result = propertyinfoUserRedPacketService.doHandleMemberRedPacketNotify(param);
+						} else {
+							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+						}
+					}else {
 						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
 					}
 				}

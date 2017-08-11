@@ -43,4 +43,8 @@ public class TransactionConstant {
      * 退保证金财务审核注销
      */
     public static final byte HANDLE_DESPOISIT_AUDIT_CANCEL = 0x07;
+    /**
+     * 用户发红包支付成功后修改红包状态
+     */
+    public static final byte HANDLE_MEMBER_RED_PACKET = 0x08;
 }

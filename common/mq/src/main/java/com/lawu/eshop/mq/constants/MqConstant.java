@@ -221,6 +221,11 @@ public class MqConstant {
 	 */
 	public static final String TAG_HANDLE_DEPOSIT_AUDIT_CANCEL = "handle_deposit_audit_cancel";
 
+	/**
+	 * 用户发红包支付成功后修改红包状态
+	 */
+	public static final String TAG_HANDLE_MEMBER_RED_PACKET = "handle_deposit_member_red_packet";
+
 	/******************************************/
 	/******* user-srv模块tag **********/
 

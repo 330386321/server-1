@@ -3,6 +3,7 @@
  */
 package com.lawu.eshop.member.api.service;
 
+import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,4 +67,12 @@ public interface UserRedPacketService {
 	@RequestMapping(value="userRedPacket/getUserRedpacketMaxMoney",method=RequestMethod.POST)
 	Result getUserRedpacketMaxMoney(@RequestParam("redPacketId") Long redPacketId);
 
+	/**
+	 * 获取需要充值的金额
+	 *
+	 * @param redPacketId
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "userRedPacket/selectUserRedPacketInfoForThrid")
+	Result<ThirdPayCallBackQueryPayOrderDTO> selectUserRedPacketInfoForThrid(@RequestParam("redPacketId") Long redPacketId);
 }
