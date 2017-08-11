@@ -363,12 +363,14 @@ public class AdController extends BaseController {
 		if(!isSuccess(result)){
 			return successCreated(result.getRet());
 		}
-		Result<ProductRelateAdInfoDTO>  proResult = productService.selectProductRelateAdInfo(result.getModel().getProductId());
-		if(!isSuccess(proResult)){
-			return successCreated(proResult.getRet());
+		if(result.getModel().getProductId()!=null){
+			Result<ProductRelateAdInfoDTO>  proResult = productService.selectProductRelateAdInfo(result.getModel().getProductId());
+			if(!isSuccess(proResult)){
+				return successCreated(proResult.getRet());
+			}
+			result.getModel().setProductImgUrl(proResult.getModel().getImgUrl());
+			result.getModel().setProductName(proResult.getModel().getName());
 		}
-		result.getModel().setProductImgUrl(proResult.getModel().getImgUrl());
-		result.getModel().setProductName(proResult.getModel().getName());
 		return result;
     }
 
@@ -504,12 +506,14 @@ public class AdController extends BaseController {
 		if(!isSuccess(result)){
 			return successCreated(result.getRet());
 		}
-		Result<ProductRelateAdInfoDTO>  proResult = productService.selectProductRelateAdInfo(result.getModel().getProductId());
-		if(!isSuccess(proResult)){
-			return successCreated(proResult.getRet());
+		if(result.getModel().getProductId()!=null){
+			Result<ProductRelateAdInfoDTO>  proResult = productService.selectProductRelateAdInfo(result.getModel().getProductId());
+			if(!isSuccess(proResult)){
+				return successCreated(proResult.getRet());
+			}
+			result.getModel().setProductImgUrl(proResult.getModel().getImgUrl());
+			result.getModel().setProductName(proResult.getModel().getName());
 		}
-		result.getModel().setProductImgUrl(proResult.getModel().getImgUrl());
-		result.getModel().setProductName(proResult.getModel().getName());
 		
 		return result;
     }
