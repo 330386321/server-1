@@ -41,6 +41,7 @@ public class ReportAreaAdPointDailyServiceImpl implements ReportAreaAdPointDaily
 			reportAreaAdPointDailyBO.setGmtReport(DO.getGmtReport());
 			reportAreaAdPointDailyBO.setProvinceId(DO.getProvinceId());
 			reportAreaAdPointDailyBO.setReportTotalPoint(DO.getReportTotalPoint());
+			reportAreaAdPointDailyBO.setId(DO.getId());
 			rtnList.add(reportAreaAdPointDailyBO);
 		}
 		return rtnList;

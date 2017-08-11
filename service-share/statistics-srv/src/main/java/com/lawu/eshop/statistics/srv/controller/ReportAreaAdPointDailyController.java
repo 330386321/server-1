@@ -37,6 +37,7 @@ public class ReportAreaAdPointDailyController extends BaseController {
 		for(ReportAreaAdPointDailyBO BO : list) {
 			ReportAreaAdPointDailyDTO reportAreaAdPointDailyDTO = new ReportAreaAdPointDailyDTO();
 			reportAreaAdPointDailyDTO.setAreaId(BO.getAreaId());
+			reportAreaAdPointDailyDTO.setId(BO.getId());
 			reportAreaAdPointDailyDTO.setCityId(BO.getCityId());
 			reportAreaAdPointDailyDTO.setGmtCreate(BO.getGmtCreate());
 			reportAreaAdPointDailyDTO.setGmtReport(BO.getGmtReport());
@@ -57,7 +58,7 @@ public class ReportAreaAdPointDailyController extends BaseController {
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "deleteReportAreaAdPointDaily", method = RequestMethod.POST)
-	public Result deleteReportAreaAdPointDaily(@PathVariable @ApiParam(required = true, value = "id") Long id) {
+	public Result deleteReportAreaAdPointDaily(@RequestParam(value = "id") Long id) {
 		reportAreaAdPointDailyService.deleteReportAreaAdPointDaily(id);
 		return successCreated(ResultCode.SUCCESS);
 	}

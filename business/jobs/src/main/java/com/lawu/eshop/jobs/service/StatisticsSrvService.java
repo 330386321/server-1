@@ -20,7 +20,7 @@ import com.lawu.eshop.statistics.param.ReportAreaAdPointMonthParams;
 public interface StatisticsSrvService {
 
 	
-	@RequestMapping(method = RequestMethod.POST, value = "reportAreaAdPointDaily/selectReportAreaAdPointDaily/{areaId}")
+	@RequestMapping(method = RequestMethod.GET, value = "reportAreaAdPointDaily/selectReportAreaAdPointDaily/{areaId}")
 	Result<List<ReportAreaAdPointDailyDTO>> selectReportAreaAdPointDaily(@PathVariable("areaId") Integer areaId, @RequestParam("date") String date);	
 	
 	@SuppressWarnings("rawtypes")

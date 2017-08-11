@@ -9,7 +9,7 @@
 	
 	<resultMap id="ReportAdGroupByAreaResultMap" type="com.lawu.eshop.property.srv.domain.extend.ReportAdPointGroupByAreaView">
 	    <result column="total_point" jdbcType="DECIMAL" property="totalPoint" />
-	    <result column="city_id" jdbcType="INTEGER" property="cityId" />
+	    <result column="area_id" jdbcType="INTEGER" property="areaId"/>
 	</resultMap>
   
  	<select id="getReportAdEarningsPoint"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
@@ -53,9 +53,9 @@
 	 
 	 <select id="getReportAdPointGroupByArea"  resultMap="ReportAdGroupByAreaResultMap" parameterType="java.lang.String">
 	    select
-	    	sum(point) total_point,area_id
+	    	sum(point) as total_point,area_id
 	    from point_detail
 	    where
-	      	where point_type=110 and (gmt_create &gt;= #{bdate,jdbcType=DATE} and gmt_create &lt;= #{edate,jdbcType=DATE}) group by area_id
+	      	point_type=110 and (gmt_create &gt;= #{bdate} and gmt_create &lt;= #{edate}) group by area_id
 	 </select>
 </mapper>

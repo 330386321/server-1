@@ -5,6 +5,8 @@ import java.util.List;
 import com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView;
 import com.lawu.eshop.property.srv.domain.extend.ReportAdPointGroupByAreaView;
 
+import org.apache.ibatis.annotations.Param;
+
 public interface PointDetailDOMapperExtend {
 	
 	ReportAdEarningsPointView  getReportAdEarningsPoint(ReportAdEarningsPointView view);
@@ -15,5 +17,5 @@ public interface PointDetailDOMapperExtend {
 	
 	ReportAdEarningsPointView getLovePointByBzId(ReportAdEarningsPointView view);
     
-	List<ReportAdPointGroupByAreaView> getReportAdPointGroupByArea(String bdate, String edate);   
+	List<ReportAdPointGroupByAreaView> getReportAdPointGroupByArea(@Param("bdate") String bdate, @Param("edate")String edate);   
 }

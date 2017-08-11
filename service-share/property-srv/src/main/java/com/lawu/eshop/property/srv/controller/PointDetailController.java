@@ -130,6 +130,8 @@ public class PointDetailController extends BaseController {
     
     @RequestMapping(value = "getReportAdPointGroupByArea", method = RequestMethod.GET)
 	public Result<List<ReportAdPointGroupByAreaDTO>> getReportAdPointGroupByArea(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate) {
+    	System.out.println(bdate);
+    	System.out.println(edate);
     	List<ReportAdPointGroupByAreaBO> list = pointDetailService.getReportAdPointGroupByArea(bdate, edate);
     	List<ReportAdPointGroupByAreaDTO> rtnList = new ArrayList<ReportAdPointGroupByAreaDTO>();
     	for(ReportAdPointGroupByAreaBO BO : list) {
