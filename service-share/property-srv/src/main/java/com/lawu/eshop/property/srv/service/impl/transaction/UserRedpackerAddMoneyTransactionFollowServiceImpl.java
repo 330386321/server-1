@@ -13,7 +13,7 @@ import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 
 /**
- * 返还用户红包金额、和用户领取红包获取金额
+ * 用户领取红包获取金额
  * 
  * @author lihj
  * @date 2017年8月7日

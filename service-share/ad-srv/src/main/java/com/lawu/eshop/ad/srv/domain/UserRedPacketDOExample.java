@@ -776,6 +776,66 @@ public class UserRedPacketDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andRefundMoneyIsNull() {
+            addCriterion("refund_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyIsNotNull() {
+            addCriterion("refund_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyEqualTo(BigDecimal value) {
+            addCriterion("refund_money =", value, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("refund_money <>", value, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyGreaterThan(BigDecimal value) {
+            addCriterion("refund_money >", value, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("refund_money >=", value, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyLessThan(BigDecimal value) {
+            addCriterion("refund_money <", value, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("refund_money <=", value, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyIn(List<BigDecimal> values) {
+            addCriterion("refund_money in", values, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("refund_money not in", values, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("refund_money between", value1, value2, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("refund_money not between", value1, value2, "refundMoney");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

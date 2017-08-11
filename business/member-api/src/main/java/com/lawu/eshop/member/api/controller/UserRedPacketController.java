@@ -84,11 +84,11 @@ public class UserRedPacketController extends BaseController {
 		if (param.getTotalMoney().compareTo(UserRedpacketValue.MAX_MONTY) >= 0) {
 			return successCreated(ResultCode.MAX_USERREDPACKET_MONTY);
 		}
-		Result<PropertyBalanceDTO> resultMoney = propertyInfoService
-				.getPropertyBalance(UserUtil.getCurrentUserNum(request));
-		if (param.getTotalMoney().compareTo(resultMoney.getModel().getBalance()) >= 0) {
-			return successCreated(ResultCode.PROPERTY_INFO_BALANCE_LESS);// 余额不足
-		}
+//		Result<PropertyBalanceDTO> resultMoney = propertyInfoService
+//				.getPropertyBalance(UserUtil.getCurrentUserNum(request));
+//		if (param.getTotalMoney().compareTo(resultMoney.getModel().getBalance()) > 0) {
+//			return successCreated(ResultCode.PROPERTY_INFO_BALANCE_LESS);// 余额不足
+//		}
 		UserRedPacketSaveParam saveParam = new UserRedPacketSaveParam();
 		saveParam.setRedPacketPutWayEnum(param.getRedPacketPutWayEnum());
 		saveParam.setTotalCount(param.getTotalCount());

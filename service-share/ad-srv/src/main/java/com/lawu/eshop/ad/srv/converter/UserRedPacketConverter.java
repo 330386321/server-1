@@ -11,6 +11,7 @@ import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
 import com.lawu.eshop.ad.constants.UserRedPacketEnum;
 import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
+import com.lawu.eshop.ad.param.UserPacketRefundParam;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
@@ -97,5 +98,15 @@ public class UserRedPacketConverter {
 		user.setStatus(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
 		user.setGmtModified(new Date());
 		return user;
+	}
+
+	public static UserPacketRefundParam convertReFund(UserRedPacketDO userRedpacket) {
+		UserPacketRefundParam param =new UserPacketRefundParam();
+		param.setPayType(userRedpacket.getPayType());
+		param.setRedId(userRedpacket.getId());
+		param.setThirdNo(userRedpacket.getThirdNumber());
+		param.setUserNum(userRedpacket.getUserNum());
+		param.setRefundMoney(userRedpacket.getRefundMoney());
+		return param;
 	}
 }

@@ -14,6 +14,7 @@ import com.lawu.eshop.ad.constants.RedPacketArithmetic;
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
 import com.lawu.eshop.ad.constants.UserRedPacketEnum;
 import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.ad.param.UserPacketRefundParam;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
 import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
@@ -30,6 +31,8 @@ import com.lawu.eshop.ad.srv.mapper.UserRedPacketDOMapper;
 import com.lawu.eshop.ad.srv.mapper.UserTakedRedPacketDOMapper;
 import com.lawu.eshop.ad.srv.mapper.extend.UserTakedRedpacketBOMapperExtend;
 import com.lawu.eshop.ad.srv.service.UserRedPacketService;
+import com.lawu.eshop.compensating.transaction.Reply;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.compensating.transaction.TransactionStatusService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mq.constants.MqConstant;
@@ -39,6 +42,7 @@ import com.lawu.eshop.utils.DateUtil;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,6 +65,10 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	private MessageProducerService messageProducerService;
 
 	@Autowired
+	@Qualifier("memberRedPacketRefundTransactionMainServiceImpl")
+	private TransactionMainService<Reply> memberRedPacketRefundTransactionMainServiceImpl;
+	
+	@Autowired
 	private TransactionStatusService transactionStatusService;
 
 	/**
@@ -80,10 +88,6 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		notification.setId(userRed.getId());
 		notification.setMoney(userRed.getTotalMoney());
 		notification.setUserNum(userRed.getUserNum());
-		/*// 扣除用户红包金额
-		transactionStatusService.save(userRed.getId(), TransactionConstant.USER_REDPACKED_CUT_MONEY);
-		messageProducerService.sendMessage(MqConstant.TOPIC_AD_SRV, MqConstant.TAG_AD_USER_REDPACKET_CUT_MONTY,
-				notification);*/
 		return userRed.getId();
 	}
 
@@ -222,6 +226,11 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		}
 	}
 	
+	public UserPacketRefundParam selectBackTotalMoney(Long userRedpacketId){
+		UserRedPacketDO userRedpacket = userRedPacketDOMapper.selectByPrimaryKey(userRedpacketId);
+		UserPacketRefundParam param =UserRedPacketConverter.convertReFund(userRedpacket);
+		return param;
+	}	
 	/**
 	 * 设置红包过期
 	 * @param userRedpacketId
@@ -235,15 +244,9 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
 		List<UserTakedRedPacketDO> listTaked = userTakedRedPacketDOMapper.selectByExample(userTakedExample);
 		BigDecimal totalBackMoney = getTotalBackMoney(listTaked);
+		userRedpacket.setRefundMoney(totalBackMoney);
 		userRedPacketDOMapper.updateByPrimaryKeySelective(userRedpacket);
-		UserRedPacketNotification notification = new UserRedPacketNotification();
-		notification.setId(userRedpacket.getId());
-		notification.setMoney(totalBackMoney);
-		notification.setUserNum(userRedpacket.getUserNum());
-		/*// 退款
-		transactionStatusService.save(userRedpacket.getId(), TransactionConstant.USER_REDPACKED_MONEY_ADD);
-		messageProducerService.sendMessage(MqConstant.TOPIC_AD_SRV, MqConstant.TAG_AD_USER_REDPACKET_ADD_MONTY,
-				notification);*/
+		memberRedPacketRefundTransactionMainServiceImpl.sendNotice(userRedpacketId);
 	}
 
 	/**
@@ -258,6 +261,18 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 			taked.setStatus(PointPoolStatusEnum.AD_POINT_OUT.val);
 			taked.setGmtModified(new Date());
 			userTakedRedPacketDOMapper.updateByPrimaryKeySelective(taked);
+		}
+		return totalMoney;
+	}
+	/**
+	 * @param listTaked
+	 * @return
+	 */
+	private BigDecimal getTotalBackMoneyNoUpdate(List<UserTakedRedPacketDO> listTaked) {
+		BigDecimal totalMoney = new BigDecimal(0);
+		for (int i = 0; i < listTaked.size(); i++) {
+			UserTakedRedPacketDO taked = listTaked.get(i);
+			totalMoney = totalMoney.add(taked.getMoney());
 		}
 		return totalMoney;
 	}
