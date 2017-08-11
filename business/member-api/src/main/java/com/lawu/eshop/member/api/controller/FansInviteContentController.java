@@ -19,6 +19,7 @@ import com.lawu.eshop.user.dto.FansInviteContentDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 /**
  * @author hongqm
@@ -38,7 +39,7 @@ public class FansInviteContentController extends BaseController{
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "selectInviteContentById/{id}/{relateId}", method = RequestMethod.GET)
-    public Result<FansInviteContentDTO> selectInviteContentById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable("id") Long id,@PathVariable("relateId") Long relateId) {
+    public Result<FansInviteContentDTO> selectInviteContentById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable("id") @ApiParam(value = "messageId", required = true) Long id,@PathVariable("relateId") @ApiParam(value = "mesasge里的relateId", required = true) Long relateId) {
 		Result<FansInviteContentDTO> result = fansInviteContentService.selectInviteContentById(id,relateId);
 		return result;
     }
