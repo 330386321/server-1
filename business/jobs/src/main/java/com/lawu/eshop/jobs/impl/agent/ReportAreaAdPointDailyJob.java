@@ -1,4 +1,4 @@
-package com.lawu.eshop.jobs.impl.ad;
+package com.lawu.eshop.jobs.impl.agent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dangdang.ddframe.job.api.ShardingContext;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
+import com.lawu.eshop.jobs.impl.ad.ReportEarningDailyReportJob;
 import com.lawu.eshop.jobs.service.ReportAreaAdPointDailyService;
 
 public class ReportAreaAdPointDailyJob implements SimpleJob {
