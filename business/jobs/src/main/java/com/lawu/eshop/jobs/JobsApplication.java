@@ -25,8 +25,8 @@ public class JobsApplication {
     private static Logger logger = LoggerFactory.getLogger(JobsApplication.class);
 
     public static void main(String[] args) {
-        logger.info("statistics is starting");
+        logger.info("jobs is starting");
         SpringApplication.run(JobsApplication.class, args);
-        logger.info("statistics is started");
+        logger.info("jobs is started");
     }
 }
