@@ -2,6 +2,7 @@ package com.lawu.eshop.agent.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.agent.api.service.AgentUserService;
 import com.lawu.eshop.agent.dto.LoginDTO;
 import com.lawu.eshop.agent.dto.LoginUserDTO;
+import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.manager.TokenManager;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -51,6 +53,16 @@ public class CommonController extends BaseController {
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setUserNum(userDTO.getNum());
         loginDTO.setToken(token);
+        loginDTO.setRegionPath(userDTO.getRegionPath());
         return successCreated(loginDTO);
+    }
+
+    @ApiOperation(value = "退出", notes = "退出登录，清除token。（章勇）", httpMethod = "DELETE")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @Authorization
+    @RequestMapping(value = "logout", method = RequestMethod.DELETE)
+    public Result logout(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        tokenManager.delRelationshipByToken(token);
+        return successDelete();
     }
 }
