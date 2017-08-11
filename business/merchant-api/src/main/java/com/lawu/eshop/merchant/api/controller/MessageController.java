@@ -1,5 +1,14 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -13,12 +22,11 @@ import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
 import com.lawu.eshop.mall.param.MessageParam;
 import com.lawu.eshop.merchant.api.service.MessageService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * 站内信息接口
@@ -122,6 +130,7 @@ public class MessageController extends BaseController {
     public Result delMessage(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                              @PathVariable(value = "ids") String ids) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
-        return messageService.delMessageByIds(ids, userNum);
+        messageService.delMessageByIds(ids, userNum);
+        return successDelete();
     }
 }
