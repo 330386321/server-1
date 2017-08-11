@@ -1,5 +1,14 @@
 package com.lawu.eshop.statistics.srv.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.statistics.dto.ReportUserRegAreaDTO;
@@ -10,10 +19,6 @@ import com.lawu.eshop.statistics.srv.bo.ReportUserRegAreaBO;
 import com.lawu.eshop.statistics.srv.converter.ReportUserRegConverter;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
 import com.lawu.eshop.statistics.srv.service.UserRegService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -94,6 +99,29 @@ public class UserRegController extends BaseController {
     public Result<List<ReportUserRegAreaDTO>> getReportUserRegArea() {
         List<ReportUserRegAreaBO> regAreaBOList = userRegService.getReportUserRegArea();
         return successGet(ReportUserRegConverter.convertAreaDTO(regAreaBOList));
+    }
+
+    /**
+     * 新增地区日统计记录
+     * @param userRegAreaParam
+     * @return
+     */
+    @RequestMapping(value = "addUserRegAreaDaily", method = RequestMethod.POST)
+    Result addUserRegAreaDaily(@RequestBody UserRegAreaParam userRegAreaParam) {
+        userRegService.addUserRegAreaDaily(userRegAreaParam);
+        return successCreated();
+    }
+
+    /**
+     * 新增地区月统计记录
+     *
+     * @param userRegAreaParam
+     * @return
+     */
+    @RequestMapping(value = "userReg/addUserRegAreaMonth", method = RequestMethod.POST)
+    Result addUserRegAreaMonth(@RequestBody UserRegAreaParam userRegAreaParam) {
+        userRegService.addUserRegAreaMonth(userRegAreaParam);
+        return successCreated();
     }
 
 }

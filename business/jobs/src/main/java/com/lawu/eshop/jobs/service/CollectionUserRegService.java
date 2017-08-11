@@ -1,11 +1,12 @@
 package com.lawu.eshop.jobs.service;
 
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.param.CollectionUserRegParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.param.CollectionUserRegParam;
 
 /**
  * @author meishuquan
@@ -77,4 +78,51 @@ public interface CollectionUserRegService {
     @RequestMapping(value = "userReg/collectionMerchantEntityRegArea", method = RequestMethod.POST)
     Result<Integer> collectionMerchantEntityRegArea(@RequestBody CollectionUserRegParam param);
 
+    /**
+     *查询日注册用户总数
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "userReg/collectionMemberRegDailyArea", method = RequestMethod.POST)
+    Result<Integer> collectionMemberRegDailyArea(@RequestBody CollectionUserRegParam param);
+
+    /**
+     * 查询日注册普通店铺总数
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "userReg/collectionMerchantNormalRegDailyArea", method = RequestMethod.POST)
+    Result<Integer> collectionMerchantNormalRegDailyArea(@RequestBody CollectionUserRegParam param);
+
+    /**
+     * 查询日注册实体店铺总数
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "userReg/collectionMerchantEntityRegDailyArea", method = RequestMethod.POST)
+    Result<Integer> collectionMerchantEntityRegDailyArea(@RequestBody CollectionUserRegParam param);
+
+    /**
+     *查询月注册用户总数
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "userReg/collectionMemberRegMonthArea", method = RequestMethod.POST)
+    Result<Integer> collectionMemberRegMonthArea(@RequestBody CollectionUserRegParam param);
+
+    /**
+     * 查询月注册普通店铺总数
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "userReg/collectionMerchantNormalRegMonthArea", method = RequestMethod.POST)
+    Result<Integer> collectionMerchantNormalRegMonthArea(@RequestBody CollectionUserRegParam param);
+
+    /**
+     * 查询月注册实体店铺总数
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "userReg/collectionMerchantEntityRegMonthArea", method = RequestMethod.POST)
+    Result<Integer> collectionMerchantEntityRegMonthArea(@RequestBody CollectionUserRegParam param);
 }

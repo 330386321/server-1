@@ -1,23 +1,33 @@
 package com.lawu.eshop.statistics.srv.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.statistics.param.UserRegAreaParam;
 import com.lawu.eshop.statistics.param.UserRegParam;
 import com.lawu.eshop.statistics.srv.bo.ReportUserRegAreaBO;
 import com.lawu.eshop.statistics.srv.converter.ReportUserRegConverter;
-import com.lawu.eshop.statistics.srv.domain.*;
+import com.lawu.eshop.statistics.srv.domain.ReportAreaUserRegDailyDO;
+import com.lawu.eshop.statistics.srv.domain.ReportAreaUserRegMonthDO;
+import com.lawu.eshop.statistics.srv.domain.ReportUserRegAreaDO;
+import com.lawu.eshop.statistics.srv.domain.ReportUserRegAreaDOExample;
+import com.lawu.eshop.statistics.srv.domain.ReportUserRegDailyDO;
+import com.lawu.eshop.statistics.srv.domain.ReportUserRegDailyDOExample;
+import com.lawu.eshop.statistics.srv.domain.ReportUserRegMonthDO;
+import com.lawu.eshop.statistics.srv.domain.ReportUserRegMonthDOExample;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
+import com.lawu.eshop.statistics.srv.mapper.ReportAreaUserRegDailyDOMapper;
+import com.lawu.eshop.statistics.srv.mapper.ReportAreaUserRegMonthDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserRegAreaDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserRegDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserRegMonthDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.extend.UserRegDOMapperExtend;
 import com.lawu.eshop.statistics.srv.service.UserRegService;
 import com.lawu.eshop.utils.DateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -37,6 +47,12 @@ public class UserRegServiceImpl implements UserRegService {
 
     @Autowired
     private UserRegDOMapperExtend userRegDOMapperExtend;
+
+    @Autowired
+    private ReportAreaUserRegDailyDOMapper reportAreaUserRegDailyDOMapper;
+
+    @Autowired
+    private ReportAreaUserRegMonthDOMapper reportAreaUserRegMonthDOMapper;
 
     @Override
     @Transactional
@@ -107,5 +123,35 @@ public class UserRegServiceImpl implements UserRegService {
 
         List<ReportUserRegAreaDO> regAreaDOList = reportUserRegAreaDOMapper.selectByExample(example);
         return ReportUserRegConverter.convertAreaBO(regAreaDOList);
+    }
+
+    @Override
+    @Transactional
+    public void addUserRegAreaDaily(UserRegAreaParam userRegAreaParam) {
+        ReportAreaUserRegDailyDO userRegDailyDO = new ReportAreaUserRegDailyDO();
+        userRegDailyDO.setCityId(userRegAreaParam.getCityId());
+        userRegDailyDO.setCityName(userRegAreaParam.getName());
+        userRegDailyDO.setMemberCount(userRegAreaParam.getMemberCount());
+        userRegDailyDO.setMerchantEntityCount(userRegAreaParam.getMerchantEntityCount());
+        userRegDailyDO.setMerchantNormalCount(userRegAreaParam.getMerchantCount());
+        userRegDailyDO.setMerchantCount(userRegAreaParam.getMerchantCount());
+        userRegDailyDO.setGmtCreate(new Date());
+        userRegDailyDO.setGmtReport(DateUtil.getDayBefore(new Date()));
+        reportAreaUserRegDailyDOMapper.insertSelective(userRegDailyDO);
+    }
+
+    @Override
+    @Transactional
+    public void addUserRegAreaMonth(UserRegAreaParam userRegAreaParam) {
+        ReportAreaUserRegMonthDO userRegMonthDO = new ReportAreaUserRegMonthDO();
+        userRegMonthDO.setCityId(userRegAreaParam.getCityId());
+        userRegMonthDO.setCityName(userRegAreaParam.getName());
+        userRegMonthDO.setMemberCount(userRegAreaParam.getMemberCount());
+        userRegMonthDO.setMerchantEntityCount(userRegAreaParam.getMerchantEntityCount());
+        userRegMonthDO.setMerchantNormalCount(userRegAreaParam.getMerchantCount());
+        userRegMonthDO.setMerchantCount(userRegAreaParam.getMerchantCount());
+        userRegMonthDO.setGmtCreate(new Date());
+        userRegMonthDO.setGmtReport(DateUtil.getDayBefore(new Date()));
+        reportAreaUserRegMonthDOMapper.insertSelective(userRegMonthDO);
     }
 }

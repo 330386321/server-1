@@ -1,14 +1,15 @@
 package com.lawu.eshop.user.srv.controller;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.param.CollectionUserRegParam;
-import com.lawu.eshop.user.srv.service.UserRegService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.param.CollectionUserRegParam;
+import com.lawu.eshop.user.srv.service.UserRegService;
 
 /**
  * @author meishuquan
@@ -104,4 +105,69 @@ public class UserRegController extends BaseController {
         Integer count = userRegService.collectionMerchantEntityRegArea(param);
         return successGet(count);
     }
+
+
+    /**
+     *查询日用户总数
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "collectionMemberRegDailyArea", method = RequestMethod.POST)
+    public Result<Integer> collectionMemberRegDailyArea(@RequestBody CollectionUserRegParam param){
+        return successCreated(userRegService.collectionMemberRegDailyArea(param));
+    }
+
+    /**
+     * 查询日普通店铺总数
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "collectionMerchantNormalRegDailyArea", method = RequestMethod.POST)
+    public Result<Integer> collectionMerchantNormalRegDailyArea(@RequestBody CollectionUserRegParam param){
+        return successCreated(userRegService.collectionMerchantNormalRegDailyArea(param));
+    }
+
+    /**
+     * 查询日实体店铺总数
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "collectionMerchantEntityRegDailyArea", method = RequestMethod.POST)
+    public Result<Integer> collectionMerchantEntityRegDailyArea(@RequestBody CollectionUserRegParam param){
+        return successCreated(userRegService.collectionMerchantEntityRegDailyArea(param));
+    }
+
+
+    /**
+     *查询月注册用户总数
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "collectionMemberRegMonthArea", method = RequestMethod.POST)
+    public Result<Integer> collectionMemberRegMonthArea(@RequestBody CollectionUserRegParam param){
+        return successCreated(userRegService.collectionMemberRegMonthArea(param));
+    }
+
+    /**
+     * 查询月注册普通店铺总数
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "collectionMerchantNormalRegMonthArea", method = RequestMethod.POST)
+    public  Result<Integer> collectionMerchantNormalRegMonthArea(@RequestBody CollectionUserRegParam param){
+        return successCreated(userRegService.collectionMerchantNormalRegMonthArea(param));
+    }
+
+    /**
+     * 查询月注册实体店铺总数
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "collectionMerchantEntityRegMonthArea", method = RequestMethod.POST)
+    public Result<Integer> collectionMerchantEntityRegMonthArea(@RequestBody CollectionUserRegParam param){
+        return successCreated(userRegService.collectionMerchantEntityRegMonthArea(param));
+    }
+
+
+
 }

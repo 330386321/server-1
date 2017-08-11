@@ -69,4 +69,15 @@ public interface UserRegService {
      */
     Integer collectionMerchantEntityRegArea(CollectionUserRegParam param);
 
+    Integer collectionMemberRegDailyArea(CollectionUserRegParam param);
+
+    Integer collectionMerchantEntityRegDailyArea(CollectionUserRegParam param);
+
+    Integer collectionMerchantNormalRegDailyArea(CollectionUserRegParam param);
+
+    Integer collectionMemberRegMonthArea(CollectionUserRegParam param);
+
+    Integer collectionMerchantNormalRegMonthArea(CollectionUserRegParam param);
+
+    Integer collectionMerchantEntityRegMonthArea(CollectionUserRegParam param);
 }

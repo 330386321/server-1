@@ -1,12 +1,13 @@
 package com.lawu.eshop.jobs.service;
 
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.statistics.param.UserRegAreaParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.statistics.param.UserRegAreaParam;
 
 /**
  * @author meishuquan
@@ -42,4 +43,19 @@ public interface UserRegService {
     @RequestMapping(value = "userReg/updateUserRegArea", method = RequestMethod.POST)
     Result updateUserRegArea(@RequestBody UserRegAreaParam param);
 
+    /**
+     * 新增统计地区日注册量
+     * @param userRegAreaParam
+     * @return
+     */
+    @RequestMapping(value = "userReg/addUserRegAreaDaily", method = RequestMethod.POST)
+    Result addUserRegAreaDaily(@RequestBody UserRegAreaParam userRegAreaParam);
+
+    /**
+     * 新增统计地区月注册量
+     * @param userRegAreaParam
+     * @return
+     */
+    @RequestMapping(value = "userReg/addUserRegAreaMonth", method = RequestMethod.POST)
+    Result addUserRegAreaMonth(@RequestBody UserRegAreaParam userRegAreaParam);
 }

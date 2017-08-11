@@ -12,4 +12,7 @@ public interface UserRegStatisticsService {
 
     void executeCollectionUserRegArea();
 
+    void executeCollectionUserRegAreaDaily();
+
+    void executeCollectionUserRegAreaMonth();
 }

@@ -9,20 +9,20 @@ import com.dangdang.ddframe.job.api.simple.SimpleJob;
 import com.lawu.eshop.jobs.service.UserRegStatisticsService;
 
 /**
- * 按地区日统计用户注册数量
  * @author zhangyong
  * @date 2017/8/11.
  */
-public class AgentUserRegDailyJob implements SimpleJob{
-    private static Logger logger = LoggerFactory.getLogger(AgentUserRegDailyJob.class);
+public class AgentUserRegMonthJob implements SimpleJob {
 
+    private static Logger logger = LoggerFactory.getLogger(AgentUserRegMonthJob.class);
     @Autowired
     private UserRegStatisticsService userRegStatisticsService;
+
     @Override
     public void execute(ShardingContext shardingContext) {
         logger.debug("------{}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
 
-        userRegStatisticsService.executeCollectionUserRegAreaDaily();
+        userRegStatisticsService.executeCollectionUserRegAreaMonth();
 
         logger.debug("------{}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
     }

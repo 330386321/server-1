@@ -1,11 +1,11 @@
 package com.lawu.eshop.statistics.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.statistics.param.UserRegAreaParam;
 import com.lawu.eshop.statistics.param.UserRegParam;
 import com.lawu.eshop.statistics.srv.bo.ReportUserRegAreaBO;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -59,4 +59,7 @@ public interface UserRegService {
      */
     List<ReportUserRegAreaBO> getReportUserRegArea();
 
+    void addUserRegAreaDaily(UserRegAreaParam userRegAreaParam);
+
+    void addUserRegAreaMonth(UserRegAreaParam userRegAreaParam);
 }

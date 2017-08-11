@@ -16,6 +16,8 @@ public class UserRegAreaParam {
 
     private Integer cityId;
 
+    private String name;
+
     public Integer getMemberCount() {
         return memberCount;
     }
@@ -54,5 +56,13 @@ public class UserRegAreaParam {
 
     public void setCityId(Integer cityId) {
         this.cityId = cityId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
