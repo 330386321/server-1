@@ -14,6 +14,8 @@ public class LoginUserDTO {
 
     private String mobile;
 
+    private String regionPath;
+
     public Long getId() {
         return id;
     }
@@ -44,5 +46,13 @@ public class LoginUserDTO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
     }
 }

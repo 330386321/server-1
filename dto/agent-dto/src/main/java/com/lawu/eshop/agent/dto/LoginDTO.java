@@ -14,6 +14,9 @@ public class LoginDTO {
     @ApiModelProperty(value = "用户token", required = true)
     private String token;
 
+    @ApiModelProperty(value = "地区路径", required = true)
+    private String regionPath;
+
     public String getUserNum() {
         return userNum;
     }
@@ -28,5 +31,13 @@ public class LoginDTO {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
     }
 }

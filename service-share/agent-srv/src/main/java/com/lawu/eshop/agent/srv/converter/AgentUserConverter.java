@@ -40,6 +40,7 @@ public class AgentUserConverter {
         userDTO.setNum(userBO.getNum());
         userDTO.setAccount(userBO.getAccount());
         userDTO.setMobile(userBO.getMobile());
+        userDTO.setRegionPath(userBO.getRegionPath());
         return userDTO;
     }
 

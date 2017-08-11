@@ -151,7 +151,7 @@ public class UserRegServiceImpl implements UserRegService {
         userRegMonthDO.setMerchantNormalCount(userRegAreaParam.getMerchantCount());
         userRegMonthDO.setMerchantCount(userRegAreaParam.getMerchantCount());
         userRegMonthDO.setGmtCreate(new Date());
-        userRegMonthDO.setGmtReport(DateUtil.getDayBefore(new Date()));
+        userRegMonthDO.setGmtReport(DateUtil.getMonthBefore(new Date()));
         reportAreaUserRegMonthDOMapper.insertSelective(userRegMonthDO);
     }
 }
