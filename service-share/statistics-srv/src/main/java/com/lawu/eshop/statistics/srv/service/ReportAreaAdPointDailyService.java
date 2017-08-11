@@ -18,4 +18,6 @@ public interface ReportAreaAdPointDailyService {
 	List<ReportAreaAdPointMonthBO> selectReportAreaAdPointDailyInMonth(String bdate, String edate);
 	
 	List<ReportAreaAdPointDailyBO> selectReportAreaAdPointDailyByAreaId(AgentSelectAreaAdPointParam param);
+	
+	List<ReportAreaAdPointDailyBO> selectReportAreaAdPointDaily(AgentSelectAreaAdPointParam param);
 }

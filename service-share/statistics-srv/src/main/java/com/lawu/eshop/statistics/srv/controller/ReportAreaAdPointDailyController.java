@@ -16,6 +16,8 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.statistics.dto.ReportAreaAdPointDailyDTO;
 import com.lawu.eshop.statistics.dto.ReportAreaAdPointMonthDTO;
+import com.lawu.eshop.statistics.dto.ReportAreaAdPorintDailyByAreaIdDTO;
+import com.lawu.eshop.statistics.param.AgentSelectAreaAdPointParam;
 import com.lawu.eshop.statistics.param.ReportAreaAdPointDailyParams;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaAdPointDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaAdPointMonthBO;
@@ -80,6 +82,21 @@ public class ReportAreaAdPointDailyController extends BaseController {
 			}
 		}
 		return successCreated(rtnList);
+	}
+	
+	@RequestMapping(value = "selectReportAreaAdPointDaily", method = RequestMethod.GET)
+	Result<List<ReportAreaAdPorintDailyByAreaIdDTO>> selectReportAreaAdPointDaily(@RequestBody AgentSelectAreaAdPointParam param) {
+		List<ReportAreaAdPointDailyBO> list = reportAreaAdPointDailyService.selectReportAreaAdPointDaily(param);
+		List<ReportAreaAdPorintDailyByAreaIdDTO> rtnList = new ArrayList<ReportAreaAdPorintDailyByAreaIdDTO>();
+		if(list != null && !list.isEmpty()) {
+			for(ReportAreaAdPointDailyBO bo : list) {
+				ReportAreaAdPorintDailyByAreaIdDTO dto = new ReportAreaAdPorintDailyByAreaIdDTO();
+				dto.setGmtReport(bo.getGmtReport());
+				dto.setReportTotalPoint(bo.getReportTotalPoint());
+				rtnList.add(dto);
+			}
+		}
+		return  successCreated(rtnList);
 	}
 	
 }

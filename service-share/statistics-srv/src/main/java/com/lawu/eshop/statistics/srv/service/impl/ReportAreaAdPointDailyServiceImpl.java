@@ -14,6 +14,7 @@ import com.lawu.eshop.statistics.srv.bo.ReportAreaAdPointMonthBO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaAdPointDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaAdPointDailyDOExample;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaAdPointDailyDOExample.Criteria;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportAreaAdPointDailyDOView;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportAreaAdPointDailyInMonthDOView;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaAdPointDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.extend.ReportAreaAdPointDailyDOMapperExtend;
@@ -95,8 +96,22 @@ public class ReportAreaAdPointDailyServiceImpl implements ReportAreaAdPointDaily
 		if(param.getBdate() != null && param.getEdate() != null)
 			criteria.andGmtReportBetween(param.getBdate(), param.getEdate());
 		List<ReportAreaAdPointDailyDO> list = reportAreaAdPointDailyDOMapper.selectByExample(reportAreaAdPointDailyDOExample);
-		
 		return null;
+	}
+
+	@Override
+	public List<ReportAreaAdPointDailyBO> selectReportAreaAdPointDaily(AgentSelectAreaAdPointParam param) {
+		List<ReportAreaAdPointDailyDOView> viewList = reportAreaAdPointDailyDOMapperExtend.selectReportAreaAdPointDaily(param);
+		List<ReportAreaAdPointDailyBO> boList = new ArrayList<ReportAreaAdPointDailyBO>();
+		if(viewList != null && !viewList.isEmpty()) {
+			for(ReportAreaAdPointDailyDOView raadView : viewList) {
+				ReportAreaAdPointDailyBO bo = new ReportAreaAdPointDailyBO();
+				bo.setGmtReport(raadView.getGmtReport());
+				bo.setReportTotalPoint(raadView.getReportTotalPoint());
+				boList.add(bo);
+			}
+		}
+		return boList;
 	}
 
 }

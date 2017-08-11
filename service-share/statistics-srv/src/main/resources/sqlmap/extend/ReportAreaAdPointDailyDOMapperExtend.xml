@@ -9,11 +9,16 @@
         group by area_id,city_id,province_id
    </select>
    
-  <select id="selectReportAreaAdPointDailyInMonth" resultType="com.lawu.eshop.statistics.srv.domain.extend.ReportAreaAdPointDailyDOView" 
-  		parameterType="java.lang.String">
-        select area_id as areaId,city_id as cityId,province_id as provinceId,sum(report_total_point) as totalPoint
-        from report_area_ad_point_daily where (gmt_report &gt;= #{bdate} and gmt_report &lt;= #{edate})
-        group by area_id,city_id,province_id
+ <select id="selectReportAreaAdPointDaily" resultType="com.lawu.eshop.statistics.srv.domain.extend.ReportAreaAdPointDailyDOView" 
+  		parameterType="com.lawu.eshop.statistics.param.AgentSelectAreaAdPointParam">
+        select 
+        sum(report_total_point) as reportTotalPoint,gmt_report as gmtReport 
+        from report_area_ad_point_daily 
+        where city_id = #{cityId}
+        <if test="bdate != null and edate != null">
+        	and (gmt_report &gt;= #{bdate} and gmt_report &lt;= #{edate})
+        </if>
+        group by gmt_report
    </select>
    
 </mapper>
