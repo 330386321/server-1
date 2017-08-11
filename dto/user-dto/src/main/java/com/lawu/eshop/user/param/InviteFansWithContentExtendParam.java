@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class InviteFansWithContentExtendParam extends InviteFansParam{
 
 	@ApiModelProperty(value = "邀请内容的图片", required = true)
-	private String Url;
+	private String url;
 	
 	@ApiModelProperty(value = "商家LOGO", required = true)
 	private String logoUrl;
@@ -30,12 +30,13 @@ public class InviteFansWithContentExtendParam extends InviteFansParam{
 	@ApiModelProperty(value = "地区", required = false)
 	private String regionPath;
 
+
 	public String getUrl() {
-		return Url;
+		return url;
 	}
 
 	public void setUrl(String url) {
-		Url = url;
+		this.url = url;
 	}
 
 	public String getLogoUrl() {
