@@ -46,7 +46,7 @@ public class MessageDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtCreate;
 
-    @ApiModelProperty(name = "relateId",value = "关联商家ID")
+    @ApiModelProperty(name = "relateId",value = "关联商家ID,邀请粉丝时关联的事粉丝邀请内容表的ID")
     private Long relateId;
 
     public Long getId() {

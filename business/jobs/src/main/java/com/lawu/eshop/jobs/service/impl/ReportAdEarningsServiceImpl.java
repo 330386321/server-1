@@ -25,7 +25,7 @@ import com.lawu.eshop.statistics.param.ReportAdEarningsParam;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 
 @Service
-public class ReportAdEarningsServiceImpl extends BaseController implements ReportAdEarningsCommissionService{
+public class ReportAdEarningsServiceImpl extends BaseController implements ReportAdEarningsCommissionService {
 	
 	@Autowired 
 	private AdSrvService  adSrvService;
@@ -106,6 +106,5 @@ public class ReportAdEarningsServiceImpl extends BaseController implements Repor
 			 }
 		 }
 	}
-
 
 }

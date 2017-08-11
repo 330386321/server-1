@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
-import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +21,17 @@ import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.PointConsumeReportBO;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
+import com.lawu.eshop.property.srv.bo.ReportAdPointGroupByAreaBO;
 import com.lawu.eshop.property.srv.converter.PointDetailConverter;
 import com.lawu.eshop.property.srv.domain.PointDetailDO;
 import com.lawu.eshop.property.srv.domain.PointDetailDOExample;
 import com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
+import com.lawu.eshop.property.srv.domain.extend.ReportAdPointGroupByAreaView;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
+import com.lawu.eshop.property.srv.mapper.extend.PointDetailDOMapperExtend;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
@@ -46,6 +49,8 @@ public class PointDetailServiceImpl implements PointDetailService {
 	private PointDetailDOMapper pointDetailDOMapper;
 	@Autowired
 	private PropertyInfoDOMapper propertyInfoDOMapper;
+	@Autowired
+	private PointDetailDOMapperExtend pointDetailDOMapperExtend;
 
 	/**
 	 * 根据用户编号、查询参数分页查询积分明细
@@ -196,6 +201,19 @@ public class PointDetailServiceImpl implements PointDetailService {
 			bos.add(bo);
 		}
 		return bos;
+	}
+
+	@Override
+	public List<ReportAdPointGroupByAreaBO> getReportAdPointGroupByArea(String bdate, String edate) {
+		List<ReportAdPointGroupByAreaView> list = pointDetailDOMapperExtend.getReportAdPointGroupByArea(bdate, edate);
+		List<ReportAdPointGroupByAreaBO> rntList = new ArrayList<ReportAdPointGroupByAreaBO>();
+		for(ReportAdPointGroupByAreaView r : list) {
+			ReportAdPointGroupByAreaBO BO = new ReportAdPointGroupByAreaBO();
+			BO.setAreaId(r.getAreaId());
+			BO.setTotalPoint(r.getTotalPoint());
+			rntList.add(BO);
+		}
+		return rntList;
 	}
 
 }
