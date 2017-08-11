@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
+import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
@@ -48,11 +49,11 @@ public class UserRedPacketController extends BaseController {
 	 */
 	@RequestMapping(value = "addUserRedPacket", method = RequestMethod.POST)
 	public Result addUserRedPacket(@RequestBody UserRedPacketSaveParam param) {
-		Integer id = userRedPacketService.addUserRedPacket(param);
+		Long id = userRedPacketService.addUserRedPacket(param);
 		if (null == id || id < 0) {
 			successCreated(ResultCode.SAVE_FAIL);
 		}
-		return successCreated();
+		return successCreated(id);
 	}
 
 	/**
@@ -121,4 +122,15 @@ public class UserRedPacketController extends BaseController {
 		return successCreated(maxMoney);
 	}	
 
+	/**
+	 * 根据红包ID 获取红包金额、和orderNum支付时调用第三方用
+	 * @param redPacketId
+	 * @return
+	 */
+	@RequestMapping(value="selectUserRedPacketInfoForThrid",method=RequestMethod.GET)
+	public Result<ThirdPayCallBackQueryPayOrderDTO> selectUserRedPacketInfoForThrid(@RequestParam Long redPacketId){
+		ThirdPayCallBackQueryPayOrderDTO result = userRedPacketService.selectUserRedPacketInfoForThrid(redPacketId);
+		return successGet(result); 
+	}
+	
 }

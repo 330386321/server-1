@@ -25,7 +25,7 @@ public class UserRedPacketAddParam {
 	
 	@ApiParam(name = "totalMoney", required = true, value = "红包总金额")
 	private BigDecimal totalMoney;
-
+	
 	/**
 	 * @return the redPacketPutWayEnum
 	 */

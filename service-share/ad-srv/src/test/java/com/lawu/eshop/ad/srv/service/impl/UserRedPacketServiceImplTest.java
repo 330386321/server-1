@@ -56,7 +56,7 @@ public class UserRedPacketServiceImplTest {
 		param.setTotalMoney(new BigDecimal(100));
 		param.setUserAccount("15000000000");
 		param.setUserNum("M000001");
-		Integer i = userRedPacketService.addUserRedPacket(param);
+		Long i = userRedPacketService.addUserRedPacket(param);
 		UserRedPacketSelectParam query = new UserRedPacketSelectParam();
 		query.setCurrentPage(1);
 		query.setPageSize(10);

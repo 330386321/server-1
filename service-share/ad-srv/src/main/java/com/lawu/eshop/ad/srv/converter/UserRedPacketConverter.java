@@ -9,8 +9,10 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
 import com.lawu.eshop.ad.constants.UserRedPacketEnum;
+import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
+import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
 import com.lawu.eshop.ad.srv.domain.UserRedPacketDO;
 import com.lawu.eshop.utils.DateUtil;
@@ -24,12 +26,13 @@ public class UserRedPacketConverter {
 		UserRedPacketDO info = new UserRedPacketDO();
 		info.setGmtCreate(new Date());
 		info.setGmtModified(new Date());
-		info.setStatus((byte) 1);
+		info.setStatus(UserRedPacketEnum.USER_STATUS_UNPAID.val);
 		info.setTotalCount(param.getTotalCount());
 		info.setTotalMoney(param.getTotalMoney());
 		info.setType(param.getRedPacketPutWayEnum().val);
 		info.setUserAccount(param.getUserAccount());
 		info.setUserNum(param.getUserNum());
+		info.setOrderNum(param.getOrderNum());
 		return info;
 	}
 
@@ -77,5 +80,19 @@ public class UserRedPacketConverter {
 		dto.setUserRedPacketEnum(bo.getUserRedPacketEnum());
 		dto.setTypeStr(RedPacketPutWayEnum.getName(bo.getRedPacketPutWayEnum().val));
 		return dto;
+	}
+
+	public static ThirdPayCallBackQueryPayOrderDTO convertThirdPay(UserRedPacketDO userRed) {
+		ThirdPayCallBackQueryPayOrderDTO dto =new ThirdPayCallBackQueryPayOrderDTO();
+		dto.setActualMoney(userRed.getTotalMoney().doubleValue());
+		dto.setOrderNum(userRed.getOrderNum());
+		return dto;
+	}
+
+	public static UserRedPacketDO convertDO(UserRedPacketUpdateParam param) {
+		UserRedPacketDO user =new UserRedPacketDO();
+		user.setPayType(param.getPayType());
+		user.setThirdNumber(param.getThirdNum());
+		return user;
 	}
 }

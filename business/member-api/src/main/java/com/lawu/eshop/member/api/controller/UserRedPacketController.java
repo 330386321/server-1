@@ -40,6 +40,7 @@ import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.UserRedPacketService;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.utils.QrCodeUtil;
+import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -94,6 +95,7 @@ public class UserRedPacketController extends BaseController {
 		saveParam.setTotalMoney(param.getTotalMoney());
 		saveParam.setUserAccount(UserUtil.getCurrentAccount(request));
 		saveParam.setUserNum(UserUtil.getCurrentUserNum(request));
+		saveParam.setOrderNum(StringUtil.getRandomNum(""));
 		Result result = userRedPacketService.addUserRedPacket(saveParam);
 		return successCreated(result);
 	}

@@ -13,8 +13,10 @@ import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.RedPacketArithmetic;
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
 import com.lawu.eshop.ad.constants.UserRedPacketEnum;
+import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
+import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
 import com.lawu.eshop.ad.srv.constants.TransactionConstant;
 import com.lawu.eshop.ad.srv.converter.UserRedPacketConverter;
@@ -66,7 +68,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	 */
 	@Override
 	@Transactional
-	public Integer addUserRedPacket(UserRedPacketSaveParam param) {
+	public Long addUserRedPacket(UserRedPacketSaveParam param) {
 		UserRedPacketDO userRed = UserRedPacketConverter.converDO(param);
 		Integer i = userRedPacketDOMapper.insert(userRed);
 		if (param.getRedPacketPutWayEnum() == RedPacketPutWayEnum.PUT_WAY_COMMON) {// 普通红包
@@ -78,11 +80,11 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		notification.setId(userRed.getId());
 		notification.setMoney(userRed.getTotalMoney());
 		notification.setUserNum(userRed.getUserNum());
-		// 扣除用户红包金额
+		/*// 扣除用户红包金额
 		transactionStatusService.save(userRed.getId(), TransactionConstant.USER_REDPACKED_CUT_MONEY);
 		messageProducerService.sendMessage(MqConstant.TOPIC_AD_SRV, MqConstant.TAG_AD_USER_REDPACKET_CUT_MONTY,
-				notification);
-		return i;
+				notification);*/
+		return userRed.getId();
 	}
 
 	/**
@@ -300,6 +302,27 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	@Override
 	public UserRedpacketMaxMoney getUserRedpacketMaxMoney(Long redPacketId) {
 		return userTakedRedpacketBOMapperExtend.getMaxMoney(redPacketId);
+	}
+
+	/**
+	 * 根据红包ID 获取红包金额、和orderNum支付时调用第三方用
+	 */
+	@Override
+	public ThirdPayCallBackQueryPayOrderDTO selectUserRedPacketInfoForThrid(Long redPacketId) {
+		UserRedPacketDO userRed = userRedPacketDOMapper.selectByPrimaryKey(redPacketId);
+		ThirdPayCallBackQueryPayOrderDTO third = UserRedPacketConverter.convertThirdPay(userRed);
+		return third;
+	}
+
+	/**
+	 * 第三方回调更新
+	 * 
+	 */
+	@Override
+	public boolean updateUserPacketInfo(UserRedPacketUpdateParam paran) {
+		UserRedPacketDO user =UserRedPacketConverter.convertDO(paran);
+		userRedPacketDOMapper.updateByPrimaryKeySelective(user);
+		return true;
 	}
 
 }

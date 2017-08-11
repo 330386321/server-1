@@ -18,6 +18,7 @@ import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
  * @author lihj
  * @date 2017年8月7日
  */
+@Deprecated
 @Service
 @CompensatingTransactionFollow(topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_USER_REDPACKET_CUT_MONTY)
 public class UserRedpackerCutMoneyTransactionFollowServiceImpl
