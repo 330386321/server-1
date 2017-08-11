@@ -142,6 +142,7 @@ public class ProductConverter {
         productEditInfoBO.setImageContent(imageContents);
         
         productEditInfoBO.setAllowRefund(productDO.getIsAllowRefund());
+        productEditInfoBO.setKeywords(productDO.getKeywords());
         return productEditInfoBO;
     }
 

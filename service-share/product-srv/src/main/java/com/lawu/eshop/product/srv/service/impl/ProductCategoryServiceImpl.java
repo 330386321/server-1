@@ -1,5 +1,12 @@
 package com.lawu.eshop.product.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.lawu.eshop.product.srv.bo.ProductCategoryBO;
 import com.lawu.eshop.product.srv.converter.ProductCategoryConverter;
 import com.lawu.eshop.product.srv.domain.ProductCategoryeDO;
@@ -7,12 +14,6 @@ import com.lawu.eshop.product.srv.domain.ProductCategoryeDOExample;
 import com.lawu.eshop.product.srv.mapper.ProductCategoryeDOMapper;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.utils.DataTransUtil;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by shoubao-016 on 2017/3/22.
@@ -114,6 +115,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 		return productCategoryeDOS.isEmpty() ? new ArrayList<ProductCategoryBO>() : ProductCategoryConverter.convertBOS(productCategoryeDOS);
 	}
 
+	@Deprecated
 	@Override
 	public String getFullCategoryId(Integer id) {
 		ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(id);

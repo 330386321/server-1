@@ -13,7 +13,6 @@ public class ProductEditInfoBO {
     private Long id;
     private Long merchantId;
     private Long category;
-	private String fullCategoryId;
     private String categoryName;
     private String name;
     private String content;
@@ -23,6 +22,7 @@ public class ProductEditInfoBO {
     private List<String> imageContent;
     private List<String> imageDetailUrl;
     private boolean isAllowRefund;
+    private String keywords;
 	public Long getId() {
 		return id;
 	}
@@ -99,11 +99,11 @@ public class ProductEditInfoBO {
 		this.imageDetailUrl = imageDetailUrl;
 	}
 
-	public String getFullCategoryId() {
-		return fullCategoryId;
+	public String getKeywords() {
+		return keywords;
 	}
 
-	public void setFullCategoryId(String fullCategoryId) {
-		this.fullCategoryId = fullCategoryId;
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
 	}
 }
