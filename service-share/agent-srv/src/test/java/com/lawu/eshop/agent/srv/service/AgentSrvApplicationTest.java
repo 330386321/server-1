@@ -1,4 +1,4 @@
-package com.lawu.eshop.agent.srv;
+package com.lawu.eshop.agent.srv.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
