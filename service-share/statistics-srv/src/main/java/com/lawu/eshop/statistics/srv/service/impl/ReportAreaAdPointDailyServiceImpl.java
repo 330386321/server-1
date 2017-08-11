@@ -68,7 +68,7 @@ public class ReportAreaAdPointDailyServiceImpl implements ReportAreaAdPointDaily
 
 	@Override
 	public List<ReportAreaAdPointMonthBO> selectReportAreaAdPointDailyInMonth(String bdate, String edate) {
-		List<ReportAreaAdPointDailyInMonthDOView> viewList = reportAreaAdPointDailyDOMapperExtend.selectReportAreaAdPointDailyInMonth(DateUtil.formatDate(bdate, "yyyy-MM-dd"), DateUtil.formatDate(edate, "yyyy-MM-dd"));
+		List<ReportAreaAdPointDailyInMonthDOView> viewList = reportAreaAdPointDailyDOMapperExtend.selectReportAreaAdPointDailyInMonth(bdate, edate);
 		List<ReportAreaAdPointMonthBO> rtnList = new ArrayList<ReportAreaAdPointMonthBO>();
 		if(viewList != null && !viewList.isEmpty()) {
 			for(ReportAreaAdPointDailyInMonthDOView view : viewList) {

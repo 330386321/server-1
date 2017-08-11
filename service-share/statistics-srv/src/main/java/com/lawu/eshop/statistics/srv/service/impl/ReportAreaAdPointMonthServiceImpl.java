@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.statistics.param.ReportAreaAdPointMonthParams;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaAdPointMonthDO;
+import com.lawu.eshop.statistics.srv.domain.ReportAreaAdPointMonthDOExample;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaAdPointMonthDOMapper;
 import com.lawu.eshop.statistics.srv.service.ReportAreaAdPointMonthService;
 import com.lawu.eshop.utils.DateUtil;
@@ -18,6 +19,9 @@ public class ReportAreaAdPointMonthServiceImpl implements ReportAreaAdPointMonth
 	
 	@Override
 	public int insertReportAreaAdPointMonth(ReportAreaAdPointMonthParams param) {
+		ReportAreaAdPointMonthDOExample reportAreaAdPointMonthDOExample = new ReportAreaAdPointMonthDOExample();
+		reportAreaAdPointMonthDOExample.createCriteria().andAreaIdEqualTo(param.getAreaId()).andGmtReportEqualTo(DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(new Date())));
+		reportAreaAdPointMonthDOMapper.deleteByExample(reportAreaAdPointMonthDOExample);
 		ReportAreaAdPointMonthDO reportAreaAdPointMonthDO = new ReportAreaAdPointMonthDO();
 		reportAreaAdPointMonthDO.setAreaId(param.getAreaId());
 		reportAreaAdPointMonthDO.setCityId(param.getCityId());

@@ -27,6 +27,8 @@ public class ReportAreaAdPointMonthServiceImpl extends BaseController implements
 		Result<List<ReportAreaAdPointMonthDTO>> result = statisticsSrvService.selectReportAreaAdPointDailyInMonth(DateUtil.getDateFormat(firstDayOfLastMonth), DateUtil.getDateFormat(lastDayOfLastMonth));
 		if(result.getModel() != null && !result.getModel().isEmpty()) {
 			for(ReportAreaAdPointMonthDTO dto : result.getModel()) {
+				
+				
 				ReportAreaAdPointMonthParams param = new ReportAreaAdPointMonthParams();
 				param.setAreaId(dto.getAreaId());
 				param.setCityId(dto.getCityId());

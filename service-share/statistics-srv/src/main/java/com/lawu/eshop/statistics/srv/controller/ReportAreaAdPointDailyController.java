@@ -65,8 +65,8 @@ public class ReportAreaAdPointDailyController extends BaseController {
 	
 	
 	@RequestMapping(value = "selectReportAreaAdPointDailyInMonth", method = RequestMethod.GET)
-	public Result<List<ReportAreaAdPointMonthDTO>> selectReportAreaAdPointDailyInMonth(@RequestParam @ApiParam(required = true, value = "开始日期") String bdate, 
-				@RequestParam @ApiParam(required = true, value = "结束") String edate) {
+	public Result<List<ReportAreaAdPointMonthDTO>> selectReportAreaAdPointDailyInMonth(@RequestParam(value = "bdate") String bdate, 
+				@RequestParam(value = "edate") String edate) {
 		List<ReportAreaAdPointMonthBO> list = reportAreaAdPointDailyService.selectReportAreaAdPointDailyInMonth(bdate, edate);
 		List<ReportAreaAdPointMonthDTO> rtnList = new ArrayList<ReportAreaAdPointMonthDTO>();
 		if(list != null && !list.isEmpty()) {
