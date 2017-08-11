@@ -13,7 +13,6 @@ import com.lawu.eshop.statistics.srv.bo.ReportAreaAdPointDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaAdPointMonthBO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaAdPointDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaAdPointDailyDOExample;
-import com.lawu.eshop.statistics.srv.domain.ReportAreaAdPointDailyDOExample.Criteria;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportAreaAdPointDailyDOView;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportAreaAdPointDailyInMonthDOView;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaAdPointDailyDOMapper;
@@ -87,17 +86,6 @@ public class ReportAreaAdPointDailyServiceImpl implements ReportAreaAdPointDaily
 		return rtnList;
 	}
 
-	@Override
-	public List<ReportAreaAdPointDailyBO> selectReportAreaAdPointDailyByAreaId(AgentSelectAreaAdPointParam param) {
-		ReportAreaAdPointDailyDOExample reportAreaAdPointDailyDOExample = new ReportAreaAdPointDailyDOExample();
-		Criteria criteria = reportAreaAdPointDailyDOExample.createCriteria();
-		if(param.getCityId() != null)
-			criteria.andCityIdEqualTo(param.getCityId());
-		if(param.getBdate() != null && param.getEdate() != null)
-			criteria.andGmtReportBetween(param.getBdate(), param.getEdate());
-		List<ReportAreaAdPointDailyDO> list = reportAreaAdPointDailyDOMapper.selectByExample(reportAreaAdPointDailyDOExample);
-		return null;
-	}
 
 	@Override
 	public List<ReportAreaAdPointDailyBO> selectReportAreaAdPointDaily(AgentSelectAreaAdPointParam param) {
@@ -112,6 +100,11 @@ public class ReportAreaAdPointDailyServiceImpl implements ReportAreaAdPointDaily
 			}
 		}
 		return boList;
+	}
+
+	@Override
+	public List<ReportAreaAdPointDailyBO> selectReportAreaAdPointDailyByAreaId(AgentSelectAreaAdPointParam param) {
+		return null;
 	}
 
 }

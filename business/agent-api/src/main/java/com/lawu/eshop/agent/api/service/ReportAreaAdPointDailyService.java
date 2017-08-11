@@ -19,7 +19,7 @@ public interface ReportAreaAdPointDailyService {
 
 	
 	
-	@RequestMapping(value = "reportAreaAdPointDaily/selectReportAreaAdPointDaily", method = RequestMethod.GET)
+	@RequestMapping(value = "reportAreaAdPointDaily/selectReportAreaAdPointDailyByAgentSelectAreaAdPointParam", method = RequestMethod.POST)
 	Result<List<ReportAreaAdPorintDailyByAreaIdDTO>> selectReportAreaAdPointDaily(@RequestBody AgentSelectAreaAdPointParam param);
 	
 }

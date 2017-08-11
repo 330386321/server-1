@@ -84,7 +84,7 @@ public class ReportAreaAdPointDailyController extends BaseController {
 		return successCreated(rtnList);
 	}
 	
-	@RequestMapping(value = "selectReportAreaAdPointDaily", method = RequestMethod.GET)
+	@RequestMapping(value = "selectReportAreaAdPointDailyByAgentSelectAreaAdPointParam", method = RequestMethod.POST)
 	Result<List<ReportAreaAdPorintDailyByAreaIdDTO>> selectReportAreaAdPointDaily(@RequestBody AgentSelectAreaAdPointParam param) {
 		List<ReportAreaAdPointDailyBO> list = reportAreaAdPointDailyService.selectReportAreaAdPointDaily(param);
 		List<ReportAreaAdPorintDailyByAreaIdDTO> rtnList = new ArrayList<ReportAreaAdPorintDailyByAreaIdDTO>();

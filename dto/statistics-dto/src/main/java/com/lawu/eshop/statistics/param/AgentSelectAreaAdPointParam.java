@@ -10,10 +10,10 @@ public class AgentSelectAreaAdPointParam {
 	private Integer cityId;
 	
 	@ApiParam (value = "开始时间")
-	private Date bdate;
+	private String bdate;
 	
 	@ApiParam (value = "结束时间")
-	private Date edate;
+	private String edate;
 
 	public Integer getCityId() {
 		return cityId;
@@ -23,21 +23,19 @@ public class AgentSelectAreaAdPointParam {
 		this.cityId = cityId;
 	}
 
-	public Date getBdate() {
+	public String getBdate() {
 		return bdate;
 	}
 
-	public void setBdate(Date bdate) {
+	public void setBdate(String bdate) {
 		this.bdate = bdate;
 	}
 
-	public Date getEdate() {
+	public String getEdate() {
 		return edate;
 	}
 
-	public void setEdate(Date edate) {
+	public void setEdate(String edate) {
 		this.edate = edate;
 	}
-
-	
 }
