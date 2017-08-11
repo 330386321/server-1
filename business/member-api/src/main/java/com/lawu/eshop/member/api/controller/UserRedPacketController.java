@@ -115,7 +115,7 @@ public class UserRedPacketController extends BaseController {
 	@ApiOperation(value = "生成用户红包二维码", notes = "生成用户红包二维码(李洪军)", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserQrCode", method = RequestMethod.GET)
-	public void getUserQrCode(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+	public void getUserQrCode(@RequestParam(UserConstant.REQ_HEADER_TOKEN) String token,
 			@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId) throws IOException {
 		HttpServletRequest request = getRequest();
 		Long memberId = UserUtil.getCurrentUserId(request);

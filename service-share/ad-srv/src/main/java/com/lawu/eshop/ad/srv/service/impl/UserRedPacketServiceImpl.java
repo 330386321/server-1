@@ -143,6 +143,8 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	@Transactional
 	public Page<UserRedPacketBO> selectUserRedPacketList(UserRedPacketSelectParam param) {
 		UserRedPacketDOExample example = new UserRedPacketDOExample();
+		Criteria cr = example.createCriteria();
+		cr.andUserNumEqualTo(param.getUserNum());
 		example.setOrderByClause("gmt_create desc");
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		List<UserRedPacketDO> listDO = userRedPacketDOMapper.selectByExampleWithRowbounds(example, rowBounds);
@@ -238,10 +240,10 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		notification.setId(userRedpacket.getId());
 		notification.setMoney(totalBackMoney);
 		notification.setUserNum(userRedpacket.getUserNum());
-		// 退款
+		/*// 退款
 		transactionStatusService.save(userRedpacket.getId(), TransactionConstant.USER_REDPACKED_MONEY_ADD);
 		messageProducerService.sendMessage(MqConstant.TOPIC_AD_SRV, MqConstant.TAG_AD_USER_REDPACKET_ADD_MONTY,
-				notification);
+				notification);*/
 	}
 
 	/**
