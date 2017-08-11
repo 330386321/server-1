@@ -106,6 +106,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                             newStoreDO.setPrincipalMobile(merchantStoreParam.getPrincipalMobile());
                             newStoreDO.setIndustryName(merchantStoreParam.getIndustryName());
                             newStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
+                            newStoreDO.setKeywords(merchantStoreParam.getKeywords());
                             merchantStoreDOMapper.updateByPrimaryKeySelective(newStoreDO);
                             //修改更新门店扩展信息
                             MerchantStoreProfileDO profile = new MerchantStoreProfileDO();

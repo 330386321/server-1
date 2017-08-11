@@ -87,6 +87,7 @@ public class MerchantStoreConverter {
         merchantStoreInfoBO.setStatusEnum(MerchantStatusEnum.getEnum(merchantStoreDO.getStatus()));
         merchantStoreInfoBO.setRegionName(merchantStoreDO.getRegionName());
         merchantStoreInfoBO.setIndustryName(merchantStoreDO.getIndustryName());
+        merchantStoreInfoBO.setKeywords(merchantStoreDO.getKeywords());
         return merchantStoreInfoBO;
     }
 
@@ -131,6 +132,7 @@ public class MerchantStoreConverter {
         merchantStoreDTO.setMerchantStatus(merchantStoreInfoBO.getStatusEnum());
         merchantStoreDTO.setRegionName(merchantStoreInfoBO.getRegionName());
         merchantStoreDTO.setIndustryName(merchantStoreInfoBO.getIndustryName());
+        merchantStoreDTO.setKeywords(merchantStoreInfoBO.getKeywords());
 
         return merchantStoreDTO;
     }

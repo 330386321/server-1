@@ -1,9 +1,9 @@
 package com.lawu.eshop.user.srv.bo;
 
-import com.lawu.eshop.user.dto.MerchantStatusEnum;
-
 import java.math.BigDecimal;
 import java.util.Date;
+
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
 
 /**
  * 商家门店信息
@@ -163,6 +163,8 @@ public class MerchantStoreInfoBO {
      * 门店审核状态
      */
     private boolean auditSuccess = false;
+
+    private String keywords;
 
     public Long getMerchantStoreId() {
         return merchantStoreId;
@@ -396,5 +398,13 @@ public class MerchantStoreInfoBO {
 
     public void setIndustryName(String industryName) {
         this.industryName = industryName;
+    }
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
     }
 }
