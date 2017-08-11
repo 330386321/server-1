@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.statistics.param.AgentSelectAreaAdPointParam;
 import com.lawu.eshop.statistics.param.ReportAreaAdPointDailyParams;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaAdPointDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaAdPointMonthBO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaAdPointDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaAdPointDailyDOExample;
+import com.lawu.eshop.statistics.srv.domain.ReportAreaAdPointDailyDOExample.Criteria;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportAreaAdPointDailyInMonthDOView;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaAdPointDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.extend.ReportAreaAdPointDailyDOMapperExtend;
@@ -82,6 +84,19 @@ public class ReportAreaAdPointDailyServiceImpl implements ReportAreaAdPointDaily
 			
 		}
 		return rtnList;
+	}
+
+	@Override
+	public List<ReportAreaAdPointDailyBO> selectReportAreaAdPointDailyByAreaId(AgentSelectAreaAdPointParam param) {
+		ReportAreaAdPointDailyDOExample reportAreaAdPointDailyDOExample = new ReportAreaAdPointDailyDOExample();
+		Criteria criteria = reportAreaAdPointDailyDOExample.createCriteria();
+		if(param.getCityId() != null)
+			criteria.andCityIdEqualTo(param.getCityId());
+		if(param.getBdate() != null && param.getEdate() != null)
+			criteria.andGmtReportBetween(param.getBdate(), param.getEdate());
+		List<ReportAreaAdPointDailyDO> list = reportAreaAdPointDailyDOMapper.selectByExample(reportAreaAdPointDailyDOExample);
+		
+		return null;
 	}
 
 }
