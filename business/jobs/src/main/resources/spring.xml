@@ -80,14 +80,21 @@
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 				
 	<job:simple id="userRedpacketJob" description="用户红包失效任务" class="com.lawu.eshop.jobs.impl.ad.UserRedpacketJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" 
-				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>			
-	
-	<job:simple id="reportAreaAdPointDailyJob" description="区域发广告总额日统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaAdPointDailyJob" registry-center-ref="regCenter" cron="0 15 0 1/1 * ?" 
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
-				
-	<job:simple id="reportAreaAdPointMonthJob" description="区域发广告总额月统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaAdPointMonthJob" registry-center-ref="regCenter" cron="0 0 1 1 * ?" 
-				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>			
-				
+
+	<job:simple id="reportAreaAdPointDailyJob" description="区域发广告总额日统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaAdPointDailyJob" registry-center-ref="regCenter" cron="0 15 0 1/1 * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
+
+	<job:simple id="reportAreaAdPointMonthJob" description="区域发广告总额月统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaAdPointMonthJob" registry-center-ref="regCenter" cron="0 0 1 1 * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
+
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
+
+	<job:simple id="agentUserRegDailyJob" description="用户注册地区日统计" class="com.lawu.eshop.jobs.impl.agent.AgentUserRegDailyJob" registry-center-ref="regCenter" cron="0 0 1 1/1 * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+	<job:simple id="agentUserRegMonthJob" description="用户注册地区月统计" class="com.lawu.eshop.jobs.impl.agent.AgentUserRegDailyJob" registry-center-ref="regCenter" cron="0 0 2 1 * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+
 	<!-- Lock service -->
 	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />
 	<bean id="redissonConfiguration" class="com.lawu.eshop.synchronization.lock.config.RedissonConfiguration" />

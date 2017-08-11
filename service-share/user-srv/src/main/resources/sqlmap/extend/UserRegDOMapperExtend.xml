@@ -42,29 +42,29 @@
     <select id="collectionMerchantNormalRegDailyArea" resultType="java.lang.Integer" parameterType="com.lawu.eshop.user.param.CollectionUserRegParam">
         select count(1) from merchant m inner join merchant_store ms on m.id = ms.merchant_id
         inner join merchant_store_profile msp on ms.merchant_id = msp.merchant_id
-        where year(gmt_create)=#{year} and month(gmt_create)=#{month} and day(gmt_create)=#{day} and ms.region_path like CONCAT(#{regionPath},'%') and msp.manage_type = 1;
+        where year(ms.gmt_create)=#{year} and month(ms.gmt_create)=#{month} and day(ms.gmt_create)=#{day} and ms.region_path like CONCAT(#{regionPath},'%') and msp.manage_type = 1;
     </select>
 
     <select id="collectionMerchantEntityRegDailyArea" resultType="java.lang.Integer" parameterType="com.lawu.eshop.user.param.CollectionUserRegParam">
         select count(1) from merchant m inner join merchant_store ms on m.id = ms.merchant_id
         inner join merchant_store_profile msp on ms.merchant_id = msp.merchant_id
-        where year(gmt_create)=#{year} and month(gmt_create)=#{month} and day(gmt_create)=#{day} and ms.region_path like CONCAT(#{regionPath},'%') and msp.manage_type = 2;
+        where year(ms.gmt_create)=#{year} and month(ms.gmt_create)=#{ms.month} and day(ms.gmt_create)=#{day} and ms.region_path like CONCAT(#{regionPath},'%') and msp.manage_type = 2;
     </select>
 
     <select id="collectionMemberRegMonthArea" resultType="java.lang.Integer" parameterType="com.lawu.eshop.user.param.CollectionUserRegParam">
-        select count(1) from member where year(gmt_create)=#{year} and month(gmt_create)=#{month}  and region_path like CONCAT(#{regionPath},'%')
+        select count(1) from member where year(ms.gmt_create)=#{year} and month(ms.gmt_create)=#{month}  and region_path like CONCAT(#{regionPath},'%')
     </select>
 
     <select id="collectionMerchantNormalRegMonthArea" resultType="java.lang.Integer" parameterType="com.lawu.eshop.user.param.CollectionUserRegParam">
         select count(1) from merchant m inner join merchant_store ms on m.id = ms.merchant_id
         inner join merchant_store_profile msp on ms.merchant_id = msp.merchant_id
-        where year(gmt_create)=#{year} and month(gmt_create)=#{month}  and ms.region_path like CONCAT(#{regionPath},'%') and msp.manage_type = 1;
+        where year(ms.gmt_create)=#{year} and month(ms.gmt_create)=#{month}  and ms.region_path like CONCAT(#{regionPath},'%') and msp.manage_type = 1;
     </select>
 
     <select id="collectionMerchantEntityRegMonthArea" resultType="java.lang.Integer" parameterType="com.lawu.eshop.user.param.CollectionUserRegParam">
         select count(1) from merchant m inner join merchant_store ms on m.id = ms.merchant_id
         inner join merchant_store_profile msp on ms.merchant_id = msp.merchant_id
-        where year(gmt_create)=#{year} and month(gmt_create)=#{month} and ms.region_path like CONCAT(#{regionPath},'%') and msp.manage_type = 2;
+        where year(ms.gmt_create)=#{year} and month(ms.gmt_create)=#{month} and ms.region_path like CONCAT(#{regionPath},'%') and msp.manage_type = 2;
     </select>
 
 
