@@ -95,9 +95,9 @@
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 
 	<job:simple id="reportAreaVolumnDailyJob" description="区域总销量日统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaVolumnDailyJob" registry-center-ref="regCenter" cron="0 15 0 1/1 * ?"
-				sharding-total-count="1" overwrite="true" disabled="false"/>
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 	<job:simple id="reportAreaVolumnMontyJob" description="区域总销量月统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaVolumnMonthJob" registry-center-ref="regCenter" cron="0 0 1 1 * ?"
-				sharding-total-count="1" overwrite="true" disabled="false"/>
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 	
 	<!-- Lock service -->
 	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />
