@@ -242,7 +242,7 @@ public class AdController extends BaseController {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());
     	return adService.selectListByMerchant(adMerchantParam, memberId);
     }
-
+    
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "广告操作下架", notes = "广告操作下架,[5001]（张荣成）", httpMethod = "PUT")

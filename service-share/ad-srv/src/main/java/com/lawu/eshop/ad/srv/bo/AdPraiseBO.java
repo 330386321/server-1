@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
+import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
 public class AdPraiseBO {
 	
@@ -39,6 +40,10 @@ public class AdPraiseBO {
 	private String content;
 	
 	private AdStatusEnum statusEnum;
+	
+	private Long relateId;
+	
+	private RelateTypeEnum relateType;
 	
 
 	public AdStatusEnum getStatusEnum() {
@@ -167,6 +172,22 @@ public class AdPraiseBO {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public Long getRelateId() {
+		return relateId;
+	}
+
+	public void setRelateId(Long relateId) {
+		this.relateId = relateId;
+	}
+
+	public RelateTypeEnum getRelateType() {
+		return relateType;
+	}
+
+	public void setRelateType(RelateTypeEnum relateType) {
+		this.relateType = relateType;
 	}
 	
 	

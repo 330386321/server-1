@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
+import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -66,6 +67,12 @@ public class AdPraiseDTO {
 	
 	@ApiModelProperty(value = "提示语")
 	private List<String> words;
+	
+	@ApiModelProperty (name="relateId", value = "关联id")
+	private Long relateId;
+	
+	@ApiModelProperty (name="relateType", value = "PRODUCT_TYPE 商品  | MERCHANT_STORE_TYPE 店铺")
+	private RelateTypeEnum relateType;
 	
 
 	public Integer getCount() {
@@ -218,6 +225,22 @@ public class AdPraiseDTO {
 
 	public void setWords(List<String> words) {
 		this.words = words;
+	}
+
+	public Long getRelateId() {
+		return relateId;
+	}
+
+	public void setRelateId(Long relateId) {
+		this.relateId = relateId;
+	}
+
+	public RelateTypeEnum getRelateType() {
+		return relateType;
+	}
+
+	public void setRelateType(RelateTypeEnum relateType) {
+		this.relateType = relateType;
 	}
 
 	
