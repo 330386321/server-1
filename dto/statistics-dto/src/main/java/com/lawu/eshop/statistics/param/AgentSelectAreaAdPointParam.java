@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiParam;
 
 public class AgentSelectAreaAdPointParam {
 
-	@ApiParam (value = "经度")
+	@ApiParam (value = "市编号")
 	private Integer cityId;
 	
 	@ApiParam (value = "开始时间")

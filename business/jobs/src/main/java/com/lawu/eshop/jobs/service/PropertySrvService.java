@@ -13,7 +13,9 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.ReportAdEarningsPointDTO;
 import com.lawu.eshop.property.dto.ReportAdPointGroupByAreaDTO;
 import com.lawu.eshop.property.dto.ReportEarningsDTO;
+import com.lawu.eshop.property.dto.TotalSalesGroupByAreaDTO;
 import com.lawu.eshop.property.param.ReportAdEarningsPointParam;
+import com.lawu.eshop.property.param.TotalSalesQueryParam;
 
 @FeignClient(value= "property-srv")
 public interface PropertySrvService {
@@ -60,4 +62,13 @@ public interface PropertySrvService {
 	 */
 	@RequestMapping(value = "pointDetail/getReportAdPointGroupByArea",method = RequestMethod.GET)
 	Result<List<ReportAdPointGroupByAreaDTO>> getReportAdPointGroupByArea(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate);
+	
+	/**
+	 * 查询指定日期的平台销量(group by area)
+	 *
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "transactionDetail/selectTotalSalesGroupByArea", method = RequestMethod.POST)
+	Result<List<TotalSalesGroupByAreaDTO>> selectTotalSalesGroupByArea(@RequestBody TotalSalesQueryParam param);
 }

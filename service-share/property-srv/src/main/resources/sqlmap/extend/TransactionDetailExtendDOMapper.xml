@@ -7,6 +7,16 @@
         <result column="transaction_type" jdbcType="TINYINT" property="transactionType" />
     </resultMap>
     
+    
+    <resultMap id="TotalSalesGroupByAreaResultMap" type="com.lawu.eshop.property.srv.domain.extend.TotalSalesGroupByAreaDO">
+        <result column="amount" jdbcType="DECIMAL" property="amount" />
+        <result column="transaction_type" jdbcType="TINYINT" property="transactionType" />
+        <result column="province_id" jdbcType="INTEGER" property="provinceId" />
+        <result column="city_id" jdbcType="INTEGER" property="cityId" />
+        <result column="area_id" jdbcType="INTEGER" property="areaId" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+    </resultMap>
+    
     <resultMap id="UserIncomeExpenditureResultMap" type="com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureDO">
         <result column="user_num" jdbcType="VARCHAR" property="userNum" />
         <result column="amount" jdbcType="DECIMAL" property="amount" />
@@ -27,4 +37,14 @@
 		WHERE AND gmt_create BETWEEN #{start} and #{end}
 		GROUP BY user_num, direction
     </select>
+    
+     <!-- 根据时间获取获取买单和订单的收入group by areaId -->
+	<select id="selectTotalSalesGroupByArea"  resultMap="TotalSalesGroupByAreaResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample">
+		SELECT sum(amount) as amount, province_id, city_id, area_id, transaction_type, case when transaction_type = 100 then '买单' else '订单' end type
+		FROM transaction_detail 
+			WHERE transaction_type in (100, 101)
+			AND gmt_create BETWEEN #{start} AND #{end}
+		GROUP BY transaction_type,province_id,city_id,area_id
+	</select>
+	
 </mapper>

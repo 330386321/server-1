@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.TotalSalesDTO;
+import com.lawu.eshop.property.dto.TotalSalesGroupByAreaDTO;
 import com.lawu.eshop.property.dto.TransactionDetailBackageDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
@@ -24,6 +26,7 @@ import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
+import com.lawu.eshop.property.srv.bo.TotalSalesGroupByAreaBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
 import com.lawu.eshop.property.srv.converter.TotalSalesConverter;
@@ -117,6 +120,34 @@ public class TransactionDetailController extends BaseController {
 		TotalSalesDTO rtn = TotalSalesConverter.convertTotalSalesDTO(totalSalesBOList);
 		return successCreated(rtn);
 	}
+	
+	/**
+	 * 查询指定日期的平台销量(group by area)
+	 *
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "selectTotalSalesGroupByArea", method = RequestMethod.POST)
+	public Result<List<TotalSalesGroupByAreaDTO>> selectTotalSalesGroupByArea(@RequestBody TotalSalesQueryParam param) {
+		List<TotalSalesGroupByAreaBO> totalSalesBOList = transactionDetailService.selectTotalSalesGroupByArea(param);
+		List<TotalSalesGroupByAreaDTO> rtnList = new ArrayList<TotalSalesGroupByAreaDTO>();
+		if(totalSalesBOList != null && !totalSalesBOList.isEmpty()) {
+			for(TotalSalesGroupByAreaBO BO : totalSalesBOList) {
+				TotalSalesGroupByAreaDTO dto = new TotalSalesGroupByAreaDTO();
+				dto.setAreaId(BO.getAreaId());
+				dto.setCityId(BO.getCityId());
+				dto.setProvinceId(BO.getProvinceId());
+				if(BO.getTransactionType().getValue() == 100) {
+					dto.setPayOrderAmount(BO.getAmount());
+				} else {
+					dto.setShoppingOrderAmount(BO.getAmount());
+				}
+				rtnList.add(dto);
+			}
+		}
+		return successCreated(rtnList);
+	}
+	
 	
 	/**
 	 * 查询用户收入和支出

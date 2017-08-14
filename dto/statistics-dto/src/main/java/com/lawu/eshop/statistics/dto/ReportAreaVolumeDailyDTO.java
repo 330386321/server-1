@@ -1,11 +1,14 @@
-package com.lawu.eshop.statistics.param;
+package com.lawu.eshop.statistics.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ReportAreaAdPointMonthParams {
-
-	private BigDecimal reportTotalPoint;
+public class ReportAreaVolumeDailyDTO {
+	private Long id;
+	
+	private BigDecimal reportTotalMoney;
+	
+	private Byte type;
 	
 	private Integer provinceId;
 	
@@ -17,12 +20,28 @@ public class ReportAreaAdPointMonthParams {
 	
 	private Date gmtCreate;
 
-	public BigDecimal getReportTotalPoint() {
-		return reportTotalPoint;
+	public Long getId() {
+		return id;
 	}
 
-	public void setReportTotalPoint(BigDecimal reportTotalPoint) {
-		this.reportTotalPoint = reportTotalPoint;
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public BigDecimal getReportTotalMoney() {
+		return reportTotalMoney;
+	}
+
+	public void setReportTotalMoney(BigDecimal reportTotalMoney) {
+		this.reportTotalMoney = reportTotalMoney;
+	}
+
+	public Byte getType() {
+		return type;
+	}
+
+	public void setType(Byte type) {
+		this.type = type;
 	}
 
 	public Integer getProvinceId() {
@@ -64,5 +83,4 @@ public class ReportAreaAdPointMonthParams {
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
 	}
-	
 }

@@ -5,16 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.property.srv.domain.PropertyDOExample;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
-import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gexin.fastjson.JSONObject;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
@@ -27,18 +24,23 @@ import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
+import com.lawu.eshop.property.srv.bo.TotalSalesGroupByAreaBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
 import com.lawu.eshop.property.srv.converter.TotalSalesConverter;
 import com.lawu.eshop.property.srv.converter.TransactionDetailConverter;
 import com.lawu.eshop.property.srv.converter.UserIncomeExpenditureConverter;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample.Criteria;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesDO;
+import com.lawu.eshop.property.srv.domain.extend.TotalSalesGroupByAreaDO;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample;
 import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureDO;
 import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureExample;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.TransactionDetailExtendDOMapper;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
@@ -256,6 +258,33 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		UserIncomeExpenditureExample example = UserIncomeExpenditureConverter.convert(param);
 		List<UserIncomeExpenditureDO> userIncomeExpenditureDOList = transactionDetailExtendDOMapper.selectUserIncomeExpenditure(example);
 		return UserIncomeExpenditureConverter.convertUserIncomeExpenditureBOList(userIncomeExpenditureDOList);
+	}
+
+	
+	/**
+	 * 查询平台销售金额 group by area
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Override
+	public List<TotalSalesGroupByAreaBO> selectTotalSalesGroupByArea(TotalSalesQueryParam param) {
+		TotalSalesQueryExample example = TotalSalesConverter.convert(param);
+		List<TotalSalesGroupByAreaDO> totalSalesDOList = transactionDetailExtendDOMapper.selectTotalSalesGroupByArea(example);
+		List<TotalSalesGroupByAreaBO> boList = new ArrayList<TotalSalesGroupByAreaBO>();
+		if(totalSalesDOList != null && !totalSalesDOList.isEmpty()) {
+			for(TotalSalesGroupByAreaDO DO : totalSalesDOList) {
+				TotalSalesGroupByAreaBO bo = new TotalSalesGroupByAreaBO();
+				bo.setAmount(DO.getAmount());
+				bo.setAreaId(DO.getAreaId());
+				bo.setCityId(DO.getCityId());
+				bo.setProvinceId(DO.getProvinceId());
+				bo.setTransactionType(MerchantTransactionTypeEnum.getEnum(DO.getTransactionType()));
+				bo.setType(DO.getType());
+				boList.add(bo);
+			}
+		}
+		return boList;
 	}
 
 }

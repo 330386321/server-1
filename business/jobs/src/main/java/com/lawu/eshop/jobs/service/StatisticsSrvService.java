@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.statistics.dto.ReportAreaAdPointDailyDTO;
 import com.lawu.eshop.statistics.dto.ReportAreaAdPointMonthDTO;
+import com.lawu.eshop.statistics.dto.ReportAreaVolumnDailyInMonthDTO;
 import com.lawu.eshop.statistics.param.ReportAreaAdPointDailyParams;
 import com.lawu.eshop.statistics.param.ReportAreaAdPointMonthParams;
+import com.lawu.eshop.statistics.param.ReportAreaVolumnDailyParam;
+import com.lawu.eshop.statistics.param.ReportAreaVolumnMonthParam;
 
 
 @FeignClient(value= "statistics-srv")
@@ -38,4 +41,15 @@ public interface StatisticsSrvService {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "reportAreaAdPointMonth/insertReportAreaAdPointMonth", method = RequestMethod.POST)
 	Result insertReportAreaAdPointMonth(@RequestBody ReportAreaAdPointMonthParams param);
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "reportAreaVolumnDaily/insertReportAreaVolumnDaily", method = RequestMethod.POST)
+	Result insertReportAreaVolumnDaily(@RequestBody ReportAreaVolumnDailyParam param);
+	
+	@RequestMapping(value = "reportAreaVolumnDaily/selectReportAreaVolumeDailyInMonth", method = RequestMethod.GET)
+    Result<List<ReportAreaVolumnDailyInMonthDTO>> selectReportAreaVolumeDailyInMonth(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate);
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "reportAreaVolumnMonth/insertReportAreaVolumnMonth", method = RequestMethod.POST)
+    Result insertReportAreaVolumnMonth(@RequestBody ReportAreaVolumnMonthParam param);
 }

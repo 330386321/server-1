@@ -11,6 +11,7 @@ import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
+import com.lawu.eshop.property.srv.bo.TotalSalesGroupByAreaBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
 
@@ -71,6 +72,15 @@ public interface TransactionDetailService {
 	 * @return
 	 */
 	List<TotalSalesBO> selectTotalSales(TotalSalesQueryParam param);
+	
+	
+	/**
+	 * 查询平台销售金额groupby area
+	 *
+	 * @param param
+	 * @return
+	 */
+	List<TotalSalesGroupByAreaBO> selectTotalSalesGroupByArea(TotalSalesQueryParam param);
 	
 	/**
 	 * 查询用户收入和支出金额

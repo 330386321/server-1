@@ -62,8 +62,6 @@ public class FansInviteContentController extends BaseController {
     	FansInviteContentDTO dto = FansInviteContentConverter.converterBoToDto(bo);
     	int i = fansInviteResultService.selectInviteResultById(id);
     	dto.setFansInviteResultEnum(FansInviteResultEnum.getEnum((byte)i));
-    	Result<FansInviteContentDTO> result = new Result<FansInviteContentDTO>();
-    	result.setModel(dto);
-    	return result;
+    	return successCreated(dto);
     }
 }
