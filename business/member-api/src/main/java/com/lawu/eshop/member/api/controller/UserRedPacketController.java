@@ -38,7 +38,6 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.MemberApiConfig;
-import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.utils.QrCodeUtil;
 import com.lawu.eshop.utils.StringUtil;
 
@@ -108,11 +107,10 @@ public class UserRedPacketController extends BaseController {
 	@ApiOperation(value = "生成用户红包二维码", notes = "生成用户红包二维码(李洪军)", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserQrCode", method = RequestMethod.GET)
-	public void getUserQrCode(@RequestParam(UserConstant.REQ_HEADER_TOKEN) String token,
+	public void getUserQrCode(@RequestParam @ApiParam(required = true, value = "token") String token,
 			@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId) throws IOException {
-		HttpServletRequest request = getRequest();
-		Long memberId = UserUtil.getCurrentUserId(request);
-		if (memberId != 0) {
+		String memberId = UserUtil.getCurrentUserIdByToken(token);
+		if (null != memberId) {
 			HttpServletResponse response = getResponse();
 			response.setHeader("Pragma", "no-cache");
 			response.setHeader("Cache-Control", "no-cache");

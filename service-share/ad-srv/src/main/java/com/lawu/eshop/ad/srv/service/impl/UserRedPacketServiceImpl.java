@@ -14,7 +14,6 @@ import com.lawu.eshop.ad.constants.RedPacketArithmetic;
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
 import com.lawu.eshop.ad.constants.UserRedPacketEnum;
 import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
-import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.param.UserPacketRefundParam;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
