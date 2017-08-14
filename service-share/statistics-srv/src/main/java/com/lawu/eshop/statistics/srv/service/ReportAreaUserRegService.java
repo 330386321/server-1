@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.lawu.eshop.statistics.param.AgentReportParam;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaUserRegDailyBO;
+import com.lawu.eshop.statistics.srv.bo.ReportAreaUserRegMonthBO;
 
 /**
  * @author zhangyong
@@ -12,4 +13,6 @@ import com.lawu.eshop.statistics.srv.bo.ReportAreaUserRegDailyBO;
 public interface ReportAreaUserRegService {
 
     List<ReportAreaUserRegDailyBO> getUserRegListDaily(AgentReportParam param);
+
+    List<ReportAreaUserRegMonthBO> getUserRegListMonth(AgentReportParam param);
 }
