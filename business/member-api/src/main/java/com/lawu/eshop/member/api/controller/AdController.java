@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -199,13 +200,19 @@ public class AdController extends BaseController {
     		adEgainDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
     		adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
     	}
-    	
-		 Result<Set<String>> rs= adViewService.getAdviews(id.toString());
+    	if(StringUtils.isNotEmpty(adEgainDTO.getVideoImgUrl())){
+    		File f= new File(memberApiConfig.getVideoUrl()+adEgainDTO.getMediaUrl()); 
+    		if (f.exists() && f.isFile()){  
+    	        adEgainDTO.setFileSize(f.length()/1024/1024);
+    	    }
+    	}
+	    
+		Result<Set<String>> rs= adViewService.getAdviews(id.toString());
 		 
-		 if(!isSuccess(rs)){
+		if(!isSuccess(rs)){
 			 return successCreated(rs.getRet());
-    	 }
-		 if(!rs.getModel().isEmpty()){
+    	}
+		if(!rs.getModel().isEmpty()){
 			boolean flag = false;
 			for (String str : rs.getModel()) {
 				flag = memberId.toString().equals(str);
@@ -213,9 +220,9 @@ public class AdController extends BaseController {
 			if (!flag) {
 				adViewService.setAdView(id.toString(), memberId.toString());
 			}
-		  }else{
+		 }else{
 			 adViewService.setAdView(id.toString(), memberId.toString());
-		  }
+		 }
        
         return successAccepted(adEgainDTO);
     }

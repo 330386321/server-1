@@ -182,7 +182,7 @@ public class AdController extends BaseController {
     public Result saveAdvert(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-		if(adParam.getTypeEnum().getVal() != 4){
+    	if(adParam.getTypeEnum()!=AdTypeEnum.AD_TYPE_PACKET){
 			if(StringUtils.isEmpty(adParam.getBeginTime())){
 				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
 			}
@@ -201,13 +201,13 @@ public class AdController extends BaseController {
     		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
     	}
     	Integer count=0;
-    	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==1){
+    	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_AREAS){
     		String areas=adParam.getAreas();
     		if(areas==null || areas==""){
     			areas=ALL_PLACE;
     		}
     		count=memberCountService.findMemberCount(areas);
-    	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==2){
+    	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_FENS){
     		count=memberCountService.findFensCount(merchantId);
     	}
     	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
