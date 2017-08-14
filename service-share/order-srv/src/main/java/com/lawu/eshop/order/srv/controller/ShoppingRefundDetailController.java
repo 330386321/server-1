@@ -351,7 +351,7 @@ public class ShoppingRefundDetailController extends BaseController {
 		if (shoppingRefundDetailBO == null) {
 			return successGet(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_REFUND_DATA_DOES_NOT_EXIST);
 		}
-		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingRefundDetailBO.getId());
+		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingRefundDetailBO.getShoppingOrderItemId());
 		if (shoppingOrderItemBO == null) {
 			return successGet(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
 		}
