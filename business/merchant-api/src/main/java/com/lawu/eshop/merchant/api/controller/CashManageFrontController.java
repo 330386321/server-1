@@ -73,14 +73,14 @@ public class CashManageFrontController extends BaseController {
 		
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		CashUserInfoDTO cashUserInfoDTO = merchantStoreService.findCashUserInfo(merchantId);
-		if(cashUserInfoDTO == null){
-			return successCreated(ResultCode.PROPERTY_CASH_USER_INFO_NULL);
-		}
-		dataParam.setName(cashUserInfoDTO.getName());
-		dataParam.setProvinceId(cashUserInfoDTO.getProvinceId());
-		dataParam.setCityId(cashUserInfoDTO.getCityId());
-		dataParam.setAreaId(cashUserInfoDTO.getAreaId());
-		dataParam.setRegionFullName(cashUserInfoDTO.getRegionFullName());
+//		if(cashUserInfoDTO == null){
+//			return successCreated(ResultCode.PROPERTY_CASH_USER_INFO_NULL);
+//		}
+		dataParam.setName(cashUserInfoDTO == null ? "" : cashUserInfoDTO.getName());
+		dataParam.setProvinceId(cashUserInfoDTO == null ? 0 : cashUserInfoDTO.getProvinceId());
+		dataParam.setCityId(cashUserInfoDTO == null ? 0 : cashUserInfoDTO.getCityId());
+		dataParam.setAreaId(cashUserInfoDTO == null ? 0 : cashUserInfoDTO.getAreaId());
+		dataParam.setRegionFullName(cashUserInfoDTO == null ? "" : cashUserInfoDTO.getRegionFullName());
 		
 		return cashManageFrontService.save(dataParam);
 
