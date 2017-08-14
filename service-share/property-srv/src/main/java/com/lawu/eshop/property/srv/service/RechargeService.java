@@ -7,10 +7,12 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.property.param.AgentReportRechargeQueryParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
+import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
 import com.lawu.eshop.property.srv.bo.RechargeReportBO;
 
@@ -84,4 +86,11 @@ public interface RechargeService {
      * @return
      */
     ThirdPayStatusEnum getRechargeById(Long id);
+
+    /**
+     * 代理商区域统计，获取某天第三方充值记录，分组查询
+     * @param param
+     * @return
+     */
+    List<AgentReportRechargeQueryBO> selectAgentAreaReportRechargeListByDate(AgentReportRechargeQueryParam param);
 }

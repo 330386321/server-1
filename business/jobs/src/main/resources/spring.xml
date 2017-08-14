@@ -88,7 +88,6 @@
 	<job:simple id="reportAreaAdPointMonthJob" description="区域发广告总额月统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaAdPointMonthJob" registry-center-ref="regCenter" cron="0 0 1 1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 
-
 	<job:simple id="agentUserRegDailyJob" description="用户注册地区日统计" class="com.lawu.eshop.jobs.impl.agent.AgentUserRegDailyJob" registry-center-ref="regCenter" cron="0 0 1 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="agentUserRegMonthJob" description="用户注册地区月统计" class="com.lawu.eshop.jobs.impl.agent.AgentUserRegDailyJob" registry-center-ref="regCenter" cron="0 0 2 1 * ?"
@@ -99,6 +98,11 @@
 	<job:simple id="reportAreaVolumnMontyJob" description="区域总销量月统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaVolumnMonthJob" registry-center-ref="regCenter" cron="0 0 1 1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 	
+	<job:simple id="reportAreaRechargeDailyJob" description="区域充值日统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaRechargeDailyJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+	<job:simple id="reportAreaRechargeMonthJob" description="区域充值月统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaRechargeMonthJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+
 	<!-- Lock service -->
 	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />
 	<bean id="redissonConfiguration" class="com.lawu.eshop.synchronization.lock.config.RedissonConfiguration" />

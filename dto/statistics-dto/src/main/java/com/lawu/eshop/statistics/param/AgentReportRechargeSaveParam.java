@@ -1,49 +1,62 @@
-package com.lawu.eshop.property.param;
+package com.lawu.eshop.statistics.param;/**
+ * Created by ${Yangqh} on 2017/8/14.
+ */
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class AgentRechargeReportParam {
+/**
+ * <p> </p>
+ *
+ * @author yangqh
+ * @date 2017/8/14 14:08
+ */
+public class AgentReportRechargeSaveParam {
 
-    @NotNull(message = "gmtReport不能为空")
-    private Date gmtReport;
+    private Integer provinceId;
 
-    @NotNull(message = "gmtCreate不能为空")
-    private Date gmtCreate;
+    private Integer cityId;
 
-    @NotNull(message = "merchantRechargeBalance不能为空")
+    private Integer areaId;
+
     private BigDecimal merchantRechargeBalance;
 
-    @NotNull(message = "merchantRechargePoint不能为空")
     private BigDecimal merchantRechargePoint;
 
-    @NotNull(message = "memberRechargeBalance不能为空")
     private BigDecimal memberRechargeBalance;
 
-    @NotNull(message = "memberRechargePoint不能为空")
     private BigDecimal memberRechargePoint;
 
-    @NotNull(message = "totalRechargeBalance不能为空")
     private BigDecimal totalRechargeBalance;
 
-    @NotNull(message = "totalRechargePoint不能为空")
     private BigDecimal totalRechargePoint;
 
-    public Date getGmtReport() {
-        return gmtReport;
+    private Date gmtReport;
+
+    private Date gmtCreate;
+
+    public Integer getProvinceId() {
+        return provinceId;
     }
 
-    public void setGmtReport(Date gmtReport) {
-        this.gmtReport = gmtReport;
+    public void setProvinceId(Integer provinceId) {
+        this.provinceId = provinceId;
     }
 
-    public Date getGmtCreate() {
-        return gmtCreate;
+    public Integer getCityId() {
+        return cityId;
     }
 
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
+    }
+
+    public Integer getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(Integer areaId) {
+        this.areaId = areaId;
     }
 
     public BigDecimal getMerchantRechargeBalance() {
@@ -84,6 +97,22 @@ public class AgentRechargeReportParam {
 
     public void setTotalRechargeBalance(BigDecimal totalRechargeBalance) {
         this.totalRechargeBalance = totalRechargeBalance;
+    }
+
+    public Date getGmtReport() {
+        return gmtReport;
+    }
+
+    public void setGmtReport(Date gmtReport) {
+        this.gmtReport = gmtReport;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 
     public BigDecimal getTotalRechargePoint() {

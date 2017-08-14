@@ -6,19 +6,24 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.*;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.property.param.AgentReportRechargeQueryParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
 import com.lawu.eshop.property.srv.bo.RechargeReportBO;
 import com.lawu.eshop.property.srv.domain.RechargeDO;
 import com.lawu.eshop.property.srv.domain.RechargeDOExample;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
+import com.lawu.eshop.property.srv.domain.extend.ReportAreaRechargeDOExtend;
+import com.lawu.eshop.property.srv.domain.extend.ReportAreaRechargeDOView;
 import com.lawu.eshop.property.srv.mapper.RechargeDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
+import com.lawu.eshop.property.srv.mapper.extend.RechargeDOMapperExtend;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.RechargeService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
@@ -50,6 +55,8 @@ public class RechargeServiceImpl implements RechargeService {
     private TransactionDetailService transactionDetailService;
     @Autowired
     private PointDetailService pointDetailService;
+    @Autowired
+    private RechargeDOMapperExtend rechargeDOMapperExtend;
 
     @Override
     @Transactional
@@ -293,6 +300,31 @@ public class RechargeServiceImpl implements RechargeService {
             return null;
         }
         return ThirdPayStatusEnum.getEnum(recharge.getStatus());
+    }
+
+    @Override
+    public List<AgentReportRechargeQueryBO> selectAgentAreaReportRechargeListByDate(AgentReportRechargeQueryParam param) {
+        ReportAreaRechargeDOView recharge = new ReportAreaRechargeDOView();
+        recharge.setChannel(param.getChannel());
+        recharge.setStatus(param.getStatus());
+        recharge.setBeginDate(param.getDate() + " 00:00:00");
+        recharge.setEndDate(param.getDate() + " 23:59:59");
+        List<ReportAreaRechargeDOExtend> rtnList = rechargeDOMapperExtend.selectAgentAreaReportRechargeListByDate(recharge);
+        List<AgentReportRechargeQueryBO> bos = new ArrayList<>();
+        for(ReportAreaRechargeDOExtend doExtend : rtnList){
+            AgentReportRechargeQueryBO bo = new AgentReportRechargeQueryBO();
+            bo.setProvinceId(doExtend.getProvinceId());
+            bo.setCityId(doExtend.getCityId());
+            bo.setAreaId(doExtend.getAreaId());
+            bo.setMemberRechargeBalance(doExtend.getMemberRechargeBalance());
+            bo.setMemberRechargePoint(doExtend.getMemberRechargePoint());
+            bo.setMerchantRechargeBalance(doExtend.getMerchantRechargeBalance());
+            bo.setMerchantRechargePoint(doExtend.getMerchantRechargePoint());
+            bo.setTotalRechargeBalance(doExtend.getMemberRechargeBalance().add(doExtend.getMerchantRechargeBalance()));
+            bo.setTotalRechargePoint(doExtend.getMemberRechargePoint().add(doExtend.getMerchantRechargePoint()));
+            bos.add(bo);
+        }
+        return bos;
     }
 
 }

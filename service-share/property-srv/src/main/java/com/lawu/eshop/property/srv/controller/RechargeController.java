@@ -11,11 +11,14 @@ import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.BalanceAndPointListQueryDTO;
 import com.lawu.eshop.property.dto.RechargeReportDTO;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
+import com.lawu.eshop.property.dto.ReportAreaRechargeDailyDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.property.param.AgentReportRechargeQueryParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
+import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.bo.RechargeReportBO;
@@ -24,6 +27,7 @@ import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.RechargeService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.BeanUtil;
+import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.PwdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -31,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -206,6 +211,40 @@ public class RechargeController extends BaseController {
             dto.setId(bo.getId());
             dto.setRechargeMoney(bo.getRechargeMoney());
             dto.setUserNum(bo.getUserNum());
+            dtos.add(dto);
+        }
+        return successCreated(dtos);
+    }
+
+    /**
+     *代理商区域统计，获取某天第三方充值记录，分组查询
+     * @param param
+     * @param result
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "selectAgentAreaReportRechargeListByDate", method = RequestMethod.POST)
+    public Result<List<ReportAreaRechargeDailyDTO>> selectAgentAreaReportRechargeListByDate(@RequestBody @Valid AgentReportRechargeQueryParam param, BindingResult result) throws Exception {
+        String message = validate(result);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        List<ReportAreaRechargeDailyDTO> dtos = new ArrayList<>();
+        List<AgentReportRechargeQueryBO> rntList;
+        rntList = rechargeService.selectAgentAreaReportRechargeListByDate(param);
+        for (AgentReportRechargeQueryBO bo : rntList) {
+            ReportAreaRechargeDailyDTO dto = new ReportAreaRechargeDailyDTO();
+            dto.setProvinceId(bo.getProvinceId());
+            dto.setCityId(bo.getCityId());
+            dto.setAreaId(bo.getAreaId());
+            dto.setMemberRechargeBalance(bo.getMemberRechargeBalance());
+            dto.setMemberRechargePoint(bo.getMemberRechargePoint());
+            dto.setMerchantRechargeBalance(bo.getMerchantRechargeBalance());
+            dto.setMerchantRechargePoint(bo.getMerchantRechargePoint());
+            dto.setTotalRechargeBalance(bo.getMemberRechargeBalance().add(bo.getMerchantRechargeBalance()));
+            dto.setTotalRechargePoint(bo.getMemberRechargePoint().add(bo.getMerchantRechargePoint()));
+            dto.setGmtCreate(new Date());
+            dto.setGmtReport(DateUtil.formatDate(param.getDate(), "yyyy-MM-dd"));
             dtos.add(dto);
         }
         return successCreated(dtos);

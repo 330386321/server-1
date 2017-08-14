@@ -2,7 +2,7 @@ package com.lawu.eshop.jobs.service;
 
 import java.util.List;
 
-import com.lawu.eshop.property.dto.AgentReportRechargeQueryDTO;
+import com.lawu.eshop.property.dto.ReportAreaRechargeDailyDTO;
 import com.lawu.eshop.property.param.AgentReportRechargeQueryParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,5 +32,5 @@ public interface PropertyRechargeService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "recharge/selectAgentAreaReportRechargeListByDate")
-	Result<List<AgentReportRechargeQueryDTO>> selectAgentAreaReportRechargeListByDate(@RequestBody AgentReportRechargeQueryParam param);
+	Result<List<ReportAreaRechargeDailyDTO>> selectAgentAreaReportRechargeListByDate(@RequestBody AgentReportRechargeQueryParam param);
 }
