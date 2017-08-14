@@ -34,6 +34,11 @@ public class ShoppingOrderBO {
     * 门店id
     */
     private Long merchantStoreId;
+    
+    /**
+    * 商家门店区域（省市区id）
+    */
+    private String merchantStoreRegionPath;
 	
 	/**
 	 * 商家编号
@@ -243,6 +248,14 @@ public class ShoppingOrderBO {
 
 	public void setMerchantStoreId(Long merchantStoreId) {
 		this.merchantStoreId = merchantStoreId;
+	}
+
+	public String getMerchantStoreRegionPath() {
+		return merchantStoreRegionPath;
+	}
+
+	public void setMerchantStoreRegionPath(String merchantStoreRegionPath) {
+		this.merchantStoreRegionPath = merchantStoreRegionPath;
 	}
 
 	public String getMerchantNum() {

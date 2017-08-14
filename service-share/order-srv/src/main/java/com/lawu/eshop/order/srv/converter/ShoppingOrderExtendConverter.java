@@ -52,6 +52,7 @@ public class ShoppingOrderExtendConverter {
 		rtn.setMemberNum(shoppingOrderExtendDO.getMemberNum());
 		rtn.setMerchantId(shoppingOrderExtendDO.getMerchantId());
 		rtn.setMerchantStoreId(shoppingOrderExtendDO.getMerchantStoreId());
+		rtn.setMerchantStoreRegionPath(shoppingOrderExtendDO.getMerchantStoreRegionPath());
 		rtn.setMerchantNum(shoppingOrderExtendDO.getMerchantNum());
 		rtn.setMerchantName(shoppingOrderExtendDO.getMerchantName());
 		rtn.setConsigneeName(shoppingOrderExtendDO.getConsigneeName());

@@ -98,6 +98,7 @@ CREATE TABLE `shopping_order` (
   `member_num` varchar(19) DEFAULT NULL,
   `merchant_id` bigint(20) NOT NULL,
   `merchant_store_id` bigint(20) unsigned NOT NULL,
+  `merchant_store_region_path` varchar(25) NOT NULL COMMENT '商家门店区域（省市区id）',
   `merchant_num` varchar(19) DEFAULT '',
   `merchant_name` varchar(100) NOT NULL,
   `consignee_name` varchar(20) NOT NULL,

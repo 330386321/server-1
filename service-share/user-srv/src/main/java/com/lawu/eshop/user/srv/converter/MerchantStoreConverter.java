@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
@@ -39,7 +40,6 @@ import com.lawu.eshop.user.srv.domain.extend.NewMerchantStoreDOView;
 import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
 import com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview;
 import com.lawu.eshop.utils.DataTransUtil;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * 商家门店信息转换
@@ -263,38 +263,38 @@ public class MerchantStoreConverter {
      * @return
      */
     public static ShoppingOrderFindMerchantInfoBO convert(MerchantStoreDO merchantStoreDO, MerchantDO merchantDO) {
-        if (merchantStoreDO == null) {
+        if (merchantStoreDO == null || merchantDO == null) {
             return null;
         }
-
-        ShoppingOrderFindMerchantInfoBO merchantStoreNoReasonReturnBO = new ShoppingOrderFindMerchantInfoBO();
-        merchantStoreNoReasonReturnBO.setMerchantStoreId(merchantStoreDO.getId());
-        merchantStoreNoReasonReturnBO.setIsNoReasonReturn(merchantStoreDO.getIsNoReasonReturn());
-        merchantStoreNoReasonReturnBO.setMerchantId(merchantStoreDO.getMerchantId());
-        merchantStoreNoReasonReturnBO.setMerchantStoreName(merchantStoreDO.getName());
-        merchantStoreNoReasonReturnBO.setMerchantNum(merchantDO.getNum());
-        
-        return merchantStoreNoReasonReturnBO;
+        ShoppingOrderFindMerchantInfoBO shoppingOrderFindMerchantInfoBO = new ShoppingOrderFindMerchantInfoBO();
+        shoppingOrderFindMerchantInfoBO.setMerchantStoreId(merchantStoreDO.getId());
+        shoppingOrderFindMerchantInfoBO.setMerchantStoreRegionPath(merchantStoreDO.getRegionPath());
+        shoppingOrderFindMerchantInfoBO.setIsNoReasonReturn(merchantStoreDO.getIsNoReasonReturn());
+        shoppingOrderFindMerchantInfoBO.setMerchantId(merchantStoreDO.getMerchantId());
+        shoppingOrderFindMerchantInfoBO.setMerchantStoreName(merchantStoreDO.getName());
+        shoppingOrderFindMerchantInfoBO.setMerchantNum(merchantDO.getNum());
+        return shoppingOrderFindMerchantInfoBO;
     }
 
     /**
-     * MerchantStoreNoReasonReturnDTO转换
+     * ShoppingOrderFindMerchantInfoDTO转换
      *
-     * @param merchantStoreNoReasonReturnBO
+     * @param shoppingOrderFindMerchantInfoBO
      * @return
      */
-    public static ShoppingOrderFindMerchantInfoDTO convert(ShoppingOrderFindMerchantInfoBO merchantStoreNoReasonReturnBO) {
-        if (merchantStoreNoReasonReturnBO == null) {
+    public static ShoppingOrderFindMerchantInfoDTO convert(ShoppingOrderFindMerchantInfoBO shoppingOrderFindMerchantInfoBO) {
+        if (shoppingOrderFindMerchantInfoBO == null) {
             return null;
         }
 
         ShoppingOrderFindMerchantInfoDTO rtn = new ShoppingOrderFindMerchantInfoDTO();
-        rtn.setMerchantId(merchantStoreNoReasonReturnBO.getMerchantId());
-        rtn.setMerchantStoreId(merchantStoreNoReasonReturnBO.getMerchantStoreId());
-        rtn.setMerchantStoreName(merchantStoreNoReasonReturnBO.getMerchantStoreName());
-        rtn.setMerchantNum(merchantStoreNoReasonReturnBO.getMerchantNum());
-        rtn.setIsNoReasonReturn(merchantStoreNoReasonReturnBO.getIsNoReasonReturn());
-        rtn.setIsFans(merchantStoreNoReasonReturnBO.getIsFans());
+        rtn.setMerchantId(shoppingOrderFindMerchantInfoBO.getMerchantId());
+        rtn.setMerchantStoreId(shoppingOrderFindMerchantInfoBO.getMerchantStoreId());
+        rtn.setMerchantStoreRegionPath(shoppingOrderFindMerchantInfoBO.getMerchantStoreRegionPath());
+        rtn.setMerchantStoreName(shoppingOrderFindMerchantInfoBO.getMerchantStoreName());
+        rtn.setMerchantNum(shoppingOrderFindMerchantInfoBO.getMerchantNum());
+        rtn.setIsNoReasonReturn(shoppingOrderFindMerchantInfoBO.getIsNoReasonReturn());
+        rtn.setIsFans(shoppingOrderFindMerchantInfoBO.getIsFans());
         return rtn;
     }
 

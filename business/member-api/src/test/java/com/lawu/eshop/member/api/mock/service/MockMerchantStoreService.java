@@ -1,18 +1,33 @@
 package com.lawu.eshop.member.api.mock.service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.product.dto.MemberProductStoreDTO;
 import com.lawu.eshop.user.constants.ManageTypeEnum;
-import com.lawu.eshop.user.dto.*;
+import com.lawu.eshop.user.dto.MerchantAdInfoDTO;
+import com.lawu.eshop.user.dto.MerchantInfoForShoppingCartDTO;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreStatusDTO;
+import com.lawu.eshop.user.dto.PayOrderMerchantStoreInfoDTO;
+import com.lawu.eshop.user.dto.PayOrderStoreInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingOrderFindMerchantInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreSolrInfoDTO;
+import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Service
@@ -42,6 +57,7 @@ public class MockMerchantStoreService extends BaseController implements Merchant
         ddto.setIsNoReasonReturn(true);
         ddto.setMerchantNum("M4343");
         ddto.setMerchantStoreId(1L);
+        ddto.setMerchantStoreRegionPath("1/2/3");
         ddto.setMerchantStoreName("fdfdf");
         ddtos.add(ddto);
         dto.setShoppingOrderFindMerchantInfoDTOList(ddtos);

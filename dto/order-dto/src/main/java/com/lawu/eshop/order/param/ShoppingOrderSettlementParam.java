@@ -32,6 +32,11 @@ public class ShoppingOrderSettlementParam {
 	private Long merchantStoreId;
 	
     /**
+    * 商家门店省市区
+    */
+    private String merchantStoreRegionPath;
+	
+    /**
     * 商家编号
     */
 	private String merchantNum;
@@ -121,6 +126,14 @@ public class ShoppingOrderSettlementParam {
 
 	public void setMerchantStoreId(Long merchantStoreId) {
 		this.merchantStoreId = merchantStoreId;
+	}
+
+	public String getMerchantStoreRegionPath() {
+		return merchantStoreRegionPath;
+	}
+
+	public void setMerchantStoreRegionPath(String merchantStoreRegionPath) {
+		this.merchantStoreRegionPath = merchantStoreRegionPath;
 	}
 
 	public String getMerchantNum() {

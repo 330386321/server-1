@@ -267,11 +267,8 @@ public class MerchantStoreController extends BaseController {
 	 */
 	@RequestMapping(value = "shoppingOrderFindUserInfo", method = RequestMethod.PUT)
 	public Result<ShoppingOrderFindUserInfoDTO> shoppingOrderFindUserInfo(@RequestBody ShoppingOrderFindUserInfoParam param) {
-
 		List<ShoppingOrderFindMerchantInfoBO> shoppingOrderFindUserInfoBOList = merchantStoreInfoService.shoppingOrderFindUserInfo(param);
-		
 		MemberBO memberBO = memberService.getMemberById(param.getMemberId());
-		
 		return successGet(MerchantStoreConverter.convert(shoppingOrderFindUserInfoBOList, memberBO));
 	}
 

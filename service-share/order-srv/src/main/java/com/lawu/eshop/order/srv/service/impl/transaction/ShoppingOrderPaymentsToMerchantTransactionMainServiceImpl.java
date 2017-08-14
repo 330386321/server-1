@@ -40,6 +40,7 @@ public class ShoppingOrderPaymentsToMerchantTransactionMainServiceImpl extends A
     	}
     	
     	rtn.setMerchantNum(shoppingOrderBO.getMerchantNum());
+    	rtn.setMerchantStoreRegionPath(shoppingOrderBO.getMerchantStoreRegionPath());
     	rtn.setShoppingOrderId(shoppingOrderId);
     	rtn.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderBO.getPaymentMethod().getVal()));
     	

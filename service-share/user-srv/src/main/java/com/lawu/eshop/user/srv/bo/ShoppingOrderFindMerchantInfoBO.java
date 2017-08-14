@@ -1,14 +1,10 @@
 package com.lawu.eshop.user.srv.bo;
 
-import java.io.Serializable;
-
 /**
  * @author Sunny
  * @date 2017/4/10
  */
-public class ShoppingOrderFindMerchantInfoBO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderFindMerchantInfoBO {
 
 	/**
 	 * 商家Id
@@ -20,6 +16,11 @@ public class ShoppingOrderFindMerchantInfoBO implements Serializable {
     */
     private Long merchantStoreId;
 	
+    /**
+    * 省市区
+    */
+    private String merchantStoreRegionPath;
+    
     /**
     * 店铺名称
     */
@@ -54,6 +55,14 @@ public class ShoppingOrderFindMerchantInfoBO implements Serializable {
 
 	public void setMerchantStoreId(Long merchantStoreId) {
 		this.merchantStoreId = merchantStoreId;
+	}
+
+	public String getMerchantStoreRegionPath() {
+		return merchantStoreRegionPath;
+	}
+
+	public void setMerchantStoreRegionPath(String merchantStoreRegionPath) {
+		this.merchantStoreRegionPath = merchantStoreRegionPath;
 	}
 
 	public String getMerchantStoreName() {

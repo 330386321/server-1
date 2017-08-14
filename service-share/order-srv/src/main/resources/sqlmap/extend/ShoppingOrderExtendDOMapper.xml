@@ -28,6 +28,7 @@
 		<result column="member_num" jdbcType="VARCHAR" property="memberNum" />
 		<result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
 		<result column="merchant_store_id" jdbcType="BIGINT" property="merchantStoreId" />
+		<result column="merchant_store_region_path" jdbcType="VARCHAR" property="merchantStoreRegionPath" />
 		<result column="merchant_num" jdbcType="VARCHAR" property="merchantNum" />
 		<result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
 		<result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
@@ -114,7 +115,7 @@
 	</sql>
 	
 	<sql id="ShoppingOrder_Column_List">
-		so.id, so.member_id, so.member_num, so.merchant_id, merchant_store_id, so.merchant_num, so.merchant_name,
+		so.id, so.member_id, so.member_num, so.merchant_id, so.merchant_store_id, so.merchant_store_region_path, so.merchant_num, so.merchant_name,
 		so.consignee_name,
 		so.consignee_address,
 		so.consignee_mobile, so.remark,

@@ -283,6 +283,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		shoppingOrderSettlementParam.setMemberNum(shoppingOrderFindUserInfoDTOResult.getModel().getMemberNum());
     		shoppingOrderSettlementParam.setMerchantId(key);
     		shoppingOrderSettlementParam.setMerchantStoreId(shoppingOrderFindMerchantInfoDTOMap.get(key).getMerchantStoreId());
+    		shoppingOrderSettlementParam.setMerchantStoreRegionPath(shoppingOrderFindMerchantInfoDTOMap.get(key).getMerchantStoreRegionPath());
     		shoppingOrderSettlementParam.setMerchantNum(shoppingOrderFindMerchantInfoDTOMap.get(key).getMerchantNum());
     		shoppingOrderSettlementParam.setMerchantName(value.get(0).getMerchantName());
     		shoppingOrderSettlementParam.setMessage(shoppingOrderSettlementForeignParamMap.get(key).getMessage());
@@ -568,6 +569,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		shoppingOrderSettlementParam.setMemberNum(shoppingOrderFindUserInfoDTOResult.getModel().getMemberNum());
 		shoppingOrderSettlementParam.setMerchantId(shoppingCartProductModelDTO.getMerchantId());
 		shoppingOrderSettlementParam.setMerchantStoreId(shoppingOrderFindMerchantInfoDTO.getMerchantStoreId());
+		shoppingOrderSettlementParam.setMerchantStoreRegionPath(shoppingOrderFindMerchantInfoDTO.getMerchantStoreRegionPath());
 		shoppingOrderSettlementParam.setMerchantNum(shoppingOrderFindMerchantInfoDTO.getMerchantNum());
 		shoppingOrderSettlementParam.setMerchantName(shoppingOrderFindMerchantInfoDTO.getMerchantStoreName());
 		shoppingOrderSettlementParam.setMessage(param.getMessage());

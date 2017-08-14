@@ -10,7 +10,7 @@ import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
  */
 public class ShoppingOrderPaymentsToMerchantNotification extends Notification {
 
-	private static final long serialVersionUID = 4283327727130765097L;
+	private static final long serialVersionUID = 4828613333667480720L;
 
 	/**
 	 * 购物订单id
@@ -21,6 +21,11 @@ public class ShoppingOrderPaymentsToMerchantNotification extends Notification {
     * 商家编号
     */
     private String merchantNum;
+    
+    /**
+    * 商家门店区域（省市区id）
+    */
+    private String merchantStoreRegionPath;
     
     /**
      * 支付方式
@@ -41,6 +46,14 @@ public class ShoppingOrderPaymentsToMerchantNotification extends Notification {
 
 	public void setMerchantNum(String merchantNum) {
 		this.merchantNum = merchantNum;
+	}
+
+	public String getMerchantStoreRegionPath() {
+		return merchantStoreRegionPath;
+	}
+
+	public void setMerchantStoreRegionPath(String merchantStoreRegionPath) {
+		this.merchantStoreRegionPath = merchantStoreRegionPath;
 	}
 
 	public TransactionPayTypeEnum getPaymentMethod() {

@@ -33,21 +33,18 @@ public class ShoppingOrderTradingSuccessTransactionMainServiceImpl extends Abstr
     @Override
     public ShoppingOrderTradingSuccessNotification selectNotification(Long shoppingOrderId) {
     	ShoppingOrderTradingSuccessNotification rtn = null;
-    	
     	ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(shoppingOrderId);
-    	
     	if (shoppingOrderBO == null || shoppingOrderBO.getId() <= 0) {
     		return rtn;
     	}
-    	
     	rtn = new ShoppingOrderTradingSuccessNotification();
     	rtn.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderBO.getPaymentMethod().getVal()));
     	rtn.setMerchantNum(shoppingOrderBO.getMerchantNum());
+    	rtn.setMerchantStoreRegionPath(shoppingOrderBO.getMerchantStoreRegionPath());
     	rtn.setShoppingOrderId(shoppingOrderId);
     	rtn.setOrderTotalPrice(NumberUtil.format(shoppingOrderBO.getOrderTotalPrice()));
     	rtn.setIsAutoReceipt(shoppingOrderBO.getIsAutomaticReceipt());
 	    rtn.setOrderNum(shoppingOrderBO.getOrderNum());
-    	
         return rtn;
     }
 }

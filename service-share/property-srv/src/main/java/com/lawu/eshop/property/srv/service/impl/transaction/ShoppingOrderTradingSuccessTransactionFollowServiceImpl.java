@@ -41,6 +41,7 @@ public class ShoppingOrderTradingSuccessTransactionFollowServiceImpl extends Abs
 	    	param.setOrderActualMoney(notification.getOrderTotalPrice());
 	    	param.setOrderIds(notification.getShoppingOrderId().toString());
 	    	param.setUserNums(notification.getMerchantNum());
+	    	param.setRegionPaths(notification.getMerchantStoreRegionPath());
 	    	param.setPayWays(new Byte[]{notification.getPaymentMethod().getVal()});
 	    	orderService.comfirmSysJob(param);
 	    }

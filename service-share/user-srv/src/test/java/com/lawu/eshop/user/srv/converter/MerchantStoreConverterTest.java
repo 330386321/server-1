@@ -208,6 +208,7 @@ public class MerchantStoreConverterTest {
         ShoppingOrderFindMerchantInfoBO merchantStoreNoReasonReturnBO = new ShoppingOrderFindMerchantInfoBO();
         merchantStoreNoReasonReturnBO.setMerchantId(200L);
         merchantStoreNoReasonReturnBO.setMerchantStoreId(300L);
+        merchantStoreNoReasonReturnBO.setMerchantStoreRegionPath("1/2/3");
         merchantStoreNoReasonReturnBO.setMerchantStoreName("test");
         merchantStoreNoReasonReturnBO.setMerchantNum("B0001");
         merchantStoreNoReasonReturnBO.setIsNoReasonReturn(true);
@@ -223,6 +224,7 @@ public class MerchantStoreConverterTest {
         ShoppingOrderFindMerchantInfoBO shoppingOrderFindMerchantInfoBO = new ShoppingOrderFindMerchantInfoBO();
         shoppingOrderFindMerchantInfoBO.setMerchantId(200L);
         shoppingOrderFindMerchantInfoBO.setMerchantStoreId(300L);
+        shoppingOrderFindMerchantInfoBO.setMerchantStoreRegionPath("1/2/3");
         shoppingOrderFindMerchantInfoBO.setMerchantStoreName("test");
         shoppingOrderFindMerchantInfoBO.setMerchantNum("B0001");
         shoppingOrderFindMerchantInfoBO.setIsNoReasonReturn(true);

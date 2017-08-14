@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
-            location="D:/maven/LocalWarehouse/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
+            location="G:/lib/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
     <context id="MysqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
     	<!-- 再次生成xml时候是覆盖 -->
     	<property name="mergeable" value="false"/>
@@ -55,9 +55,6 @@
         <table tableName="shopping_refund_detail" domainObjectName="ShoppingRefundDetailDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="shopping_order" domainObjectName="ShoppingOrderDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
         <table tableName="shopping_refund_process" domainObjectName="ShoppingRefundProcessDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
@@ -70,8 +67,11 @@
         <table tableName="follow_transaction_record" domainObjectName="FollowTransactionRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        -->
         <table tableName="shopping_refund_detail" domainObjectName="ShoppingRefundDetailDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        -->
+        <table tableName="shopping_order" domainObjectName="ShoppingOrderDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

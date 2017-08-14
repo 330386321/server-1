@@ -31,6 +31,7 @@ public class ShoppingOrderPaymentsToMerchantTransactionFollowServiceImpl extends
 	    OrderReleaseFreezeParam param = new OrderReleaseFreezeParam();
     	param.setOrderIds(notification.getShoppingOrderId().toString());
     	param.setUserNums(notification.getMerchantNum());
+    	param.setRegionPaths(notification.getMerchantStoreRegionPath());
     	param.setPayWays(new Byte[]{notification.getPaymentMethod().getVal()});
     	orderService.comfirmReleaseFreeze(param);
     }
