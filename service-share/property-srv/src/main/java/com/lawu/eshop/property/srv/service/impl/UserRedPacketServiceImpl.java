@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserRedPacketServiceImpl implements UserRedPacketService {
@@ -57,6 +58,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
     private TransactionDetailDOMapper transactionDetailDOMapper;
 
     @Override
+    @Transactional
     public int doHandleMemberRedPacketNotify(NotifyCallBackParam param) {
 
         // 新增会员交易记录
@@ -73,12 +75,13 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
         tdsParam.setBizNum(param.getOutTradeNo());
         transactionDetailService.save(tdsParam);
 
-        memberRedPacketPaymentTransactionMainServiceImpl.sendNotice(Long.valueOf(param.getBizIds()));
+        memberRedPacketPaymentTransactionMainServiceImpl.sendNotice(tdsParam.getId());
 
         return ResultCode.SUCCESS;
     }
 
     @Override
+    @Transactional
     public int doRefund(MemberRedPacketRefundDataParam param) throws Exception {
 
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
