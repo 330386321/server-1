@@ -1,20 +1,31 @@
 package com.lawu.eshop.statistics.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.statistics.dto.ReportUserActiveAreaDTO;
 import com.lawu.eshop.statistics.dto.UserActiveDTO;
 import com.lawu.eshop.statistics.dto.UserActiveListDTO;
+import com.lawu.eshop.statistics.param.AgentReportParam;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaMonthBO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
 import com.lawu.eshop.statistics.srv.bo.UserActiveBO;
 import com.lawu.eshop.statistics.srv.converter.UserActiveConverter;
-import com.lawu.eshop.statistics.srv.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import com.lawu.eshop.statistics.srv.service.ReportUserActiveAreaDailyService;
+import com.lawu.eshop.statistics.srv.service.ReportUserActiveAreaMonthService;
+import com.lawu.eshop.statistics.srv.service.ReportUserActiveDailyService;
+import com.lawu.eshop.statistics.srv.service.ReportUserActiveMonthService;
+import com.lawu.eshop.statistics.srv.service.UserActiveService;
 
 /**
  * @author zhangyong
@@ -205,6 +216,42 @@ public class UserActiveController extends BaseController{
     public Result saveMerchantActiveAreaMonth(@RequestBody List<UserActiveDTO> list){
         reportUserActiveAreaMonthService.saveMerchantActiveAreaMonth(list);
         return successCreated();
+    }
+
+    /**
+     * 按地区查询日统计活跃用户列表
+     * @param param
+     * @return
+     */
+    @RequestMapping(value ="getAgentUserActiveListDaily" ,method = RequestMethod.POST)
+    public Result<List<UserActiveListDTO>> getAgentUserActiveListDaily(@RequestBody AgentReportParam param){
+        List<ReportUserActiveAreaDailyBO> listBOS = reportUserActiveDailyService.getAgentUserActiveListDaily(param);
+        List<UserActiveListDTO> listDTOS = UserActiveConverter.coverAgentReportDTOS(listBOS);
+        return successGet(listDTOS);
+    }
+
+    /**
+     * 按地区查询月统计活跃用户列表
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "getAgentUserActiveListMonth", method = RequestMethod.POST)
+    public Result<List<UserActiveListDTO>> getAgentUserActiveListMonth(@RequestBody AgentReportParam param) {
+
+        List<ReportUserActiveAreaMonthBO> listBOS = reportUserActiveDailyService.getAgentUserActiveListMonth(param);
+        if (listBOS.isEmpty()) {
+            return successGet(new ArrayList<>());
+        }
+        List<UserActiveListDTO> list = new ArrayList<>();
+        UserActiveListDTO activeListDTO;
+        for (ReportUserActiveAreaMonthBO activeAreaMonthBO : listBOS) {
+            activeListDTO = new UserActiveListDTO();
+            activeListDTO.setMerchantCount(activeAreaMonthBO.getMerchantCount());
+            activeListDTO.setMemberCount(activeAreaMonthBO.getMemberCount());
+            activeListDTO.setGmtReport(activeAreaMonthBO.getGmtReport());
+            list.add(activeListDTO);
+        }
+        return successGet(list);
     }
 
 }

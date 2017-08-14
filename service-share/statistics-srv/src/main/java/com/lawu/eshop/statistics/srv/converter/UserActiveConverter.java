@@ -1,5 +1,8 @@
 package com.lawu.eshop.statistics.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.lawu.eshop.statistics.dto.ReportUserActiveAreaDTO;
 import com.lawu.eshop.statistics.dto.UserActiveDTO;
 import com.lawu.eshop.statistics.dto.UserActiveListDTO;
@@ -12,9 +15,6 @@ import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaMonthDO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserActiveDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserActiveMonthDO;
 import com.lawu.eshop.statistics.srv.domain.extend.UserActiveDOView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author zhangyong
@@ -167,4 +167,18 @@ public class UserActiveConverter {
     }
 
 
+    public static List<UserActiveListDTO> coverAgentReportDTOS(List<ReportUserActiveAreaDailyBO> listBOS) {
+        if (listBOS.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<UserActiveListDTO> listDTOS = new ArrayList<>();
+        for (ReportUserActiveAreaDailyBO activeAreaDailyBO : listBOS) {
+            UserActiveListDTO userActiveListDTO = new UserActiveListDTO();
+            userActiveListDTO.setGmtReport(activeAreaDailyBO.getGmtReport());
+            userActiveListDTO.setMemberCount(activeAreaDailyBO.getMemberCount());
+            userActiveListDTO.setMerchantCount(activeAreaDailyBO.getMerchantCount());
+            listDTOS.add(userActiveListDTO);
+        }
+        return listDTOS;
+    }
 }
