@@ -10,10 +10,12 @@ import com.google.common.collect.Lists;
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
 import com.lawu.eshop.ad.constants.UserRedPacketEnum;
 import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
 import com.lawu.eshop.ad.param.UserPacketRefundParam;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
+import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
 import com.lawu.eshop.ad.srv.domain.UserRedPacketDO;
 import com.lawu.eshop.utils.DateUtil;
@@ -108,5 +110,19 @@ public class UserRedPacketConverter {
 		param.setUserNum(userRedpacket.getUserNum());
 		param.setRefundMoney(userRedpacket.getRefundMoney());
 		return param;
+	}
+
+	public static UserRedPacketAddReturnDTO convertAddDTO(UserRedPacketAddReturnBO bo) {
+		UserRedPacketAddReturnDTO dto =new UserRedPacketAddReturnDTO();
+		dto.setId(bo.getId());
+		dto.setOrderNum(bo.getOrderNum());
+		return dto;
+	}
+
+	public static UserRedPacketAddReturnBO convertAddBO(UserRedPacketDO userRed) {
+		UserRedPacketAddReturnBO bo = new UserRedPacketAddReturnBO();
+		bo.setId(userRed.getId());
+		bo.setOrderNum(userRed.getOrderNum());
+		return bo;
 	}
 }

@@ -22,6 +22,7 @@ import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
+import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
 import com.lawu.eshop.ad.srv.domain.extend.UserRedpacketMaxMoney;
 import com.lawu.eshop.ad.srv.service.UserRedPacketService;
@@ -56,7 +57,7 @@ public class UserRedPacketServiceImplTest {
 		param.setTotalMoney(new BigDecimal(100));
 		param.setUserAccount("15000000000");
 		param.setUserNum("M000001");
-		Long i = userRedPacketService.addUserRedPacket(param);
+		UserRedPacketAddReturnBO ubo = userRedPacketService.addUserRedPacket(param);
 		UserRedPacketSelectParam query = new UserRedPacketSelectParam();
 		query.setCurrentPage(1);
 		query.setPageSize(10);

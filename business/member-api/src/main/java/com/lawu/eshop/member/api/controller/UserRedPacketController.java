@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
+import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
 import com.lawu.eshop.ad.param.UserRedPacketAddParam;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
@@ -38,7 +39,6 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
-import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.utils.QrCodeUtil;
 import com.lawu.eshop.utils.StringUtil;
 
@@ -62,9 +62,6 @@ public class UserRedPacketController extends BaseController {
 	private UserRedPacketService userRedPacketService;
 
 	@Autowired
-	private PropertyInfoService propertyInfoService;
-
-	@Autowired
 	private MemberApiConfig memberApiConfig;
 
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
@@ -72,7 +69,7 @@ public class UserRedPacketController extends BaseController {
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "addUserRedPacket", method = RequestMethod.POST)
-	public Result addUserRedPacket(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+	public Result<UserRedPacketAddReturnDTO> addUserRedPacket(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam(required = true, value = "新增红包信息") UserRedPacketAddParam param) {
 		HttpServletRequest request = getRequest();
 		if (null == param) {
@@ -84,11 +81,7 @@ public class UserRedPacketController extends BaseController {
 		if (param.getTotalMoney().compareTo(UserRedpacketValue.MAX_MONTY) >= 0) {
 			return successCreated(ResultCode.MAX_USERREDPACKET_MONTY);
 		}
-//		Result<PropertyBalanceDTO> resultMoney = propertyInfoService
-//				.getPropertyBalance(UserUtil.getCurrentUserNum(request));
-//		if (param.getTotalMoney().compareTo(resultMoney.getModel().getBalance()) > 0) {
-//			return successCreated(ResultCode.PROPERTY_INFO_BALANCE_LESS);// 余额不足
-//		}
+
 		UserRedPacketSaveParam saveParam = new UserRedPacketSaveParam();
 		saveParam.setRedPacketPutWayEnum(param.getRedPacketPutWayEnum());
 		saveParam.setTotalCount(param.getTotalCount());

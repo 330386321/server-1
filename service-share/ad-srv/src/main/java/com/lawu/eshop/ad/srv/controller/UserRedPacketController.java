@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
+import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
 import com.lawu.eshop.ad.srv.converter.UserRedPacketConverter;
 import com.lawu.eshop.ad.srv.domain.extend.UserRedpacketMaxMoney;
@@ -48,12 +50,13 @@ public class UserRedPacketController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "addUserRedPacket", method = RequestMethod.POST)
-	public Result addUserRedPacket(@RequestBody UserRedPacketSaveParam param) {
-		Long id = userRedPacketService.addUserRedPacket(param);
-		if (null == id || id < 0) {
+	public Result<UserRedPacketAddReturnDTO> addUserRedPacket(@RequestBody UserRedPacketSaveParam param) {
+		UserRedPacketAddReturnBO bo = userRedPacketService.addUserRedPacket(param);
+		if (null == bo) {
 			successCreated(ResultCode.SAVE_FAIL);
 		}
-		return successCreated(id);
+		UserRedPacketAddReturnDTO dto =UserRedPacketConverter.convertAddDTO(bo);
+		return successCreated(dto);
 	}
 
 	/**

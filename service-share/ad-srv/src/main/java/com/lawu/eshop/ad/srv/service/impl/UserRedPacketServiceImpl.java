@@ -14,10 +14,12 @@ import com.lawu.eshop.ad.constants.RedPacketArithmetic;
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
 import com.lawu.eshop.ad.constants.UserRedPacketEnum;
 import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.param.UserPacketRefundParam;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
 import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
+import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
 import com.lawu.eshop.ad.srv.constants.TransactionConstant;
 import com.lawu.eshop.ad.srv.converter.UserRedPacketConverter;
@@ -76,19 +78,19 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	 */
 	@Override
 	@Transactional
-	public Long addUserRedPacket(UserRedPacketSaveParam param) {
+	public UserRedPacketAddReturnBO addUserRedPacket(UserRedPacketSaveParam param) {
 		UserRedPacketDO userRed = UserRedPacketConverter.converDO(param);
 		Integer i = userRedPacketDOMapper.insert(userRed);
+		if (null == i || i < 0) {
+			return null;
+		}
 		if (param.getRedPacketPutWayEnum() == RedPacketPutWayEnum.PUT_WAY_COMMON) {// 普通红包
 			saveNormalUserTakedRedpacked(userRed);
 		} else if (param.getRedPacketPutWayEnum() == RedPacketPutWayEnum.PUT_WAY_LUCK) {// 手气红包
 			saveLockUserTakedRedpacked(userRed);
 		}
-		UserRedPacketNotification notification = new UserRedPacketNotification();
-		notification.setId(userRed.getId());
-		notification.setMoney(userRed.getTotalMoney());
-		notification.setUserNum(userRed.getUserNum());
-		return userRed.getId();
+		UserRedPacketAddReturnBO dto =UserRedPacketConverter.convertAddBO(userRed);
+		return dto;
 	}
 
 	/**
@@ -149,6 +151,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		UserRedPacketDOExample example = new UserRedPacketDOExample();
 		Criteria cr = example.createCriteria();
 		cr.andUserNumEqualTo(param.getUserNum());
+		cr.andPayTypeIsNotNull();
 		example.setOrderByClause("gmt_create desc");
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		List<UserRedPacketDO> listDO = userRedPacketDOMapper.selectByExampleWithRowbounds(example, rowBounds);

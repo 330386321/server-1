@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
+import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
@@ -32,7 +33,7 @@ public interface UserRedPacketService {
 	 * @return
 	 */
 	@RequestMapping(value = "userRedPacket/addUserRedPacket", method = RequestMethod.POST)
-	Result addUserRedPacket(@RequestBody UserRedPacketSaveParam saveParam);
+	Result<UserRedPacketAddReturnDTO> addUserRedPacket(@RequestBody UserRedPacketSaveParam saveParam);
 
 	/**
 	 * 查询用户红包列表

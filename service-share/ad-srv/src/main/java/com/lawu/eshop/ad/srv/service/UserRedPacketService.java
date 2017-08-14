@@ -3,13 +3,12 @@
  */
 package com.lawu.eshop.ad.srv.service;
 
-import java.math.BigDecimal;
-
 import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.ad.param.UserPacketRefundParam;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
 import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
+import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
 import com.lawu.eshop.ad.srv.domain.extend.UserRedpacketMaxMoney;
 import com.lawu.eshop.framework.core.page.Page;
@@ -26,7 +25,7 @@ public interface UserRedPacketService {
 	 * @param param
 	 * @return
 	 */
-	public Long addUserRedPacket(UserRedPacketSaveParam param);
+	public UserRedPacketAddReturnBO addUserRedPacket(UserRedPacketSaveParam param);
 
 	/**
 	 * 查询用户红包列表
