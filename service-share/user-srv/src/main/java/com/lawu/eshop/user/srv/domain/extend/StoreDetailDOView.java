@@ -40,6 +40,10 @@ public class StoreDetailDOView implements Serializable {
 
     private String regionPath;
 
+    private BigDecimal longitude;
+
+    private BigDecimal latitude;
+
     public Long getMerchantId() {
         return merchantId;
     }
@@ -158,5 +162,21 @@ public class StoreDetailDOView implements Serializable {
 
     public void setRegionPath(String regionPath) {
         this.regionPath = regionPath;
+    }
+
+    public BigDecimal getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(BigDecimal longitude) {
+        this.longitude = longitude;
+    }
+
+    public BigDecimal getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
     }
 }

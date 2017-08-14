@@ -510,6 +510,8 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		storeDetailBO.setUserNum(storeDetailDOViews.get(0).getUserNum());
 		storeDetailBO.setRegionName(storeDetailDOViews.get(0).getRegionName());
 		storeDetailBO.setRegionPath(storeDetailDOViews.get(0).getRegionPath());
+		storeDetailBO.setLongitude(storeDetailDOViews.get(0).getLongitude());
+		storeDetailBO.setLatitude(storeDetailDOViews.get(0).getLatitude());
 		for (StoreDetailDOView storeDetailDOView :storeDetailDOViews){
 			//门店照
 			if(storeDetailDOView.getType() == MerchantStoreImageEnum.STORE_IMAGE_STORE.val){

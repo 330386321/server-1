@@ -93,6 +93,12 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "门店是否存在（注销状态） true:是,false:否")
     private boolean isExistStore;
 
+    @ApiModelProperty(value = "经度")
+    private BigDecimal longitude;
+
+    @ApiModelProperty(value = "纬度")
+    private BigDecimal latitude;
+
     public String getName() {
         return name;
     }
@@ -307,5 +313,21 @@ public class StoreDetailDTO {
 
     public void setAreaName(String areaName) {
         this.areaName = areaName;
+    }
+
+    public BigDecimal getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(BigDecimal longitude) {
+        this.longitude = longitude;
+    }
+
+    public BigDecimal getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
     }
 }
