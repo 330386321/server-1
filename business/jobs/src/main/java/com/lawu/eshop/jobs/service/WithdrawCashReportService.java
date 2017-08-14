@@ -18,6 +18,6 @@ public interface WithdrawCashReportService {
 	 */
 	void executeCollectMonthData();
 
-	
 
+	void executeCollectAgentDailyData();
 }

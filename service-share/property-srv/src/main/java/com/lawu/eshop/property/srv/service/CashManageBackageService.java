@@ -3,6 +3,7 @@ package com.lawu.eshop.property.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.property.param.AgentWithdrawCashReportParam;
 import com.lawu.eshop.property.param.CashBackageOperDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
@@ -59,7 +60,7 @@ public interface CashManageBackageService {
 	 * @date 2017年6月28日 下午4:34:03
 	 */
 	List<WithdrawCashReportBO> selectWithdrawCashListByDateAndStatus(WithdrawCashReportParam param);
-	
-	
 
+
+	List<WithdrawCashReportBO> selectAgentWithdrawCashList(AgentWithdrawCashReportParam param);
 }

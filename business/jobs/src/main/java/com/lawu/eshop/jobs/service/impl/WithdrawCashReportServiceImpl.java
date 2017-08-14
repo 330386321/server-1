@@ -12,12 +12,16 @@ import org.springframework.stereotype.Service;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.jobs.service.PropertyWithdrawCashService;
+import com.lawu.eshop.jobs.service.RegionService;
 import com.lawu.eshop.jobs.service.StatisticsWithdrawCashService;
 import com.lawu.eshop.jobs.service.WithdrawCashReportService;
+import com.lawu.eshop.mall.dto.RegionDTO;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.dto.WithdrawCashReportDTO;
+import com.lawu.eshop.property.param.AgentWithdrawCashReportParam;
 import com.lawu.eshop.property.param.WithdrawCashReportParam;
 import com.lawu.eshop.statistics.dto.ReportWithdrawDailyDTO;
+import com.lawu.eshop.statistics.param.AgentWithdrawCashParam;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.DateUtil;
@@ -31,6 +35,9 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 	private PropertyWithdrawCashService propertyWithdrawCashService;
 	@Autowired
 	private StatisticsWithdrawCashService statisticsWithdrawCashService;
+
+	@Autowired
+	private RegionService regionService;
 	
 	@SuppressWarnings({ "rawtypes" })
 	@Override
@@ -107,5 +114,43 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 			logger.error("提现报表统计定时采集数据保存report_withdraw_month表异常！");
 		}
 	}
-	
+
+	@Override
+	public void executeCollectAgentDailyData() {
+		//查询二级城市Path
+
+		Result<List<RegionDTO>> regionResult = regionService.getRegionLevelTwo();
+		if (regionResult.getModel().isEmpty()) {
+			return;
+		}
+		String today = DateUtil.getDateFormat(DateUtil.getDayBefore(new Date()),"yyyy-MM-dd");
+		AgentWithdrawCashReportParam param = new AgentWithdrawCashReportParam();
+		param.setDate(today);
+		param.setStatus(CashStatusEnum.SUCCESS.getVal());
+		for (RegionDTO regionDTO : regionResult.getModel()) {
+			param.setCityId(regionDTO.getId());
+			Result<List<WithdrawCashReportDTO>> rntResult = propertyWithdrawCashService.selectAgentWithdrawCashList(param);
+			if(!rntResult.getModel().isEmpty()){
+				//存在提现记录
+				BigDecimal memberMoney = new BigDecimal("0");
+				BigDecimal merchantMoney = new BigDecimal("0");
+				for(WithdrawCashReportDTO dto : rntResult.getModel()){
+					if(dto.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
+						memberMoney = memberMoney.add(dto.getCashMoney());
+					}else if(dto.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
+						merchantMoney = merchantMoney.add(dto.getCashMoney());
+					}
+				}
+				AgentWithdrawCashParam reportWithdraw = new AgentWithdrawCashParam();
+				reportWithdraw.setGmtReport(DateUtil.formatDate(today, "yyyy-MM-dd"));
+				reportWithdraw.setMemberMoney(memberMoney);
+				reportWithdraw.setMerchantMoney(merchantMoney);
+				reportWithdraw.setTotalMoney(memberMoney.add(merchantMoney));
+				reportWithdraw.setCityId(regionDTO.getId());
+				reportWithdraw.setCityName(regionDTO.getName());
+				statisticsWithdrawCashService.saveAgentDaily(reportWithdraw);
+			}
+		}
+	}
+
 }

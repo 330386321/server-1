@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
-import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +19,12 @@ import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
+import com.lawu.eshop.property.param.AgentWithdrawCashReportParam;
 import com.lawu.eshop.property.param.CashBackageOperDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
 import com.lawu.eshop.property.param.CashBackageQuerySumParam;
+import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.param.WithdrawCashReportParam;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQuerySumBO;
@@ -37,11 +37,11 @@ import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
 import com.lawu.eshop.property.srv.domain.extend.WithdrawCashDOView;
 import com.lawu.eshop.property.srv.domain.extend.WithdrawCashOperDOView;
 import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
-import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.WithdrawCashDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.mapper.extend.WithdrawCashDOMapperExtend;
 import com.lawu.eshop.property.srv.service.CashManageBackageService;
+import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
@@ -275,6 +275,26 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		List<WithdrawCashReportBO> wrbs = new ArrayList<WithdrawCashReportBO>();
 		for (WithdrawCashDO cdo : rntList) {
 			WithdrawCashReportBO wrb = new WithdrawCashReportBO();
+			wrb.setId(cdo.getId());
+			wrb.setUserNum(cdo.getUserNum());
+			wrb.setFinishDate(DateUtil.getDateFormat(cdo.getGmtFinish(), "yyyy-MM-dd"));
+			wrb.setCashMoney(cdo.getCashMoney());
+			wrbs.add(wrb);
+		}
+		return wrbs;
+	}
+
+	@Override
+	public List<WithdrawCashReportBO> selectAgentWithdrawCashList(AgentWithdrawCashReportParam param) {
+		WithdrawCashDOExample example = new WithdrawCashDOExample();
+		Date begin = DateUtil.formatDate(param.getDate() + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
+		Date end = DateUtil.formatDate(param.getDate() + " 23:59:59", "yyyy-MM-dd HH:mm:ss");
+		example.createCriteria().andStatusEqualTo(param.getStatus()).andGmtFinishBetween(begin, end).andCityIdEqualTo(param.getCityId());
+		List<WithdrawCashDO> rntList = withdrawCashDOMapper.selectByExample(example);
+		List<WithdrawCashReportBO> wrbs = new ArrayList<>();
+		WithdrawCashReportBO wrb;
+		for (WithdrawCashDO cdo : rntList) {
+			wrb = new WithdrawCashReportBO();
 			wrb.setId(cdo.getId());
 			wrb.setUserNum(cdo.getUserNum());
 			wrb.setFinishDate(DateUtil.getDateFormat(cdo.getGmtFinish(), "yyyy-MM-dd"));

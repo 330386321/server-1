@@ -18,6 +18,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 import com.lawu.eshop.statistics.dto.ReportWithdrawDailyDTO;
+import com.lawu.eshop.statistics.param.AgentWithdrawCashParam;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.service.WithdrawCashService;
@@ -102,5 +103,11 @@ public class WithdrawCashController extends BaseController {
 	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
 	public ReportCommonBackDTO selectReport(@RequestParam("bdate") String bdate,@RequestParam("edate") String edate) {
 		return withdrawCashService.selectReport(bdate,edate);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "saveAgentDaily")
+	public Result saveAgentDaily(@RequestBody AgentWithdrawCashParam param){
+		withdrawCashService.saveAgentDaily(param);
+		return successCreated(ResultCode.SUCCESS);
 	}
 }

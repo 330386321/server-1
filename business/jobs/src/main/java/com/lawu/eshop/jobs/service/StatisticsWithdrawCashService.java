@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.statistics.dto.ReportWithdrawDailyDTO;
+import com.lawu.eshop.statistics.param.AgentWithdrawCashParam;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 
 @FeignClient(value= "statistics-srv")
@@ -33,6 +34,8 @@ public interface StatisticsWithdrawCashService {
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.DELETE, value = "withdrawCash/deleteMonthByReportDate")
-	Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate);	
-	
+	Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate);
+
+	@RequestMapping(method = RequestMethod.POST, value = "withdrawCash/saveAgentDaily")
+	Result saveAgentDaily(@RequestBody AgentWithdrawCashParam param);
 }

@@ -3,6 +3,7 @@ package com.lawu.eshop.statistics.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
+import com.lawu.eshop.statistics.param.AgentWithdrawCashParam;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
 
@@ -20,6 +21,6 @@ public interface WithdrawCashService {
 
 	ReportCommonBackDTO selectReport(String bdate,String edate);
 
-	
 
+    void saveAgentDaily(AgentWithdrawCashParam param);
 }

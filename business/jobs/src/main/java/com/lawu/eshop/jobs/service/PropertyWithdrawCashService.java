@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.WithdrawCashReportDTO;
+import com.lawu.eshop.property.param.AgentWithdrawCashReportParam;
 import com.lawu.eshop.property.param.WithdrawCashReportParam;
 
 @FeignClient(value= "property-srv")
@@ -24,5 +25,11 @@ public interface PropertyWithdrawCashService {
 	@RequestMapping(method = RequestMethod.POST, value = "cashBackage/selectWithdrawCashListByDateAndStatus")
 	Result<List<WithdrawCashReportDTO>> selectWithdrawCashListByDateAndStatus(@RequestBody WithdrawCashReportParam param);
 
-	
+	/**
+	 * 获取某天某个地区提现成功的记录
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "cashBackage/selectAgentWithdrawCashList")
+    Result<List<WithdrawCashReportDTO>> selectAgentWithdrawCashList(@RequestBody AgentWithdrawCashReportParam param);
 }

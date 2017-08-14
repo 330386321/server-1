@@ -7,14 +7,18 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
+import com.lawu.eshop.statistics.param.AgentWithdrawCashParam;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
+import com.lawu.eshop.statistics.srv.domain.ReportAreaWithdrawDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDOExample;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawMonthDO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawMonthDOExample;
+import com.lawu.eshop.statistics.srv.mapper.ReportAreaWithdrawDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportWithdrawDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportWithdrawMonthDOMapper;
 import com.lawu.eshop.statistics.srv.service.WithdrawCashService;
@@ -27,6 +31,9 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 	private ReportWithdrawDailyDOMapper reportWithdrawDailyDOMapper;
 	@Autowired
 	private ReportWithdrawMonthDOMapper reportWithdrawMonthDOMapper;
+
+	@Autowired
+	private ReportAreaWithdrawDailyDOMapper reportAreaWithdrawDailyDOMapper;
 	
 	@Override
 	public void saveDaily(ReportKCommonParam param) {
@@ -135,5 +142,19 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 		dto.setEdate(edate);
 		return dto;
 	}
-	
+
+	@Override
+	@Transactional
+	public void saveAgentDaily(AgentWithdrawCashParam param) {
+		ReportAreaWithdrawDailyDO withdrawDailyDO = new ReportAreaWithdrawDailyDO();
+		withdrawDailyDO.setCityName(param.getCityName());
+		withdrawDailyDO.setGmtCreate(new Date());
+		withdrawDailyDO.setCityId(param.getCityId());
+		withdrawDailyDO.setMemberMoney(param.getMemberMoney());
+		withdrawDailyDO.setMerchantMoney(param.getMerchantMoney());
+		withdrawDailyDO.setTotalMoney(param.getTotalMoney());
+		withdrawDailyDO.setGmtReport(param.getGmtReport());
+		reportAreaWithdrawDailyDOMapper.insertSelective(withdrawDailyDO);
+	}
+
 }

@@ -21,6 +21,7 @@ import com.lawu.eshop.property.constants.CashOperEnum;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQuerySumDTO;
 import com.lawu.eshop.property.dto.WithdrawCashReportDTO;
+import com.lawu.eshop.property.param.AgentWithdrawCashReportParam;
 import com.lawu.eshop.property.param.CashBackageOperDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
@@ -177,6 +178,22 @@ public class CashManageBackageController extends BaseController {
 			dtos.add(dto);
 		}
 		return successCreated(dtos);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "selectAgentWithdrawCashList")
+	public Result<List<WithdrawCashReportDTO>> selectAgentWithdrawCashList(@RequestBody AgentWithdrawCashReportParam param){
+		List<WithdrawCashReportDTO> list = new ArrayList<>();
+		WithdrawCashReportDTO cash;
+		List<WithdrawCashReportBO> rntList = cashManageBackageService.selectAgentWithdrawCashList(param);
+		for(WithdrawCashReportBO bo : rntList){
+			cash = new WithdrawCashReportDTO();
+			cash.setId(bo.getId());
+			cash.setCashMoney(bo.getCashMoney());
+			cash.setFinishDate(bo.getFinishDate());
+			cash.setUserNum(bo.getUserNum());
+			list.add(cash);
+		}
+		return successCreated(list);
 	}
 	
 }
