@@ -85,10 +85,12 @@
         </table> -->
 
         <table tableName="report_area_point_consume_daily" domainObjectName="ReportAreaPointConsumeDaily">
+        <table tableName="report_area_withdraw_daily" domainObjectName="ReportAreaWithdrawDailyDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
         <table tableName="report_area_point_consume_month" domainObjectName="ReportAreaPointConsumeMonth">
+        <table tableName="report_area_withdraw_month" domainObjectName="ReportAreaWithdrawMonthDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
