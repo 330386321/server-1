@@ -77,6 +77,11 @@ public class RechargeServiceImpl implements RechargeService {
             recharge.setCityId(regions.length > 1 ? Integer.valueOf(regions[1]) : 0);
             recharge.setAreaId(regions.length > 2 ? Integer.valueOf(regions[2]) : 0);
         }
+        if(recharge.getUserNum().startsWith(com.lawu.eshop.user.constants.UserTypeEnum.MEMBER.name())){
+            recharge.setUserType(com.lawu.eshop.user.constants.UserTypeEnum.MEMBER.val);
+        } else if(recharge.getUserNum().startsWith(UserTypeEnum.MEMCHANT.name())){
+            recharge.setUserType(com.lawu.eshop.user.constants.UserTypeEnum.MEMCHANT.val);
+        }
         rechargeDOMapper.insertSelective(recharge);
 
         if (recharge.getId() == null) {
