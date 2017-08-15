@@ -399,6 +399,10 @@ public class MerchantStoreConverter {
         document.addField("storePic_s", storePic);
         if (StringUtils.isNotEmpty(merchantStoreDO.getKeywords())) {
             document.addField("keywords", merchantStoreDO.getKeywords());
+            String[] keywords = merchantStoreDO.getKeywords().split(",");
+            for (String keyword : keywords) {
+                document.addField("keyword_ss", keyword);
+            }
         }
         return document;
     }
@@ -460,6 +464,14 @@ public class MerchantStoreConverter {
         document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
         document.addField("discountPackage_s", solrDocument.get("discountPackage_s"));
         document.addField("keywords", solrDocument.get("keywords"));
+        if (solrDocument.get("keywords") != null && StringUtils.isNotEmpty(solrDocument.get("keywords").toString())) {
+            String keywords = solrDocument.get("keywords").toString();
+            keywords = keywords.substring(1, keywords.length() - 1);
+            String[] keywordArr = keywords.split(",");
+            for (String keyword : keywordArr) {
+                document.addField("keyword_ss", keyword);
+            }
+        }
         return document;
     }
     
