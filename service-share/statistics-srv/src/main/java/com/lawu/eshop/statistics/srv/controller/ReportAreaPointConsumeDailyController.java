@@ -34,7 +34,7 @@ public class ReportAreaPointConsumeDailyController extends BaseController{
 	
 	/**
 	 * 统计保存
-	 * @param reportAdEarningsParam
+	 * @param param
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
