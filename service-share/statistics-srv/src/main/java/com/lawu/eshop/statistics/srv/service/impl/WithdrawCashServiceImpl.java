@@ -5,13 +5,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
+import com.lawu.eshop.statistics.param.AgentReportParam;
 import com.lawu.eshop.statistics.param.AgentWithdrawCashParam;
+import com.lawu.eshop.statistics.param.ReportAreaWithdrawParam;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
+import com.lawu.eshop.statistics.srv.bo.ReportAreaWithdrawBO;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaWithdrawDailyDO;
@@ -21,10 +25,12 @@ import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDOExample;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawMonthDO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawMonthDOExample;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportAreaWithdrawDOView;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaWithdrawDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaWithdrawMonthDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportWithdrawDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportWithdrawMonthDOMapper;
+import com.lawu.eshop.statistics.srv.mapper.extend.ReportAreaWithdrawDOMapperExtend;
 import com.lawu.eshop.statistics.srv.service.WithdrawCashService;
 import com.lawu.eshop.utils.DateUtil;
 
@@ -41,6 +47,9 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 
 	@Autowired
 	private ReportAreaWithdrawMonthDOMapper reportAreaWithdrawMonthDOMapper;
+
+	@Autowired
+	private ReportAreaWithdrawDOMapperExtend reportAreaWithdrawDOMapperExtend;
 	
 	@Override
 	public void saveDaily(ReportKCommonParam param) {
@@ -202,6 +211,67 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 		withdrawMonthDO.setTotalMoney(param.getTotalMoney());
 		withdrawMonthDO.setGmtReport(param.getGmtReport());
 		reportAreaWithdrawMonthDOMapper.insertSelective(withdrawMonthDO);
+	}
+
+	@Override
+	public ReportAreaWithdrawBO selectAreaWithdrawDailyReport(AgentReportParam param) {
+		String beginTime;
+		String endTime;
+		if (StringUtils.isEmpty(param.getBeginTime()) || StringUtils.isEmpty(param.getEndTime())) {
+			endTime = DateUtil.getDateFormat(new Date(), "yyyy-MM-dd");
+			beginTime = DateUtil.getDateFormat(new Date(), "yyyy-MM") + "-01";
+		} else {
+			endTime = param.getEndTime();
+			beginTime = param.getBeginTime();
+		}
+		String[] pathArr = param.getRegionPath().split("/");
+		ReportAreaWithdrawParam withdrawParam = new ReportAreaWithdrawParam();
+		withdrawParam.setBeginDate(beginTime);
+		withdrawParam.setEndDate(endTime);
+		withdrawParam.setCityId(Integer.valueOf(pathArr[1]));
+		ReportAreaWithdrawDOView withdrawDOView = reportAreaWithdrawDOMapperExtend.selectAreaWithdrawDailyReport(withdrawParam);
+		ReportAreaWithdrawBO reportAreaWithdrawBO = new ReportAreaWithdrawBO();
+		if (withdrawDOView == null) {
+			reportAreaWithdrawBO.setMemberMoney(BigDecimal.ZERO);
+			reportAreaWithdrawBO.setMerchantMoney(BigDecimal.ZERO);
+			reportAreaWithdrawBO.setTotalMoney(BigDecimal.ZERO);
+		} else {
+			reportAreaWithdrawBO.setMemberMoney(withdrawDOView.getMemberMoney());
+			reportAreaWithdrawBO.setMerchantMoney(withdrawDOView.getMerchantMoney());
+			reportAreaWithdrawBO.setTotalMoney(withdrawDOView.getTotalMoney());
+		}
+		return reportAreaWithdrawBO;
+	}
+
+	@Override
+	public ReportAreaWithdrawBO selectAreaWithdrawMonthReport(AgentReportParam param) {
+		String beginDate;
+		String endDate;
+		if(StringUtils.isEmpty(param.getBeginTime()) || StringUtils.isEmpty(param.getEndTime())){
+			endDate = DateUtil.getDateFormat(new Date(), "yyyy-MM"+"-01");
+			beginDate = DateUtil.getDateFormat(new Date(), "yyyy"+"-01-01");
+		}else{
+			endDate = param.getEndTime()+"-01";
+			beginDate = param.getBeginTime()+"-01";
+		}
+
+		String[] pathArr = param.getRegionPath().split("/");
+		ReportAreaWithdrawParam withdrawParam = new ReportAreaWithdrawParam();
+		withdrawParam.setBeginDate(beginDate);
+		withdrawParam.setEndDate(endDate);
+		withdrawParam.setCityId(Integer.valueOf(pathArr[1]));
+		ReportAreaWithdrawDOView withdrawDOView = reportAreaWithdrawDOMapperExtend.selectAreaWithdrawMonthReport(withdrawParam);
+		ReportAreaWithdrawBO reportAreaWithdrawBO = new ReportAreaWithdrawBO();
+		if (withdrawDOView == null) {
+			reportAreaWithdrawBO.setMemberMoney(BigDecimal.ZERO);
+			reportAreaWithdrawBO.setTotalMoney(BigDecimal.ZERO);
+			reportAreaWithdrawBO.setMerchantMoney(BigDecimal.ZERO);
+		} else {
+			reportAreaWithdrawBO.setMemberMoney(withdrawDOView.getMemberMoney());
+			reportAreaWithdrawBO.setMerchantMoney(withdrawDOView.getMerchantMoney());
+			reportAreaWithdrawBO.setTotalMoney(withdrawDOView.getTotalMoney());
+		}
+		return reportAreaWithdrawBO;
 	}
 
 }

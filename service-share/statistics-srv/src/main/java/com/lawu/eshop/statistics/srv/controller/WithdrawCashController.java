@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.statistics.dto.ReportAreaWithdrawDTO;
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 import com.lawu.eshop.statistics.dto.ReportWithdrawDailyDTO;
+import com.lawu.eshop.statistics.param.AgentReportParam;
 import com.lawu.eshop.statistics.param.AgentWithdrawCashParam;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
+import com.lawu.eshop.statistics.srv.bo.ReportAreaWithdrawBO;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.service.WithdrawCashService;
@@ -137,6 +140,36 @@ public class WithdrawCashController extends BaseController {
 	Result saveAgentMonth(@RequestBody AgentWithdrawCashParam param){
 		withdrawCashService.saveAgentMonth(param);
 		return successCreated(ResultCode.SUCCESS);
+	}
+
+	/**
+	 * 代理商日统计提现查询
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "selectAreaWithdrawDailyReport", method = RequestMethod.POST)
+	Result<ReportAreaWithdrawDTO> selectAreaWithdrawDailyReport(@RequestBody AgentReportParam param) {
+		ReportAreaWithdrawBO withdrawBO = withdrawCashService.selectAreaWithdrawDailyReport(param);
+		ReportAreaWithdrawDTO withdrawDTO = new ReportAreaWithdrawDTO();
+		withdrawDTO.setMerchantMoney(withdrawBO.getMerchantMoney());
+		withdrawDTO.setMemberMoney(withdrawBO.getMemberMoney());
+		withdrawDTO.setTotalMoney(withdrawBO.getTotalMoney());
+		return successCreated(withdrawDTO);
+	}
+
+	/**
+	 * 代理商月统计提现查询
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "selectAreaWithdrawMonthReport", method = RequestMethod.POST)
+	Result<ReportAreaWithdrawDTO> selectAreaWithdrawMonthReport(@RequestBody AgentReportParam param) {
+		ReportAreaWithdrawBO withdrawBO = withdrawCashService.selectAreaWithdrawMonthReport(param);
+		ReportAreaWithdrawDTO withdrawDTO = new ReportAreaWithdrawDTO();
+		withdrawDTO.setMerchantMoney(withdrawBO.getMerchantMoney());
+		withdrawDTO.setMemberMoney(withdrawBO.getMemberMoney());
+		withdrawDTO.setTotalMoney(withdrawBO.getTotalMoney());
+		return successCreated(withdrawDTO);
 	}
 
 }
