@@ -283,8 +283,13 @@ public class ProductConverter {
         document.addField("price_d", productDO.getMinPrice() == null ? 0 : productDO.getMinPrice().doubleValue());
         document.addField("inventory_i", productDO.getTotalInventory());
         document.addField("salesVolume_i", productDO.getTotalSalesVolume());
-        if(org.apache.commons.lang.StringUtils.isNotEmpty(productDO.getKeywords())){
+        if (org.apache.commons.lang.StringUtils.isNotEmpty(productDO.getKeywords())) {
             document.addField("keywords", productDO.getKeywords());
+            String keywords = productDO.getKeywords();
+            String[] keywordArr = keywords.split(",");
+            for (String keyword : keywordArr) {
+                document.addField("keyword_ss", keyword);
+            }
         }
         return document;
     }

@@ -632,6 +632,14 @@ public class ProductServiceImpl implements ProductService {
             document.addField("inventory_i", solrDocument.get("inventory_i"));
             document.addField("salesVolume_i", solrDocument.get("salesVolume_i"));
             document.addField("keywords", solrDocument.get("keywords"));
+            if (solrDocument.get("keywords") != null && StringUtils.isNotEmpty(solrDocument.get("keywords").toString())) {
+                String keywords = solrDocument.get("keywords").toString();
+                keywords = keywords.substring(1, keywords.length() - 1);
+                String[] keywordArr = keywords.split(",");
+                for (String keyword : keywordArr) {
+                    document.addField("keyword_ss", keyword);
+                }
+            }
             solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
