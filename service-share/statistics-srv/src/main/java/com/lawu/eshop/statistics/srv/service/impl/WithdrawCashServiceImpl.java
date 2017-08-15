@@ -12,13 +12,17 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 import com.lawu.eshop.statistics.param.AgentWithdrawCashParam;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
+import com.lawu.eshop.statistics.srv.bo.ReportAreaWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaWithdrawDailyDO;
+import com.lawu.eshop.statistics.srv.domain.ReportAreaWithdrawDailyDOExample;
+import com.lawu.eshop.statistics.srv.domain.ReportAreaWithdrawMonthDO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDOExample;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawMonthDO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawMonthDOExample;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaWithdrawDailyDOMapper;
+import com.lawu.eshop.statistics.srv.mapper.ReportAreaWithdrawMonthDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportWithdrawDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportWithdrawMonthDOMapper;
 import com.lawu.eshop.statistics.srv.service.WithdrawCashService;
@@ -34,6 +38,9 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 
 	@Autowired
 	private ReportAreaWithdrawDailyDOMapper reportAreaWithdrawDailyDOMapper;
+
+	@Autowired
+	private ReportAreaWithdrawMonthDOMapper reportAreaWithdrawMonthDOMapper;
 	
 	@Override
 	public void saveDaily(ReportKCommonParam param) {
@@ -155,6 +162,46 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 		withdrawDailyDO.setTotalMoney(param.getTotalMoney());
 		withdrawDailyDO.setGmtReport(param.getGmtReport());
 		reportAreaWithdrawDailyDOMapper.insertSelective(withdrawDailyDO);
+	}
+
+	@Override
+	public List<ReportAreaWithdrawDailyBO> selectReportAreaWithdrawCashList(String month, Integer cityId) {
+		ReportAreaWithdrawDailyDOExample example = new ReportAreaWithdrawDailyDOExample();
+		Date begin = DateUtil.formatDate(month + "-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+		Date end = DateUtil.getLastDayOfMonth(begin);
+		example.createCriteria().andGmtReportBetween(begin, end).andCityIdEqualTo(cityId);
+		List<ReportAreaWithdrawDailyDO> listDOS = reportAreaWithdrawDailyDOMapper.selectByExample(example);
+		if (listDOS.isEmpty()) {
+			return new ArrayList<>();
+		}
+		List<ReportAreaWithdrawDailyBO> list = new ArrayList<>();
+		ReportAreaWithdrawDailyBO withdrawDailyBO;
+		for (ReportAreaWithdrawDailyDO withdrawDailyDO : listDOS) {
+			withdrawDailyBO = new ReportAreaWithdrawDailyBO();
+			withdrawDailyBO.setId(withdrawDailyDO.getId());
+			withdrawDailyBO.setGmtReport(withdrawDailyDO.getGmtReport());
+			withdrawDailyBO.setMemberMoney(withdrawDailyDO.getMemberMoney());
+			withdrawDailyBO.setMerchantMoney(withdrawDailyDO.getMerchantMoney());
+			withdrawDailyBO.setCityId(withdrawDailyDO.getCityId());
+			withdrawDailyBO.setCityName(withdrawDailyDO.getCityName());
+			withdrawDailyBO.setTotalMoney(withdrawDailyDO.getTotalMoney());
+			list.add(withdrawDailyBO);
+		}
+		return list;
+	}
+
+	@Override
+	@Transactional
+	public void saveAgentMonth(AgentWithdrawCashParam param) {
+		ReportAreaWithdrawMonthDO withdrawMonthDO = new ReportAreaWithdrawMonthDO();
+		withdrawMonthDO.setCityName(param.getCityName());
+		withdrawMonthDO.setGmtCreate(new Date());
+		withdrawMonthDO.setCityId(param.getCityId());
+		withdrawMonthDO.setMemberMoney(param.getMemberMoney());
+		withdrawMonthDO.setMerchantMoney(param.getMerchantMoney());
+		withdrawMonthDO.setTotalMoney(param.getTotalMoney());
+		withdrawMonthDO.setGmtReport(param.getGmtReport());
+		reportAreaWithdrawMonthDOMapper.insertSelective(withdrawMonthDO);
 	}
 
 }

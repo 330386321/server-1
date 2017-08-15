@@ -20,6 +20,7 @@ import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 import com.lawu.eshop.statistics.dto.ReportWithdrawDailyDTO;
 import com.lawu.eshop.statistics.param.AgentWithdrawCashParam;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
+import com.lawu.eshop.statistics.srv.bo.ReportAreaWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.service.WithdrawCashService;
 
@@ -110,4 +111,32 @@ public class WithdrawCashController extends BaseController {
 		withdrawCashService.saveAgentDaily(param);
 		return successCreated(ResultCode.SUCCESS);
 	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "withdrawCash/selectReportAreaWithdrawCashList")
+	Result<List<ReportWithdrawDailyDTO>> selectReportAreaWithdrawCashList(
+			@RequestParam("month") String month, @RequestParam("cityId") Integer cityId){
+		List<ReportAreaWithdrawDailyBO> rntList = withdrawCashService.selectReportAreaWithdrawCashList(month,cityId);
+		if(rntList.isEmpty()){
+			return successGet(new ArrayList<>());
+		}
+		List<ReportWithdrawDailyDTO> dailyDTOS = new ArrayList<>();
+		ReportWithdrawDailyDTO reportWithdrawDailyDTO;
+		for (ReportAreaWithdrawDailyBO dailyBO : rntList) {
+			reportWithdrawDailyDTO = new ReportWithdrawDailyDTO();
+			reportWithdrawDailyDTO.setId(dailyBO.getId());
+			reportWithdrawDailyDTO.setTotalMoney(dailyBO.getTotalMoney());
+			reportWithdrawDailyDTO.setMerchantMoney(dailyBO.getMerchantMoney());
+			reportWithdrawDailyDTO.setMemberMoney(dailyBO.getMemberMoney());
+			reportWithdrawDailyDTO.setGmtReport(dailyBO.getGmtReport());
+			dailyDTOS.add(reportWithdrawDailyDTO);
+		}
+		return successGet(dailyDTOS);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "saveAgentMonth")
+	Result saveAgentMonth(@RequestBody AgentWithdrawCashParam param){
+		withdrawCashService.saveAgentMonth(param);
+		return successCreated(ResultCode.SUCCESS);
+	}
+
 }

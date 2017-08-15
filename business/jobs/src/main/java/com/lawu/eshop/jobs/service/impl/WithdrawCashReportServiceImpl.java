@@ -153,4 +153,40 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 		}
 	}
 
+	@Override
+	public void executeCollectAgentMonthData() {
+		//查询二级城市Path
+
+		Result<List<RegionDTO>> regionResult = regionService.getRegionLevelTwo();
+		if (regionResult.getModel().isEmpty()) {
+			return;
+		}
+		String month = DateUtil.getDateFormat(DateUtil.getMonthBefore(new Date()),"yyyy-MM");
+		for (RegionDTO regionDTO : regionResult.getModel()) {
+			Result<List<ReportWithdrawDailyDTO>> rntResult = statisticsWithdrawCashService.selectReportAreaWithdrawCashList(month,regionDTO.getId());
+			if(!rntResult.getModel().isEmpty()) {
+				//存在提现记录统计
+				BigDecimal memberMoney = new BigDecimal("0");
+				BigDecimal merchantMoney = new BigDecimal("0");
+				BigDecimal totalMoney = new BigDecimal("0");
+				for (ReportWithdrawDailyDTO dto : rntResult.getModel()) {
+					memberMoney = memberMoney.add(dto.getMemberMoney());
+					merchantMoney = merchantMoney.add(dto.getMerchantMoney());
+					totalMoney = totalMoney.add(dto.getTotalMoney());
+				}
+
+				AgentWithdrawCashParam reportWithdraw = new AgentWithdrawCashParam();
+				reportWithdraw.setGmtReport(DateUtil.formatDate(month+"-01", "yyyy-MM-dd"));
+				reportWithdraw.setMemberMoney(memberMoney);
+				reportWithdraw.setMerchantMoney(merchantMoney);
+				reportWithdraw.setTotalMoney(memberMoney.add(merchantMoney));
+				reportWithdraw.setCityId(regionDTO.getId());
+				reportWithdraw.setCityName(regionDTO.getName());
+				statisticsWithdrawCashService.saveAgentMonth(reportWithdraw);
+
+			}
+		}
+
+	}
+
 }

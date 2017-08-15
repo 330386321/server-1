@@ -5,6 +5,7 @@ import java.util.List;
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 import com.lawu.eshop.statistics.param.AgentWithdrawCashParam;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
+import com.lawu.eshop.statistics.srv.bo.ReportAreaWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
 
 public interface WithdrawCashService {
@@ -23,4 +24,8 @@ public interface WithdrawCashService {
 
 
     void saveAgentDaily(AgentWithdrawCashParam param);
+
+    List<ReportAreaWithdrawDailyBO> selectReportAreaWithdrawCashList(String month, Integer cityId);
+
+	void saveAgentMonth(AgentWithdrawCashParam param);
 }

@@ -38,4 +38,10 @@ public interface StatisticsWithdrawCashService {
 
 	@RequestMapping(method = RequestMethod.POST, value = "withdrawCash/saveAgentDaily")
 	Result saveAgentDaily(@RequestBody AgentWithdrawCashParam param);
+
+	@RequestMapping(method = RequestMethod.GET, value = "withdrawCash/selectReportAreaWithdrawCashList")
+	Result<List<ReportWithdrawDailyDTO>> selectReportAreaWithdrawCashList(@RequestParam("month") String month, @RequestParam("cityId") Integer cityId);
+
+	@RequestMapping(method = RequestMethod.POST, value = "withdrawCash/saveAgentMonth")
+	Result saveAgentMonth(@RequestBody AgentWithdrawCashParam param);
 }
