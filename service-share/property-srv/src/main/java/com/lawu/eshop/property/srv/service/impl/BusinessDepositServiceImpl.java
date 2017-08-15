@@ -248,6 +248,8 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
         bddo.setGmtModified(new Date());
         if (BusinessDepositOperEnum.VERIFYD.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
             bddo.setGmtVerify(new Date());
+        } else if (BusinessDepositOperEnum.ACCPET_REFUND.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
+            bddo.setGmtAccpet(new Date());
         }
         BusinessDepositDOExample example = new BusinessDepositDOExample();
         example.createCriteria().andIdEqualTo(Long.valueOf(param.getId()));
@@ -324,6 +326,11 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
         bo.setAmount(list.get(0).getAmount().toString());
         bo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(list.get(0).getStatus()));
         bo.setRemark(list.get(0).getRemark());
+        bo.setGmtPay(list.get(0).getGmtPay());
+        bo.setGmtVerify(list.get(0).getGmtVerify());
+        bo.setGmtRefund(list.get(0).getGmtRefund());
+        bo.setGmtAccpet(list.get(0).getGmtAccpet());
+        bo.setGmtResult(list.get(0).getGmtModified());
 
         if (list.get(0).getBusinessBankAccountId() != null) {
             BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(list.get(0).getBusinessBankAccountId());
