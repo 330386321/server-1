@@ -288,7 +288,7 @@ public class ProductConverter {
             String keywords = productDO.getKeywords();
             String[] keywordArr = keywords.split(",");
             for (String keyword : keywordArr) {
-                document.addField("keyword_ss", keyword);
+                document.addField("keyword_ss", keyword.trim());
             }
         }
         return document;

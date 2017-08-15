@@ -151,6 +151,7 @@ public class ProductSolrController extends BaseController {
         List<ProductSearchWordDTO> searchWordDTOS = new ArrayList<>();
         SolrQuery query = new SolrQuery();
         query.setQuery("keyword_ss:" + name + "*");
+        query.setFields("keyword_ss");
         query.setStart(0);
         query.setRows(10);
         SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
@@ -163,12 +164,12 @@ public class ProductSolrController extends BaseController {
             keywords = keywords.substring(1, keywords.length() - 1);
             String[] keywordArr = keywords.split(",");
             for (String keyword : keywordArr) {
-                if (keyword.startsWith(name)) {
+                if (keyword.trim().startsWith(name)) {
                     ProductSearchWordDTO searchWordDTO = new ProductSearchWordDTO();
-                    searchWordDTO.setName(keyword);
+                    searchWordDTO.setName(keyword.trim());
 
                     query = new SolrQuery();
-                    query.setQuery("keyword_ss:" + keyword);
+                    query.setQuery("keyword_ss:" + keyword.trim());
                     query.setFields("id");
                     solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
                     searchWordDTO.setCount((int) solrDocumentList.getNumFound());
