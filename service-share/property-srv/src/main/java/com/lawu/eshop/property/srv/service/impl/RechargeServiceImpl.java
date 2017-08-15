@@ -14,10 +14,12 @@ import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
+import com.lawu.eshop.property.srv.bo.AreaRechargePointBO;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
 import com.lawu.eshop.property.srv.bo.RechargeReportBO;
 import com.lawu.eshop.property.srv.domain.RechargeDO;
 import com.lawu.eshop.property.srv.domain.RechargeDOExample;
+import com.lawu.eshop.property.srv.domain.extend.AreaRechargePointDOView;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
 import com.lawu.eshop.property.srv.domain.extend.ReportAreaRechargeDOExtend;
 import com.lawu.eshop.property.srv.domain.extend.ReportAreaRechargeDOView;
@@ -327,4 +329,22 @@ public class RechargeServiceImpl implements RechargeService {
         return bos;
     }
 
+	@Override
+	public List<AreaRechargePointBO> selectAreaRechargePoint(String bdate, String edate) {
+		List<AreaRechargePointDOView> list = rechargeDOMapperExtend.selectAreaRechargePoint(bdate, edate);
+		List<AreaRechargePointBO> rtnList = new ArrayList<AreaRechargePointBO>();
+		if(list != null && !list.isEmpty()) {
+			for(AreaRechargePointDOView view : list) {
+				AreaRechargePointBO BO = new AreaRechargePointBO();
+				BO.setAreaId(view.getAreaId());
+				BO.setCityId(view.getCityId());
+				BO.setProvinceId(view.getProvinceId());
+				BO.setTotalMoney(view.getTotalMoney());
+				BO.setType(view.getType());
+				rtnList.add(BO);
+			}
+			
+		}
+		return rtnList;
+	}
 }

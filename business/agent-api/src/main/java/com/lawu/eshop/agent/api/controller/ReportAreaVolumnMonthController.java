@@ -15,7 +15,6 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.statistics.dto.ReportAreaVolumeDailyDTO;
 import com.lawu.eshop.statistics.dto.ReportAreaVolumnMonthDTO;
 
 import io.swagger.annotations.Api;
@@ -34,7 +33,7 @@ public class ReportAreaVolumnMonthController extends BaseController {
 	@Autowired
 	private ReportAreaVolumnMonthService reportAreaVolumnMonthService;
 	
-	@ApiOperation(value = "根据区域和时间查询总销量月列表", notes = "根据区域和时间查询总销量日列表,(洪钦明)", httpMethod = "GET")
+	@ApiOperation(value = "根据区域和时间查询总销量月列表", notes = "根据区域和时间查询总销量月列表,(洪钦明)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "selectReportAreaVolumnMonth", method = RequestMethod.GET)

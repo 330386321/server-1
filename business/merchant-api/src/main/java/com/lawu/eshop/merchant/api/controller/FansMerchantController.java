@@ -323,9 +323,12 @@ public class FansMerchantController extends BaseController {
 		}
 		ids = ids.substring(0, ids.length() - 1);
 		nums = nums.substring(0, nums.length() - 1);
-		
-		
-		int inviteFansCount = listInviteFansWithContentParam.getInviteCount();
+		int inviteFansCount = 0;
+		if(listInviteFansWithContentParam.getInviteCount() != null || listInviteFansWithContentParam.getInviteCount() == 0) {
+			inviteFansCount = listInviteFansWithContentParam.getInviteCount();
+		} else {
+			inviteFansCount = fmtDTOlist.getModel().size();
+		}
 		Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
 		if (isSuccess(resultFreeze)) {
 			if (PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel().getStatus())) {

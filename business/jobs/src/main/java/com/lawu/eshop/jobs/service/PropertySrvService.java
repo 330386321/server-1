@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.param.CommissionJobParam;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.property.dto.AreaPointConsumeDTO;
+import com.lawu.eshop.property.dto.AreaRechargePointDTO;
 import com.lawu.eshop.property.dto.ReportAdEarningsPointDTO;
 import com.lawu.eshop.property.dto.ReportAdPointGroupByAreaDTO;
 import com.lawu.eshop.property.dto.ReportEarningsDTO;
@@ -71,4 +73,12 @@ public interface PropertySrvService {
 	 */
 	@RequestMapping(value = "transactionDetail/selectTotalSalesGroupByArea", method = RequestMethod.POST)
 	Result<List<TotalSalesGroupByAreaDTO>> selectTotalSalesGroupByArea(@RequestBody TotalSalesQueryParam param);
+	
+	
+	@RequestMapping(value = "pointDetail/getAreaPointConsume", method = RequestMethod.GET)
+    Result<List<AreaPointConsumeDTO>> getAreaPointConsume(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate);
+	
+	
+	@RequestMapping(value = "recharge/selectAreaRechargePoint", method = RequestMethod.GET)
+    public Result<List<AreaRechargePointDTO>> selectAreaRechargePoint(@RequestParam("bdate")String bdate, @RequestParam("edate")String edate);
 }

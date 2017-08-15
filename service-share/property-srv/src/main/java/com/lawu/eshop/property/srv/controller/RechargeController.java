@@ -1,5 +1,20 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -8,6 +23,7 @@ import com.lawu.eshop.property.constants.PayTypeEnum;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.dto.AreaRechargePointDTO;
 import com.lawu.eshop.property.dto.BalanceAndPointListQueryDTO;
 import com.lawu.eshop.property.dto.RechargeReportDTO;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
@@ -19,6 +35,7 @@ import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
+import com.lawu.eshop.property.srv.bo.AreaRechargePointBO;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.bo.RechargeReportBO;
@@ -29,14 +46,6 @@ import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.PwdUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * <p>
@@ -246,6 +255,29 @@ public class RechargeController extends BaseController {
             dto.setGmtCreate(new Date());
             dto.setGmtReport(DateUtil.formatDate(param.getDate(), "yyyy-MM-dd"));
             dtos.add(dto);
+        }
+        return successGet(dtos);
+    }
+    /**
+     * 查询区域充值积分记录
+     * @param bdate
+     * @param edate
+     * @return
+     */
+    @RequestMapping(value = "selectAreaRechargePoint", method = RequestMethod.GET)
+    public Result<List<AreaRechargePointDTO>> selectAreaRechargePoint(@RequestParam("bdate")String bdate, @RequestParam("edate")String edate) {
+        List<AreaRechargePointDTO> dtos = new ArrayList<>();
+        List<AreaRechargePointBO> rntList = rechargeService.selectAreaRechargePoint(bdate, edate);
+        if(rntList != null && !rntList.isEmpty()) {
+        	for (AreaRechargePointBO bo : rntList) {
+            	AreaRechargePointDTO dto = new AreaRechargePointDTO();
+                dto.setAreaId(bo.getAreaId());
+                dto.setCityId(bo.getCityId());
+                dto.setProvinceId(bo.getProvinceId());
+                dto.setTotalMoney(bo.getTotalMoney());
+                dto.setType(bo.getType());
+                dtos.add(dto);
+            }
         }
         return successCreated(dtos);
     }

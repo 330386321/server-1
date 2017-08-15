@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lawu.eshop.property.srv.mapper.extend.RechargeDOMapperExtend">
-
     <resultMap id="BaseResultMap" type="com.lawu.eshop.property.srv.domain.extend.ReportAreaRechargeDOExtend">
         <result column="member_recharge_balance" property="memberRechargeBalance" jdbcType="DECIMAL"/>
         <result column="member_recharge_point" property="memberRechargePoint" jdbcType="DECIMAL"/>
@@ -41,4 +40,10 @@
   ) tt group by tt.province_id,tt.city_id,tt.area_id
   </select>
 
+	<select id="selectAreaRechargePoint"  resultType="com.lawu.eshop.property.srv.domain.extend.AreaRechargePointDOView" parameterType="java.lang.String">
+		select sum(money) totalMoney,area_id as areaId,city_id as cityId,province_id as provinceId,left(user_num,1) as type 
+			from recharge
+			where recharge_type = 2 and status = 2 and gmt_modified BETWEEN #{bdate} and #{edate}
+		group by area_id,city_id,province_id,left(user_num,1)
+	</select>
 </mapper>

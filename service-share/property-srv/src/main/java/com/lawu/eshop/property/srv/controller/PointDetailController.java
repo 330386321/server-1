@@ -18,6 +18,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.dto.AreaPointConsumeDTO;
 import com.lawu.eshop.property.dto.PointConsumeReportDTO;
 import com.lawu.eshop.property.dto.PointDetailBackageDTO;
 import com.lawu.eshop.property.dto.PointDetailDTO;
@@ -26,6 +27,7 @@ import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
+import com.lawu.eshop.property.srv.bo.AreaPointConsumeBO;
 import com.lawu.eshop.property.srv.bo.PointConsumeReportBO;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.bo.ReportAdPointGroupByAreaBO;
@@ -130,8 +132,6 @@ public class PointDetailController extends BaseController {
     
     @RequestMapping(value = "getReportAdPointGroupByArea", method = RequestMethod.GET)
 	public Result<List<ReportAdPointGroupByAreaDTO>> getReportAdPointGroupByArea(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate) {
-    	System.out.println(bdate);
-    	System.out.println(edate);
     	List<ReportAdPointGroupByAreaBO> list = pointDetailService.getReportAdPointGroupByArea(bdate, edate);
     	List<ReportAdPointGroupByAreaDTO> rtnList = new ArrayList<ReportAdPointGroupByAreaDTO>();
     	for(ReportAdPointGroupByAreaBO BO : list) {
@@ -142,4 +142,20 @@ public class PointDetailController extends BaseController {
     	}
 		return successCreated(rtnList);
 	}
+    
+    @RequestMapping(value = "getAreaPointConsume", method = RequestMethod.GET)
+    public Result<List<AreaPointConsumeDTO>> getAreaPointConsume(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate) {
+    	List<AreaPointConsumeBO> list = pointDetailService.getAreaPointConsume(bdate, edate);
+    	List<AreaPointConsumeDTO> rtnList = new ArrayList<AreaPointConsumeDTO>();
+    	for(AreaPointConsumeBO BO : list) {
+    		AreaPointConsumeDTO dto = new AreaPointConsumeDTO();
+    		dto.setAreaId(BO.getAreaId());
+    		dto.setTotalPoint(BO.getTotalPoint());
+    		dto.setCityId(BO.getCityId());
+    		dto.setProvinceId(BO.getProvinceId());
+    		dto.setType(BO.getType());
+    		rtnList.add(dto);
+    	}
+		return successCreated(rtnList);
+    }
 }

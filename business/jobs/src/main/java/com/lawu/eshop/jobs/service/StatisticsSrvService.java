@@ -15,6 +15,7 @@ import com.lawu.eshop.statistics.dto.ReportAreaAdPointMonthDTO;
 import com.lawu.eshop.statistics.dto.ReportAreaVolumnDailyInMonthDTO;
 import com.lawu.eshop.statistics.param.ReportAreaAdPointDailyParams;
 import com.lawu.eshop.statistics.param.ReportAreaAdPointMonthParams;
+import com.lawu.eshop.statistics.param.ReportAreaPointConsumeDailyParam;
 import com.lawu.eshop.statistics.param.ReportAreaVolumnDailyParam;
 import com.lawu.eshop.statistics.param.ReportAreaVolumnMonthParam;
 
@@ -52,4 +53,8 @@ public interface StatisticsSrvService {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "reportAreaVolumnMonth/insertReportAreaVolumnMonth", method = RequestMethod.POST)
     Result insertReportAreaVolumnMonth(@RequestBody ReportAreaVolumnMonthParam param);
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "reportAreaPointConsumeDaily/insertReportAreaPointConsumeDaily", method = RequestMethod.POST)
+	public Result insertReportAreaPointConsumeDaily(@RequestBody ReportAreaPointConsumeDailyParam param);
 }

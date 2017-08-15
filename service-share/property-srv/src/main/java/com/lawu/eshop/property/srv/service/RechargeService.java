@@ -13,6 +13,7 @@ import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
+import com.lawu.eshop.property.srv.bo.AreaRechargePointBO;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
 import com.lawu.eshop.property.srv.bo.RechargeReportBO;
 
@@ -93,4 +94,13 @@ public interface RechargeService {
      * @return
      */
     List<AgentReportRechargeQueryBO> selectAgentAreaReportRechargeListByDate(AgentReportRechargeQueryParam param);
+    
+    
+    /**
+     * 查询区域充值积分的记录
+     * @param bdate
+     * @param edate
+     * @return
+     */
+    List<AreaRechargePointBO> selectAreaRechargePoint(String bdate, String edate);
 }
