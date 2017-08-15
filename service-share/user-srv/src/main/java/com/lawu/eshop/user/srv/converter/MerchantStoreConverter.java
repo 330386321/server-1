@@ -401,7 +401,7 @@ public class MerchantStoreConverter {
             document.addField("keywords", merchantStoreDO.getKeywords());
             String[] keywords = merchantStoreDO.getKeywords().split(",");
             for (String keyword : keywords) {
-                document.addField("keyword_ss", keyword);
+                document.addField("keyword_ss", keyword.trim());
             }
         }
         return document;
@@ -469,7 +469,7 @@ public class MerchantStoreConverter {
             keywords = keywords.substring(1, keywords.length() - 1);
             String[] keywordArr = keywords.split(",");
             for (String keyword : keywordArr) {
-                document.addField("keyword_ss", keyword);
+                document.addField("keyword_ss", keyword.trim());
             }
         }
         return document;

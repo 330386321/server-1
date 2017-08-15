@@ -112,6 +112,7 @@ public class StoreSolrController extends BaseController {
         List<StoreSearchWordDTO> searchWordDTOS = new ArrayList<>();
         SolrQuery query = new SolrQuery();
         query.setQuery("keyword_ss:" + name + "* AND regionPath_s:" + regionPath + "*");
+        query.setFields("keyword_ss");
         query.setStart(0);
         query.setRows(10);
         SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
