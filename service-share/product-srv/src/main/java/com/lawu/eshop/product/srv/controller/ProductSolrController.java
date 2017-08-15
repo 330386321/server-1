@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -147,34 +148,35 @@ public class ProductSolrController extends BaseController {
      */
     @RequestMapping(value = "listProductSearchWord", method = RequestMethod.GET)
     public Result<List<ProductSearchWordDTO>> listStoreSearchWord(@RequestParam String name) {
-        //SolrQuery query = new SolrQuery();
-        //query.set("q", "*:*");
-        //query.set("qt", "/terms");
-        //query.set("terms", "true");
-        //query.set("terms.fl", "name_s");
-        //query.set("terms.regex", name + "+.*");
-        //query.set("terms.regex.flag", "case_insensitive");
-        //TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        List<ProductSearchWordDTO> searchWordDTOS = new ArrayList<>();
+        SolrQuery query = new SolrQuery();
+        query.setQuery("keyword_ss:" + name + "*");
+        query.setStart(0);
+        query.setRows(10);
+        SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        if (solrDocumentList == null || solrDocumentList.isEmpty()) {
+            return successGet(searchWordDTOS);
+        }
 
-        List<ProductSearchWordDTO> productSearchWordDTOS = new ArrayList<>();
-        //if (termsResponse != null) {
-        //    Map<String, List<TermsResponse.Term>> termsMap = termsResponse.getTermMap();
-        //    for (Map.Entry<String, List<TermsResponse.Term>> termsEntry : termsMap.entrySet()) {
-        //        List<TermsResponse.Term> termList = termsEntry.getValue();
-        //        for (TermsResponse.Term term : termList) {
-        //            ProductSearchWordDTO productSearchWordDTO = new ProductSearchWordDTO();
-        //            productSearchWordDTO.setName(term.getTerm());
-        //            productSearchWordDTO.setCount((int) term.getFrequency());
-        //            productSearchWordDTOS.add(productSearchWordDTO);
-        //        }
-        //    }
-        //} else {
-        //    ProductSearchWordDTO productSearchWordDTO = new ProductSearchWordDTO();
-        //    productSearchWordDTO.setName(name);
-        //    productSearchWordDTO.setCount(0);
-        //    productSearchWordDTOS.add(productSearchWordDTO);
-        //}
-        return successGet(productSearchWordDTOS);
+        for (SolrDocument solrDocument : solrDocumentList) {
+            String keywords = solrDocument.get("keyword_ss").toString();
+            keywords = keywords.substring(1, keywords.length() - 1);
+            String[] keywordArr = keywords.split(",");
+            for (String keyword : keywordArr) {
+                if (keyword.startsWith(name)) {
+                    ProductSearchWordDTO searchWordDTO = new ProductSearchWordDTO();
+                    searchWordDTO.setName(keyword);
+
+                    query = new SolrQuery();
+                    query.setQuery("keyword_ss:" + keyword);
+                    query.setFields("id");
+                    solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+                    searchWordDTO.setCount((int) solrDocumentList.getNumFound());
+                    searchWordDTOS.add(searchWordDTO);
+                }
+            }
+        }
+        return successGet(searchWordDTOS);
     }
 
     /**
