@@ -364,7 +364,7 @@ public class DiscountPackageController extends BaseController {
 	 */
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "更新优惠套餐", notes = "更新优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "PUT")
+	@ApiOperation(value = "更新优惠套餐", notes = "更新优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "update/{id}", method = RequestMethod.POST)
