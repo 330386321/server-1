@@ -51,7 +51,7 @@ public interface UserRedPacketService {
 	 * @param redPacketId
 	 * @param userNum
 	 */
-	void getUserRedpacketMoney(Long redPacketId, String userNum);
+	UserRedpacketMaxMoney getUserRedpacketMoney(Long redPacketId, String userNum);
 
 	/**
 	 * 获取最大的红包金额

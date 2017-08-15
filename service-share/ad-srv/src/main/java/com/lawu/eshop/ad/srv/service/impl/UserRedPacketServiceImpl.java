@@ -284,11 +284,12 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	 */
 	@Override
 	@Transactional
-	public void getUserRedpacketMoney(Long redPacketId, String userNum) {
+	public UserRedpacketMaxMoney getUserRedpacketMoney(Long redPacketId, String userNum) {
 		UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
 		userTakedExample.createCriteria().andUserRedPackIdEqualTo(redPacketId)
 				.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
 		List<UserTakedRedPacketDO> listTaked = userTakedRedPacketDOMapper.selectByExample(userTakedExample);
+		UserRedpacketMaxMoney getMoney=new UserRedpacketMaxMoney();
 		if (null != listTaked && listTaked.size() > 0) {
 			UserTakedRedPacketDO userTabed = listTaked.get(0);
 			userTabed.setGmtModified(new Date());
@@ -311,8 +312,9 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 			transactionStatusService.save(userTabed.getId(), TransactionConstant.USER_REDPACKED_GET_MONEY);
 			messageProducerService.sendMessage(MqConstant.TOPIC_AD_SRV, MqConstant.TAG_AD_USER_REDPACKET_ADD_MONTY,
 					notification);
+			getMoney.setMaxMoney(userTabed.getMoney());
 		}
-
+		return getMoney;
 	}
 
 	/**

@@ -59,7 +59,7 @@ public class UserRedPacketController extends BaseController {
 
 	@Autowired
 	private UserRedPacketService userRedPacketService;
-
+	
 	@Autowired
 	private MemberApiConfig memberApiConfig;
 

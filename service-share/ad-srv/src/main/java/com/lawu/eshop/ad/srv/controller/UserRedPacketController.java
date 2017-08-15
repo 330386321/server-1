@@ -109,9 +109,9 @@ public class UserRedPacketController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "getUserRedpacketMoney", method = RequestMethod.POST)
-	public Result getUserRedpacketMoney(@RequestParam Long redPacketId, @RequestParam String userNum) {
-		userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
-		return successCreated();
+	public Result<UserRedpacketMaxMoney> getUserRedpacketMoney(@RequestParam Long redPacketId, @RequestParam String userNum) {
+		UserRedpacketMaxMoney getMoney = userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
+		return successCreated(getMoney);
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class UserRedPacketController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.POST)
-	public Result getUserRedpacketMaxMoney(@RequestParam Long redPacketId) {
+	public Result<UserRedpacketMaxMoney> getUserRedpacketMaxMoney(@RequestParam Long redPacketId) {
 		UserRedpacketMaxMoney maxMoney =userRedPacketService.getUserRedpacketMaxMoney(redPacketId);
 		return successCreated(maxMoney);
 	}	
