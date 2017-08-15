@@ -14,8 +14,10 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.statistics.dto.ReportAreaPointConsumeDailyDTO;
+import com.lawu.eshop.statistics.dto.ReportAreaPointConsumeDailyInMonthDTO;
 import com.lawu.eshop.statistics.param.ReportAreaPointConsumeDailyParam;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaPointConsumeDailyBO;
+import com.lawu.eshop.statistics.srv.bo.ReportAreaPointConsumeDailyInMonthBO;
 import com.lawu.eshop.statistics.srv.service.ReportAreaPointConsumeDailyService;
 /**
  * 
@@ -68,4 +70,31 @@ public class ReportAreaPointConsumeDailyController extends BaseController{
 		}
 		return successGet(rtnList);
 	}
+	
+	/**
+	 * 定时任务调用统计每月区域积分消费的查询
+	 * @param bdate
+	 * @param edate
+	 * @return
+	 */
+	@RequestMapping(value = "selectReportAreaPointConsumeDailyInMonth", method = RequestMethod.GET)
+	public Result<List<ReportAreaPointConsumeDailyInMonthDTO>> selectReportAreaPointConsumeDailyInMonth(@RequestParam("bdate")String bdate, @RequestParam("edate")String edate){
+		List<ReportAreaPointConsumeDailyInMonthBO> list = reportAreaPointConsumeDailyService.selectReportAreaPointConsumeDailyInMonth(bdate, edate);
+		List<ReportAreaPointConsumeDailyInMonthDTO> rtnList = new ArrayList<>();
+		if(list != null && !list.isEmpty()) {
+			for(ReportAreaPointConsumeDailyInMonthBO bo : list) {
+				ReportAreaPointConsumeDailyInMonthDTO dto = new ReportAreaPointConsumeDailyInMonthDTO();
+				dto.setMemberPoint(bo.getMemberPoint());
+				dto.setMerchantPoint(bo.getMerchantPoint());
+				dto.setMemberRechargePoint(bo.getMemberRechargePoint());
+				dto.setMerchantRechargePoint(bo.getMerchantRechargePoint());
+				dto.setAreaId(bo.getAreaId());
+				dto.setCityId(bo.getCityId());
+				dto.setProvinceId(bo.getProvinceId());
+				rtnList.add(dto);
+			}
+		}
+		return successGet(rtnList);
+	}
+	
 }

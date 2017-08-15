@@ -9,9 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.statistics.param.ReportAreaPointConsumeDailyParam;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaPointConsumeDailyBO;
+import com.lawu.eshop.statistics.srv.bo.ReportAreaPointConsumeDailyInMonthBO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaPointConsumeDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaPointConsumeDailyDOExample;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportAreaPointConsumeDailyInMonthDOView;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaPointConsumeDailyDOMapper;
+import com.lawu.eshop.statistics.srv.mapper.extend.ReportAreaPointConsumeMonthDOMapperExtend;
 import com.lawu.eshop.statistics.srv.service.ReportAreaPointConsumeDailyService;
 import com.lawu.eshop.utils.DateUtil;
 
@@ -20,6 +23,9 @@ public class ReportAreaPointConsumeDailyServiceImpl implements ReportAreaPointCo
 
 	@Autowired
 	private ReportAreaPointConsumeDailyDOMapper reportAreaPointConsumeDailyMapper;
+	
+	@Autowired
+	private ReportAreaPointConsumeMonthDOMapperExtend reportAreaPointConsumeMonthDOMapperExtend;
 	
 	@Override
 	public int insertReportAreaPointConsumeDaily(ReportAreaPointConsumeDailyParam param) {
@@ -60,6 +66,26 @@ public class ReportAreaPointConsumeDailyServiceImpl implements ReportAreaPointCo
 				bo.setMerchantRechargePoint(Do.getMerchantRechargePoint());
 				bo.setTotalPoint(Do.getTotalPoint());
 				bo.setTotalRechargePoint(Do.getTotalRechargePoint());
+				rtnList.add(bo);
+			}
+		}
+		return rtnList;
+	}
+
+	@Override
+	public List<ReportAreaPointConsumeDailyInMonthBO> selectReportAreaPointConsumeDailyInMonth(String bdate, String edate) {
+		List<ReportAreaPointConsumeDailyInMonthDOView> viewList = reportAreaPointConsumeMonthDOMapperExtend.selectReportAreaPointConsumeDailyInMonth(bdate, edate);
+		List<ReportAreaPointConsumeDailyInMonthBO> rtnList = new ArrayList<>();
+		if(viewList != null && !viewList.isEmpty()) {
+			for(ReportAreaPointConsumeDailyInMonthDOView view : viewList) {
+				ReportAreaPointConsumeDailyInMonthBO bo = new ReportAreaPointConsumeDailyInMonthBO();
+				bo.setAreaId(view.getAreaId());
+				bo.setCityId(view.getCityId());
+				bo.setProvinceId(view.getProvinceId());
+				bo.setMemberPoint(view.getMemberPoint());
+				bo.setMemberRechargePoint(view.getMemberRechargePoint());
+				bo.setMerchantPoint(view.getMerchantPoint());
+				bo.setMerchantRechargePoint(view.getMerchantRechargePoint());
 				rtnList.add(bo);
 			}
 		}

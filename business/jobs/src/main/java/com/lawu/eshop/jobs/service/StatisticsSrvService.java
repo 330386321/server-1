@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.statistics.dto.ReportAreaAdPointDailyDTO;
 import com.lawu.eshop.statistics.dto.ReportAreaAdPointMonthDTO;
+import com.lawu.eshop.statistics.dto.ReportAreaPointConsumeDailyInMonthDTO;
 import com.lawu.eshop.statistics.dto.ReportAreaVolumnDailyInMonthDTO;
 import com.lawu.eshop.statistics.param.ReportAreaAdPointDailyParams;
 import com.lawu.eshop.statistics.param.ReportAreaAdPointMonthParams;
 import com.lawu.eshop.statistics.param.ReportAreaPointConsumeDailyParam;
+import com.lawu.eshop.statistics.param.ReportAreaPointConsumeMonthParam;
 import com.lawu.eshop.statistics.param.ReportAreaVolumnDailyParam;
 import com.lawu.eshop.statistics.param.ReportAreaVolumnMonthParam;
 
@@ -56,5 +58,12 @@ public interface StatisticsSrvService {
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "reportAreaPointConsumeDaily/insertReportAreaPointConsumeDaily", method = RequestMethod.POST)
-	public Result insertReportAreaPointConsumeDaily(@RequestBody ReportAreaPointConsumeDailyParam param);
+	Result insertReportAreaPointConsumeDaily(@RequestBody ReportAreaPointConsumeDailyParam param);
+	
+	@RequestMapping(value = "reportAreaPointConsumeDaily/selectReportAreaPointConsumeDailyInMonth", method = RequestMethod.GET)
+	Result<List<ReportAreaPointConsumeDailyInMonthDTO>> selectReportAreaPointConsumeDailyInMonth(@RequestParam("bdate")String bdate, @RequestParam("edate")String edate);
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "reportAreaPointConsumeMonth/saveReportAreaPointConsumeMonth", method = RequestMethod.POST)
+	Result saveReportAreaPointConsumeMonth(@RequestBody ReportAreaPointConsumeMonthParam param);
 }
