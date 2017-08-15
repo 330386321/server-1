@@ -59,8 +59,8 @@ public class FastDFSUploadUtils {
 								result.setFenum(FastDFSResultEnum.FD_FILE_IMG_BIG);
 								return result;
 							}
-							String fileUrl = FastDFSClient.getInstance(param)
-									.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName);
+							FastDFSClient client =new FastDFSClient();
+							String fileUrl =client.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName,param);
 							result.setFileUrl(fileUrl);
 						} else if (uparam.getFileUploadTypeEnum().equals(FileUploadTypeEnum.VIDEO)) {// 视频文件
 							if (StringUtils.isEmpty(uparam.getFfmpegUrl())) {
@@ -69,14 +69,15 @@ public class FastDFSUploadUtils {
 							}
 							String newName = RandomUtil.buildFileName(fileName);
 							saveLocalFile(part, uparam, newName);
-							String fileUrl = FastDFSClient.getInstance(param)
-									.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName);
+							FastDFSClient client =new FastDFSClient();
+							String fileUrl = client.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName,param);
 							result.setFileUrl(fileUrl);
 							String tmpVideoUrl = uparam.getBaseImageDir() + File.separator + uparam.getDir()
 									+ File.separator + newName;
 							String cutUrl = uparam.getBaseImageDir() + File.separator + VideoCutImgUtil.processImg(
 									tmpVideoUrl, uparam.getDir(), uparam.getBaseImageDir(), uparam.getFfmpegUrl());
-							String cutImgUrl = FastDFSClient.getInstance(param).uploadFile(cutUrl);
+							FastDFSClient clientImg =new FastDFSClient();
+							String cutImgUrl = clientImg.uploadFile(cutUrl,param);
 							if (null == cutImgUrl) {
 								result.setFenum(FastDFSResultEnum.FD_FILE_CUT_ERROR);
 								return result;
@@ -91,14 +92,14 @@ public class FastDFSUploadUtils {
 								cutImgFile.delete();
 							}
 						} else {// 其他文件
-							String fileUrl = FastDFSClient.getInstance(param)
-									.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName);
+							FastDFSClient client =new FastDFSClient();
+							String fileUrl = client.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName,param);
 							result.setFileUrl(fileUrl);
 						}
 						result.setFenum(FastDFSResultEnum.FD_UPLOAD_SUCCESS);
 						return result;
 					} catch (Exception e) {
-						log.error("FastDFS上传文件异常" + e.getMessage());
+						log.error("FastDFS上传文件异常" + e.getMessage()+e.getLocalizedMessage());
 						try {
 							if (null != in) {
 								in.close();
