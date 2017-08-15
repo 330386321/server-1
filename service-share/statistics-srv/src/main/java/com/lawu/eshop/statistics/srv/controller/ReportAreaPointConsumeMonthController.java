@@ -32,7 +32,7 @@ public class ReportAreaPointConsumeMonthController extends BaseController{
 	
 	/**
 	 * 统计保存
-	 * @param reportAdEarningsParam
+	 * @param param
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -54,12 +54,12 @@ public class ReportAreaPointConsumeMonthController extends BaseController{
 		BigDecimal totalRechargePoint = new BigDecimal(0);
 		if(list != null && !list.isEmpty()) {
 			for(ReportAreaPointConsumeMonthBO bo : list) {
-				memberPoint.add(bo.getMemberPoint());
-				memberRechargePoint.add(bo.getMemberRechargePoint());
-				merchantPoint.add(bo.getMerchantPoint());
-				merchantRechargePoint.add(bo.getMemberRechargePoint());
-				totalRechargePoint.add(bo.getMemberRechargePoint().add(bo.getMemberRechargePoint()));
-				totalPoint.add(bo.getMerchantPoint().add(bo.getMemberPoint()));
+				memberPoint = memberPoint.add(bo.getMemberPoint());
+				memberRechargePoint = memberRechargePoint.add(bo.getMemberRechargePoint());
+				merchantPoint = merchantPoint.add(bo.getMerchantPoint());
+				merchantRechargePoint = merchantRechargePoint.add(bo.getMerchantRechargePoint());
+				totalRechargePoint = totalRechargePoint.add(bo.getMemberRechargePoint().add(bo.getMemberRechargePoint()));
+				totalPoint = totalPoint.add(bo.getMerchantPoint().add(bo.getMemberPoint()));
 			}
 			dto.setMemberPoint(memberPoint);
 			dto.setMemberRechargePoint(memberRechargePoint);
