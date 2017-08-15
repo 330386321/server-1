@@ -1,6 +1,7 @@
 package com.lawu.eshop.statistics.srv.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.lawu.eshop.framework.web.BaseController;
@@ -15,6 +16,7 @@ import com.lawu.eshop.statistics.srv.bo.AgentAreaRechargeQReturnBO;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaRechargeDailyBO;
 import com.lawu.eshop.statistics.srv.converter.ReportAreaRechargeConverter;
 import com.lawu.eshop.statistics.srv.service.ReportAreaRechargeService;
+import com.lawu.eshop.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,8 +59,8 @@ public class ReportAreaRechargeController extends BaseController {
         List<ReportAreaRechargeDailyDTO> dtoList = new ArrayList<>();
         for (ReportAreaRechargeDailyBO rbo : rntList) {
             ReportAreaRechargeDailyDTO dto = new ReportAreaRechargeDailyDTO();
-            dto.setGmtCreate(rbo.getGmtCreate());
-            dto.setGmtReport(rbo.getGmtReport());
+            dto.setGmtCreate(new Date());
+            dto.setGmtReport(DateUtil.formatDate(reportDate + "-01", "yyyy-MM-dd"));
             dto.setMemberRechargeBalance(rbo.getMemberRechargeBalance());
             dto.setMemberRechargePoint(rbo.getMemberRechargePoint());
             dto.setMerchantRechargeBalance(rbo.getMerchantRechargeBalance());

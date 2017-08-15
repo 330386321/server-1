@@ -9,7 +9,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.jobs.service.AgentReportAreaRechargeService;
 import com.lawu.eshop.jobs.service.PropertyRechargeService;
 import com.lawu.eshop.jobs.service.StatisticsReportAreaRechargeService;
-import com.lawu.eshop.property.constants.CashStatusEnum;
+import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.ReportAreaRechargeDailyDTO;
 import com.lawu.eshop.property.param.AgentReportRechargeQueryParam;
@@ -38,7 +38,7 @@ public class AgentReportAreaRechargeServiceImpl implements AgentReportAreaRechar
 
 		AgentReportRechargeQueryParam param = new AgentReportRechargeQueryParam();
 		param.setDate(today);
-		param.setStatus(CashStatusEnum.SUCCESS.getVal());
+		param.setStatus(ThirdPayStatusEnum.SUCCESS.getVal());
 		param.setChannel(TransactionPayTypeEnum.BALANCE.getVal());
 		Result<List<ReportAreaRechargeDailyDTO>> rtnResult = propertyRechargeService.selectAgentAreaReportRechargeListByDate(param);
 		if(ResultCode.SUCCESS != rtnResult.getRet()){
@@ -50,7 +50,7 @@ public class AgentReportAreaRechargeServiceImpl implements AgentReportAreaRechar
 			logger.info("充值报表统计(按日)定时采集数据srv返回空！");
 		}
 		List<AgentReportRechargeSaveParam> saveParams = new ArrayList<>();
-		for(ReportAreaRechargeDailyDTO dto : rtnResult.getModel()){
+		for(ReportAreaRechargeDailyDTO dto : rntList){
 			AgentReportRechargeSaveParam saveParam = new AgentReportRechargeSaveParam();
 			saveParam.setGmtCreate(dto.getGmtCreate());
 			saveParam.setGmtReport(dto.getGmtReport());

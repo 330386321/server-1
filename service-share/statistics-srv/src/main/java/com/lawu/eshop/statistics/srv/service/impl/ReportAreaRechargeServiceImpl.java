@@ -50,6 +50,9 @@ public class ReportAreaRechargeServiceImpl implements ReportAreaRechargeService 
             record.setMerchantRechargePoint(param.getMerchantRechargePoint());
             record.setTotalRechargeBalance(param.getTotalRechargeBalance());
             record.setTotalRechargePoint(param.getTotalRechargePoint());
+            record.setProvinceId(param.getProvinceId());
+            record.setCityId(param.getCityId());
+            record.setAreaId(param.getAreaId());
             reportAreaRechargeDailyDOMapper.insertSelective(record);
         }
     }
@@ -66,6 +69,9 @@ public class ReportAreaRechargeServiceImpl implements ReportAreaRechargeService 
             record.setMerchantRechargePoint(param.getMerchantRechargePoint());
             record.setTotalRechargeBalance(param.getTotalRechargeBalance());
             record.setTotalRechargePoint(param.getTotalRechargePoint());
+            record.setProvinceId(param.getProvinceId());
+            record.setCityId(param.getCityId());
+            record.setAreaId(param.getAreaId());
             reportAreaRechargeMonthDOMapper.insertSelective(record);
         }
     }
@@ -73,7 +79,7 @@ public class ReportAreaRechargeServiceImpl implements ReportAreaRechargeService 
     @Override
     public List<ReportAreaRechargeDailyBO> getDailyList(String reportDate) {
         ReportAreaRechargeDailyDOExample example = new ReportAreaRechargeDailyDOExample();
-        Date begin = DateUtil.formatDate(reportDate + "-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+        Date begin = DateUtil.formatDate(reportDate + "-01", "yyyy-MM-dd");
         Date end = DateUtil.getLastDayOfMonth(begin);
         example.createCriteria().andGmtReportBetween(begin, end);
         List<ReportAreaRechargeDailyDO> rntList = reportAreaRechargeDailyDOMapper.selectByExample(example);
