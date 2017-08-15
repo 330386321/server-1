@@ -3,7 +3,9 @@ package com.lawu.eshop.statistics.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
+import com.lawu.eshop.statistics.param.AgentReportParam;
 import com.lawu.eshop.statistics.param.AgentReportRechargeSaveParam;
+import com.lawu.eshop.statistics.srv.bo.AgentAreaRechargeQReturnBO;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaRechargeDailyBO;
 
 public interface ReportAreaRechargeService {
@@ -18,7 +20,7 @@ public interface ReportAreaRechargeService {
 
 	void deleteMonthByReportDate(String reportDate);
 
-	ReportCommonBackDTO selectReport(String bdate, String edate);
+	AgentAreaRechargeQReturnBO getAreaRechargeList(AgentReportParam param);
 
 	
 

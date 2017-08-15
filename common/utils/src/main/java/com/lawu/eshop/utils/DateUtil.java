@@ -28,10 +28,10 @@ public class DateUtil {
 
     // int日期格式
     private static final String DATE_INT_FORMAT = "yyyyMMdd";
-    
+
     // 年月日期格式
     public static final String DATE_YYYY_MM_FORMAT = "yyyy-MM";
-    
+
     // 月日日期格式
     public static final String DATE_MM_DD_FORMAT = "MM-dd";
 
@@ -49,7 +49,7 @@ public class DateUtil {
 
     //int时间格式
     private static final String TIME_INT_FORMAT = "HHmmss";
-    
+
     // 默认日期格式化
     private static DateFormat dateFormat;
 
@@ -87,7 +87,8 @@ public class DateUtil {
         timeIntFormat = new SimpleDateFormat(TIME_INT_FORMAT);
     }
 
-    private DateUtil(){}
+    private DateUtil() {
+    }
 
     /**
      * 获取当前日期   yyyy-MM-dd
@@ -254,7 +255,7 @@ public class DateUtil {
             String date = dateFormat.format(beginDate) + " 23:59:59";
             long intervalMilli = endDate.getTime() - dateTimeFormat.parse(date).getTime();
             return intervalMilli > 0;
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("判断是否超过当前时间异常：{}", e);
             return false;
         }
@@ -277,7 +278,7 @@ public class DateUtil {
             long intervalMilli = endDate.getTime() - beginDate.getTime();
             int intervalMinutes = (int) (intervalMilli / (60 * 1000));
             return intervalMinutes > minutes;
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("短信是否超时异常：{}", e);
             return false;
         }
@@ -546,7 +547,7 @@ public class DateUtil {
         gregorianCalendar.set(Calendar.DATE, day + 1);
         return gregorianCalendar.getTime();
     }
-    
+
     /**
      * 获取日期前一月
      *
@@ -672,40 +673,39 @@ public class DateUtil {
 
         return calendar.getTime();
     }
-    
+
     /**
-     * 
-     * @param from 开始时间
+     * @param from  开始时间
      * @param to
      * @param field
      * @return
      * @author Sunny
      */
     public static Long interval(Date from, Date to, int field) {
-    	Long rtn = null;
+        Long rtn = null;
         // 所有参数不能为空
         if (from == null || to == null) {
             return rtn;
         }
-        
+
         long interval = to.getTime() - from.getTime();
-        
+
         switch (field) {
-			case Calendar.MILLISECOND:
-				rtn = interval;
-				break;
-			case Calendar.SECOND:
-				rtn = interval/1000;
-				break;
-			case Calendar.MINUTE:
-				rtn = interval/1000/60;
-				break;
-			case Calendar.HOUR:
-				rtn = interval/1000/60/60;
-				break;
-			default:
-				break;
-		}
+            case Calendar.MILLISECOND:
+                rtn = interval;
+                break;
+            case Calendar.SECOND:
+                rtn = interval / 1000;
+                break;
+            case Calendar.MINUTE:
+                rtn = interval / 1000 / 60;
+                break;
+            case Calendar.HOUR:
+                rtn = interval / 1000 / 60 / 60;
+                break;
+            default:
+                break;
+        }
         return rtn;
     }
 
@@ -718,10 +718,10 @@ public class DateUtil {
      * @author Sunny
      * @date 2017年7月3日
      */
-    public static int getFieldValue(Date date, int field){
-    	Calendar calendar = Calendar.getInstance();
-    	calendar.setTime(date);
-    	return calendar.get(field);
+    public static int getFieldValue(Date date, int field) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(field);
     }
 
     /**
@@ -733,13 +733,31 @@ public class DateUtil {
      * @author Sunny
      * @date 2017年7月3日
      */
-    public static int getFieldMaxValue(Date date, int field){
-    	Calendar calendar = Calendar.getInstance();
-    	calendar.setTime(date);
-    	return calendar.getMaximum(field);
+    public static int getFieldMaxValue(Date date, int field) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.getMaximum(field);
     }
 
     public static String getIntDateByTime(Date time) {
         return dateIntFormat.format(time);
     }
+
+    /**
+     * 校验时间格式是否符合指定格式
+     *
+     * @param dateStr   时间字符串
+     * @param formatStr 格式
+     * @return
+     */
+    public static boolean checkDateFormat(String dateStr, String formatStr) {
+        SimpleDateFormat format = new SimpleDateFormat(formatStr);
+        try {
+            Date date = format.parse(dateStr);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
 }

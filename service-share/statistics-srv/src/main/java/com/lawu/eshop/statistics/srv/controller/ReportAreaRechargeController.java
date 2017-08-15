@@ -6,10 +6,14 @@ import java.util.List;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.statistics.dto.AgentAreaRechargeQReturnDTO;
 import com.lawu.eshop.statistics.dto.ReportAreaRechargeDailyDTO;
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
+import com.lawu.eshop.statistics.param.AgentReportParam;
 import com.lawu.eshop.statistics.param.AgentReportRechargeSaveParam;
+import com.lawu.eshop.statistics.srv.bo.AgentAreaRechargeQReturnBO;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaRechargeDailyBO;
+import com.lawu.eshop.statistics.srv.converter.ReportAreaRechargeConverter;
 import com.lawu.eshop.statistics.srv.service.ReportAreaRechargeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -84,16 +88,16 @@ public class ReportAreaRechargeController extends BaseController {
     }
 
     /**
-     * @param bdate 时间条件
-     * @param edate
+     * 代理商系统页面查询接口
+     * @param param
      * @return
      * @author yangqh
-     * @date 2017年7月3日 上午10:28:40
+     * @date 2017年8月15日
      */
-    @RequestMapping(value = "selectReport", method = RequestMethod.GET)
-    public ReportCommonBackDTO selectReport(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate) {
-//        return withdrawCashService.selectReport(bdate, edate);
-        return null;
+    @RequestMapping(value = "getAreaRechargeList", method = RequestMethod.POST)
+    public AgentAreaRechargeQReturnDTO getAreaRechargeList(@RequestBody AgentReportParam param) {
+        AgentAreaRechargeQReturnBO bo = reportAreaRechargeService.getAreaRechargeList(param);
+        return ReportAreaRechargeConverter.convertDTO(bo);
     }
 
 }

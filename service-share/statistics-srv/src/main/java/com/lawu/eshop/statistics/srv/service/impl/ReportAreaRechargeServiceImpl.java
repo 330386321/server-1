@@ -4,15 +4,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
+import com.lawu.eshop.statistics.param.AgentReportParam;
 import com.lawu.eshop.statistics.param.AgentReportRechargeSaveParam;
+import com.lawu.eshop.statistics.srv.bo.AgentAreaRechargeQReturnBO;
 import com.lawu.eshop.statistics.srv.bo.ReportAreaRechargeDailyBO;
+import com.lawu.eshop.statistics.srv.converter.ReportAreaRechargeConverter;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaRechargeDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaRechargeDailyDOExample;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaRechargeMonthDO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaRechargeMonthDOExample;
+import com.lawu.eshop.statistics.srv.domain.extend.AgentAreaRechargeDailyMonthDOExtend;
+import com.lawu.eshop.statistics.srv.domain.extend.AgentAreaRechargeExampleExtend;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaRechargeDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaRechargeMonthDOMapper;
+import com.lawu.eshop.statistics.srv.mapper.extend.ReportAreaRechargeDailyDOMapperExtend;
+import com.lawu.eshop.statistics.srv.mapper.extend.ReportAreaRechargeMonthDOMapperExtend;
 import com.lawu.eshop.statistics.srv.service.ReportAreaRechargeService;
 import com.lawu.eshop.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +32,10 @@ public class ReportAreaRechargeServiceImpl implements ReportAreaRechargeService 
     private ReportAreaRechargeDailyDOMapper reportAreaRechargeDailyDOMapper;
     @Autowired
     private ReportAreaRechargeMonthDOMapper reportAreaRechargeMonthDOMapper;
+    @Autowired
+    private ReportAreaRechargeDailyDOMapperExtend reportAreaRechargeDailyDOMapperExtend;
+    @Autowired
+    private ReportAreaRechargeMonthDOMapperExtend reportAreaRechargeMonthDOMapperExtend;
 
     @Override
     @Transactional
@@ -102,54 +112,23 @@ public class ReportAreaRechargeServiceImpl implements ReportAreaRechargeService 
     }
 
     @Override
-    public ReportCommonBackDTO selectReport(String bdate, String edate) {
-//		if("".equals(bdate) || "".equals(edate)){
-//			bdate = DateUtil.getDateFormat(new Date(), "yyyy-MM")+"-01";
-//			edate = DateUtil.getDateFormat(new Date(), "yyyy-MM-dd");
-//		}
-//		ReportCommonBackDTO dto = new ReportCommonBackDTO();
-//		List<String> xAxisData = new ArrayList<>();
-//		List<BigDecimal> yAxisMemberData = new ArrayList<>();
-//		List<BigDecimal> yAxisMerchantData = new ArrayList<>();
-//		List<BigDecimal> yAxisTotalData = new ArrayList<>();
-//		if(bdate.length() > 7){
-//			ReportWithdrawDailyDOExample example = new ReportWithdrawDailyDOExample();
-//			Date begin = DateUtil.formatDate(bdate, "yyyy-MM-dd");
-//			Date end = DateUtil.formatDate(edate, "yyyy-MM-dd");
-//			example.createCriteria().andGmtReportBetween(begin, end);
-//			example.setOrderByClause(" gmt_report asc ");
-//			List<ReportWithdrawDailyDO> rntList = reportWithdrawDailyDOMapper.selectByExample(example);
-//			for(ReportWithdrawDailyDO rdo : rntList){
-//				String day = DateUtil.getDateFormat(rdo.getGmtReport(), "MM-dd");
-//				xAxisData.add(day);
-//				yAxisMemberData.add(rdo.getMemberMoney().setScale(2));
-//				yAxisMerchantData.add(rdo.getMerchantMoney().setScale(2));
-//				yAxisTotalData.add(rdo.getTotalMoney().setScale(2));
-//			}
-//		}else {
-//			ReportWithdrawMonthDOExample example = new ReportWithdrawMonthDOExample();
-//			Date begin = DateUtil.formatDate(bdate+"-01", "yyyy-MM-dd");
-//			Date endFirst = DateUtil.formatDate(edate+"-01", "yyyy-MM-dd");
-//			Date end = DateUtil.getLastDayOfMonth(endFirst);
-//			example.createCriteria().andGmtReportBetween(begin, end);
-//			example.setOrderByClause(" gmt_report asc ");
-//			List<ReportWithdrawMonthDO> rntList = reportWithdrawMonthDOMapper.selectByExample(example);
-//			for(ReportWithdrawMonthDO rdo : rntList){
-//				String day = DateUtil.getDateFormat(rdo.getGmtReport(), "yyyy-MM");
-//				xAxisData.add(day);
-//				yAxisMemberData.add(rdo.getMemberMoney().setScale(2));
-//				yAxisMerchantData.add(rdo.getMerchantMoney().setScale(2));
-//				yAxisTotalData.add(rdo.getTotalMoney().setScale(2));
-//			}
-//		}
-//		dto.setxAxisData(xAxisData);
-//		dto.setyAxisMemberData(yAxisMemberData);
-//		dto.setyAxisMerchantData(yAxisMerchantData);
-//		dto.setyAxisTotalData(yAxisTotalData);
-//		dto.setBdate(bdate);
-//		dto.setEdate(edate);
-//		return dto;
-        return null;
+    public AgentAreaRechargeQReturnBO getAreaRechargeList(AgentReportParam param) {
+        AgentAreaRechargeDailyMonthDOExtend doExtend;
+        AgentAreaRechargeExampleExtend exampleExtend = new AgentAreaRechargeExampleExtend();
+        String[] regionPaths = param.getRegionPath().split("/");
+        if(DateUtil.checkDateFormat(param.getBeginTime(),"yyyy-MM-dd")){
+            exampleExtend.setCityId(new Integer(regionPaths[1]));
+            exampleExtend.setBeginTime(param.getBeginTime());
+            exampleExtend.setEndTime(param.getEndTime());
+            doExtend = reportAreaRechargeDailyDOMapperExtend.getAreaRechargeList(exampleExtend);
+        } else {
+            exampleExtend.setCityId(new Integer(regionPaths[1]));
+            exampleExtend.setBeginTime(param.getBeginTime() + "-01");
+            exampleExtend.setEndTime(param.getEndTime() + "-01");
+            doExtend = reportAreaRechargeMonthDOMapperExtend.getAreaRechargeList(exampleExtend);
+        }
+        return ReportAreaRechargeConverter.convertBO(doExtend);
     }
+
 
 }
