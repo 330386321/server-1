@@ -3,6 +3,8 @@ package com.lawu.eshop.statistics.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ReportAreaVolumeDailyDTO {
 	private Long id;
 	
@@ -15,7 +17,8 @@ public class ReportAreaVolumeDailyDTO {
 	private Integer cityId;
 	
 	private Integer areaId;
-	
+
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date gmtReport;
 	
 	private Date gmtCreate;

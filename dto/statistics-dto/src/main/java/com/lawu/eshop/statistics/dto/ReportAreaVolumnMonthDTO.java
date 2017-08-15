@@ -3,8 +3,10 @@ package com.lawu.eshop.statistics.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ReportAreaVolumnMonthDTO {
-	private Long id;
+    private Long id;
 
     private BigDecimal reportTotalMoney;
 
@@ -16,71 +18,72 @@ public class ReportAreaVolumnMonthDTO {
 
     private Integer areaId;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date gmtReport;
 
     private Date gmtCreate;
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public BigDecimal getReportTotalMoney() {
-		return reportTotalMoney;
-	}
+    public BigDecimal getReportTotalMoney() {
+        return reportTotalMoney;
+    }
 
-	public void setReportTotalMoney(BigDecimal reportTotalMoney) {
-		this.reportTotalMoney = reportTotalMoney;
-	}
+    public void setReportTotalMoney(BigDecimal reportTotalMoney) {
+        this.reportTotalMoney = reportTotalMoney;
+    }
 
-	public Byte getType() {
-		return type;
-	}
+    public Byte getType() {
+        return type;
+    }
 
-	public void setType(Byte type) {
-		this.type = type;
-	}
+    public void setType(Byte type) {
+        this.type = type;
+    }
 
-	public Integer getProvinceId() {
-		return provinceId;
-	}
+    public Integer getProvinceId() {
+        return provinceId;
+    }
 
-	public void setProvinceId(Integer provinceId) {
-		this.provinceId = provinceId;
-	}
+    public void setProvinceId(Integer provinceId) {
+        this.provinceId = provinceId;
+    }
 
-	public Integer getCityId() {
-		return cityId;
-	}
+    public Integer getCityId() {
+        return cityId;
+    }
 
-	public void setCityId(Integer cityId) {
-		this.cityId = cityId;
-	}
+    public void setCityId(Integer cityId) {
+        this.cityId = cityId;
+    }
 
-	public Integer getAreaId() {
-		return areaId;
-	}
+    public Integer getAreaId() {
+        return areaId;
+    }
 
-	public void setAreaId(Integer areaId) {
-		this.areaId = areaId;
-	}
+    public void setAreaId(Integer areaId) {
+        this.areaId = areaId;
+    }
 
-	public Date getGmtReport() {
-		return gmtReport;
-	}
+    public Date getGmtReport() {
+        return gmtReport;
+    }
 
-	public void setGmtReport(Date gmtReport) {
-		this.gmtReport = gmtReport;
-	}
+    public void setGmtReport(Date gmtReport) {
+        this.gmtReport = gmtReport;
+    }
 
-	public Date getGmtCreate() {
-		return gmtCreate;
-	}
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
 
-	public void setGmtCreate(Date gmtCreate) {
-		this.gmtCreate = gmtCreate;
-	}
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
 }

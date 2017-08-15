@@ -40,7 +40,7 @@ public class ReportAreaVolumnMonthController extends BaseController {
 	
 	@RequestMapping(value = "selectReportAreaVolumnMonth", method = RequestMethod.GET)
 	Result<List<ReportAreaVolumnMonthDTO>> selectReportAreaVolumnMonth(@RequestParam("cityId")Integer cityId,@RequestParam("bdate") String bdate,@RequestParam("edate") String edate) {
-		List<ReportAreaVolumnMonthBO> list = reportAreaVolumnMonthService.selectReportAreaVolumnMonth(cityId, DateUtil.getDateFormat(bdate), DateUtil.getDateFormat(edate));
+		List<ReportAreaVolumnMonthBO> list = reportAreaVolumnMonthService.selectReportAreaVolumnMonth(cityId, DateUtil.getDateFormat(bdate+"-01"), DateUtil.getDateFormat(edate+"-01"));
 		List<ReportAreaVolumnMonthDTO> rtnList = ReportAreaVolumnMonthConverter.converBOtoDTOList(list);
         return successGet(rtnList);
     }

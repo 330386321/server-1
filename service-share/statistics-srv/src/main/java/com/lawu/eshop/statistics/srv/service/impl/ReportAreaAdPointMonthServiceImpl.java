@@ -45,7 +45,7 @@ public class ReportAreaAdPointMonthServiceImpl implements ReportAreaAdPointMonth
 			criteria.andCityIdEqualTo(param.getCityId());
 		}
 		if(param.getBdate() != null && !"".equals(param.getBdate()) || param.getEdate() != null && !"".equals(param.getEdate())) {
-			criteria.andGmtReportBetween(DateUtil.formatDate(param.getBdate(), "yyyy-MM-dd"), DateUtil.formatDate(param.getEdate(), "yyyy-MM-dd"));
+			criteria.andGmtReportBetween(DateUtil.formatDate(param.getBdate()+"-01", "yyyy-MM-dd"), DateUtil.formatDate(param.getEdate()+"-01", "yyyy-MM-dd"));
 		}
 		List<ReportAreaAdPointMonthDO> doList = reportAreaAdPointMonthDOMapper.selectByExample(reportAreaAdPointMonthDOExample);
 		List<ReportAreaAdPointMonthBO> list = new ArrayList<ReportAreaAdPointMonthBO>();

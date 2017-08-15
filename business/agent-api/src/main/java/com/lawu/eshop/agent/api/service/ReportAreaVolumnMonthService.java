@@ -17,7 +17,7 @@ import com.lawu.eshop.statistics.dto.ReportAreaVolumnMonthDTO;
 public interface ReportAreaVolumnMonthService {
 
 	
-	@RequestMapping(value = "selectReportAreaVolumnMonth", method = RequestMethod.GET)
+	@RequestMapping(value = "reportAreaVolumnMonth/selectReportAreaVolumnMonth", method = RequestMethod.GET)
 	Result<List<ReportAreaVolumnMonthDTO>> selectReportAreaVolumnMonth(@RequestParam("cityId")Integer cityId,@RequestParam("bdate") String bdate,@RequestParam("edate") String edate);
 	
 }

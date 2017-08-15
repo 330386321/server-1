@@ -3,6 +3,7 @@ package com.lawu.eshop.statistics.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 public class ReportAreaAdPorintDailyByAreaIdDTO {
@@ -11,6 +12,7 @@ public class ReportAreaAdPorintDailyByAreaIdDTO {
 	private BigDecimal reportTotalPoint;
 	
 	@ApiModelProperty(value = "日期")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date gmtReport;
 
 	public BigDecimal getReportTotalPoint() {
