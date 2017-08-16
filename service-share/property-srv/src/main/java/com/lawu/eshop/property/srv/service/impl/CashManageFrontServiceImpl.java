@@ -88,15 +88,16 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
         WithdrawCashDOExample example = new WithdrawCashDOExample();
         example.createCriteria().andUserNumEqualTo(cash.getUserNum()).andStatusLessThan(CashStatusEnum.FAILURE.getVal()).andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth());
         int count = withdrawCashDOMapper.countByExample(example);
-        if (count > 0) {
-            String minusMoney = propertyService.getValue(PropertyType.CASH_GREATER_ONE_MINUS_MONEY);
-            dCashMoney = dCashMoney - Double.parseDouble(minusMoney);
-            withdrawCashDO.setRemark("自然月提现次数大于1次后，提现金额需要扣除" + minusMoney + "元");
-        }
-
         String currentScale = propertyService.getValue(PropertyType.CASH_SCALE);
         double dCurrentScale = Double.parseDouble(currentScale);
-        double money = dCashMoney * dCurrentScale;
+        double money = 0;
+        if (count > 0) {
+            String minusMoney = propertyService.getValue(PropertyType.CASH_GREATER_ONE_MINUS_MONEY);
+            money = dCashMoney * dCurrentScale - Double.parseDouble(minusMoney);
+            withdrawCashDO.setRemark("自然月提现次数大于1次后，实际到账=提现金额*95%-5块");
+        } else {
+            money = dCashMoney * dCurrentScale;
+        }
 
         // 保存提现表记录
         withdrawCashDO.setCashMoney(new BigDecimal(cash.getCashMoney()));
