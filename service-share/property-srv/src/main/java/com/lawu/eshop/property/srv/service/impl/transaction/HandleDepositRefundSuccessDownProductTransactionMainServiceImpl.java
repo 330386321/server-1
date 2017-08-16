@@ -1,0 +1,26 @@
+package com.lawu.eshop.property.srv.service.impl.transaction;
+
+import com.lawu.eshop.compensating.transaction.Reply;
+import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
+import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
+import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.property.DownProductNotification;
+import com.lawu.eshop.mq.dto.property.StoreStatusNotification;
+import com.lawu.eshop.property.srv.constans.TransactionConstant;
+import org.springframework.stereotype.Service;
+
+/**
+ * @author yangqh
+ * @date 2017/8/16.
+ * 退款成功操作后，发送消息修改下架 - 主事务
+ */
+@Service("handleDepositRefundSuccessDownProductTransactionMainServiceImpl")
+@CompensatingTransactionMain(value = TransactionConstant.HANDLE_DESPOISIT_AUDIT_CANCEL_DOWN_PRODUCT, topic = MqConstant.TOPIC_PROPERTY_SRV, tags = MqConstant.TAG_HANDLE_DEPOSIT_DOWN_PRODUCT)
+public class HandleDepositRefundSuccessDownProductTransactionMainServiceImpl extends AbstractTransactionMainService<DownProductNotification, Reply> {
+    @Override
+    public DownProductNotification selectNotification(Long merchantId) {
+        DownProductNotification notification = new DownProductNotification();
+        notification.setMerchantId(merchantId);
+        return notification;
+    }
+}

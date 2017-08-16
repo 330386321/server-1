@@ -226,6 +226,11 @@ public class MqConstant {
 	 */
 	public static final String TAG_HANDLE_MEMBER_RED_PACKET = "handle_deposit_member_red_packet";
 
+	/**
+	 * 保证金财务审核成功后修改商品下架
+	 */
+	public static final String TAG_HANDLE_DEPOSIT_DOWN_PRODUCT = "tag_handle_deposit_down_product";
+
 	/******************************************/
 	/******* user-srv模块tag **********/
 

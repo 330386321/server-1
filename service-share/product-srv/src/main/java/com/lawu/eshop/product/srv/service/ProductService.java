@@ -181,4 +181,5 @@ public interface ProductService {
      * @data 2017/08/10
      */
     ProductRelateAdInfoBO selectProductRelateAdInfo(Long id);
+
 }

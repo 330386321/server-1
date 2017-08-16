@@ -63,6 +63,11 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
     @Qualifier("handleDepositAuditCancelTransactionMainServiceImpl")
     private TransactionMainService<Reply> handleDepositAuditCancelTransactionMainServiceImpl;
 
+    @Autowired
+    @Qualifier("handleDepositRefundSuccessDownProductTransactionMainServiceImpl")
+    private TransactionMainService<Reply> handleDepositRefundSuccessDownProductTransactionMainServiceImpl;
+
+
     @Override
     @Transactional
     public BusinessDepositInitDTO save(BusinessDepositSaveDataParam param) {
@@ -264,6 +269,8 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
         } else if (BusinessDepositOperEnum.REFUND_SUCCESS.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
             // 退款成功操作后，发送MQ消息修改门店状态为：注销
             handleDepositAuditCancelTransactionMainServiceImpl.sendNotice(param.getBusinessId());
+            //修改商品下架
+            handleDepositRefundSuccessDownProductTransactionMainServiceImpl.sendNotice(param.getBusinessId());
         }
         return ResultCode.SUCCESS;
     }

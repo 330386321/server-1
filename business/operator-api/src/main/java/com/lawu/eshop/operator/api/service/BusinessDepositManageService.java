@@ -25,7 +25,7 @@ public interface BusinessDepositManageService {
 
 	/**
 	 * 保证金列表查询
-	 * @param dparam
+	 * @param param
 	 * @return
 	 */
 	@RequestMapping(value = "businessDeposit/selectDepositList",method = RequestMethod.POST)
@@ -33,7 +33,7 @@ public interface BusinessDepositManageService {
 
 	/**
 	 * 保证金操作
-	 * @param dparam
+	 * @param param
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
