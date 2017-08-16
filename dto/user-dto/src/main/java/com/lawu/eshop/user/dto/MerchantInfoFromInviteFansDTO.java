@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class MerchantInfoFromInviteFansDTO {
 
+	@ApiModelProperty(value = "门店ID")
+	private Long merchantStoreId;
+	
 	@ApiModelProperty(value = "门店照")
 	private String merchantStoreUrl;
 	
@@ -16,6 +19,14 @@ public class MerchantInfoFromInviteFansDTO {
 	@ApiModelProperty(value = "门店名称")
 	private String merchantStoreName;
 
+
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
+	}
 
 	public String getMerchantStoreUrl() {
 		return merchantStoreUrl;

@@ -2,7 +2,9 @@ package com.lawu.eshop.user.srv.domain.extend;
 
 public class MerchantInfoFromInviteFansDOView {
 
-private String merchantStoreUrl;
+	private Long merchantStoreId;
+	
+	private String merchantStoreUrl;
 	
 	private String merchantStoreLogo;
 	
@@ -10,6 +12,13 @@ private String merchantStoreUrl;
 	
 	private String merchantStoreName;
 
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
+	}
 
 	public String getMerchantStoreUrl() {
 		return merchantStoreUrl;
