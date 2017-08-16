@@ -1,26 +1,26 @@
 package com.lawu.eshop.agent.api.controller;
 
-import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.statistics.param.AgentReportParam;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.agent.api.service.ReportAreaPointConsumeDailyService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.statistics.dto.ReportAreaPointConsumeDailyDTO;
 import com.lawu.eshop.statistics.dto.ReportAreaPointConsumeDailyForCircleDTO;
+import com.lawu.eshop.statistics.param.AgentReportParam;
 
 import io.swagger.annotations.Api;
 

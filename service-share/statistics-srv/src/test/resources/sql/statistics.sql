@@ -265,3 +265,191 @@ CREATE TABLE `user_visit_record` (
 	PRIMARY KEY (`id`)
 )
 ;
+
+drop table `report_area_ad_point_daily`;
+CREATE TABLE `report_area_ad_point_daily` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`report_total_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '商家发广告消费积分总和',
+	`province_id` INT(8) NULL DEFAULT NULL COMMENT '省编号',
+	`city_id` INT(8) NULL DEFAULT NULL COMMENT '市编号',
+	`area_id` INT(8) NULL DEFAULT NULL COMMENT '区编号',
+	`gmt_report` DATE NOT NULL COMMENT '统计数据所属日期',
+	`gmt_create` DATETIME NOT NULL COMMENT '统计时间',
+	PRIMARY KEY (`id`)
+)
+;
+
+drop table `report_area_ad_point_month`;
+CREATE TABLE `report_area_ad_point_month` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`report_total_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '商家发广告消费积分总和',
+	`province_id` INT(8) NULL DEFAULT NULL COMMENT '省编号',
+	`city_id` INT(8) NULL DEFAULT NULL COMMENT '市编号',
+	`area_id` INT(8) NULL DEFAULT NULL COMMENT '区编号',
+	`gmt_report` DATE NOT NULL COMMENT '统计数据所属日期',
+	`gmt_create` DATETIME NOT NULL COMMENT '统计时间',
+	PRIMARY KEY (`id`)
+)
+;
+
+drop table `report_area_point_consume_daily`;
+CREATE TABLE `report_area_point_consume_daily` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`member_recharge_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '会员充值积分',
+	`merchant_recharge_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '商家充值积分',
+	`total_recharge_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '总充值积分',
+	`member_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '会员积分消费',
+	`merchant_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '商家积分消费',
+	`total_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '总积分消费',
+	`province_id` INT(11) NOT NULL COMMENT '省编号',
+	`city_id` INT(11) NOT NULL COMMENT '市编号',
+	`area_id` INT(11) NOT NULL COMMENT '区编号',
+	`gmt_report` DATE NOT NULL COMMENT '统计数据所属日期',
+	`gmt_create` DATETIME NOT NULL COMMENT '统计时间',
+	PRIMARY KEY (`id`)
+)
+;
+
+drop table `report_area_point_consume_month`;
+CREATE TABLE `report_area_point_consume_month` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`member_recharge_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '会员充值积分',
+	`merchant_recharge_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '商家充值积分',
+	`total_recharge_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '总充值积分',
+	`member_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '会员积分消费',
+	`merchant_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '商家积分消费',
+	`total_point` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '总积分消费',
+	`province_id` INT(11) NOT NULL COMMENT '省编号',
+	`city_id` INT(11) NOT NULL COMMENT '市编号',
+	`area_id` INT(11) NOT NULL COMMENT '区编号',
+	`gmt_report` DATE NOT NULL COMMENT '统计数据所属日期',
+	`gmt_create` DATETIME NOT NULL COMMENT '统计时间',
+	PRIMARY KEY (`id`)
+)
+;
+
+drop table `report_area_recharge_daily`;
+CREATE TABLE `report_area_recharge_daily` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`merchant_recharge_balance` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' COMMENT '商家充值余额',
+	`merchant_recharge_point` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' COMMENT '商家充值积分',
+	`member_recharge_balance` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' COMMENT '用户充值余额',
+	`member_recharge_point` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' COMMENT '用户充值积分',
+	`total_recharge_balance` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' COMMENT '充值总余额',
+	`total_recharge_point` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' COMMENT '充值总积分',
+	`province_id` INT(8) NULL DEFAULT NULL COMMENT '省编号',
+	`city_id` INT(8) NULL DEFAULT NULL COMMENT '市编号',
+	`area_id` INT(8) NULL DEFAULT NULL COMMENT '区编号',
+	`gmt_report` DATE NOT NULL COMMENT '统计数据所属日期',
+	`gmt_create` DATETIME NOT NULL COMMENT '统计时间',
+	PRIMARY KEY (`id`)
+)
+;
+
+drop table `report_area_recharge_month`;
+CREATE TABLE `report_area_recharge_month` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`merchant_recharge_balance` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' COMMENT '商家充值余额',
+	`merchant_recharge_point` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' COMMENT '商家值积分',
+	`member_recharge_balance` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' COMMENT '用户值余额',
+	`member_recharge_point` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' COMMENT '用户充值积分',
+	`total_recharge_balance` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' COMMENT '充值总余额',
+	`total_recharge_point` DECIMAL(20,6) NOT NULL DEFAULT '0.000000' COMMENT '充值总积分',
+	`province_id` INT(8) NULL DEFAULT NULL COMMENT '省编号',
+	`city_id` INT(8) NULL DEFAULT NULL COMMENT '市编号',
+	`area_id` INT(8) NULL DEFAULT NULL COMMENT '区编号',
+	`gmt_report` DATE NOT NULL COMMENT '统计数据所属日期(yyyy-mm-01)',
+	`gmt_create` DATETIME NOT NULL COMMENT '统计时间',
+	PRIMARY KEY (`id`)
+)
+;
+
+drop table `report_area_user_reg_daily`;
+CREATE TABLE `report_area_user_reg_daily` (
+	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`member_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '会员总数',
+	`merchant_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商家总数',
+	`merchant_normal_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '普通商家数',
+	`merchant_entity_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '实体商家数',
+	`city_id` INT(8) UNSIGNED NOT NULL COMMENT '市级区域ID',
+	`city_name` VARCHAR(50) NOT NULL COMMENT '市级名称',
+	`gmt_report` DATE NOT NULL COMMENT '统计数据所属日期',
+	`gmt_create` DATETIME NOT NULL COMMENT '统计时间',
+	PRIMARY KEY (`id`)
+)
+;
+
+
+drop table `report_area_user_reg_month`;
+CREATE TABLE `report_area_user_reg_month` (
+	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`member_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '会员总数',
+	`merchant_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商家总数',
+	`merchant_normal_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '普通商家数',
+	`merchant_entity_count` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '实体商家数',
+	`city_id` INT(8) UNSIGNED NOT NULL COMMENT '市级区域ID',
+	`city_name` VARCHAR(50) NOT NULL COMMENT '市级名称',
+	`gmt_report` DATE NOT NULL COMMENT '统计数据所属日期',
+	`gmt_create` DATETIME NOT NULL COMMENT '统计时间',
+	PRIMARY KEY (`id`)
+)
+;
+
+
+drop table `report_area_volume_daily`;
+CREATE TABLE `report_area_volume_daily` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`report_total_money` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '销售总额',
+	`type` TINYINT(3) NOT NULL COMMENT '消费类型: 1--买单, 2--购物',
+	`province_id` INT(8) NULL DEFAULT NULL COMMENT '省编号',
+	`city_id` INT(8) NULL DEFAULT NULL COMMENT '市编号',
+	`area_id` INT(8) NULL DEFAULT NULL COMMENT '区编号',
+	`gmt_report` DATE NOT NULL COMMENT '统计数据所属日期',
+	`gmt_create` DATETIME NOT NULL COMMENT '统计时间',
+	PRIMARY KEY (`id`)
+)
+;
+
+drop table `report_area_volume_month`;
+CREATE TABLE `report_area_volume_month` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`report_total_money` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '销售总额',
+	`type` TINYINT(3) NOT NULL COMMENT '消费类型: 1--买单, 2--购物',
+	`province_id` INT(8) NULL DEFAULT NULL COMMENT '省编号',
+	`city_id` INT(8) NULL DEFAULT NULL COMMENT '市编号',
+	`area_id` INT(8) NULL DEFAULT NULL COMMENT '区编号',
+	`gmt_report` DATE NOT NULL COMMENT '统计数据所属日期',
+	`gmt_create` DATETIME NOT NULL COMMENT '统计时间',
+	PRIMARY KEY (`id`)
+)
+;
+
+
+drop  table `report_area_withdraw_daily`;
+CREATE TABLE `report_area_withdraw_daily` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`member_money` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '会员提现成功金额(含手续费)',
+	`merchant_money` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '商家提现成功金额(含手续费)',
+	`total_money` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '总提现成功金额(含手续费)',
+	`city_id` INT(8) UNSIGNED NOT NULL COMMENT '市级区域ID',
+	`city_name` VARCHAR(50) NOT NULL COMMENT '名称',
+	`gmt_report` DATE NOT NULL COMMENT '统计数据所属日期',
+	`gmt_create` DATETIME NOT NULL COMMENT '统计时间',
+	PRIMARY KEY (`id`)
+)
+;
+
+drop table `report_area_withdraw_month`;
+CREATE TABLE `report_area_withdraw_month` (
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`member_money` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '会员提现成功金额(含手续费)',
+	`merchant_money` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '商家提现成功金额(含手续费)',
+	`total_money` DECIMAL(20,6) UNSIGNED NOT NULL COMMENT '总提现成功金额(含手续费)',
+	`city_id` INT(8) UNSIGNED NOT NULL COMMENT '市级区域ID',
+	`city_name` VARCHAR(50) NOT NULL COMMENT '名称',
+	`gmt_report` DATE NOT NULL COMMENT '统计数据所属日期',
+	`gmt_create` DATETIME NOT NULL COMMENT '统计时间',
+	PRIMARY KEY (`id`)
+)
+;
+

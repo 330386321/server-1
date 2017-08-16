@@ -61,8 +61,8 @@ public class ReportSalesServiceImplTest {
 		save();
 		PlatformTotalSalesQueryParam param = new PlatformTotalSalesQueryParam();
 		param.setType(ReportTypeEnum.DAILY);
-		param.setStart(DateUtil.formatDate("2017-7-1", "yyyy-MM-dd"));
-		param.setEnd(DateUtil.formatDate("2017-7-31", "yyyy-MM-dd"));
+		param.setStart(DateUtil.getFirstDayOfMonth());
+		param.setEnd(DateUtil.getLastDayOfMonth());
 		List<ReportSalesBO> list = reportSalesService.list(param);
 		Assert.assertEquals(1, list.size());
 		param.setType(ReportTypeEnum.MONTH);

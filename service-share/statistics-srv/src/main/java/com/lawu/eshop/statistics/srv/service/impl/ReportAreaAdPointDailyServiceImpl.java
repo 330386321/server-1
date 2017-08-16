@@ -102,9 +102,4 @@ public class ReportAreaAdPointDailyServiceImpl implements ReportAreaAdPointDaily
 		return boList;
 	}
 
-	@Override
-	public List<ReportAreaAdPointDailyBO> selectReportAreaAdPointDailyByAreaId(AgentSelectAreaAdPointParam param) {
-		return null;
-	}
-
 }

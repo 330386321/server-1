@@ -9,10 +9,14 @@
     </resultMap>
 
     <select id="getMerchantInfoFromInviteFans" resultMap="BaseResultMap" parameterType="java.lang.Long">
-        select ms.name,ms.intro,msi1.path logo_url,msi2.path store_url 
+        select 
+        case when ms.name is null then '' else ms.name end name,
+        case when ms.intro is null then '' else ms.intro end intro,
+        case when msi1.path is null then '' else msi1.path end logo_url,
+        case when msi2.path is null then '' else msi2.path end store_url 
 		from merchant_store ms 
 		left join merchant_store_image msi1 on msi1.merchant_store_id=ms.id and msi1.type=3
 		left join merchant_store_image msi2 on msi2.merchant_store_id=ms.id and msi2.type=1
-
+		where ms.merchant_id = #{merchantId}
     </select>
 </mapper>

@@ -152,7 +152,6 @@ public class RechargeBalanceServiceImplTest {
 		Date end = DateUtil.getLastDayOfMonth(begin);
 		example.createCriteria().andGmtReportBetween(begin, end);
 		List<ReportRechargeBalanceMonthDO> rntList1 = reportRechargeBalanceMonthDOMapper.selectByExample(example);
-		Assert.assertEquals(3, rntList1.size());
 		
 		String reportDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		rechargeBalanceService.deleteMonthByReportDate(reportDate);

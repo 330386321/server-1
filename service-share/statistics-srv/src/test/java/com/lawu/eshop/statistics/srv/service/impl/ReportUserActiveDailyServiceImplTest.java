@@ -48,8 +48,8 @@ public class ReportUserActiveDailyServiceImplTest {
 		String endTime = "";
 		List<ReportUserActiveBO> list = reportUserActiveDailyService.getUserActiveListDaily(beginTime, endTime);
 		Assert.assertEquals(1, list.size());
-		beginTime = "2017-7-1";
-		endTime = "2017-7-31";
+		beginTime = DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth());
+		endTime = DateUtil.getDateFormat(DateUtil.getLastDayOfMonth());
 		list = reportUserActiveDailyService.getUserActiveListDaily(beginTime, endTime);
 		Assert.assertEquals(1, list.size());
 	}
