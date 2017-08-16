@@ -177,6 +177,13 @@ public class ProductSolrController extends BaseController {
                 }
             }
         }
+        for (int i = 0; i < searchWordDTOS.size(); i++) {
+            for (int j = 0; j < searchWordDTOS.size(); j++) {
+                if (searchWordDTOS.get(i).getName().equals(searchWordDTOS.get(j).getName()) && i != j) {
+                    searchWordDTOS.remove(i);
+                }
+            }
+        }
         return successGet(searchWordDTOS);
     }
 
