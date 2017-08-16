@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.statistics.param.AgentReportParam;
 import com.lawu.eshop.statistics.param.AgentReportRechargeSaveParam;
 import com.lawu.eshop.statistics.srv.bo.AgentAreaRechargeQReturnBO;
+import com.lawu.eshop.statistics.srv.bo.ReportAreaRechargeDailyBO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaRechargeDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaRechargeMonthDO;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaRechargeDailyDOMapper;
@@ -119,16 +120,16 @@ public class ReportAreaRechargeServiceImplTest {
 		Assert.assertEquals(1, (int)bo.getCityId());
 	}
 	
-//	@Test
-//	@Rollback
-//	@Transactional
-//	public void getAreaRechargeList() {
-//		saveDaily();
-//		AgentReportParam param = new AgentReportParam();
-//		param.setRegionPath("1/1/1");
-//		param.setBeginTime(DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(new Date()))));
-//		param.setEndTime(DateUtil.getDateFormat(DateUtil.getLastDayOfMonth(DateUtil.getMonthBefore(new Date()))));
-//		AgentAreaRechargeQReturnBO bo = reportAreaRechargeService.getDailyList(reportDate);
-//		Assert.assertEquals(1, (int)bo.getCityId());
-//	}
+	@Test
+	@Rollback
+	@Transactional
+	public void getDailyList() {
+		saveDaily();
+		AgentReportParam param = new AgentReportParam();
+		param.setRegionPath("1/1/1");
+		param.setBeginTime(DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(new Date()))));
+		param.setEndTime(DateUtil.getDateFormat(DateUtil.getLastDayOfMonth(DateUtil.getMonthBefore(new Date()))));
+		List<ReportAreaRechargeDailyBO> list = reportAreaRechargeService.getDailyList(DateUtil.getDateFormat(new Date()));
+		Assert.assertEquals(1, list.size());
+	}
 }
