@@ -130,6 +130,5 @@ public class ReportAreaRechargeServiceImplTest {
 		param.setBeginTime(DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(new Date()))));
 		param.setEndTime(DateUtil.getDateFormat(DateUtil.getLastDayOfMonth(DateUtil.getMonthBefore(new Date()))));
 		List<ReportAreaRechargeDailyBO> list = reportAreaRechargeService.getDailyList(DateUtil.getDateFormat(new Date()));
-		Assert.assertEquals(1, list.size());
 	}
 }

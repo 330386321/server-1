@@ -135,6 +135,4 @@ public class ReportAreaRechargeServiceImpl implements ReportAreaRechargeService 
         }
         return ReportAreaRechargeConverter.convertBO(doExtend);
     }
-
-
 }
