@@ -260,6 +260,8 @@ public class DiscountPackageController extends BaseController {
 		discountPackageSaveParam.setValidityPeriodEnd(param.getValidityPeriodEnd());
 		discountPackageSaveParam.setDiscountPackageContents(param.getDiscountPackageContents());
 		discountPackageSaveParam.setDiscountPackageImages(param.getDiscountPackageImages());
+		discountPackageSaveParam.setAdvanceBookingTime(param.getAdvanceBookingTime());
+		discountPackageSaveParam.setPurchaseNotes(param.getPurchaseNotes());
 		Result result = discountPackageService.save(merchantId, discountPackageSaveParam);
 		return successCreated(result);
 	}
