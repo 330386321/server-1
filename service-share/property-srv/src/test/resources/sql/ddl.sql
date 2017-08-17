@@ -160,6 +160,9 @@ CREATE TABLE `point_detail` (
   `previous_point` decimal(20,6)  NOT NULL DEFAULT '0.000000' COMMENT '操作前积分',
   `direction` tinyint(2) NOT NULL COMMENT '1-支出2-收入',
   `biz_id` varchar(20) NOT NULL DEFAULT '0',
+  `province_id` int(8) DEFAULT NULL COMMENT '省ID',
+  `city_id` int(8) DEFAULT NULL COMMENT '省ID',
+  `area_id` int(8) DEFAULT NULL COMMENT '省ID',
   `remark` varchar(30) DEFAULT '' COMMENT '备注',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
@@ -240,6 +243,9 @@ CREATE TABLE `transaction_detail` (
   `third_transaction_num` varchar(30) DEFAULT NULL COMMENT '第三方支付交易号',
   `biz_id` varchar(500) DEFAULT '0' COMMENT '业务类型操作对应的业务表ID',
   `biz_num` varchar(30) DEFAULT NULL COMMENT '业务订单号',
+  `province_id` int(8) DEFAULT NULL COMMENT '省ID',
+  `city_id` int(8) DEFAULT NULL COMMENT '省ID',
+  `area_id` int(8) DEFAULT NULL COMMENT '省ID',
   `remark` varchar(30) DEFAULT '' COMMENT '备注',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)

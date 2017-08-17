@@ -216,6 +216,7 @@ public class OrderServiceImplTest {
         param.setOrderIds("1");
         param.setAccounts("1361313");
         param.setPayWays(new Byte[]{1});
+        param.setRegionPaths("1/11/111");
         int ret = orderService.comfirmReleaseFreeze(param);
         Assert.assertEquals(ResultCode.SUCCESS,ret);
     }
@@ -230,6 +231,7 @@ public class OrderServiceImplTest {
         param.setAccounts("164641");
         param.setOrderActualMoney("100");
         param.setPayWays(new Byte[]{1});
+        param.setRegionPaths("1/11/111");
         int ret = orderService.comfirmSysJob(param);
         Assert.assertEquals(ResultCode.SUCCESS,ret);
     }
