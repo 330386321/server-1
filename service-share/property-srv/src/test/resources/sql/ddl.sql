@@ -204,6 +204,7 @@ DROP TABLE IF EXISTS `recharge`;
 CREATE TABLE `recharge` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `user_num` varchar(19) NOT NULL COMMENT '用户编号',
+  `user_type` tinyint(2) NOT NULL COMMENT '用户类型(用户1|商家2)',
   `recharge_money` decimal(18,4)  NOT NULL COMMENT '充值金额/积分',
   `current_scale` varchar(15)  NOT NULL COMMENT '当前充值比例',
   `money` decimal(18,4)  NOT NULL COMMENT '充值所得金额/积分',
@@ -212,6 +213,9 @@ CREATE TABLE `recharge` (
   `status` tinyint(3)  NOT NULL COMMENT '1-待支付,2-成功,3-失败',
   `recharge_number` varchar(25)  DEFAULT NULL COMMENT '充值单号',
   `third_number` varchar(50)  DEFAULT NULL COMMENT '第三方支付的订单号',
+  `province_id` int(8) DEFAULT NULL COMMENT '省ID',
+  `city_id` int(8) DEFAULT NULL COMMENT '市ID',
+  `area_id` int(8) DEFAULT NULL COMMENT '区ID',
   `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   `gmt_modified` datetime DEFAULT NULL COMMENT '修改日期',
   `note` text  COMMENT '备注',

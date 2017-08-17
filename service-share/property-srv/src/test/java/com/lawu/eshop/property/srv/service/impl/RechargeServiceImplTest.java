@@ -6,10 +6,13 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.*;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.property.param.AgentReportRechargeQueryParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
+import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
+import com.lawu.eshop.property.srv.bo.AreaRechargePointBO;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
 import com.lawu.eshop.property.srv.bo.RechargeReportBO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
@@ -210,6 +213,83 @@ public class RechargeServiceImplTest {
         param.setRechargeType(PayTypeEnum.BALANCE.getVal());
         param.setStatus(ThirdPayStatusEnum.PAYING.getVal());
         List<RechargeReportBO> rtnList = rechargeService.selectWithdrawCashListByDateAndStatus(param);
+        Assert.assertEquals(1,rtnList.size());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getRechargeById(){
+        RechargeDO recharge = new RechargeDO();
+        recharge.setUserNum("M10001");
+        recharge.setRechargeMoney(new BigDecimal("20"));
+        recharge.setCurrentScale("1");
+        double dCurrentScale = Double.parseDouble("1");
+        double dRechargeMoney = Double.parseDouble("20");
+        double money = dRechargeMoney * dCurrentScale;
+        recharge.setMoney(BigDecimal.valueOf(money));
+        recharge.setRechargeType(PayTypeEnum.BALANCE.getVal());
+        recharge.setChannel(TransactionPayTypeEnum.ALIPAY.getVal());
+        recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
+        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setGmtCreate(new Date());
+        recharge.setGmtModified(new Date());
+        rechargeDOMapper.insertSelective(recharge);
+        ThirdPayStatusEnum status = rechargeService.getRechargeById(recharge.getId());
+        Assert.assertEquals(ThirdPayStatusEnum.PAYING.getVal(),status.getVal());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void selectAgentAreaReportRechargeListByDate(){
+        RechargeDO recharge = new RechargeDO();
+        recharge.setUserNum("M10001");
+        recharge.setRechargeMoney(new BigDecimal("20"));
+        recharge.setCurrentScale("1");
+        double dCurrentScale = Double.parseDouble("1");
+        double dRechargeMoney = Double.parseDouble("20");
+        double money = dRechargeMoney * dCurrentScale;
+        recharge.setMoney(BigDecimal.valueOf(money));
+        recharge.setRechargeType(PayTypeEnum.BALANCE.getVal());
+        recharge.setChannel(TransactionPayTypeEnum.ALIPAY.getVal());
+        recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
+        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setGmtCreate(new Date());
+        recharge.setGmtModified(new Date());
+        rechargeDOMapper.insertSelective(recharge);
+
+        AgentReportRechargeQueryParam param = new AgentReportRechargeQueryParam();
+        param.setStatus(ThirdPayStatusEnum.PAYING.getVal());
+        param.setChannel(TransactionPayTypeEnum.BALANCE.getVal());
+        param.setDate(DateUtil.getDateFormat(new Date(),"yyyy-MM-dd"));
+        List<AgentReportRechargeQueryBO> rtnList = rechargeService.selectAgentAreaReportRechargeListByDate(param);
+        Assert.assertEquals(1,rtnList.size());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void selectAreaRechargePoint(){
+        RechargeDO recharge = new RechargeDO();
+        recharge.setUserNum("M10001");
+        recharge.setRechargeMoney(new BigDecimal("20"));
+        recharge.setCurrentScale("1");
+        double dCurrentScale = Double.parseDouble("1");
+        double dRechargeMoney = Double.parseDouble("20");
+        double money = dRechargeMoney * dCurrentScale;
+        recharge.setMoney(BigDecimal.valueOf(money));
+        recharge.setRechargeType(PayTypeEnum.POINT.getVal());
+        recharge.setChannel(TransactionPayTypeEnum.ALIPAY.getVal());
+        recharge.setStatus(ThirdPayStatusEnum.SUCCESS.getVal());
+        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setGmtCreate(new Date());
+        recharge.setGmtModified(new Date());
+        rechargeDOMapper.insertSelective(recharge);
+
+        String bdate = DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth(new Date()),"yyyy-MM-dd");
+        String edate = DateUtil.getDateFormat(DateUtil.getLastDayOfMonth(new Date()),"yyyy-MM-dd");
+        List<AreaRechargePointBO> rtnList = rechargeService.selectAreaRechargePoint(bdate,edate);
         Assert.assertEquals(1,rtnList.size());
     }
 }
