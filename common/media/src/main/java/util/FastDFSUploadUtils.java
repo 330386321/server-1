@@ -15,6 +15,7 @@ import javax.servlet.http.Part;
 import org.csource.fastdfs.ClientParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.StringUtils;
 
 import com.lawu.eshop.utils.RandomUtil;
@@ -76,6 +77,7 @@ public class FastDFSUploadUtils {
 									+ File.separator + newName;
 							String cutUrl = uparam.getBaseImageDir() + File.separator + VideoCutImgUtil.processImg(
 									tmpVideoUrl, uparam.getDir(), uparam.getBaseImageDir(), uparam.getFfmpegUrl());
+							Thread.sleep(550);
 							FastDFSClient clientImg =new FastDFSClient();
 							String cutImgUrl = clientImg.uploadFile(cutUrl,param);
 							if (null == cutImgUrl) {
@@ -151,5 +153,4 @@ public class FastDFSUploadUtils {
 			throw e;
 		}
 	}
-
 }

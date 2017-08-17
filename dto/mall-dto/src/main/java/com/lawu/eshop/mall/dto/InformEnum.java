@@ -12,7 +12,8 @@ public enum InformEnum {
 	INFORM_TYPE_PLAT((byte)0x01, "平面广告"), 
 	INFORM_TYPE_PRAISE((byte)0x02, "E赞"), 
 	INFORM_TYPE_MERCHANT((byte)0x03, "商家"), 
-	INFORM_TYPE_GOODS((byte)0x04, "商品");
+	INFORM_TYPE_GOODS((byte)0x04, "商品"),
+	INFORM_TYPE_VIDEO((byte)0x05,"视频");
 
 	private Byte val;
 
