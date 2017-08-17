@@ -72,6 +72,9 @@ public class AdEgainDTO {
 	
 	@ApiModelProperty(value = "视频大小")
 	private Long fileSize;
+	
+	@ApiModelProperty(value = "视频时间")
+	private String videoTime;
 
 	public Long getId() {
 		return id;
@@ -241,6 +244,15 @@ public class AdEgainDTO {
 		this.fileSize = fileSize;
 	}
 
+	public String getVideoTime() {
+		return videoTime;
+	}
+
+	public void setVideoTime(String videoTime) {
+		this.videoTime = videoTime;
+	}
+
+	
 	
 	
 	

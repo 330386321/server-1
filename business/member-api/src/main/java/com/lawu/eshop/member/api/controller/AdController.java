@@ -83,6 +83,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import util.VideoCutImgUtil;
 
 /**
  * 描述：广告管理
@@ -201,10 +202,12 @@ public class AdController extends BaseController {
     		adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
     	}
     	if(StringUtils.isNotEmpty(adEgainDTO.getVideoImgUrl())){
-    		File f= new File(memberApiConfig.getVideoUrl()+adEgainDTO.getMediaUrl()); 
+    		String url=memberApiConfig.getVideoUploadUrl()+adEgainDTO.getMediaUrl();
+    		File f= new File(url); 
     		if (f.exists() && f.isFile()){  
     	        adEgainDTO.setFileSize(f.length()/1024/1024);
     	    }
+    		adEgainDTO.setVideoTime(VideoCutImgUtil.getVideoTime(url, memberApiConfig.getFfmpegUrl()));
     	}
 	    
 		Result<Set<String>> rs= adViewService.getAdviews(id.toString());
