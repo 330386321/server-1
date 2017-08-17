@@ -1,5 +1,6 @@
 package com.lawu.eshop.statistics.srv.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,9 +13,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.statistics.dto.UserActiveDTO;
+import com.lawu.eshop.statistics.param.AgentReportParam;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaDailyBO;
+import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaMonthBO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
+import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaMonthDO;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserActiveDailyDOMapper;
+import com.lawu.eshop.statistics.srv.service.ReportUserActiveAreaDailyService;
+import com.lawu.eshop.statistics.srv.service.ReportUserActiveAreaMonthService;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveDailyService;
 import com.lawu.eshop.utils.DateUtil;
 
@@ -27,7 +34,13 @@ public class ReportUserActiveDailyServiceImplTest {
 
 	@Autowired
 	private ReportUserActiveDailyDOMapper reportUserActiveDailyDOMapper;
+	
+	@Autowired
+	private ReportUserActiveAreaDailyService reportUserActiveAreaDailyService;
 
+	@Autowired
+	private ReportUserActiveAreaMonthService reportUserActiveAreaMonthService;
+	
 	@Transactional
 	@Rollback
 	@Test
@@ -64,4 +77,50 @@ public class ReportUserActiveDailyServiceImplTest {
 		Assert.assertEquals(0, list.size());
 	}
 
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void getAgentUserActiveListDaily() {
+		List<UserActiveDTO> userActiveDTOS = new ArrayList<UserActiveDTO>();
+		for(int i = 0 ; i < 5 ; i++) {
+			UserActiveDTO dto = new UserActiveDTO();
+			dto.setCityId(4403);
+			dto.setCityName("深圳市");
+			dto.setUserCount(i);
+			dto.setVisitDate(new Date());
+			userActiveDTOS.add(dto);
+		}
+		reportUserActiveAreaDailyService.saveUserActiveAreaDaily(userActiveDTOS);
+		
+		AgentReportParam param = new AgentReportParam();
+		param.setRegionPath("1/4403/1");
+		param.setBeginTime(DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth()));
+		param.setEndTime(DateUtil.getDateFormat(DateUtil.getLastDayOfMonth()));
+		List<ReportUserActiveAreaDailyBO> list = reportUserActiveDailyService.getAgentUserActiveListDaily(param);
+		Assert.assertEquals(5, list.size());
+	}
+	
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void getAgentUserActiveListMonth() {
+		
+		List<UserActiveDTO> list = new ArrayList<>();
+		UserActiveDTO dto = new UserActiveDTO();
+		dto.setCityId(4403);
+		dto.setCityName("");
+		dto.setUserCount(1);
+		dto.setVisitDate(new Date());
+		list.add(dto);
+		reportUserActiveAreaMonthService.saveUserActiveAreaMonth(list);
+		AgentReportParam param = new AgentReportParam();
+		param.setRegionPath("1/4403/1");
+		param.setBeginTime(DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth()));
+		param.setEndTime(DateUtil.getDateFormat(DateUtil.getLastDayOfMonth()));
+		
+		List<ReportUserActiveAreaMonthBO> list1 = reportUserActiveDailyService.getAgentUserActiveListMonth(param);
+		Assert.assertEquals(1, list.size());
+	}
 }

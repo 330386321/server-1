@@ -28,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.statistics.param.AgentReportParam;
+import com.lawu.eshop.statistics.param.AgentWithdrawCashParam;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.statistics.srv.StatisticsSrvApplicationTest;
 
@@ -149,5 +151,97 @@ public class WithdrawCashControllerTest {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
+	}
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void selectReportAreaWithdrawCashList() {
+		RequestBuilder request = get("/withdrawCash/selectReportAreaWithdrawCashList").param("month", "2017-7").param("cityId", "1");
+//		try {
+//			ResultActions perform = mvc.perform(request);
+//			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK))
+//					.andDo(MockMvcResultHandlers.print()).andReturn();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			Assert.fail(e.getMessage());
+//		}
+	}
+	
+	
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void saveAgentDaily() {
+		AgentWithdrawCashParam param = new AgentWithdrawCashParam();
+		String questJson = JSONObject.toJSONString(param);
+		RequestBuilder request = post("/withdrawCash/saveAgentDaily").contentType(MediaType.APPLICATION_JSON).content(questJson);
+		try {
+			ResultActions perform = mvc.perform(request);
+			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED))
+					.andDo(MockMvcResultHandlers.print()).andReturn();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void saveAgentMonth() {
+		AgentWithdrawCashParam param = new AgentWithdrawCashParam();
+		String questJson = JSONObject.toJSONString(param);
+		RequestBuilder request = post("/withdrawCash/saveAgentMonth").contentType(MediaType.APPLICATION_JSON).content(questJson);
+		try {
+			ResultActions perform = mvc.perform(request);
+			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED))
+					.andDo(MockMvcResultHandlers.print()).andReturn();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+	}
+	
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void selectAreaWithdrawDailyReport() {
+		AgentReportParam param = new AgentReportParam();
+		param.setBeginTime("2017-1-1 00:00:00");
+		param.setEndTime("2017-12-31 23:59:59");
+		param.setRegionPath("1/4403/1");
+		String questJson = JSONObject.toJSONString(param);
+		RequestBuilder request = get("/withdrawCash/selectAreaWithdrawDailyReport").contentType(MediaType.APPLICATION_JSON).content(questJson);
+//		try {
+//			ResultActions perform = mvc.perform(request);
+//			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK))
+//					.andDo(MockMvcResultHandlers.print()).andReturn();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			Assert.fail(e.getMessage());
+//		}
+	}
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void selectAreaWithdrawMonthReport() {
+		AgentReportParam param = new AgentReportParam();
+		param.setBeginTime("2017-1-1 00:00:00");
+		param.setEndTime("2017-12-31 23:59:59");
+		param.setRegionPath("1/4403/1");
+		String questJson = JSONObject.toJSONString(param);
+		RequestBuilder request = get("/withdrawCash/selectAreaWithdrawMonthReport").contentType(MediaType.APPLICATION_JSON).content(questJson);
+//		try {
+//			ResultActions perform = mvc.perform(request);
+//			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK))
+//					.andDo(MockMvcResultHandlers.print()).andReturn();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			Assert.fail(e.getMessage());
+//		}
 	}
 }

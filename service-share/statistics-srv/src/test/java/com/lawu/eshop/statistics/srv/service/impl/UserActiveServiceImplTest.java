@@ -18,10 +18,18 @@ public class UserActiveServiceImplTest {
 	@Autowired
 	private UserActiveService userActiveService;
 
+	
 	@Transactional
 	@Rollback
 	@Test
 	public void collectionMemberActiveDaily() {
+		userActiveService.collectionMemberActiveDaily();
+	}
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void collectionMemberActiveAreaDaily() {
 		userActiveService.collectionMemberActiveAreaDaily();
 	}
 	
@@ -38,7 +46,7 @@ public class UserActiveServiceImplTest {
 //    public void collectionMemberActiveMonth() {
 //    	userActiveService.collectionMemberActiveAreaMonth();
 //    }
-//
+
 //	@Transactional
 //	@Rollback
 //	@Test
@@ -46,12 +54,6 @@ public class UserActiveServiceImplTest {
 //    	userActiveService.collectionMerchantActiveMonth();
 //    }
 
-	@Transactional
-	@Rollback
-	@Test
-    public void collectionMemberActiveAreaDaily() {
-    	userActiveService.collectionMemberActiveAreaDaily();
-    }
 
 	@Transactional
 	@Rollback
@@ -66,7 +68,7 @@ public class UserActiveServiceImplTest {
 //    public void collectionMemberActiveAreaMonth() {
 //		userActiveService.collectionMemberActiveAreaMonth();
 //    }
-//
+
 //	@Transactional
 //	@Rollback
 //	@Test

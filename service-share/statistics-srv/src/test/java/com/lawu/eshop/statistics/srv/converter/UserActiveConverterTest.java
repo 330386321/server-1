@@ -190,4 +190,25 @@ public class UserActiveConverterTest {
 			Assert.fail(e.getMessage());
 		}
 	}
+	
+	@Test
+	public void coverAgentReportDTOS() {
+		try {
+			List<ReportUserActiveAreaDailyBO> list = new ArrayList<>();
+			UserActiveConverter.coverAgentReportDTOS(list);
+			for(int i = 0; i < 2; i++) {
+				ReportUserActiveAreaDailyBO bo = new ReportUserActiveAreaDailyBO();
+				bo.setMemberCount(10);
+				bo.setMerchantCount(10);
+				bo.setGmtReport(new Date());
+				bo.setCityId(1);
+				bo.setCityName("");
+				list.add(bo);
+			}
+			UserActiveConverter.coverAgentReportDTOS(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+	}
 }

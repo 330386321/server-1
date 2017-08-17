@@ -73,5 +73,32 @@ public class UserRegServiceImplTest {
     public void getReportUserRegArea() {
 		userRegService.getReportUserRegArea();
     }
+	
+	@Transactional
+	@Rollback
+	@Test
+    public void addUserRegAreaDaily() {
+		UserRegAreaParam param = new UserRegAreaParam();
+		param.setCityId(1);
+		param.setMemberCount(1);
+		param.setMerchantCommonCount(1);
+		param.setMerchantCount(1);
+		param.setMerchantEntityCount(1);
+		param.setName("");
+		userRegService.addUserRegAreaDaily(param);
+    }
     
+	@Transactional
+	@Rollback
+	@Test
+    public void addUserRegAreaMonth() {
+		UserRegAreaParam param = new UserRegAreaParam();
+		param.setCityId(1);
+		param.setMemberCount(1);
+		param.setMerchantCommonCount(1);
+		param.setMerchantCount(1);
+		param.setMerchantEntityCount(1);
+		param.setName("");
+		userRegService.addUserRegAreaMonth(param);
+    }
 }

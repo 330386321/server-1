@@ -14,9 +14,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.statistics.param.AgentReportParam;
+import com.lawu.eshop.statistics.param.AgentWithdrawCashParam;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
+import com.lawu.eshop.statistics.srv.bo.ReportAreaWithdrawDailyBO;
+import com.lawu.eshop.statistics.srv.domain.ReportAreaWithdrawDailyDO;
+import com.lawu.eshop.statistics.srv.domain.ReportAreaWithdrawMonthDO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawMonthDO;
+import com.lawu.eshop.statistics.srv.mapper.ReportAreaWithdrawDailyDOMapper;
+import com.lawu.eshop.statistics.srv.mapper.ReportAreaWithdrawMonthDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportWithdrawDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportWithdrawMonthDOMapper;
 import com.lawu.eshop.statistics.srv.service.WithdrawCashService;
@@ -34,6 +41,12 @@ public class WithdrawCashServiceImplTest {
 	
 	@Autowired
 	private ReportWithdrawMonthDOMapper reportWithdrawMonthDOMapper;
+	
+	@Autowired
+	private ReportAreaWithdrawDailyDOMapper reportAreaWithdrawDailyDOMapper;
+	
+	@Autowired
+	private ReportAreaWithdrawMonthDOMapper reportAreaWithdrawMonthDOMapper;
 	
 	@Transactional
 	@Rollback
@@ -110,5 +123,72 @@ public class WithdrawCashServiceImplTest {
 		bdate = new SimpleDateFormat("yyyy-MM").format(DateUtil.getMonthBefore(new Date()));
 		edate = new SimpleDateFormat("yyyy-MM").format(new Date());
 		WithdrawCashService.selectReport(bdate, edate);
+	}
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void saveAgentDaily() {
+		AgentWithdrawCashParam param = new AgentWithdrawCashParam();
+		param.setCityId(1);
+		param.setCityName("");
+		param.setGmtReport(new Date());
+		param.setMemberMoney(new BigDecimal(1));
+		param.setMerchantMoney(new BigDecimal(1));
+		param.setTotalMoney(new BigDecimal(2));
+		WithdrawCashService.saveAgentDaily(param);
+		List<ReportAreaWithdrawDailyDO> list = reportAreaWithdrawDailyDOMapper.selectByExample(null);
+		Assert.assertEquals(1, list.size());
+	}
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void selectReportAreaWithdrawCashList() {
+		saveAgentDaily();
+		List<ReportAreaWithdrawDailyBO> list = WithdrawCashService.selectReportAreaWithdrawCashList(DateUtil.getDateFormat(new Date(), "yyyy-MM"), 1);
+		Assert.assertEquals(1, list.size());
+	}
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void saveAgentMonth() {
+		AgentWithdrawCashParam param = new AgentWithdrawCashParam();
+		param.setCityId(1);
+		param.setCityName("");
+		param.setGmtReport(DateUtil.getMonthBefore(new Date()));
+		param.setMemberMoney(new BigDecimal(1));
+		param.setMerchantMoney(new BigDecimal(1));
+		param.setTotalMoney(new BigDecimal(2));
+		WithdrawCashService.saveAgentMonth(param);
+		List<ReportAreaWithdrawMonthDO> list = reportAreaWithdrawMonthDOMapper.selectByExample(null);
+		Assert.assertEquals(1, list.size());
+	}
+	
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void selectAreaWithdrawDailyReport() {
+		saveAgentDaily();
+		AgentReportParam param = new AgentReportParam();
+		param.setBeginTime(DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth()));
+		param.setEndTime(DateUtil.getDateFormat(DateUtil.getLastDayOfMonth()));
+		param.setRegionPath("1/1/1");
+		WithdrawCashService.selectAreaWithdrawDailyReport(param);
+	}
+	
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void selectAreaWithdrawMonthReport() {
+		saveAgentMonth();
+		AgentReportParam param = new AgentReportParam();
+		param.setBeginTime(DateUtil.getDateFormat(DateUtil.getMonthBefore(new Date()), "yyyy-MM"));
+		param.setEndTime(DateUtil.getDateFormat(new Date(), "yyyy-MM"));
+		param.setRegionPath("1/1/1");
+		WithdrawCashService.selectAreaWithdrawMonthReport(param);
 	}
 }

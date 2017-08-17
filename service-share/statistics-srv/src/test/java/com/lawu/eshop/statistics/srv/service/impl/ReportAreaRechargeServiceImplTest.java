@@ -124,7 +124,23 @@ public class ReportAreaRechargeServiceImplTest {
 	@Rollback
 	@Transactional
 	public void getDailyList() {
-		saveDaily();
+		for(int i = 0 ; i < 2 ; i++) {
+			List<AgentReportRechargeSaveParam> saveParams = new ArrayList<>();
+			AgentReportRechargeSaveParam param = new AgentReportRechargeSaveParam();
+			param.setAreaId(1);
+			param.setCityId(1);
+			param.setProvinceId(1);
+			param.setGmtCreate(new Date());
+			param.setGmtReport(DateUtil.getMonthBefore(new Date()));
+			param.setMemberRechargeBalance(new BigDecimal(1));
+			param.setMemberRechargePoint(new BigDecimal(1));
+			param.setMerchantRechargeBalance(new BigDecimal(1));
+			param.setMerchantRechargePoint(new BigDecimal(1));
+			param.setTotalRechargeBalance(new BigDecimal(2));
+			param.setTotalRechargePoint(new BigDecimal(2));
+			saveParams.add(param);
+			reportAreaRechargeService.saveDaily(saveParams);
+		}
 		AgentReportParam param = new AgentReportParam();
 		param.setRegionPath("1/1/1");
 		param.setBeginTime(DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(new Date()))));
