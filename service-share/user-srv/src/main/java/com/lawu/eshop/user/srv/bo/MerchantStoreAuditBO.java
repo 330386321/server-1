@@ -108,6 +108,8 @@ public class MerchantStoreAuditBO {
      */
     private String content;
 
+    private String keywords;
+
     public Long getId() {
         return id;
     }
@@ -202,5 +204,13 @@ public class MerchantStoreAuditBO {
 
     public void setType(Byte type) {
         this.type = type;
+    }
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
     }
 }

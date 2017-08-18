@@ -1,16 +1,18 @@
 package com.lawu.eshop.user.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreAuditDTO;
 import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDO;
-import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.sf.json.JSONObject;
 
 /**
  * @author meishuquan
@@ -82,6 +84,7 @@ public class MerchantStoreAuditConverter {
         merchantStoreAuditDTO.setCertifType(merchantStoreParam.getCertifType());
         merchantStoreAuditDTO.setOperatorCardId(merchantStoreParam.getOperatorCardId());
         merchantStoreAuditDTO.setOperatorName(merchantStoreParam.getOperatorName());
+        merchantStoreAuditDTO.setKeywords(merchantStoreParam.getKeywords());
         if(StringUtils.isNotEmpty(merchantStoreParam.getLogoUrl()) && merchantStoreParam.getLogoUrl().lastIndexOf(',') > 0){
             merchantStoreAuditDTO.setLogoUrl(merchantStoreParam.getLogoUrl().substring(0,merchantStoreParam.getLogoUrl().length() - 1));
         }else{
