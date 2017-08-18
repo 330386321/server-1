@@ -219,6 +219,9 @@ public class ProductServiceImpl implements ProductService {
             return null;
         }
         List<MemberProductModelDTO> spec = new ArrayList<MemberProductModelDTO>();
+        BigDecimal minPrice = new BigDecimal("0");
+        BigDecimal maxPrice = new BigDecimal("0");
+        int k = 0;
         for (ProductModelDO mdo : productModelDOS) {
             MemberProductModelDTO dto = new MemberProductModelDTO();
             dto.setId(mdo.getId());
@@ -227,8 +230,24 @@ public class ProductServiceImpl implements ProductService {
             dto.setOriginalPrice(mdo.getOriginalPrice());
             dto.setPrice(mdo.getPrice());
             spec.add(dto);
+
+            if (k == 0){
+                minPrice = mdo.getPrice();
+                maxPrice = mdo.getPrice();
+            } else{
+                if(mdo.getPrice().compareTo(minPrice) == -1){
+                    minPrice = mdo.getPrice();
+                }
+                if(mdo.getPrice().compareTo(maxPrice) == 1){
+                    maxPrice = mdo.getPrice();
+                }
+            }
+            k++;
         }
         productInfoBO.setSpec(spec);
+        productInfoBO.setMinPrice(minPrice.toString());
+        productInfoBO.setMaxPrice(maxPrice.toString());
+
 
         // 查询商品图片
         ProductImageDOExample imageExample = new ProductImageDOExample();
