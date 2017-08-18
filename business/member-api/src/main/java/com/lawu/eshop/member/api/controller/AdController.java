@@ -316,8 +316,11 @@ public class AdController extends BaseController {
 		if(result.getModel()){
 			return successCreated(ResultCode.AD_CLICK_EXIST);
 		}else{
-			clickAdRecordService.setClickAdRecord(memberId+id+DateUtil.getIntDate());
-			return adExtendService.clickAd(id, memberId, num);
+			 Result<ClickAdPointDTO> res=adExtendService.clickAd(id, memberId, num);
+			 if(isSuccess(res)){
+				 clickAdRecordService.setClickAdRecord(memberId+id+DateUtil.getIntDate());
+			 }
+			return res;
 		}
 		
 	}
