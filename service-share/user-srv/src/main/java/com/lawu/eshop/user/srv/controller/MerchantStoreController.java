@@ -501,19 +501,6 @@ public class MerchantStoreController extends BaseController {
 	}
 
 	/**
-	 * 更新门店索引
-	 *
-	 * @param id
-	 * @return
-	 */
-	@Deprecated
-	@RequestMapping(value = "updateStoreIndex/{id}", method = RequestMethod.PUT)
-	public Result updateStoreIndex(@PathVariable Long id) {
-		merchantStoreService.updateStoreIndex(id);
-		return successCreated();
-	}
-
-	/**
 	 * 重建门店索引
 	 *
 	 * @return
@@ -768,26 +755,6 @@ public class MerchantStoreController extends BaseController {
 		 dto.setLatitude(bo.getLatitude());
 		 dto.setLongitude(bo.getLongitude());
 		 return successGet(dto);
-	}
-
-	/**
-	 * 根据ID更新门店关键词
-	 *
-	 * @param id
-	 * @param merchantId
-	 * @param keywords
-	 * @return
-	 * @author meishuquan
-	 */
-	@Deprecated
-	@RequestMapping(value = "updateKeywordsById/{id}", method = RequestMethod.PUT)
-	public Result updateKeywordsById(@PathVariable Long id, @RequestParam Long merchantId, @RequestParam String keywords) {
-		MerchantStoreBO merchantStoreBO = merchantStoreService.getMerchantStoreById(id);
-		if (merchantStoreBO == null) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-		merchantStoreService.updateKeywordsById(id, merchantId, keywords);
-		return successCreated();
 	}
 
 	@RequestMapping(value = "delSolrDocsById", method = RequestMethod.DELETE)

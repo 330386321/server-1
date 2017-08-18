@@ -68,14 +68,6 @@ public interface MerchantStoreService {
     void updateStoreStatisticsById(Long id, StoreStatisticsParam param);
 
     /**
-     * 更新门店索引
-     *
-     * @param id
-     */
-    @Deprecated
-    void updateStoreIndex(Long id);
-
-    /**
      * 重建门店索引
      */
     void rebuildStoreIndex(List<StoreIndexParam> indexParamList);
@@ -132,14 +124,4 @@ public interface MerchantStoreService {
      */
     MerchantStoreAdInfoBO selectMerchantStoreAdInfo(Long merchantId);
 
-    /**
-     * 根据ID更新门店关键词
-     *
-     * @param id
-     * @param merchantId
-     * @param keywords
-     * @author meishuquan
-     */
-    @Deprecated
-    void updateKeywordsById(Long id, Long merchantId, String keywords);
 }
