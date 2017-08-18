@@ -101,9 +101,9 @@ public class MemberController extends BaseController{
         }
     }
 
-    @ApiOperation(value = "冻结账户", notes = "冻结账户（商家，会员）（章勇）", httpMethod = "PUT")
+    @ApiOperation(value = "冻结账户", notes = "冻结账户（商家，会员）（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "freezeAccount", method = RequestMethod.PUT)
+    @RequestMapping(value = "freezeAccount", method = RequestMethod.POST)
     public Result freezeAccount(@ModelAttribute AccountFreezeParam param){
 
         if (param.getNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
