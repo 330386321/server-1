@@ -140,17 +140,4 @@ public interface MerchantStoreService {
 	@RequestMapping(value = "merchantStore/selectMerchantStoreAdInfo/{merchantId}", method = RequestMethod.GET)
 	Result<MerchantStoreAdInfoDTO> selectMerchantStoreAdInfo(@PathVariable("merchantId") Long merchantId);
 
-    /**
-     * 根据ID更新门店关键词
-     *
-     * @param id
-     * @param merchantId
-     * @param keywords
-     * @return
-     * @author meishuquan
-     */
-    @Deprecated
-    @RequestMapping(value = "merchantStore/updateKeywordsById/{id}", method = RequestMethod.PUT)
-    Result updateKeywordsById(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestParam("keywords") String keywords);
-
 }

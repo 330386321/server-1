@@ -216,28 +216,6 @@ public class MerchantStoreServiceImplTest {
     @Transactional
     @Rollback
     @Test
-    public void updateStoreIndex() {
-        MerchantStoreDO storeDO = new MerchantStoreDO();
-        storeDO.setMerchantId(200L);
-        storeDO.setName("测试店铺");
-        storeDO.setRegionPath("44/4403/440303");
-        storeDO.setRegionName("广东省深圳市南山区");
-        storeDO.setAddress("大冲商务中心");
-        storeDO.setLongitude(new BigDecimal(104.23));
-        storeDO.setLatitude(new BigDecimal(22.36));
-        storeDO.setIntro("店铺介绍");
-        storeDO.setStatus(DataTransUtil.intToByte(1));
-        storeDO.setIsNoReasonReturn(true);
-        merchantStoreDOMapper.insertSelective(storeDO);
-
-        merchantStoreService.updateStoreIndex(storeDO.getId());
-        SolrDocument solrDocument = solrService.getSolrDocsById(storeDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
-        Assert.assertNull(solrDocument);
-    }
-
-    @Transactional
-    @Rollback
-    @Test
     public void rebuildStoreIndex() {
         MerchantStoreDO storeDO = new MerchantStoreDO();
         storeDO.setMerchantId(200L);
@@ -456,27 +434,4 @@ public class MerchantStoreServiceImplTest {
         Assert.assertNotNull(merchantStoreBO);
     }
 
-    @Transactional
-    @Rollback
-    @Test
-    public void updateKeywordsById() {
-        MerchantStoreDO storeDO = new MerchantStoreDO();
-        storeDO.setMerchantId(200L);
-        storeDO.setName("测试店铺");
-        storeDO.setRegionPath("44/4403/440303");
-        storeDO.setRegionName("广东省深圳市南山区");
-        storeDO.setAddress("大冲商务中心");
-        storeDO.setLongitude(new BigDecimal(104.23));
-        storeDO.setLatitude(new BigDecimal(22.36));
-        storeDO.setIntro("店铺介绍");
-        storeDO.setStatus(DataTransUtil.intToByte(1));
-        storeDO.setIsNoReasonReturn(true);
-        storeDO.setKeywords("test");
-        merchantStoreDOMapper.insertSelective(storeDO);
-
-        merchantStoreService.updateKeywordsById(storeDO.getId(), 200L, "keywords");
-        storeDO = merchantStoreDOMapper.selectByPrimaryKey(storeDO.getId());
-        Assert.assertNotNull(storeDO);
-        Assert.assertEquals(storeDO.getKeywords(), "keywords");
-    }
 }

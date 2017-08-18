@@ -452,27 +452,6 @@ public class ProductControllerTest {
 	}
 
 	/**
-	 * 更新商品索引
-	 */
-	@Transactional
-	@Rollback
-	@Test
-	public void updateProductIndex() {
-		RequestBuilder request = put("/product/updateProductIndex/1");
-		try {
-			addProduct();
-			ResultActions perform = mvc.perform(request);
-			log.info(perform.andReturn().getResponse().getContentAsString());
-			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED))
-					.andDo(MockMvcResultHandlers.print()).andReturn();
-			Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail(e.getMessage());
-		}
-	}
-
-	/**
 	 * 重建商品索引
 	 */
 	@Transactional

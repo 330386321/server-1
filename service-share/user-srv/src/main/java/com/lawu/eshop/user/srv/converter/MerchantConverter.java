@@ -47,6 +47,7 @@ public class MerchantConverter {
         merchantBO.setGtCid(merchantDO.getGtCid());
         merchantBO.setRyToken(merchantDO.getRyToken());
         merchantBO.setIsFreeze(merchantDO.getIsFreeze());
+        merchantBO.setFreezeReason(merchantDO.getFreezeReason());
         return merchantBO;
     }
 

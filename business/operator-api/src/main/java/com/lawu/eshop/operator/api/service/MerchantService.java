@@ -72,7 +72,8 @@ public interface MerchantService {
      Result<Page<AccountDTO>> getAccountList(@RequestBody AccountParam param);
 
     @RequestMapping(value = "merchant/freezeAccount", method = RequestMethod.PUT)
-    Result freezeAccount(@RequestParam(value ="num" ) String num, @RequestParam(value ="isFreeze" ) Boolean isFreeze);
+    Result freezeAccount(@RequestParam(value ="num" ) String num, @RequestParam(value ="isFreeze" ) Boolean isFreeze,
+                         @RequestParam("freezeReason") String freezeReason);
 
     @RequestMapping(value = "merchant/getMerchantStoreProfileInfo", method = RequestMethod.GET)
     Result<MerchantStoreProfileDTO> getMerchantStoreProfileInfo(@RequestParam(value ="id" )  Long id);

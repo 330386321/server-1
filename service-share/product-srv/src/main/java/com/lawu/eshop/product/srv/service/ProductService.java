@@ -128,13 +128,6 @@ public interface ProductService {
     void updateAverageDailySalesById(Long id, BigDecimal averageDailySales);
 
     /**
-     * 更新商品索引
-     *
-     * @param id
-     */
-    void updateProductIndex(Long id);
-
-    /**
      * 重建商品索引
      */
     void rebuildProductIndex();
@@ -159,17 +152,6 @@ public interface ProductService {
      * @return
      */
     List<ProductBO> listProductByIds(List<Long> ids);
-
-    /**
-     * 根据ID更新商品关键词
-     *
-     * @param id
-     * @param merchantId
-     * @param keywords
-     * @author meishuquan
-     */
-    @Deprecated
-    void updateKeywordsById(Long id, Long merchantId, String keywords);
 
     void soldOutProductByMerchantId(Long merchantId);
     

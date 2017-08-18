@@ -156,5 +156,5 @@ public interface MemberService {
 
     Page<MemberBO> getAccountList(AccountParam param);
 
-    void freezeAccount(String num, Boolean isFreeze);
+    void freezeAccount(String num, Boolean isFreeze,String freezeReason);
 }

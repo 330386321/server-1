@@ -635,7 +635,7 @@ public class MerchantServiceImplTest {
         merchantDO.setNum("123");
         merchantDO.setGmtCreate(new Date());
         merchantDOMapper.insertSelective(merchantDO);
-        merchantService.freezeAccount("123",true);
+        merchantService.freezeAccount("123",true,"违规");
         List<MerchantDO> list = merchantDOMapper.selectByExample(null);
         Assert.assertEquals(1, list.size());
         Assert.assertEquals(true, list.get(0).getIsFreeze());

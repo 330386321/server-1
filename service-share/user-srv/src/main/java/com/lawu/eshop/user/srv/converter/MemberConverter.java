@@ -59,6 +59,7 @@ public class MemberConverter {
         memberBO.setRyToken(memberDO.getRyToken());
         memberBO.setRegionName(memberDO.getRegionName());
         memberBO.setIsFreeze(memberDO.getIsFreeze());
+        memberBO.setFreezeReason(memberDO.getFreezeReason());
         memberBO.setGmtCreate(memberDO.getGmtCreate());
         return memberBO;
     }

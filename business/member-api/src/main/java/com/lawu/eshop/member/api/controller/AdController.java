@@ -69,7 +69,6 @@ import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
-import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
@@ -317,7 +316,7 @@ public class AdController extends BaseController {
 			return successCreated(ResultCode.AD_CLICK_EXIST);
 		}else{
 			 Result<ClickAdPointDTO> res=adExtendService.clickAd(id, memberId, num);
-			 if(isSuccess(res)){
+			 if(isSuccess(res)){ 
 				 clickAdRecordService.setClickAdRecord(memberId+id+DateUtil.getIntDate());
 			 }
 			return res;
@@ -500,6 +499,7 @@ public class AdController extends BaseController {
 		return adService.isExistsRedPacket(merchantId);
 	}
 	
+	@Audit(date = "2017-08-18", reviewer = "李洪军")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询E赚列表", notes = "分页查询E赚列表(平面和视频)[]（蒋鑫俊）", httpMethod = "GET")
 	@Authorization
@@ -510,6 +510,7 @@ public class AdController extends BaseController {
 		return successGet(result);
 	}
 	
+	@Audit(date = "2017-08-18", reviewer = "李洪军")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询积分排行榜广告列表", notes = "查询积分排行榜广告列表(积分榜，人气榜),[]（蒋鑫俊）", httpMethod = "GET")
 	@Authorization
@@ -520,6 +521,7 @@ public class AdController extends BaseController {
 		return successGet(result);
 	}
 	
+	@Audit(date = "2017-08-18", reviewer = "李洪军")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询精选推荐广告列表", notes = "分页查询精选推荐广告列表,[]（蒋鑫俊）", httpMethod = "GET")
 	@Authorization

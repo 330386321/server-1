@@ -595,9 +595,10 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     @Transactional
-    public void freezeAccount(String num, Boolean isFreeze) {
+    public void freezeAccount(String num, Boolean isFreeze,String freezeReason) {
         MerchantDO merchantDO = new MerchantDO();
         merchantDO.setIsFreeze(isFreeze);
+        merchantDO.setFreezeReason(freezeReason);
         MerchantDOExample example = new MerchantDOExample();
         example.createCriteria().andNumEqualTo(num);
         merchantDOMapper.updateByExampleSelective(merchantDO, example);

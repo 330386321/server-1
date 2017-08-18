@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -375,19 +374,6 @@ public class MerchantStoreController extends BaseController {
                                              @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam) {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId, merchantStoreParam);
-    }
-
-    @Deprecated
-    @Audit(date = "2017-08-08", reviewer = "孙林青")
-    @ApiOperation(value = "更新门店关键词", notes = "更新门店关键词。 [1002]（梅述全）", httpMethod = "PUT")
-    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @Authorization
-    @RequestMapping(value = "updateKeywordsById/{id}", method = RequestMethod.PUT)
-    public Result updateKeywordsById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                     @PathVariable @ApiParam(required = true, value = "门店ID") Long id,
-                                     @RequestParam @ApiParam(required = true, value = "关键词") String keywords) {
-        Long merchantId = UserUtil.getCurrentUserId(getRequest());
-        return merchantStoreService.updateKeywordsById(id, merchantId, keywords);
     }
 
 }

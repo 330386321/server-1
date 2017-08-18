@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,15 +41,6 @@ public interface ProductService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "product/listProduct")
     Result<List<ProductInfoDTO>> listProduct(@ModelAttribute ListProductParam listProductParam);
-
-    /**
-     * 更新商品索引
-     *
-     * @param id
-     * @return
-     */
-    @RequestMapping(method = RequestMethod.PUT, value = "product/updateProductIndex/{id}")
-    Result updateProductIndex(@PathVariable("id") Long id);
 
     /**
      * 重建商品索引

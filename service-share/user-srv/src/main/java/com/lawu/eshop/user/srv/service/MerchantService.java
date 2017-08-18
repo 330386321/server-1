@@ -142,5 +142,5 @@ public interface MerchantService {
 
     Page<MerchantBO> getAccountList(AccountParam param);
 
-    void freezeAccount(String num, Boolean isFreeze);
+    void freezeAccount(String num, Boolean isFreeze,String freezeReason);
 }

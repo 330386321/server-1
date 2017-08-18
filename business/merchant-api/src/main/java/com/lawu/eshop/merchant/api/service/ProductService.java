@@ -86,19 +86,6 @@ public interface ProductService {
     @RequestMapping(value = "product/getProduct/{id}", method = RequestMethod.GET)
     Result<ProductInfoDTO> getProduct(@PathVariable("id") Long id);
 
-    /**
-     * 根据ID更新商品关键词
-     *
-     * @param id
-     * @param merchantId
-     * @param keywords
-     * @return
-     * @author meishuquan
-     */
-    @Deprecated
-    @RequestMapping(value = "product/updateKeywordsById/{id}", method = RequestMethod.PUT)
-    Result updateKeywordsById(@PathVariable("id") Long id, @RequestParam("keywords") Long merchantId, @RequestParam("keywords") String keywords);
-
      /* 查询商家上架商品的总数量
      *
      * @param merchantId

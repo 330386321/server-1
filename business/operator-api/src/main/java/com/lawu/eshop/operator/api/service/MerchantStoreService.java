@@ -43,16 +43,6 @@ public interface MerchantStoreService {
 	Result<List<MerchantStoreDTO>> listMerchantStore(@ModelAttribute ListMerchantStoreParam listMerchantStoreParam);
 
 	/**
-	 * 更新门店索引
-	 *
-	 * @param id
-	 * @return
-	 */
-	@Deprecated
-	@RequestMapping(method = RequestMethod.PUT, value = "merchantStore/updateStoreIndex/{id}")
-	Result updateStoreIndex(@PathVariable("id") Long id);
-
-	/**
 	 * 重建门店索引
 	 *
 	 * @return
