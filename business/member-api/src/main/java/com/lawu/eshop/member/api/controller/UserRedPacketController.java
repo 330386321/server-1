@@ -5,16 +5,12 @@ package com.lawu.eshop.member.api.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.lawu.eshop.member.api.service.MemberService;
-import com.lawu.eshop.member.api.service.UserRedPacketService;
-import com.lawu.eshop.user.dto.MemberDTO;
-import com.lawu.eshop.user.dto.UserDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -44,6 +40,10 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.MemberApiConfig;
+import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.member.api.service.UserRedPacketService;
+import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.utils.QrCodeUtil;
 import com.lawu.eshop.utils.StringUtil;
 
@@ -108,7 +108,15 @@ public class UserRedPacketController extends BaseController {
 	public Result<Page<UserRedPacketDTO>> selectUserRedPacketList(
 			@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam(required = true, value = "查询信息") UserRedPacketSelectParam param) {
-		return userRedPacketService.selectUserRedPacketList(param);
+		 Result<Page<UserRedPacketDTO>>  result=userRedPacketService.selectUserRedPacketList(param);
+		 if(!isSuccess(result)){
+			 return successCreated(result.getRet());
+		 }
+		 List<UserRedPacketDTO> list = result.getModel().getRecords();
+		 for (UserRedPacketDTO userRedPacketDTO : list) {
+			 userRedPacketDTO.setMemberId(Long.parseLong(UserUtil.getCurrentUserIdByToken(token)));
+		 }
+		 return result;
 	}
 
 	@Audit(date = "2017-08-08", reviewer = "孙林青")

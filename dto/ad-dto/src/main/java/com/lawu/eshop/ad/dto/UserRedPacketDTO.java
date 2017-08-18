@@ -37,6 +37,10 @@ public class UserRedPacketDTO {
 	private Date gmtCreate;
 	@ApiModelProperty(value = "红包创建时间格式化后")
 	private String gmtCreateStr;
+	
+	@ApiModelProperty(value = "用户id")
+	private Long memberId;
+	
 
 	/**
 	 * @return the id
@@ -144,4 +148,13 @@ public class UserRedPacketDTO {
 		this.userRedPacketEnum = userRedPacketEnum;
 	}
 
+	public Long getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
+	}
+
+	
 }
