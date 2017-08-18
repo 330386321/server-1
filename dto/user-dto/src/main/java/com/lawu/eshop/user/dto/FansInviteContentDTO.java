@@ -3,6 +3,7 @@ package com.lawu.eshop.user.dto;
 import java.util.Date;
 
 import com.lawu.eshop.user.constants.FansInviteResultEnum;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -34,6 +35,9 @@ public class FansInviteContentDTO {
 	
 	@ApiModelProperty(value = "商家简介", required = true)
 	private String merchantStoreIntro;
+	
+	@ApiModelProperty(value = "门店类型,COMMON--普通,ENTITY--实体", required = true)
+	private ManageTypeEnum manageTypeEnum;
 	
 	private Long fansInviteDetailId;
 	
@@ -147,6 +151,14 @@ public class FansInviteContentDTO {
 
 	public void setMerchantStoreId(Long merchantStoreId) {
 		this.merchantStoreId = merchantStoreId;
+	}
+
+	public ManageTypeEnum getManageTypeEnum() {
+		return manageTypeEnum;
+	}
+
+	public void setManageTypeEnum(ManageTypeEnum manageTypeEnum) {
+		this.manageTypeEnum = manageTypeEnum;
 	}
 	
 }
