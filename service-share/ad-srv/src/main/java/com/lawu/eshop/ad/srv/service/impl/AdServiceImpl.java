@@ -1266,6 +1266,8 @@ public class AdServiceImpl implements AdService {
 		List<AdDO> list = adDOMapper.selectByExample(example2);
 		if (!list.isEmpty()) {
 			for (AdDO ad : list) {
+				//退换积分
+				matransactionMainAddService.sendNotice(ad.getId());
 				// 删除solr中的数据
 				solrService.delSolrDocsById(ad.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 			}
