@@ -317,7 +317,7 @@ public class AdController extends BaseController {
 			return successCreated(ResultCode.AD_CLICK_EXIST);
 		}else{
 			 Result<ClickAdPointDTO> res=adExtendService.clickAd(id, memberId, num);
-			 if(isSuccess(res)){
+			 if(isSuccess(res)){ 
 				 clickAdRecordService.setClickAdRecord(memberId+id+DateUtil.getIntDate());
 			 }
 			return res;

@@ -174,14 +174,20 @@ public class UserRedPacketController extends BaseController {
 	}
 
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
-	@ApiOperation(value = "领取用户红包", notes = "领取用户红包", httpMethod = "POST")
+	@ApiOperation(value = "领取用户红包", notes = "领取用户红包[1002]", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserRedpacketMoney", method = RequestMethod.POST)
 	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMoney(@RequestParam @ApiParam(required = true, value = "手机号") String phoneNumber,
 			@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId) {
 		Result<MemberDTO> user = memberService.getMemberByAccount(phoneNumber);
+		if(!isSuccess(user)){
+			return successCreated(user.getRet());
+		}
+		if(user.getModel()==null){
+			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+		}
 		Result<UserRedpacketMaxMoneyDTO> result = userRedPacketService.getUserRedpacketMoney(redPacketId, user.getModel().getNum());
-		return successCreated(result);
+		return result;
 	}
 
 }
