@@ -11,7 +11,11 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.UserRedPacketService;
+import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.UserDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
+import com.lawu.eshop.ad.dto.UserRedPacketReturnDTO;
+import com.lawu.eshop.ad.dto.UserRedpacketMaxMoneyDTO;
 import com.lawu.eshop.ad.param.UserRedPacketAddParam;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
@@ -59,6 +65,8 @@ public class UserRedPacketController extends BaseController {
 
 	@Autowired
 	private UserRedPacketService userRedPacketService;
+	@Autowired
+	private MemberService memberService;
 	
 	@Autowired
 	private MemberApiConfig memberApiConfig;
@@ -152,21 +160,27 @@ public class UserRedPacketController extends BaseController {
 	@ApiOperation(value = "获取红包中最大值", notes = "获取红包中最大值", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.POST)
-	public Result getUserRedpacketMaxMoney(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId) {
-		Result result = userRedPacketService.getUserRedpacketMaxMoney(redPacketId);
-		return successGet(result);
+	public Result<UserRedPacketReturnDTO> getUserRedpacketMaxMoney(@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId,@RequestParam @ApiParam(required = true, value = "发红包者ID") Long memberId) {
+		Result<UserRedpacketMaxMoneyDTO> result = userRedPacketService.getUserRedpacketMaxMoney(redPacketId);
+		UserRedPacketReturnDTO dto =new UserRedPacketReturnDTO();
+		dto.setMoney(result.getModel().getMoney());
+		Result<UserDTO> user= memberService.findMemberInfo(memberId);
+		if(null==user||null==user.getModel()){
+			return successGet(ResultCode.NOT_FOUND_DATA);
+		}
+		dto.setHeadUrl(user.getModel().getHeadimg());
+		dto.setNickName(user.getModel().getNickname());
+		return successGet(dto);
 	}
 
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "领取用户红包", notes = "领取用户红包", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserRedpacketMoney", method = RequestMethod.POST)
-	public Result getUserRedpacketMoney(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMoney(@RequestParam @ApiParam(required = true, value = "手机号") String phoneNumber,
 			@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId) {
-		HttpServletRequest request = getRequest();
-		String userNum = UserUtil.getCurrentUserNum(request);
-		Result result = userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
+		Result<MemberDTO> user = memberService.getMemberByAccount(phoneNumber);
+		Result<UserRedpacketMaxMoneyDTO> result = userRedPacketService.getUserRedpacketMoney(redPacketId, user.getModel().getNum());
 		return successCreated(result);
 	}
 

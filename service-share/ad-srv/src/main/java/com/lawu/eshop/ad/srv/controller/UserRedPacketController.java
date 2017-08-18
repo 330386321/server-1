@@ -15,6 +15,7 @@ import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
+import com.lawu.eshop.ad.dto.UserRedpacketMaxMoneyDTO;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
@@ -109,9 +110,11 @@ public class UserRedPacketController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "getUserRedpacketMoney", method = RequestMethod.POST)
-	public Result<UserRedpacketMaxMoney> getUserRedpacketMoney(@RequestParam Long redPacketId, @RequestParam String userNum) {
+	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMoney(@RequestParam Long redPacketId, @RequestParam String userNum) {
 		UserRedpacketMaxMoney getMoney = userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
-		return successCreated(getMoney);
+		UserRedpacketMaxMoneyDTO dto =new UserRedpacketMaxMoneyDTO();
+		dto.setMoney(getMoney.getMaxMoney());
+		return successCreated(dto);
 	}
 
 	/**
@@ -120,9 +123,11 @@ public class UserRedPacketController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.POST)
-	public Result<UserRedpacketMaxMoney> getUserRedpacketMaxMoney(@RequestParam Long redPacketId) {
+	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMaxMoney(@RequestParam Long redPacketId) {
 		UserRedpacketMaxMoney maxMoney =userRedPacketService.getUserRedpacketMaxMoney(redPacketId);
-		return successCreated(maxMoney);
+		UserRedpacketMaxMoneyDTO dto =new UserRedpacketMaxMoneyDTO();
+		dto.setMoney(maxMoney.getMaxMoney());
+		return successCreated(dto);
 	}	
 
 	/**

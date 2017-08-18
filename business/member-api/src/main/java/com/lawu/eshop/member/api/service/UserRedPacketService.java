@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
+import com.lawu.eshop.ad.dto.UserRedpacketMaxMoneyDTO;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
 import com.lawu.eshop.framework.core.page.Page;
@@ -58,7 +59,7 @@ public interface UserRedPacketService {
 	 * @return
 	 */
 	@RequestMapping(value="userRedPacket/getUserRedpacketMoney",method=RequestMethod.POST)
-	Result getUserRedpacketMoney(@RequestParam("redPacketId") Long redPacketId, @RequestParam("userNum") String userNum);
+	Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMoney(@RequestParam("redPacketId") Long redPacketId, @RequestParam("userNum") String userNum);
 
 	/**
 	 * 
@@ -66,7 +67,7 @@ public interface UserRedPacketService {
 	 * @return
 	 */
 	@RequestMapping(value="userRedPacket/getUserRedpacketMaxMoney",method=RequestMethod.POST)
-	Result getUserRedpacketMaxMoney(@RequestParam("redPacketId") Long redPacketId);
+	Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMaxMoney(@RequestParam("redPacketId") Long redPacketId);
 
 	/**
 	 * 获取需要充值的金额
