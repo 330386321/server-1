@@ -649,7 +649,7 @@ public class MemberServiceImplTest {
         memberDO.setNum("123");
         memberDO.setGmtCreate(new Date());
         memberDOMapper.insertSelective(memberDO);
-        memberService.freezeAccount("123",true);
+        memberService.freezeAccount("123",true,"违规");
         List<MemberDO> list = memberDOMapper.selectByExample(null);
         Assert.assertEquals(1, list.size());
         Assert.assertEquals(true, list.get(0).getIsFreeze());

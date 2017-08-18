@@ -63,5 +63,6 @@ public interface MemberService {
     Result<Page<AccountDTO>> getAccountList(@RequestBody  AccountParam param);
 
     @RequestMapping(value = "member/freezeAccount", method = RequestMethod.PUT)
-    Result freezeAccount(@RequestParam("num") String num, @RequestParam("isFreeze") Boolean isFreeze);
+    Result freezeAccount(@RequestParam("num") String num, @RequestParam("isFreeze") Boolean isFreeze,
+                         @RequestParam("freezeReason") String freezeReason);
 }

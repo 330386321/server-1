@@ -5,6 +5,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -112,23 +113,23 @@ public class MemberController extends BaseController{
                 return successCreated(ResultCode.FAIL);
             }
             //修改用户冻结状态
-            memberService.freezeAccount(param.getNum(), param.getFreeze());
-            if (param.getFreeze()) {//冻结
+            memberService.freezeAccount(param.getNum(), param.getIsFreeze(),StringUtils.isEmpty(param.getFreezeReason()) ? "解冻" : param.getFreezeReason());
+            if (param.getIsFreeze()) {//冻结
                 tokenService.delMemberRelationshipByAccount(param.getAccount());//删除token
             }
             return successCreated();
         }
         //查询商家冻结状态
         Result<MerchantDTO> merchant = merchantService.getMerchantByNum(param.getNum());
-        if (merchant.getModel() != null && merchant.getModel().getIsFreeze().equals(param.getFreeze())) {
+        if (merchant.getModel() != null && merchant.getModel().getIsFreeze().equals(param.getIsFreeze())) {
             return successCreated(ResultCode.FAIL);
         }
         //冻结商家
-        merchantService.freezeAccount(param.getNum(),param.getFreeze());
+        merchantService.freezeAccount(param.getNum(),param.getIsFreeze(), StringUtils.isEmpty(param.getFreezeReason()) ? "解冻" : param.getFreezeReason());
         Result<MerchantStoreProfileDTO> result = merchantService.getMerchantStoreProfileInfo(param.getId());
         if (ResultCode.MERCHANT_STORE_NO_EXIST == result.getRet()) {
             //未创建门店
-            if (param.getFreeze()) {
+            if (param.getIsFreeze()) {
                 tokenService.delMerchantRelationshipByAccount(param.getAccount());//删除token
             }
             //下架并删除solr广告
@@ -136,7 +137,7 @@ public class MemberController extends BaseController{
 
             return successCreated();
         }
-        if (param.getFreeze()) {
+        if (param.getIsFreeze()) {
             //冻结
             if (MerchantStoreTypeEnum.ENTITY_MERCHANT.equals(result.getModel().getTypeEnum())) {
                 //实体店铺

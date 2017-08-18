@@ -725,6 +725,76 @@ public class MerchantDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andFreezeReasonIsNull() {
+            addCriterion("freeze_reason is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonIsNotNull() {
+            addCriterion("freeze_reason is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonEqualTo(String value) {
+            addCriterion("freeze_reason =", value, "freezeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonNotEqualTo(String value) {
+            addCriterion("freeze_reason <>", value, "freezeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonGreaterThan(String value) {
+            addCriterion("freeze_reason >", value, "freezeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonGreaterThanOrEqualTo(String value) {
+            addCriterion("freeze_reason >=", value, "freezeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonLessThan(String value) {
+            addCriterion("freeze_reason <", value, "freezeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonLessThanOrEqualTo(String value) {
+            addCriterion("freeze_reason <=", value, "freezeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonLike(String value) {
+            addCriterion("freeze_reason like", value, "freezeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonNotLike(String value) {
+            addCriterion("freeze_reason not like", value, "freezeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonIn(List<String> values) {
+            addCriterion("freeze_reason in", values, "freezeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonNotIn(List<String> values) {
+            addCriterion("freeze_reason not in", values, "freezeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonBetween(String value1, String value2) {
+            addCriterion("freeze_reason between", value1, value2, "freezeReason");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeReasonNotBetween(String value1, String value2) {
+            addCriterion("freeze_reason not between", value1, value2, "freezeReason");
+            return (Criteria) this;
+        }
+
         public Criteria andInviterIdIsNull() {
             addCriterion("inviter_id is null");
             return (Criteria) this;

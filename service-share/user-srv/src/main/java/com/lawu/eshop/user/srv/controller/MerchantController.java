@@ -67,7 +67,7 @@ public class MerchantController extends BaseController {
             return successGet(ResultCode.MEMBER_WRONG_PWD);
         }
         if(merchantBO.getIsFreeze()){
-            return successGet(ResultCode.ACCOUNT_IS_FREEZE);
+            return successGet(ResultCode.ACCOUNT_IS_FREEZE, merchantBO.getFreezeReason());
         }
         return successGet(LoginUserConverter.convert(merchantBO));
     }
@@ -347,8 +347,9 @@ public class MerchantController extends BaseController {
     }
 
     @RequestMapping(value = "freezeAccount", method = RequestMethod.PUT)
-    Result freezeAccount(@RequestParam(value ="num" ) String num, @RequestParam(value ="isFreeze" ) Boolean isFreeze){
-        merchantService.freezeAccount(num, isFreeze);
+    Result freezeAccount(@RequestParam(value ="num" ) String num, @RequestParam(value ="isFreeze" ) Boolean isFreeze,
+                         @RequestParam("freezeReason") String freezeReason){
+        merchantService.freezeAccount(num, isFreeze, freezeReason);
         return successCreated();
     }
 
