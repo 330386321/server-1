@@ -5,6 +5,8 @@ package com.lawu.eshop.member.api.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -88,7 +90,10 @@ public class UserRedPacketController extends BaseController {
 		if (param.getTotalMoney().compareTo(UserRedpacketValue.MAX_MONTY) >= 0) {
 			return successCreated(ResultCode.MAX_USERREDPACKET_MONTY);
 		}
-
+		int flag =param.getTotalMoney().divide(new BigDecimal(param.getTotalCount()), 4, RoundingMode.HALF_UP).compareTo(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT));
+		if(flag<0){
+			return successCreated(ResultCode.MIN_USERREDPACKET_MONTY);
+		}
 		UserRedPacketSaveParam saveParam = new UserRedPacketSaveParam();
 		saveParam.setRedPacketPutWayEnum(param.getRedPacketPutWayEnum());
 		saveParam.setTotalCount(param.getTotalCount());

@@ -151,6 +151,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		Criteria cr = example.createCriteria();
 		cr.andUserNumEqualTo(param.getUserNum());
 		cr.andPayTypeIsNotNull();
+		example.setOrderByClause("status asc");
 		example.setOrderByClause("gmt_create desc");
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		List<UserRedPacketDO> listDO = userRedPacketDOMapper.selectByExampleWithRowbounds(example, rowBounds);

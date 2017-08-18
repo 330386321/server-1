@@ -11,6 +11,7 @@ import java.math.BigDecimal;
  */
 public class UserRedpacketValue {
 
-	public static int MAX_USERREDPACKET_COUNT = 99999;
+	public static int MAX_USERREDPACKET_COUNT = 9999;
+	public static String MIN_USERREDPACKET_COUNT = "0.01";
 	public static BigDecimal MAX_MONTY = new BigDecimal(50000);
 }
