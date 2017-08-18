@@ -210,6 +210,8 @@ public class MerchantStoreConverter {
         storeDetailDTO.setAverageScore(storeDetailBO.getAverageScore().compareTo(BigDecimal.valueOf(0)) == 0 ? BigDecimal.valueOf(4) : storeDetailBO.getAverageScore());
         storeDetailDTO.setFeedbackRate(storeDetailBO.getFeedbackRate());
         storeDetailDTO.setBuyNumbers(storeDetailBO.getBuyNumbers());
+        storeDetailDTO.setLongitude(storeDetailBO.getLongitude());
+        storeDetailDTO.setLatitude(storeDetailBO.getLatitude());
         return storeDetailDTO;
     }
 
