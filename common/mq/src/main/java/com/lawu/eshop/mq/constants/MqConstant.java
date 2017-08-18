@@ -189,6 +189,11 @@ public class MqConstant {
 	 */
 	public static final String TAG_ORDERS_TRADING_INCOME_NOTICE = "orders_trading_income_notice";
 
+	/**
+	 * 审核成功或失败后发送消息通知mall-srv模块发送推送消息给商家
+	 */
+	public static final String TAG_PROPERTY_DEPOSIT_DO_RESULT = "property_deposit_do_result";
+
 	/******************************************/
 	/******* product-srv模块tag **********/
 	public static final String TAG_DEL_COMMENT = "del_comment";

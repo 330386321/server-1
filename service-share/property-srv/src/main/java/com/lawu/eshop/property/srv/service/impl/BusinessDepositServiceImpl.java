@@ -5,7 +5,10 @@ import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.order.RefundDepositDoSuccessOrFailureNotification;
 import com.lawu.eshop.mq.dto.user.HandleDepostMessage;
+import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.property.constants.*;
 import com.lawu.eshop.property.dto.BusinessDepositInitDTO;
 import com.lawu.eshop.property.param.*;
@@ -66,6 +69,9 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
     @Autowired
     @Qualifier("handleDepositRefundSuccessDownProductTransactionMainServiceImpl")
     private TransactionMainService<Reply> handleDepositRefundSuccessDownProductTransactionMainServiceImpl;
+
+    @Autowired
+    private MessageProducerService messageProducerService;
 
 
     @Override
@@ -272,6 +278,16 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
             //修改商品下架
             handleDepositRefundSuccessDownProductTransactionMainServiceImpl.sendNotice(param.getBusinessId());
         }
+
+        // 审核成功或失败后发送消息通知mall-srv模块发送推送消息给商家
+        if (BusinessDepositOperEnum.REFUND_SUCCESS.getVal().equals(param.getBusinessDepositOperEnum().getVal()) || BusinessDepositOperEnum.REFUND_FAILURE.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
+            RefundDepositDoSuccessOrFailureNotification notification = new  RefundDepositDoSuccessOrFailureNotification();
+            notification.setDepositId(Long.valueOf(param.getId()));
+            notification.setFailureReason(param.getFailReason() == null ? "" : param.getFailReason());
+            notification.setMerchantNum(param.getUserNum());
+            messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_PROPERTY_DEPOSIT_DO_RESULT, notification);
+        }
+
         return ResultCode.SUCCESS;
     }
 
