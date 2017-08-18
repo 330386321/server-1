@@ -78,4 +78,12 @@ public interface PointDetailService {
 	 * @return
 	 */
 	List<AreaPointConsumeBO> getAreaPointConsume(String bdate, String edate);
+	
+	/**
+	 * 获取区域积分退还统计数据
+	 * @param bdate
+	 * @param edate
+	 * @return
+	 */
+	List<AreaPointConsumeBO> getAreaPointRefund(String bdate, String edate);
 }

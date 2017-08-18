@@ -21,4 +21,6 @@ public interface PointDetailDOMapperExtend {
 	List<ReportAdPointGroupByAreaView> getReportAdPointGroupByArea(@Param("bdate") String bdate, @Param("edate")String edate);
 	
 	List<AreaPointConsumeDOView> getAreaPointConsume(@Param("bdate") String bdate, @Param("edate")String edate);
+	
+	List<AreaPointConsumeDOView> getAreaPointRefund(@Param("bdate") String bdate, @Param("edate")String edate);
 }

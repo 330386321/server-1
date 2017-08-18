@@ -158,4 +158,17 @@ public class PointDetailController extends BaseController {
     	}
 		return successCreated(rtnList);
     }
+    
+    @RequestMapping(value = "getAreaPointRefund", method = RequestMethod.GET)
+    public Result<List<AreaPointConsumeDTO>> getAreaPointRefund(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate) {
+    	List<AreaPointConsumeBO> list = pointDetailService.getAreaPointRefund(bdate, edate);
+    	List<AreaPointConsumeDTO> rtnList = new ArrayList<AreaPointConsumeDTO>();
+    	for(AreaPointConsumeBO BO : list) {
+    		AreaPointConsumeDTO dto = new AreaPointConsumeDTO();
+    		dto.setAreaId(BO.getAreaId());
+    		dto.setTotalPoint(BO.getTotalPoint());
+    		rtnList.add(dto);
+    	}
+		return successCreated(rtnList);
+    }
 }

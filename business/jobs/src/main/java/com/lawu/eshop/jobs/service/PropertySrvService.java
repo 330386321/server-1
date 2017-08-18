@@ -78,6 +78,8 @@ public interface PropertySrvService {
 	@RequestMapping(value = "pointDetail/getAreaPointConsume", method = RequestMethod.GET)
     Result<List<AreaPointConsumeDTO>> getAreaPointConsume(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate);
 	
+	@RequestMapping(value = "pointDetail/getAreaPointRefund", method = RequestMethod.GET)
+    Result<List<AreaPointConsumeDTO>> getAreaPointRefund(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate);
 	
 	@RequestMapping(value = "recharge/selectAreaRechargePoint", method = RequestMethod.GET)
     public Result<List<AreaRechargePointDTO>> selectAreaRechargePoint(@RequestParam("bdate")String bdate, @RequestParam("edate")String edate);

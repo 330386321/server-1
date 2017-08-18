@@ -39,7 +39,7 @@ public class ReportAreaPointConsumeDailyServiceImpl implements ReportAreaPointCo
 		reportAreaPointConsumeDaily.setGmtReport(param.getGmtReport());
 		reportAreaPointConsumeDaily.setMemberPoint(param.getMemberPoint());
 		reportAreaPointConsumeDaily.setMemberRechargePoint(param.getMemberRechargePoint());
-		reportAreaPointConsumeDaily.setMerchantPoint(param.getMemberPoint());
+		reportAreaPointConsumeDaily.setMerchantPoint(param.getMerchantPoint());
 		reportAreaPointConsumeDaily.setMerchantRechargePoint(param.getMerchantRechargePoint());
 		reportAreaPointConsumeDaily.setProvinceId(param.getProvinceId());
 		reportAreaPointConsumeDaily.setTotalPoint(param.getTotalPoint());

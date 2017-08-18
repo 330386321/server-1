@@ -9,12 +9,10 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gexin.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.jobs.service.PropertySrvService;
 import com.lawu.eshop.jobs.service.ReportAreaPointConsumeDailyService;
 import com.lawu.eshop.jobs.service.StatisticsSrvService;
-import com.lawu.eshop.mall.constants.UserTypeEnum;
 import com.lawu.eshop.property.dto.AreaPointConsumeDTO;
 import com.lawu.eshop.property.dto.AreaRechargePointDTO;
 import com.lawu.eshop.statistics.dto.ReportAreaPointConsumeDailyInMonthDTO;
@@ -37,11 +35,18 @@ public class ReportAreaPointConsumeDailyServiceImpl implements ReportAreaPointCo
 		String bdate = DateUtil.getDateFormat(date) + " 00:00:00";
 		String edate = DateUtil.getDateFormat(date) + " 23:59:59";
 		Result<List<AreaPointConsumeDTO>> result = propertySrvService.getAreaPointConsume(bdate, edate);
+		Result<List<AreaPointConsumeDTO>> refundResult = propertySrvService.getAreaPointRefund(bdate, edate);
 		Result<List<AreaRechargePointDTO>> rechargeResult = propertySrvService.selectAreaRechargePoint(bdate, edate);
 
 		Set<Integer> set = new HashSet<Integer>();
 		for(AreaPointConsumeDTO dto : result.getModel()){
 			set.add(dto.getAreaId());
+			for(AreaPointConsumeDTO refundDto : refundResult.getModel()) {
+				if(refundDto.getAreaId().intValue() == dto.getAreaId().intValue() && "B".equals(dto.getType())) {
+					dto.setTotalPoint(dto.getTotalPoint().subtract(refundDto.getTotalPoint()).compareTo(BigDecimal.ZERO) == -1 ? new BigDecimal(0) : dto.getTotalPoint().subtract(refundDto.getTotalPoint()));
+					continue;
+				}
+			}
 		}
 		for(AreaRechargePointDTO dto : rechargeResult.getModel()) {
 			set.add(dto.getAreaId());
@@ -52,12 +57,13 @@ public class ReportAreaPointConsumeDailyServiceImpl implements ReportAreaPointCo
 			param.setMemberPoint(new BigDecimal(0));
 			param.setMerchantPoint(new BigDecimal(0));
 			param.setGmtReport(date);
+			
 			for(AreaPointConsumeDTO dto : result.getModel()) {
-				if(dto.getAreaId() == i && "M".equals(dto.getType())) {
+				if(dto.getAreaId().intValue() == i && "M".equals(dto.getType())) {
 					param.setCityId(dto.getCityId());
 					param.setProvinceId(dto.getProvinceId());
 					param.setMemberPoint(dto.getTotalPoint());
-				} else if(dto.getAreaId() == i && "B".equals(dto.getType())) {
+				} else if(dto.getAreaId().intValue() == i && "B".equals(dto.getType())) {
 					param.setCityId(dto.getCityId());
 					param.setProvinceId(dto.getProvinceId());
 					param.setMerchantPoint(dto.getTotalPoint());
@@ -67,11 +73,11 @@ public class ReportAreaPointConsumeDailyServiceImpl implements ReportAreaPointCo
 			param.setMemberRechargePoint(new BigDecimal(0));
 			param.setMerchantRechargePoint(new BigDecimal(0));
 			for(AreaRechargePointDTO dto : rechargeResult.getModel()) {
-				if(dto.getAreaId() == i && UserTypeEnum.MEMBER.equals(dto.getType())) {
+				if(dto.getAreaId().intValue() == i && "M".equals(dto.getType())) {
 					param.setCityId(dto.getCityId());
 					param.setProvinceId(dto.getProvinceId());
 					param.setMemberRechargePoint(dto.getTotalMoney());
-				} else if(dto.getAreaId() == i && UserTypeEnum.MEMCHANT.equals(dto.getType())) {
+				} else if(dto.getAreaId().intValue() == i && "B".equals(dto.getType())) {
 					param.setCityId(dto.getCityId());
 					param.setProvinceId(dto.getProvinceId());
 					param.setMerchantRechargePoint(dto.getTotalMoney());
@@ -90,7 +96,6 @@ public class ReportAreaPointConsumeDailyServiceImpl implements ReportAreaPointCo
 		if(result.getModel() != null && !result.getModel().isEmpty()) {
 			for(ReportAreaPointConsumeDailyInMonthDTO dto : result.getModel()) {
 				ReportAreaPointConsumeMonthParam param = new ReportAreaPointConsumeMonthParam();
-				System.out.println(JSONObject.toJSON(param));
 				param.setAreaId(dto.getAreaId());
 				param.setCityId(dto.getCityId());
 				param.setProvinceId(dto.getProvinceId());

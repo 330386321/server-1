@@ -235,4 +235,19 @@ public class PointDetailServiceImpl implements PointDetailService {
 		}
 		return rtnList;
 	}
+
+	@Override
+	public List<AreaPointConsumeBO> getAreaPointRefund(String bdate, String edate) {
+		List<AreaPointConsumeDOView> list = pointDetailDOMapperExtend.getAreaPointRefund(bdate, edate);
+		List<AreaPointConsumeBO> rtnList = new ArrayList<AreaPointConsumeBO>();
+		if(list != null && !list.isEmpty()) {
+			for(AreaPointConsumeDOView view : list) {
+				AreaPointConsumeBO BO = new AreaPointConsumeBO();
+				BO.setAreaId(view.getAreaId());
+				BO.setTotalPoint(view.getTotalPoint());
+				rtnList.add(BO);
+			}
+		}
+		return rtnList;
+	}
 }

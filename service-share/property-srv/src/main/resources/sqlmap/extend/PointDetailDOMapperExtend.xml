@@ -68,4 +68,14 @@
 	      	group by area_id,city_id,province_id,left(user_num,1)
 	 </select>
 	 
+	 <select id="getAreaPointRefund"  resultType="com.lawu.eshop.property.srv.domain.extend.AreaPointConsumeDOView" parameterType="java.lang.String">
+	    select
+	    	sum(point) as totalPoint,area_id as areaId
+	    from point_detail
+	    where
+	      	point_type = 112 and area_id is not null  and (gmt_create &gt;= #{bdate} and gmt_create &lt;= #{edate}) 
+	      	group by area_id
+	 </select>
+	 
+	 
 </mapper>
