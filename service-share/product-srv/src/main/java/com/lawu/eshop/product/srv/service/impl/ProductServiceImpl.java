@@ -766,11 +766,14 @@ public class ProductServiceImpl implements ProductService {
         productDOMapper.updateByExampleSelective(productDO, example);
 
         ProductDOExample example2 = new ProductDOExample();
-        example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
+        example2.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
         List<ProductDO> productDOS = productDOMapper.selectByExample(example2);
         if (!productDOS.isEmpty()) {
-            for (ProductDO product : productDOS)
-                solrService.delSolrDocsById(product.getId(), productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+            List<String> ids = new ArrayList<>();
+            for (ProductDO product : productDOS) {
+                ids.add(String.valueOf(product.getId()));
+            }
+            solrService.delSolrDocsByIds(ids, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
 
