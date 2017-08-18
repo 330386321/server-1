@@ -13,9 +13,11 @@ import com.lawu.eshop.user.constants.FansInviteResultEnum;
 import com.lawu.eshop.user.dto.FansInviteContentDTO;
 import com.lawu.eshop.user.param.FansInviteContentExtendParam;
 import com.lawu.eshop.user.srv.bo.FansInviteContentBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.converter.FansInviteContentConverter;
 import com.lawu.eshop.user.srv.service.FansInviteContentService;
 import com.lawu.eshop.user.srv.service.FansInviteResultService;
+import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 
 @RestController
 @RequestMapping(value = "fansInviteContent/")
@@ -26,6 +28,9 @@ public class FansInviteContentController extends BaseController {
 	
 	@Autowired
 	private FansInviteResultService fansInviteResultService;
+	
+	@Autowired
+	private MerchantStoreInfoService merchantStoreInfoService;
 	
 	/**
 	 * 保存邀请内容
@@ -62,8 +67,8 @@ public class FansInviteContentController extends BaseController {
     	FansInviteContentDTO dto = FansInviteContentConverter.converterBoToDto(bo);
     	int i = fansInviteResultService.selectInviteResultById(id);
     	dto.setFansInviteResultEnum(FansInviteResultEnum.getEnum((byte)i));
-    	Result<FansInviteContentDTO> result = new Result<FansInviteContentDTO>();
-    	result.setModel(dto);
-    	return result;
+    	MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(dto.getMerchantId());
+    	dto.setMerchantStoreId(merchantStoreInfoBO.getMerchantStoreId());
+    	return successGet(dto);
     }
 }
