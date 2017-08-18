@@ -148,8 +148,8 @@ public class UserRedPacketController extends BaseController {
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "扫描用户分享红包二维码", notes = "扫描用户分享红包二维码(李洪军)", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@RequestMapping(value = "getUserQrCodeContent/{redPacketId}", method = RequestMethod.GET)
-	public void getUserQrCodeContent(@RequestParam @ApiParam(required = true, value = "用户ID") Long memberId,
+	@RequestMapping(value = "getUserQrCodeContent/{memberId}/{redPacketId}", method = RequestMethod.GET)
+	public void getUserQrCodeContent(@PathVariable @ApiParam(required = true, value = "用户ID") Long memberId,
 			@PathVariable @ApiParam(required = true, value = "红包ID") Long redPacketId) throws IOException {
 		HttpServletResponse response = getResponse();
 		if (memberId == null || memberId <= 0) {
