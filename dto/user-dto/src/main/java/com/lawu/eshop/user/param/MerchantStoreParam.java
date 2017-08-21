@@ -6,6 +6,7 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 
 import io.swagger.annotations.ApiParam;
@@ -165,6 +166,9 @@ public class MerchantStoreParam {
 
     @ApiParam(name = "keywords", value = "关键词")
     private String keywords;
+
+    @ApiParam(name = "merchantStoreStatus", value = "门店状态")
+    private MerchantStatusEnum merchantStoreStatus;
 
 
     public String getName() {
@@ -373,5 +377,13 @@ public class MerchantStoreParam {
 
     public void setKeywords(String keywords) {
         this.keywords = keywords;
+    }
+
+    public MerchantStatusEnum getMerchantStoreStatus() {
+        return merchantStoreStatus;
+    }
+
+    public void setMerchantStoreStatus(MerchantStatusEnum merchantStoreStatus) {
+        this.merchantStoreStatus = merchantStoreStatus;
     }
 }

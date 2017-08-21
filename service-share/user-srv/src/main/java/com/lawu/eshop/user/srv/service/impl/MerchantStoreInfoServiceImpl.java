@@ -474,14 +474,26 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 	@Override
 	@Transactional
 	public void saveMerchantStoreAuditInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId) {
-
+		boolean isShow = true;
 		MerchantStoreAuditDO merchantStoreAuditDO = new MerchantStoreAuditDO();
 		merchantStoreAuditDO.setMerchantStoreId(merchantStoreId);
 		merchantStoreAuditDO.setMerchantId(merchantId);
 		JSONObject json = JSONObject.fromObject(merchantStoreParam);
 		merchantStoreAuditDO.setContent(json.toString());
 		merchantStoreAuditDO.setGmtModified(new Date());
-		merchantStoreAuditDO.setIsShow(true);
+		MerchantStoreDO storeDO = new MerchantStoreDO();
+		storeDO.setId(merchantStoreId);
+		if (MerchantStatusEnum.MERCHANT_STATUS_CANCEL.val.byteValue() == merchantStoreParam.getMerchantStoreStatus().val.byteValue()
+				&& CertifTypeEnum.CERTIF_TYPE_IDCARD.val.byteValue() == merchantStoreParam.getCertifType().val.byteValue()) {
+			// 填写身份证用户需要交保证金
+			isShow = false;
+			//修改店铺状态
+			storeDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_NOT_MONEY.val.byteValue());
+		} else {
+			storeDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val.byteValue());
+		}
+		merchantStoreDOMapper.updateByPrimaryKeySelective(storeDO);
+		merchantStoreAuditDO.setIsShow(isShow);
 		merchantStoreAuditDO.setType(MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val);
 		merchantStoreAuditDO.setGmtCreate(new Date());
 		merchantStoreAuditDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
