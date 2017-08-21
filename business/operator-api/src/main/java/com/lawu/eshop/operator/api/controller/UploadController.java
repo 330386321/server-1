@@ -54,6 +54,7 @@ public class UploadController extends BaseController {
         uparam.setBaseImageDir(operatorApiConfig.getImageUploadUrl());
         uparam.setDir(FileDirConstant.AD_PLAT_FORM_URL);
         uparam.setFileUploadTypeEnum(FileUploadTypeEnum.getEnum(uploadType));
+        uparam.setFfmpegUrl(operatorApiConfig.getFfmpegUrl());
         ClientParams cp = new ClientParams();
         cp.setTrackerServer(operatorApiConfig.getTrackerServers());
         cp.setTrackerHttpPort(operatorApiConfig.getTrackerHttpPort());

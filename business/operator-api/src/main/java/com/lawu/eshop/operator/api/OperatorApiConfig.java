@@ -28,6 +28,8 @@ public class OperatorApiConfig {
     @Value(value="${fastdfs.trackerHttpPort}")
     private int trackerHttpPort;
     
+    @Value(value="${ffmpeg.url}")
+    private String ffmpegUrl;
 
     public String getTrackerServers() {
 		return trackerServers;
@@ -52,4 +54,9 @@ public class OperatorApiConfig {
     public String getVideoUploadUrl() {
         return videoUploadUrl;
     }
+
+	public String getFfmpegUrl() {
+		return ffmpegUrl;
+	}
+    
 }

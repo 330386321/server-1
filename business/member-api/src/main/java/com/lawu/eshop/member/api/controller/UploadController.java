@@ -27,11 +27,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import util.upload.FastDFSResult;
 import util.FastDFSUploadUtils;
+import util.UploadParam;
+import util.upload.FastDFSResult;
 import util.upload.FileUploadDTO;
 import util.upload.FileUploadTypeEnum;
-import util.UploadParam;
 
 /**
  * 统一上传接口
@@ -59,6 +59,7 @@ public class UploadController extends BaseController {
         uparam.setBaseImageDir(memberApiConfig.getImageUploadUrl());
         uparam.setDir(FileDirConstant.DIR_HEAD);
         uparam.setFileUploadTypeEnum(FileUploadTypeEnum.getEnum(uploadType));
+        uparam.setFfmpegUrl(memberApiConfig.getFfmpegUrl());
         ClientParams cp = new ClientParams();
         cp.setTrackerServer(memberApiConfig.getTrackerServers());
         cp.setTrackerHttpPort(memberApiConfig.getTrackerHttpPort());
