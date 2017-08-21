@@ -5,9 +5,7 @@ import javax.validation.Valid;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.param.MemberRedPacketRefundDataParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
-import com.lawu.eshop.property.param.OrderRefundDataParam;
 import com.lawu.eshop.property.srv.service.UserRedPacketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -49,17 +47,18 @@ public class UserRedPacketController extends BaseController {
         return successCreated(retCode);
     }
 
-    @SuppressWarnings("rawtypes")
-    @RequestMapping(value = "doRefund", method = RequestMethod.POST)
-    public Result doRefund(@RequestBody @Valid MemberRedPacketRefundDataParam param, BindingResult result)
-            throws Exception {
-        String message = validate(result);
-        if (message != null) {
-            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
-        }
-
-        int retCode = userRedPacketService.doRefund(param);
-        return successCreated(retCode);
-    }
+//    @SuppressWarnings("rawtypes")
+//    @Deprecated
+//    @RequestMapping(value = "doRefund", method = RequestMethod.POST)
+//    public Result doRefund(@RequestBody @Valid MemberRedPacketRefundDataParam param, BindingResult result)
+//            throws Exception {
+//        String message = validate(result);
+//        if (message != null) {
+//            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+//        }
+//
+//        int retCode = userRedPacketService.doRefund(param);
+//        return successCreated(retCode);
+//    }
 
 }

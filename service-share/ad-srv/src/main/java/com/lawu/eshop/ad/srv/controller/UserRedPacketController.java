@@ -98,7 +98,7 @@ public class UserRedPacketController extends BaseController {
 	@Deprecated
 	@RequestMapping(value = "executeUserRedPacketData", method = RequestMethod.POST)
 	public Result executeUserRedPacketData() {
-		userRedPacketService.executeUserRedPacketData();
+		//userRedPacketService.executeUserRedPacketData();
 		return successCreated();
 	}
 

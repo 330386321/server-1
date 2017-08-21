@@ -13,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 用户红包退款-主事务
+ * 用户红包过期退款-主事务
  */
 @Service("memberRedPacketRefundTransactionMainServiceImpl")
-@CompensatingTransactionMain(value = TransactionConstant.USER_REDPACKED_MONEY_ADD, topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_USER_REDPACKET_CUT_MONTY)
+@CompensatingTransactionMain(value = TransactionConstant.USER_REDPACKED_CANNEL_REFUND_MONEY, topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_USER_REDPACKET_CANNEL_REFUND_MONEY)
 public class MemberRedPacketRefundTransactionMainServiceImpl extends AbstractTransactionMainService<MemberRedPacketBackNotification, Reply> {
 
     @Autowired
@@ -25,15 +25,15 @@ public class MemberRedPacketRefundTransactionMainServiceImpl extends AbstractTra
     @Override
     public MemberRedPacketBackNotification selectNotification(Long redPacketId) {
 
-    	UserPacketRefundParam userRedPacketDO = userRedPacketService.selectBackTotalMoney(redPacketId);
+        UserPacketRefundParam userRedPacketDO = userRedPacketService.selectBackTotalMoney(redPacketId);
 
-    	MemberRedPacketBackNotification notification = new MemberRedPacketBackNotification();
+        MemberRedPacketBackNotification notification = new MemberRedPacketBackNotification();
 
-    	notification.setRedPacketId(userRedPacketDO.getRedId().toString());
-    	notification.setRefundMoney(userRedPacketDO.getRefundMoney().toString());
-    	notification.setTradeNo(userRedPacketDO.getThirdNo());
-    	notification.setTransactionPayTypeEnum(TransactionPayTypeEnum.getEnum(userRedPacketDO.getPayType()));
-    	notification.setUserNum(userRedPacketDO.getUserNum());
+        notification.setRedPacketId(userRedPacketDO.getRedId().toString());
+        notification.setRefundMoney(userRedPacketDO.getRefundMoney().toString());
+        notification.setTradeNo(userRedPacketDO.getThirdNo());
+        notification.setTransactionPayTypeEnum(TransactionPayTypeEnum.getEnum(userRedPacketDO.getPayType()));
+        notification.setUserNum(userRedPacketDO.getUserNum());
         return notification;
     }
 }

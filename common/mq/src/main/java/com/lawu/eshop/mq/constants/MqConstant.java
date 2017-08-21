@@ -52,9 +52,11 @@ public class MqConstant {
 
 	public static final String TAG_AD_USER_SWEEP_RED = "rp_user_sweep_red";
 
-	public static final String TAG_AD_USER_REDPACKET_CUT_MONTY = "ad_user_redpacket_cut_monty";
-	
-	public static final String TAG_AD_USER_REDPACKET_ADD_MONTY = "ad_user_redpacket_add_monty";
+	//用户红包注销退回
+	public static final String TAG_AD_USER_REDPACKET_CANNEL_REFUND_MONEY = "tag_ad_user_redpacket_cannel_refund_money";
+
+	//用户领取红包（用户发的红包）
+	public static final String TAG_USER_GET_AD_USER_REDPACKET = "tag_user_get_ad_user_redpacket";
 
 	/******************************************/
 	/******* mall-srv模块tag **********/

@@ -85,9 +85,9 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
     public int doRefund(MemberRedPacketRefundDataParam param) throws Exception {
 
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-        tdsParam.setTitle(TransactionTitleEnum.MEMBER_RED_PACKET.getVal());
+        tdsParam.setTitle(MemberTransactionTypeEnum.USER_REDPACKET_ADD.getName());
         tdsParam.setUserNum(param.getUserNum());
-        tdsParam.setTransactionType(MemberTransactionTypeEnum.REFUND_ORDERS.getValue());
+        tdsParam.setTransactionType(MemberTransactionTypeEnum.USER_REDPACKET_ADD.getValue());
         tdsParam.setTransactionAccount("");
         tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
         tdsParam.setAmount(new BigDecimal(param.getRefundMoney()));

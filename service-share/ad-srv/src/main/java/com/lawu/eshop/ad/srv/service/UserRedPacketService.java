@@ -43,8 +43,8 @@ public interface UserRedPacketService {
 	/**
 	 * 
 	 */
-	@Deprecated
-	void executeUserRedPacketData();
+//	@Deprecated
+//	void executeUserRedPacketData();
 
 	/**
 	 * 用户领取红包

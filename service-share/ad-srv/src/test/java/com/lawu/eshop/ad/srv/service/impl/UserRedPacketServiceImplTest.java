@@ -105,7 +105,7 @@ public class UserRedPacketServiceImplTest {
 		param.setUserAccount("15000000000");
 		param.setUserNum("M000001");
 		userRedPacketService.addUserRedPacket(param);
-		userRedPacketService.executeUserRedPacketData();
+//		userRedPacketService.executeUserRedPacketData();
 	}
 
 	@Transactional

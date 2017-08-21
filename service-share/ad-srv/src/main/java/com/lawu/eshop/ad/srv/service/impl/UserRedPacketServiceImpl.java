@@ -68,7 +68,11 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	@Autowired
 	@Qualifier("memberRedPacketRefundTransactionMainServiceImpl")
 	private TransactionMainService<Reply> memberRedPacketRefundTransactionMainServiceImpl;
-	
+
+	@Autowired
+	@Qualifier("memberGetRedPacketTransactionMainServiceImpl")
+	private TransactionMainService<Reply> memberGetRedPacketTransactionMainServiceImpl;
+
 	@Autowired
 	private TransactionStatusService transactionStatusService;
 
@@ -196,38 +200,38 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	/**
 	 * 红包过期定时任务
 	 */
-	@Deprecated
-	@Override
-	@Transactional
-	public void executeUserRedPacketData() {
-		Date date = DateUtil.getDayBefore(new Date());// 前一天的时间
-		UserRedPacketDOExample example = new UserRedPacketDOExample();
-		Criteria cr = example.createCriteria();
-		cr.andGmtCreateLessThan(date);
-		cr.andStatusEqualTo(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
-		List<UserRedPacketDO> list = userRedPacketDOMapper.selectByExample(example);
-		if (!list.isEmpty()) {
-			for (int i = 0; i < list.size(); i++) {
-				UserRedPacketDO userRed = list.get(i);
-				UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
-				userTakedExample.createCriteria().andUserRedPackIdEqualTo(userRed.getId())
-						.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-				List<UserTakedRedPacketDO> listTaked = userTakedRedPacketDOMapper.selectByExample(userTakedExample);
-				BigDecimal totalBackMoney = getTotalBackMoney(listTaked);
-				userRed.setGmtModified(new Date());
-				userRed.setStatus(UserRedPacketEnum.USER_STATUS_OUT.val);
-				userRedPacketDOMapper.updateByPrimaryKeySelective(userRed);
-				UserRedPacketNotification notification = new UserRedPacketNotification();
-				notification.setId(userRed.getId());
-				notification.setMoney(totalBackMoney);
-				notification.setUserNum(userRed.getUserNum());
-				// 退款
-				transactionStatusService.save(userRed.getId(), TransactionConstant.USER_REDPACKED_MONEY_ADD);
-				messageProducerService.sendMessage(MqConstant.TOPIC_AD_SRV, MqConstant.TAG_AD_USER_REDPACKET_ADD_MONTY,
-						notification);
-			}
-		}
-	}
+//	@Deprecated
+//	@Override
+//	@Transactional
+//	public void executeUserRedPacketData() {
+//		Date date = DateUtil.getDayBefore(new Date());// 前一天的时间
+//		UserRedPacketDOExample example = new UserRedPacketDOExample();
+//		Criteria cr = example.createCriteria();
+//		cr.andGmtCreateLessThan(date);
+//		cr.andStatusEqualTo(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
+//		List<UserRedPacketDO> list = userRedPacketDOMapper.selectByExample(example);
+//		if (!list.isEmpty()) {
+//			for (int i = 0; i < list.size(); i++) {
+//				UserRedPacketDO userRed = list.get(i);
+//				UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
+//				userTakedExample.createCriteria().andUserRedPackIdEqualTo(userRed.getId())
+//						.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+//				List<UserTakedRedPacketDO> listTaked = userTakedRedPacketDOMapper.selectByExample(userTakedExample);
+//				BigDecimal totalBackMoney = getTotalBackMoney(listTaked);
+//				userRed.setGmtModified(new Date());
+//				userRed.setStatus(UserRedPacketEnum.USER_STATUS_OUT.val);
+//				userRedPacketDOMapper.updateByPrimaryKeySelective(userRed);
+//				UserRedPacketNotification notification = new UserRedPacketNotification();
+//				notification.setId(userRed.getId());
+//				notification.setMoney(totalBackMoney);
+//				notification.setUserNum(userRed.getUserNum());
+//				// 退款
+//				transactionStatusService.save(userRed.getId(), TransactionConstant.USER_REDPACKED_MONEY_ADD);
+//				messageProducerService.sendMessage(MqConstant.TOPIC_AD_SRV, MqConstant.TAG_AD_USER_REDPACKET_ADD_MONTY,
+//						notification);
+//			}
+//		}
+//	}
 	
 	public UserPacketRefundParam selectBackTotalMoney(Long userRedpacketId){
 		UserRedPacketDO userRedpacket = userRedPacketDOMapper.selectByPrimaryKey(userRedpacketId);
@@ -304,15 +308,9 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 				userRed.setStatus(UserRedPacketEnum.USER_STATUS_OVER.val);
 				userRedPacketDOMapper.updateByPrimaryKeySelective(userRed);
 			}
-			//给用户加余额
-			UserRedPacketNotification notification = new UserRedPacketNotification();
-			notification.setId(userTabed.getId());
-			notification.setMoney(userTabed.getMoney());
-			notification.setUserNum(userNum);
-			// 用户领取红包
-			transactionStatusService.save(userTabed.getId(), TransactionConstant.USER_REDPACKED_GET_MONEY);
-			messageProducerService.sendMessage(MqConstant.TOPIC_AD_SRV, MqConstant.TAG_AD_USER_REDPACKET_ADD_MONTY,
-					notification);
+
+			memberGetRedPacketTransactionMainServiceImpl.sendNotice(userTabed.getId());
+
 			getMoney.setMaxMoney(userTabed.getMoney());
 		}
 		return getMoney;
