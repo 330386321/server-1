@@ -34,8 +34,8 @@ public class AdPlatformOperatorDTO {
 	@ApiModelProperty(value = "门店名称")
 	private String merchantName;
 	
-	@ApiModelProperty(value = "商品名称")
-	private String productName;
+	@ApiModelProperty(value = "关联名称")
+	private String relateName;
 
 	@ApiModelProperty(value = "创建日期")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -122,12 +122,13 @@ public class AdPlatformOperatorDTO {
 		this.merchantName = merchantName;
 	}
 
-	public String getProductName() {
-		return productName;
+
+	public String getRelateName() {
+		return relateName;
 	}
 
-	public void setProductName(String productName) {
-		this.productName = productName;
+	public void setRelateName(String relateName) {
+		this.relateName = relateName;
 	}
 
 	public PositionEnum getPositionEnum() {
