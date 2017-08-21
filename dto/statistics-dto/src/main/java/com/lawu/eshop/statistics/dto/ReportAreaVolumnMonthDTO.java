@@ -5,18 +5,25 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class ReportAreaVolumnMonthDTO {
     private Long id;
 
-    private BigDecimal reportTotalMoney;
-
-    private Byte type;
-
-    private Integer provinceId;
-
-    private Integer cityId;
-
-    private Integer areaId;
+    @ApiModelProperty(value = "总销售额")
+	private BigDecimal reportTotalMoney;
+	
+	@ApiModelProperty(value = "消费类型: 1--买单, 2--购物")
+	private Byte type;
+	
+	@ApiModelProperty(value = "省编号")
+	private Integer provinceId;
+	
+	@ApiModelProperty(value = "市编号")
+	private Integer cityId;
+	
+	@ApiModelProperty(value = "区编号")
+	private Integer areaId;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date gmtReport;

@@ -1,22 +1,7 @@
 package com.lawu.eshop.agent.api.controller;
 
 import javax.validation.Valid;
-import java.util.List;
 
-import com.lawu.eshop.agent.api.service.ReportAreaRechargeService;
-import com.lawu.eshop.agent.api.service.ReportAreaUserRegDailyService;
-import com.lawu.eshop.authorization.annotation.Authorization;
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.statistics.dto.AgentAreaRechargeQReturnDTO;
-import com.lawu.eshop.statistics.dto.AgentUserRegUserListDTO;
-import com.lawu.eshop.statistics.param.AgentReportParam;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,6 +9,20 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.lawu.eshop.agent.api.service.ReportAreaRechargeService;
+import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.statistics.dto.AgentAreaRechargeQReturnDTO;
+import com.lawu.eshop.statistics.param.AgentReportParam;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 
 /**
  * 充值统计查询

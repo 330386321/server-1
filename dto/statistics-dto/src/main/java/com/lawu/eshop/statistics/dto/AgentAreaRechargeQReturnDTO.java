@@ -1,9 +1,7 @@
 package com.lawu.eshop.statistics.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 /**

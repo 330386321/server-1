@@ -2,20 +2,28 @@ package com.lawu.eshop.statistics.dto;
 
 import java.math.BigDecimal;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class ReportAreaPointConsumeMonthForCircleDTO {
 
+	@ApiModelProperty(value = "会员消费总积分")
 	private BigDecimal memberPoint;
 	
+	@ApiModelProperty(value = "商家消费总积分")
 	private BigDecimal merchantPoint;
 	
+	@ApiModelProperty(value = "会员充值总积分")
 	private BigDecimal memberRechargePoint;
 	
+	@ApiModelProperty(value = "商家充值总积分")
 	private BigDecimal merchantRechargePoint;
 	
+	@ApiModelProperty(value = "总积分")
 	private BigDecimal totalPoint;
 	
+	@ApiModelProperty(value = "充值总积分")
 	private BigDecimal totalRechargePoint;
-
+	
 	public BigDecimal getMemberPoint() {
 		return memberPoint;
 	}

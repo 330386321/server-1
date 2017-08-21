@@ -5,10 +5,13 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class ReportAreaAdPointMonthDTO {
 
     private Long id;
 
+    @ApiModelProperty(value = "投放总积分")
     private BigDecimal reportTotalPoint;
 
     private Integer provinceId;
@@ -17,6 +20,7 @@ public class ReportAreaAdPointMonthDTO {
 
     private Integer areaId;
 
+    @ApiModelProperty(value = "日期")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date gmtReport;
 
