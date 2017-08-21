@@ -19,6 +19,22 @@ public class AdMemberParam extends AbstractPageParam{
 
 	@ApiParam (name="orderTypeEnum", value = "AD_TORLEPOINT_DESC 总积分倒序  AD_POINT_DESC 单个积分倒序")
 	private OrderTypeEnum orderTypeEnum;
+	
+	/**
+	 * 定位区域
+	 */
+	@ApiParam(value="定位区域")
+	private String transRegionPath;
+
+	public String getTransRegionPath() {
+		return transRegionPath;
+	}
+
+
+	public void setTransRegionPath(String transRegionPath) {
+		this.transRegionPath = transRegionPath;
+	}
+
 
 	public AdTypeEnum getTypeEnum() {
 		return typeEnum;

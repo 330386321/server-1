@@ -153,7 +153,7 @@ public class AdController extends BaseController {
 	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
 	@ApiOperation(value = "会员查询广告列表(精选推荐)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
-	@Authorization
+	//@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectChoiceness", method = RequestMethod.GET)
 	public Result<Page<AdDTO>> selectChoiceness(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdChoicenessParam param) {

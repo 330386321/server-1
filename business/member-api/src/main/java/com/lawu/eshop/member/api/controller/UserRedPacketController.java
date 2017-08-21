@@ -88,7 +88,7 @@ public class UserRedPacketController extends BaseController {
 		if (param.getTotalCount() > UserRedpacketValue.MAX_USERREDPACKET_COUNT) {
 			return successCreated(ResultCode.MAX_USERREDPACKET_COUNT);
 		}
-		if (param.getTotalMoney().compareTo(UserRedpacketValue.MAX_MONTY) >= 0) {
+		if (param.getTotalMoney().compareTo(UserRedpacketValue.MAX_MONTY) > 0) {
 			return successCreated(ResultCode.MAX_USERREDPACKET_MONTY);
 		}
 		int flag =param.getTotalMoney().divide(new BigDecimal(param.getTotalCount()), 4, RoundingMode.HALF_UP).compareTo(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT));

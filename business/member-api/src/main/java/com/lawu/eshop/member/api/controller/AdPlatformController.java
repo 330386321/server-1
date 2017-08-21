@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.ad.constants.AdPlatformFlatTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
-import com.lawu.eshop.ad.dto.AdPlatformFlatDTO;
 import com.lawu.eshop.ad.dto.AdPlatformVideoFlatDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindEginParam;
 import com.lawu.eshop.ad.param.AdPlatformInternalParam;
@@ -72,19 +70,26 @@ public class AdPlatformController extends BaseController {
     @RequestMapping(value = "selAdPlatformPositionAd", method = RequestMethod.GET)
     public Result<AdPlatformVideoFlatDTO> selAdPlatformPositionAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPlatformFindEginParam query) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
-		// 获取查询广告所需要的信息
-		Result<AdQueryMemberInfoDTO> adQueryMemberInfoResult = memberService.adQueryMemberInfo(memberId);
-		if (!isSuccess(adQueryMemberInfoResult)) {
-			return successGet(adQueryMemberInfoResult);
-		}
-		AdQueryMemberInfoDTO adQueryMemberInfoDTO = adQueryMemberInfoResult.getModel();
     	AdPlatformInternalParam param = new AdPlatformInternalParam();
     	param.setLatitude(query.getLatitude());
     	param.setLongitude(query.getLongitude());
-    	param.setMerchantIds(adQueryMemberInfoDTO.getFansList());
-    	if (StringUtils.isNotBlank(adQueryMemberInfoDTO.getRegionPath())) {
-    		param.setAreas(Arrays.asList(StringUtils.split(adQueryMemberInfoDTO.getRegionPath(), "/")));
-		}
+    	if(memberId==0){
+    		if (StringUtils.isNotBlank(query.getTransRegionPath())) {
+    			param.setAreas(Arrays.asList(StringUtils.split(query.getTransRegionPath(), "/")));
+    		}
+    	}else{
+    		// 获取查询广告所需要的信息
+    		Result<AdQueryMemberInfoDTO> adQueryMemberInfoResult = memberService.adQueryMemberInfo(memberId);
+    		if (!isSuccess(adQueryMemberInfoResult)) {
+    			return successGet(adQueryMemberInfoResult);
+    		}
+    		AdQueryMemberInfoDTO adQueryMemberInfoDTO = adQueryMemberInfoResult.getModel();
+    		param.setMerchantIds(adQueryMemberInfoDTO.getFansList());
+    		if (StringUtils.isNotBlank(adQueryMemberInfoDTO.getRegionPath())) {
+    			param.setAreas(Arrays.asList(StringUtils.split(adQueryMemberInfoDTO.getRegionPath(), "/")));
+    		}
+    	}
+    	
         return adPlatformService.selAdPlatformPositionAd(param);
     }
     
