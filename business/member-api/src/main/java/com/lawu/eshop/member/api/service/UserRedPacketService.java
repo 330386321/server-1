@@ -16,7 +16,7 @@ import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
 import com.lawu.eshop.ad.dto.UserRedpacketMaxMoneyDTO;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
-import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
+import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 
@@ -42,7 +42,7 @@ public interface UserRedPacketService {
 	 * @return
 	 */
 	@RequestMapping(value="userRedPacket/selectUserRedPacketList",method=RequestMethod.POST)
-	Result<Page<UserRedPacketDTO>> selectUserRedPacketList(@RequestBody UserRedPacketSelectParam param);
+	Result<Page<UserRedPacketDTO>> selectUserRedPacketList(@RequestBody UserRedPacketSelectNumParam param);
 
 	/**
 	 * 判断是否还有红包可以领取

@@ -6,7 +6,7 @@ package com.lawu.eshop.ad.srv.service;
 import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.ad.param.UserPacketRefundParam;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
-import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
+import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
 import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
@@ -32,7 +32,7 @@ public interface UserRedPacketService {
 	 * @param param
 	 * @return
 	 */
-	Page<UserRedPacketBO> selectUserRedPacketList(UserRedPacketSelectParam param);
+	Page<UserRedPacketBO> selectUserRedPacketList(UserRedPacketSelectNumParam param);
 
 	/**
 	 * @param redPacketId
@@ -40,11 +40,6 @@ public interface UserRedPacketService {
 	 */
 	boolean isExistsRedPacket(Long redPacketId);
 
-	/**
-	 * 
-	 */
-//	@Deprecated
-//	void executeUserRedPacketData();
 
 	/**
 	 * 用户领取红包

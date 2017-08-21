@@ -30,6 +30,7 @@ import com.lawu.eshop.ad.dto.UserRedPacketReturnDTO;
 import com.lawu.eshop.ad.dto.UserRedpacketMaxMoneyDTO;
 import com.lawu.eshop.ad.param.UserRedPacketAddParam;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
+import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
 import com.lawu.eshop.ad.param.UserRedpacketValue;
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -113,7 +114,11 @@ public class UserRedPacketController extends BaseController {
 	public Result<Page<UserRedPacketDTO>> selectUserRedPacketList(
 			@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam(required = true, value = "查询信息") UserRedPacketSelectParam param) {
-		 Result<Page<UserRedPacketDTO>>  result=userRedPacketService.selectUserRedPacketList(param);
+		 UserRedPacketSelectNumParam userparam =new UserRedPacketSelectNumParam();
+		 userparam.setCurrentPage(param.getCurrentPage());
+		 userparam.setPageSize(param.getPageSize());
+		 userparam.setNum(UserUtil.getCurrentUserNumByToken(token));
+		 Result<Page<UserRedPacketDTO>>  result=userRedPacketService.selectUserRedPacketList(userparam);
 		 if(!isSuccess(result)){
 			 return successCreated(result.getRet());
 		 }

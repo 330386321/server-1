@@ -17,7 +17,7 @@ import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
 import com.lawu.eshop.ad.dto.UserRedpacketMaxMoneyDTO;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
-import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
+import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
 import com.lawu.eshop.ad.srv.converter.UserRedPacketConverter;
@@ -67,7 +67,7 @@ public class UserRedPacketController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "selectUserRedPacketList", method = RequestMethod.POST)
-	public Result<Page<UserRedPacketDTO>> selectUserRedPacketList(@RequestBody UserRedPacketSelectParam param) {
+	public Result<Page<UserRedPacketDTO>> selectUserRedPacketList(@RequestBody UserRedPacketSelectNumParam param) {
 		Page<UserRedPacketBO> pageBO = userRedPacketService.selectUserRedPacketList(param);
 		Page<UserRedPacketDTO> pageDTO = new Page<UserRedPacketDTO>();
 		pageDTO.setCurrentPage(pageBO.getCurrentPage());

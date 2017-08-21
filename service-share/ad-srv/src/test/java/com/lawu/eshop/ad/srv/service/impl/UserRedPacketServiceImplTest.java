@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
+import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
@@ -58,10 +59,10 @@ public class UserRedPacketServiceImplTest {
 		param.setUserAccount("15000000000");
 		param.setUserNum("M000001");
 		UserRedPacketAddReturnBO ubo = userRedPacketService.addUserRedPacket(param);
-		UserRedPacketSelectParam query = new UserRedPacketSelectParam();
+		UserRedPacketSelectNumParam query = new UserRedPacketSelectNumParam();
 		query.setCurrentPage(1);
 		query.setPageSize(10);
-		query.setUserNum("M000001");
+		query.setNum("M000001");
 		Page<UserRedPacketBO> userPage = userRedPacketService.selectUserRedPacketList(query);
 		UserRedPacketBO bo = userPage.getRecords().get(0);
 		Assert.assertEquals(param.getUserAccount(), bo.getUserAccount());
@@ -82,10 +83,10 @@ public class UserRedPacketServiceImplTest {
 		param.setUserAccount("15000000000");
 		param.setUserNum("M000001");
 		userRedPacketService.addUserRedPacket(param);
-		UserRedPacketSelectParam query = new UserRedPacketSelectParam();
+		UserRedPacketSelectNumParam query = new UserRedPacketSelectNumParam();
 		query.setCurrentPage(1);
 		query.setPageSize(10);
-		query.setUserNum("M000001");
+		query.setNum("M000001");
 		Page<UserRedPacketBO> userPage = userRedPacketService.selectUserRedPacketList(query);
 		List<UserRedPacketBO> list = userPage.getRecords();
 		for (int i = 0; i < list.size(); i++) {
@@ -119,10 +120,10 @@ public class UserRedPacketServiceImplTest {
 		param.setUserAccount("15000000000");
 		param.setUserNum("M000001");
 		userRedPacketService.addUserRedPacket(param);
-		UserRedPacketSelectParam query = new UserRedPacketSelectParam();
+		UserRedPacketSelectNumParam query = new UserRedPacketSelectNumParam();
 		query.setCurrentPage(1);
 		query.setPageSize(10);
-		query.setUserNum("M000001");
+		query.setNum("M000001");
 		Page<UserRedPacketBO> userPage = userRedPacketService.selectUserRedPacketList(query);
 		UserRedPacketBO bo = userPage.getRecords().get(0);
 		userRedPacketService.getUserRedpacketMoney(bo.getId(), bo.getUserNum());
@@ -141,10 +142,10 @@ public class UserRedPacketServiceImplTest {
 		param.setUserAccount("15000000000");
 		param.setUserNum("M000001");
 		userRedPacketService.addUserRedPacket(param);
-		UserRedPacketSelectParam query = new UserRedPacketSelectParam();
+		UserRedPacketSelectNumParam query = new UserRedPacketSelectNumParam();
 		query.setCurrentPage(1);
 		query.setPageSize(10);
-		query.setUserNum("M000001");
+		query.setNum("M000001");
 		Page<UserRedPacketBO> userPage = userRedPacketService.selectUserRedPacketList(query);
 		UserRedPacketBO bo = userPage.getRecords().get(0);
 		UserRedpacketMaxMoney maxMoney = userRedPacketService.getUserRedpacketMaxMoney(bo.getId());

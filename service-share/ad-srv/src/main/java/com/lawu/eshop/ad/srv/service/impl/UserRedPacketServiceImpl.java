@@ -16,11 +16,10 @@ import com.lawu.eshop.ad.constants.UserRedPacketEnum;
 import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.ad.param.UserPacketRefundParam;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
-import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
+import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
 import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
-import com.lawu.eshop.ad.srv.constants.TransactionConstant;
 import com.lawu.eshop.ad.srv.converter.UserRedPacketConverter;
 import com.lawu.eshop.ad.srv.domain.UserRedPacketDO;
 import com.lawu.eshop.ad.srv.domain.UserRedPacketDOExample;
@@ -34,11 +33,7 @@ import com.lawu.eshop.ad.srv.mapper.extend.UserTakedRedpacketBOMapperExtend;
 import com.lawu.eshop.ad.srv.service.UserRedPacketService;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
-import com.lawu.eshop.compensating.transaction.TransactionStatusService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.mq.constants.MqConstant;
-import com.lawu.eshop.mq.dto.ad.UserRedPacketNotification;
-import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.utils.DateUtil;
 
 import org.apache.ibatis.session.RowBounds;
@@ -63,18 +58,12 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	@Autowired
 	private UserTakedRedpacketBOMapperExtend userTakedRedpacketBOMapperExtend;
 	@Autowired
-	private MessageProducerService messageProducerService;
-
-	@Autowired
 	@Qualifier("memberRedPacketRefundTransactionMainServiceImpl")
 	private TransactionMainService<Reply> memberRedPacketRefundTransactionMainServiceImpl;
 
 	@Autowired
 	@Qualifier("memberGetRedPacketTransactionMainServiceImpl")
 	private TransactionMainService<Reply> memberGetRedPacketTransactionMainServiceImpl;
-
-	@Autowired
-	private TransactionStatusService transactionStatusService;
 
 	/**
 	 * 新增用户红包
@@ -150,10 +139,10 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	 */
 	@Override
 	@Transactional
-	public Page<UserRedPacketBO> selectUserRedPacketList(UserRedPacketSelectParam param) {
+	public Page<UserRedPacketBO> selectUserRedPacketList(UserRedPacketSelectNumParam param) {
 		UserRedPacketDOExample example = new UserRedPacketDOExample();
 		Criteria cr = example.createCriteria();
-		cr.andUserNumEqualTo(param.getUserNum());
+		cr.andUserNumEqualTo(param.getNum());
 		cr.andPayTypeIsNotNull();
 		example.setOrderByClause("status asc");
 		example.setOrderByClause("gmt_create desc");
@@ -197,42 +186,6 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		}
 	}
 
-	/**
-	 * 红包过期定时任务
-	 */
-//	@Deprecated
-//	@Override
-//	@Transactional
-//	public void executeUserRedPacketData() {
-//		Date date = DateUtil.getDayBefore(new Date());// 前一天的时间
-//		UserRedPacketDOExample example = new UserRedPacketDOExample();
-//		Criteria cr = example.createCriteria();
-//		cr.andGmtCreateLessThan(date);
-//		cr.andStatusEqualTo(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
-//		List<UserRedPacketDO> list = userRedPacketDOMapper.selectByExample(example);
-//		if (!list.isEmpty()) {
-//			for (int i = 0; i < list.size(); i++) {
-//				UserRedPacketDO userRed = list.get(i);
-//				UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
-//				userTakedExample.createCriteria().andUserRedPackIdEqualTo(userRed.getId())
-//						.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-//				List<UserTakedRedPacketDO> listTaked = userTakedRedPacketDOMapper.selectByExample(userTakedExample);
-//				BigDecimal totalBackMoney = getTotalBackMoney(listTaked);
-//				userRed.setGmtModified(new Date());
-//				userRed.setStatus(UserRedPacketEnum.USER_STATUS_OUT.val);
-//				userRedPacketDOMapper.updateByPrimaryKeySelective(userRed);
-//				UserRedPacketNotification notification = new UserRedPacketNotification();
-//				notification.setId(userRed.getId());
-//				notification.setMoney(totalBackMoney);
-//				notification.setUserNum(userRed.getUserNum());
-//				// 退款
-//				transactionStatusService.save(userRed.getId(), TransactionConstant.USER_REDPACKED_MONEY_ADD);
-//				messageProducerService.sendMessage(MqConstant.TOPIC_AD_SRV, MqConstant.TAG_AD_USER_REDPACKET_ADD_MONTY,
-//						notification);
-//			}
-//		}
-//	}
-	
 	public UserPacketRefundParam selectBackTotalMoney(Long userRedpacketId){
 		UserRedPacketDO userRedpacket = userRedPacketDOMapper.selectByPrimaryKey(userRedpacketId);
 		UserPacketRefundParam param =UserRedPacketConverter.convertReFund(userRedpacket);

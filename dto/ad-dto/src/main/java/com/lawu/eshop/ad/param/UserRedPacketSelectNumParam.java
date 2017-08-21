@@ -11,7 +11,16 @@ import com.lawu.eshop.framework.core.page.AbstractPageParam;
  * @author lihj
  * @date 2017年8月4日
  */
-public class UserRedPacketSelectParam extends AbstractPageParam {
+public class UserRedPacketSelectNumParam extends AbstractPageParam {
 
+	private String num;
 
+	public String getNum() {
+		return num;
+	}
+
+	public void setNum(String num) {
+		this.num = num;
+	}
+	
 }
