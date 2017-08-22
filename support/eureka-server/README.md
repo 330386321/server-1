@@ -4,6 +4,7 @@
 ##启动容器
 ```Bash
 sudo docker run --name eureka-server -it -d -p 8888:8888 \
+    --network=eshop_eshopNet \
     -v /etc/localtime:/etc/localtime:ro \
     registry.eshop.com/eureka-server --spring.profiles.active=product1
 ```

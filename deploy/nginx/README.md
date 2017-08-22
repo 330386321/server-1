@@ -51,6 +51,31 @@ docker run --name nginx -it -d -p 80:80 \
     nginx:1.10.2-alpine
 ```
 
+正式环境
+----
+```bash
+docker run --name nginx -it -d -p 80:80 \
+    -v /usr/local/eshop/nginx/nginx_product.conf:/etc/nginx/nginx.conf:ro \
+    -v /usr/local/eshop/media:/usr/local/eshop/media:ro \
+    -v /usr/local/eshop/html:/usr/local/eshop/html:ro \
+    -v /etc/localtime:/etc/localtime:ro \
+    nginx:1.10.2-alpine        
+```
+
+正式环境外部映射说明
+----
+http://app.lovelawu.com/member -> http://192.168.100.73/member、http://192.168.100.74/member
+http://app.lovelawu.com/merchant -> http://192.168.100.73/merchant、http://192.168.100.74/merchant
+http://app.lovelawu.com/operator -> http://192.168.100.73/operator、http://192.168.100.74/operator
+http://app.lovelawu.com/agent -> http://192.168.100.73/agent、http://192.168.100.74/agent
+http://app.lovelawu.com/images -> http://192.168.100.73/images、http://192.168.100.74/images
+http://app.lovelawu.com/videos -> http://192.168.100.73/videos、http://192.168.100.74/videos
+http://app.lovelawu.com/member-api -> http://192.168.100.73:1111/member-api、http://192.168.100.74:1111/member-api
+http://app.lovelawu.com/merchant-api -> http://192.168.100.73:2222/merchant-api、http://192.168.100.74:2222/merchant-api
+http://app.lovelawu.com/operator-api -> http://192.168.100.73:3333/operator-api、http://192.168.100.74:3333/operator-api
+http://app.lovelawu.com/agent-api -> http://192.168.100.73:4444/agent-api、http://192.168.100.74: 4444/agent-api
+http://app.lovelawu.com/external-api -> http://192.168.100.73:5555/external-api、http://192.168.100.74: 5555/external-api
+
 HTTPS
 ======
 生成证书
