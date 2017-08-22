@@ -44,6 +44,22 @@ sudo docker run -d --privileged --name docker-maven \
 
 构建docker镜像
 ======
+
+1.在liunx中构建
+------
+
+非root用户，需要获取root权限
+```bash
+sudo -s
+```
+
+如果找不到JAVA环境，刷新系统变量
+```bash
+source /etc/profile
+```
+
+2.在docker容器中构建
+------
 ```bash    
 sudo docker exec -it docker-maven mvn clean package -Dmaven.test.skip -DpushImage
 ```
