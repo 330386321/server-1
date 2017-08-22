@@ -143,7 +143,7 @@ public class AdController extends BaseController {
 	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
 	@ApiOperation(value = "E赚列表(E赚平面和视频)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
-	@Authorization
+//	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectEgain", method = RequestMethod.GET)
 	public Result<Page<AdDTO>> selectEgain(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdEgainParam adEgainParam) {
@@ -163,7 +163,7 @@ public class AdController extends BaseController {
 	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
 	@ApiOperation(value = "会员查询广告列表(积分榜，人气榜)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
-	@Authorization
+//	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectListPointTotle", method = RequestMethod.GET)
 	public Result<List<AdDTO>> selectListPointTotle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPointParam adPointParam) {
@@ -231,7 +231,7 @@ public class AdController extends BaseController {
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
 	@ApiOperation(value = "会员查询广告列表(E赞)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
-	@Authorization
+//	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.GET)
 	public Result<Page<AdPraiseDTO>> selectAdPraiseList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPraiseParam adPraiseParam) {
@@ -337,24 +337,25 @@ public class AdController extends BaseController {
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
 	@ApiOperation(value = "广告搜索", notes = "广告搜索,[]（张荣成）", httpMethod = "GET")
-	@Authorization
+//	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectAdByTitle", method = RequestMethod.GET)
 	public Result<Page<AdSolrDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdSolrParam adSolrParam) {
 		
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
-		Result<UserDTO> userRS = memberService.findMemberInfo(memberId);
-		
 		AdsolrFindParam findParam = new AdsolrFindParam();
 		findParam.setAdSolrParam(adSolrParam);
-		findParam.setMerchantIds(merchantIds);
 		findParam.setMemberId(memberId);
-		
-		if (userRS.getModel().getRegionPath() != null) {
-			findParam.setRegionPath(userRS.getModel().getRegionPath());
+		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
+		findParam.setMerchantIds(merchantIds);
+		if(memberId != 0) {
+			Result<UserDTO> userRS = memberService.findMemberInfo(memberId);
+			if (userRS.getModel().getRegionPath() != null) {
+				findParam.setRegionPath(userRS.getModel().getRegionPath());
+			}
+		} else {
+			findParam.setRegionPath(adSolrParam.getTransRegionPath());
 		}
-		
 		return adService.queryAdByTitle(findParam);
 	}
 
@@ -415,7 +416,7 @@ public class AdController extends BaseController {
 	@Deprecated
 	@Audit(date = "2017-05-12", reviewer = "孙林青")
 	@ApiOperation(value = "E赚列表(E赚平面和视频)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
-	@Authorization
+//	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectEgainAd", method = RequestMethod.GET)
 	public Result<Page<AdFlatVideoDTO>> selectEgainAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdEgainParam adEgainParam) {

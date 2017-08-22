@@ -187,9 +187,13 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		for (AdDTO adDTO : newList) {
 			for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
 				if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
-					Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
-					if (isSuccess(resultFavoriteAd)) {
-						adDTO.setIsFavorite(resultFavoriteAd.getModel());
+					if(memberId == 0) {
+						adDTO.setIsFavorite(false);
+					} else {
+						Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
+						if (isSuccess(resultFavoriteAd)) {
+							adDTO.setIsFavorite(resultFavoriteAd.getModel());
+						}
 					}
 					adDTO.setMerchantStoreId(merchantAdInfoDTO.getMerchantStoreId());
 					if (merchantAdInfoDTO.getName() != null) {
@@ -402,9 +406,11 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 
 			} else if (adDTO.getPutWayEnum().val == 2) {
 				// 获取商家粉丝，判断当前用户是否属于商家粉丝
-				Result<Boolean> rs = fansMerchantService.isFansMerchant(adDTO.getMerchantId(), memberId);
-				if (rs.getModel())
-					newList.add(adDTO);
+				if(memberId != 0) {
+					Result<Boolean> rs = fansMerchantService.isFansMerchant(adDTO.getMerchantId(), memberId);
+					if (rs.getModel())
+						newList.add(adDTO);
+				}
 			} else {
 				if (adMemberParam.getLongitude() == null || adMemberParam.getLatitude() == null) {
 					continue;
