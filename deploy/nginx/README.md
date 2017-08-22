@@ -68,13 +68,11 @@ http://app.lovelawu.com/member -> http://192.168.100.73/member、http://192.168.
 http://app.lovelawu.com/merchant -> http://192.168.100.73/merchant、http://192.168.100.74/merchant
 http://app.lovelawu.com/operator -> http://192.168.100.73/operator、http://192.168.100.74/operator
 http://app.lovelawu.com/agent -> http://192.168.100.73/agent、http://192.168.100.74/agent
-http://app.lovelawu.com/images -> http://192.168.100.73/images、http://192.168.100.74/images
-http://app.lovelawu.com/videos -> http://192.168.100.73/videos、http://192.168.100.74/videos
 http://app.lovelawu.com/member-api -> http://192.168.100.73:1111/member-api、http://192.168.100.74:1111/member-api
 http://app.lovelawu.com/merchant-api -> http://192.168.100.73:2222/merchant-api、http://192.168.100.74:2222/merchant-api
 http://app.lovelawu.com/operator-api -> http://192.168.100.73:3333/operator-api、http://192.168.100.74:3333/operator-api
-http://app.lovelawu.com/agent-api -> http://192.168.100.73:4444/agent-api、http://192.168.100.74: 4444/agent-api
-http://app.lovelawu.com/external-api -> http://192.168.100.73:5555/external-api、http://192.168.100.74: 5555/external-api
+http://app.lovelawu.com/agent-api -> http://192.168.100.73:4444/agent-api、http://192.168.100.74:4444/agent-api
+http://app.lovelawu.com/external-api -> http://192.168.100.73:5555/external-api、http://192.168.100.74:5555/external-api
 
 HTTPS
 ======
