@@ -28,6 +28,9 @@ public class AccountDTO {
     @ApiModelProperty(value = "是否冻结")
     private Boolean isFreeze;
 
+    @ApiModelProperty(value = "冻结原因")
+    private String freezeReason;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtCreate;
 
@@ -77,5 +80,13 @@ public class AccountDTO {
 
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
+    }
+
+    public String getFreezeReason() {
+        return freezeReason;
+    }
+
+    public void setFreezeReason(String freezeReason) {
+        this.freezeReason = freezeReason;
     }
 }

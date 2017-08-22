@@ -293,6 +293,7 @@ public class MemberConverter {
             accountDTO.setUserType(UserType.MEMBER);
             accountDTO.setGmtCreate(memberBO.getGmtCreate());
             accountDTO.setFreeze(memberBO.getIsFreeze());
+            accountDTO.setFreezeReason(memberBO.getFreezeReason());
             list.add(accountDTO);
         }
         return list;
