@@ -174,6 +174,7 @@ public class MerchantConverter {
             accountDTO.setUserType(UserType.MERCHANT);
             accountDTO.setFreeze(merchantBO.getIsFreeze());
             accountDTO.setGmtCreate(merchantBO.getGmtCreate());
+            accountDTO.setFreezeReason(merchantBO.getFreezeReason());
             list.add(accountDTO);
         }
         return list;
