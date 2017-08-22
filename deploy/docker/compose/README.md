@@ -18,8 +18,23 @@ sudo chmod +x /usr/local/bin/docker-compose
 ```
 
 参考资料
-======
+=====
 https://docs.docker.com/compose/install/
+
+构建网络
+=====
+创建网络
+-----
+通过服务编排创建网络,会以当前文件夹为前缀
+
+加入网络
+-----
+```bash
+docker run --name nginx -it -d -p 80:80 \
+    --network=eshop_eshopNet \
+    -v /etc/localtime:/etc/localtime:ro \
+    nginx:1.10.2-alpine
+```
 
 启动服务
 =====
