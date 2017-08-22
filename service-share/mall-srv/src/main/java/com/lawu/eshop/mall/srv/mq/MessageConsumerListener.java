@@ -225,6 +225,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				return;
 			}
 
+		} else if (MqConstant.TOPIC_PROPERTY_SRV.equals(topic)) {
 			/*
 			 *  提醒商家申请退款保证金结果通知
 			 *
@@ -250,6 +251,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
 				return;
 			}
+
 		}
 	}
 }
