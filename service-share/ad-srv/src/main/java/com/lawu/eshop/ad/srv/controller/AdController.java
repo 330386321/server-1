@@ -357,12 +357,19 @@ public class AdController extends BaseController {
 		}
 		if (adSolrParam.getRegionPath() != null) {
 			String[] path = adSolrParam.getRegionPath().split("/");
-			if (str != "") {
-				query.setParam("" + str + " or ('area_is:" + path[0] + "') or ('area_is:" + path[1] + "') or ('area_is:" + path[2] + "')");
+			if(path.length < 3) {
+				if (str != "") {
+					query.setParam("" + str + " or ('area_is:" + path[0] + "') or ('area_is:" + path[1] + "')");
+				} else {
+					query.setParam("area_is:" + path[0] + " or " + "area_is:" + path[1]);
+				}
 			} else {
-				query.setParam("area_is:" + path[0] + " or " + "area_is:" + path[1] + " or " + "area_is:" + path[2]);
+				if (str != "") {
+					query.setParam("" + str + " or ('area_is:" + path[0] + "') or ('area_is:" + path[1] + "') or ('area_is:" + path[2] + "')");
+				} else {
+					query.setParam("area_is:" + path[0] + " or " + "area_is:" + path[1] + " or " + "area_is:" + path[2]);
+				}
 			}
-
 		} else {
 			query.setParam("" + str + " or ('area_is:" + 0 + "') ");
 		}

@@ -220,6 +220,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		Result<Page<AdDTO>> pageDTOS = adService.selectPraiseListByMember(adPraiseParam, memberId);
 		List<AdDTO> list = pageDTOS.getModel().getRecords();
+		AdMemberParam amp = new AdMemberParam();
 		List<AdDTO> newList = adFilter(null, list, memberId);
 		AdPage<AdDTO> adpage = new AdPage<>();
 		List<AdDTO> screenList = adpage.page(newList, adPraiseParam.getPageSize(), adPraiseParam.getCurrentPage());
@@ -383,7 +384,12 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	 */
 	public List<AdDTO> adFilter(AdMemberParam adMemberParam, List<AdDTO> list, Long memberId) {
 		Result<UserDTO> memberDTO = memberService.findMemberInfo(memberId);
-		String memberPath = memberDTO.getModel().getRegionPath();
+		String memberPath = "";
+		if(memberId != 0)  {
+			memberPath = memberDTO.getModel().getRegionPath();
+		} else if(adMemberParam != null) {
+			memberPath = adMemberParam.getTransRegionPath();
+		}			
 		List<AdDTO> newList = new ArrayList<>();
 		for (AdDTO adDTO : list) {
 			if (adDTO.getPutWayEnum().val == 1) { // 区域
