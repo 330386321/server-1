@@ -11,31 +11,42 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class PropertyPointAndBalanceDTO implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	/**
-    * 积分
-    */
-	@ApiModelProperty(name = "point", value= "积分", required = true)
-   private BigDecimal point;
-	
-	@ApiModelProperty(name = "balance", value= "余额", required = true)
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 积分
+     */
+    @ApiModelProperty(name = "point", value = "积分", required = true)
+    private BigDecimal point;
+
+    @ApiModelProperty(name = "balance", value = "余额", required = true)
     private BigDecimal balance;
 
-	public BigDecimal getPoint() {
-		return point;
-	}
 
-	public void setPoint(BigDecimal point) {
-		this.point = point;
-	}
+    @ApiModelProperty(name = "freeze", value = "冻结资金", required = true)
+    private BigDecimal freeze;
 
-	public BigDecimal getBalance() {
-		return balance;
-	}
+    public BigDecimal getPoint() {
+        return point;
+    }
 
-	public void setBalance(BigDecimal balance) {
-		this.balance = balance;
-	}
-   
+    public void setPoint(BigDecimal point) {
+        this.point = point;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public BigDecimal getFreeze() {
+        return freeze;
+    }
+
+    public void setFreeze(BigDecimal freeze) {
+        this.freeze = freeze;
+    }
 }

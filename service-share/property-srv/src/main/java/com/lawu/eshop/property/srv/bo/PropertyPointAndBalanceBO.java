@@ -2,6 +2,8 @@ package com.lawu.eshop.property.srv.bo;
 
 import java.math.BigDecimal;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class PropertyPointAndBalanceBO {
 	/**
 	 * 余额
@@ -11,6 +13,9 @@ public class PropertyPointAndBalanceBO {
 	 * 积分
 	 */
 	private BigDecimal point;
+
+
+	private BigDecimal freeze;
 
 	public BigDecimal getBalance() {
 		return balance;
@@ -28,4 +33,11 @@ public class PropertyPointAndBalanceBO {
 		this.point = point;
 	}
 
+	public BigDecimal getFreeze() {
+		return freeze;
+	}
+
+	public void setFreeze(BigDecimal freeze) {
+		this.freeze = freeze;
+	}
 }

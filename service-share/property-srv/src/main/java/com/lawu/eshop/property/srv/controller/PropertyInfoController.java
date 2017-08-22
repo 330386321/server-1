@@ -197,6 +197,7 @@ public class PropertyInfoController extends BaseController {
 		PropertyPointAndBalanceDTO dto = new PropertyPointAndBalanceDTO();
 		dto.setBalance(propertyPointBO.getBalance().setScale(2,BigDecimal.ROUND_DOWN));
 		dto.setPoint(propertyPointBO.getPoint().setScale(2,BigDecimal.ROUND_DOWN));
+		dto.setFreeze(propertyPointBO.getFreeze().setScale(2,BigDecimal.ROUND_DOWN));
 		return successCreated(dto);
 	}
 
