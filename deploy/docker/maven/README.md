@@ -68,11 +68,11 @@ sudo docker exec -it docker-maven mvn clean package -Dmaven.test.skip -DpushImag
 清空无用docker镜像
 ======
 ```bash 
-docker rmi $(docker images -f "dangling=true" -q)
+sudo docker rmi $(sudo docker images -f "dangling=true" -q)
 ```
 
 清除无用的挂载目录
 ======
 ```bash
-sudo docker volume rm $(docker volume ls -qf dangling=true)
+sudo docker volume rm $(sudo docker volume ls -qf dangling=true)
 ```
