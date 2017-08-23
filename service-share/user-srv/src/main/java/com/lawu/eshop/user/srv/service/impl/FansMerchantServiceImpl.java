@@ -73,9 +73,11 @@ public class FansMerchantServiceImpl implements FansMerchantService {
         listInviteFansRealWithContentParam.setEndAge(param.getEndAge());
         listInviteFansRealWithContentParam.setInviteCount(param.getInviteCount());
         listInviteFansRealWithContentParam.setInviteType((int)param.getInviteType());
-        String[] num = param.getNums().split(",");
-        List<String> numList = Arrays.asList(num);
-        listInviteFansRealWithContentParam.setNums(numList);
+        if(param.getNums() != null) {
+	        String[] num = param.getNums().split(",");
+	        List<String> numList = Arrays.asList(num);
+	        listInviteFansRealWithContentParam.setNums(numList);
+        }
         List<FansMerchantDOView> list = fansMerchantDOMapperExtend.listInviteFansWithContent(listInviteFansRealWithContentParam);
         return FansMerchantConverter.convertBO(list);
 		
