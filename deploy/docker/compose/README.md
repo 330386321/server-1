@@ -70,6 +70,13 @@ sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml up -d
 ```
 
 更新服务
+
+```bash
+sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml down
+```
+
+或者
+
 ```bash
 sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml stop
 sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml rm

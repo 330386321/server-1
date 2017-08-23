@@ -71,6 +71,10 @@ sudo docker exec -it docker-maven mvn clean package -Dmaven.test.skip -DpushImag
 sudo docker rmi $(sudo docker images -f "dangling=true" -q)
 ```
 
+删除none镜像
+======
+sudo docker rmi $(sudo docker inspect -f "{{.ID}}:{{.RepoTags}}" $(sudo docker images -q) | grep "\[\]" | cut -d ":" -f 2)
+
 清除无用的挂载目录
 ======
 ```bash
