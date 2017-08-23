@@ -149,7 +149,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
         businessDepositDOMapper.updateByExampleSelective(depositDO, example);
 
         // 回调成功后，发送消息修改门店状态为：已缴保证金待核实
-        handleDepositEditStoreStatusTransactionMainServiceImpl.sendNotice(param.getMerchantId());
+        handleDepositEditStoreStatusTransactionMainServiceImpl.sendNotice(Long.valueOf(param.getBizIds()));
 
         result.setRet(ResultCode.SUCCESS);
         return result;
@@ -270,13 +270,13 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
         message.setUserNum(param.getUserNum());
         if (BusinessDepositOperEnum.VERIFYD.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
             // 核实操作成功后，发送MQ消息修改门店状态为：待审核,并修改门店审核显示状态
-            handleDepositAuditPassTransactionMainServiceImpl.sendNotice(param.getBusinessId());
+            handleDepositAuditPassTransactionMainServiceImpl.sendNotice(Long.valueOf(param.getId()));
 
         } else if (BusinessDepositOperEnum.REFUND_SUCCESS.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
             // 退款成功操作后，发送MQ消息修改门店状态为：注销
-            handleDepositAuditCancelTransactionMainServiceImpl.sendNotice(param.getBusinessId());
+            handleDepositAuditCancelTransactionMainServiceImpl.sendNotice(Long.valueOf(param.getId()));
             //修改商品下架
-            handleDepositRefundSuccessDownProductTransactionMainServiceImpl.sendNotice(param.getBusinessId());
+            handleDepositRefundSuccessDownProductTransactionMainServiceImpl.sendNotice(Long.valueOf(param.getId()));
         }
 
         // 审核成功或失败后发送消息通知mall-srv模块发送推送消息给商家

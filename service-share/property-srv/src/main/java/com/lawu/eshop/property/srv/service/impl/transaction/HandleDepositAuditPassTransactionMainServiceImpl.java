@@ -6,6 +6,9 @@ import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainServi
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.property.StoreStatusNotification;
 import com.lawu.eshop.property.srv.constans.TransactionConstant;
+import com.lawu.eshop.property.srv.domain.BusinessDepositDO;
+import com.lawu.eshop.property.srv.mapper.BusinessDepositDOMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,10 +19,13 @@ import org.springframework.stereotype.Service;
 @Service("handleDepositAuditPassTransactionMainServiceImpl")
 @CompensatingTransactionMain(value = TransactionConstant.HANDLE_DESPOISIT_AUDIT_PASS, topic = MqConstant.TOPIC_PROPERTY_SRV, tags = MqConstant.TAG_HANDLE_DEPOSIT_AUDIT_PASS)
 public class HandleDepositAuditPassTransactionMainServiceImpl extends AbstractTransactionMainService<StoreStatusNotification, Reply> {
+    @Autowired
+    private BusinessDepositDOMapper businessDepositDOMapper;
     @Override
-    public StoreStatusNotification selectNotification(Long merchantId) {
+    public StoreStatusNotification selectNotification(Long depositId) {
+        BusinessDepositDO depositDO = businessDepositDOMapper.selectByPrimaryKey(depositId);
         StoreStatusNotification notification = new StoreStatusNotification();
-        notification.setMerchantId(merchantId);
+        notification.setMerchantId(depositDO.getBusinessId());
         notification.setShow(true);
         return notification;
     }
