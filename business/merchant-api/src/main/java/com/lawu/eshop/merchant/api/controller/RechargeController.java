@@ -1,8 +1,8 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,7 +14,9 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.RechargeService;
+import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.param.RechargeSaveParam;
@@ -61,6 +63,17 @@ public class RechargeController extends BaseController {
 		dparam.setPayPwd(param.getPayPwd());
 		return rechargeService.save(dparam);
 
+	}
+
+
+	@Audit(date = "2017-08-28", reviewer = "章勇")
+	@Authorization
+	@ApiOperation(value = "查询充值状态", notes = "查询充值状态，[]，(章勇)", httpMethod = "GET")
+	@RequestMapping(value = "getRechargeById/{rechargeId}", method = RequestMethod.GET)
+	public Result<ThirdPayStatusEnum> getRechargeById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+													  @PathVariable("rechargeId") Long rechargeId){
+
+		return rechargeService.getRechargeById(rechargeId);
 	}
 
 }
