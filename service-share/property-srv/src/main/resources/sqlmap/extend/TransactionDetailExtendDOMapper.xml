@@ -27,4 +27,48 @@
 		WHERE AND gmt_create BETWEEN #{start} and #{end}
 		GROUP BY user_num, direction
     </select>
+    
+    <resultMap id="BaseResultMap" type="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
+	    <result column="user_totle_point" jdbcType="DECIMAL" property="userTotalPoint" />
+	    <result column="love_totle_point" jdbcType="DECIMAL" property="loveTotalPoint" />
+	</resultMap>
+  
+ 	<select id="getReportAdEarningsPoint"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
+	    select
+	    	sum(point) as user_totle_point
+	    from transaction_detail
+	    where
+	      	transaction_type =#{pointType,jdbcType=TINYINT}
+	      	and biz_id=#{bizId,jdbcType=BIGINT}
+	 </select>
+	 
+	 
+	 <select id="getReportAdEarningsLovePoint"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
+	    select
+	    	sum(amount) as love_totle_point
+	    from love_detail
+	    where
+	      	love_type =#{pointType,jdbcType=TINYINT}
+	      	and biz_id=#{bizId,jdbcType=BIGINT}
+	 </select>
+	 
+	 <!-- 用户广告总收益统计   包括点广告  红包   广告提成  抢赞  -->
+	 <select id="getUserPointByBzId"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
+	    select
+	    	sum(point) as user_totle_point
+	    from transaction_detail
+	    where
+	      	transaction_type in (2,3,5,16)
+	      	and biz_id=#{bizId,jdbcType=BIGINT}
+	 </select>
+	 
+	 
+	 <select id="getLovePointByBzId"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
+	    select
+	    	sum(amount) as love_totle_point
+	    from love_detail
+	    where
+	      	love_type in (1,2,5,6)
+	      	and biz_id=#{bizId,jdbcType=BIGINT}
+	 </select>
 </mapper>

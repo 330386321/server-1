@@ -340,7 +340,7 @@ public class AdController extends BaseController {
 //	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectAdByTitle", method = RequestMethod.GET)
-	public Result<Page<AdSolrDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdSolrParam adSolrParam) {
+	public Result<Page<AdSolrDTO>> selectAdByTitle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdSolrParam adSolrParam) {
 		
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		AdsolrFindParam findParam = new AdsolrFindParam();
