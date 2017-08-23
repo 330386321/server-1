@@ -6,7 +6,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.constants.MqConstant;
-import com.lawu.eshop.mq.dto.order.RefundDepositDoSuccessOrFailureNotification;
+import com.lawu.eshop.mq.dto.property.RefundDepositDoSuccessOrFailureNotification;
 import com.lawu.eshop.mq.dto.user.HandleDepostMessage;
 import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.property.constants.*;
@@ -285,6 +285,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
             notification.setDepositId(Long.valueOf(param.getId()));
             notification.setFailureReason(param.getFailReason() == null ? "" : param.getFailReason());
             notification.setMerchantNum(param.getUserNum());
+            notification.setDepositOperEnumVal(param.getBusinessDepositOperEnum().getVal());
             messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_PROPERTY_DEPOSIT_DO_RESULT, notification);
         }
 

@@ -1,7 +1,7 @@
 package com.lawu.eshop.mall.srv.mq;
 
 import com.lawu.eshop.mall.constants.BusinessDepositOperEnum;
-import com.lawu.eshop.mq.dto.order.RefundDepositDoSuccessOrFailureNotification;
+import com.lawu.eshop.mq.dto.property.RefundDepositDoSuccessOrFailureNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lawu.eshop.mall.constants.MessageTypeEnum;

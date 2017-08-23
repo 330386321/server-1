@@ -1,4 +1,4 @@
-package com.lawu.eshop.mq.dto.order;
+package com.lawu.eshop.mq.dto.property;
 
 import java.io.Serializable;
 
