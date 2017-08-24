@@ -14,9 +14,12 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.merchant.api.service.BusinessDepositService;
 import com.lawu.eshop.merchant.api.service.MerchantInfoService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
+import com.lawu.eshop.user.constants.BusinessDepositStatusEnum;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
 import com.lawu.eshop.user.dto.MerchantInfoFromInviteFansDTO;
 import com.lawu.eshop.user.dto.MerchantInfoFromPublishAdDTO;
@@ -41,6 +44,9 @@ public class MerchantInfoController extends BaseController {
     private MerchantInfoService merchantProfileService;
     @Autowired
     private PropertyInfoService propertyInfoService;
+
+    @Autowired
+    private BusinessDepositService businessDepositService;
     
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "设置网站链接", notes = "设置网站链接，成功返回merchantInfo。[2100] （章勇）", httpMethod = "PUT")
@@ -66,6 +72,10 @@ public class MerchantInfoController extends BaseController {
         Result<MerchantInfoDTO> result = merchantProfileService.getCurrentMerchantInfo(id);
         PropertyLoveAccountDTO propertyLoveAccountDTO=propertyInfoService.selectLoveAccount(userNum).getModel();
         result.getModel().setLoveAccount(propertyLoveAccountDTO.getLoveAccount());
+        Result<BusinessDepositDetailDTO> business = businessDepositService.selectDeposit(String.valueOf(id));
+        if(business.getModel() != null){
+            result.getModel().setDepositStatusEnum(BusinessDepositStatusEnum.getEnum(business.getModel().getBusinessDepositStatusEnum().getVal()));
+        }
         return result;
     }
 

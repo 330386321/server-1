@@ -269,7 +269,6 @@ public class MerchantStoreController extends BaseController {
     Result<MerchantAuditInfoDTO> getMerchantAuditInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         Result<MerchantAuditInfoDTO> result = merchantStoreService.getMerchantAuditInfo(merchantId);
-        MerchantAuditInfoDTO auditInfoDTO = result.getModel();
         Result<BusinessDepositDetailDTO> business = businessDepositService.selectDeposit(String.valueOf(merchantId));
         if(business.getModel() != null){
             result.getModel().setDepositStatusEnum(BusinessDepositStatusEnum.getEnum(business.getModel().getBusinessDepositStatusEnum().getVal()));
