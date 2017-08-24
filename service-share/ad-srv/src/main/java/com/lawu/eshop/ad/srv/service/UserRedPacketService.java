@@ -40,6 +40,7 @@ public interface UserRedPacketService {
 	 */
 	boolean isExistsRedPacket(Long redPacketId);
 
+	@Deprecated
 
 	/**
 	 * 用户领取红包

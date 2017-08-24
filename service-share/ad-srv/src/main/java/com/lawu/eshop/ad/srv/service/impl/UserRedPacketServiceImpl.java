@@ -199,6 +199,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	 * 设置红包过期
 	 * @param userRedpacketId
 	 */
+	@Deprecated
 	private void setRedpacketOverDue(Long userRedpacketId) {
 		UserRedPacketDO userRedpacket =userRedPacketDOMapper.selectByPrimaryKey(userRedpacketId);
 		userRedpacket.setGmtModified(new Date());
@@ -211,6 +212,30 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		userRedpacket.setRefundMoney(totalBackMoney);
 		userRedPacketDOMapper.updateByPrimaryKeySelective(userRedpacket);
 		memberRedPacketRefundTransactionMainServiceImpl.sendNotice(userRedpacketId);
+	}
+	
+	/**
+	 * 设置红包过期
+	 * @param userRedpacketId
+	 */
+	private void setRedpacketOverDue(Long userRedpacketId) {
+		UserRedPacketDO userRedpacket =userRedPacketDOMapper.selectByPrimaryKey(userRedpacketId);
+		userRedpacket.setGmtModified(new Date());
+		userRedpacket.setStatus(UserRedPacketEnum.USER_STATUS_OVER.val);
+		UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
+		userTakedExample.createCriteria().andUserRedPackIdEqualTo(userRedpacketId)
+		.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+		List<UserTakedRedPacketDO> listTaked = userTakedRedPacketDOMapper.selectByExample(userTakedExample);
+		BigDecimal totalBackMoney = getTotalBackMoney(listTaked);
+		userRedPacketDOMapper.updateByPrimaryKeySelective(userRedpacket);
+		UserRedPacketNotification notification = new UserRedPacketNotification();
+		notification.setId(userRedpacket.getId());
+		notification.setMoney(totalBackMoney);
+		notification.setUserNum(userRedpacket.getUserNum());
+		// 退款
+		transactionStatusService.save(userRedpacket.getId(), TransactionConstant.USER_REDPACKED_MONEY_ADD);
+		messageProducerService.sendMessage(MqConstant.TOPIC_AD_SRV, MqConstant.TAG_AD_USER_REDPACKET_ADD_MONTY,
+				notification);
 	}
 
 	/**
