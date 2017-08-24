@@ -4,10 +4,14 @@
   <resultMap id="BaseResultMap" type="com.lawu.eshop.ad.srv.domain.AdDO">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+     <result column="merchant_store_id" jdbcType="BIGINT" property="merchantStoreId" />
     <result column="merchant_num" jdbcType="VARCHAR" property="merchantNum" />
     <result column="merchant_longitude" jdbcType="DECIMAL" property="merchantLongitude" />
     <result column="merchant_latitude" jdbcType="DECIMAL" property="merchantLatitude" />
+     <result column="merchant_store_name" jdbcType="VARCHAR" property="merchantStoreName" />
+    <result column="manage_type" jdbcType="TINYINT" property="manageType" />
     <result column="title" jdbcType="VARCHAR" property="title" />
+     <result column="logo_url" jdbcType="VARCHAR" property="logoUrl" />
     <result column="media_url" jdbcType="VARCHAR" property="mediaUrl" />
     <result column="video_img_url" jdbcType="VARCHAR" property="videoImgUrl" />
     <result column="content" jdbcType="VARCHAR" property="content" />
@@ -25,8 +29,8 @@
   </resultMap>
   
  <sql id="Base_Column_List">
-    id, merchant_id, merchant_num, merchant_longitude, merchant_latitude, title, media_url, 
-    video_img_url, content, type, put_way,begin_time, areas,
+    id, merchant_id,merchant_store_id,merchant_store_name,manage_type, merchant_num, merchant_longitude, merchant_latitude, title, media_url, 
+    video_img_url, logo_url,content, type, put_way,begin_time, areas,
     radius, point, total_point, ad_count, hits, viewCount, status
   </sql>
   

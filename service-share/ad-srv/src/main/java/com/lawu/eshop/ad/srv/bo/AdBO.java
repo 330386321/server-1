@@ -1,13 +1,14 @@
 package com.lawu.eshop.ad.srv.bo;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.constants.RelateTypeEnum;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 public class AdBO {
 
@@ -46,43 +47,48 @@ public class AdBO {
 	private Integer number;
 
 	private Boolean isFavorite;
-	
+
 	private Boolean isPraise;
-	
+
 	private AdPraiseStatusEnum adPraiseStatusEnum;
 
 	private Integer auditorId;
 
 	private String remark;
-	
-	 /**
-    *
-    * 经度
-    * ad.merchant_longitude
-    *
-    * @mbg.generated
-    */
-   private BigDecimal merchantLongitude;
 
-   /**
-    *
-    * 纬度
-    * ad.merchant_latitude
-    *
-    * @mbg.generated
-    */
-   private BigDecimal merchantLatitude;
-   
-   private String videoImgUrl;
-   
-   private String regionName;
-   
-   
-   private Boolean isClickAd;
-   
+	/**
+	 *
+	 * 经度 ad.merchant_longitude
+	 *
+	 * @mbg.generated
+	 */
+	private BigDecimal merchantLongitude;
+
+	/**
+	 *
+	 * 纬度 ad.merchant_latitude
+	 *
+	 * @mbg.generated
+	 */
+	private BigDecimal merchantLatitude;
+
+	private String videoImgUrl;
+
+	private String regionName;
+
+	private Boolean isClickAd;
+
 	private Long relateId;
-	
+
 	private RelateTypeEnum relateType;
+	
+	private Long merchantStoreId;
+	 
+	private String merchantStoreName;
+	 
+	private ManageTypeEnum manageType;
+	 
+	private String logoUrl;
 
 	public Boolean getIsPraise() {
 		return isPraise;
@@ -315,6 +321,39 @@ public class AdBO {
 	public void setRelateType(RelateTypeEnum relateType) {
 		this.relateType = relateType;
 	}
+
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
+	}
+
+	public String getMerchantStoreName() {
+		return merchantStoreName;
+	}
+
+	public void setMerchantStoreName(String merchantStoreName) {
+		this.merchantStoreName = merchantStoreName;
+	}
+
+	public ManageTypeEnum getManageType() {
+		return manageType;
+	}
+
+	public void setManageType(ManageTypeEnum manageType) {
+		this.manageType = manageType;
+	}
+
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
+	}
 	
 	
+
 }

@@ -322,7 +322,7 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_PRAISE_PUTED, "抢赞已经结束");
         ResultCode.messageMap.put(AD_CLICK_EXIST, "今天已经看过该广告");
         ResultCode.messageMap.put(AD_PRAISE_POINT_GET, "你已经抢到赞了");
-        ResultCode.messageMap.put(AD_CLICK_PUTED, "广告已结束或者已点击完");
+        ResultCode.messageMap.put(AD_CLICK_PUTED, "广告已点击完");
         ResultCode.messageMap.put(AD_RED_PACKGE_PUTED, "红包已下架");
         ResultCode.messageMap.put(AD_BEGIN_TIME_NOT_EXIST, "投放时间不能为空");
         

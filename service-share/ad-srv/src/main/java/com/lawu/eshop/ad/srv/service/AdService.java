@@ -23,6 +23,7 @@ import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
+import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
@@ -139,7 +140,7 @@ public interface AdService {
      * @param memberId
      * @return
      */
-    BigDecimal clickAd(Long id, Long memberId, String num);
+    ClickPointBO clickAd(Long id, Long memberId, String num);
 
 
 
@@ -350,4 +351,9 @@ public interface AdService {
 	List<OperatorAdBO> selectOperatorAdAll(OperatorAdParam operatorAdParam);
 
     void soldOutAdByMerchantId(Long merchantId);
+    
+    /**
+	 * 定时任务修改两个星期平面和视频结束
+	 */
+	void updatFlatAndVideoToPuted();
 }

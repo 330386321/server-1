@@ -83,6 +83,10 @@ public class AdConverter {
 		adBO.setRemark(adDO.getRemark());
 		adBO.setRelateId(adDO.getRelateId());
 		adBO.setRelateType(RelateTypeEnum.getEnum(adDO.getRelateType()));
+		adBO.setMerchantStoreId(adDO.getMerchantStoreId());
+		adBO.setMerchantStoreName(adDO.getMerchantStoreName());
+		adBO.setManageType(ManageTypeEnum.getEnum(adDO.getManageType()));
+		adBO.setLogoUrl(adDO.getLogoUrl());
         return adBO;
 		
 	}
@@ -140,6 +144,10 @@ public class AdConverter {
 		adDTO.setAuditorId(adBO.getAuditorId());
 		adDTO.setRemark(adBO.getRemark());
 		adDTO.setIsClickAd(adBO.getIsClickAd());
+		adDTO.setMerchantStoreId(adBO.getMerchantStoreId());
+		adDTO.setName(adBO.getMerchantStoreName());
+		adDTO.setManageTypeEnum(adBO.getManageType());
+		adDTO.setLogoUrl(adBO.getLogoUrl());
 		Date date=new Date();
 		if(adBO.getTypeEnum().getVal()==3 && adBO.getStatusEnum().val==2){ //结束倒计时
 			Long time=adBO.getBeginTime().getTime()+ (20*60*1000)-date.getTime();
