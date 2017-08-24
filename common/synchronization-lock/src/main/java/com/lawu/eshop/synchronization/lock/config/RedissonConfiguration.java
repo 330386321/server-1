@@ -30,13 +30,13 @@ public class RedissonConfiguration {
 	 * Comma-separated list of "host:port" pairs to bootstrap from. This represents an
 	 * "initial" list of cluster nodes and is required to have at least one entry.
 	 */
-	@Value("#{'${redis.cluster.nodes}'.split(',')} : null")
+	@Value("#{'${redis.cluster.nodes}'.split(',')}")
 	private String[] nodes;
 	
 	@Bean
 	public RedissonClient redissonClient() {
 		Config config = new Config();
-		if (nodes != null  && nodes.length > 0 && nodes[0].equals("")) {
+		if (StringUtils.isEmpty(address)) {
 			ClusterServersConfig clusterServersConfig = config.useClusterServers();
 			clusterServersConfig.setScanInterval(2000); // cluster state scan interval in milliseconds
 			clusterServersConfig.addNodeAddress(nodes);
