@@ -1,7 +1,5 @@
 package com.lawu.eshop.synchronization.lock.config;
 
-import java.util.List;
-
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.ClusterServersConfig;
@@ -32,17 +30,16 @@ public class RedissonConfiguration {
 	 * Comma-separated list of "host:port" pairs to bootstrap from. This represents an
 	 * "initial" list of cluster nodes and is required to have at least one entry.
 	 */
-	//@Value("${redis.cluster.nodes}")
-	private List<String> nodes;
+	@Value("#{'${redis.cluster.nodes}'.split(',')} : null")
+	private String[] nodes;
 	
 	@Bean
 	public RedissonClient redissonClient() {
 		Config config = new Config();
-		if (nodes != null  && nodes.size() > 0) {
+		if (nodes != null  && nodes.length > 0 && nodes[0].equals("")) {
 			ClusterServersConfig clusterServersConfig = config.useClusterServers();
 			clusterServersConfig.setScanInterval(2000); // cluster state scan interval in milliseconds
-			String [] nodeAddress = new String[nodes.size()];
-			clusterServersConfig.addNodeAddress(nodes.toArray(nodeAddress));
+			clusterServersConfig.addNodeAddress(nodes);
 			if (connectionPoolSize != null) {
 				clusterServersConfig.setSlaveConnectionPoolSize(connectionPoolSize);
 			}
