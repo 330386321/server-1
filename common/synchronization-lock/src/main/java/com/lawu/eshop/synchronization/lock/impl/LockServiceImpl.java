@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.synchronization.lock.constants.LockConstant;
 import com.lawu.eshop.synchronization.lock.constants.LockConstant.LockModule;
@@ -19,6 +20,7 @@ import com.lawu.eshop.synchronization.lock.service.LockService;
  * @author Sunny
  * @date 2017年5月18日
  */
+@Service
 public class LockServiceImpl implements LockService {
 	
 	private static Logger logger = LoggerFactory.getLogger(LockServiceImpl.class);
