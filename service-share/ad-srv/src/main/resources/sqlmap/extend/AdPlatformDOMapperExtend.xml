@@ -34,7 +34,7 @@
 		ad_platform ap
 	LEFT JOIN ad a ON ap.ad_id = a.id
 	WHERE
-		ap.type = 4
+		ap.type = 4 and ap.status=1
 	AND ap.ad_id in (
 	 		SELECT id FROM ad
 				WHERE  status = 2 AND
