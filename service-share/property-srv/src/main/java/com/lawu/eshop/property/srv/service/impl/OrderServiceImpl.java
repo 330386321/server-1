@@ -114,6 +114,7 @@ public class OrderServiceImpl implements OrderService {
         tdsParam.setThirdTransactionNum(param.getTradeNo());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(param.getOutTradeNo());
+        tdsParam.setRegionPath(param.getRegionPath());
         transactionDetailService.save(tdsParam);
 
         //更新订单状态 发送MQ消息更新订单状态
