@@ -114,9 +114,10 @@ public class UserRedPacketController extends BaseController {
 		UserRedpacketMaxMoney getMoney = userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
 		UserRedpacketMaxMoneyDTO dto =new UserRedpacketMaxMoneyDTO();
 		dto.setMoney(getMoney.getMaxMoney());
+		dto.setFlag(getMoney.isFlag());
 		return successCreated(dto);
 	}
-
+	
 	/**
 	 * 获取最大的红包金额
 	 * @param redPacketId

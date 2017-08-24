@@ -12,6 +12,10 @@ import java.math.BigDecimal;
 public class UserRedpacketMaxMoney {
 
 	private BigDecimal maxMoney;
+	/**
+	 * 是否可以领取红包
+	 */
+	private boolean flag;
 
 	/**
 	 * @return the maxMoney
@@ -28,4 +32,13 @@ public class UserRedpacketMaxMoney {
 		this.maxMoney = maxMoney;
 	}
 
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+
+	
 }

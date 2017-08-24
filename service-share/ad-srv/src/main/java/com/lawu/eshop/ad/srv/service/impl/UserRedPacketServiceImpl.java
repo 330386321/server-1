@@ -34,6 +34,7 @@ import com.lawu.eshop.ad.srv.service.UserRedPacketService;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.synchronization.lock.service.LockService;
 import com.lawu.eshop.utils.DateUtil;
 
 import org.apache.ibatis.session.RowBounds;
@@ -65,6 +66,9 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	@Qualifier("memberGetRedPacketTransactionMainServiceImpl")
 	private TransactionMainService<Reply> memberGetRedPacketTransactionMainServiceImpl;
 
+	@Autowired
+	private LockService lockService;
+	
 	/**
 	 * 新增用户红包
 	 */
@@ -247,24 +251,35 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		userTakedExample.createCriteria().andUserRedPackIdEqualTo(redPacketId)
 				.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
 		List<UserTakedRedPacketDO> listTaked = userTakedRedPacketDOMapper.selectByExample(userTakedExample);
+		String lockKey ="UserRedpacket"+redPacketId+userNum;
+		boolean lock = lockService.tryLock(lockKey);
 		UserRedpacketMaxMoney getMoney=new UserRedpacketMaxMoney();
-		if (null != listTaked && listTaked.size() > 0) {
-			UserTakedRedPacketDO userTabed = listTaked.get(0);
-			userTabed.setGmtModified(new Date());
-			userTabed.setTakedTime(new Date());
-			userTabed.setUserNum(userNum);
-			userTabed.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
-			userTakedRedPacketDOMapper.updateByPrimaryKeySelective(userTabed);
-			if(listTaked.size()==1){//最后一个
-				UserRedPacketDO userRed = userRedPacketDOMapper.selectByPrimaryKey(redPacketId);
-				userRed.setGmtModified(new Date());
-				userRed.setStatus(UserRedPacketEnum.USER_STATUS_OVER.val);
-				userRedPacketDOMapper.updateByPrimaryKeySelective(userRed);
+		if(lock){
+			boolean flag = checkUserGetRedpacket(redPacketId, userNum);
+			getMoney.setFlag(flag);
+			if(flag){
+				if (null != listTaked && listTaked.size() > 0) {
+					UserTakedRedPacketDO userTabed = listTaked.get(0);
+					userTabed.setGmtModified(new Date());
+					userTabed.setTakedTime(new Date());
+					userTabed.setUserNum(userNum);
+					userTabed.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+					userTakedRedPacketDOMapper.updateByPrimaryKeySelective(userTabed);
+					if(listTaked.size()==1){//最后一个
+						UserRedPacketDO userRed = userRedPacketDOMapper.selectByPrimaryKey(redPacketId);
+						userRed.setGmtModified(new Date());
+						userRed.setStatus(UserRedPacketEnum.USER_STATUS_OVER.val);
+						userRedPacketDOMapper.updateByPrimaryKeySelective(userRed);
+					}
+					
+					memberGetRedPacketTransactionMainServiceImpl.sendNotice(userTabed.getId());
+					
+					getMoney.setMaxMoney(userTabed.getMoney());
+				}
 			}
-
-			memberGetRedPacketTransactionMainServiceImpl.sendNotice(userTabed.getId());
-
-			getMoney.setMaxMoney(userTabed.getMoney());
+		}else{
+			lockService.unLock(lockKey);
+			getMoney.setFlag(false);
 		}
 		return getMoney;
 	}
@@ -298,4 +313,15 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		return true;
 	}
 
+	public boolean checkUserGetRedpacket(Long redPacketId, String userNum) {
+		UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
+		userTakedExample.createCriteria().andUserRedPackIdEqualTo(redPacketId).andUserNumEqualTo(userNum)
+				.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val);
+		List<UserTakedRedPacketDO> listTaked = userTakedRedPacketDOMapper.selectByExample(userTakedExample);
+		boolean flag =false;
+		if(listTaked.size()==0){
+			flag=true;
+		}
+		return flag;
+	}
 }
