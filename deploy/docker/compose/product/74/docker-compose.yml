@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+
+  member-api:
+    image: registry.eshop.com/member-api
+    container_name: member-api
+    ports:
+      - "1111:1111"
+    environment:
+      - spring.cloud.config.profile=product
+      - spring.cloud.config.uri=http://192.168.100.80:8080
+    networks:
+      - eshop_eshopNet
+  merchant-api:
+    image: registry.eshop.com/merchant-api
+    container_name: merchant-api
+    ports:
+      - "2222:2222"
+    environment:
+      - spring.cloud.config.profile=product
+      - spring.cloud.config.uri=http://192.168.100.80:8080
+    networks:
+      - eshop_eshopNet
+  external-api:
+    image: registry.eshop.com/external-api
+    container_name: external-api
+    ports:
+      - "5555:5555"
+    environment:
+      - spring.cloud.config.profile=product
+      - spring.cloud.config.uri=http://192.168.100.80:8080
+    networks:
+      - eshop_eshopNet
+  jobs:
+    image: registry.eshop.com/jobs
+    container_name: jobs
+    ports:
+      - "6666:6666"
+    environment:
+      - spring.cloud.config.profile=product
+      - spring.cloud.config.uri=http://192.168.100.80:8080
+    networks:
+      - eshop_eshopNet
+
+networks:
+  eshop_eshopNet:
+    external: true

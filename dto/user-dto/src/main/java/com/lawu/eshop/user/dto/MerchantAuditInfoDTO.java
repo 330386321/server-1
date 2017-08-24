@@ -1,11 +1,13 @@
 package com.lawu.eshop.user.dto;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.user.constants.BusinessDepositStatusEnum;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
-import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author zhangyong
@@ -32,9 +34,13 @@ public class MerchantAuditInfoDTO {
     @ApiModelProperty(value = "审核类型：AUDIT_TYPE_STORE：申请实体店，AUDIT_TYPE_EDIT_INFO：修改资料")
     private MerchantAuditTypeEnum auditTypeEnum;
 
+    @ApiModelProperty(value = "状态['PAYING-待支付', 'VERIFY-已支付未核实', 'VERIFYD-已核实', 'APPLY_REFUND-退款申请', 'ACCPET_REFUND-退款已受理', 'REFUND_SUCCESS-退款成功', 'REFUND_FAILURE-退款失败']")
+    private BusinessDepositStatusEnum depositStatusEnum;
+
     public MerchantAuditStatusEnum getMerchantAuditStatusEnum() {
         return merchantAuditStatusEnum;
     }
+
 
     public void setMerchantAuditStatusEnum(MerchantAuditStatusEnum merchantAuditStatusEnum) {
         this.merchantAuditStatusEnum = merchantAuditStatusEnum;
@@ -78,5 +84,13 @@ public class MerchantAuditInfoDTO {
 
     public void setAuditTypeEnum(MerchantAuditTypeEnum auditTypeEnum) {
         this.auditTypeEnum = auditTypeEnum;
+    }
+
+    public BusinessDepositStatusEnum getDepositStatusEnum() {
+        return depositStatusEnum;
+    }
+
+    public void setDepositStatusEnum(BusinessDepositStatusEnum depositStatusEnum) {
+        this.depositStatusEnum = depositStatusEnum;
     }
 }

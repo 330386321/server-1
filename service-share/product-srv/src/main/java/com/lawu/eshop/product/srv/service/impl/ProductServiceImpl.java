@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,6 +35,7 @@ import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductModelBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+import com.lawu.eshop.product.srv.bo.ProductRelateAdInfoBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
 import com.lawu.eshop.product.srv.domain.ProductCategoryeDO;
@@ -218,6 +218,9 @@ public class ProductServiceImpl implements ProductService {
             return null;
         }
         List<MemberProductModelDTO> spec = new ArrayList<MemberProductModelDTO>();
+        BigDecimal minPrice = new BigDecimal("0");
+        BigDecimal maxPrice = new BigDecimal("0");
+        int k = 0;
         for (ProductModelDO mdo : productModelDOS) {
             MemberProductModelDTO dto = new MemberProductModelDTO();
             dto.setId(mdo.getId());
@@ -226,8 +229,24 @@ public class ProductServiceImpl implements ProductService {
             dto.setOriginalPrice(mdo.getOriginalPrice());
             dto.setPrice(mdo.getPrice());
             spec.add(dto);
+
+            if (k == 0){
+                minPrice = mdo.getPrice();
+                maxPrice = mdo.getPrice();
+            } else{
+                if(mdo.getPrice().compareTo(minPrice) == -1){
+                    minPrice = mdo.getPrice();
+                }
+                if(mdo.getPrice().compareTo(maxPrice) == 1){
+                    maxPrice = mdo.getPrice();
+                }
+            }
+            k++;
         }
         productInfoBO.setSpec(spec);
+        productInfoBO.setMinPrice(minPrice.toString());
+        productInfoBO.setMaxPrice(maxPrice.toString());
+
 
         // 查询商品图片
         ProductImageDOExample imageExample = new ProductImageDOExample();
@@ -311,9 +330,7 @@ public class ProductServiceImpl implements ProductService {
         productEditInfoBO.setImageDetailUrl(imageDetails);
 
         String category = productCategoryService.getFullName(productDO.getCategoryId());
-        String fullCategoryId = productCategoryService.getFullCategoryId(productDO.getCategoryId());
         productEditInfoBO.setCategoryName(category);
-        productEditInfoBO.setFullCategoryId(fullCategoryId);
 
         return productEditInfoBO;
     }
@@ -542,6 +559,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
+    @Transactional
     public void editTotalInventory(Long productId, int num, String flag) {
         ProductNumsView view = new ProductNumsView();
         view.setProductId(productId);
@@ -549,9 +567,14 @@ public class ProductServiceImpl implements ProductService {
         view.setNum(num);
         view.setGmtModified(new Date());
         productDOMapperExtend.editTotalInventory(view);
+
+        ProductDO productDO = productDOMapper.selectByPrimaryKey(productId);
+        SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
+        solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
     }
 
     @Override
+    @Transactional
     public void editTotalSaleVolume(Long productId, int num, String flag) {
         ProductNumsView view = new ProductNumsView();
         view.setProductId(productId);
@@ -560,6 +583,9 @@ public class ProductServiceImpl implements ProductService {
         view.setGmtModified(new Date());
         productDOMapperExtend.editTotalSaleVolume(view);
 
+        ProductDO productDO = productDOMapper.selectByPrimaryKey(productId);
+        SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
+        solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
     }
 
     @Override
@@ -620,35 +646,9 @@ public class ProductServiceImpl implements ProductService {
         productDO.setAverageDailySales(averageDailySales);
         productDOMapper.updateByPrimaryKeySelective(productDO);
 
-        SolrDocument solrDocument = solrService.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
-        if (solrDocument != null) {
-            SolrInputDocument document = new SolrInputDocument();
-            document.addField("id", solrDocument.get("id"));
-            document.addField("featureImage_s", solrDocument.get("featureImage_s"));
-            document.setField("name", solrDocument.get("name"));
-            document.addField("categoryId_i", solrDocument.get("categoryId_i"));
-            document.addField("averageDailySales_d", averageDailySales == null ? 0 : averageDailySales.doubleValue());
-            document.addField("originalPrice_d", solrDocument.get("originalPrice_d"));
-            document.addField("price_d", solrDocument.get("price_d"));
-            document.addField("inventory_i", solrDocument.get("inventory_i"));
-            document.addField("salesVolume_i", solrDocument.get("salesVolume_i"));
-            document.addField("keywords", solrDocument.get("keywords"));
-            solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
-        }
-    }
-
-    @Deprecated
-    @Override
-    public void updateProductIndex(Long id) {
-        ProductDO productDO = productDOMapper.selectByPrimaryKey(id);
-        if(productDO == null){
-            return;
-        }
-        SolrDocument solrDocument = solrService.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
-        if(solrDocument == null){
-            SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
-            solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
-        }
+        productDO = productDOMapper.selectByPrimaryKey(id);
+        SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
+        solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
     }
 
     @Override
@@ -758,31 +758,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public void updateKeywordsById(Long id, Long merchantId, String keywords) {
-        ProductDO productDO = new ProductDO();
-        productDO.setKeywords(keywords);
-        ProductDOExample example = new ProductDOExample();
-        example.createCriteria().andIdEqualTo(id).andMerchantIdEqualTo(merchantId);
-        productDOMapper.updateByExampleSelective(productDO, example);
-
-        SolrDocument solrDocument = solrService.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
-        if (solrDocument != null) {
-            SolrInputDocument document = new SolrInputDocument();
-            document.addField("id", solrDocument.get("id"));
-            document.addField("featureImage_s", solrDocument.get("featureImage_s"));
-            document.setField("name", solrDocument.get("name"));
-            document.addField("categoryId_i", solrDocument.get("categoryId_i"));
-            document.addField("averageDailySales_d", solrDocument.get("averageDailySales_d"));
-            document.addField("originalPrice_d", solrDocument.get("originalPrice_d"));
-            document.addField("price_d", solrDocument.get("price_d"));
-            document.addField("inventory_i", solrDocument.get("inventory_i"));
-            document.addField("salesVolume_i", solrDocument.get("salesVolume_i"));
-            document.addField("keywords", keywords);
-            solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
-        }
-    }
-    @Override
-    @Transactional
     public void soldOutProductByMerchantId(Long merchantId) {
         ProductDO productDO = new ProductDO();
         productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal());
@@ -791,12 +766,24 @@ public class ProductServiceImpl implements ProductService {
         productDOMapper.updateByExampleSelective(productDO, example);
 
         ProductDOExample example2 = new ProductDOExample();
-        example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
+        example2.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
         List<ProductDO> productDOS = productDOMapper.selectByExample(example2);
         if (!productDOS.isEmpty()) {
-            for (ProductDO product : productDOS)
-                solrService.delSolrDocsById(product.getId(), productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+            List<String> ids = new ArrayList<>();
+            for (ProductDO product : productDOS) {
+                ids.add(String.valueOf(product.getId()));
+            }
+            solrService.delSolrDocsByIds(ids, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
+
+	@Override
+	public ProductRelateAdInfoBO selectProductRelateAdInfo(Long id) {
+		ProductDO productDO = productDOMapper.selectByPrimaryKey(id);
+		ProductRelateAdInfoBO bo = new ProductRelateAdInfoBO();
+		bo.setName(productDO.getName());
+		bo.setImgUrl(productDO.getFeatureImage());
+		return bo;
+	}
 
 }

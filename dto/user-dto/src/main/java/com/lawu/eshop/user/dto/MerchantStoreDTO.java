@@ -1,10 +1,11 @@
 package com.lawu.eshop.user.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.math.BigDecimal;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import io.swagger.annotations.ApiModelProperty;
 
 public class MerchantStoreDTO {
 
@@ -176,6 +177,9 @@ public class MerchantStoreDTO {
 
     @ApiModelProperty(value = "商家ID")
     private Long merchantId;
+
+    @ApiModelProperty(value = "关键词")
+    private String keywords;
 
     public Long getMerchantId() {
         return merchantId;
@@ -408,5 +412,13 @@ public class MerchantStoreDTO {
 
     public void setIndustryName(String industryName) {
         this.industryName = industryName;
+    }
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
     }
 }

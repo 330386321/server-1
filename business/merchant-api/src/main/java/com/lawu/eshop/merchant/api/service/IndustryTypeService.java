@@ -1,13 +1,16 @@
 package com.lawu.eshop.merchant.api.service;
 
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.dto.IndustryTypeDTO;
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.constants.MerchantIndustryTypeEnum;
+import com.lawu.eshop.mall.dto.IndustryTypeDTO;
 
 /**
  * @author zhangyong
@@ -38,4 +41,14 @@ public interface IndustryTypeService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "industryType/getAllIndustryList")
     Result<List<IndustryTypeDTO>> getAllIndustryList();
+
+    /**
+     * 根据行业类型查询行业列表
+     *
+     * @param industryTypeEnum
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "industryType/listIndustryTypeByType")
+    Result<List<IndustryTypeDTO>> listIndustryTypeByType(@RequestParam("industryTypeEnum") MerchantIndustryTypeEnum industryTypeEnum);
 }

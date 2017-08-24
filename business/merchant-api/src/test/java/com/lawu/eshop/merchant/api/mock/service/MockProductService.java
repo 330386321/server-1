@@ -1,5 +1,10 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -9,12 +14,9 @@ import com.lawu.eshop.product.dto.CommentProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.dto.ProductRelateAdInfoDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author meishuquan
@@ -62,13 +64,13 @@ public class MockProductService extends BaseController implements ProductService
     }
 
     @Override
-    public Result updateKeywordsById(@PathVariable("id") Long id, @RequestParam("keywords") Long merchantId, @RequestParam("keywords") String keywords) {
-        return successCreated();
-    }
-
-    @Override
     public Result<Integer> selectProductCount(@RequestParam("merchantId") Long merchantId) {
         return successCreated(new Integer(1));
     }
+
+	@Override
+	public Result<ProductRelateAdInfoDTO> selectProductRelateAdInfo(Long id) {
+		return successGet(new ProductRelateAdInfoDTO());
+	}
 
 }

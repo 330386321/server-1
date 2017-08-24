@@ -1,5 +1,16 @@
 package com.lawu.eshop.product.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.mq.dto.order.ProductModeUpdateInventoryDTO;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
@@ -12,8 +23,14 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.srv.ProductSrvConfig;
 import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
+import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
-import com.lawu.eshop.product.srv.domain.*;
+import com.lawu.eshop.product.srv.domain.ProductDO;
+import com.lawu.eshop.product.srv.domain.ProductDOExample;
+import com.lawu.eshop.product.srv.domain.ProductModelDO;
+import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
+import com.lawu.eshop.product.srv.domain.ProductModelInventoryDO;
+import com.lawu.eshop.product.srv.domain.ProductModelInventoryDOExample;
 import com.lawu.eshop.product.srv.domain.extend.ProductModelNumsView;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
 import com.lawu.eshop.product.srv.mapper.ProductCategoryeDOMapper;
@@ -24,13 +41,6 @@ import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.mapper.extend.ProductModelDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductModelService;
 import com.lawu.eshop.solr.service.SolrService;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 @Service
 public class ProductModelServiceImpl implements ProductModelService {
@@ -276,31 +286,8 @@ public class ProductModelServiceImpl implements ProductModelService {
 			
 			// 获取增加之后的销量，放入solr
 			ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
-			
-			// 更新solr商品销量
-			SolrDocument solrDocument = solrService.getSolrDocsById(productDO.getId(), productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
-			if (solrDocument != null) {
-				SolrInputDocument document = new SolrInputDocument();
-				document.addField("id", solrDocument.get("id"));
-				document.addField("featureImage_s", solrDocument.get("featureImage_s"));
-				document.setField("name_s", solrDocument.get("name_s"));
-				document.addField("categoryId_i", solrDocument.get("categoryId_i"));
-				document.addField("content_s", solrDocument.get("content_s"));
-				document.addField("averageDailySales_d", solrDocument.get("averageDailySales_d"));
-				document.addField("originalPrice_d", solrDocument.get("originalPrice_d"));
-				document.addField("price_d", solrDocument.get("price_d"));
-				document.addField("inventory_i", solrDocument.get("inventory_i"));
-				document.addField("salesVolume_i", productDO.getTotalSalesVolume());
-				ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(Integer.valueOf(solrDocument.get("categoryId_i").toString()));
-				if (productCategoryeDO != null) {
-					String[] categoryIdArr = productCategoryeDO.getPath().split("/");
-					for (String categoryId : categoryIdArr) {
-						document.addField("categoryId_is", categoryId);
-					}
-				}
-				solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
-			}
-			
+			SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
+			solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
 		}
 	}
 	

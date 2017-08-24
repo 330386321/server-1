@@ -1276,6 +1276,66 @@ public class BusinessDepositDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andGmtVerifyIsNull() {
+            addCriterion("gmt_verify is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtVerifyIsNotNull() {
+            addCriterion("gmt_verify is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtVerifyEqualTo(Date value) {
+            addCriterion("gmt_verify =", value, "gmtVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtVerifyNotEqualTo(Date value) {
+            addCriterion("gmt_verify <>", value, "gmtVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtVerifyGreaterThan(Date value) {
+            addCriterion("gmt_verify >", value, "gmtVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtVerifyGreaterThanOrEqualTo(Date value) {
+            addCriterion("gmt_verify >=", value, "gmtVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtVerifyLessThan(Date value) {
+            addCriterion("gmt_verify <", value, "gmtVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtVerifyLessThanOrEqualTo(Date value) {
+            addCriterion("gmt_verify <=", value, "gmtVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtVerifyIn(List<Date> values) {
+            addCriterion("gmt_verify in", values, "gmtVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtVerifyNotIn(List<Date> values) {
+            addCriterion("gmt_verify not in", values, "gmtVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtVerifyBetween(Date value1, Date value2) {
+            addCriterion("gmt_verify between", value1, value2, "gmtVerify");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtVerifyNotBetween(Date value1, Date value2) {
+            addCriterion("gmt_verify not between", value1, value2, "gmtVerify");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtRefundIsNull() {
             addCriterion("gmt_refund is null");
             return (Criteria) this;
@@ -1333,6 +1393,66 @@ public class BusinessDepositDOExample {
 
         public Criteria andGmtRefundNotBetween(Date value1, Date value2) {
             addCriterion("gmt_refund not between", value1, value2, "gmtRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAccpetIsNull() {
+            addCriterion("gmt_accpet is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAccpetIsNotNull() {
+            addCriterion("gmt_accpet is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAccpetEqualTo(Date value) {
+            addCriterion("gmt_accpet =", value, "gmtAccpet");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAccpetNotEqualTo(Date value) {
+            addCriterion("gmt_accpet <>", value, "gmtAccpet");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAccpetGreaterThan(Date value) {
+            addCriterion("gmt_accpet >", value, "gmtAccpet");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAccpetGreaterThanOrEqualTo(Date value) {
+            addCriterion("gmt_accpet >=", value, "gmtAccpet");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAccpetLessThan(Date value) {
+            addCriterion("gmt_accpet <", value, "gmtAccpet");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAccpetLessThanOrEqualTo(Date value) {
+            addCriterion("gmt_accpet <=", value, "gmtAccpet");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAccpetIn(List<Date> values) {
+            addCriterion("gmt_accpet in", values, "gmtAccpet");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAccpetNotIn(List<Date> values) {
+            addCriterion("gmt_accpet not in", values, "gmtAccpet");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAccpetBetween(Date value1, Date value2) {
+            addCriterion("gmt_accpet between", value1, value2, "gmtAccpet");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAccpetNotBetween(Date value1, Date value2) {
+            addCriterion("gmt_accpet not between", value1, value2, "gmtAccpet");
             return (Criteria) this;
         }
 

@@ -4,6 +4,7 @@ import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -79,7 +80,9 @@ public class AdBO {
    
    private Boolean isClickAd;
    
+	private Long relateId;
 	
+	private RelateTypeEnum relateType;
 
 	public Boolean getIsPraise() {
 		return isPraise;
@@ -295,6 +298,22 @@ public class AdBO {
 
 	public void setIsClickAd(Boolean isClickAd) {
 		this.isClickAd = isClickAd;
+	}
+
+	public Long getRelateId() {
+		return relateId;
+	}
+
+	public void setRelateId(Long relateId) {
+		this.relateId = relateId;
+	}
+
+	public RelateTypeEnum getRelateType() {
+		return relateType;
+	}
+
+	public void setRelateType(RelateTypeEnum relateType) {
+		this.relateType = relateType;
 	}
 	
 	

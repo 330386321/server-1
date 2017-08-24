@@ -75,7 +75,7 @@ public class ResultCode {
     public static final int ACCOUNT_IS_FREEZE = 2015;
     public static final int MAX_USERREDPACKET_COUNT=2016;
     public static final int MAX_USERREDPACKET_MONTY=2017;
-    
+    public static final int MIN_USERREDPACKET_MONTY=2018;
 
 
     // 商品模块代码 3xxx
@@ -205,7 +205,7 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_FORMAT_WRONG_UPLOAD, "上传图片格式错误");
         ResultCode.messageMap.put(RECORD_EXIST, "该记录已经存在");
         ResultCode.messageMap.put(IMAGE_SIZE_ERROR, "上传图片应小于500K");
-        ResultCode.messageMap.put(NOT_SEND_SMS_MOBILE, "与发送短信手机号不匹配");
+        ResultCode.messageMap.put(NOT_SEND_SMS_MOBILE, "手机号与验证码不匹配");
         ResultCode.messageMap.put(IMAGE_IS_NULL, "图片格式不正确");
         ResultCode.messageMap.put(MONEY_IS_POINT_2, "金额请保留两位小数");
 
@@ -213,18 +213,18 @@ public class ResultCode {
         ResultCode.messageMap.put(UPLOAD_SIZE_BIGER, "上传文件应小于50M");
         ResultCode.messageMap.put(INVITE_FANS_NOT_EXIST, "可邀请的粉丝不存在");
         
-        ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "一小时内同一手机号超过发送次数");
-        ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "同一IP 24小时内超过发送次数");
-        ResultCode.messageMap.put(SMS_SEND_MOBILE_LIMIT, "同一手机号24小时内超过发送次数");
-        ResultCode.messageMap.put(VERIFY_PWD_FAIL, "原始密码错误");
+        ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "同一手机号1小时内只能发送5次");
+        ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "同一设备24小时内只能发送5次");
+        ResultCode.messageMap.put(SMS_SEND_MOBILE_LIMIT, "同一手机号24小时内只能发送5次");
+        ResultCode.messageMap.put(VERIFY_PWD_FAIL, "原始密码错误，请重新输入");
         ResultCode.messageMap.put(VERIFY_SMS_CODE_FAIL, "短信验证码错误");
         ResultCode.messageMap.put(VERIFY_PIC_CODE_FAIL, "图片验证码错误");
         ResultCode.messageMap.put(PAY_PWD_NULL, "尚未设置支付密码");
         ResultCode.messageMap.put(PAY_PWD_ERROR, "支付密码错误");
         ResultCode.messageMap.put(ILLEGAL_OPERATION, "非法操作");
-        ResultCode.messageMap.put(VERIFY_SMS_CODE_OVERTIME, "短信验证码超时");
+        ResultCode.messageMap.put(VERIFY_SMS_CODE_OVERTIME, "短信验证码已失效");
         ResultCode.messageMap.put(INVITER_NO_EXIST, "邀请人不存在，请重新输入");
-        ResultCode.messageMap.put(ACCOUNT_EXIST, "账号已存在");
+        ResultCode.messageMap.put(ACCOUNT_EXIST, "该账号已存在");
         ResultCode.messageMap.put(SMS_SEND_FAIL, "短信验证码发送失败，请稍后重试！");
 
         ResultCode.messageMap.put(ID_CARD_RECORD_EXIST, "该身份证号已经创建过门店");
@@ -253,8 +253,9 @@ public class ResultCode {
         ResultCode.messageMap.put(MOBILE_IS_NOT_EXIST, "手机号不存在");
         ResultCode.messageMap.put(MERCHANT_STORE_IS_FAVORITE, "门店已被收藏");
         ResultCode.messageMap.put(ACCOUNT_IS_FREEZE, "账户已被冻结");
-        ResultCode.messageMap.put(MAX_USERREDPACKET_COUNT, "单个红包个数不能大于99999");
+        ResultCode.messageMap.put(MAX_USERREDPACKET_COUNT, "单个红包个数不能大于9999");
         ResultCode.messageMap.put(MAX_USERREDPACKET_MONTY, "单个红包金额不能大于50000");
+        ResultCode.messageMap.put(MIN_USERREDPACKET_MONTY, "单个红包金额不能小于0.01");
         
 
         //运营

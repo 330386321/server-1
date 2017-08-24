@@ -208,8 +208,8 @@ public class ShoppingRefundDetailController extends BaseController {
 	@ApiOperation(value = "商家拒绝退款", notes = "商家拒绝退款。。[1002|1003|4011|4013|4028]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
-	@RequestMapping(value = "rejectRefund/{shoppingOrderItemId}", method = RequestMethod.POST)
-    public Result rejectRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("shoppingOrderItemId") @ApiParam(required = true, value = "退款详情id") Long id, @ModelAttribute @ApiParam(value = "同意退款参数") @Validated RefuseRefundForeignParam param, BindingResult bindingResult){
+	@RequestMapping(value = "rejectRefund/{id}", method = RequestMethod.POST)
+    public Result rejectRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(required = true, value = "退款详情id") Long id, @ModelAttribute @ApiParam(value = "同意退款参数") @Validated RefuseRefundForeignParam param, BindingResult bindingResult){
 		String message = validate(bindingResult);
 		if(message != null){
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);

@@ -94,13 +94,10 @@ public class AdPlatformConverter {
             adPlatformBO.setPositionEnum(PositionEnum.getEnum(adPlatformDO.getPosition()));
             adPlatformBO.setStatus(adPlatformDO.getStatus());
             adPlatformBO.setGmtCreate(adPlatformDO.getGmtCreate());
-            if (adPlatformDO.getMerchantStoreId() != null)
-                adPlatformBO.setMerchantStoreId(adPlatformDO.getMerchantStoreId());
-            if (adPlatformDO.getType() == 1) {
-                adPlatformBO.setLinkUrl(adPlatformDO.getLinkUrl());
-            } else {
-                adPlatformBO.setProductId(adPlatformDO.getProductId());
-            }
+            adPlatformBO.setMerchantStoreId(adPlatformDO.getMerchantStoreId());
+            adPlatformBO.setLinkUrl(adPlatformDO.getLinkUrl());
+            adPlatformBO.setProductId(adPlatformDO.getProductId());
+            adPlatformBO.setAdId(adPlatformDO.getAdId());
             BOS.add(adPlatformBO);
         }
         return BOS;
@@ -159,11 +156,9 @@ public class AdPlatformConverter {
             adPlatformDTO.setPositionEnum(adPlatformBO.getPositionEnum());
             adPlatformDTO.setStatusEnum(AdPlatformStatusEnum.getEnum(adPlatformBO.getStatus()));
             adPlatformDTO.setGmtCreate(adPlatformBO.getGmtCreate());
-            if (adPlatformBO.getType() == 1) {
-                adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());
-            } else {
-                adPlatformDTO.setProductId(adPlatformBO.getProductId());
-            }
+            adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());
+            adPlatformDTO.setProductId(adPlatformBO.getProductId());
+            adPlatformDTO.setAdId(adPlatformBO.getAdId());
             DTOS.add(adPlatformDTO);
         }
         return DTOS;

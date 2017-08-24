@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
+import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
+import com.lawu.eshop.ad.dto.UserRedpacketMaxMoneyDTO;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
-import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
+import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
+import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
 import com.lawu.eshop.ad.srv.converter.UserRedPacketConverter;
 import com.lawu.eshop.ad.srv.domain.extend.UserRedpacketMaxMoney;
@@ -47,12 +51,13 @@ public class UserRedPacketController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "addUserRedPacket", method = RequestMethod.POST)
-	public Result addUserRedPacket(@RequestBody UserRedPacketSaveParam param) {
-		Integer id = userRedPacketService.addUserRedPacket(param);
-		if (null == id || id < 0) {
+	public Result<UserRedPacketAddReturnDTO> addUserRedPacket(@RequestBody UserRedPacketSaveParam param) {
+		UserRedPacketAddReturnBO bo = userRedPacketService.addUserRedPacket(param);
+		if (null == bo) {
 			successCreated(ResultCode.SAVE_FAIL);
 		}
-		return successCreated();
+		UserRedPacketAddReturnDTO dto =UserRedPacketConverter.convertAddDTO(bo);
+		return successCreated(dto);
 	}
 
 	/**
@@ -62,7 +67,7 @@ public class UserRedPacketController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "selectUserRedPacketList", method = RequestMethod.POST)
-	public Result<Page<UserRedPacketDTO>> selectUserRedPacketList(@RequestBody UserRedPacketSelectParam param) {
+	public Result<Page<UserRedPacketDTO>> selectUserRedPacketList(@RequestBody UserRedPacketSelectNumParam param) {
 		Page<UserRedPacketBO> pageBO = userRedPacketService.selectUserRedPacketList(param);
 		Page<UserRedPacketDTO> pageDTO = new Page<UserRedPacketDTO>();
 		pageDTO.setCurrentPage(pageBO.getCurrentPage());
@@ -90,9 +95,10 @@ public class UserRedPacketController extends BaseController {
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping(value = "executeUserRedPacketData", method = RequestMethod.POST)
 	public Result executeUserRedPacketData() {
-		userRedPacketService.executeUserRedPacketData();
+		//userRedPacketService.executeUserRedPacketData();
 		return successCreated();
 	}
 
@@ -104,20 +110,36 @@ public class UserRedPacketController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "getUserRedpacketMoney", method = RequestMethod.POST)
-	public Result getUserRedpacketMoney(@RequestParam Long redPacketId, @RequestParam String userNum) {
-		userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
-		return successCreated();
+	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMoney(@RequestParam Long redPacketId, @RequestParam String userNum) {
+		UserRedpacketMaxMoney getMoney = userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
+		UserRedpacketMaxMoneyDTO dto =new UserRedpacketMaxMoneyDTO();
+		dto.setMoney(getMoney.getMaxMoney());
+		dto.setFlag(getMoney.isFlag());
+		return successCreated(dto);
 	}
-
+	
 	/**
 	 * 获取最大的红包金额
 	 * @param redPacketId
 	 * @return
 	 */
 	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.POST)
-	public Result getUserRedpacketMaxMoney(@RequestParam Long redPacketId) {
+	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMaxMoney(@RequestParam Long redPacketId) {
 		UserRedpacketMaxMoney maxMoney =userRedPacketService.getUserRedpacketMaxMoney(redPacketId);
-		return successCreated(maxMoney);
+		UserRedpacketMaxMoneyDTO dto =new UserRedpacketMaxMoneyDTO();
+		dto.setMoney(maxMoney.getMaxMoney());
+		return successCreated(dto);
 	}	
 
+	/**
+	 * 根据红包ID 获取红包金额、和orderNum支付时调用第三方用
+	 * @param redPacketId
+	 * @return
+	 */
+	@RequestMapping(value="selectUserRedPacketInfoForThrid",method=RequestMethod.GET)
+	public Result<ThirdPayCallBackQueryPayOrderDTO> selectUserRedPacketInfoForThrid(@RequestParam Long redPacketId){
+		ThirdPayCallBackQueryPayOrderDTO result = userRedPacketService.selectUserRedPacketInfoForThrid(redPacketId);
+		return successGet(result); 
+	}
+	
 }

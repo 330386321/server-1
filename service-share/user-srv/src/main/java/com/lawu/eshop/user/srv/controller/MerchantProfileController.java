@@ -62,6 +62,7 @@ public class MerchantProfileController extends BaseController{
 	   dto.setMerchantStoreLogo(merchantInfoFromInviteFansBO.getMerchantStoreLogo());
 	   dto.setMerchantStoreName(merchantInfoFromInviteFansBO.getMerchantStoreName());
 	   dto.setMerchantStoreUrl(merchantInfoFromInviteFansBO.getMerchantStoreUrl());
+	   dto.setMerchantStoreId(merchantInfoFromInviteFansBO.getMerchantStoreId());
 	   return successGet(dto);
    }
    

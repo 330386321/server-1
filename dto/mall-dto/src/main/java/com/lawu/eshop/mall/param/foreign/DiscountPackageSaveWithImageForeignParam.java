@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.mall.param.DiscountPackageImageSaveParam;
 
 import io.swagger.annotations.ApiModel;
@@ -51,6 +52,7 @@ public class DiscountPackageSaveWithImageForeignParam {
 	@NotNull(message = "有效期-开始不能为空")
 	@ApiModelProperty(value = "有效期-开始(yyyy-MM-dd)", required = true)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date validityPeriodBegin;
 
 	/**
@@ -59,6 +61,7 @@ public class DiscountPackageSaveWithImageForeignParam {
 	@NotNull(message  = "有效期-结束不能为空")
 	@ApiModelProperty(value = "有效期-结束(yyyy-MM-dd)", required = true)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date validityPeriodEnd;
 
 	/**
@@ -74,6 +77,7 @@ public class DiscountPackageSaveWithImageForeignParam {
 	@NotNull(message = "使用时间-开始不能为空")
 	@ApiModelProperty(value = "使用时间-开始(HH:mm)", required = true)
 	@DateTimeFormat(pattern = "HH:mm")
+	@JsonFormat(pattern = "HH:mm")
 	private Date useTimeBegin;
 
 	/**
@@ -82,6 +86,7 @@ public class DiscountPackageSaveWithImageForeignParam {
 	@NotNull(message = "使用时间-结束不能为空")
 	@ApiModelProperty(value = "使用时间-结束(HH:mm)", required = true)
 	@DateTimeFormat(pattern = "HH:mm")
+	@JsonFormat(pattern = "HH:mm")
 	private Date useTimeEnd;
 
 	/**

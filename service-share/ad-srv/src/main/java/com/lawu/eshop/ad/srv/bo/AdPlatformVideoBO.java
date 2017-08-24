@@ -4,23 +4,19 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class AdPlatformVideoBO {
 	
-	@ApiModelProperty(value = "主键")
 	private Long id ;
 	
-	@ApiModelProperty(value = "广告id")
 	private Long adId;
 	
-	@ApiModelProperty(value = "标题")
 	private String title;
 	
-	@ApiModelProperty(value = "内容")
 	private String content;
 	
-	@ApiModelProperty(value = "商家名称")
 	private String name ;
 	
-	@ApiModelProperty(value = "图片路径")
 	private String videoImgUrl ;
+	
+	private String logoUrl;
 
 	public Long getId() {
 		return id;
@@ -68,6 +64,14 @@ public class AdPlatformVideoBO {
 
 	public void setVideoImgUrl(String videoImgUrl) {
 		this.videoImgUrl = videoImgUrl;
+	}
+
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
 	}
 	
 	

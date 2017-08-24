@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -107,35 +108,44 @@ public class StoreSolrController extends BaseController {
      * @return
      */
     @RequestMapping(value = "listStoreSearchWord", method = RequestMethod.GET)
-    public Result<List<StoreSearchWordDTO>> listStoreSearchWord(@RequestParam String name) {
-        //SolrQuery query = new SolrQuery();
-        //query.set("q", "*:*");
-        //query.set("qt", "/terms");
-        //query.set("terms", "true");
-        //query.set("terms.fl", "name_s");
-        //query.set("terms.regex", name + "+.*");
-        //query.set("terms.regex.flag", "case_insensitive");
-        //TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+    public Result<List<StoreSearchWordDTO>> listStoreSearchWord(@RequestParam String name, @RequestParam String regionPath) {
+        List<StoreSearchWordDTO> searchWordDTOS = new ArrayList<>();
+        SolrQuery query = new SolrQuery();
+        query.setQuery("keyword_ss:" + name + "* AND regionPath_s:" + regionPath + "*");
+        query.setFields("keyword_ss");
+        query.setStart(0);
+        query.setRows(10);
+        SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+        if (solrDocumentList == null || solrDocumentList.isEmpty()) {
+            return successGet(searchWordDTOS);
+        }
 
-        List<StoreSearchWordDTO> storeSearchWordDTOS = new ArrayList<>();
-        //if (termsResponse != null) {
-        //    Map<String, List<TermsResponse.Term>> termsMap = termsResponse.getTermMap();
-        //    for (Map.Entry<String, List<TermsResponse.Term>> termsEntry : termsMap.entrySet()) {
-        //        List<TermsResponse.Term> termList = termsEntry.getValue();
-        //        for (TermsResponse.Term term : termList) {
-        //            StoreSearchWordDTO storeSearchWordDTO = new StoreSearchWordDTO();
-        //            storeSearchWordDTO.setName(term.getTerm());
-        //            storeSearchWordDTO.setCount((int) term.getFrequency());
-        //            storeSearchWordDTOS.add(storeSearchWordDTO);
-        //        }
-        //    }
-        //} else {
-        //    StoreSearchWordDTO storeSearchWordDTO = new StoreSearchWordDTO();
-        //    storeSearchWordDTO.setName(name);
-        //    storeSearchWordDTO.setCount(0);
-        //    storeSearchWordDTOS.add(storeSearchWordDTO);
-        //}
-        return successGet(storeSearchWordDTOS);
+        for (SolrDocument solrDocument : solrDocumentList) {
+            String keywords = solrDocument.get("keyword_ss").toString();
+            keywords = keywords.substring(1, keywords.length() - 1);
+            String[] keywordArr = keywords.split(",");
+            for (String keyword : keywordArr) {
+                if (keyword.startsWith(name)) {
+                    StoreSearchWordDTO searchWordDTO = new StoreSearchWordDTO();
+                    searchWordDTO.setName(keyword);
+
+                    query = new SolrQuery();
+                    query.setQuery("keyword_ss:" + keyword + " AND regionPath_s:" + regionPath + "*");
+                    query.setFields("id");
+                    solrDocumentList = solrService.getSolrDocsByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+                    searchWordDTO.setCount((int) solrDocumentList.getNumFound());
+                    searchWordDTOS.add(searchWordDTO);
+                }
+            }
+        }
+        for (int i = 0; i < searchWordDTOS.size(); i++) {
+            for (int j = 0; j < searchWordDTOS.size(); j++) {
+                if (searchWordDTOS.get(i).getName().equals(searchWordDTOS.get(j).getName()) && i != j) {
+                    searchWordDTOS.remove(i);
+                }
+            }
+        }
+        return successGet(searchWordDTOS);
     }
 
     /**

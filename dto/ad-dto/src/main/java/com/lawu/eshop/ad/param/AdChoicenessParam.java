@@ -24,6 +24,13 @@ public class AdChoicenessParam extends AbstractPageParam {
 	@ApiParam (value = "纬度")
 	private Double latitude;
 
+	/**
+	 * 定位区域
+	 */
+	@ApiParam(value="定位区域")
+	private String transRegionPath;
+	
+	
 	public Double getLongitude() {
 		return longitude;
 	}
@@ -38,6 +45,14 @@ public class AdChoicenessParam extends AbstractPageParam {
 
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
+	}
+
+	public String getTransRegionPath() {
+		return transRegionPath;
+	}
+
+	public void setTransRegionPath(String transRegionPath) {
+		this.transRegionPath = transRegionPath;
 	}
 	
 

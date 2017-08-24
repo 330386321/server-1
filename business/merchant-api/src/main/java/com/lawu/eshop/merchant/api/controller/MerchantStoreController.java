@@ -1,5 +1,24 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
@@ -9,30 +28,22 @@ import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
+import com.lawu.eshop.merchant.api.service.BusinessDepositService;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
+import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
+import com.lawu.eshop.user.constants.BusinessDepositStatusEnum;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.param.ApplyPhysicalStoreParam;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * 商家扩展信息
@@ -48,6 +59,9 @@ public class MerchantStoreController extends BaseController {
 
     @Autowired
     private MerchantApiConfig merchantApiConfig;
+
+    @Autowired
+    private BusinessDepositService businessDepositService;
 
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
@@ -255,7 +269,12 @@ public class MerchantStoreController extends BaseController {
     Result<MerchantAuditInfoDTO> getMerchantAuditInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         Result<MerchantAuditInfoDTO> result = merchantStoreService.getMerchantAuditInfo(merchantId);
-        return result;
+        MerchantAuditInfoDTO auditInfoDTO = result.getModel();
+        Result<BusinessDepositDetailDTO> business = businessDepositService.selectDeposit(String.valueOf(merchantId));
+        if(business.getModel() != null){
+            auditInfoDTO.setDepositStatusEnum(BusinessDepositStatusEnum.getEnum(business.getModel().getBusinessDepositStatusEnum().getVal()));
+        }
+        return successGet(auditInfoDTO);
     }
 
     @Audit(date = "2017-04-21", reviewer = "孙林青")
@@ -366,18 +385,6 @@ public class MerchantStoreController extends BaseController {
                                              @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam) {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId, merchantStoreParam);
-    }
-
-    @Audit(date = "2017-08-08", reviewer = "孙林青")
-    @ApiOperation(value = "更新门店关键词", notes = "更新门店关键词。 [1002]（梅述全）", httpMethod = "PUT")
-    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @Authorization
-    @RequestMapping(value = "updateKeywordsById/{id}", method = RequestMethod.PUT)
-    public Result updateKeywordsById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                     @PathVariable @ApiParam(required = true, value = "门店ID") Long id,
-                                     @RequestParam @ApiParam(required = true, value = "关键词") String keywords) {
-        Long merchantId = UserUtil.getCurrentUserId(getRequest());
-        return merchantStoreService.updateKeywordsById(id, merchantId, keywords);
     }
 
 }

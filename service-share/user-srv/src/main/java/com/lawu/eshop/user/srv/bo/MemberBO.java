@@ -1,9 +1,9 @@
 package com.lawu.eshop.user.srv.bo;
 
 
-import com.lawu.eshop.user.constants.UserSexEnum;
-
 import java.util.Date;
+
+import com.lawu.eshop.user.constants.UserSexEnum;
 
 /**
  * 会员BO
@@ -58,6 +58,8 @@ public class MemberBO {
     private String regionName;
 
     private Boolean isFreeze;
+
+    private String freezeReason;
 
     public UserSexEnum getUserSex() {
         return userSex;
@@ -245,5 +247,13 @@ public class MemberBO {
 
     public void setIsFreeze(Boolean freeze) {
         isFreeze = freeze;
+    }
+
+    public String getFreezeReason() {
+        return freezeReason;
+    }
+
+    public void setFreezeReason(String freezeReason) {
+        this.freezeReason = freezeReason;
     }
 }

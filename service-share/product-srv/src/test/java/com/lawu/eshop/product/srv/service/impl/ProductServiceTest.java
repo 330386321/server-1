@@ -326,20 +326,6 @@ public class ProductServiceTest {
 	}
 
 	/**
-	 * 更新商品索引
-	 */
-	@Transactional
-	@Rollback
-	@Test
-	public void updateProductIndex() {
-		EditProductDataParam product = initProduct("1");
-		productService.eidtProduct(product);
-		EditProductDataParam product1 = initProduct("2");
-		productService.eidtProduct(product1);
-		productService.updateProductIndex(1L);
-	}
-
-	/**
 	 * 重建商品索引
 	 */
 	@Transactional
@@ -416,21 +402,6 @@ public class ProductServiceTest {
 		List<ProductBO> list = productService.listProductByIds(ids);
 		log.info(JSON.toJSON(list));
 		Assert.assertEquals(list.size(), 2);
-	}
-
-	@Transactional
-	@Rollback
-	@Test
-	public void updateKeywordsById() {
-		ProductDO productDO = new ProductDO();
-		productDO.setMerchantId(200L);
-		productDO.setKeywords("test");
-		productDOMapper.insertSelective(productDO);
-		productService.updateKeywordsById(productDO.getId(), 200L, "keywords");
-
-		productDO = productDOMapper.selectByPrimaryKey(productDO.getId());
-		Assert.assertNotNull(productDO);
-		Assert.assertEquals(productDO.getKeywords(), "keywords");
 	}
 
 	/**

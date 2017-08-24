@@ -1,5 +1,12 @@
 package com.lawu.eshop.member.api.mock.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -8,12 +15,6 @@ import com.lawu.eshop.user.dto.StoreSearchWordDTO;
 import com.lawu.eshop.user.dto.StoreSolrDTO;
 import com.lawu.eshop.user.param.DiscountStoreParam;
 import com.lawu.eshop.user.param.StoreSolrParam;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 class MockStoreSolrService extends BaseController implements StoreSolrService {
@@ -42,8 +43,8 @@ class MockStoreSolrService extends BaseController implements StoreSolrService {
     }
 
     @Override
-    public Result<List<StoreSearchWordDTO>> listStoreSearchWord(@RequestParam("name") String name) {
-        return successCreated();
+    public Result<List<StoreSearchWordDTO>> listStoreSearchWord(@RequestParam("name") String name, @RequestParam("regionPath") String regionPath) {
+        return successGet();
     }
 
     @Override

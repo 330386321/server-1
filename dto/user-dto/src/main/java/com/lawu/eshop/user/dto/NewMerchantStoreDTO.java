@@ -23,6 +23,12 @@ public class NewMerchantStoreDTO {
     @ApiModelProperty(value = "区域名称")
     private String regionName;
 
+    @ApiModelProperty(value = "区域路径")
+    private String regionPath;
+
+    @ApiModelProperty(value = "地区名称")
+    private String areaName;
+
     @ApiModelProperty(value = "地址")
     private String address;
 
@@ -83,5 +89,21 @@ public class NewMerchantStoreDTO {
 
     public void setStorePic(String storePic) {
         this.storePic = storePic;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 }

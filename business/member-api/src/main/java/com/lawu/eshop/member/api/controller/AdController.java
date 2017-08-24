@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +69,6 @@ import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
-import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
@@ -82,6 +82,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import util.VideoCutImgUtil;
 
 /**
  * 描述：广告管理
@@ -142,7 +143,7 @@ public class AdController extends BaseController {
 	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
 	@ApiOperation(value = "E赚列表(E赚平面和视频)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
-	@Authorization
+//	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectEgain", method = RequestMethod.GET)
 	public Result<Page<AdDTO>> selectEgain(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdEgainParam adEgainParam) {
@@ -152,7 +153,7 @@ public class AdController extends BaseController {
 	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
 	@ApiOperation(value = "会员查询广告列表(精选推荐)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
-	@Authorization
+	//@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectChoiceness", method = RequestMethod.GET)
 	public Result<Page<AdDTO>> selectChoiceness(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdChoicenessParam param) {
@@ -162,7 +163,7 @@ public class AdController extends BaseController {
 	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
 	@ApiOperation(value = "会员查询广告列表(积分榜，人气榜)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
-	@Authorization
+//	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectListPointTotle", method = RequestMethod.GET)
 	public Result<List<AdDTO>> selectListPointTotle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPointParam adPointParam) {
@@ -199,13 +200,21 @@ public class AdController extends BaseController {
     		adEgainDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
     		adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
     	}
-    	
-		 Result<Set<String>> rs= adViewService.getAdviews(id.toString());
+    	if(StringUtils.isNotEmpty(adEgainDTO.getVideoImgUrl())){
+    		String url=memberApiConfig.getVideoUploadUrl()+"/"+adEgainDTO.getMediaUrl();
+    		File f= new File(url); 
+    		if (f.exists() && f.isFile()){  
+    	        adEgainDTO.setFileSize(f.length()/1024/1024);
+    	    }
+    		adEgainDTO.setVideoTime(VideoCutImgUtil.getVideoTime(url, memberApiConfig.getFfmpegUrl()));
+    	}
+	    
+		Result<Set<String>> rs= adViewService.getAdviews(id.toString());
 		 
-		 if(!isSuccess(rs)){
+		if(!isSuccess(rs)){
 			 return successCreated(rs.getRet());
-    	 }
-		 if(!rs.getModel().isEmpty()){
+    	}
+		if(!rs.getModel().isEmpty()){
 			boolean flag = false;
 			for (String str : rs.getModel()) {
 				flag = memberId.toString().equals(str);
@@ -213,16 +222,16 @@ public class AdController extends BaseController {
 			if (!flag) {
 				adViewService.setAdView(id.toString(), memberId.toString());
 			}
-		  }else{
+		 }else{
 			 adViewService.setAdView(id.toString(), memberId.toString());
-		  }
+		 }
        
         return successAccepted(adEgainDTO);
     }
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
 	@ApiOperation(value = "会员查询广告列表(E赞)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
-	@Authorization
+//	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.GET)
 	public Result<Page<AdPraiseDTO>> selectAdPraiseList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPraiseParam adPraiseParam) {
@@ -306,8 +315,11 @@ public class AdController extends BaseController {
 		if(result.getModel()){
 			return successCreated(ResultCode.AD_CLICK_EXIST);
 		}else{
-			clickAdRecordService.setClickAdRecord(memberId+id+DateUtil.getIntDate());
-			return adExtendService.clickAd(id, memberId, num);
+			 Result<ClickAdPointDTO> res=adExtendService.clickAd(id, memberId, num);
+			 if(isSuccess(res)){ 
+				 clickAdRecordService.setClickAdRecord(memberId+id+DateUtil.getIntDate());
+			 }
+			return res;
 		}
 		
 	}
@@ -325,24 +337,25 @@ public class AdController extends BaseController {
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
 	@ApiOperation(value = "广告搜索", notes = "广告搜索,[]（张荣成）", httpMethod = "GET")
-	@Authorization
+//	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectAdByTitle", method = RequestMethod.GET)
-	public Result<Page<AdSolrDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdSolrParam adSolrParam) {
+	public Result<Page<AdSolrDTO>> selectAdByTitle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdSolrParam adSolrParam) {
 		
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
-		Result<UserDTO> userRS = memberService.findMemberInfo(memberId);
-		
 		AdsolrFindParam findParam = new AdsolrFindParam();
 		findParam.setAdSolrParam(adSolrParam);
-		findParam.setMerchantIds(merchantIds);
 		findParam.setMemberId(memberId);
-		
-		if (userRS.getModel().getRegionPath() != null) {
-			findParam.setRegionPath(userRS.getModel().getRegionPath());
+		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
+		findParam.setMerchantIds(merchantIds);
+		if(memberId != 0) {
+			Result<UserDTO> userRS = memberService.findMemberInfo(memberId);
+			if (userRS.getModel().getRegionPath() != null) {
+				findParam.setRegionPath(userRS.getModel().getRegionPath());
+			}
+		} else {
+			findParam.setRegionPath(adSolrParam.getTransRegionPath());
 		}
-		
 		return adService.queryAdByTitle(findParam);
 	}
 
@@ -403,7 +416,7 @@ public class AdController extends BaseController {
 	@Deprecated
 	@Audit(date = "2017-05-12", reviewer = "孙林青")
 	@ApiOperation(value = "E赚列表(E赚平面和视频)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
-	@Authorization
+//	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectEgainAd", method = RequestMethod.GET)
 	public Result<Page<AdFlatVideoDTO>> selectEgainAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdEgainParam adEgainParam) {
@@ -487,6 +500,7 @@ public class AdController extends BaseController {
 		return adService.isExistsRedPacket(merchantId);
 	}
 	
+	@Audit(date = "2017-08-18", reviewer = "李洪军")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询E赚列表", notes = "分页查询E赚列表(平面和视频)[]（蒋鑫俊）", httpMethod = "GET")
 	@Authorization
@@ -497,6 +511,7 @@ public class AdController extends BaseController {
 		return successGet(result);
 	}
 	
+	@Audit(date = "2017-08-18", reviewer = "李洪军")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询积分排行榜广告列表", notes = "查询积分排行榜广告列表(积分榜，人气榜),[]（蒋鑫俊）", httpMethod = "GET")
 	@Authorization
@@ -507,6 +522,7 @@ public class AdController extends BaseController {
 		return successGet(result);
 	}
 	
+	@Audit(date = "2017-08-18", reviewer = "李洪军")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询精选推荐广告列表", notes = "分页查询精选推荐广告列表,[]（蒋鑫俊）", httpMethod = "GET")
 	@Authorization

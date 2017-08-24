@@ -1,12 +1,15 @@
 package com.lawu.eshop.user.param;
 
-import com.lawu.eshop.user.dto.CertifTypeEnum;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
-import io.swagger.annotations.ApiParam;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.math.BigDecimal;
 import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+
+import io.swagger.annotations.ApiParam;
 
 /**
  *
@@ -160,6 +163,12 @@ public class MerchantStoreParam {
      */
     @ApiParam(name = "otherUrl", value = "其他照片")
     private String otherUrl;
+
+    @ApiParam(name = "keywords", value = "关键词")
+    private String keywords;
+
+    @ApiParam(name = "merchantStoreStatus", value = "门店状态")
+    private MerchantStatusEnum merchantStoreStatus;
 
 
     public String getName() {
@@ -360,5 +369,21 @@ public class MerchantStoreParam {
 
     public void setIndustryName(String industryName) {
         this.industryName = industryName;
+    }
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
+
+    public MerchantStatusEnum getMerchantStoreStatus() {
+        return merchantStoreStatus;
+    }
+
+    public void setMerchantStoreStatus(MerchantStatusEnum merchantStoreStatus) {
+        this.merchantStoreStatus = merchantStoreStatus;
     }
 }

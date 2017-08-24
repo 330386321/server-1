@@ -212,11 +212,13 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
 			bo.setBalance(new BigDecimal("0"));
 			bo.setPoint(new BigDecimal("0"));
+			bo.setFreeze(new BigDecimal("0"));
 			return bo;
 		}
 		PropertyInfoDO pdo = propertyInfoDOS.get(0);
 		bo.setBalance(pdo.getBalance());
 		bo.setPoint(pdo.getPoint());
+		bo.setFreeze(pdo.getFreezeMoney());
 		return bo;
 	}
 

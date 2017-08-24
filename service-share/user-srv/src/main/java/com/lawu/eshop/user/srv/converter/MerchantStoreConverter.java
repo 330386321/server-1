@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.converter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +87,7 @@ public class MerchantStoreConverter {
         merchantStoreInfoBO.setStatusEnum(MerchantStatusEnum.getEnum(merchantStoreDO.getStatus()));
         merchantStoreInfoBO.setRegionName(merchantStoreDO.getRegionName());
         merchantStoreInfoBO.setIndustryName(merchantStoreDO.getIndustryName());
+        merchantStoreInfoBO.setKeywords(merchantStoreDO.getKeywords());
         return merchantStoreInfoBO;
     }
 
@@ -130,6 +132,7 @@ public class MerchantStoreConverter {
         merchantStoreDTO.setMerchantStatus(merchantStoreInfoBO.getStatusEnum());
         merchantStoreDTO.setRegionName(merchantStoreInfoBO.getRegionName());
         merchantStoreDTO.setIndustryName(merchantStoreInfoBO.getIndustryName());
+        merchantStoreDTO.setKeywords(merchantStoreInfoBO.getKeywords());
 
         return merchantStoreDTO;
     }
@@ -195,6 +198,7 @@ public class MerchantStoreConverter {
         storeDetailDTO.setUserNum(storeDetailBO.getUserNum());
         storeDetailDTO.setName(storeDetailBO.getName());
         storeDetailDTO.setRegionName(storeDetailBO.getRegionName());
+        storeDetailDTO.setRegionPath(storeDetailBO.getRegionPath());
         storeDetailDTO.setAddress(storeDetailBO.getAddress());
         storeDetailDTO.setPrincipalMobile(storeDetailBO.getPrincipalMobile());
         storeDetailDTO.setStorePic(storeDetailBO.getStorePic());
@@ -202,10 +206,12 @@ public class MerchantStoreConverter {
         storeDetailDTO.setIntro(storeDetailBO.getIntro());
         storeDetailDTO.setFavoriteNumber(storeDetailBO.getFavoriteNumber());
         storeDetailDTO.setFavorite(storeDetailBO.getFavorite());
-        storeDetailDTO.setAverageConsumeAmount(storeDetailBO.getAverageConsumeAmount());
-        storeDetailDTO.setAverageScore(storeDetailBO.getAverageScore());
+        storeDetailDTO.setAverageConsumeAmount(BigDecimal.valueOf(storeDetailBO.getAverageConsumeAmount().intValue()));
+        storeDetailDTO.setAverageScore(storeDetailBO.getAverageScore().compareTo(BigDecimal.valueOf(0)) == 0 ? BigDecimal.valueOf(4) : storeDetailBO.getAverageScore());
         storeDetailDTO.setFeedbackRate(storeDetailBO.getFeedbackRate());
         storeDetailDTO.setBuyNumbers(storeDetailBO.getBuyNumbers());
+        storeDetailDTO.setLongitude(storeDetailBO.getLongitude());
+        storeDetailDTO.setLatitude(storeDetailBO.getLatitude());
         return storeDetailDTO;
     }
 
@@ -395,6 +401,10 @@ public class MerchantStoreConverter {
         document.addField("storePic_s", storePic);
         if (StringUtils.isNotEmpty(merchantStoreDO.getKeywords())) {
             document.addField("keywords", merchantStoreDO.getKeywords());
+            String[] keywords = merchantStoreDO.getKeywords().split(",");
+            for (String keyword : keywords) {
+                document.addField("keyword_ss", keyword.trim());
+            }
         }
         return document;
     }
@@ -423,9 +433,12 @@ public class MerchantStoreConverter {
             storeSolrDTO.setDistance(DataTransUtil.objectToDobule(solrDocument.get("distance"), 3));
             storeSolrDTO.setFavoriteNumber(solrDocument.get("favoriteNumber_i") == null ? 0 : Integer.valueOf(solrDocument.get("favoriteNumber_i").toString()));
             storeSolrDTO.setAverageConsumeAmount(solrDocument.get("averageConsumeAmount_d") == null ? 0.0 : Double.valueOf(solrDocument.get("averageConsumeAmount_d").toString()).intValue());
-            storeSolrDTO.setAverageScore(solrDocument.get("averageScore_d") == null ? 4.0 : Double.valueOf(solrDocument.get("averageScore_d").toString()));
+            storeSolrDTO.setAverageScore(solrDocument.get("averageScore_d") == null ? 0.0 : Double.valueOf(solrDocument.get("averageScore_d").toString()));
             storeSolrDTO.setFavoreInfo(solrDocument.get("favoreInfo_s") == null ? "" : solrDocument.get("favoreInfo_s").toString());
             storeSolrDTO.setDiscountPackage(solrDocument.get("discountPackage_s") == null ? "" : solrDocument.get("discountPackage_s").toString());
+            if (storeSolrDTO.getAverageScore() == 0) {
+                storeSolrDTO.setAverageScore(4.0);
+            }
             storeSolrDTOS.add(storeSolrDTO);
         }
         return storeSolrDTOS;
@@ -453,6 +466,14 @@ public class MerchantStoreConverter {
         document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
         document.addField("discountPackage_s", solrDocument.get("discountPackage_s"));
         document.addField("keywords", solrDocument.get("keywords"));
+        if (solrDocument.get("keywords") != null && StringUtils.isNotEmpty(solrDocument.get("keywords").toString())) {
+            String keywords = solrDocument.get("keywords").toString();
+            keywords = keywords.substring(1, keywords.length() - 1);
+            String[] keywordArr = keywords.split(",");
+            for (String keyword : keywordArr) {
+                document.addField("keyword_ss", keyword.trim());
+            }
+        }
         return document;
     }
     
@@ -541,6 +562,7 @@ public class MerchantStoreConverter {
             storeBO.setName(storeDOView.getName());
             storeBO.setIndustryName(storeDOView.getIndustryName());
             storeBO.setRegionName(storeDOView.getRegionName());
+            storeBO.setRegionPath(storeDOView.getRegionPath());
             storeBO.setAddress(storeDOView.getAddress());
             storeBO.setStorePic(storeDOView.getStorePic());
             storeBOS.add(storeBO);
@@ -568,6 +590,7 @@ public class MerchantStoreConverter {
             storeDTO.setName(storeBO.getName());
             storeDTO.setIndustryName(storeBO.getIndustryName());
             storeDTO.setRegionName(storeBO.getRegionName());
+            storeDTO.setRegionPath(storeBO.getRegionPath());
             storeDTO.setAddress(storeBO.getAddress());
             storeDTO.setStorePic(storeBO.getStorePic());
             storeDTOS.add(storeDTO);
@@ -595,6 +618,7 @@ public class MerchantStoreConverter {
             foodBO.setName(foodDOview.getName());
             foodBO.setIndustryName(foodDOview.getIndustryName());
             foodBO.setRegionName(foodDOview.getRegionName());
+            foodBO.setRegionPath(foodDOview.getRegionPath());
             foodBO.setAddress(foodDOview.getAddress());
             foodBO.setStorePic(foodDOview.getStorePic());
             foodBO.setLongitude(foodDOview.getLongitude());
@@ -628,6 +652,7 @@ public class MerchantStoreConverter {
             foodDTO.setName(foodBO.getName());
             foodDTO.setIndustryName(foodBO.getIndustryName());
             foodDTO.setRegionName(foodBO.getRegionName());
+            foodDTO.setRegionPath(foodBO.getRegionPath());
             foodDTO.setAddress(foodBO.getAddress());
             foodDTO.setStorePic(foodBO.getStorePic());
             foodDTO.setLongitude(foodBO.getLongitude());

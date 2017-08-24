@@ -1,19 +1,22 @@
 package com.lawu.eshop.mall.srv.controller;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.dto.IndustryTypeDTO;
-import com.lawu.eshop.mall.srv.bo.IndustryTypeBO;
-import com.lawu.eshop.mall.srv.converter.IndustryTypeConverter;
-import com.lawu.eshop.mall.srv.service.IndustryTypeService;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.constants.MerchantIndustryTypeEnum;
+import com.lawu.eshop.mall.dto.IndustryTypeDTO;
+import com.lawu.eshop.mall.srv.bo.IndustryTypeBO;
+import com.lawu.eshop.mall.srv.converter.IndustryTypeConverter;
+import com.lawu.eshop.mall.srv.service.IndustryTypeService;
 
 /**
  * @author meishuquan
@@ -78,6 +81,19 @@ public class IndustryTypeController extends BaseController {
             industryTypeDTOS.add(industryTypeDTO);
         }
         return successGet(industryTypeDTOS);
+    }
+
+    /**
+     * 根据行业类型查询行业列表
+     *
+     * @param industryTypeEnum
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "listIndustryTypeByType", method = RequestMethod.GET)
+    public Result<List<IndustryTypeDTO>> listIndustryTypeByType(@RequestParam MerchantIndustryTypeEnum industryTypeEnum) {
+        List<IndustryTypeBO> industryTypeBOS = industryTypeService.listIndustryTypeByType(industryTypeEnum);
+        return successGet(IndustryTypeConverter.convertDTO(industryTypeBOS));
     }
 
 }

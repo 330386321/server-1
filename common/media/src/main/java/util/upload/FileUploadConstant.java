@@ -5,14 +5,6 @@ package util.upload;
  * @date 2017年7月31日
  */
 public class FileUploadConstant {
-	/**
-	 * 上传文件为图片类型
-	 */
-	public static String IMG = "img";
-	/**
-	 * 上传文件为视频类型
-	 */
-	public static String VIDEO = "video";
 
 	/**
 	 * 视频文件最大长度限制

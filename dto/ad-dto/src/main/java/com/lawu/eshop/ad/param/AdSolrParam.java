@@ -20,6 +20,18 @@ public class AdSolrParam extends AbstractPageParam {
 	@ApiParam (name="latitude", value = "纬度")
 	private Double latitude;
 
+	@ApiParam(value="定位区域")
+	private String transRegionPath;
+	
+	
+	public String getTransRegionPath() {
+		return transRegionPath;
+	}
+
+	public void setTransRegionPath(String transRegionPath) {
+		this.transRegionPath = transRegionPath;
+	}
+
 	public String getTitle() {
 		return title;
 	}

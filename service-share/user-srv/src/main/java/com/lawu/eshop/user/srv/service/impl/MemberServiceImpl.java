@@ -641,9 +641,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void freezeAccount(String num, Boolean isFreeze) {
+    public void freezeAccount(String num, Boolean isFreeze,String freezeReason) {
         MemberDO memberDO = new MemberDO();
         memberDO.setIsFreeze(isFreeze);
+        memberDO.setFreezeReason(freezeReason);
         MemberDOExample example = new MemberDOExample();
         example.createCriteria().andNumEqualTo(num);
         memberDOMapper.updateByExampleSelective(memberDO, example);

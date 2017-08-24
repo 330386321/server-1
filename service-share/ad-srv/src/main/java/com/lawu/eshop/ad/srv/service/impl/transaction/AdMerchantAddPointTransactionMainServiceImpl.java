@@ -1,6 +1,7 @@
 package com.lawu.eshop.ad.srv.service.impl.transaction;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,9 +53,6 @@ public class AdMerchantAddPointTransactionMainServiceImpl extends AbstractTransa
  			for (PointPoolDO pointPoolDO : list) {
  				BigDecimal  point=pointPoolDO.getPoint();
  				sum=sum.add(point);
- 				//退还积分将积分记录设置为过期
- 				pointPoolDO.setStatus(new Byte("2"));
- 				pointPoolDOMapper.updateByPrimaryKey(pointPoolDO);
  			}
  			notification.setPoint(sum); 
     	 }else{

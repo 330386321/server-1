@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.dto.OperatorAdDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
@@ -68,6 +70,7 @@ public class AdPlatformController extends BaseController {
     
     @Autowired
     private AdService adService;
+   
 
     @PageBody
     @ApiOperation(value = "广告信息查询", notes = "广告信息查询[]（张荣成）", httpMethod = "POST")
@@ -85,7 +88,8 @@ public class AdPlatformController extends BaseController {
   			 if(adPlatformDTO.getProductId()!=null){
   				 Result<ProductEditInfoDTO>  productRs=productAuditService.selectEditProductById(adPlatformDTO.getProductId());
   	   			 if(isSuccess(productRs)){
-  	   				adPlatformDTO.setProductName(productRs.getModel().getName());
+  	   				adPlatformDTO.setRelateName(productRs.getModel().getName());
+  	   			    adPlatformDTO.setMerchantName(productRs.getModel().getName());
   	   			 }
   			 }
   			if(adPlatformDTO.getMerchantStoreId()!=null){
@@ -93,6 +97,19 @@ public class AdPlatformController extends BaseController {
   				if(isSuccess(merchantRs)){
   				  adPlatformDTO.setMerchantName(merchantRs.getModel().getName());
   				}
+  			}
+  			if(adPlatformDTO.getAdId()!=null){
+  				Result<AdDTO>  adRs=adService.getAdById(adPlatformDTO.getAdId());
+  				if(!isSuccess(adRs)){
+  					return successCreated(adRs.getRet());
+  				}
+  				adPlatformDTO.setRelateName(adRs.getModel().getTitle());
+ 				adPlatformDTO.setMerchantName(adRs.getModel().getName());
+ 				if(adRs.getModel().getTypeEnum()!=AdTypeEnum.AD_TYPE_VIDEO){
+ 					adPlatformDTO.setMediaUrl(adRs.getModel().getMediaUrl());
+ 				}else{
+ 					adPlatformDTO.setMediaUrl(adRs.getModel().getVideoImgUrl());
+ 				}
   			}
   			 
 		}

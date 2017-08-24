@@ -10,12 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.constants.FansInviteResultEnum;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.FansInviteContentDTO;
 import com.lawu.eshop.user.param.FansInviteContentExtendParam;
 import com.lawu.eshop.user.srv.bo.FansInviteContentBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.converter.FansInviteContentConverter;
 import com.lawu.eshop.user.srv.service.FansInviteContentService;
 import com.lawu.eshop.user.srv.service.FansInviteResultService;
+import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
 
 @RestController
 @RequestMapping(value = "fansInviteContent/")
@@ -26,6 +31,12 @@ public class FansInviteContentController extends BaseController {
 	
 	@Autowired
 	private FansInviteResultService fansInviteResultService;
+	
+	@Autowired
+	private MerchantStoreInfoService merchantStoreInfoService;
+	
+	@Autowired
+	private MerchantStoreProfileService merchantStoreProfileService;
 	
 	/**
 	 * 保存邀请内容
@@ -62,6 +73,10 @@ public class FansInviteContentController extends BaseController {
     	FansInviteContentDTO dto = FansInviteContentConverter.converterBoToDto(bo);
     	int i = fansInviteResultService.selectInviteResultById(id);
     	dto.setFansInviteResultEnum(FansInviteResultEnum.getEnum((byte)i));
-    	return successCreated(dto);
+    	MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(dto.getMerchantId());
+    	MerchantStoreProfileBO profileBO = merchantStoreProfileService.findMerchantStoreInfo(dto.getMerchantId());
+    	dto.setManageTypeEnum(ManageTypeEnum.getEnum(profileBO.getManageType()));
+    	dto.setMerchantStoreId(merchantStoreInfoBO.getMerchantStoreId());
+    	return successGet(dto);
     }
 }

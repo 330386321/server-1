@@ -396,6 +396,206 @@ public class UserRedPacketDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderNumIsNull() {
+            addCriterion("order_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumIsNotNull() {
+            addCriterion("order_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumEqualTo(String value) {
+            addCriterion("order_num =", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumNotEqualTo(String value) {
+            addCriterion("order_num <>", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumGreaterThan(String value) {
+            addCriterion("order_num >", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumGreaterThanOrEqualTo(String value) {
+            addCriterion("order_num >=", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumLessThan(String value) {
+            addCriterion("order_num <", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumLessThanOrEqualTo(String value) {
+            addCriterion("order_num <=", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumLike(String value) {
+            addCriterion("order_num like", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumNotLike(String value) {
+            addCriterion("order_num not like", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumIn(List<String> values) {
+            addCriterion("order_num in", values, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumNotIn(List<String> values) {
+            addCriterion("order_num not in", values, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumBetween(String value1, String value2) {
+            addCriterion("order_num between", value1, value2, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumNotBetween(String value1, String value2) {
+            addCriterion("order_num not between", value1, value2, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberIsNull() {
+            addCriterion("third_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberIsNotNull() {
+            addCriterion("third_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberEqualTo(String value) {
+            addCriterion("third_number =", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberNotEqualTo(String value) {
+            addCriterion("third_number <>", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberGreaterThan(String value) {
+            addCriterion("third_number >", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("third_number >=", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberLessThan(String value) {
+            addCriterion("third_number <", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberLessThanOrEqualTo(String value) {
+            addCriterion("third_number <=", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberLike(String value) {
+            addCriterion("third_number like", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberNotLike(String value) {
+            addCriterion("third_number not like", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberIn(List<String> values) {
+            addCriterion("third_number in", values, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberNotIn(List<String> values) {
+            addCriterion("third_number not in", values, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberBetween(String value1, String value2) {
+            addCriterion("third_number between", value1, value2, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberNotBetween(String value1, String value2) {
+            addCriterion("third_number not between", value1, value2, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeIsNull() {
+            addCriterion("pay_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeIsNotNull() {
+            addCriterion("pay_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeEqualTo(Byte value) {
+            addCriterion("pay_type =", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotEqualTo(Byte value) {
+            addCriterion("pay_type <>", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeGreaterThan(Byte value) {
+            addCriterion("pay_type >", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("pay_type >=", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeLessThan(Byte value) {
+            addCriterion("pay_type <", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("pay_type <=", value, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeIn(List<Byte> values) {
+            addCriterion("pay_type in", values, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotIn(List<Byte> values) {
+            addCriterion("pay_type not in", values, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeBetween(Byte value1, Byte value2) {
+            addCriterion("pay_type between", value1, value2, "payType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("pay_type not between", value1, value2, "payType");
+            return (Criteria) this;
+        }
+
         public Criteria andTypeIsNull() {
             addCriterion("type is null");
             return (Criteria) this;
@@ -573,6 +773,66 @@ public class UserRedPacketDOExample {
 
         public Criteria andTotalMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("total_money not between", value1, value2, "totalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyIsNull() {
+            addCriterion("refund_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyIsNotNull() {
+            addCriterion("refund_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyEqualTo(BigDecimal value) {
+            addCriterion("refund_money =", value, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("refund_money <>", value, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyGreaterThan(BigDecimal value) {
+            addCriterion("refund_money >", value, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("refund_money >=", value, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyLessThan(BigDecimal value) {
+            addCriterion("refund_money <", value, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("refund_money <=", value, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyIn(List<BigDecimal> values) {
+            addCriterion("refund_money in", values, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("refund_money not in", values, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("refund_money between", value1, value2, "refundMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("refund_money not between", value1, value2, "refundMoney");
             return (Criteria) this;
         }
 

@@ -1,8 +1,8 @@
 package com.lawu.eshop.user.dto;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import java.math.BigDecimal;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author meishuquan
@@ -24,6 +24,9 @@ public class RecommendFoodDTO {
 
     @ApiModelProperty(value = "区域名称")
     private String regionName;
+
+    @ApiModelProperty(value = "区域路径")
+    private String regionPath;
 
     @ApiModelProperty(value = "地址")
     private String address;
@@ -52,7 +55,7 @@ public class RecommendFoodDTO {
     @ApiModelProperty(value = "距离,单位km")
     private Double distance;
 
-    @ApiModelProperty(value = "区域名称")
+    @ApiModelProperty(value = "地区名称")
     private String areaName;
 
     @ApiModelProperty(value = "优惠信息")
@@ -195,5 +198,13 @@ public class RecommendFoodDTO {
 
     public void setDiscountPackage(String discountPackage) {
         this.discountPackage = discountPackage;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
     }
 }

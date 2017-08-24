@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.ad.constants.AdPlatformFlatTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
-import com.lawu.eshop.ad.dto.AdPlatformFlatDTO;
-import com.lawu.eshop.ad.dto.AdPlatformVideoDTO;
+import com.lawu.eshop.ad.dto.AdPlatformVideoFlatDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindEginParam;
 import com.lawu.eshop.ad.param.AdPlatformInternalParam;
 import com.lawu.eshop.authorization.util.UserUtil;
@@ -64,107 +62,36 @@ public class AdPlatformController extends BaseController {
         return adPlatformService.selectByPosition(positionEnum);
     }
 
+
+    @Audit(date = "2017-08-09", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
-	@ApiOperation(value = "广告位 (广告模块三个视频) ", notes = "广告位 (三个视频)[]（张荣成）", httpMethod = "GET")
+	@ApiOperation(value = "广告首页广告位 (广告首页4个广告位) ", notes = "广告首页广告位 (广告首页4个广告位)[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selAdPlatformPositionTwo", method = RequestMethod.GET)
-    public Result<List<AdPlatformVideoDTO>> selAdPlatformPositionTwo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPlatformFindEginParam query) {
+    @RequestMapping(value = "selAdPlatformPositionAd", method = RequestMethod.GET)
+    public Result<AdPlatformVideoFlatDTO> selAdPlatformPositionAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPlatformFindEginParam query) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
-		// 获取查询广告所需要的信息
-		Result<AdQueryMemberInfoDTO> adQueryMemberInfoResult = memberService.adQueryMemberInfo(memberId);
-		if (!isSuccess(adQueryMemberInfoResult)) {
-			return successGet(adQueryMemberInfoResult);
-		}
-		AdQueryMemberInfoDTO adQueryMemberInfoDTO = adQueryMemberInfoResult.getModel();
     	AdPlatformInternalParam param = new AdPlatformInternalParam();
     	param.setLatitude(query.getLatitude());
     	param.setLongitude(query.getLongitude());
-    	param.setMerchantIds(adQueryMemberInfoDTO.getFansList());
-    	if (StringUtils.isNotBlank(adQueryMemberInfoDTO.getRegionPath())) {
-    		param.setAreas(Arrays.asList(StringUtils.split(adQueryMemberInfoDTO.getRegionPath(), "/")));
-		}
-        return adPlatformService.selAdPlatformPositionTwo(param);
-    }
-    
-    @SuppressWarnings("unchecked")
-	@ApiOperation(value = "广告位 (广告模块五个平面) ", notes = "广告位 (五个平面)[]（张荣成）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selAdPlatformFiveFlat", method = RequestMethod.GET)
-    public Result<List<AdPlatformFlatDTO>> selAdPlatformFiveFlat(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPlatformFindEginParam query) {
-    	Long memberId = UserUtil.getCurrentUserId(getRequest());
-		// 获取查询广告所需要的信息
-		Result<AdQueryMemberInfoDTO> adQueryMemberInfoResult = memberService.adQueryMemberInfo(memberId);
-		if (!isSuccess(adQueryMemberInfoResult)) {
-			return successGet(adQueryMemberInfoResult);
-		}
-		AdQueryMemberInfoDTO adQueryMemberInfoDTO = adQueryMemberInfoResult.getModel();
-    	AdPlatformInternalParam param = new AdPlatformInternalParam();
-    	param.setLatitude(query.getLatitude());
-    	param.setLongitude(query.getLongitude());
-    	param.setMerchantIds(adQueryMemberInfoDTO.getFansList());
-    	if (StringUtils.isNotBlank(adQueryMemberInfoDTO.getRegionPath())) {
-    		param.setAreas(Arrays.asList(StringUtils.split(adQueryMemberInfoDTO.getRegionPath(), "/")));
-		}
-    	param.setAdPlatformFlatTypeEnum(AdPlatformFlatTypeEnum.AD_PLAT_FORM_FIVE);
-        return adPlatformService.selAdPlatformPositionFour(param);
-    }
-    
-    
-    @SuppressWarnings("unchecked")
-	@ApiOperation(value = "广告位 (广告模块一个平面) ", notes = "广告位 (一个平面)[]（张荣成）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selAdPlatformOneFlat", method = RequestMethod.GET)
-    public Result<AdPlatformFlatDTO> selAdPlatformOneFlat(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPlatformFindEginParam query) {
-    	Long memberId = UserUtil.getCurrentUserId(getRequest());
-		// 获取查询广告所需要的信息
-		Result<AdQueryMemberInfoDTO> adQueryMemberInfoResult = memberService.adQueryMemberInfo(memberId);
-		if (!isSuccess(adQueryMemberInfoResult)) {
-			return successGet(adQueryMemberInfoResult);
-		}
-		AdQueryMemberInfoDTO adQueryMemberInfoDTO = adQueryMemberInfoResult.getModel();
-    	AdPlatformInternalParam param = new AdPlatformInternalParam();
-    	param.setLatitude(query.getLatitude());
-    	param.setLongitude(query.getLongitude());
-    	param.setMerchantIds(adQueryMemberInfoDTO.getFansList());
-    	if (StringUtils.isNotBlank(adQueryMemberInfoDTO.getRegionPath())) {
-    		param.setAreas(Arrays.asList(StringUtils.split(adQueryMemberInfoDTO.getRegionPath(), "/")));
-		}
-    	param.setAdPlatformFlatTypeEnum(AdPlatformFlatTypeEnum.AD_PLAT_FORM_ONE);
-    	Result<List<AdPlatformFlatDTO>> result=adPlatformService.selAdPlatformPositionFour(param);
-    	if(!isSuccess(result)){
-    		return successCreated(result.getRet());
-    	}
-    	if(!result.getModel().isEmpty()){
-    		return successGet(result.getModel().get(0));
+    	if(memberId==0){
+    		if (StringUtils.isNotBlank(query.getTransRegionPath())) {
+    			param.setAreas(Arrays.asList(StringUtils.split(query.getTransRegionPath(), "/")));
+    		}
     	}else{
-    		return successGet(new AdPlatformFlatDTO());
+    		// 获取查询广告所需要的信息
+    		Result<AdQueryMemberInfoDTO> adQueryMemberInfoResult = memberService.adQueryMemberInfo(memberId);
+    		if (!isSuccess(adQueryMemberInfoResult)) {
+    			return successGet(adQueryMemberInfoResult);
+    		}
+    		AdQueryMemberInfoDTO adQueryMemberInfoDTO = adQueryMemberInfoResult.getModel();
+    		param.setMerchantIds(adQueryMemberInfoDTO.getFansList());
+    		if (StringUtils.isNotBlank(adQueryMemberInfoDTO.getRegionPath())) {
+    			param.setAreas(Arrays.asList(StringUtils.split(adQueryMemberInfoDTO.getRegionPath(), "/")));
+    		}
     	}
     	
+        return adPlatformService.selAdPlatformPositionAd(param);
     }
     
-    @SuppressWarnings("unchecked")
-	@ApiOperation(value = "广告位 (广告模块顶部两个平面) ", notes = "广告位 (广告模块顶部两个平面)[]（张荣成）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selAdPlatformToopTwoFlat", method = RequestMethod.GET)
-    public Result<List<AdPlatformFlatDTO>> selAdPlatformToopTwoFlat(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPlatformFindEginParam query) {
-    	Long memberId = UserUtil.getCurrentUserId(getRequest());
-		// 获取查询广告所需要的信息
-		Result<AdQueryMemberInfoDTO> adQueryMemberInfoResult = memberService.adQueryMemberInfo(memberId);
-		if (!isSuccess(adQueryMemberInfoResult)) {
-			return successGet(adQueryMemberInfoResult);
-		}
-		AdQueryMemberInfoDTO adQueryMemberInfoDTO = adQueryMemberInfoResult.getModel();
-    	AdPlatformInternalParam param = new AdPlatformInternalParam();
-    	param.setLatitude(query.getLatitude());
-    	param.setLongitude(query.getLongitude());
-    	param.setMerchantIds(adQueryMemberInfoDTO.getFansList());
-    	if (StringUtils.isNotBlank(adQueryMemberInfoDTO.getRegionPath())) {
-    		param.setAreas(Arrays.asList(StringUtils.split(adQueryMemberInfoDTO.getRegionPath(), "/")));
-		}
-    	param.setAdPlatformFlatTypeEnum(AdPlatformFlatTypeEnum.AD_PLAT_FORM_TWO);
-    	return adPlatformService.selAdPlatformPositionFour(param);
-    	
-    	
-    }
 
 }

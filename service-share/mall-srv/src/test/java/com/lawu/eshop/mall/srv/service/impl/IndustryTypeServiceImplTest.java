@@ -1,5 +1,6 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
+import com.lawu.eshop.mall.constants.MerchantIndustryTypeEnum;
 import com.lawu.eshop.mall.srv.bo.IndustryTypeBO;
 import com.lawu.eshop.mall.srv.domain.IndustryTypeDO;
 import com.lawu.eshop.mall.srv.mapper.IndustryTypeDOMapper;
@@ -56,6 +57,15 @@ public class IndustryTypeServiceImplTest {
     @Test
     public void getAllIndustryList(){
         List<IndustryTypeBO> list = industryTypeService.getAllIndustryList();
+        Assert.assertNotNull(list);
+        Assert.assertEquals(1,list.size());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void listIndustryTypeByType(){
+        List<IndustryTypeBO> list = industryTypeService.listIndustryTypeByType(MerchantIndustryTypeEnum.COMMON_INDUSTRY);
         Assert.assertNotNull(list);
         Assert.assertEquals(1,list.size());
     }

@@ -189,6 +189,7 @@ CREATE TABLE `industry_type` (
   `image_url` varchar(120) NOT NULL DEFAULT '' COMMENT '图片路径',
   `ordinal` int(10) unsigned NOT NULL COMMENT '序号',
   `status` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '1为启用,0为停用',
+  `type` TINYINT(2) UNSIGNED NOT NULL DEFAULT '1' COMMENT '1--普通店铺行业,2--实体店铺行业',
   `gmt_modified` datetime NOT NULL COMMENT '修改时间',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
@@ -422,7 +423,7 @@ INSERT INTO `region` (`id`, `parent_id`, `path`, `level`, `name`, `longitude`, `
 INSERT INTO `region` (`id`, `parent_id`, `path`, `level`, `name`, `longitude`, `latitude`) VALUES ('440305', '4403', '44/4403/440305', '3', '南山区', NULL, NULL);
 
 
-INSERT INTO `industry_type` (`id`, `parent_id`, `path`, `name`, `image_url`, `ordinal`, `status`, `gmt_modified`, `gmt_create`) VALUES ('10', '0', '10', '美食', '', '1', '1', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
+INSERT INTO `industry_type` (`id`, `parent_id`, `path`, `name`, `image_url`, `ordinal`, `status`,`type`, `gmt_modified`, `gmt_create`) VALUES ('10', '0', '10', '美食', '', '1', '1', '1', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
 
 
 -- ----------------------------

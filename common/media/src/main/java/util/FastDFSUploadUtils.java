@@ -22,6 +22,7 @@ import util.upload.FastDFSClient;
 import util.upload.FastDFSResult;
 import util.upload.FastDFSResultEnum;
 import util.upload.FileUploadConstant;
+import util.upload.FileUploadTypeEnum;
 
 /**
  * FastDFS上传工具
@@ -53,29 +54,31 @@ public class FastDFSUploadUtils {
 					try {
 						in = part.getInputStream();
 						ClientParams param = uparam.getCparam();
-						if (uparam.getType().equals(FileUploadConstant.IMG)) {// 图片文件
+						if (uparam.getFileUploadTypeEnum().equals(FileUploadTypeEnum.IMG)) {// 图片文件
 							if (fileSize > FileUploadConstant.IMG_MAX_SIZE) {
 								result.setFenum(FastDFSResultEnum.FD_FILE_IMG_BIG);
 								return result;
 							}
-							String fileUrl = FastDFSClient.getInstance(param)
-									.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName);
+							FastDFSClient client =new FastDFSClient();
+							String fileUrl =client.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName,param);
 							result.setFileUrl(fileUrl);
-						} else if (uparam.getType().equals(FileUploadConstant.VIDEO)) {// 视频文件
+						} else if (uparam.getFileUploadTypeEnum().equals(FileUploadTypeEnum.VIDEO)) {// 视频文件
 							if (StringUtils.isEmpty(uparam.getFfmpegUrl())) {
 								result.setFenum(FastDFSResultEnum.FD_FILE_ERROR);
 								return result;
 							}
 							String newName = RandomUtil.buildFileName(fileName);
 							saveLocalFile(part, uparam, newName);
-							String fileUrl = FastDFSClient.getInstance(param)
-									.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName);
+							FastDFSClient client =new FastDFSClient();
+							String fileUrl = client.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName,param);
 							result.setFileUrl(fileUrl);
 							String tmpVideoUrl = uparam.getBaseImageDir() + File.separator + uparam.getDir()
 									+ File.separator + newName;
 							String cutUrl = uparam.getBaseImageDir() + File.separator + VideoCutImgUtil.processImg(
 									tmpVideoUrl, uparam.getDir(), uparam.getBaseImageDir(), uparam.getFfmpegUrl());
-							String cutImgUrl = FastDFSClient.getInstance(param).uploadFile(cutUrl);
+							Thread.sleep(550);
+							FastDFSClient clientImg =new FastDFSClient();
+							String cutImgUrl = clientImg.uploadFile(cutUrl,param);
 							if (null == cutImgUrl) {
 								result.setFenum(FastDFSResultEnum.FD_FILE_CUT_ERROR);
 								return result;
@@ -90,14 +93,14 @@ public class FastDFSUploadUtils {
 								cutImgFile.delete();
 							}
 						} else {// 其他文件
-							String fileUrl = FastDFSClient.getInstance(param)
-									.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName);
+							FastDFSClient client =new FastDFSClient();
+							String fileUrl = client.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName,param);
 							result.setFileUrl(fileUrl);
 						}
 						result.setFenum(FastDFSResultEnum.FD_UPLOAD_SUCCESS);
 						return result;
 					} catch (Exception e) {
-						log.error("FastDFS上传文件异常" + e.getMessage());
+						log.error("FastDFS上传文件异常" + e.getMessage()+e.getLocalizedMessage());
 						try {
 							if (null != in) {
 								in.close();
@@ -149,5 +152,4 @@ public class FastDFSUploadUtils {
 			throw e;
 		}
 	}
-
 }

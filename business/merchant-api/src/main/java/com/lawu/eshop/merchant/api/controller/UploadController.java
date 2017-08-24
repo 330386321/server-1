@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.csource.fastdfs.ClientParams;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +18,6 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
-import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
 
@@ -30,6 +28,7 @@ import io.swagger.annotations.ApiResponse;
 import util.upload.FastDFSResult;
 import util.FastDFSUploadUtils;
 import util.upload.FileUploadDTO;
+import util.upload.FileUploadTypeEnum;
 import util.UploadParam;
 
 /**
@@ -48,17 +47,17 @@ public class UploadController extends BaseController {
 
     @Audit(date = "2017-08-01", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "统一上传接口", notes = "上传接口(李洪军)", httpMethod = "POST")
+    @ApiOperation(value = "统一上传接口", notes = "上传接口(李洪军)[上传类型为图片时返回图片路径是FileUrl、上传类型为视频时返回的视频路径为FileUrl、视频第三秒的截图文件路径是CutImgUrl]", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
-    public Result<FileUploadDTO> uploadFile(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                            @RequestParam @ApiParam(required = true, value = "上传类型图片(img)，视频(video),其他(file)") String type) {
+    public Result<FileUploadDTO> uploadFile(@RequestParam @ApiParam(required = true, value = "上传类型图片大写(IMG)，视频(VIDEO),其他(OTHER)") String uploadType,
+    		@RequestParam(required = false) @ApiParam(value = "上传文件下标或标识(非必填)") String fileIndex) {
         HttpServletRequest request = getRequest();
         UploadParam uparam = new UploadParam();
-        // uparam.setBaseImageDir(merchantApiConfig.getImageUploadUrl());
-        uparam.setBaseImageDir("C:/ffmpeg.exe");
+        uparam.setBaseImageDir(merchantApiConfig.getImageUploadUrl());
         uparam.setDir(FileDirConstant.DIR_HEAD);
-        uparam.setType(type);
+        uparam.setFileUploadTypeEnum(FileUploadTypeEnum.getEnum(uploadType));
+        uparam.setFfmpegUrl(merchantApiConfig.getFfmpegUrl());
         ClientParams cp = new ClientParams();
         cp.setTrackerServer(merchantApiConfig.getTrackerServers());
         cp.setTrackerHttpPort(merchantApiConfig.getTrackerHttpPort());
@@ -68,7 +67,7 @@ public class UploadController extends BaseController {
         switch (fastResult.getFenum()) {
             case FD_UPLOAD_SUCCESS:
                 result.setRet(HttpCode.SC_CREATED);
-                result.setModel(new FileUploadDTO(fastResult.getFileUrl(), fastResult.getCutImgUrl()));
+                result.setModel(new FileUploadDTO(fastResult.getFileUrl(), fastResult.getCutImgUrl(),fileIndex));
                 break;
             case FD_FILE_ERROR:
                 result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);

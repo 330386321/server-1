@@ -9,22 +9,22 @@ import com.lawu.eshop.property.param.ReportAdEarningsPointParam;
 import com.lawu.eshop.property.srv.bo.ReportAdEarningsPointBO;
 import com.lawu.eshop.property.srv.bo.ReportEarningsBO;
 import com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView;
-import com.lawu.eshop.property.srv.mapper.extend.PointDetailDOMapperExtend;
+import com.lawu.eshop.property.srv.mapper.extend.TransactionDetailExtendDOMapper;
 import com.lawu.eshop.property.srv.service.ReportAdEarningsPointService;
 
 @Service
 public class ReportAdEarningsPointServiceImpl implements ReportAdEarningsPointService{
 	
 	@Autowired
-	private PointDetailDOMapperExtend pointDetailDOMapperExtend;
+	private TransactionDetailExtendDOMapper transactionDetailExtendDOMapper;
 
 	@Override
 	public ReportAdEarningsPointBO getReportAdEarningsPoint(ReportAdEarningsPointParam ReportAdEarningsPointParam) {
 		ReportAdEarningsPointView view=new ReportAdEarningsPointView();
 		view.setBizId(ReportAdEarningsPointParam.getBizId());
 		view.setPointType(ReportAdEarningsPointParam.getMemberTransactionTypeEnum().getValue());
-		ReportAdEarningsPointView  viewDate=pointDetailDOMapperExtend.getReportAdEarningsPoint(view);
-		ReportAdEarningsPointView  viewLoveDate=pointDetailDOMapperExtend.getReportAdEarningsLovePoint(viewDate);
+		ReportAdEarningsPointView  viewDate=transactionDetailExtendDOMapper.getReportAdEarningsPoint(view);
+		ReportAdEarningsPointView  viewLoveDate=transactionDetailExtendDOMapper.getReportAdEarningsLovePoint(viewDate);
 		ReportAdEarningsPointBO bo=new ReportAdEarningsPointBO();
 		if(viewDate==null){
 			bo.setUserTotalPoint(BigDecimal.valueOf(0));
@@ -45,9 +45,9 @@ public class ReportAdEarningsPointServiceImpl implements ReportAdEarningsPointSe
 	public ReportEarningsBO getReportEarnings(Long bzId) {
 		ReportAdEarningsPointView view=new ReportAdEarningsPointView();
 		view.setBizId(bzId);
-		ReportAdEarningsPointView  userPoint=pointDetailDOMapperExtend.getUserPointByBzId(view);
+		ReportAdEarningsPointView  userPoint=transactionDetailExtendDOMapper.getUserPointByBzId(view);
 		 
-		ReportAdEarningsPointView  lovePoint=pointDetailDOMapperExtend.getLovePointByBzId(view);
+		ReportAdEarningsPointView  lovePoint=transactionDetailExtendDOMapper.getLovePointByBzId(view);
 		 
 		 ReportEarningsBO bo=new ReportEarningsBO();
 		 if(userPoint==null){
@@ -61,8 +61,6 @@ public class ReportAdEarningsPointServiceImpl implements ReportAdEarningsPointSe
 		 }else{
 			 bo.setLovaPoint(lovePoint.getLoveTotalPoint());
 		 }
-		 
-		 
 		 
 		 return bo;
 	}

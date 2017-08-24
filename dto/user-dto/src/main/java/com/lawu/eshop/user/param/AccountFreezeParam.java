@@ -20,6 +20,9 @@ public class AccountFreezeParam {
     @ApiModelProperty(value = "ID")
     private Long id;
 
+    @ApiModelProperty(value = "冻结原因")
+    private String freezeReason;
+
     public String getNum() {
         return num;
     }
@@ -28,7 +31,7 @@ public class AccountFreezeParam {
         this.num = num;
     }
 
-    public Boolean getFreeze() {
+    public Boolean getIsFreeze() {
         return isFreeze;
     }
 
@@ -50,5 +53,13 @@ public class AccountFreezeParam {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getFreezeReason() {
+        return freezeReason;
+    }
+
+    public void setFreezeReason(String freezeReason) {
+        this.freezeReason = freezeReason;
     }
 }

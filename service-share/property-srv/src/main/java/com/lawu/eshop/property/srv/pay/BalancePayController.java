@@ -96,4 +96,25 @@ public class BalancePayController extends BaseController {
         int retCode = balancePayService.balancePayPoint(param);
         return successCreated(retCode);
     }
+
+    /**
+     * 用户发红包余额支付
+     *
+     * @param param
+     * @param result
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "memberRedPacketPay", method = RequestMethod.POST)
+    public Result memberRedPacketPay(@RequestBody @Valid BalancePayDataParam param, BindingResult result) {
+        String message = validate(result);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+
+        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.USER_REDPACKET_CUT);
+        param.setTitle(MemberTransactionTypeEnum.USER_REDPACKET_CUT.getName());
+        int retCode = balancePayService.memberRedPacketPay(param);
+        return successCreated(retCode);
+    }
 }

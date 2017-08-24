@@ -1,12 +1,18 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreIndexParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
-import com.lawu.eshop.user.srv.bo.*;
-
-import java.util.List;
+import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
+import com.lawu.eshop.user.srv.bo.NewMerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.RecommendFoodBO;
 
 /**
  * 店面信息获取
@@ -60,14 +66,6 @@ public interface MerchantStoreService {
      * @param param
      */
     void updateStoreStatisticsById(Long id, StoreStatisticsParam param);
-
-    /**
-     * 更新门店索引
-     *
-     * @param id
-     */
-    @Deprecated
-    void updateStoreIndex(Long id);
 
     /**
      * 重建门店索引
@@ -126,13 +124,4 @@ public interface MerchantStoreService {
      */
     MerchantStoreAdInfoBO selectMerchantStoreAdInfo(Long merchantId);
 
-    /**
-     * 根据ID更新门店关键词
-     *
-     * @param id
-     * @param merchantId
-     * @param keywords
-     * @author meishuquan
-     */
-    void updateKeywordsById(Long id, Long merchantId, String keywords);
 }

@@ -41,6 +41,8 @@ public class MerchantBO {
 
     private Boolean isFreeze;
 
+    private String freezeReason;
+
     public Long getId() {
         return id;
     }
@@ -167,5 +169,13 @@ public class MerchantBO {
 
     public void setIsFreeze(Boolean freeze) {
         isFreeze = freeze;
+    }
+
+    public String getFreezeReason() {
+        return freezeReason;
+    }
+
+    public void setFreezeReason(String freezeReason) {
+        this.freezeReason = freezeReason;
     }
 }

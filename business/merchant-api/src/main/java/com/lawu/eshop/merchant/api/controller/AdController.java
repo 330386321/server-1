@@ -1,14 +1,10 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -47,7 +43,9 @@ import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.AdService;
 import com.lawu.eshop.merchant.api.service.MemberCountService;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
+import com.lawu.eshop.merchant.api.service.ProductService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.product.dto.ProductRelateAdInfoDTO;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
@@ -89,6 +87,9 @@ public class AdController extends BaseController {
 	private MerchantApiConfig merchantApiConfig;
 
     private final static String ALL_PLACE="ALL_PLACE";
+    
+    @Autowired
+   	private ProductService productService;
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
@@ -181,7 +182,7 @@ public class AdController extends BaseController {
     public Result saveAdvert(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-		if(adParam.getTypeEnum().getVal() != 4){
+    	if(adParam.getTypeEnum()!=AdTypeEnum.AD_TYPE_PACKET){
 			if(StringUtils.isEmpty(adParam.getBeginTime())){
 				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
 			}
@@ -200,13 +201,13 @@ public class AdController extends BaseController {
     		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
     	}
     	Integer count=0;
-    	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==1){
+    	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_AREAS){
     		String areas=adParam.getAreas();
     		if(areas==null || areas==""){
     			areas=ALL_PLACE;
     		}
     		count=memberCountService.findMemberCount(areas);
-    	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==2){
+    	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_FENS){
     		count=memberCountService.findFensCount(merchantId);
     	}
     	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
@@ -242,7 +243,7 @@ public class AdController extends BaseController {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());
     	return adService.selectListByMerchant(adMerchantParam, memberId);
     }
-
+    
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "广告操作下架", notes = "广告操作下架,[5001]（张荣成）", httpMethod = "PUT")
@@ -317,8 +318,7 @@ public class AdController extends BaseController {
     	}else if(adDTO.getPutWayEnum().val==2){
     		count=memberCountService.findFensCount(merchantId);
     	}
-    	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStoreByMId(merchantId);
-    	MerchantStoreDTO storeDTO= storeRs.getModel();
+    	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
     	AdSaveParam adSave=new AdSaveParam();
     	AdParam adParam=new AdParam();
     	adParam.setTitle(adDTO.getTitle());
@@ -331,9 +331,21 @@ public class AdController extends BaseController {
     	adParam.setPutWayEnum(adDTO.getPutWayEnum());
     	adParam.setRadius(adDTO.getRadius());
     	adParam.setTypeEnum(adDTO.getTypeEnum());
+    	adParam.setRelateId(adDTO.getProductId());
+    	adParam.setRelateType(adDTO.getRelateType());
+    	adParam.setRegionName(adDTO.getRegionName());
     	adSave.setAdParam(adParam);
-    	adSave.setLatitude(storeDTO.getLatitude());
-    	adSave.setLongitude(storeDTO.getLongitude());
+    	if(isSuccess(storeRs)){
+    		MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();
+        	if(storeDTO!=null){
+        		adSave.setLatitude(storeDTO.getLatitude());
+            	adSave.setLongitude(storeDTO.getLongitude());
+            	adSave.setLogoUrl(storeDTO.getLogoUrl());
+            	adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
+            	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
+            	adSave.setMerchantStoreName(storeDTO.getName());
+        	}
+    	}
     	adSave.setCount(count);
     	adSave.setMediaUrl(adDTO.getMediaUrl());
     	adSave.setVideoImgUrl(adDTO.getVideoImgUrl());
@@ -348,7 +360,19 @@ public class AdController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectById/{id}", method = RequestMethod.GET)
     public Result<AdMerchantDetailDTO> selectById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-    	return adService.selectById(id);
+		Result<AdMerchantDetailDTO> result = adService.selectById(id);
+		if(!isSuccess(result)){
+			return successCreated(result.getRet());
+		}
+		if(result.getModel().getProductId()!=null){
+			Result<ProductRelateAdInfoDTO>  proResult = productService.selectProductRelateAdInfo(result.getModel().getProductId());
+			if(!isSuccess(proResult)){
+				return successCreated(proResult.getRet());
+			}
+			result.getModel().setProductImgUrl(proResult.getModel().getImgUrl());
+			result.getModel().setProductName(proResult.getModel().getName());
+		}
+		return result;
     }
 
 	@SuppressWarnings("rawtypes")
@@ -435,7 +459,7 @@ public class AdController extends BaseController {
     	}else if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum()==PutWayEnum.PUT_WAY_FENS){
     		count=memberCountService.findFensCount(merchantId);
     	}
-    	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStoreByMId(merchantId);
+    	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
     	AdSaveParam adSave=new AdSaveParam();
     	AdParam adParam=new AdParam();
     	adParam.setTitle(adAgainParam.getTitle());
@@ -451,7 +475,7 @@ public class AdController extends BaseController {
     	adParam.setRegionName(adAgainParam.getRegionName());
     	adSave.setAdParam(adParam);
     	if(isSuccess(storeRs)){
-    		MerchantStoreDTO storeDTO= storeRs.getModel();
+    		MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();
         	if(storeDTO!=null){
         		adSave.setLatitude(storeDTO.getLatitude());
             	adSave.setLongitude(storeDTO.getLongitude());
@@ -479,7 +503,20 @@ public class AdController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectDetail/{id}", method = RequestMethod.GET)
     public Result<AdDetailDTO> selectDetail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-    	return adService.selectDetail(id);
+		Result<AdDetailDTO> result = adService.selectDetail(id);
+		if(!isSuccess(result)){
+			return successCreated(result.getRet());
+		}
+		if (result.getModel().getProductId() != null && result.getModel().getProductId() > 0) {
+			Result<ProductRelateAdInfoDTO>  proResult = productService.selectProductRelateAdInfo(result.getModel().getProductId());
+			if(!isSuccess(proResult)){
+				return successCreated(proResult.getRet());
+			}
+			result.getModel().setProductImgUrl(proResult.getModel().getImgUrl());
+			result.getModel().setProductName(proResult.getModel().getName());
+		}
+		
+		return result;
     }
 
 

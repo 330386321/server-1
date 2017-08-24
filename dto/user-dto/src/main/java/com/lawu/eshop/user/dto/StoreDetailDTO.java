@@ -1,9 +1,10 @@
 package com.lawu.eshop.user.dto;
 
-import com.lawu.eshop.user.constants.MerchantFavoredTypeEnum;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.math.BigDecimal;
+
+import com.lawu.eshop.user.constants.MerchantFavoredTypeEnum;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author meishuquan
@@ -22,6 +23,12 @@ public class StoreDetailDTO {
 
     @ApiModelProperty(value = "区域名称")
     private String regionName;
+
+    @ApiModelProperty(value = "区域路径")
+    private String regionPath;
+
+    @ApiModelProperty(value = "地区名称")
+    private String areaName;
 
     @ApiModelProperty(value = "地址")
     private String address;
@@ -85,6 +92,12 @@ public class StoreDetailDTO {
 
     @ApiModelProperty(value = "门店是否存在（注销状态） true:是,false:否")
     private boolean isExistStore;
+
+    @ApiModelProperty(value = "经度")
+    private BigDecimal longitude;
+
+    @ApiModelProperty(value = "纬度")
+    private BigDecimal latitude;
 
     public String getName() {
         return name;
@@ -284,5 +297,37 @@ public class StoreDetailDTO {
 
     public void setIsExistStore(boolean existStore) {
         isExistStore = existStore;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
+    }
+
+    public BigDecimal getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(BigDecimal longitude) {
+        this.longitude = longitude;
+    }
+
+    public BigDecimal getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
     }
 }

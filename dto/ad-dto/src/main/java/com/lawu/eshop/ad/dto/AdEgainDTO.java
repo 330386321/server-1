@@ -69,6 +69,12 @@ public class AdEgainDTO {
 	
 	@ApiModelProperty (name="relateType", value = "PRODUCT_TYPE 商品  | MERCHANT_STORE_TYPE 店铺")
 	private RelateTypeEnum relateType;
+	
+	@ApiModelProperty(value = "视频大小")
+	private Long fileSize;
+	
+	@ApiModelProperty(value = "视频时间")
+	private String videoTime;
 
 	public Long getId() {
 		return id;
@@ -230,5 +236,24 @@ public class AdEgainDTO {
 		this.relateType = relateType;
 	}
 
+	public Long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(Long fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	public String getVideoTime() {
+		return videoTime;
+	}
+
+	public void setVideoTime(String videoTime) {
+		this.videoTime = videoTime;
+	}
+
+	
+	
+	
 	
 }

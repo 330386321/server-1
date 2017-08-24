@@ -1,8 +1,8 @@
 package com.lawu.eshop.product.dto;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import java.util.List;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 
@@ -24,9 +24,6 @@ public class ProductEditInfoDTO {
 	@ApiModelProperty(value = "商品分类ID")
     private Long category;
 
-	@ApiModelProperty(value = "商品类别完整ID")
-	private String fullCategoryId;
-	
 	@ApiModelProperty(value = "商品分类全称")
 	private String categoryName;
 	
@@ -53,6 +50,9 @@ public class ProductEditInfoDTO {
 	
 	@ApiModelProperty(value = "是否支持退换货")
     private boolean isAllowRefund;
+
+	@ApiModelProperty(value = "关键词")
+	private String keywords;
 	
 	public Long getMerchantId() {
 		return merchantId;
@@ -127,11 +127,11 @@ public class ProductEditInfoDTO {
 		this.imageDetailUrl = imageDetailUrl;
 	}
 
-	public String getFullCategoryId() {
-		return fullCategoryId;
+	public String getKeywords() {
+		return keywords;
 	}
 
-	public void setFullCategoryId(String fullCategoryId) {
-		this.fullCategoryId = fullCategoryId;
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
 	}
 }

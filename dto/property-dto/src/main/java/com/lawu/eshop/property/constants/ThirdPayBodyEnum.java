@@ -27,7 +27,9 @@ public enum ThirdPayBodyEnum {
 	BILL_PAY_A("买单A"),
 	B_RECHARGE_BALANCE_P("商家充值余额P"),
 	B_RECHARGE_POINT_P("商家充值积分P"),
-	B_PAY_BOND_P("缴纳保证金P");
+	B_PAY_BOND_P("缴纳保证金P"),
+	M_RED_PACKET_I("发红包I"),
+	M_RED_PACKET_A("发红包A");
 	
 	private String val;
 

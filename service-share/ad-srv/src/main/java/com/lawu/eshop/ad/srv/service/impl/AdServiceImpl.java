@@ -364,10 +364,10 @@ public class AdServiceImpl implements AdService {
 		adDO.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
 		Integer i = adDOMapper.updateByPrimaryKeySelective(adDO);
 		AdDO ad = adDOMapper.selectByPrimaryKey(id);
+		matransactionMainAddService.sendNotice(ad.getId());
 		if(ad.getType()==AdTypeEnum.AD_TYPE_PACKET.getVal() || ad.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal() ){
 			pointPoolDOMapperExtend.updatePointOut(id);
 		}
-		matransactionMainAddService.sendNotice(ad.getId());
 		// 删除solr中的数据
 		solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		return i;
@@ -1269,6 +1269,8 @@ public class AdServiceImpl implements AdService {
 		List<AdDO> list = adDOMapper.selectByExample(example2);
 		if (!list.isEmpty()) {
 			for (AdDO ad : list) {
+				//退换积分
+				matransactionMainAddService.sendNotice(ad.getId());
 				// 删除solr中的数据
 				solrService.delSolrDocsById(ad.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 			}

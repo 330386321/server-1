@@ -15,7 +15,7 @@ import io.swagger.annotations.ApiParam;
  */
 public class InformParam {
 
-	@ApiParam(name = "informType", required = true, value = "INFORM_TYPE_PLAT 平面广告、INFORM_TYPE_PRAISE E赞、INFORM_TYPE_MERCHANT 商家、INFORM_TYPE_GOODS 商品")
+	@ApiParam(name = "informType", required = true, value = "INFORM_TYPE_PLAT 平面广告、INFORM_TYPE_PRAISE E赞、INFORM_TYPE_MERCHANT 商家、INFORM_TYPE_GOODS 商品、INFORM_TYPE_VIDEO视频")
 	private InformEnum informType;
 
 	@ApiParam(name = "informtItemId", required = true, value = "被举报类型id")

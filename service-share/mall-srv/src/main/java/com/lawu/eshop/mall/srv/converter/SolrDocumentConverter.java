@@ -1,5 +1,6 @@
 package com.lawu.eshop.mall.srv.converter;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 
@@ -28,6 +29,14 @@ public class SolrDocumentConverter {
         document.addField("averageScore_d", solrDocument.get("averageScore_d"));
         document.addField("discountPackage_s", solrDocument.get("discountPackage_s"));
         document.addField("keywords", solrDocument.get("keywords"));
+        if (solrDocument.get("keywords") != null && StringUtils.isNotEmpty(solrDocument.get("keywords").toString())) {
+            String keywords = solrDocument.get("keywords").toString();
+            keywords = keywords.substring(1, keywords.length() - 1);
+            String[] keywordArr = keywords.split(",");
+            for (String keyword : keywordArr) {
+                document.addField("keyword_ss", keyword.trim());
+            }
+        }
         return document;
     }
 
@@ -51,6 +60,14 @@ public class SolrDocumentConverter {
         document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d"));
         document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
         document.addField("keywords", solrDocument.get("keywords"));
+        if (solrDocument.get("keywords") != null && StringUtils.isNotEmpty(solrDocument.get("keywords").toString())) {
+            String keywords = solrDocument.get("keywords").toString();
+            keywords = keywords.substring(1, keywords.length() - 1);
+            String[] keywordArr = keywords.split(",");
+            for (String keyword : keywordArr) {
+                document.addField("keyword_ss", keyword.trim());
+            }
+        }
         return document;
     }
 }

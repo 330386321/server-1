@@ -16,6 +16,8 @@ public class NewMerchantStoreDOView {
 
     private String regionName;
 
+    private String regionPath;
+
     private String address;
 
     private String storePic;
@@ -74,5 +76,13 @@ public class NewMerchantStoreDOView {
 
     public void setStorePic(String storePic) {
         this.storePic = storePic;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
     }
 }

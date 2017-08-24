@@ -24,6 +24,7 @@ import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductPlatDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.dto.ProductRelateAdInfoDTO;
 import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.ListProductParam;
@@ -33,6 +34,7 @@ import com.lawu.eshop.product.srv.bo.ProductBO;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+import com.lawu.eshop.product.srv.bo.ProductRelateAdInfoBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.utils.BeanUtil;
@@ -149,7 +151,7 @@ public class ProductController extends BaseController {
         BeanUtil.copyProperties(productBO, productDTO);
 
         productDTO.setAllowRefund(productBO.isAllowRefund());
-        productDTO.setFullCategoryId(productBO.getFullCategoryId());
+        productDTO.setKeywords(productBO.getKeywords());
         return successGet(productDTO);
     }
 
@@ -285,20 +287,6 @@ public class ProductController extends BaseController {
     }
 
     /**
-     * 更新商品索引
-     *
-     * @param id
-     * @return
-     */
-    @Deprecated
-    @SuppressWarnings("rawtypes")
-	@RequestMapping(value = "updateProductIndex/{id}", method = RequestMethod.PUT)
-    public Result updateProductIndex(@PathVariable Long id) {
-        productService.updateProductIndex(id);
-        return successCreated();
-    }
-
-    /**
      * 重建商品索引
      * @return
      */
@@ -348,28 +336,29 @@ public class ProductController extends BaseController {
         return successGet(ProductConverter.convertSearchDTO(productBOS));
     }
 
-    /**
-     * 根据ID更新商品关键词
-     *
-     * @param id
-     * @param keywords
-     * @return
-     * @author meishuquan
-     */
-    @RequestMapping(value = "updateKeywordsById/{id}", method = RequestMethod.PUT)
-    public Result updateKeywordsById(@PathVariable Long id, @RequestParam Long merchantId, @RequestParam String keywords) {
-        ProductInfoBO productInfoBO = productService.selectProductById(id);
-        if (productInfoBO == null) {
-            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-        }
-        productService.updateKeywordsById(id, merchantId, keywords);
-        return successCreated();
-    }
-
     @RequestMapping(method = RequestMethod.PUT, value = "soldOutProductByMerchantId")
     public Result soldOutProductByMerchantId(@RequestParam(value = "id")  Long id){
         productService.soldOutProductByMerchantId(id);
         return successCreated();
     }
 
+    /**
+     * 根据商品ID查询商品
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "selectProductRelateAdInfo/{id}", method = RequestMethod.GET)
+    public Result<ProductRelateAdInfoDTO> selectProductRelateAdInfo(@PathVariable Long id) {
+    	ProductRelateAdInfoBO bo = productService.selectProductRelateAdInfo(id);
+        if (bo == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        
+        ProductRelateAdInfoDTO dto = new ProductRelateAdInfoDTO();
+        dto.setImgUrl(bo.getImgUrl());
+        dto.setName(bo.getName());
+        
+        return successGet(dto);
+    }
 }

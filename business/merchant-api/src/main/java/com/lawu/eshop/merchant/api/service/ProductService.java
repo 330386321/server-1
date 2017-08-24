@@ -1,5 +1,12 @@
 package com.lawu.eshop.merchant.api.service;
 
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
@@ -7,10 +14,9 @@ import com.lawu.eshop.product.dto.CommentProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.dto.ProductRelateAdInfoDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * 产品服务接口
@@ -80,18 +86,6 @@ public interface ProductService {
     @RequestMapping(value = "product/getProduct/{id}", method = RequestMethod.GET)
     Result<ProductInfoDTO> getProduct(@PathVariable("id") Long id);
 
-    /**
-     * 根据ID更新商品关键词
-     *
-     * @param id
-     * @param merchantId
-     * @param keywords
-     * @return
-     * @author meishuquan
-     */
-    @RequestMapping(value = "product/updateKeywordsById/{id}", method = RequestMethod.PUT)
-    Result updateKeywordsById(@PathVariable("id") Long id, @RequestParam("keywords") Long merchantId, @RequestParam("keywords") String keywords);
-
      /* 查询商家上架商品的总数量
      *
      * @param merchantId
@@ -99,5 +93,9 @@ public interface ProductService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "product/selectProductCount")
     Result<Integer> selectProductCount(@RequestParam("merchantId") Long merchantId);
+    
+    @RequestMapping(value = "product/selectProductRelateAdInfo/{id}", method = RequestMethod.GET)
+    Result<ProductRelateAdInfoDTO> selectProductRelateAdInfo(@PathVariable("id") Long id);
 
 }
+

@@ -8,6 +8,8 @@
     <schema name="mall" checkSQLschema="false" sqlMaxLimit="100" dataNode="dn_mall"/>
     <schema name="user" checkSQLschema="false" sqlMaxLimit="100" dataNode="dn_user"/>
     <schema name="operator" checkSQLschema="false" sqlMaxLimit="100" dataNode="dn_operator"/>
+    <schema name="statistics" checkSQLschema="false" sqlMaxLimit="100" dataNode="dn_statistics"/>
+    <schema name="agent" checkSQLschema="false" sqlMaxLimit="100" dataNode="dn_agent"/>
 
     <dataNode name="dn_ad" dataHost="host1" database="eshop_ad"/>
     <dataNode name="dn_product" dataHost="host1" database="eshop_product"/>
@@ -16,6 +18,8 @@
     <dataNode name="dn_mall" dataHost="host1" database="eshop_mall"/>
     <dataNode name="dn_user" dataHost="host1" database="eshop_user"/>
     <dataNode name="dn_operator" dataHost="host1" database="eshop_operator"/>
+    <dataNode name="dn_statistics" dataHost="host1" database="eshop_statistics"/>
+    <dataNode name="dn_agent" dataHost="host1" database="eshop_agent"/>
 
     <dataHost name="host1" maxCon="1000" minCon="10" balance="1" writeType="1" dbType="mysql" dbDriver="native">
         <heartbeat>select 1</heartbeat>

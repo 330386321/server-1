@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
+import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -81,10 +82,10 @@ public class UserRedPacketControllerTest {
 	@Test
 	public void selectUserRedPacketList() {
 		addUserRedPacket();
-		UserRedPacketSelectParam param = new UserRedPacketSelectParam();
+		UserRedPacketSelectNumParam param = new UserRedPacketSelectNumParam();
 		param.setCurrentPage(1);
 		param.setPageSize(10);
-		param.setUserNum("M00001");
+		param.setNum("M00001");
 		String json = JSONObject.toJSONString(param);
 		RequestBuilder request = post("/userRedPacket/selectUserRedPacketList").contentType(MediaType.APPLICATION_JSON)
 				.content(json);
@@ -104,10 +105,10 @@ public class UserRedPacketControllerTest {
 	@Test
 	public void isExistsRedPacket() {
 		addUserRedPacket();
-		UserRedPacketSelectParam param = new UserRedPacketSelectParam();
+		UserRedPacketSelectNumParam param = new UserRedPacketSelectNumParam();
 		param.setCurrentPage(1);
 		param.setPageSize(10);
-		param.setUserNum("M00001");
+		param.setNum("M00001");
 		String json = JSONObject.toJSONString(param);
 		RequestBuilder request = post("/userRedPacket/selectUserRedPacketList").contentType(MediaType.APPLICATION_JSON)
 				.content(json);
@@ -153,10 +154,10 @@ public class UserRedPacketControllerTest {
 	@Test
 	public void getUserRedpacketMoney() {
 		addUserRedPacket();
-		UserRedPacketSelectParam param = new UserRedPacketSelectParam();
+		UserRedPacketSelectNumParam param = new UserRedPacketSelectNumParam();
 		param.setCurrentPage(1);
 		param.setPageSize(10);
-		param.setUserNum("M00001");
+		param.setNum("M00001");
 		String json = JSONObject.toJSONString(param);
 		RequestBuilder request = post("/userRedPacket/selectUserRedPacketList").contentType(MediaType.APPLICATION_JSON)
 				.content(json);
@@ -201,10 +202,10 @@ public class UserRedPacketControllerTest {
 	@Test
 	public void getUserRedpacketMaxMoney() {
 		addUserRedPacket();
-		UserRedPacketSelectParam param = new UserRedPacketSelectParam();
+		UserRedPacketSelectNumParam param = new UserRedPacketSelectNumParam();
 		param.setCurrentPage(1);
 		param.setPageSize(10);
-		param.setUserNum("M00001");
+		param.setNum("M00001");
 		String json = JSONObject.toJSONString(param);
 		RequestBuilder request = post("/userRedPacket/selectUserRedPacketList").contentType(MediaType.APPLICATION_JSON)
 				.content(json);

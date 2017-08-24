@@ -81,6 +81,8 @@ public class AdConverter {
 		adBO.setRegionName(adDO.getRegionName());
 		adBO.setAuditorId(adDO.getAuditorId());
 		adBO.setRemark(adDO.getRemark());
+		adBO.setRelateId(adDO.getRelateId());
+		adBO.setRelateType(RelateTypeEnum.getEnum(adDO.getRelateType()));
         return adBO;
 		
 	}
@@ -336,6 +338,8 @@ public class AdConverter {
 		dto.setContent(adBO.getContent());
 		dto.setVideoImgUrl(adBO.getVideoImgUrl());
 		dto.setRegionName(adBO.getRegionName());
+		dto.setProductId(adBO.getRelateId());
+		dto.setRelateType(adBO.getRelateType());
 		return dto;
 	}
 	
@@ -389,6 +393,7 @@ public class AdConverter {
 		adDetailBO.setRemark(adDO.getRemark());
 		adDetailBO.setAuditTime(adDO.getAuditTime());
 		adDetailBO.setBeginTime(adDO.getBeginTime());
+		adDetailBO.setProductId(adDO.getRelateId());
         return adDetailBO;
 		
 		
@@ -422,6 +427,7 @@ public class AdConverter {
 		adDetailDTO.setAlreadyGetPoint(adDetailBO.getAlreadyGetPoint());
 		adDetailDTO.setNotGetPoint(adDetailBO.getNotGetPoint());
 		adDetailDTO.setBeginTime(adDetailBO.getBeginTime());
+		adDetailDTO.setProductId(adDetailBO.getProductId());
         return adDetailDTO;
 		
 		
@@ -641,6 +647,8 @@ public class AdConverter {
 		adBO.setManageTypeEnum(ManageTypeEnum.getEnum(adDO.getManageType()));
 		adBO.setMerchantStoreId(adDO.getMerchantStoreId());
 		adBO.setStatusEnum(AdStatusEnum.getEnum(adDO.getStatus()));
+		adBO.setRelateId(adDO.getRelateId());
+		adBO.setRelateType(RelateTypeEnum.getEnum(adDO.getRelateType()));
         return adBO;
 
 	}
@@ -667,6 +675,8 @@ public class AdConverter {
 		dto.setIsFavorite(adBO.getIsFavorite());
 		dto.setIsPraise(adBO.getIsPraise());
 		dto.setCount(adBO.getNumber());
+		dto.setRelateId(adBO.getRelateId());
+		dto.setRelateType(adBO.getRelateType());
 		Date date=new Date();
 		if(adBO.getStatusEnum().val==2){ //结束倒计时
 			Long time=adBO.getBeginTime().getTime()+ (20*60*1000)-date.getTime();

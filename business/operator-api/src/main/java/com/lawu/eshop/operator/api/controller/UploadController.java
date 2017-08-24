@@ -28,6 +28,7 @@ import util.FastDFSUploadUtils;
 import util.UploadParam;
 import util.upload.FastDFSResult;
 import util.upload.FileUploadDTO;
+import util.upload.FileUploadTypeEnum;
 
 /**
  * 统一上传接口
@@ -47,12 +48,13 @@ public class UploadController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
     @ResponseBody
-    public Result<FileUploadDTO> uploadFile(@RequestParam @ApiParam(required = true, value = "上传类型图片(img)，视频(video),其他(file)") String fileType) {
+    public Result<FileUploadDTO> uploadFile(@RequestParam @ApiParam(required = true, value = "上传类型图片(IMG)，视频(VIDEO),其他(OTHER)") String uploadType) {
         HttpServletRequest request = getRequest();
         UploadParam uparam = new UploadParam();
         uparam.setBaseImageDir(operatorApiConfig.getImageUploadUrl());
         uparam.setDir(FileDirConstant.AD_PLAT_FORM_URL);
-        uparam.setType(fileType);
+        uparam.setFileUploadTypeEnum(FileUploadTypeEnum.getEnum(uploadType));
+        uparam.setFfmpegUrl(operatorApiConfig.getFfmpegUrl());
         ClientParams cp = new ClientParams();
         cp.setTrackerServer(operatorApiConfig.getTrackerServers());
         cp.setTrackerHttpPort(operatorApiConfig.getTrackerHttpPort());

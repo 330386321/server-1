@@ -1,5 +1,7 @@
 package com.lawu.eshop.mall.srv.mq;
 
+import com.lawu.eshop.mall.constants.BusinessDepositOperEnum;
+import com.lawu.eshop.mq.dto.property.RefundDepositDoSuccessOrFailureNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
@@ -222,7 +224,34 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
 				return;
 			}
-			
+
+		} else if (MqConstant.TOPIC_PROPERTY_SRV.equals(topic)) {
+			/*
+			 *  提醒商家申请退款保证金结果通知
+			 *
+			 */
+			if (MqConstant.TAG_PROPERTY_DEPOSIT_DO_RESULT.equals(tags)) {
+				RefundDepositDoSuccessOrFailureNotification notification = (RefundDepositDoSuccessOrFailureNotification) message;
+				/*
+				 * 发送站内信
+				 */
+				// 组装信息
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(notification.getDepositId());
+				if (BusinessDepositOperEnum.REFUND_SUCCESS.getVal().equals(notification.getDepositOperEnumVal())) {
+					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_DEPOSIT_SUCCESS);
+				} else  if(BusinessDepositOperEnum.REFUND_FAILURE.getVal().equals(notification.getDepositOperEnumVal())){
+					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_DEPOSIT_FAIL);
+				}
+
+				messageInfoParam.setMessageParam(new MessageTempParam());
+				messageInfoParam.getMessageParam().setFailReason(notification.getFailureReason());
+
+				// 保存站内信，并且发送个推
+				messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
+				return;
+			}
+
 		}
 	}
 }

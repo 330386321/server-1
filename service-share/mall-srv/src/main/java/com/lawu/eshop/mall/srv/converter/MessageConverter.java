@@ -1,5 +1,9 @@
 package com.lawu.eshop.mall.srv.converter;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import com.lawu.eshop.mall.constants.MessageStatusReturnEnum;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
@@ -9,9 +13,7 @@ import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
 import com.lawu.eshop.mall.srv.domain.MessageDO;
 import com.lawu.eshop.mall.srv.domain.MessageTemplateDO;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 站内信息转换类
@@ -58,6 +60,13 @@ public class MessageConverter {
             messageDTO.setMessageTypeEnum(MessageTypeEnum.getEnum(messageBO.getType()));
             messageDTO.setContent(messageBO.getContent());
             messageDTO.setTitle(messageBO.getTitle());
+            String createTime = DateUtil.getDateFormat(messageBO.getGmtCreate());
+            String now = DateUtil.getDateFormat(new Date());
+            if(now.equals(createTime)){
+                messageDTO.setCreateTime(DateUtil.getTimeFormat(messageBO.getGmtCreate()));
+            }else{
+                messageDTO.setCreateTime(createTime);
+            }
             messageDTO.setGmtCreate(messageBO.getGmtCreate());
             messageDTO.setRelateId(messageBO.getRelateId());
             messageDTOS.add(messageDTO);

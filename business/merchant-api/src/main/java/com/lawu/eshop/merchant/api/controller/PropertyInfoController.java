@@ -2,8 +2,11 @@ package com.lawu.eshop.merchant.api.controller;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.dto.FreezeDTO;
+import com.lawu.eshop.property.param.FreezeParam;
 import com.lawu.eshop.property.param.FreezeQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -114,10 +117,13 @@ public class PropertyInfoController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getFreezeList", method = RequestMethod.GET)
-    public Result<Page<FreezeDTO>> getFreezeList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<Page<FreezeDTO>> getFreezeList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                 @ModelAttribute @ApiParam( value = "查询信息") FreezeParam freezeParam) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         FreezeQueryParam param = new FreezeQueryParam();
         param.setUserNum(userNum);
+        param.setCurrentPage(freezeParam.getCurrentPage());
+        param.setPageSize(freezeParam.getPageSize());
         return successGet(propertyInfoService.getFreezeList(param));
     }
 }

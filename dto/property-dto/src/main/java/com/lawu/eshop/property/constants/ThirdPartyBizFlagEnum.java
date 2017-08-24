@@ -17,7 +17,8 @@ public enum ThirdPartyBizFlagEnum {
 	MEMBER_PAY_BALANCE((byte) 0x04), // 用户充值余额
 	MEMBER_PAY_POINT((byte) 0x05), // 用户充值积分
 	MEMBER_PAY_ORDER((byte) 0x06), // 订单付款
-	MEMBER_PAY_BILL((byte) 0x07);// 买单
+	MEMBER_PAY_BILL((byte) 0x07),// 买单
+	MEMBER_RED_PACKET((byte) 0x08);//用户发红包
 	private Byte val;
 
 	ThirdPartyBizFlagEnum(Byte val) {

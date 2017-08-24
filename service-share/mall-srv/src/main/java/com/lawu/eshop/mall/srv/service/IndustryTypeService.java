@@ -1,8 +1,9 @@
 package com.lawu.eshop.mall.srv.service;
 
-import com.lawu.eshop.mall.srv.bo.IndustryTypeBO;
-
 import java.util.List;
+
+import com.lawu.eshop.mall.constants.MerchantIndustryTypeEnum;
+import com.lawu.eshop.mall.srv.bo.IndustryTypeBO;
 
 /**
  * @author meishuquan
@@ -26,4 +27,13 @@ public interface IndustryTypeService {
     List<IndustryTypeBO> listIndustryTypeByParentId(Short parentId);
 
     List<IndustryTypeBO> getAllIndustryList();
+
+    /**
+     * 根据行业类型查询行业列表
+     *
+     * @param industryTypeEnum
+     * @return
+     * @author meishuquan
+     */
+    List<IndustryTypeBO> listIndustryTypeByType(MerchantIndustryTypeEnum industryTypeEnum);
 }

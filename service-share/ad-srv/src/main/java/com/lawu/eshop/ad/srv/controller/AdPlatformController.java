@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.ad.constants.AdPlatformFlatTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
@@ -20,12 +19,14 @@ import com.lawu.eshop.ad.dto.AdPlatformFlatDTO;
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.dto.AdPlatformProductDTO;
 import com.lawu.eshop.ad.dto.AdPlatformVideoDTO;
+import com.lawu.eshop.ad.dto.AdPlatformVideoFlatDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformInternalParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
 import com.lawu.eshop.ad.srv.bo.AdPlatformFlatBO;
 import com.lawu.eshop.ad.srv.bo.AdPlatformVideoBO;
+import com.lawu.eshop.ad.srv.bo.AdPlatformVideoFlatBO;
 import com.lawu.eshop.ad.srv.converter.AdPlatformConverter;
 import com.lawu.eshop.ad.srv.service.AdPlatformService;
 import com.lawu.eshop.framework.core.page.Page;
@@ -215,15 +216,41 @@ public class AdPlatformController extends BaseController {
     }
     
     /**
-     * 广告模块广告位二查询
+     * 广告首页广告位
      * @return
      */
-    @RequestMapping(value = "selAdPlatformPositionTwo", method = RequestMethod.POST)
-    public Result<List<AdPlatformVideoDTO>> selAdPlatformPositionTwo(@RequestBody AdPlatformInternalParam param) {
-        List<AdPlatformVideoBO> BOS = adPlatformService.selAdPlatformPositionTwo(param);
-        List<AdPlatformVideoDTO> list = new ArrayList<>();
+    @RequestMapping(value = "selAdPlatformPositionAd", method = RequestMethod.POST)
+    public Result<AdPlatformVideoFlatDTO> selAdPlatformPositionAd(@RequestBody AdPlatformInternalParam param) {
+        AdPlatformVideoFlatBO bo = adPlatformService.selAdPlatformPositionAd(param);
         
-        for (AdPlatformVideoBO adPlatformVideoBO : BOS) {
+        List<AdPlatformFlatDTO> listDTOOneFlat = new ArrayList<>();
+		List<AdPlatformFlatDTO> listDTOTwoFlat = new ArrayList<>();
+		List<AdPlatformFlatDTO> listDTOFiveFlat = new ArrayList<>();
+		List<AdPlatformVideoDTO> listDTOVideo= new ArrayList<>();
+		
+        List<AdPlatformFlatBO> listFiveFlat = bo.getListFiveFlat();
+        for (AdPlatformFlatBO adPlatformFlatBO : listFiveFlat) {
+        	AdPlatformFlatDTO dto = new  AdPlatformFlatDTO();
+        	dto.setAdId(adPlatformFlatBO.getAdId());
+        	dto.setMediaUrl(adPlatformFlatBO.getMediaUrl());
+        	listDTOFiveFlat.add(dto);
+		}
+        List<AdPlatformFlatBO> listOneFlat = bo.getListOneFlat();
+        for (AdPlatformFlatBO adPlatformFlatBO : listOneFlat) {
+        	AdPlatformFlatDTO dto = new  AdPlatformFlatDTO();
+        	dto.setAdId(adPlatformFlatBO.getAdId());
+        	dto.setMediaUrl(adPlatformFlatBO.getMediaUrl());
+        	listDTOOneFlat.add(dto);
+		}
+        List<AdPlatformFlatBO> listTwoFlat = bo.getListTwoFlat();
+        for (AdPlatformFlatBO adPlatformFlatBO : listTwoFlat) {
+        	AdPlatformFlatDTO dto = new  AdPlatformFlatDTO();
+        	dto.setAdId(adPlatformFlatBO.getAdId());
+        	dto.setMediaUrl(adPlatformFlatBO.getMediaUrl());
+        	listDTOTwoFlat.add(dto);
+		}
+        List<AdPlatformVideoBO> videoList = bo.getListVideo();
+        for (AdPlatformVideoBO adPlatformVideoBO : videoList) {
         	AdPlatformVideoDTO dto = new  AdPlatformVideoDTO();
         	dto.setAdId(adPlatformVideoBO.getAdId());
         	dto.setContent(adPlatformVideoBO.getContent());
@@ -231,28 +258,18 @@ public class AdPlatformController extends BaseController {
         	dto.setName(adPlatformVideoBO.getName());
         	dto.setTitle(adPlatformVideoBO.getTitle());
         	dto.setVideoImgUrl(adPlatformVideoBO.getVideoImgUrl());
-        	list.add(dto);
+        	dto.setLogoUrl(adPlatformVideoBO.getLogoUrl());
+        	listDTOVideo.add(dto);
 		}
+        AdPlatformVideoFlatDTO dto = new AdPlatformVideoFlatDTO();
         
-        return successGet(list);
+        dto.setListFiveFlat(listDTOFiveFlat);
+        dto.setListOneFlat(listDTOOneFlat);
+        dto.setListTwoFlat(listDTOTwoFlat);
+        dto.setListVideo(listDTOVideo);
+        
+        return successGet(dto);
     }
     
-    /**
-     * 广告模块广告位四查询
-     * @return
-     */
-    @RequestMapping(value = "selAdPlatformPositionFour", method = RequestMethod.POST)
-    public Result<List<AdPlatformFlatDTO>> selAdPlatformPositionFour(@RequestBody AdPlatformInternalParam param) {
-        List<AdPlatformFlatBO> BOS = adPlatformService.selAdPlatformPositionFour(param);
-        List<AdPlatformFlatDTO> list = new ArrayList<>();
-        
-        for (AdPlatformFlatBO adPlatformFlatBO : BOS) {
-        	AdPlatformFlatDTO dto = new  AdPlatformFlatDTO();
-        	dto.setAdId(adPlatformFlatBO.getAdId());
-        	dto.setMediaUrl(adPlatformFlatBO.getMediaUrl());
-        	list.add(dto);
-		}
-        
-        return successGet(list);
-    }
+   
 }

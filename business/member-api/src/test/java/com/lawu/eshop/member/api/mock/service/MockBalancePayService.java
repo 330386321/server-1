@@ -26,4 +26,9 @@ public class MockBalancePayService extends BaseController implements BalancePayS
 	public Result balancePayPoint(BalancePayParam param) {
 		return successCreated();
 	}
+
+	@Override
+	public Result memberRedPacketPay(BalancePayDataParam param) {
+		return null;
+	}
 }

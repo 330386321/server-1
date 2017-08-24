@@ -56,6 +56,9 @@ public class MemberApiConfig {
 
 	@Value(value = "${member.share.over.url}")
 	private String memberShareOverUrl;
+	
+	@Value(value="${ffmpeg.url}")
+    private String ffmpegUrl;
 
 	public String getImageUrl() {
 		return imageUrl;
@@ -176,6 +179,10 @@ public class MemberApiConfig {
 	 */
 	public void setMemberShareOverUrl(String memberShareOverUrl) {
 		this.memberShareOverUrl = memberShareOverUrl;
+	}
+
+	public String getFfmpegUrl() {
+		return ffmpegUrl;
 	}
 
 

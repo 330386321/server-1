@@ -1,21 +1,21 @@
 package com.lawu.eshop.member.api.service;
 
-import com.lawu.eshop.ad.constants.AdPlatformFlatTypeEnum;
-import com.lawu.eshop.ad.constants.PositionEnum;
-import com.lawu.eshop.ad.constants.TypeEnum;
-import com.lawu.eshop.ad.dto.AdPlatformDTO;
-import com.lawu.eshop.ad.dto.AdPlatformFlatDTO;
-import com.lawu.eshop.ad.dto.AdPlatformProductDTO;
-import com.lawu.eshop.ad.dto.AdPlatformVideoDTO;
-import com.lawu.eshop.ad.param.AdPlatformInternalParam;
-import com.lawu.eshop.framework.web.Result;
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.lawu.eshop.ad.constants.PositionEnum;
+import com.lawu.eshop.ad.constants.TypeEnum;
+import com.lawu.eshop.ad.dto.AdPlatformDTO;
+import com.lawu.eshop.ad.dto.AdPlatformFlatDTO;
+import com.lawu.eshop.ad.dto.AdPlatformProductDTO;
+import com.lawu.eshop.ad.dto.AdPlatformVideoFlatDTO;
+import com.lawu.eshop.ad.param.AdPlatformInternalParam;
+import com.lawu.eshop.framework.web.Result;
 
 /**
  * 平台广告管理
@@ -57,16 +57,11 @@ public interface AdPlatformService {
     Result<List<AdPlatformDTO>> getAdPlatformByTypePositionRegionPath(@RequestParam("typeEnum") TypeEnum typeEnum, @RequestParam("positionEnum") PositionEnum positionEnum, @RequestParam("regionPath") String regionPath);
 
     /**
-     * 广告位 三个视频
+     * 广告首页广告位
      * @return
      */
-    @RequestMapping(value = "adPlatform/selAdPlatformPositionTwo", method = RequestMethod.POST)
-    Result<List<AdPlatformVideoDTO>> selAdPlatformPositionTwo(@RequestBody AdPlatformInternalParam param);
+    @RequestMapping(value = "adPlatform/selAdPlatformPositionAd", method = RequestMethod.POST)
+    Result<AdPlatformVideoFlatDTO> selAdPlatformPositionAd(@RequestBody AdPlatformInternalParam param);
     
-    /**
-     * 广告位 五个平面 | 一个平面
-     * @return
-     */
-    @RequestMapping(value = "adPlatform/selAdPlatformPositionFour", method = RequestMethod.POST)
-    Result<List<AdPlatformFlatDTO>> selAdPlatformPositionFour(@RequestBody AdPlatformInternalParam param);
+ 
 }

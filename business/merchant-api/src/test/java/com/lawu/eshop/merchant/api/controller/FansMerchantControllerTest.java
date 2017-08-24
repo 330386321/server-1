@@ -161,7 +161,7 @@ public class FansMerchantControllerTest {
         map.add("inviteContent", "inviteContent");
         map.add("merchantStoreIntro", "merchantStoreIntro");
         map.add("inviteCount", "10");
-        map.add("inviteType", "1");
+        map.add("inviteTypeEnum", "ALL");
         map.add("regionPath", "");
         RequestBuilder request = post("/fansMerchant/inviteFansWithContentExtend").header("authorization", "8888").params(map);
         try {

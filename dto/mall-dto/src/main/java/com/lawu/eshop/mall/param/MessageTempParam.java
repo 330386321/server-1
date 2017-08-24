@@ -85,8 +85,30 @@ public class MessageTempParam {
     @ApiModelProperty(value = "订单金额{22}")
     private BigDecimal orderAmount;
 
+    @ApiModelProperty(value = "工单问题{23}")
+    private String workOrderContent;
+    
+    @ApiModelProperty(value = "回复工单的内容{24}")
+    private String replyWorkOrderContent;
+    
+    
+    public String getWorkOrderContent() {
+		return workOrderContent;
+	}
 
-    public String getUserName() {
+	public void setWorkOrderContent(String workOrderContent) {
+		this.workOrderContent = workOrderContent;
+	}
+
+	public String getReplyWorkOrderContent() {
+		return replyWorkOrderContent;
+	}
+
+	public void setReplyWorkOrderContent(String replyWorkOrderContent) {
+		this.replyWorkOrderContent = replyWorkOrderContent;
+	}
+
+	public String getUserName() {
         return userName;
     }
 
@@ -269,4 +291,6 @@ public class MessageTempParam {
     public void setExpressCompanyName(String expressCompanyName) {
         this.expressCompanyName = expressCompanyName;
     }
+    
+    
 }

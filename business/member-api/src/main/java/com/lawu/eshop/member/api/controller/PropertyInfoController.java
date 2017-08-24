@@ -88,6 +88,7 @@ public class PropertyInfoController extends BaseController {
     	return successGet(propertyInfoService.getPropertyInfoMoney(userNum));
     }
 
+    @Audit(date = "2017-08-18", reviewer = "李洪军")
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "验证支付密码", notes = "验证支付密码(true--正确，false--错误)。[1002|1022]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

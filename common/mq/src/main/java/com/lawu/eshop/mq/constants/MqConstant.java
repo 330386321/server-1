@@ -52,9 +52,11 @@ public class MqConstant {
 
 	public static final String TAG_AD_USER_SWEEP_RED = "rp_user_sweep_red";
 
-	public static final String TAG_AD_USER_REDPACKET_CUT_MONTY = "ad_user_redpacket_cut_monty";
-	
-	public static final String TAG_AD_USER_REDPACKET_ADD_MONTY = "ad_user_redpacket_add_monty";
+	//用户红包注销退回
+	public static final String TAG_AD_USER_REDPACKET_CANNEL_REFUND_MONEY = "tag_ad_user_redpacket_cannel_refund_money";
+
+	//用户领取红包（用户发的红包）
+	public static final String TAG_USER_GET_AD_USER_REDPACKET = "tag_user_get_ad_user_redpacket";
 
 	/******************************************/
 	/******* mall-srv模块tag **********/
@@ -189,6 +191,11 @@ public class MqConstant {
 	 */
 	public static final String TAG_ORDERS_TRADING_INCOME_NOTICE = "orders_trading_income_notice";
 
+	/**
+	 * 审核成功或失败后发送消息通知mall-srv模块发送推送消息给商家
+	 */
+	public static final String TAG_PROPERTY_DEPOSIT_DO_RESULT = "property_deposit_do_result";
+
 	/******************************************/
 	/******* product-srv模块tag **********/
 	public static final String TAG_DEL_COMMENT = "del_comment";
@@ -220,6 +227,16 @@ public class MqConstant {
 	 * 退款成功操作后，发送消息修改门店状态为：注销
 	 */
 	public static final String TAG_HANDLE_DEPOSIT_AUDIT_CANCEL = "handle_deposit_audit_cancel";
+
+	/**
+	 * 用户发红包支付成功后修改红包状态
+	 */
+	public static final String TAG_HANDLE_MEMBER_RED_PACKET = "handle_deposit_member_red_packet";
+
+	/**
+	 * 保证金财务审核成功后修改商品下架
+	 */
+	public static final String TAG_HANDLE_DEPOSIT_DOWN_PRODUCT = "tag_handle_deposit_down_product";
 
 	/******************************************/
 	/******* user-srv模块tag **********/

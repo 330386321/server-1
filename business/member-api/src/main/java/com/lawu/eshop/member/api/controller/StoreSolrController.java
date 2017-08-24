@@ -93,8 +93,9 @@ public class StoreSolrController extends BaseController {
     @ApiOperation(value = "搜索词关联词频查询", notes = "根据搜索词推荐关联词和频率查询。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listStoreSearchWord", method = RequestMethod.GET)
-    public Result<List<StoreSearchWordDTO>> listStoreSearchWord(@RequestParam @ApiParam(name = "name", required = true, value = "门店名称") String name) {
-        return storeSolrService.listStoreSearchWord(name);
+    public Result<List<StoreSearchWordDTO>> listStoreSearchWord(@RequestParam @ApiParam(name = "name", required = true, value = "门店名称") String name,
+                                                                @RequestParam @ApiParam(name = "regionPath", required = true, value = "区域路径") String regionPath) {
+        return storeSolrService.listStoreSearchWord(name, regionPath);
     }
 
     @Audit(date = "2017-04-26", reviewer = "孙林青")
@@ -154,6 +155,12 @@ public class StoreSolrController extends BaseController {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
         List<NewMerchantStoreDTO> storeDTOS = JSON.parseArray(result.getModel(), NewMerchantStoreDTO.class);
+        for (NewMerchantStoreDTO storeDTO : storeDTOS) {
+            if (StringUtils.isNotEmpty(storeDTO.getRegionPath())) {
+                String areaName = regionService.getAreaName(storeDTO.getRegionPath()).getModel();
+                storeDTO.setAreaName(areaName);
+            }
+        }
         return successGet(storeDTOS);
     }
 

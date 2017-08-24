@@ -3,8 +3,12 @@
  */
 package com.lawu.eshop.ad.srv.service;
 
+import com.lawu.eshop.ad.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.ad.param.UserPacketRefundParam;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
-import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
+import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
+import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
+import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
 import com.lawu.eshop.ad.srv.domain.extend.UserRedpacketMaxMoney;
 import com.lawu.eshop.framework.core.page.Page;
@@ -21,14 +25,14 @@ public interface UserRedPacketService {
 	 * @param param
 	 * @return
 	 */
-	Integer addUserRedPacket(UserRedPacketSaveParam param);
+	public UserRedPacketAddReturnBO addUserRedPacket(UserRedPacketSaveParam param);
 
 	/**
 	 * 查询用户红包列表
 	 * @param param
 	 * @return
 	 */
-	Page<UserRedPacketBO> selectUserRedPacketList(UserRedPacketSelectParam param);
+	Page<UserRedPacketBO> selectUserRedPacketList(UserRedPacketSelectNumParam param);
 
 	/**
 	 * @param redPacketId
@@ -36,17 +40,13 @@ public interface UserRedPacketService {
 	 */
 	boolean isExistsRedPacket(Long redPacketId);
 
-	/**
-	 * 
-	 */
-	void executeUserRedPacketData();
 
 	/**
 	 * 用户领取红包
 	 * @param redPacketId
 	 * @param userNum
 	 */
-	void getUserRedpacketMoney(Long redPacketId, String userNum);
+	UserRedpacketMaxMoney getUserRedpacketMoney(Long redPacketId, String userNum);
 
 	/**
 	 * 获取最大的红包金额
@@ -55,5 +55,20 @@ public interface UserRedPacketService {
 	 */
 	UserRedpacketMaxMoney getUserRedpacketMaxMoney(Long redPacketId);
 
+	/**
+	 * 根据红包ID 获取红包金额、和orderNum支付时调用第三方用
+	 * @param redPacketId
+	 * @return
+	 */
+	ThirdPayCallBackQueryPayOrderDTO selectUserRedPacketInfoForThrid(Long redPacketId);
+
+	/**
+	 * 第三方回调更新
+	 * @param paran
+	 * @return
+	 */
+	boolean updateUserPacketInfo(UserRedPacketUpdateParam paran);
+
+	UserPacketRefundParam selectBackTotalMoney(Long userRedpacketId);
 	
 }

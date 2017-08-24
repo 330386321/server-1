@@ -34,4 +34,10 @@ public interface BalancePayService {
 	 */
 	int balancePayPoint(BalancePayDataParam param);
 
+	/**
+	 * 用户红包余额支付
+	 * @param param
+	 * @return
+	 */
+	int memberRedPacketPay(BalancePayDataParam param);
 }

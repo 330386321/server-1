@@ -49,6 +49,10 @@ public class BalancePayServiceImpl implements BalancePayService {
     private TransactionMainService<Reply> shoppingOrderPaymentTransactionMainServiceImpl;
 
     @Autowired
+    @Qualifier("memberRedPacketPaymentTransactionMainServiceImpl")
+    private TransactionMainService<Reply> memberRedPacketPaymentTransactionMainServiceImpl;
+
+    @Autowired
     private PropertyService propertyService;
     @Autowired
     private PointDetailService pointDetailService;
@@ -211,6 +215,38 @@ public class BalancePayServiceImpl implements BalancePayService {
         RechargeDOExample example = new RechargeDOExample();
         example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds()));
         rechargeDOMapper.updateByExampleSelective(recharge, example);
+
+        return ResultCode.SUCCESS;
+    }
+
+    @Override
+    public int memberRedPacketPay(BalancePayDataParam param) {
+        int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount(), false, "");
+        if (retCode != ResultCode.SUCCESS) {
+            return retCode;
+        }
+
+        //新增交易明细
+        TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+        tdsParam.setTitle(param.getTitle());
+        tdsParam.setUserNum(param.getUserNum());
+        tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
+        tdsParam.setTransactionAccount(param.getAccount());
+        tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
+        tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
+        tdsParam.setBizId(param.getBizIds());
+        tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
+        tdsParam.setBizNum(param.getOrderNum());
+        transactionDetailService.save(tdsParam);
+
+        //减财产余额
+        PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
+        infoDoView.setUserNum(param.getUserNum());
+        infoDoView.setBalance(new BigDecimal(param.getTotalAmount()));
+        infoDoView.setGmtModified(new Date());
+        propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(infoDoView);
+
+        memberRedPacketPaymentTransactionMainServiceImpl.sendNotice(tdsParam.getId());
 
         return ResultCode.SUCCESS;
     }

@@ -1,6 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -56,6 +55,8 @@ public class AlipayController extends BaseController {
     private PayOrderService payOrderService;
     @Autowired
     private MerchantStoreService merchantStoreService;
+	@Autowired
+    private UserRedPacketService userRedPacketService;
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @SuppressWarnings("rawtypes")
@@ -104,6 +105,11 @@ public class AlipayController extends BaseController {
                 || ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(param.getBizFlagEnum().getVal())) {
             ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
             money = recharge.getActualMoney();
+            rtnMoney = String.valueOf(money);
+
+        }  else if (ThirdPartyBizFlagEnum.MEMBER_RED_PACKET.getVal().equals(param.getBizFlagEnum().getVal())) {
+            Result<ThirdPayCallBackQueryPayOrderDTO> moneyResult = userRedPacketService.selectUserRedPacketInfoForThrid(Long.valueOf(param.getBizIds()));
+            money = moneyResult.getModel().getActualMoney();
             rtnMoney = String.valueOf(money);
 
         }

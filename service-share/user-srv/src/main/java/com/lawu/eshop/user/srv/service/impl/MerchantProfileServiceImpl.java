@@ -90,6 +90,7 @@ public class MerchantProfileServiceImpl implements MerchantProfileService {
 		MerchantInfoFromInviteFansBO merchantInfoFromInviteFansBO = new MerchantInfoFromInviteFansBO();
 		if(list != null && !list.isEmpty()) {
 			MerchantInfoFromInviteFansDOView view = list.get(0);
+			merchantInfoFromInviteFansBO.setMerchantStoreId(view.getMerchantStoreId());
 			merchantInfoFromInviteFansBO.setMerchantStoreIntro(view.getMerchantStoreIntro());
 			merchantInfoFromInviteFansBO.setMerchantStoreLogo(view.getMerchantStoreLogo());
 			merchantInfoFromInviteFansBO.setMerchantStoreName(view.getMerchantStoreName());

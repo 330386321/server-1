@@ -1,5 +1,8 @@
 package com.lawu.eshop.property.dto;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -23,6 +26,29 @@ public class BusinessDepositDetailDTO {
 	
 	@ApiModelProperty(value = "卡号后四位")
 	private String cardNo;
+
+	@ApiModelProperty(value = "失败原因")
+	private String remark;
+
+	@ApiModelProperty(value = "支付时间")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date gmtPay;
+
+	@ApiModelProperty(value = "核实时间")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date gmtVerify;
+
+	@ApiModelProperty(value = "退款时间")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date gmtRefund;
+
+	@ApiModelProperty(value = "受理时间")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date gmtAccpet;
+
+	@ApiModelProperty(value = "退款申请完成时间")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	private Date gmtResult;
 	
 	public Long getId() {
 		return id;
@@ -72,4 +98,51 @@ public class BusinessDepositDetailDTO {
 		this.cardNo = cardNo;
 	}
 
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Date getGmtPay() {
+		return gmtPay;
+	}
+
+	public void setGmtPay(Date gmtPay) {
+		this.gmtPay = gmtPay;
+	}
+
+	public Date getGmtVerify() {
+		return gmtVerify;
+	}
+
+	public void setGmtVerify(Date gmtVerify) {
+		this.gmtVerify = gmtVerify;
+	}
+
+	public Date getGmtRefund() {
+		return gmtRefund;
+	}
+
+	public void setGmtRefund(Date gmtRefund) {
+		this.gmtRefund = gmtRefund;
+	}
+
+	public Date getGmtAccpet() {
+		return gmtAccpet;
+	}
+
+	public void setGmtAccpet(Date gmtAccpet) {
+		this.gmtAccpet = gmtAccpet;
+	}
+
+	public Date getGmtResult() {
+		return gmtResult;
+	}
+
+	public void setGmtResult(Date gmtResult) {
+		this.gmtResult = gmtResult;
+	}
 }

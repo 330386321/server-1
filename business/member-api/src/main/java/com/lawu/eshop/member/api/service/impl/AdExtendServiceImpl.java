@@ -187,9 +187,13 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		for (AdDTO adDTO : newList) {
 			for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
 				if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
-					Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
-					if (isSuccess(resultFavoriteAd)) {
-						adDTO.setIsFavorite(resultFavoriteAd.getModel());
+					if(memberId == 0) {
+						adDTO.setIsFavorite(false);
+					} else {
+						Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
+						if (isSuccess(resultFavoriteAd)) {
+							adDTO.setIsFavorite(resultFavoriteAd.getModel());
+						}
 					}
 					adDTO.setMerchantStoreId(merchantAdInfoDTO.getMerchantStoreId());
 					if (merchantAdInfoDTO.getName() != null) {
@@ -216,6 +220,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		Result<Page<AdDTO>> pageDTOS = adService.selectPraiseListByMember(adPraiseParam, memberId);
 		List<AdDTO> list = pageDTOS.getModel().getRecords();
+		AdMemberParam amp = new AdMemberParam();
 		List<AdDTO> newList = adFilter(null, list, memberId);
 		AdPage<AdDTO> adpage = new AdPage<>();
 		List<AdDTO> screenList = adpage.page(newList, adPraiseParam.getPageSize(), adPraiseParam.getCurrentPage());
@@ -321,9 +326,70 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	 * @param memberId
 	 * @return
 	 */
+	public List<AdDTO> adFilterNoMemberId(AdMemberParam adMemberParam, List<AdDTO> list) {
+//		Result<UserDTO> memberDTO = memberService.findMemberInfo(memberId);
+//		String memberPath = memberDTO.getModel().getRegionPath();
+		String memberPath = adMemberParam.getTransRegionPath();
+		List<AdDTO> newList = new ArrayList<>();
+		for (AdDTO adDTO : list) {
+			if (adDTO.getPutWayEnum().val == 1) { // 区域
+				if (adDTO.getAreas() == null || adDTO.getAreas() == "") {
+					newList.add(adDTO);
+				} else {
+					if (memberPath != null) {
+						String[] memberPaths = memberPath.split("/");
+						String[] path = adDTO.getAreas().split(",");
+						for (String s : path) {
+							for (String mp : memberPaths) {
+								if (s.equals(mp)) {
+									newList.add(adDTO);
+								}
+								continue;
+							}
+						}
+					}
+				}
+				
+			} else if (adDTO.getPutWayEnum().val == 2) {//没有登录不考虑粉丝
+				// 获取商家粉丝，判断当前用户是否属于商家粉丝
+				/*Result<Boolean> rs = fansMerchantService.isFansMerchant(adDTO.getMerchantId(), memberId);
+				if (rs.getModel()){
+					newList.add(adDTO);
+				}*/
+			} else {
+				if (adMemberParam.getLongitude() == null || adMemberParam.getLatitude() == null) {
+					continue;
+				} else {
+					Result<MerchantStoreDTO> rs = merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
+					MerchantStoreDTO dto = rs.getModel();
+					if (dto != null) {
+						int distance = DistanceUtil.getDistance(adMemberParam.getLongitude(), adMemberParam.getLatitude(), dto.getLongitude().doubleValue(), dto.getLatitude().doubleValue());
+						if (adDTO.getRadius() != null && adDTO.getRadius() > distance / 1000) {
+							newList.add(adDTO);
+						}
+					}
+				}
+			}
+			
+		}
+		return newList;
+		
+	}
+	/**
+	 * 公用方法广告过滤
+	 *
+	 * @param list
+	 * @param memberId
+	 * @return
+	 */
 	public List<AdDTO> adFilter(AdMemberParam adMemberParam, List<AdDTO> list, Long memberId) {
 		Result<UserDTO> memberDTO = memberService.findMemberInfo(memberId);
-		String memberPath = memberDTO.getModel().getRegionPath();
+		String memberPath = "";
+		if(memberId != 0)  {
+			memberPath = memberDTO.getModel().getRegionPath();
+		} else if(adMemberParam != null) {
+			memberPath = adMemberParam.getTransRegionPath();
+		}			
 		List<AdDTO> newList = new ArrayList<>();
 		for (AdDTO adDTO : list) {
 			if (adDTO.getPutWayEnum().val == 1) { // 区域
@@ -346,9 +412,11 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 
 			} else if (adDTO.getPutWayEnum().val == 2) {
 				// 获取商家粉丝，判断当前用户是否属于商家粉丝
-				Result<Boolean> rs = fansMerchantService.isFansMerchant(adDTO.getMerchantId(), memberId);
-				if (rs.getModel())
-					newList.add(adDTO);
+				if(memberId != 0) {
+					Result<Boolean> rs = fansMerchantService.isFansMerchant(adDTO.getMerchantId(), memberId);
+					if (rs.getModel())
+						newList.add(adDTO);
+				}
 			} else {
 				if (adMemberParam.getLongitude() == null || adMemberParam.getLatitude() == null) {
 					continue;
@@ -409,8 +477,18 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		param.setPageSize(adChoicenessParam.getPageSize());
 		param.setLatitude(adChoicenessParam.getLatitude());
 		param.setLongitude(adChoicenessParam.getLongitude());
+		param.setTransRegionPath(adChoicenessParam.getTransRegionPath());
 		Result<Page<AdDTO>> pageDTOS = adService.selectChoiceness(param);
-		List<AdDTO> newList = adFilter(param, pageDTOS.getModel().getRecords(), memberId);
+		Page<AdDTO> newPage = new Page<>();
+		List<AdDTO> newList =null;
+		if(memberId==0){
+			if(null==param.getTransRegionPath()){
+				return successGet(newPage);
+			}
+			newList=adFilterNoMemberId(param, pageDTOS.getModel().getRecords());
+		}else{
+			newList=adFilter(param, pageDTOS.getModel().getRecords(), memberId);
+		}
 		AdPage<AdDTO> adpage = new AdPage<>();
 		List<AdDTO> screenList = adpage.page(newList, param.getPageSize(), param.getCurrentPage());
 
@@ -455,7 +533,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			}
 
 		}
-		Page<AdDTO> newPage = new Page<>();
 		newPage.setCurrentPage(adChoicenessParam.getCurrentPage());
 		newPage.setTotalCount(newList.size());
 		newPage.setRecords(screenList);

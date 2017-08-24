@@ -16,7 +16,7 @@ public interface AdPlatformDOMapperExtend {
 
     List<AdPlatformDOView> getAdPlatformByTypePosition(AdPlatformExtendParam param);
 
-	List<AdPlatformVideoView> selAdPlatformPositionTwo(SelectAdEgainIdExample example);
+	List<AdPlatformVideoView> selAdPlatformPositionAd(SelectAdEgainIdExample example);
 	
 	List<AdPlatformFlatView> selAdPlatformPositionFour(SelectAdEgainIdExample example);
 }

@@ -1,13 +1,14 @@
 package com.lawu.eshop.user.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
-import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
+import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author meishuquan
@@ -122,6 +123,9 @@ public class MerchantStoreAuditDTO {
     @ApiModelProperty(value = "修改时间")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date gmtModified;
+
+    @ApiModelProperty(value = "关键词")
+    private String keywords;
 
     public String getName() {
         return name;
@@ -401,5 +405,13 @@ public class MerchantStoreAuditDTO {
 
     public void setAuditorName(String auditorName) {
         this.auditorName = auditorName;
+    }
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
     }
 }

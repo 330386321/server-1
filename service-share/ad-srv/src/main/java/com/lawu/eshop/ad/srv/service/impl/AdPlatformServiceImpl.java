@@ -11,11 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lawu.eshop.ad.constants.AdPlatformFlatTypeEnum;
 import com.lawu.eshop.ad.constants.AdPlatformStatusEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
-import com.lawu.eshop.ad.param.AdEgainInternalParam;
 import com.lawu.eshop.ad.param.AdPlatformExtendParam;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformInternalParam;
@@ -23,6 +21,7 @@ import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
 import com.lawu.eshop.ad.srv.bo.AdPlatformFlatBO;
 import com.lawu.eshop.ad.srv.bo.AdPlatformVideoBO;
+import com.lawu.eshop.ad.srv.bo.AdPlatformVideoFlatBO;
 import com.lawu.eshop.ad.srv.converter.AdPlatformConverter;
 import com.lawu.eshop.ad.srv.domain.AdPlatformDO;
 import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample;
@@ -198,7 +197,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
     }
 
 	@Override
-	public List<AdPlatformVideoBO> selAdPlatformPositionTwo(AdPlatformInternalParam param) {
+	public  AdPlatformVideoFlatBO selAdPlatformPositionAd(AdPlatformInternalParam param) {
 		// 组装查询参数
 		SelectAdEgainIdExample example = new SelectAdEgainIdExample();
 		example.setLatitude(new BigDecimal(param.getLatitude()));
@@ -206,41 +205,58 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 		example.setMerchantIds(param.getMerchantIds());
 		example.setAreas(param.getAreas());
 		
-		List<AdPlatformVideoView> list = adPlatformDOMapperExtend.selAdPlatformPositionTwo(example);
+		List<AdPlatformVideoView> list = adPlatformDOMapperExtend.selAdPlatformPositionAd(example);
 		
-		List<AdPlatformVideoBO> listBO = new ArrayList<>();
+		List<AdPlatformVideoBO> listVideo= new ArrayList<>();
+		
+		List<AdPlatformFlatBO> listOneFlat = new ArrayList<>();
+		List<AdPlatformFlatBO> listTwoFlat = new ArrayList<>();
+		List<AdPlatformFlatBO> listFiveFlat = new ArrayList<>();
+		
+		
+		AdPlatformVideoFlatBO videoFlatBO = new AdPlatformVideoFlatBO();
+		
 		for (AdPlatformVideoView adPlatformVideoView : list) {
-			AdPlatformVideoBO bo = new  AdPlatformVideoBO();
-			bo.setAdId(adPlatformVideoView.getAdId());
-			bo.setContent(adPlatformVideoView.getContent());
-			bo.setId(adPlatformVideoView.getId());
-			bo.setName(adPlatformVideoView.getName());
-			bo.setTitle(adPlatformVideoView.getTitle());
-			bo.setVideoImgUrl(adPlatformVideoView.getVideoImgUrl());
-			listBO.add(bo);
+			
+			if(adPlatformVideoView.getPosition()==PositionEnum.POSITON_AD_TOP.val){
+				if(listTwoFlat.size()>2) continue;
+				AdPlatformFlatBO bo = new  AdPlatformFlatBO();
+				bo.setAdId(adPlatformVideoView.getAdId());
+				bo.setMediaUrl(adPlatformVideoView.getMediaUrl());
+				listTwoFlat.add(bo);
+			}else if(adPlatformVideoView.getPosition()==PositionEnum.AD_POSITION_TWO.val){
+				if(listVideo.size()>3) continue;
+				AdPlatformVideoBO bo = new  AdPlatformVideoBO();
+				bo.setAdId(adPlatformVideoView.getAdId());
+				bo.setContent(adPlatformVideoView.getContent());
+				bo.setId(adPlatformVideoView.getId());
+				bo.setName(adPlatformVideoView.getName());
+				bo.setTitle(adPlatformVideoView.getTitle());
+				bo.setVideoImgUrl(adPlatformVideoView.getVideoImgUrl());
+				bo.setLogoUrl(adPlatformVideoView.getLogoUrl());
+				listVideo.add(bo);
+			}else if(adPlatformVideoView.getPosition()==PositionEnum.AD_POSITION_THREE.val){
+				if(listOneFlat.size()>1) continue;
+				AdPlatformFlatBO bo = new  AdPlatformFlatBO();
+				bo.setAdId(adPlatformVideoView.getAdId());
+				bo.setMediaUrl(adPlatformVideoView.getMediaUrl());
+				listOneFlat.add(bo);
+			}else if(adPlatformVideoView.getPosition()==PositionEnum.AD_POSITION_FOUR.val){
+				if(listFiveFlat.size()>5) continue;
+				AdPlatformFlatBO bo = new  AdPlatformFlatBO();
+				bo.setAdId(adPlatformVideoView.getAdId());
+				bo.setMediaUrl(adPlatformVideoView.getMediaUrl());
+				listFiveFlat.add(bo);
+			}
+			
 		}
-		return listBO;
+		videoFlatBO.setListFiveFlat(listFiveFlat);
+		videoFlatBO.setListOneFlat(listOneFlat);
+		videoFlatBO.setListTwoFlat(listTwoFlat);
+		videoFlatBO.setListVideo(listVideo);
+		
+		return videoFlatBO;
 	}
 
-	@Override
-	public List<AdPlatformFlatBO> selAdPlatformPositionFour(AdPlatformInternalParam param) {
-		// 组装查询参数
-		SelectAdEgainIdExample example = new SelectAdEgainIdExample();
-		example.setLatitude(new BigDecimal(param.getLatitude()));
-		example.setLongitude(new BigDecimal(param.getLongitude()));
-		example.setMerchantIds(param.getMerchantIds());
-		example.setAreas(param.getAreas());
-		example.setType(param.getAdPlatformFlatTypeEnum().getVal());
-		List<AdPlatformFlatView> list = adPlatformDOMapperExtend.selAdPlatformPositionFour(example);
-		
-		List<AdPlatformFlatBO> listBO = new ArrayList<>();
-		for (AdPlatformFlatView adPlatformFlatView : list) {
-			AdPlatformFlatBO bo = new  AdPlatformFlatBO();
-			bo.setAdId(adPlatformFlatView.getAdId());
-			bo.setMediaUrl(adPlatformFlatView.getMediaUrl());
-			listBO.add(bo);
-		}
-		return listBO;
-	}
 
 }

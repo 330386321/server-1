@@ -14,6 +14,8 @@ public class StoreDetailBO {
 
     private String regionName;
 
+    private String regionPath;
+
     private String address;
 
     private String principalMobile;
@@ -37,6 +39,10 @@ public class StoreDetailBO {
     private Boolean isFavorite;
 
     private String userNum;
+
+    private BigDecimal longitude;
+
+    private BigDecimal latitude;
 
     public String getName() {
         return name;
@@ -156,5 +162,29 @@ public class StoreDetailBO {
 
     public void setUserNum(String userNum) {
         this.userNum = userNum;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
+    }
+
+    public BigDecimal getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(BigDecimal longitude) {
+        this.longitude = longitude;
+    }
+
+    public BigDecimal getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
     }
 }

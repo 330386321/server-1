@@ -1,9 +1,9 @@
 package com.lawu.eshop.product.srv.service;
 
 
-import com.lawu.eshop.product.srv.bo.ProductCategoryBO;
-
 import java.util.List;
+
+import com.lawu.eshop.product.srv.bo.ProductCategoryBO;
 
 /**
  * 产品服务接口
@@ -48,5 +48,6 @@ public interface ProductCategoryService {
 	 * @param id
 	 * @return
 	 */
+	@Deprecated
 	String getFullCategoryId(Integer id);
 }

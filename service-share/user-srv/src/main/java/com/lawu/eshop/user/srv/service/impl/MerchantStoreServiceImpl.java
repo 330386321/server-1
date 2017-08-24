@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,25 +161,14 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
             document.addField("discountPackage_s", solrDocument.get("discountPackage_s"));
             document.addField("keywords", solrDocument.get("keywords"));
-            solrService.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
-        }
-    }
-
-    @Deprecated
-    @Override
-    public void updateStoreIndex(Long id) {
-        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
-        if(merchantStoreDO == null){
-            return;
-        }
-
-        SolrDocument solrDocument = solrService.getSolrDocsById(id, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
-        if(solrDocument == null){
-            MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-            merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreDO.getId()).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val).andStatusEqualTo(true);
-            List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
-            String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
-            SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
+            if (solrDocument.get("keywords") != null && StringUtils.isNotEmpty(solrDocument.get("keywords").toString())) {
+                String keywords = solrDocument.get("keywords").toString();
+                keywords = keywords.substring(1, keywords.length() - 1);
+                String[] keywordArr = keywords.split(",");
+                for (String keyword : keywordArr) {
+                    document.addField("keyword_ss", keyword.trim());
+                }
+            }
             solrService.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         }
     }
@@ -332,34 +322,4 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 		return bo;
 	}
 
-    @Override
-    @Transactional
-    public void updateKeywordsById(Long id, Long merchantId, String keywords) {
-        MerchantStoreDO merchantStoreDO = new MerchantStoreDO();
-        merchantStoreDO.setKeywords(keywords);
-        MerchantStoreDOExample example = new MerchantStoreDOExample();
-        example.createCriteria().andIdEqualTo(id).andMerchantIdEqualTo(merchantId);
-        merchantStoreDOMapper.updateByExampleSelective(merchantStoreDO, example);
-
-        SolrDocument solrDocument = solrService.getSolrDocsById(id, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
-        if (solrDocument != null) {
-            SolrInputDocument document = new SolrInputDocument();
-            document.addField("id", solrDocument.get("id"));
-            document.addField("merchantId_l", solrDocument.get("merchantId_l"));
-            document.addField("name", solrDocument.get("name"));
-            document.addField("regionPath_s", solrDocument.get("regionPath_s"));
-            document.addField("latLon_p", solrDocument.get("latLon_p"));
-            document.addField("industryPath_s", solrDocument.get("industryPath_s"));
-            document.addField("industryName_s", solrDocument.get("industryName_s"));
-            document.addField("storePic_s", solrDocument.get("storePic_s"));
-            document.addField("averageConsumeAmount_d", solrDocument.get("averageConsumeAmount_d"));
-            document.addField("averageScore_d", solrDocument.get("averageScore_d"));
-            document.addField("favoriteNumber_i", solrDocument.get("favoriteNumber_i"));
-            document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d"));
-            document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
-            document.addField("discountPackage_s", solrDocument.get("discountPackage_s"));
-            document.addField("keywords", keywords);
-            solrService.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
-        }
-    }
 }
