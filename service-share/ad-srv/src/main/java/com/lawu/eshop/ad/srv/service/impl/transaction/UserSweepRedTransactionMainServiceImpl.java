@@ -22,7 +22,6 @@ public class UserSweepRedTransactionMainServiceImpl extends AbstractTransactionM
 
 	@Autowired
 	private PointPoolDOMapper pointPoolDOMapper;
-	
 
     @Override
     public AdPointNotification selectNotification(Long id) {
@@ -31,6 +30,7 @@ public class UserSweepRedTransactionMainServiceImpl extends AbstractTransactionM
     	notification.setUserNum(pointPoolDO.getMemberNum());
     	notification.setPoint(pointPoolDO.getPoint());
     	notification.setAdId(pointPoolDO.getAdId());
+    	notification.setRegionPath("");
         return notification;
     }
 

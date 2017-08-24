@@ -31,6 +31,7 @@ public class UserClickAdTransactionFollowServiceImpl extends AbstractTransaction
 		param.setUserNum(notification.getUserNum());
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADVERTISING);
 		param.setLoveTypeEnum(LoveTypeEnum.AD_CLICK);
+		param.setRegionPath(notification.getRegionPath());
 		param.setTempBizId(notification.getAdId() == null ? "0" : notification.getAdId().toString());
 		propertyInfoDataService.doHanlderBalanceIncome(param);
 	}
