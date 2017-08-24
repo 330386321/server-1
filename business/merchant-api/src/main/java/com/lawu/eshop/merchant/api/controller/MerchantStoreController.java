@@ -28,7 +28,10 @@ import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
+import com.lawu.eshop.merchant.api.service.BusinessDepositService;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
+import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
+import com.lawu.eshop.user.constants.BusinessDepositStatusEnum;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
@@ -56,6 +59,9 @@ public class MerchantStoreController extends BaseController {
 
     @Autowired
     private MerchantApiConfig merchantApiConfig;
+
+    @Autowired
+    private BusinessDepositService businessDepositService;
 
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
@@ -263,7 +269,12 @@ public class MerchantStoreController extends BaseController {
     Result<MerchantAuditInfoDTO> getMerchantAuditInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         Result<MerchantAuditInfoDTO> result = merchantStoreService.getMerchantAuditInfo(merchantId);
-        return result;
+        MerchantAuditInfoDTO auditInfoDTO = result.getModel();
+        Result<BusinessDepositDetailDTO> business = businessDepositService.selectDeposit(String.valueOf(merchantId));
+        if(business.getModel() != null){
+            auditInfoDTO.setDepositStatusEnum(BusinessDepositStatusEnum.getEnum(business.getModel().getBusinessDepositStatusEnum().getVal()));
+        }
+        return successGet(auditInfoDTO);
     }
 
     @Audit(date = "2017-04-21", reviewer = "孙林青")
