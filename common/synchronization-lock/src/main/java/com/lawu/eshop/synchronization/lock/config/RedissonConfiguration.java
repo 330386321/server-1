@@ -32,7 +32,7 @@ public class RedissonConfiguration {
 	 * Comma-separated list of "host:port" pairs to bootstrap from. This represents an
 	 * "initial" list of cluster nodes and is required to have at least one entry.
 	 */
-	@Value("${redis.cluster.nodes}")
+	//@Value("${redis.cluster.nodes}")
 	private List<String> nodes;
 	
 	@Bean
