@@ -20,7 +20,6 @@ import com.lawu.eshop.synchronization.lock.service.LockService;
  * @author Sunny
  * @date 2017年5月18日
  */
-@Service
 public class LockServiceImpl implements LockService {
 	
 	private static Logger logger = LoggerFactory.getLogger(LockServiceImpl.class);
