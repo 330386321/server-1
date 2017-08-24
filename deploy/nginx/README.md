@@ -17,6 +17,17 @@ docker run --name nginx -it -d -p 80:80 \
     nginx:1.10.2-alpine        
 ```
 
+
+```bash
+docker run --name nginx_https -it -d -p 80:80 -p 81:81 \
+    -v /usr/local/eshop/nginx/cer:/etc/nginx/cer:ro \
+    -v /usr/local/eshop/nginx/nginx_test_https.conf:/etc/nginx/nginx.conf:ro \
+    -v /usr/local/eshop/media:/usr/local/eshop/media:ro \
+    -v /usr/local/eshop/html:/usr/local/eshop/html:ro \
+    -v /etc/localtime:/etc/localtime:ro \
+    nginx:1.10.2-alpine
+```
+
 预生产环境
 ----
 
