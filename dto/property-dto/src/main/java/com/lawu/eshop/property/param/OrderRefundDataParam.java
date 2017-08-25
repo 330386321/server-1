@@ -32,7 +32,7 @@ public class OrderRefundDataParam extends OrderRefundParam {
 	@NotBlank(message = "orderId不能为空")
 	private String orderId;
 
-	// 商家订单中需要退款的订单项ID-支持多个，已英文逗号分隔
+	// 商家订单中需要退款的订单项ID
 	@NotBlank(message = "orderItemIds不能为空")
 	private String orderItemIds;
 

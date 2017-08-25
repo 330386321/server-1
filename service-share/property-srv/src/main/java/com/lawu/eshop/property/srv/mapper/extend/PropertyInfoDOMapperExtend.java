@@ -65,7 +65,7 @@ public interface PropertyInfoDOMapperExtend {
 	void updatePropertyInfoMinusFreeze(PropertyInfoDOEiditView editView);
 
 	/**
-	 * 用户确认收货7天后定时任务处理，释放冻结资金商家加余额减冻结资金
+	 * 加余额减冻结资金
 	 * @param editView
 	 */
 	void updatePropertyInfoAddBalanceMinusFreeze(PropertyInfoDOEiditView editView);

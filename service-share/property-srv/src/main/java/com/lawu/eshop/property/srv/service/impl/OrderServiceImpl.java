@@ -275,6 +275,9 @@ public class OrderServiceImpl implements OrderService {
                 freezeDO.setFundType(FreezeTypeEnum.PRODUCT_ORDER.getVal());
                 freezeDO.setFundBizType(FreezeBizTypeEnum.PRODUCT_ORDER_MERCHANT_DOREFUND.getVal());
                 freezeDO.setBizId(freeze.getBizId());
+                if(param.getOrderItemIds() != null && !"".equals(param.getOrderItemIds())){
+                    freezeDO.setItemId(Long.valueOf(param.getOrderItemIds()));
+                }
                 freezeDO.setGmtCreate(new Date());
                 freezeDO.setDays(freeze.getDays());
                 freezeDO.setOrderNum(freeze.getOrderNum());

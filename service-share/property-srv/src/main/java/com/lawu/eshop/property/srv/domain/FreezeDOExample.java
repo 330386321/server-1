@@ -746,6 +746,66 @@ public class FreezeDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andItemIdIsNull() {
+            addCriterion("item_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andItemIdIsNotNull() {
+            addCriterion("item_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andItemIdEqualTo(Long value) {
+            addCriterion("item_id =", value, "itemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andItemIdNotEqualTo(Long value) {
+            addCriterion("item_id <>", value, "itemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andItemIdGreaterThan(Long value) {
+            addCriterion("item_id >", value, "itemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andItemIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("item_id >=", value, "itemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andItemIdLessThan(Long value) {
+            addCriterion("item_id <", value, "itemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andItemIdLessThanOrEqualTo(Long value) {
+            addCriterion("item_id <=", value, "itemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andItemIdIn(List<Long> values) {
+            addCriterion("item_id in", values, "itemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andItemIdNotIn(List<Long> values) {
+            addCriterion("item_id not in", values, "itemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andItemIdBetween(Long value1, Long value2) {
+            addCriterion("item_id between", value1, value2, "itemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andItemIdNotBetween(Long value1, Long value2) {
+            addCriterion("item_id not between", value1, value2, "itemId");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderNumIsNull() {
             addCriterion("order_num is null");
             return (Criteria) this;
