@@ -20,5 +20,8 @@ public class TransactionConstant {
 
     //用户领取红包
     public static final byte USER_REDPACKED_GET_MONEY=0x06;
+    
+   //用户领取商家红包
+    public static final byte USER_SWEET_MONEY=0x07;
    
 }
