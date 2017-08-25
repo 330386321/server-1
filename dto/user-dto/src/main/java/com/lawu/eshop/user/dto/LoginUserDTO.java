@@ -6,7 +6,6 @@ package com.lawu.eshop.user.dto;
  */
 public class LoginUserDTO {
 
-
     private Long id;
 
     private String num;
@@ -16,7 +15,11 @@ public class LoginUserDTO {
     private String ryToken;
 
     private Boolean isFreeze;
-
+    
+    /**
+     * 门店类型
+     */
+    private MerchantStoreTypeEnum merchantStoreType;
 
     public Long getId() {
         return id;
@@ -57,4 +60,12 @@ public class LoginUserDTO {
     public void setIsFreeze(Boolean freeze) {
         isFreeze = freeze;
     }
+
+	public MerchantStoreTypeEnum getMerchantStoreType() {
+		return merchantStoreType;
+	}
+
+	public void setMerchantStoreType(MerchantStoreTypeEnum merchantStoreType) {
+		this.merchantStoreType = merchantStoreType;
+	}
 }

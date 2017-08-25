@@ -1,11 +1,20 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.manager.TokenManager;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.constants.MerchantStoreTypeEnum;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.framework.web.dto.TokenDTO;
@@ -13,12 +22,11 @@ import com.lawu.eshop.mall.dto.ConfigDTO;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.user.dto.LoginUserDTO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Leach
@@ -59,7 +67,7 @@ public class CommonController extends BaseController {
         tokenDTO.setToken(token);
         tokenDTO.setRyToken(userDTO.getRyToken());
         tokenDTO.setIsFreeze(userDTO.getIsFreeze());
-
+        tokenDTO.setMerchantStoreType(userDTO.getMerchantStoreType() != null ? MerchantStoreTypeEnum.getEnum(userDTO.getMerchantStoreType().val) : MerchantStoreTypeEnum.NOT_MERCHANT);
         return successCreated(tokenDTO);
     }
 

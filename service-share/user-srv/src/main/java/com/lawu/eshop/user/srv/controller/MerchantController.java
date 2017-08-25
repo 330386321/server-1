@@ -16,6 +16,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.AccountDTO;
+import com.lawu.eshop.user.dto.LoginMerchantStoreTypeEnum;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
@@ -34,6 +35,7 @@ import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
 import com.lawu.eshop.user.srv.bo.RongYunBO;
@@ -44,6 +46,7 @@ import com.lawu.eshop.user.srv.converter.RongYunConverter;
 import com.lawu.eshop.user.srv.domain.extend.MerchantDOView;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
+import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import com.lawu.eshop.utils.PwdUtil;
 
 /**
@@ -58,6 +61,9 @@ public class MerchantController extends BaseController {
     private MerchantService merchantService;
 
     @Autowired
+    private MerchantStoreService merchantStoreService;	
+    
+    @Autowired
     private MerchantStoreProfileService merchantStoreProfileService;
 
     @RequestMapping(value = "withPwd/{account}", method = RequestMethod.GET)
@@ -69,7 +75,10 @@ public class MerchantController extends BaseController {
         if(merchantBO.getIsFreeze()){
             return successGet(ResultCode.ACCOUNT_IS_FREEZE, merchantBO.getFreezeReason());
         }
-        return successGet(LoginUserConverter.convert(merchantBO));
+        LoginUserDTO rtn = LoginUserConverter.convert(merchantBO);
+        MerchantStoreBO merchantStoreBO = merchantStoreService.selectMerchantStore(merchantBO.getId());
+        rtn.setMerchantStoreType(merchantStoreBO != null ? merchantStoreBO.getManageTypeEnum() : null);
+        return successGet(rtn);
     }
 
 

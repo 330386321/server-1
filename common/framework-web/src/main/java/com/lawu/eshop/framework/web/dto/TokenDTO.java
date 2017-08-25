@@ -1,5 +1,7 @@
 package com.lawu.eshop.framework.web.dto;
 
+import com.lawu.eshop.framework.web.constants.MerchantStoreTypeEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -19,7 +21,13 @@ public class TokenDTO {
 
     @ApiModelProperty(value = "true:冻结，false未冻结")
     private Boolean isFreeze;
-
+    
+    /**
+     * 店铺类型
+     */
+    @ApiModelProperty(value = "门店类型(NOT_MERCHANT-没有店铺|NORMAL_MERCHANT-普通店铺|ENTITY_MERCHANT-实体店铺)")
+    private MerchantStoreTypeEnum merchantStoreType;
+    
     public String getUserNum() {
         return userNum;
     }
@@ -51,4 +59,13 @@ public class TokenDTO {
     public void setIsFreeze(Boolean freeze) {
         isFreeze = freeze;
     }
+
+	public MerchantStoreTypeEnum getMerchantStoreType() {
+		return merchantStoreType;
+	}
+
+	public void setMerchantStoreType(MerchantStoreTypeEnum merchantStoreType) {
+		this.merchantStoreType = merchantStoreType;
+	}
+    
 }
