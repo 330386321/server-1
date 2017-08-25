@@ -624,6 +624,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			if (item.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
 				// 清空退款状态
 				item.setRefundStatus(null);
+				item.setGmtModified(new Date());
+				shoppingOrderItemDOMapper.updateByPrimaryKey(item);
 				// 撤销退款申请
 				ShoppingRefundDetailDOExample shoppingRefundDetailDOExample = new ShoppingRefundDetailDOExample();
 				ShoppingRefundDetailDOExample.Criteria shoppingRefundDetailDOExampleCriteria = shoppingRefundDetailDOExample.createCriteria();
@@ -632,11 +634,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
 				shoppingRefundDetailDO.setStatus(StatusEnum.INVALID.getValue());
 				shoppingRefundDetailDOMapper.updateByExampleSelective(shoppingRefundDetailDO, shoppingRefundDetailDOExample);
+			} else if (!item.getOrderStatus().equals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue())) {
+				// 如果订单项状态是交易关闭，不予处理
+				// 更改订单项状态为交易成功
+				item.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+				item.setGmtModified(new Date());
+				shoppingOrderItemDOMapper.updateByPrimaryKey(item);
 			}
-			// 更改订单项状态为交易成功
-			item.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
-			item.setGmtModified(new Date());
-			shoppingOrderItemDOMapper.updateByPrimaryKey(item);
 		}
 		// 发送MQ消息通知产品模块增加销量
 		shoppingOrderTradingSuccessIncreaseSalesTransactionMainServiceImpl.sendNotice(id);
