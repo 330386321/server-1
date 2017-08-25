@@ -55,6 +55,6 @@
     from favorite_ad fa  
     	left join ad a on fa.ad_id= a.id
 	      where fa.is_send = 0 and a.type =3 and a.status=2
-	      and  a.begin_time < #{warnDate} 
+	      and  a.begin_time <![CDATA[< #{warnDate} ]]> 
   </select> 
 </mapper>
