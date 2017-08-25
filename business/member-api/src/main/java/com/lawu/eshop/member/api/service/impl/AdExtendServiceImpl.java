@@ -161,7 +161,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		Result<Page<AdDTO>> pageDTOS = adService.selectListByMember(param, memberId);
 		List<AdDTO> newList = adFilter(param, pageDTOS.getModel().getRecords(), memberId);
 		if (newList.size() > 9) {
-			newList = newList.subList(0, 9);
+			newList = newList.subList(0, 10);
 		} else {
 			newList = newList.subList(0, newList.size());
 		}
