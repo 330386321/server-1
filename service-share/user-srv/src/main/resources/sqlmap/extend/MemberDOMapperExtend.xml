@@ -72,7 +72,11 @@
 		select
 		num
 		from member
-		where status = 1 and (account like #{queryContent} or nickname like #{queryContent})
+		where status = 1 and (account like #{queryContent} or nickname like #{queryContent}
+		<if test="_parameter == '%E店用户%'.toString()" >
+			or nickname is null
+		</if>
+		)
 	</select>
 	  
 </mapper>
