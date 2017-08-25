@@ -162,7 +162,9 @@ public class AdServiceImpl implements AdService {
 		adDO.setMerchantNum(adSaveParam.getUserNum());
 		adDO.setMerchantStoreId(adSaveParam.getMerchantStoreId());
 		adDO.setMerchantStoreName(adSaveParam.getMerchantStoreName());
-		adDO.setManageType(adSaveParam.getManageType().getVal());
+		if(adSaveParam.getManageType()!=null){
+			adDO.setManageType(adSaveParam.getManageType().getVal());
+		}
 		adDO.setLogoUrl(adSaveParam.getLogoUrl());
 		adDO.setMerchantLatitude(adSaveParam.getLatitude());
 		adDO.setMerchantLongitude(adSaveParam.getLongitude());
