@@ -52,7 +52,7 @@
 	      </if>
 	      <!-- 人气榜 -->
 	      <if test="topType ==2">
-	      	 type=1 and <![CDATA[ status > 0 and status < 3  ]]>
+	      	 type=1 and <![CDATA[ status > 0 and status < 3 and begin_time > #{beginAfterTime,jdbcType=TIMESTAMP}  ]]>
 	      	 and point>=20
 	      	 order by point desc
 	      </if>
