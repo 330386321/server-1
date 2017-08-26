@@ -112,11 +112,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberBO findMemberInfoById(Long id) {
-
-        MemberDOExample example = new MemberDOExample();
-        example.createCriteria().andIdEqualTo(id);
         MemberDO memberDO = memberDOMapper.selectByPrimaryKey(id);
-
         return MemberConverter.convertBO(memberDO);
     }
 

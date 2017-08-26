@@ -19,6 +19,7 @@ import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
+import com.lawu.eshop.user.dto.MerchantDetailDTO;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.dto.MerchantStoreProfileDTO;
@@ -33,6 +34,7 @@ import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantDetailBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
@@ -372,4 +374,21 @@ public class MerchantController extends BaseController {
         profileDTO.setMerchantStoreId(merchantStoreProfileBO.getMerchantStoreId());
         return successGet(profileDTO);
     }
+
+    /**
+     * 根据商家ID查询商家详细信息(包括门店、图片等信息)
+     *
+     * @param merchantId
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "getMerchantDetail/{merchantId}", method = RequestMethod.GET)
+    public Result<MerchantDetailDTO> getMerchantDetailById(@PathVariable Long merchantId) {
+        MerchantDetailBO detailBO = merchantService.getMerchantDetailById(merchantId);
+        if (detailBO == null) {
+            return successGet(new MerchantDetailDTO());
+        }
+        return successGet(MerchantConverter.convertDTO(detailBO));
+    }
+
 }
