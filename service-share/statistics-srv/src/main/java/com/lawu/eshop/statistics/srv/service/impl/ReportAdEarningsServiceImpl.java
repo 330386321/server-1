@@ -85,6 +85,7 @@ public class ReportAdEarningsServiceImpl implements ReportAdEarningsService {
 		}
 		Long count=ReportAdEarningsDOMapper.countByExample(example);
 		RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
+		example.setOrderByClause("gmt_create desc");
 		List<ReportAdEarningsDO>  list=ReportAdEarningsDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		List<ReportAdEarningsBO>  listBO=new ArrayList<>();
 		for (ReportAdEarningsDO reportAdEarningsDO : list) {
