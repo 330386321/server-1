@@ -1,8 +1,7 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -18,14 +17,20 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
+import com.lawu.eshop.ad.constants.RedPacketStatusEnum;
+import com.lawu.eshop.ad.constants.UserRedPacketPayTypeEnum;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
-import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
+import com.lawu.eshop.ad.srv.domain.UserRedPacketDO;
+import com.lawu.eshop.ad.srv.domain.UserTakedRedPacketDO;
 import com.lawu.eshop.ad.srv.domain.extend.UserRedpacketMaxMoney;
+import com.lawu.eshop.ad.srv.mapper.UserRedPacketDOMapper;
+import com.lawu.eshop.ad.srv.mapper.UserTakedRedPacketDOMapper;
 import com.lawu.eshop.ad.srv.service.UserRedPacketService;
 import com.lawu.eshop.framework.core.page.Page;
 
@@ -42,6 +47,12 @@ public class UserRedPacketServiceImplTest {
 
 	@Autowired
 	private UserRedPacketService userRedPacketService;
+	
+	@Autowired
+	private UserRedPacketDOMapper userRedPacketDOMapper;
+	
+	@Autowired
+	private UserTakedRedPacketDOMapper userTakedRedPacketDOMapper;
 
 	@Before
 	public void setUp() throws Exception {
@@ -52,6 +63,7 @@ public class UserRedPacketServiceImplTest {
 	@Rollback
 	@Test
 	public void addUserRedPacket() {
+		
 		UserRedPacketSaveParam param = new UserRedPacketSaveParam();
 		param.setRedPacketPutWayEnum(RedPacketPutWayEnum.PUT_WAY_LUCK);
 		param.setTotalCount(1);
@@ -63,26 +75,39 @@ public class UserRedPacketServiceImplTest {
 		query.setCurrentPage(1);
 		query.setPageSize(10);
 		query.setNum("M000001");
-		Page<UserRedPacketBO> userPage = userRedPacketService.selectUserRedPacketList(query);
-		UserRedPacketBO bo = userPage.getRecords().get(0);
-		Assert.assertEquals(param.getUserAccount(), bo.getUserAccount());
-		Assert.assertEquals(Integer.valueOf(param.getTotalCount()), bo.getTotalCount());
-		int t = param.getTotalMoney().compareTo(bo.getTotalMoney());
-		Assert.assertEquals(0,t);
-		Assert.assertEquals(param.getUserNum(), bo.getUserNum());
+		List<UserRedPacketDO> userList = userRedPacketDOMapper.selectByExample(null);
+		Assert.assertNotNull(userList);
+        Assert.assertTrue(userList.size()>0);
 	}
 
 	@Transactional
 	@Rollback
 	@Test
 	public void isExistsRedPacket() {
-		UserRedPacketSaveParam param = new UserRedPacketSaveParam();
-		param.setRedPacketPutWayEnum(RedPacketPutWayEnum.PUT_WAY_LUCK);
-		param.setTotalCount(1);
-		param.setTotalMoney(new BigDecimal(100));
-		param.setUserAccount("15000000000");
-		param.setUserNum("M000001");
-		userRedPacketService.addUserRedPacket(param);
+		
+		UserRedPacketDO redPack = new UserRedPacketDO();
+		redPack.setGmtCreate(new Date());
+		redPack.setGmtModified(new Date());
+		redPack.setOrderNum("2017082115590000182751221");
+		redPack.setPayType(UserRedPacketPayTypeEnum.ALIPAY.getVal());
+		redPack.setStatus(RedPacketStatusEnum.RED_PACKET_SUCCESS.val);
+		redPack.setTotalCount(1);
+		redPack.setTotalMoney(BigDecimal.valueOf(100));
+		redPack.setType(RedPacketPutWayEnum.PUT_WAY_LUCK.val);
+		redPack.setUserAccount("15000000000");
+		redPack.setUserNum("M000001");
+		userRedPacketDOMapper.insert(redPack);
+		
+		UserTakedRedPacketDO userTaked = new UserTakedRedPacketDO();
+		userTaked.setGmtCreate(new Date());
+		userTaked.setGmtModified(new Date());
+		userTaked.setMoney(BigDecimal.valueOf(100));
+		userTaked.setOrdinal(0);
+		userTaked.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+		userTaked.setType(redPack.getType());
+		userTaked.setUserRedPackId(redPack.getId());
+		userTakedRedPacketDOMapper.insert(userTaked);
+	
 		UserRedPacketSelectNumParam query = new UserRedPacketSelectNumParam();
 		query.setCurrentPage(1);
 		query.setPageSize(10);
@@ -113,21 +138,30 @@ public class UserRedPacketServiceImplTest {
 	@Rollback
 	@Test
 	public void getUserRedpacketMoney() {
-		UserRedPacketSaveParam param = new UserRedPacketSaveParam();
-		param.setRedPacketPutWayEnum(RedPacketPutWayEnum.PUT_WAY_LUCK);
-		param.setTotalCount(1);
-		param.setTotalMoney(new BigDecimal(100));
-		param.setUserAccount("15000000000");
-		param.setUserNum("M000001");
-		userRedPacketService.addUserRedPacket(param);
-		UserRedPacketSelectNumParam query = new UserRedPacketSelectNumParam();
-		query.setCurrentPage(1);
-		query.setPageSize(10);
-		query.setNum("M000001");
-		Page<UserRedPacketBO> userPage = userRedPacketService.selectUserRedPacketList(query);
-		UserRedPacketBO bo = userPage.getRecords().get(0);
-		userRedPacketService.getUserRedpacketMoney(bo.getId(), bo.getUserNum());
-		boolean flag = userRedPacketService.isExistsRedPacket(bo.getId());
+		UserRedPacketDO redPack = new UserRedPacketDO();
+		redPack.setGmtCreate(new Date());
+		redPack.setGmtModified(new Date());
+		redPack.setOrderNum("2017082115590000182751221");
+		redPack.setPayType(UserRedPacketPayTypeEnum.ALIPAY.getVal());
+		redPack.setStatus(RedPacketStatusEnum.RED_PACKET_SUCCESS.val);
+		redPack.setTotalCount(1);
+		redPack.setTotalMoney(BigDecimal.valueOf(100));
+		redPack.setType(RedPacketPutWayEnum.PUT_WAY_LUCK.val);
+		redPack.setUserAccount("15000000000");
+		redPack.setUserNum("M000001");
+		userRedPacketDOMapper.insert(redPack);
+		
+		UserTakedRedPacketDO userTaked = new UserTakedRedPacketDO();
+		userTaked.setGmtCreate(new Date());
+		userTaked.setGmtModified(new Date());
+		userTaked.setMoney(BigDecimal.valueOf(100));
+		userTaked.setOrdinal(0);
+		userTaked.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+		userTaked.setType(redPack.getType());
+		userTaked.setUserRedPackId(redPack.getId());
+		userTakedRedPacketDOMapper.insert(userTaked);
+		
+		boolean flag = userRedPacketService.isExistsRedPacket(redPack.getId());
 		Assert.assertEquals(false, flag);
 	}
 
@@ -135,22 +169,32 @@ public class UserRedPacketServiceImplTest {
 	@Rollback
 	@Test
 	public void getUserRedpacketMaxMoney(){
-		UserRedPacketSaveParam param = new UserRedPacketSaveParam();
-		param.setRedPacketPutWayEnum(RedPacketPutWayEnum.PUT_WAY_LUCK);
-		param.setTotalCount(1);
-		param.setTotalMoney(new BigDecimal(100));
-		param.setUserAccount("15000000000");
-		param.setUserNum("M000001");
-		userRedPacketService.addUserRedPacket(param);
-		UserRedPacketSelectNumParam query = new UserRedPacketSelectNumParam();
-		query.setCurrentPage(1);
-		query.setPageSize(10);
-		query.setNum("M000001");
-		Page<UserRedPacketBO> userPage = userRedPacketService.selectUserRedPacketList(query);
-		UserRedPacketBO bo = userPage.getRecords().get(0);
-		UserRedpacketMaxMoney maxMoney = userRedPacketService.getUserRedpacketMaxMoney(bo.getId());
-		int t = maxMoney.getMaxMoney().compareTo(new BigDecimal(100));
-		Assert.assertEquals(0,t);
+		UserRedPacketDO redPack = new UserRedPacketDO();
+		redPack.setGmtCreate(new Date());
+		redPack.setGmtModified(new Date());
+		redPack.setOrderNum("2017082115590000182751221");
+		redPack.setPayType(UserRedPacketPayTypeEnum.ALIPAY.getVal());
+		redPack.setStatus(RedPacketStatusEnum.RED_PACKET_SUCCESS.val);
+		redPack.setTotalCount(1);
+		redPack.setTotalMoney(BigDecimal.valueOf(100));
+		redPack.setType(RedPacketPutWayEnum.PUT_WAY_LUCK.val);
+		redPack.setUserAccount("15000000000");
+		redPack.setUserNum("M000001");
+		userRedPacketDOMapper.insert(redPack);
+		
+		UserTakedRedPacketDO userTaked = new UserTakedRedPacketDO();
+		userTaked.setGmtCreate(new Date());
+		userTaked.setGmtModified(new Date());
+		userTaked.setMoney(BigDecimal.valueOf(100));
+		userTaked.setOrdinal(0);
+		userTaked.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+		userTaked.setType(redPack.getType());
+		userTaked.setUserRedPackId(redPack.getId());
+		userTakedRedPacketDOMapper.insert(userTaked);
+		
+		UserRedpacketMaxMoney maxMoney = userRedPacketService.getUserRedpacketMaxMoney(redPack.getId());
+		
+		Assert.assertNotNull(maxMoney);
 	}
 	
 }
