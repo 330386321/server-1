@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.UserRedPacketService;
 import com.lawu.eshop.user.dto.VisitUserInfoDTO;
+import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -97,6 +98,11 @@ public class BalancePayController extends BaseController {
             return successCreated(result.getRet());
         }
         double orderMoney = result.getModel().getOrderTotalPrice().doubleValue();
+
+        if (StringUtil.doubleCompareTo(orderMoney, 0) == 0) {
+            return successCreated(ResultCode.MONEY_IS_ZERO);
+        }
+
         dparam.setTotalAmount(String.valueOf(orderMoney));
 
         return balancePayService.orderPay(dparam);
@@ -119,6 +125,10 @@ public class BalancePayController extends BaseController {
             return successCreated(ResultCode.PAY_ORDER_NULL);
         } else if (PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal().equals(payOrderCallback.getPayOrderStatusEnum().getVal())) {
             return successCreated(ResultCode.PAY_ORDER_IS_SUCCESS);
+        }else {
+            if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), 0) == 0) {
+                return successCreated(ResultCode.MONEY_IS_ZERO);
+            }
         }
         dparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
         dparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
@@ -144,6 +154,9 @@ public class BalancePayController extends BaseController {
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
 
         ThirdPayCallBackQueryPayOrderDTO payOrderCallback = rechargeService.getRechargeMoney(param.getBizIds());
+        if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), 0) == 0) {
+            return successCreated(ResultCode.MONEY_IS_ZERO);
+        }
         dparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
         dparam.setOrderNum(payOrderCallback.getOrderNum());
 
@@ -187,6 +200,9 @@ public class BalancePayController extends BaseController {
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
 
         Result<ThirdPayCallBackQueryPayOrderDTO> moneyResult = userRedPacketService.selectUserRedPacketInfoForThrid(Long.valueOf(param.getBizIds()));
+        if (StringUtil.doubleCompareTo(moneyResult.getModel().getActualMoney(), 0) == 0) {
+            return successCreated(ResultCode.MONEY_IS_ZERO);
+        }
         dparam.setTotalAmount(String.valueOf(moneyResult.getModel().getActualMoney()));
         dparam.setOrderNum(moneyResult.getModel().getOrderNum());
 
