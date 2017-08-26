@@ -251,7 +251,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		}
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam.setAmount(actureMoneyIn);
-		tdsParam.setBizId("");
+		tdsParam.setBizId(param.getTempBizId());
 		tdsParam.setThirdTransactionNum("");
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 		tdsParam.setPreviousAmount((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getBalance());
