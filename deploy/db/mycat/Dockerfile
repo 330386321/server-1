@@ -23,7 +23,7 @@ RUN set -x \
 	&& tar -xvf mycat.tar.gz --strip-components=1 \
 	&& rm mycat.tar.gz*
 
-EXPOSE 8066 9066
+EXPOSE 8066 9066 1984
 
 VOLUME ["/usr/local/mycat/conf","/usr/local/mycat/logs"]
 
