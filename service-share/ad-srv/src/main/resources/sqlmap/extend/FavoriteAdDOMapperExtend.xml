@@ -54,7 +54,7 @@
     	a.title as title
     from favorite_ad fa  
     	left join ad a on fa.ad_id= a.id
-	      where fa.is_send = 0 and a.type =3 and a.status=2
+	      where fa.is_send = 0 and a.type =3 and a.status=1
 	      and  a.begin_time <![CDATA[< #{warnDate} ]]> 
   </select> 
 </mapper>
