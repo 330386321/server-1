@@ -105,7 +105,7 @@ public class AdDTO {
 	
 	@ApiModelProperty(value = "是否点击过广告")
 	private Boolean isClickAd;
-
+	
 	public Long getId() {
 		return id;
 	}

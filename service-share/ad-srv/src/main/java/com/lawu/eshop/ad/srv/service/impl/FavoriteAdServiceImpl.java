@@ -106,7 +106,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 	public List<FavoriteAdPraiseWarnBO> selectFavoriteAdPraise() {
 		FavoriteAdExtendDOView view = new FavoriteAdExtendDOView();
 		Calendar nowTime = Calendar.getInstance();
-		nowTime.add(Calendar.MINUTE, -10);
+		nowTime.add(Calendar.MINUTE, +10);
 		view.setWarnDate(DateUtil.getDateTimeFormat(nowTime.getTime()));
 		List<FavoriteAdPraiseWarnView> list=favoriteAdDOMapperExtend.selectFavoriteAdPraise(view);
 		List<FavoriteAdPraiseWarnBO> listBO = new ArrayList<>();

@@ -24,6 +24,7 @@ import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
+import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
@@ -34,6 +35,7 @@ import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.IsMyDateDTO;
+import com.lawu.eshop.ad.dto.OperatorAdDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
 import com.lawu.eshop.ad.dto.ReportAdDTO;
@@ -48,22 +50,21 @@ import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.param.ListAdParam;
-import com.lawu.eshop.ad.dto.AdEgainDTO;
-import com.lawu.eshop.ad.dto.OperatorAdDTO;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
+import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
+import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.GetRedPacketBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
-import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
@@ -208,8 +209,11 @@ public class AdController extends BaseController {
 	 */
 	@RequestMapping(value = "clickAd/{id}", method = RequestMethod.PUT)
 	public Result<ClickAdPointDTO> clickAd(@PathVariable Long id, @RequestParam Long memberId, @RequestParam String num) {
-		BigDecimal point = adService.clickAd(id, memberId, num);
-		ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, point);
+		ClickPointBO bo = adService.clickAd(id, memberId, num);
+		if(bo.isOverClick()){
+			return successCreated(ResultCode.AD_CLICK_PUTED);
+		}
+		ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
 		ClickAdPointDTO dto = new ClickAdPointDTO();
 		dto.setAddPoint(clickAdPointBO.getAddPoint());
 		dto.setPoint(clickAdPointBO.getAdTotlePoint());

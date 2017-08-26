@@ -1,10 +1,12 @@
 package com.lawu.eshop.user.dto;
 
+import java.math.BigDecimal;
+
+import com.lawu.eshop.user.constants.BusinessDepositStatusEnum;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
-import io.swagger.annotations.ApiModelProperty;
 
-import java.math.BigDecimal;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 商家扩展信息表
@@ -72,6 +74,9 @@ public class MerchantInfoDTO {
 
     @ApiModelProperty(name = "level", value= "等级")
     private Integer level;
+
+    @ApiModelProperty(value = "状态['PAYING-待支付', 'VERIFY-已支付未核实', 'VERIFYD-已核实', 'APPLY_REFUND-退款申请', 'ACCPET_REFUND-退款已受理', 'REFUND_SUCCESS-退款成功', 'REFUND_FAILURE-退款失败']")
+    private BusinessDepositStatusEnum depositStatusEnum;
 
     public Integer getInviteMemberCount() {
         return inviteMemberCount;
@@ -191,5 +196,13 @@ public class MerchantInfoDTO {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public BusinessDepositStatusEnum getDepositStatusEnum() {
+        return depositStatusEnum;
+    }
+
+    public void setDepositStatusEnum(BusinessDepositStatusEnum depositStatusEnum) {
+        this.depositStatusEnum = depositStatusEnum;
     }
 }

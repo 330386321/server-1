@@ -364,7 +364,7 @@ public class AdController extends BaseController {
 		if(!isSuccess(result)){
 			return successCreated(result.getRet());
 		}
-		if(result.getModel().getProductId()!=null){
+		if(result.getModel().getProductId()!=null && result.getModel().getProductId() > 0){
 			Result<ProductRelateAdInfoDTO>  proResult = productService.selectProductRelateAdInfo(result.getModel().getProductId());
 			if(!isSuccess(proResult)){
 				return successCreated(proResult.getRet());

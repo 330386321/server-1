@@ -46,6 +46,7 @@ import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
+import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
@@ -161,7 +162,9 @@ public class AdServiceImpl implements AdService {
 		adDO.setMerchantNum(adSaveParam.getUserNum());
 		adDO.setMerchantStoreId(adSaveParam.getMerchantStoreId());
 		adDO.setMerchantStoreName(adSaveParam.getMerchantStoreName());
-		adDO.setManageType(adSaveParam.getManageType().getVal());
+		if(adSaveParam.getManageType()!=null){
+			adDO.setManageType(adSaveParam.getManageType().getVal());
+		}
 		adDO.setLogoUrl(adSaveParam.getLogoUrl());
 		adDO.setMerchantLatitude(adSaveParam.getLatitude());
 		adDO.setMerchantLongitude(adSaveParam.getLongitude());
@@ -513,8 +516,15 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	@Transactional
-	public BigDecimal clickAd(Long id, Long memberId, String num) {
+	public ClickPointBO clickAd(Long id, Long memberId, String num) {
 		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+		
+		ClickPointBO  clickBO = new ClickPointBO();
+		if(adDO.getHits()>=adDO.getAdCount()){
+			clickBO.setPoint(BigDecimal.valueOf(0));
+			clickBO.setOverClick(true);
+			return clickBO;
+		}
 
 		MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
 		memberAdRecordD.setAdId(adDO.getId());
@@ -532,15 +542,10 @@ public class AdServiceImpl implements AdService {
 		//发送消息修改积分
 		userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 
-		if (adDO.getHits() + 1 >= adDO.getAdCount()) {
-			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); // 投放结束
-			adDO.setGmtModified(new Date());
-			adDOMapper.updateByPrimaryKey(adDO);
-			// 删除solr中的数据
-			solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-		}
+		clickBO.setOverClick(false);
+		clickBO.setPoint(adDO.getPoint());
 
-		return adDO.getPoint();
+		return clickBO;
 	}
 
 	/**
@@ -665,10 +670,11 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public void updatAdToPuted() {
+		
 		AdDOExample example = new AdDOExample();
 		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.getVal());
 		List<AdDO> listADD = adDOMapper.selectByExample(example);
-		if (!listADD.isEmpty())
+		if (!listADD.isEmpty()){
 			for (AdDO adDO : listADD) {
 				Date date = new Date();
 				Calendar nowTime = Calendar.getInstance();
@@ -679,8 +685,35 @@ public class AdServiceImpl implements AdService {
 					adDOMapper.updateByPrimaryKey(adDO);
 					// 将没有领完的积分退还给用户
 					matransactionMainAddService.sendNotice(adDO.getId());
-				}
+			    }
+		    }
+		}
+	}
+	
+	@Override
+	public void updatFlatAndVideoToPuted() {
+		
+		AdDOExample example = new AdDOExample();
+		List<Byte> bytes = new ArrayList<>();
+		bytes.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
+		bytes.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
+		Calendar calendar = Calendar.getInstance(); 
+		calendar.setTime(new Date());
+		calendar.add(Calendar.DAY_OF_MONTH, -14); // 设置为14天前
+		Date before14days = calendar.getTime(); 
+		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeIn(bytes).andBeginTimeLessThan(before14days);
+		List<AdDO> list = adDOMapper.selectByExample(example);
+		for (AdDO adDO : list) {
+			
+			if (adDO.getHits()  >= adDO.getAdCount()) {
+				adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); // 投放结束
+				adDO.setGmtModified(new Date());
+				adDOMapper.updateByPrimaryKey(adDO);
+				// 删除solr中的数据
+				solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 			}
+			
+		}
 	}
 
 	@Override
@@ -1276,4 +1309,6 @@ public class AdServiceImpl implements AdService {
 			}
 		}
 	}
+
+	
 }

@@ -17,12 +17,11 @@ import com.lawu.eshop.mq.dto.ad.AdPointNotification;
  * @date 2017/4/12
  */
 @Service("userSweepRedTransactionMainServiceImpl")
-@CompensatingTransactionMain(value = TransactionConstant.AD_CLICK_POINT, topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_USER_SWEEP_RED)
+@CompensatingTransactionMain(value = TransactionConstant.USER_SWEET_MONEY, topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_USER_SWEEP_RED)
 public class UserSweepRedTransactionMainServiceImpl extends AbstractTransactionMainService<AdPointNotification, Reply> {
 
 	@Autowired
 	private PointPoolDOMapper pointPoolDOMapper;
-	
 
     @Override
     public AdPointNotification selectNotification(Long id) {
@@ -31,6 +30,7 @@ public class UserSweepRedTransactionMainServiceImpl extends AbstractTransactionM
     	notification.setUserNum(pointPoolDO.getMemberNum());
     	notification.setPoint(pointPoolDO.getPoint());
     	notification.setAdId(pointPoolDO.getAdId());
+    	notification.setRegionPath("");
         return notification;
     }
 

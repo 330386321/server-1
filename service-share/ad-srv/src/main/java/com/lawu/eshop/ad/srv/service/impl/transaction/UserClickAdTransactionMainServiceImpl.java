@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.srv.constants.TransactionConstant;
+import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
+import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
@@ -23,14 +25,19 @@ public class UserClickAdTransactionMainServiceImpl extends AbstractTransactionMa
 	@Autowired
 	private MemberAdRecordDOMapper memberAdRecordDOMapper;
 	
+	@Autowired
+	private AdDOMapper adDOMapper;
 
     @Override
     public AdPointNotification selectNotification(Long id) {
     	 MemberAdRecordDO memberAdRecordDO=memberAdRecordDOMapper.selectByPrimaryKey(id);
+    	 
+    	 AdDO ad = adDOMapper.selectByPrimaryKey(memberAdRecordDO.getAdId());
     	 AdPointNotification notification=new AdPointNotification();
     	 notification.setUserNum(memberAdRecordDO.getMemberNum());
     	 notification.setPoint(memberAdRecordDO.getOriginalPoint());
     	 notification.setAdId(memberAdRecordDO.getAdId());
+    	 notification.setRegionPath(ad.getMerchantRegionPath());
         return notification;
     }
 

@@ -42,7 +42,7 @@ public class ShoppingOrderTradingSuccessTransactionMainServiceImpl extends Abstr
     	rtn.setMerchantNum(shoppingOrderBO.getMerchantNum());
     	rtn.setMerchantStoreRegionPath(shoppingOrderBO.getMerchantStoreRegionPath());
     	rtn.setShoppingOrderId(shoppingOrderId);
-    	rtn.setOrderTotalPrice(NumberUtil.format(shoppingOrderBO.getOrderTotalPrice()));
+    	rtn.setOrderTotalPrice(NumberUtil.format(shoppingOrderBO.getActualAmount()));
     	rtn.setIsAutoReceipt(shoppingOrderBO.getIsAutomaticReceipt());
 	    rtn.setOrderNum(shoppingOrderBO.getOrderNum());
         return rtn;

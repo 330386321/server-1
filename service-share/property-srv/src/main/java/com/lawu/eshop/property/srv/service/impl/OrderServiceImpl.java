@@ -114,6 +114,7 @@ public class OrderServiceImpl implements OrderService {
         tdsParam.setThirdTransactionNum(param.getTradeNo());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(param.getOutTradeNo());
+        tdsParam.setRegionPath(param.getRegionPath());
         transactionDetailService.save(tdsParam);
 
         //更新订单状态 发送MQ消息更新订单状态
@@ -274,6 +275,9 @@ public class OrderServiceImpl implements OrderService {
                 freezeDO.setFundType(FreezeTypeEnum.PRODUCT_ORDER.getVal());
                 freezeDO.setFundBizType(FreezeBizTypeEnum.PRODUCT_ORDER_MERCHANT_DOREFUND.getVal());
                 freezeDO.setBizId(freeze.getBizId());
+                if(param.getOrderItemIds() != null && !"".equals(param.getOrderItemIds())){
+                    freezeDO.setItemId(Long.valueOf(param.getOrderItemIds()));
+                }
                 freezeDO.setGmtCreate(new Date());
                 freezeDO.setDays(freeze.getDays());
                 freezeDO.setOrderNum(freeze.getOrderNum());

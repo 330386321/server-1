@@ -58,16 +58,6 @@ public class RechargeServiceImplTest {
     @Rollback
     @Test
     public void save(){
-        PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
-        propertyInfoDO.setUserNum("M10001");
-        propertyInfoDO.setGmtCreate(new Date());
-        propertyInfoDO.setPayPassword(PwdUtil.generate("123456"));
-        propertyInfoDO.setBalance(new BigDecimal("200"));
-        propertyInfoDO.setPoint(new BigDecimal("200"));
-        propertyInfoDO.setLoveAccount(new BigDecimal("200"));
-        propertyInfoDO.setFreeze(FreezeStatusEnum.RELEASE.getVal());
-        propertyInfoDOMapper.insertSelective(propertyInfoDO);
-
         RechargeSaveDataParam param = new RechargeSaveDataParam();
         param.setRechargeMoney("100");
         param.setPayTypeEnum(PayTypeEnum.BALANCE);
@@ -76,7 +66,7 @@ public class RechargeServiceImplTest {
         param.setRechargeScale("1");
         param.setUserNum("M10001");
         RechargeSaveDTO dto = rechargeService.save(param);
-        Assert.assertNotEquals(0,dto.getId().intValue());
+        Assert.assertEquals(1,dto.getId().intValue());
     }
 
     @Transactional

@@ -73,6 +73,7 @@ public class ShoppingOrderConverter {
 		rtn.setMerchantName(param.getMerchantName());
 		rtn.setMerchantNum(param.getMerchantNum());
 		rtn.setMerchantStoreId(param.getMerchantStoreId());
+		rtn.setMerchantStoreRegionPath(param.getMerchantStoreRegionPath());
 		rtn.setMessage(param.getMessage());
 		rtn.setOrderTotalPrice(param.getOrderTotalPrice());
 		

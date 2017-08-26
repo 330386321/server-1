@@ -39,6 +39,7 @@ import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
+import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
@@ -54,6 +55,7 @@ import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 广告测试
@@ -755,9 +757,8 @@ public class AdServiceImplTest {
         Integer id=adDOMapper.insertSelective(ad);
         
         
-        BigDecimal point= adService.clickAd(ad.getId(), 1l, "aaa");
-        Assert.assertNotNull(point);
-        Assert.assertTrue(point.compareTo(BigDecimal.valueOf(0))==1);
+        ClickPointBO bo= adService.clickAd(ad.getId(), 1l, "aaa");
+        Assert.assertNotNull(bo);
 
     }
 	
@@ -1477,6 +1478,39 @@ public class AdServiceImplTest {
         Integer id=adDOMapper.insertSelective(ad);
         
         adService.updatAdToPuted();
+
+    }
+	
+	@Transactional
+	@Rollback
+    @Test
+    public void updatFlatAndVideoToPuted() {
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setHits(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(DateUtil.stringToDate("2017-07-10 14:49:00"));
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        Integer id=adDOMapper.insertSelective(ad);
+        
+        adService.updatFlatAndVideoToPuted();
 
     }
 	

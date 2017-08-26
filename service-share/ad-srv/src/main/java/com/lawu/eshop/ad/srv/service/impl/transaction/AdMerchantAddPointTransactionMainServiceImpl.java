@@ -63,7 +63,7 @@ public class AdMerchantAddPointTransactionMainServiceImpl extends AbstractTransa
         		 hits=0;
         	 notification.setPoint(totalPoint.subtract(point.multiply(new BigDecimal(hits)))); 
     	 }
-    	
+    	notification.setRegionPath("");
         return notification;
     }
 

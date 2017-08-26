@@ -255,6 +255,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		tdsParam.setThirdTransactionNum("");
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 		tdsParam.setPreviousAmount((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getBalance());
+		tdsParam.setRegionPath(param.getRegionPath());
 		transactionDetailService.save(tdsParam);
 		
 		// 更新用户资产余额

@@ -12,6 +12,7 @@ import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainServi
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ProductModeUpdateInventoryDTO;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessIncreaseSalesNotification;
+import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.constants.TransactionConstant;
@@ -48,10 +49,13 @@ public class ShoppingOrderTradingSuccessIncreaseSalesTransactionMainServiceImpl 
     	rtn.setShoppingOrderId(shoppingOrderId);
     	List<ProductModeUpdateInventoryDTO> params = new ArrayList<>();
         for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
-        	ProductModeUpdateInventoryDTO productModeUpdateInventoryParam = new ProductModeUpdateInventoryDTO();
-        	productModeUpdateInventoryParam.setProdecutModelId(shoppingOrderItemBO.getProductModelId());
-        	productModeUpdateInventoryParam.setQuantity(shoppingOrderItemBO.getQuantity());
-        	params.add(productModeUpdateInventoryParam);
+        	// 排除已经退完款的订单项
+        	if (!ShoppingOrderStatusEnum.CANCEL_TRANSACTION.equals(shoppingOrderItemBO.getOrderStatus())) {
+	        	ProductModeUpdateInventoryDTO productModeUpdateInventoryParam = new ProductModeUpdateInventoryDTO();
+	        	productModeUpdateInventoryParam.setProdecutModelId(shoppingOrderItemBO.getProductModelId());
+	        	productModeUpdateInventoryParam.setQuantity(shoppingOrderItemBO.getQuantity());
+	        	params.add(productModeUpdateInventoryParam);
+        	}
         }
         rtn.setParams(params);
     	

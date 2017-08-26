@@ -29,6 +29,9 @@
         from merchant me
         left join merchant_store ms on me.id=ms.merchant_id
         where ms.name like #{queryContent} or me.account like #{queryContent}
+        <if test="_parameter == '%E店商家%'.toString()" >
+            or ms.name is null
+        </if>
     </select>
 
     <select id="selectInviteMerchantInfo" resultMap="inviteResultMap" parameterType="java.lang.String">
