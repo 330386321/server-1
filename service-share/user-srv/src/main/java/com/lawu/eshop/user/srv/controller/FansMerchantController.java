@@ -106,9 +106,9 @@ public class FansMerchantController extends BaseController {
     @RequestMapping(value = "isFansMerchant/{merchantId}", method = RequestMethod.GET)
     public Result<Boolean> isFansMerchant(@PathVariable Long merchantId, @RequestParam Long memberId) {
         FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchant(memberId, merchantId);
-        if (fansMerchantBO == null || fansMerchantBO.getAccount() == null) {
+        if (fansMerchantBO == null) {
             return successGet(false);
-        }
+        } 
         return successGet(true);
     }
 
