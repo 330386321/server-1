@@ -280,6 +280,57 @@ public class AdPlatformControllerTest {
 
     }
     
+    @Transactional
+    @Rollback
+    @Test
+    public void getAdPlatformByTypePosition() {
+    	
+        try {
+            RequestBuilder request = get("/adPlatform/getAdPlatformByTypePosition").param("typeEnum","TYPE_STORE").param("positionEnum","POSITON_SHOP_TOP");
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+    }
+    
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void getAdPlatformByTypePositionRegionPath() {
+    	
+        try {
+            RequestBuilder request = get("/adPlatform/getAdPlatformByTypePositionRegionPath").param("typeEnum","TYPE_STORE").param("positionEnum","POSITON_SHOP_TOP").param("regionPath", "11/1101/110101");
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+    }
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void selectByProductIdAndStatus() {
+    	
+        try {
+            RequestBuilder request = get("/adPlatform/selectByProductIdAndStatus").param("productId", "1");
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+    }
     
     
 }

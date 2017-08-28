@@ -87,8 +87,10 @@ public class UserRedPacketConverter {
 
 	public static ThirdPayCallBackQueryPayOrderDTO convertThirdPay(UserRedPacketDO userRed) {
 		ThirdPayCallBackQueryPayOrderDTO dto =new ThirdPayCallBackQueryPayOrderDTO();
-		dto.setActualMoney(userRed.getTotalMoney().doubleValue());
-		dto.setOrderNum(userRed.getOrderNum());
+		if(userRed != null){
+			dto.setActualMoney(userRed.getTotalMoney().doubleValue());
+			dto.setOrderNum(userRed.getOrderNum());
+		}
 		return dto;
 	}
 

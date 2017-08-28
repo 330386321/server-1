@@ -13,10 +13,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.srv.bo.GetRedPacketBO;
+import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
+import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.service.PointPoolService;
 
@@ -35,6 +41,9 @@ public class PointPoolServiceImplTest {
 	
 	@Autowired
 	private PointPoolDOMapper pointPoolDOMapper;
+	
+	@Autowired
+	private AdDOMapper adDOMapper;
 	
 	@Transactional
     @Rollback
@@ -88,6 +97,25 @@ public class PointPoolServiceImplTest {
     @Rollback
     @Test
     public void isGetRedPacket() {
+		
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setAdCount(2);
+		ad.setPutWay(PutWayEnum.PUT_WAY_COMMON.val);
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_PACKET.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+        adDOMapper.insertSelective(ad);
 
 		PointPoolDO pointPoolDO=new PointPoolDO();
         pointPoolDO.setAdId(1l);
