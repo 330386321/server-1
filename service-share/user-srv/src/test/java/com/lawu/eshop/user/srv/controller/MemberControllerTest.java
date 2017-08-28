@@ -621,7 +621,7 @@ public class MemberControllerTest {
     @Rollback
     @Test
     public void freezeAccount(){
-        RequestBuilder request = put("/member/freezeAccount").param("num","123").param("isFreeze","true");
+        RequestBuilder request = put("/member/freezeAccount").param("num","123").param("isFreeze","true").param("freezeReason","test");
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();

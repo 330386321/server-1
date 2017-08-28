@@ -144,7 +144,7 @@ public class MerchantControllerTest {
     @Transactional
     @Rollback
     @Test
-    public void getMerchant() {
+    public void getMerchantByAccount() {
         RequestBuilder request = get("/merchant/getMerchant/13888888888");
         try {
             ResultActions perform = mvc.perform(request);
@@ -507,7 +507,7 @@ public class MerchantControllerTest {
     @Rollback
     @Test
     public void freezeAccount(){
-        RequestBuilder request = put("/merchant/freezeAccount").param("num","123").param("isFreeze","true");
+        RequestBuilder request = put("/merchant/freezeAccount").param("num","123").param("isFreeze","true").param("freezeReason","test");
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -534,6 +534,21 @@ public class MerchantControllerTest {
         imageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
         merchantStoreImageDOMapper.insertSelective(imageDO);
         RequestBuilder request = get("/merchant/getMerchantStoreProfileInfo").param("id","1");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getMerchantDetailById() {
+        RequestBuilder request = get("/merchant/getMerchantDetail/200");
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();

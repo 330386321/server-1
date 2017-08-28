@@ -18,6 +18,7 @@ import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.StatusEnum;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
@@ -382,6 +383,7 @@ public class MerchantStoreInfoServiceImplTest {
         merchantStoreParam.setIdcardUrl("pic");
         merchantStoreParam.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT);
         merchantStoreParam.setCertifType(CertifTypeEnum.CERTIF_TYPE_LICENSE);
+        merchantStoreParam.setMerchantStoreStatus(MerchantStatusEnum.MERCHANT_STATUS_CANCEL);
         merchantStoreInfoService.saveMerchantStoreAuditInfo(200L, merchantStoreParam, 300L);
 
         List<MerchantStoreAuditDO> storeAuditDOS = merchantStoreAuditDOMapper.selectByExample(null);

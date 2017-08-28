@@ -1,7 +1,9 @@
 package com.lawu.eshop.user.srv.controller;
 
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.user.srv.UserSrvApplicationTest;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,8 +21,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.user.srv.UserSrvApplicationTest;
 
 /**
  * @author meishuquan
@@ -61,6 +63,21 @@ public class MerchantProfileControllerTest {
     @Test
     public void getMerchantInfoFromPublishAd() {
         RequestBuilder request = post("/merchantProfile/getMerchantInfoFromPublishAd/200");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getMerchantInfoFromInviteFans() {
+        RequestBuilder request = get("/merchantProfile/getMerchantInfoFromInviteFans/200");
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();

@@ -1,8 +1,21 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.param.MerchantProfileParam;
+import com.lawu.eshop.user.srv.bo.MerchantInfoFromInviteFansBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoFromPublishAdBO;
 import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
 import com.lawu.eshop.user.srv.bo.MerchantSizeLinkBO;
@@ -17,17 +30,6 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantProfileService;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.RandomUtil;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author meishuquan
@@ -180,6 +182,28 @@ public class MerchantProfileServiceImplTest {
         MerchantInfoFromPublishAdBO publishAdBO = merchantProfileService.getMerchantInfoFromPublishAd(200L);
         Assert.assertNotNull(publishAdBO);
         Assert.assertEquals(storeImageDO.getPath(), publishAdBO.getLogoUrl());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getMerchantInfoFromInviteFans() {
+        MerchantStoreDO storeDO = new MerchantStoreDO();
+        storeDO.setMerchantId(200L);
+        storeDO.setName("测试店铺");
+        storeDO.setRegionPath("44/4403/440303");
+        storeDO.setRegionName("广东省深圳市南山区");
+        storeDO.setAddress("大冲商务中心");
+        storeDO.setLongitude(new BigDecimal(104.23));
+        storeDO.setLatitude(new BigDecimal(22.36));
+        storeDO.setIntro("店铺介绍");
+        storeDO.setStatus(DataTransUtil.intToByte(1));
+        storeDO.setIsNoReasonReturn(true);
+        merchantStoreDOMapper.insertSelective(storeDO);
+
+        MerchantInfoFromInviteFansBO inviteFansBO = merchantProfileService.getMerchantInfoFromInviteFans(200L);
+        Assert.assertNotNull(inviteFansBO);
+        Assert.assertEquals(storeDO.getId(), inviteFansBO.getMerchantStoreId());
     }
 
 }
