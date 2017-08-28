@@ -5,6 +5,15 @@
 sudo docker build -t eshop/solr:6.5.1-alpine .
 ```
 
+solr单节点部署
+```bash
+sudo docker run --name solr -t -d -p 8983:8983 \
+    -v /etc/localtime:/etc/localtime:ro \
+    -v /usr/local/eshop/solr/config/solr:/opt/solr/server/solr \
+    eshop/solr:6.5.1-alpine
+```
+
+solr集群部署
 创建znode节点
 ------
 
