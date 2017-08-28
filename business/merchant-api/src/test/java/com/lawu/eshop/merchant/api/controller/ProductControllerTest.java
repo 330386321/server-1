@@ -102,4 +102,23 @@ public class ProductControllerTest {
         }
     }
 
+    @Test
+    public void saveProductInfo() {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("productId", "10");
+        map.add("imageContents", "[\"pic\"]");
+        map.add("backProductImageUrls", "[\"pic\"]");
+        map.add("backProductDetailImageUrls", "[\"pic\"]");
+        map.add("spec", "[{\"id\":10,\"name\":\"test\",\"originalPrice\":10,\"price\":10,\"inventory\":10,\"inventoryTrans\":10,\"salesVolume\":10}]");
+        RequestBuilder request = post("/product/saveProductInfo").header("authorization", "8888").params(map);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
 }

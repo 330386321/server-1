@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -86,6 +87,14 @@ public class MemberController extends BaseController{
     @RequestMapping(value = "getMember/{account}", method = RequestMethod.GET)
     public Result<MemberDTO> getMember(@PathVariable @ApiParam(value = "会员账号") String account) {
         return memberService.getMemberByAccount(account);
+    }
+
+    @ApiOperation(value = "根据会员ID查询会员信息", notes = "根据会员ID查询会员信息。（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("account:detail")
+    @RequestMapping(value = "getMemberById/{id}", method = RequestMethod.GET)
+    public Result<MemberDTO> getMemberById(@PathVariable @ApiParam(value = "会员账号") Long id) {
+        return memberService.findMember(id);
     }
 
     @ApiOperation(value = "根据会员账号查询会员列表（商家，会员）", notes = "根据会员账号查询会员列表（商家，会员）（章勇）", httpMethod = "GET")

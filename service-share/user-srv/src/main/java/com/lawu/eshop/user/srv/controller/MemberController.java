@@ -509,7 +509,7 @@ public class MemberController extends BaseController {
     }
 
     @RequestMapping(value = "freezeAccount", method = RequestMethod.PUT)
-    Result freezeAccount(@RequestParam("num") String num, @RequestParam("isFreeze") Boolean isFreeze,
+    public Result freezeAccount(@RequestParam("num") String num, @RequestParam("isFreeze") Boolean isFreeze,
                          @RequestParam("freezeReason") String freezeReason) {
         memberService.freezeAccount(num, isFreeze,freezeReason);
         return successCreated();

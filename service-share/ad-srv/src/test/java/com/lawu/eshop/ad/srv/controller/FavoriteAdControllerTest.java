@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.junit.Assert;
@@ -27,10 +28,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.FavoriteAdTypeEnum;
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.param.FavoriteAdParam;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
+import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDO;
+import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.framework.web.HttpCode;
 
@@ -47,6 +54,10 @@ public class FavoriteAdControllerTest {
      
      @Autowired
      private FavoriteAdDOMapper favoriteAdDOMapper;
+     
+     
+     @Autowired
+     private AdDOMapper adDOMapper;
 
      @Before
      public void setUp() throws Exception {
@@ -171,7 +182,37 @@ public class FavoriteAdControllerTest {
      @Rollback
      @Test
      public void selectFavoriteAdPraise() {
+		AdDO ad = new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
+		ad.setGmtCreate(new Date());
+		ad.setGmtModified(new Date());
+         ad.setHits(0);
+         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+         Integer id=adDOMapper.insertSelective(ad);
     	 
+    	 FavoriteAdDO favoriteAdDO=new FavoriteAdDO();
+    	 favoriteAdDO.setAdId(ad.getId());
+    	 favoriteAdDO.setGmtCreate(new Date());
+    	 favoriteAdDO.setMemberId(1l);
+    	 favoriteAdDO.setMemberNum("M000001");
+    	 favoriteAdDOMapper.insert(favoriteAdDO);
          try {
              RequestBuilder request = get("/favoriteAd/selectFavoriteAdPraise");
              ResultActions perform= mvc.perform(request);

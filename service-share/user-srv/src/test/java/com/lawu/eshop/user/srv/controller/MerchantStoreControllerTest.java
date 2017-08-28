@@ -30,6 +30,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.ApplyStoreParam;
@@ -322,6 +323,7 @@ public class MerchantStoreControllerTest {
         param.setLicenseIndate(new Date());
         param.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT);
         param.setCertifType(CertifTypeEnum.CERTIF_TYPE_LICENSE);
+        param.setMerchantStoreStatus(MerchantStatusEnum.MERCHANT_STATUS_CANCEL);
         String requestJson = JSONObject.toJSONString(param);
         RequestBuilder request = post("/merchantStore/saveMerchantStoreAuditInfo/300").param("merchantId", "200").contentType(MediaType.APPLICATION_JSON).content(requestJson);
         try {

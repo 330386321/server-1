@@ -1,11 +1,11 @@
 package com.lawu.eshop.user.srv.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.user.constants.StoreSolrEnum;
-import com.lawu.eshop.user.param.DiscountStoreParam;
-import com.lawu.eshop.user.param.StoreSolrParam;
-import com.lawu.eshop.user.srv.UserSrvApplicationTest;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.math.BigDecimal;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,11 +24,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.user.constants.StoreSolrEnum;
+import com.lawu.eshop.user.param.DiscountStoreParam;
+import com.lawu.eshop.user.param.StoreSolrParam;
+import com.lawu.eshop.user.srv.UserSrvApplicationTest;
 
 /**
  * @author meishuquan
@@ -78,7 +79,7 @@ public class StoreSolrControllerTest {
     @Rollback
     @Test
     public void listStoreSearchWord() {
-        RequestBuilder request = get("/storeSolr/listStoreSearchWord").param("name", "test");
+        RequestBuilder request = get("/storeSolr/listStoreSearchWord").param("name", "test").param("regionPath","44/4403");
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();

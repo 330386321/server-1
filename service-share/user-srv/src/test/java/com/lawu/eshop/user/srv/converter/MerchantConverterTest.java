@@ -9,9 +9,14 @@ import org.junit.Test;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.dto.AccountDTO;
+import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantDTO;
+import com.lawu.eshop.user.dto.MerchantDetailDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.bo.MerchantDetailBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.utils.DataTransUtil;
@@ -152,5 +157,37 @@ public class MerchantConverterTest {
         List<AccountDTO> list = MerchantConverter.convertAccountDOTS(records);
         Assert.assertNotNull(list);
         Assert.assertEquals(merchantBO.getNum(), list.get(0).getNum());
+    }
+
+    @Test
+    public void convertMerchantDetailDTO() {
+        MerchantDetailBO detailBO = new MerchantDetailBO();
+        detailBO.setName("test");
+        detailBO.setRegionName("44/4403");
+        detailBO.setAddress("test");
+        detailBO.setIndustryName("test");
+        detailBO.setKeywords("test");
+        detailBO.setIntro("test");
+        detailBO.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK);
+        detailBO.setPrincipalName("test");
+        detailBO.setPrincipalMobile("13666666666");
+        detailBO.setCompanyName("test");
+        detailBO.setRegNumber("test");
+        detailBO.setCompanyAddress("test");
+        detailBO.setLicenseIndate(new Date());
+        detailBO.setManageType(MerchantStoreTypeEnum.NORMAL_MERCHANT);
+        detailBO.setCertifType(CertifTypeEnum.CERTIF_TYPE_IDCARD);
+        detailBO.setOperatorCardId("test");
+        detailBO.setOperatorName("test");
+        detailBO.setStoreUrl(new ArrayList<>());
+        detailBO.setEnvironmentUrl(new ArrayList<>());
+        detailBO.setIdcardUrl(new ArrayList<>());
+        detailBO.setLicenseUrl(new ArrayList<>());
+        detailBO.setLogoUrl("pic");
+        detailBO.setOtherUrl(new ArrayList<>());
+
+        MerchantDetailDTO detailDTO = MerchantConverter.convertDTO(detailBO);
+        Assert.assertNotNull(detailDTO);
+        Assert.assertEquals(detailBO.getName(), detailDTO.getName());
     }
 }

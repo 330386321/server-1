@@ -1,10 +1,11 @@
 package com.lawu.eshop.user.dto;
 
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.user.constants.UserSexEnum;
-import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
+import io.swagger.annotations.ApiModelProperty;
 
 public class MemberDTO {
 
@@ -23,7 +24,11 @@ public class MemberDTO {
     @ApiModelProperty(value = "区域")
     private String regionPath;
 
+    @ApiModelProperty(value = "区域名称")
+    private String regionName;
+
     @ApiModelProperty(value = "出生年月")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date birthday;
 
     @ApiModelProperty(value = "头像")
@@ -130,5 +135,11 @@ public class MemberDTO {
         this.mobile = mobile;
     }
 
+    public String getRegionName() {
+        return regionName;
+    }
 
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
 }

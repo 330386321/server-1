@@ -100,7 +100,11 @@ public class FansMerchantServiceImpl implements FansMerchantService {
         List<FansMerchantDOView> fansMerchantDOViewList = fansMerchantDOMapperExtend.pageListInviteFans(listInviteFansRealParam);
         Page<FansMerchantBO> page = new Page<>();
         page.setCurrentPage(param.getCurrentPage());
-        page.setTotalCount(fansMerchantDOMapperExtend.countInviteFans(listInviteFansRealParam));
+        Integer count = fansMerchantDOMapperExtend.countInviteFans(listInviteFansRealParam);
+        if(param.getInviteCount() != null && param.getInviteCount() < count) {
+        	count = param.getInviteCount();
+        }
+        page.setTotalCount(count);
         page.setRecords(FansMerchantConverter.convertBO(fansMerchantDOViewList));
         return page;
     }

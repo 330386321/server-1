@@ -7,8 +7,10 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.type.UserType;
 import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
+import com.lawu.eshop.user.dto.MerchantDetailDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.bo.MerchantDetailBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 
@@ -180,5 +182,36 @@ public class MerchantConverter {
         return list;
     }
 
+    public static MerchantDetailDTO convertDTO(MerchantDetailBO detailBO) {
+        if (detailBO == null) {
+            return null;
+        }
+
+        MerchantDetailDTO detailDTO = new MerchantDetailDTO();
+        detailDTO.setName(detailBO.getName());
+        detailDTO.setRegionName(detailBO.getRegionName());
+        detailDTO.setAddress(detailBO.getAddress());
+        detailDTO.setIndustryName(detailBO.getIndustryName());
+        detailDTO.setKeywords(detailBO.getKeywords());
+        detailDTO.setIntro(detailBO.getIntro());
+        detailDTO.setStatusEnum(detailBO.getStatusEnum());
+        detailDTO.setPrincipalName(detailBO.getPrincipalName());
+        detailDTO.setPrincipalMobile(detailBO.getPrincipalMobile());
+        detailDTO.setCompanyName(detailBO.getCompanyName());
+        detailDTO.setRegNumber(detailBO.getRegNumber());
+        detailDTO.setCompanyAddress(detailBO.getCompanyAddress());
+        detailDTO.setLicenseIndate(detailBO.getLicenseIndate());
+        detailDTO.setManageType(detailBO.getManageType());
+        detailDTO.setCertifType(detailBO.getCertifType());
+        detailDTO.setOperatorCardId(detailBO.getOperatorCardId());
+        detailDTO.setOperatorName(detailBO.getOperatorName());
+        detailDTO.setStoreUrl(detailBO.getStoreUrl());
+        detailDTO.setEnvironmentUrl(detailBO.getEnvironmentUrl());
+        detailDTO.setIdcardUrl(detailBO.getIdcardUrl());
+        detailDTO.setLicenseUrl(detailBO.getLicenseUrl());
+        detailDTO.setLogoUrl(detailBO.getLogoUrl());
+        detailDTO.setOtherUrl(detailBO.getOtherUrl());
+        return detailDTO;
+    }
 
 }

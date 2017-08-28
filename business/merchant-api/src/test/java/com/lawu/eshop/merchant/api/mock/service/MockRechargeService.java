@@ -1,15 +1,16 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.RechargeService;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author meishuquan
@@ -31,6 +32,6 @@ public class MockRechargeService extends BaseController implements RechargeServi
 
     @Override
     public Result<ThirdPayStatusEnum> getRechargeById(@PathVariable("rechargeId") Long rechargeId) {
-        return successCreated(ThirdPayStatusEnum.SUCCESS);
+        return successGet(ThirdPayStatusEnum.SUCCESS);
     }
 }

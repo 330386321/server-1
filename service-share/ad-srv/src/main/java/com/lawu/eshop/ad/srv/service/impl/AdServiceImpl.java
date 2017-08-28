@@ -1292,14 +1292,16 @@ public class AdServiceImpl implements AdService {
 	@Override
 	@Transactional
 	public void soldOutAdByMerchantId(Long merchantId) {
+		AdDOExample example2 = new AdDOExample();
+		example2.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
+		List<AdDO> list = adDOMapper.selectByExample(example2);
+		
 		AdDO adDO = new AdDO();
 		adDO.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
 		AdDOExample example = new AdDOExample();
 		example.createCriteria().andMerchantIdEqualTo(merchantId);
 		adDOMapper.updateByExampleSelective(adDO, example);
-		AdDOExample example2 = new AdDOExample();
-		example2.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
-		List<AdDO> list = adDOMapper.selectByExample(example2);
+		
 		if (!list.isEmpty()) {
 			for (AdDO ad : list) {
 				//退换积分
