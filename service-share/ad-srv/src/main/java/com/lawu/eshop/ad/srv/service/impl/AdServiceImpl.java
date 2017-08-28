@@ -141,10 +141,6 @@ public class AdServiceImpl implements AdService {
 	@Autowired
 	private SolrService solrService;
 
-	private int currentPage = 1;
-
-	private int reportCurrentPage = 1;
-
 
 	/**
 	 * 商家发布E赚
@@ -676,12 +672,11 @@ public class AdServiceImpl implements AdService {
 		List<AdDO> listADD = adDOMapper.selectByExample(example);
 		if (!listADD.isEmpty()){
 			for (AdDO adDO : listADD) {
-				Date date = new Date();
 				Calendar nowTime = Calendar.getInstance();
 				nowTime.add(Calendar.MINUTE, -20);
 				if ((nowTime.getTime().getTime() - adDO.getBeginTime().getTime()) > 0) {
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
-					adDO.setGmtModified(date);
+					adDO.setGmtModified(new Date());
 					adDOMapper.updateByPrimaryKey(adDO);
 					// 将没有领完的积分退还给用户
 					matransactionMainAddService.sendNotice(adDO.getId());
@@ -751,26 +746,25 @@ public class AdServiceImpl implements AdService {
 		ppexample.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
 		// 查询出没有领取的积分，取出一个给用户
 		List<PointPoolDO> list = pointPoolDOMapper.selectByExample(ppexample);
-		if (!list.isEmpty()) {
-			PointPoolDO pointPoolDO = list.get(0);
-			pointPoolDO.setStatus(new Byte("1"));
-			pointPoolDO.setMemberId(memberId);
-			pointPoolDO.setMemberNum(memberNum);
-			pointPoolDO.setGmtModified(new Date());
-			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
-			// 给用户加积分
-			userSweepRedtransactionMainAddService.sendNotice(pointPoolDO.getId());
-			if (list.size() == 1) { // 红包领取完成 将红包下架
-				AdDO ad = new AdDO();
-				ad.setId(pointPoolDO.getAdId());
-				ad.setGmtModified(new Date());
-				ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
-				adDOMapper.updateByPrimaryKeySelective(ad);
-			}
-			return pointPoolDO.getPoint();
-		} else {
+		if (list.isEmpty()) {
 			return new BigDecimal(0);
+		} 
+		PointPoolDO pointPoolDO = list.get(0);
+		pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+		pointPoolDO.setMemberId(memberId);
+		pointPoolDO.setMemberNum(memberNum);
+		pointPoolDO.setGmtModified(new Date());
+		pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
+		// 给用户加积分
+		userSweepRedtransactionMainAddService.sendNotice(pointPoolDO.getId());
+		if (list.size() == 1) { // 红包领取完成 将红包下架
+			AdDO ad = new AdDO();
+			ad.setId(pointPoolDO.getAdId());
+			ad.setGmtModified(new Date());
+			ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
+			adDOMapper.updateByPrimaryKeySelective(ad);
 		}
+		return pointPoolDO.getPoint();
 
 	}
 
@@ -1100,34 +1094,28 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public List<ReportAdBO> selectReportAdEarnings() {
-		int count = adDOMapperExtend.selectReportAdEarningscount();
-		int totalPageNum;
-		if (count % 1000 == 0) {
-			totalPageNum = count / 1000;
-		} else {
-			totalPageNum = count / 1000 + 1;
-		}
-		if (reportCurrentPage >= totalPageNum) {
-			reportCurrentPage = 1;
-		} else {
-			reportCurrentPage++;
-		}
-		RowBounds rowBounds = new RowBounds(1000 * (reportCurrentPage - 1), 1000);
-		List<ReportAdView> list = adDOMapperExtend.selectReportAdEarningsByRowbounds(rowBounds);
+		int currentPage = 0;
 		List<ReportAdBO> listBO = new ArrayList<>();
-		for (ReportAdView reportAdView : list) {
-			ReportAdBO bo = new ReportAdBO();
-			bo.setGmtCreate(reportAdView.getGmtCreate());
-			bo.setId(reportAdView.getId());
-			bo.setMerchantId(reportAdView.getMerchantId());
-			bo.setMerchantNum(reportAdView.getMerchantNum());
-			bo.setStatusEnum(AdStatusEnum.getEnum(reportAdView.getStatus()));
-			bo.setTypeEnum(AdTypeEnum.getEnum(reportAdView.getType()));
-			bo.setTotalPoint(reportAdView.getTotalPoint());
-			bo.setTitle(reportAdView.getTitle());
-			listBO.add(bo);
+		while (true) {
+			currentPage++;
+			RowBounds rowBounds = new RowBounds(1000 * (currentPage - 1), 1000);
+			List<ReportAdView> list = adDOMapperExtend.selectReportAdEarningsByRowbounds(rowBounds);
+			if (list == null || list.isEmpty()) {
+				break ;
+			}
+			for (ReportAdView reportAdView : list) {
+				ReportAdBO bo = new ReportAdBO();
+				bo.setGmtCreate(reportAdView.getGmtCreate());
+				bo.setId(reportAdView.getId());
+				bo.setMerchantId(reportAdView.getMerchantId());
+				bo.setMerchantNum(reportAdView.getMerchantNum());
+				bo.setStatusEnum(AdStatusEnum.getEnum(reportAdView.getStatus()));
+				bo.setTypeEnum(AdTypeEnum.getEnum(reportAdView.getType()));
+				bo.setTotalPoint(reportAdView.getTotalPoint());
+				bo.setTitle(reportAdView.getTitle());
+				listBO.add(bo);
+			}
 		}
-
 		return listBO;
 	}
 
