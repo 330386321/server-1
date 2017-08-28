@@ -179,7 +179,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 	public boolean verifyOrderIsPaySuccess(NotifyCallBackParam param) {
 		TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
 		Criteria criteria = transactionDetailDOExample.createCriteria();
-		criteria.andUserNumEqualTo(param.getUserNum()).andThirdTransactionNumEqualTo(param.getOutTradeNo());
+		criteria.andUserNumEqualTo(param.getUserNum()).andThirdTransactionNumEqualTo(param.getTradeNo());
 		int count = transactionDetailDOMapper.countByExample(transactionDetailDOExample);
 		if(count > 0){
 			return true;
