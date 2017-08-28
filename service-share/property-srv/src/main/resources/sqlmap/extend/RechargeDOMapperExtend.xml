@@ -43,7 +43,7 @@
 	<select id="selectAreaRechargePoint"  resultType="com.lawu.eshop.property.srv.domain.extend.AreaRechargePointDOView" parameterType="java.lang.String">
 		select sum(money) totalMoney,area_id as areaId,city_id as cityId,province_id as provinceId,left(user_num,1) as type 
 			from recharge
-			where recharge_type = 2 and status = 2 and gmt_modified BETWEEN #{bdate} and #{edate}
+			where recharge_type = 2 and status = 2 and area_id is not null and gmt_modified BETWEEN #{bdate} and #{edate}
 		group by area_id,city_id,province_id,left(user_num,1)
 	</select>
 </mapper>
