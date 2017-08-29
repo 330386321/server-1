@@ -688,7 +688,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			// 如果商家未处理时间超过退款时间，平台自动退款
 			if (isExceeds) {
-				agreeToRefund(shoppingOrderItemExtendDO.getId());
+				agreeToRefund(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId());
 			}
 		}
 	}
