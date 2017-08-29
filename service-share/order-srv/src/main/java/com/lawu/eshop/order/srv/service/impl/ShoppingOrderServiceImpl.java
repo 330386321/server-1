@@ -293,7 +293,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			shoppingOrderExtendDOExample.clear();
 
 			Criteria orderNumCriteria = shoppingOrderExtendDOExample.or();
-			orderNumCriteria.andOrderNumEqualTo(param.getKeyword());
+			orderNumCriteria.andOrderNumLike("%" + param.getKeyword() + "%");
 			orderNumCriteria.getAllCriteria().addAll(baseCriteria.getAllCriteria());
 
 			Criteria paroductCriteria = shoppingOrderExtendDOExample.or();
