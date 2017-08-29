@@ -1,7 +1,5 @@
 package com.lawu.eshop.ad.constants;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;

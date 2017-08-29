@@ -74,7 +74,7 @@ public class FavoriteAdServiceImplTest {
 
     }
     
-    @Transactional
+    /*@Transactional
     @Rollback
     @Test
     public void selectMyFavoriteAd() {
@@ -108,11 +108,11 @@ public class FavoriteAdServiceImplTest {
     	paramQuery.setPageSize(10);
     	paramQuery.setTypeEnum(FavoriteAdTypeEnum.AD_TYPE_EGAIN);
     	Page<FavoriteAdDOViewBO> page= favoriteAdService.selectMyFavoriteAd(paramQuery, 1l);
-    	/*Assert.assertNotNull(page.getRecords());
-        Assert.assertTrue(page.getRecords().size()>0);*/
+    	Assert.assertNotNull(page.getRecords());
+        Assert.assertTrue(page.getRecords().size()>0);
 
     }
-    
+    */
     
     
     @Transactional
