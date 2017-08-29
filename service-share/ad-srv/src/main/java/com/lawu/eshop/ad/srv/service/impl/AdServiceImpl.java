@@ -244,6 +244,7 @@ public class AdServiceImpl implements AdService {
 	 */
 	public void saveRPPool(AdDO adDO) {
 		if (adDO.getPutWay() == 4) { // 普通红包
+			BigDecimal usedMoney = new BigDecimal(0);
 			BigDecimal point = adDO.getTotalPoint().divide(new BigDecimal(adDO.getAdCount()), 2, RoundingMode.HALF_UP);
 			for (int j = 0; j < adDO.getAdCount(); j++) {
 				PointPoolDO pointPool = new PointPoolDO();
@@ -254,8 +255,13 @@ public class AdServiceImpl implements AdService {
 				pointPool.setGmtCreate(new Date());
 				pointPool.setGmtModified(new Date());
 				pointPool.setOrdinal(j);
-				pointPool.setPoint(point);
+				if (j + 1 == adDO.getAdCount()) {
+					pointPool.setPoint(adDO.getTotalPoint().subtract(usedMoney));
+				} else {
+					pointPool.setPoint(point);
+				}
 				pointPoolDOMapper.insert(pointPool);
+				usedMoney = usedMoney.add(point);
 			}
 		} else if (adDO.getPutWay() == 5) { // 手气红包
 			List<Double> points = RedPacketArithmetic.spiltRedPackets(adDO.getTotalPoint().doubleValue(), adDO.getAdCount());
