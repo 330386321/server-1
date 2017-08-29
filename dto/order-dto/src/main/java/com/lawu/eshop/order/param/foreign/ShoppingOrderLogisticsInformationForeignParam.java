@@ -1,6 +1,9 @@
 package com.lawu.eshop.order.param.foreign;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,12 +19,14 @@ public class ShoppingOrderLogisticsInformationForeignParam {
 	/**
 	 * 物流编号
 	 */
+	@Length(min = 10, max = 20, message = "物流编号长度不符合")
 	@ApiModelProperty(required = false, value = "物流编号")
 	private String waybillNum;
 
 	/**
 	 * 快递公司id
 	 */
+	@Min(value = 0, message = "快递公司id非法")
 	@ApiModelProperty(required = false, value = "快递公司id")
 	private Integer expressCompanyId;
 	
