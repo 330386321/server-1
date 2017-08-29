@@ -1,5 +1,16 @@
 package com.lawu.eshop.order.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
@@ -23,16 +34,6 @@ import com.lawu.eshop.order.srv.mapper.extend.PayOrderExtendDOMapper;
 import com.lawu.eshop.order.srv.service.PayOrderService;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author zhangyong
@@ -53,10 +54,16 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setMemberId(memberId);
         payOrderDO.setMemberNum(numNum);
         payOrderDO.setMerchantId(param.getMerchantId());
-        payOrderDO.setFavoredAmount(BigDecimal.valueOf(param.getFavoredAmount()));
-        payOrderDO.setActualAmount(BigDecimal.valueOf(param.getTotalAmount()-param.getFavoredAmount()));
-        payOrderDO.setNotFavoredAmount(BigDecimal.valueOf(param.getNotFavoredAmount()));
-        payOrderDO.setTotalAmount(BigDecimal.valueOf(param.getTotalAmount()));
+		if (param.getMerchantFavoredId() != null && param.getMerchantFavoredId() > 0) {
+			payOrderDO.setActualAmount(BigDecimal.valueOf(param.getTotalAmount() - param.getFavoredAmount()));
+			payOrderDO.setFavoredAmount(BigDecimal.valueOf(param.getFavoredAmount()));
+			payOrderDO.setNotFavoredAmount(BigDecimal.valueOf(param.getNotFavoredAmount()));
+		} else {
+			payOrderDO.setActualAmount(BigDecimal.valueOf(param.getTotalAmount()));
+			payOrderDO.setFavoredAmount(BigDecimal.ZERO);
+			payOrderDO.setNotFavoredAmount(BigDecimal.ZERO);
+		}
+		payOrderDO.setTotalAmount(BigDecimal.valueOf(param.getTotalAmount()));
         String orderNum = StringUtil.getRandomNum("");
         payOrderDO.setOrderNum(orderNum);
         payOrderDO.setGmtCreate(new Date());
