@@ -2,6 +2,7 @@ package com.lawu.eshop.ad.constants;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RedPacketArithmetic {  
@@ -67,6 +68,7 @@ public class RedPacketArithmetic {
             }  
         }  
     }  
+    
   
     /** 
      * 分红包 
@@ -83,13 +85,16 @@ public class RedPacketArithmetic {
         }  
         
         double max = Double.parseDouble(format.format(money/count))*MAXVALUE;  
-        max = max>money?money:max;  
+        double min=MINVALUE*money/count;
+        min=min>0.01?min:0.01;
+        
         for(int i = 0 ; i < count; i++) {  
-        	double value = randomRedPacket(money,MINVALUE*money/count,max,count-i);  
+        	double value = randomRedPacket(money,min,max,count-i);  
         	value= Double.parseDouble(format.format(value));  
             list.add(value);  
             money -= value;  
         }  
+        Collections.shuffle(list);
         return list;  
     }  
    
