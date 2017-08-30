@@ -7,6 +7,11 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
@@ -17,6 +22,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.ad.constants.AdPraiseConfig;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -75,6 +81,9 @@ import com.lawu.eshop.ad.srv.mapper.extend.MemberAdRecordDOMapperExtend;
 import com.lawu.eshop.ad.srv.mapper.extend.PointPoolDOMapperExtend;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
+import com.lawu.eshop.ad.srv.thread.SpiltPraisePointThread;
+import com.lawu.eshop.ad.srv.thread.SpiltRedComPointThread;
+import com.lawu.eshop.ad.srv.thread.SpiltRedLuckPointThread;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
@@ -140,6 +149,10 @@ public class AdServiceImpl implements AdService {
 
 	@Autowired
 	private SolrService solrService;
+	
+	private static BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>();
+
+	private static ExecutorService executorService = new ThreadPoolExecutor(AdPraiseConfig.CORE_POOL_SIZE, AdPraiseConfig.MAXIMUM_POLL_SIZE, AdPraiseConfig.KEEP_ALIVE_TIME, TimeUnit.DAYS, queue);
 
 
 	/**
@@ -224,7 +237,7 @@ public class AdServiceImpl implements AdService {
 		// 算法生成积分明细
 		double[] points = AdArithmeticUtil.getMoney(adDO.getTotalPoint().doubleValue(), count);
 		for (int j = 0; j < count; j++) {
-			PointPoolDO pointPool = new PointPoolDO();
+			/*PointPoolDO pointPool = new PointPoolDO();
 			pointPool.setAdId(adDO.getId());
 			pointPool.setMerchantId(adDO.getMerchantId());
 			pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
@@ -233,7 +246,14 @@ public class AdServiceImpl implements AdService {
 			pointPool.setGmtModified(new Date());
 			pointPool.setOrdinal(j);
 			pointPool.setPoint(BigDecimal.valueOf(points[j]));
-			pointPoolDOMapper.insert(pointPool);
+			pointPoolDOMapper.insert(pointPool);*/
+			
+			try {
+				executorService.execute(new SpiltPraisePointThread(pointPoolDOMapper,adDO,points,j));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 	}
 
@@ -247,7 +267,7 @@ public class AdServiceImpl implements AdService {
 			BigDecimal usedMoney = new BigDecimal(0);
 			BigDecimal point = adDO.getTotalPoint().divide(new BigDecimal(adDO.getAdCount()), 2, RoundingMode.HALF_UP);
 			for (int j = 0; j < adDO.getAdCount(); j++) {
-				PointPoolDO pointPool = new PointPoolDO();
+				/*PointPoolDO pointPool = new PointPoolDO();
 				pointPool.setAdId(adDO.getId());
 				pointPool.setMerchantId(adDO.getMerchantId());
 				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
@@ -260,13 +280,21 @@ public class AdServiceImpl implements AdService {
 				} else {
 					pointPool.setPoint(point);
 				}
-				pointPoolDOMapper.insert(pointPool);
-				usedMoney = usedMoney.add(point);
+				pointPoolDOMapper.insert(pointPool);*/
+				
+				try {
+					executorService.execute(new SpiltRedComPointThread(pointPoolDOMapper,adDO,point,j,usedMoney));
+					usedMoney = usedMoney.add(point);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
 			}
 		} else if (adDO.getPutWay() == 5) { // 手气红包
+
 			List<Double> points = RedPacketArithmetic.spiltRedPackets(adDO.getTotalPoint().doubleValue(), adDO.getAdCount());
 			for (int j = 0; j < adDO.getAdCount(); j++) {
-				PointPoolDO pointPool = new PointPoolDO();
+				/*PointPoolDO pointPool = new PointPoolDO();
 				pointPool.setAdId(adDO.getId());
 				pointPool.setMerchantId(adDO.getMerchantId());
 				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
@@ -276,6 +304,11 @@ public class AdServiceImpl implements AdService {
 				pointPool.setOrdinal(j);
 				pointPool.setPoint(new BigDecimal(points.get(j)));
 				pointPoolDOMapper.insert(pointPool);
+				/*try {
+					executorService.execute(new SpiltRedLuckPointThread(pointPoolDOMapper,adDO,points,j));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}*/
 			}
 		}
 
