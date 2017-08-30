@@ -967,7 +967,7 @@ public class AdServiceImpl implements AdService {
 	public void rebuildAdIndex() {
 		ListAdParam listAdParam = new ListAdParam();
 		listAdParam.setPageSize(1000);
-		int currentPage = 0;
+		int currentPage = 0; 
 
 		while (true) {
 			currentPage++;
