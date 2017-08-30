@@ -1,11 +1,9 @@
 package com.lawu.eshop.order.srv.controller;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,12 +25,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.parser.ParserConfig;
-import com.alibaba.fastjson.parser.deserializer.DateDeserializer;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
@@ -53,6 +51,7 @@ import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.OrderSrvApplicationTest;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
+import com.lawu.eshop.order.srv.json.JCDateDeserializer;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import com.lawu.eshop.utils.StringUtil;
 
@@ -169,17 +168,17 @@ public class PayOrderControllerTest {
         Assert.assertEquals(param.getCurrentPage(), page.getCurrentPage());
     	Assert.assertEquals(1, page.getTotalCount().intValue());
         
-    	for (JSONObject item : page.getRecords()) {
-    		PayOrderDTO actual = JSONObject.toJavaObject(item, PayOrderDTO.class);
-    		Assert.assertNotNull(actual);
-    		Assert.assertEquals(expected.getActualAmount().doubleValue(), actual.getActualAmount().doubleValue(), 0D);
-    		Assert.assertEquals(expected.getMerchantId(), actual.getMerchantId());
-    		Assert.assertEquals(expected.getIsEvaluation(), actual.getEvaluationEnum().getVal());
-    		Assert.assertEquals(expected.getFavoredAmount().doubleValue(), actual.getFavoredAmount().doubleValue(), 0D);
-    		Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime(), 24*60*60*1000);
-    		Assert.assertEquals(expected.getId(), actual.getId());
-    		Assert.assertEquals(expected.getTotalAmount().doubleValue(), actual.getTotalAmount().doubleValue(), 0D);
-    	}
+    	ParserConfig mapping = new ParserConfig();
+    	mapping.putDeserializer(Date.class, new JCDateDeserializer());
+    	PayOrderDTO actual = JSONObject.parseObject(page.getRecords().get(0).toJSONString(), PayOrderDTO.class, mapping, JSON.DEFAULT_PARSER_FEATURE);
+		Assert.assertNotNull(actual);
+		Assert.assertEquals(expected.getActualAmount().doubleValue(), actual.getActualAmount().doubleValue(), 0D);
+		Assert.assertEquals(expected.getMerchantId(), actual.getMerchantId());
+		Assert.assertEquals(expected.getIsEvaluation(), actual.getEvaluationEnum().getVal());
+		Assert.assertEquals(expected.getFavoredAmount().doubleValue(), actual.getFavoredAmount().doubleValue(), 0D);
+		Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime(), 24*60*60*1000);
+		Assert.assertEquals(expected.getId(), actual.getId());
+		Assert.assertEquals(expected.getTotalAmount().doubleValue(), actual.getTotalAmount().doubleValue(), 0D);
     }
     
     @Transactional
@@ -206,7 +205,6 @@ public class PayOrderControllerTest {
 		expected.setTotalAmount(new BigDecimal(2));
 		payOrderDOMapper.insert(expected);
     	
-		
     	RequestBuilder request = MockMvcRequestBuilders.put("/payOrder/delPayOrderInfo/" + expected.getId()).param("memberId", expected.getMemberId().toString());
         ResultActions perform = mvc.perform(request);
         perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
@@ -320,8 +318,32 @@ public class PayOrderControllerTest {
 		expected.setTotalAmount(new BigDecimal(2));
 		expected.setCommissionStatus((CommissionStatusEnum.NOT_COUNTED.getValue()));
 		payOrderDOMapper.insert(expected);
+		
+		PayOrderDO expected2 = new PayOrderDO();
+		expected2.setActualAmount(new BigDecimal(1));
+		expected2.setFavoredAmount(new BigDecimal(1));
+		expected2.setGmtCreate(new Date());
+		expected2.setGmtModified(new Date());
+		expected2.setIsEvaluation(false);
+		expected2.setMemberId(1L);
+		expected2.setMemberNum("M00001");
+		expected2.setMerchantId(1L);
+		expected2.setMerchantNum("B00001");
+		expected2.setNotFavoredAmount(new BigDecimal(1));
+		expected2.setOrderNum(StringUtil.getRandomNum(""));
+		expected2.setOrderStatus(true);
+		expected2.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
+		expected2.setTotalAmount(new BigDecimal(2));
+		expected2.setCommissionStatus((CommissionStatusEnum.NOT_COUNTED.getValue()));
+		payOrderDOMapper.insert(expected2);
     	
-    	RequestBuilder request = MockMvcRequestBuilders.put("/payOrder/updatePayOrderCommissionStatus").param("ids", expected.getId().toString());
+		List<String> ids = new ArrayList<>();
+		ids.add(expected.getId().toString());
+		ids.add(expected2.getId().toString());
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		params.put("ids", ids);
+    	RequestBuilder request = MockMvcRequestBuilders.put("/payOrder/updatePayOrderCommissionStatus").params(params);
+    			//.param("ids", expected.getId().toString()).param("ids", expected2.getId().toString());
         ResultActions perform = mvc.perform(request);
         perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
         		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -329,10 +351,15 @@ public class PayOrderControllerTest {
         		.andDo(MockMvcResultHandlers.print())
         		.andReturn();
         
-        PayOrderDO actual = payOrderDOMapper.selectByPrimaryKey(expected.getId());
+        PayOrderDO actual = payOrderDOMapper.selectByPrimaryKey(expected2.getId());
         Assert.assertNotNull(actual);
         Assert.assertNotNull(actual.getGmtCommission());
         Assert.assertEquals(CommissionStatusEnum.CALCULATED.getValue(), actual.getCommissionStatus());
+        
+        PayOrderDO actual2 = payOrderDOMapper.selectByPrimaryKey(expected2.getId());
+        Assert.assertNotNull(actual2);
+        Assert.assertNotNull(actual2.getGmtCommission());
+        Assert.assertEquals(CommissionStatusEnum.CALCULATED.getValue(), actual2.getCommissionStatus());
     }
     
     @SuppressWarnings("unchecked")
@@ -380,10 +407,9 @@ public class PayOrderControllerTest {
     	ParserConfig mapping = new ParserConfig();
     	mapping.putDeserializer(Date.class, new JCDateDeserializer());
 		MerchantPayOrderListDTO actual = JSONObject.parseObject(page.getRecords().get(0).toJSONString(), MerchantPayOrderListDTO.class, mapping, JSON.DEFAULT_PARSER_FEATURE);
-		
 		Assert.assertNotNull(actual);
 		Assert.assertEquals(expected.getActualAmount().doubleValue(), actual.getActualAmount().doubleValue(), 0D);
-		Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime(), 24*60*1000);
+		Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime(), 60*1000);
 		Assert.assertEquals(expected.getOrderNum(), actual.getOrderNum());
     }
     
@@ -471,7 +497,9 @@ public class PayOrderControllerTest {
         Assert.assertEquals(param.getCurrentPage(), page.getCurrentPage());
     	Assert.assertEquals(1, page.getTotalCount().intValue());
         
-    	OperatorPayOrderListDTO actual = JSONObject.toJavaObject(page.getRecords().get(0), OperatorPayOrderListDTO.class);
+    	ParserConfig mapping = new ParserConfig();
+    	mapping.putDeserializer(Date.class, new JCDateDeserializer());
+    	OperatorPayOrderListDTO actual = JSONObject.parseObject(page.getRecords().get(0).toJSONString(), OperatorPayOrderListDTO.class, mapping, JSON.DEFAULT_PARSER_FEATURE);
 		Assert.assertNotNull(actual);
 		Assert.assertEquals(expected.getActualAmount().doubleValue(), actual.getActualAmount().doubleValue(), 0D);
 		Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime(), 24*60*60*1000);
@@ -522,35 +550,11 @@ public class PayOrderControllerTest {
         List<PayOrderAutoCommentDTO> payOrderAutoCommentDTOList = JSONObject.parseArray(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), PayOrderAutoCommentDTO.class);
         Assert.assertNotNull(payOrderAutoCommentDTOList);
     	Assert.assertEquals(1, payOrderAutoCommentDTOList.size());
-        
     	PayOrderAutoCommentDTO actual = payOrderAutoCommentDTOList.get(0);
 		Assert.assertNotNull(actual);
 		Assert.assertEquals(expected.getActualAmount().doubleValue(), actual.getActualAmount().doubleValue(), 0D);
 		Assert.assertEquals(expected.getId(), actual.getId());
 		Assert.assertEquals(expected.getMemberId(), actual.getMemberId());
 		Assert.assertEquals(expected.getMerchantId(), actual.getMerchantId());
-    }
-}
-
-class JCDateDeserializer extends DateDeserializer {
-	
-    public static final JCDateDeserializer instance = new JCDateDeserializer();
-
-    public JCDateDeserializer() {}
-
-    protected <T> T cast(DefaultJSONParser parser, Type clazz, Object fieldName, Object val){
-        if (val == null) {
-            return null;
-        } else if (val instanceof String) {
-            String strVal = (String) val;
-            if (strVal.length() == 0) {
-                return null;
-            } else {
-            	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            	dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-            	parser.setDateFomrat(dateFormat);
-            }
-        }
-        return super.cast(parser, clazz, fieldName, val);
     }
 }
