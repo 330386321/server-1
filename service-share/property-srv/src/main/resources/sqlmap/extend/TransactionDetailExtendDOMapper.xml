@@ -62,13 +62,13 @@
 	      	and biz_id=#{bizId,jdbcType=BIGINT}
 	 </select>
 	 
-	 <!-- 用户广告总收益统计   包括点广告  红包   广告提成  抢赞  -->
+	 <!-- 用户广告总收益统计   包括点广告  红包    抢赞  -->
 	 <select id="getUserPointByBzId"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
 	    select
 	    	sum(amount) as user_totle_point
 	    from transaction_detail
 	    where
-	      	transaction_type in (2,3,5,16)
+	      	transaction_type in (2,3,16)
 	      	and biz_id=#{bizId,jdbcType=BIGINT}
 	 </select>
 	 
