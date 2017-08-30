@@ -303,12 +303,12 @@ public class AdServiceImpl implements AdService {
 				pointPool.setGmtModified(new Date());
 				pointPool.setOrdinal(j);
 				pointPool.setPoint(new BigDecimal(points.get(j)));
-				pointPoolDOMapper.insert(pointPool);
-				/*try {
+				pointPoolDOMapper.insert(pointPool);*/
+				try {
 					executorService.execute(new SpiltRedLuckPointThread(pointPoolDOMapper,adDO,points,j));
 				} catch (Exception e) {
 					e.printStackTrace();
-				}*/
+				}
 			}
 		}
 
