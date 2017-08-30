@@ -1,10 +1,6 @@
 package com.lawu.eshop.order.param;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.annotations.ApiModel;
 
@@ -24,9 +20,6 @@ public class ReportDataParam extends ReportParam {
 	@NotNull(message = "merchantId不能为空")
 	private Long merchantId;
 	
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date test;
-	
 	public Long getMerchantId() {
 		return merchantId;
 	}
@@ -35,12 +28,4 @@ public class ReportDataParam extends ReportParam {
 		this.merchantId = merchantId;
 	}
 
-	public Date getTest() {
-		return test;
-	}
-
-	public void setTest(Date test) {
-		this.test = test;
-	}
-	
 }
