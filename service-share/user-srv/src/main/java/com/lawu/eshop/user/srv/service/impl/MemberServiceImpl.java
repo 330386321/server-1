@@ -132,7 +132,6 @@ public class MemberServiceImpl implements MemberService {
             rongUserService.refreshUserInfo(old.getNum(), memberDO.getNickname(), headImg);
         }
         return result;
-
     }
 
     @Override
@@ -157,10 +156,10 @@ public class MemberServiceImpl implements MemberService {
     	int count=0;
     	if(inviterType==UserTypeEnum.MEMBER.val){
     		MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(inviterId);
-        	count = memberProfileDO == null ? 0 : memberProfileDO.getInviteMemberCount().intValue();
+        	count = memberProfileDO == null ? 0 : memberProfileDO.getInviteMemberCount();
     	}else{
     		 MerchantProfileDO  merchantProfileDO=merchantProfileDOMapper.selectByPrimaryKey(inviterId);
-    		 count = merchantProfileDO == null ? 0 : merchantProfileDO.getInviteMemberCount().intValue();
+    		 count = merchantProfileDO == null ? 0 : merchantProfileDO.getInviteMemberCount();
     	}
 
     	InviterUserDOView view = new InviterUserDOView();
@@ -554,21 +553,17 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public Boolean isExistsMobile(String mobile) {
-		MemberDOExample example = new MemberDOExample();
-		 example.createCriteria().andAccountEqualTo(mobile);
-		 int count = memberDOMapper.countByExample(example);
-		 if(count>0){
-			 return true;
-		 }else{
-			 return false;
-		 }
-	}
+        MemberDOExample example = new MemberDOExample();
+        example.createCriteria().andAccountEqualTo(mobile);
+        int count = memberDOMapper.countByExample(example);
+        return count > 0;
+    }
 
     @Override
     @Transactional
     public int delUserGtPush(Long memberId) {
        int rows =  memberDOMapperExtend.delUserGtPush(memberId);
-        return rows;
+       return rows;
     }
 
 	@Override

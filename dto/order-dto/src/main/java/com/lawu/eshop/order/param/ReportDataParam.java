@@ -19,7 +19,7 @@ public class ReportDataParam extends ReportParam {
 
 	@NotNull(message = "merchantId不能为空")
 	private Long merchantId;
-
+	
 	public Long getMerchantId() {
 		return merchantId;
 	}

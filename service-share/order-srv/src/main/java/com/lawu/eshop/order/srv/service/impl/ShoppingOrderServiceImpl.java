@@ -622,6 +622,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		for (ShoppingOrderItemDO item : shoppingOrderItemDOList) {
 			// 如果订单项的状态是退款中的状态
 			if (item.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
+				item.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 				// 清空退款状态
 				item.setRefundStatus(null);
 				item.setGmtModified(new Date());

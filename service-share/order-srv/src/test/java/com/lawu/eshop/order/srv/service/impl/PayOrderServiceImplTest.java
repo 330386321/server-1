@@ -231,6 +231,7 @@ public class PayOrderServiceImplTest {
 		param.setMerchantId(1L);
 		param.setMerchantNum("B00001");
 		param.setNotFavoredAmount(1D);
+		param.setMerchantFavoredId(1L);
 		param.setTotalAmount(2D);
 		PayOrderBO payOrderBO = payOrderService.savePayOrderInfo(memberId, param, memberNum);
 		

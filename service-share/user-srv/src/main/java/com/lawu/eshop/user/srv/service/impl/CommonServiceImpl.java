@@ -3,26 +3,42 @@ package com.lawu.eshop.user.srv.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.constants.UserTypeEnum;
-import com.lawu.eshop.user.dto.EFriendInviterDTO;
-import com.lawu.eshop.user.dto.MerchantStatusEnum;
-import com.lawu.eshop.user.param.EFriendQueryDataParam;
-import com.lawu.eshop.user.srv.UserSrvConfig;
-import com.lawu.eshop.user.srv.bo.EFriendInviterBO;
-import com.lawu.eshop.user.srv.domain.*;
-import com.lawu.eshop.user.srv.domain.extend.InviteMerchantInfoView;
-import com.lawu.eshop.user.srv.mapper.*;
-import com.lawu.eshop.user.srv.mapper.extend.MemberDOMapperExtend;
-import com.lawu.eshop.user.srv.mapper.extend.MerchantDOMapperExtend;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.dto.CommissionInvitersUserDTO;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.param.EFriendQueryDataParam;
+import com.lawu.eshop.user.srv.UserSrvConfig;
+import com.lawu.eshop.user.srv.bo.EFriendInviterBO;
 import com.lawu.eshop.user.srv.bo.InviterBO;
 import com.lawu.eshop.user.srv.converter.InviterConverter;
+import com.lawu.eshop.user.srv.domain.InviteRelationDO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MemberDOExample;
+import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
+import com.lawu.eshop.user.srv.domain.extend.InviteMerchantInfoView;
+import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.extend.MemberDOMapperExtend;
+import com.lawu.eshop.user.srv.mapper.extend.MerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.service.CommonService;
 
 /**
@@ -133,7 +149,7 @@ public class CommonServiceImpl implements CommonService {
 		Page<EFriendInviterBO> page = new Page<>();
 		List<EFriendInviterBO> rtnList = new ArrayList<>();
 		List<String> userNumList = new ArrayList<>();
-		if(dataParam.getQueryContent() != null && !"".equals(dataParam.getQueryContent())){
+		if(StringUtils.isNotEmpty(dataParam.getQueryContent())){
 			//用户：账号或昵称、商家：账号或店铺名称
 			List<String> memberNumList = memberDOMapperExtend.selectNumLikeContent("%" + dataParam.getQueryContent() + "%");
 			List<String> merchantNumList = merchantDOMapperExtend.selectNumLikeContent("%" + dataParam.getQueryContent() + "%");
@@ -170,7 +186,7 @@ public class CommonServiceImpl implements CommonService {
 				MemberDO member = memberList.get(0);
 				bo.setTitleName("E店用户");
 				bo.setGmtCreate(member.getGmtCreate());
-				if(member.getHeadimg() != null && !"".equals(member.getHeadimg())){
+				if(StringUtils.isNotEmpty(member.getHeadimg())){
 					bo.setHeadImg(member.getHeadimg());
 				}else{
 					bo.setHeadImg(userSrvConfig.getDefaultHeadimg());
