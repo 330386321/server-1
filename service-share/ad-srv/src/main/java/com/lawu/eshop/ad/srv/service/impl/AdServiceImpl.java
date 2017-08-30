@@ -781,8 +781,16 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public BigDecimal getRedPacket(Long merchantId, Long memberId, String memberNum) {
+		AdDOExample example = new AdDOExample();
+		example.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.getVal()).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+		List<AdDO> listAd=adDOMapper.selectByExample(example);
+		if (listAd.isEmpty()) {
+			return new BigDecimal(0);
+		} 
+		
 		PointPoolDOExample ppexample = new PointPoolDOExample();
-		ppexample.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+		ppexample.createCriteria().andAdIdEqualTo(listAd.get(0).getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+		
 		// 查询出没有领取的积分，取出一个给用户
 		List<PointPoolDO> list = pointPoolDOMapper.selectByExample(ppexample);
 		if (list.isEmpty()) {
