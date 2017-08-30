@@ -140,7 +140,7 @@ public class DiscountPackageControllerTest {
         param.getDiscountPackageImages().add(discountPackageImageSaveParam);
         
         String content = JSONObject.toJSONString(param);
-        RequestBuilder request = post("/discountPackage/").header("authorization", "8888").contentType(MediaType.APPLICATION_JSON_UTF8).content(content);
+        RequestBuilder request = post("/discountPackage/save").header("authorization", "8888").contentType(MediaType.APPLICATION_JSON_UTF8).content(content);
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();

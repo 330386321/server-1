@@ -1,9 +1,8 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.merchant.api.MerchantApiApplicationTest;
-import com.lawu.eshop.user.param.MerchantStoreParam;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +21,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.merchant.api.MerchantApiApplicationTest;
+import com.lawu.eshop.user.param.MerchantStoreParam;
 
 /**
  * @author meishuquan
@@ -165,19 +166,6 @@ public class MerchantStoreControllerTest {
         String jsonStr = JSONObject.toJSONString(param);
         RequestBuilder request = post("/merchantStore/addMerchantStoreAuditInfo/10")
                 .header("authorization", "8888").contentType(MediaType.APPLICATION_JSON).content(jsonStr);
-        try {
-            ResultActions perform = mvc.perform(request);
-            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
-            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    public void updateKeywordsById() {
-        RequestBuilder request = put("/merchantStore/updateKeywordsById/300").header("authorization", "8888").param("keywords", "test");
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();

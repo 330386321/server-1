@@ -1,5 +1,12 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.constants.StatusEnum;
 import com.lawu.eshop.user.param.AddressParam;
@@ -9,12 +16,6 @@ import com.lawu.eshop.user.srv.domain.AddressDO;
 import com.lawu.eshop.user.srv.domain.AddressDOExample;
 import com.lawu.eshop.user.srv.mapper.AddressDOMapper;
 import com.lawu.eshop.user.srv.service.AddressService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -114,7 +115,7 @@ public class AddressServiceImpl implements AddressService {
 		AddressDOExample example = new AddressDOExample();
 		example.createCriteria().andUserNumEqualTo(userNum).andStatusEqualTo(new Byte("1"));
 		Long count = addressDOMapper.countByExample(example);
-		if (count == 0 || count==null) {
+		if (count == 0) {
 			addressDO.setIsDefault(true);
 		}else{
 			addressDO.setIsDefault(false);
@@ -132,11 +133,8 @@ public class AddressServiceImpl implements AddressService {
 	public boolean isCheckAddress(Long id, String userNum) {
 		AddressDOExample example = new AddressDOExample();
 		example.createCriteria().andIdEqualTo(id).andUserNumEqualTo(userNum);
-		Long count=addressDOMapper.countByExample(example);
-		if(count.intValue()>0){
-			return true;
-		}
-		return false;
+		Long count = addressDOMapper.countByExample(example);
+		return count.intValue() > 0;
 	}
 
 }

@@ -11,6 +11,8 @@
 <mycat:server xmlns:mycat="http://io.mycat/">
     <system>
         <property name="defaultSqlParser">druidparser</property>
+        <property name="serverPort">8066</property> 
+        <property name="managerPort">9066</property>
     </system>
 
     <user name="eshopUser">

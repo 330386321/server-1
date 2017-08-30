@@ -1,5 +1,13 @@
 package com.lawu.eshop.user.srv.controller;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -10,14 +18,16 @@ import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import com.lawu.eshop.user.dto.param.MerchantSizeLinkDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
+import com.lawu.eshop.user.srv.bo.MerchantSizeLinkBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.service.MerchantProfileService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * 商家扩展信息
@@ -51,7 +61,6 @@ public class MerchantInfoController extends BaseController{
            return successCreated();
         }else{
             return successCreated(ResultCode.USER_WRONG_ID);
-
         }
     }
 
@@ -102,8 +111,6 @@ public class MerchantInfoController extends BaseController{
             }
         }
         return successGet(merchantInfoDTO);
-
-
     }
 
     @RequestMapping(value = "getMerchantSizeLink/{merchantId}",method = RequestMethod.GET)

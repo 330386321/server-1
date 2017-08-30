@@ -36,7 +36,7 @@ public class FollowTransactionRecordServiceImpl implements FollowTransactionReco
 		FollowTransactionRecordDOExample example = new FollowTransactionRecordDOExample();
 		example.createCriteria().andTopicEqualTo(topic).andTransationIdEqualTo(transationId);
 		followTransactionRecordDOMapper.countByExample(example);
-		return followTransactionRecordDOMapper.countByExample(example) > 0 ? true : false;
+		return followTransactionRecordDOMapper.countByExample(example) > 0;
 	}
 
 	/**

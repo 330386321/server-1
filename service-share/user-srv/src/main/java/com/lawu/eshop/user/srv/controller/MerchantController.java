@@ -19,6 +19,7 @@ import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
+import com.lawu.eshop.user.dto.MerchantDetailDTO;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.dto.MerchantStoreProfileDTO;
@@ -33,6 +34,7 @@ import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantDetailBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
@@ -190,7 +192,7 @@ public class MerchantController extends BaseController {
 
 
     @RequestMapping(value = "findMessagePushList",method = RequestMethod.GET)
-    Result<List<MessagePushDTO>> findMessagePushList(@RequestParam(value = "area") String area){
+    public Result<List<MessagePushDTO>> findMessagePushList(@RequestParam(value = "area") String area){
         List<MessagePushBO> list = merchantService.findMessagePushList(area);
         if(list == null||list.isEmpty()){
           return   successGet(new ArrayList<>());
@@ -212,7 +214,7 @@ public class MerchantController extends BaseController {
      * @return
      */
     @RequestMapping(value = "findMessagePushByMobile", method = RequestMethod.GET)
-    MessagePushDTO findMessagePushByMobile(@RequestParam("moblie") String moblie){
+    public MessagePushDTO findMessagePushByMobile(@RequestParam("moblie") String moblie){
         MessagePushBO messagePushBO = merchantService.findMessagePushByMobile(moblie);
         if(messagePushBO == null){
             return null;
@@ -260,7 +262,7 @@ public class MerchantController extends BaseController {
      * @return
      */
     @RequestMapping(value = "getRongYunInfo/{num}", method = RequestMethod.GET)
-    Result<RongYunDTO> getRongYunInfo(@PathVariable String num) {
+    public Result<RongYunDTO> getRongYunInfo(@PathVariable String num) {
         RongYunBO rongYunBO = merchantService.getRongYunInfoByNum(num);
         if (rongYunBO == null) {
             return successGet(ResultCode.NOT_FOUND_DATA);
@@ -355,14 +357,14 @@ public class MerchantController extends BaseController {
     }
 
     @RequestMapping(value = "freezeAccount", method = RequestMethod.PUT)
-    Result freezeAccount(@RequestParam(value ="num" ) String num, @RequestParam(value ="isFreeze" ) Boolean isFreeze,
+    public Result freezeAccount(@RequestParam(value ="num" ) String num, @RequestParam(value ="isFreeze" ) Boolean isFreeze,
                          @RequestParam("freezeReason") String freezeReason){
         merchantService.freezeAccount(num, isFreeze, freezeReason);
         return successCreated();
     }
 
     @RequestMapping(value = "getMerchantStoreProfileInfo", method = RequestMethod.GET)
-    Result<MerchantStoreProfileDTO> getMerchantStoreProfileInfo(@RequestParam(value ="id" ) Long id) {
+    public Result<MerchantStoreProfileDTO> getMerchantStoreProfileInfo(@RequestParam(value ="id" ) Long id) {
         MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreProfileService.findMerchantStoreInfo(id);
         if (merchantStoreProfileBO == null) {
             return successGet(ResultCode.MERCHANT_STORE_NO_EXIST);
@@ -372,4 +374,21 @@ public class MerchantController extends BaseController {
         profileDTO.setMerchantStoreId(merchantStoreProfileBO.getMerchantStoreId());
         return successGet(profileDTO);
     }
+
+    /**
+     * 根据商家ID查询商家详细信息(包括门店、图片等信息)
+     *
+     * @param merchantId
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "getMerchantDetail/{merchantId}", method = RequestMethod.GET)
+    public Result<MerchantDetailDTO> getMerchantDetailById(@PathVariable Long merchantId) {
+        MerchantDetailBO detailBO = merchantService.getMerchantDetailById(merchantId);
+        if (detailBO == null) {
+            return successGet(new MerchantDetailDTO());
+        }
+        return successGet(MerchantConverter.convertDTO(detailBO));
+    }
+
 }

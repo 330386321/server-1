@@ -5,9 +5,12 @@ package com.lawu.eshop.ad.srv.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.assertj.core.util.Lists;
@@ -30,10 +33,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
+import com.lawu.eshop.ad.constants.RedPacketStatusEnum;
+import com.lawu.eshop.ad.constants.UserRedPacketPayTypeEnum;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectParam;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
+import com.lawu.eshop.ad.srv.domain.UserRedPacketDO;
+import com.lawu.eshop.ad.srv.mapper.UserRedPacketDOMapper;
 import com.lawu.eshop.framework.web.HttpCode;
 
 /**
@@ -48,6 +55,9 @@ public class UserRedPacketControllerTest {
 
 	@Autowired
 	private UserRedPacketController userRedPacketController;
+	
+	@Autowired
+	private UserRedPacketDOMapper  userRedPacketDOMapper;
 
 	@Before
 	public void setUp() throws Exception {
@@ -104,31 +114,28 @@ public class UserRedPacketControllerTest {
 	@Rollback
 	@Test
 	public void isExistsRedPacket() {
-		addUserRedPacket();
-		UserRedPacketSelectNumParam param = new UserRedPacketSelectNumParam();
-		param.setCurrentPage(1);
-		param.setPageSize(10);
-		param.setNum("M00001");
-		String json = JSONObject.toJSONString(param);
-		RequestBuilder request = post("/userRedPacket/selectUserRedPacketList").contentType(MediaType.APPLICATION_JSON)
-				.content(json);
+		UserRedPacketDO redPack = new UserRedPacketDO();
+		redPack.setGmtCreate(new Date());
+		redPack.setGmtModified(new Date());
+		redPack.setOrderNum("2017082115590000182751221");
+		redPack.setPayType(UserRedPacketPayTypeEnum.ALIPAY.getVal());
+		redPack.setStatus(RedPacketStatusEnum.RED_PACKET_SUCCESS.val);
+		redPack.setTotalCount(1);
+		redPack.setTotalMoney(BigDecimal.valueOf(100));
+		redPack.setType(RedPacketPutWayEnum.PUT_WAY_LUCK.val);
+		redPack.setUserAccount("15000000000");
+		redPack.setUserNum("M000001");
+		userRedPacketDOMapper.insert(redPack);
+		
 		try {
-			ResultActions perform = mvc.perform(request);
-			MvcResult result = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print())
-					.andReturn();
-			String str = result.getResponse().getContentAsString();
-			List<String> list = fromJson(str);
-			for (int i = 0; i < list.size(); i++) {
-				RequestBuilder query = get("/userRedPacket/isExistsRedPacket/" + list.get(i));
-				ResultActions queryPerform = mvc.perform(query);
-				MvcResult queryResult = queryPerform.andExpect(status().is(HttpCode.SC_OK))
-						.andDo(MockMvcResultHandlers.print()).andReturn();
-				System.out.println(queryResult.getResponse().getContentAsString());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail(e.getMessage());
-		}
+            RequestBuilder request = get("/userRedPacket/isExistsRedPacket/"+redPack.getId());
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
 
 	}
 
@@ -251,4 +258,69 @@ public class UserRedPacketControllerTest {
 		}
 		return listIds;
 	}
+	
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void getUserRedpacketMoney2() {
+		addUserRedPacket();
+		try {
+            RequestBuilder request = post("/userRedPacket/getUserRedpacketMoney").param("redPacketId", "1").param("userNum", "M10001");
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+	}
+
+	@Transactional
+	@Rollback
+	@Test
+	public void getUserRedpacketMaxMoney2() {
+		addUserRedPacket();
+		try {
+            RequestBuilder request = post("/userRedPacket/getUserRedpacketMaxMoney").param("redPacketId","1");
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+	}
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void selectUserRedPacketInfoForThrid() {
+		UserRedPacketDO redPack = new UserRedPacketDO();
+		redPack.setGmtCreate(new Date());
+		redPack.setGmtModified(new Date());
+		redPack.setOrderNum("2017082115590000182751221");
+		redPack.setPayType(UserRedPacketPayTypeEnum.ALIPAY.getVal());
+		redPack.setStatus(RedPacketStatusEnum.RED_PACKET_SUCCESS.val);
+		redPack.setTotalCount(1);
+		redPack.setTotalMoney(BigDecimal.valueOf(100));
+		redPack.setType(RedPacketPutWayEnum.PUT_WAY_LUCK.val);
+		redPack.setUserAccount("15000000000");
+		redPack.setUserNum("M000001");
+		userRedPacketDOMapper.insert(redPack);
+		try {
+            RequestBuilder request = get("/userRedPacket/selectUserRedPacketInfoForThrid").param("redPacketId", "1");
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+	}
+	
+	
 }

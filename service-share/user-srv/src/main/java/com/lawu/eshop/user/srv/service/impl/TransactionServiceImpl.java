@@ -21,7 +21,7 @@ public class TransactionServiceImpl implements CacheService {
 	/**
 	 * 获取次数
 	 * 
-	 * @param key
+	 * @param type
 	 * @return
 	 * @author Sunny
 	 */
@@ -34,7 +34,7 @@ public class TransactionServiceImpl implements CacheService {
 	/**
 	 * 添加次数
 	 * 
-	 * @param key
+	 * @param type
 	 * @author Sunny
 	 */
 	@Override

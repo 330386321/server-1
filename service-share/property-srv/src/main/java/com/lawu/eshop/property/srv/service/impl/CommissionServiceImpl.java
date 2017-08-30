@@ -80,24 +80,43 @@ public class CommissionServiceImpl implements CommissionService {
 				}
 				
 				// 新增点广告的余额交易明细
-				TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-				tdsParam.setTransactionNum(num);
-				tdsParam.setUserNum(param.getUserNum());
-				tdsParam.setTitle(param.getTypeName());
-				tdsParam.setTransactionType(param.getTypeVal());
-				tdsParam.setTransactionAccount("");
-				tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
-				tdsParam.setAmount(param.getActureMoneyIn());
-				tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
-				tdsParam.setBizId(param.getBizId().toString());
-				transactionDetailService.save(tdsParam);
+//				TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+//				tdsParam.setTransactionNum(num);
+//				tdsParam.setUserNum(param.getUserNum());
+//				tdsParam.setTitle(param.getTypeName());
+//				tdsParam.setTransactionType(param.getTypeVal());
+//				tdsParam.setTransactionAccount("");
+//				tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
+//				tdsParam.setAmount(param.getActureMoneyIn());
+//				tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
+//				tdsParam.setBizId(param.getBizId().toString());
+//				transactionDetailService.save(tdsParam);
 
 				// 加用户（会员或商家）财产余额
+//				PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
+//				infoDoView.setUserNum(param.getUserNum());
+//				infoDoView.setBalance(param.getActureMoneyIn());
+//				infoDoView.setGmtModified(new Date());
+//				propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
+
+
+				// 新增积分明细
+				PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
+				pointDetailSaveDataParam.setPointNum(num);
+				pointDetailSaveDataParam.setUserNum(param.getUserNum());
+				pointDetailSaveDataParam.setTitle(param.getTypeName());
+				pointDetailSaveDataParam.setPointType(param.getTypeVal());
+				pointDetailSaveDataParam.setPoint(param.getActureMoneyIn());
+				pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
+				pointDetailSaveDataParam.setBizId(param.getBizId().toString());
+				pointDetailService.save(pointDetailSaveDataParam);
+
+				// 更新用户资产
 				PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
 				infoDoView.setUserNum(param.getUserNum());
-				infoDoView.setBalance(param.getActureMoneyIn());
+				infoDoView.setPoint(param.getActureMoneyIn());
 				infoDoView.setGmtModified(new Date());
-				propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
+				propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(infoDoView);
 
 			} else if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
 				

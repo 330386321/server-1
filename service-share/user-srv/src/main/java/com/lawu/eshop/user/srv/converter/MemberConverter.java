@@ -61,6 +61,7 @@ public class MemberConverter {
         memberBO.setIsFreeze(memberDO.getIsFreeze());
         memberBO.setFreezeReason(memberDO.getFreezeReason());
         memberBO.setGmtCreate(memberDO.getGmtCreate());
+        memberBO.setName(memberDO.getName());
         return memberBO;
     }
 
@@ -206,6 +207,9 @@ public class MemberConverter {
         memberDTO.setLevel(memberBO.getLevel());
         memberDTO.setMobile(memberBO.getMobile());
         memberDTO.setRegionPath(memberBO.getRegionPath());
+        memberDTO.setRegionName(memberBO.getRegionName());
+        memberDTO.setGmtCreate(memberBO.getGmtCreate());
+        memberDTO.setUserSex(memberBO.getUserSex());
         return memberDTO;
     }
 

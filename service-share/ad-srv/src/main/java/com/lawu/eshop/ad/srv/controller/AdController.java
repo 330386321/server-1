@@ -602,7 +602,7 @@ public class AdController extends BaseController {
 				ids.remove(i);
 		}
 		adService.batchDeleteAd(ids);
-		return successDelete();
+		return successCreated();
 	}
 
 	/**

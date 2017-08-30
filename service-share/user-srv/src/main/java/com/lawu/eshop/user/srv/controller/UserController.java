@@ -37,7 +37,7 @@ public class UserController extends BaseController {
 
     /**
      * 获取用户账号
-     * @param merchantId
+     * @param param
      * @return
      */
     @RequestMapping(value = "account", method = RequestMethod.PUT)
@@ -57,7 +57,6 @@ public class UserController extends BaseController {
 				default:
 					break;
     		}
-    		
     	}
         return successCreated(rtn);
     }

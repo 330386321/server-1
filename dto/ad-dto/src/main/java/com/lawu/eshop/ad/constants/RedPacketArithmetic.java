@@ -2,6 +2,7 @@ package com.lawu.eshop.ad.constants;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RedPacketArithmetic {  
@@ -22,9 +23,8 @@ public class RedPacketArithmetic {
      * @param count 
      * @return 
      */  
-    public static boolean isRight(double money,double count) {  
-    	double avg = Double.parseDouble(format.format(money/count));  
-        if(avg < MINVALUE*money/count || avg > MAXVALUE*money/count) {  
+    public static boolean isRight(double one,double avg) {  
+        if(one < MINVALUE*avg || one > MAXVALUE*avg) {  
             return false;  
         }
         return true;  
@@ -50,11 +50,13 @@ public class RedPacketArithmetic {
         double max = maxS>money?money:maxS;  
         //随机产生一个红包  
         maxS=Double.parseDouble(format.format(max-minS));
-        double one = (Math.random()*Double.parseDouble(format.format(maxS+minS)));  
+        //double one = (Math.random()*Double.parseDouble(format.format(maxS+minS))); 
+        double one =(Math.random()*(max-minS)+minS);
+        one=Double.parseDouble(format.format(one));
         double balance = Double.parseDouble(format.format(money - one));  
        
         //判断此次分配后，后续是否合理  
-        if(isRight(balance,count-1)) {  
+        if(isRight(one,money/count)) {  
             return one;  
         } else {  
             //重新分配  
@@ -76,20 +78,18 @@ public class RedPacketArithmetic {
      */  
     public static List<Double> spiltRedPackets(double money,int count) {  
     	List<Double> list = new ArrayList<>();  
-    	
-        //首先判断红包是否合情理  
-        if(!isRight(money,count)) {  
-            return list;  
-        }  
         
         double max = Double.parseDouble(format.format(money/count))*MAXVALUE;  
-        max = max>money?money:max;  
+        double min=MINVALUE*money/count;
+        min=min>0.01?min:0.01;
+        
         for(int i = 0 ; i < count; i++) {  
-        	double value = randomRedPacket(money,MINVALUE*money/count,max,count-i);  
+        	double value = randomRedPacket(money,min,max,count-i);  
         	value= Double.parseDouble(format.format(value));  
             list.add(value);  
             money -= value;  
         }  
+        Collections.shuffle(list);
         return list;  
     }  
    

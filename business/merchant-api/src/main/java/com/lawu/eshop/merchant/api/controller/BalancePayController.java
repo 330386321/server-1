@@ -3,6 +3,7 @@ package com.lawu.eshop.merchant.api.controller;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
+import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -73,6 +74,9 @@ public class BalancePayController extends BaseController {
 
 		ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
 		double money = recharge.getActualMoney();
+		if (StringUtil.doubleCompareTo(money, 0) == 0) {
+			return successCreated(ResultCode.MONEY_IS_ZERO);
+		}
 		dparam.setTotalAmount(String.valueOf(money));
 
 		Result result = balancePayService.balancePayPoint(dparam);

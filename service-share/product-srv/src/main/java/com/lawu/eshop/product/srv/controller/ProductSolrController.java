@@ -124,8 +124,7 @@ public class ProductSolrController extends BaseController {
     @RequestMapping(value = "listProductByName", method = RequestMethod.POST)
     public Result<Page<ProductSearchDTO>> listProductByName(@RequestBody ProductSearchRealParam param) {
         SolrQuery query = new SolrQuery();
-        query.setQuery("text:" + param.getName());
-        query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
+        query.setQuery("text:" + param.getName() + "*");
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
         SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());

@@ -1,5 +1,12 @@
 package com.lawu.eshop.user.srv.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.constants.RongOnlineStatusEnum;
@@ -12,8 +19,6 @@ import com.lawu.eshop.user.srv.rong.models.CodeSuccessResult;
 import com.lawu.eshop.user.srv.rong.models.HistoryMessageResult;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongUserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zhangyong
@@ -38,10 +43,12 @@ public class RongUserController extends BaseController {
     public Result<RongYunTokenDTO> getRongToken(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri){
         TokenResult token = rongUserService.getRongToken(userId, name, portraitUri);
         RongYunTokenDTO rongYunTokenDTO = new RongYunTokenDTO();
-        rongYunTokenDTO.setCode(token.getCode());
-        rongYunTokenDTO.setRyToken(token.getToken());
-        rongYunTokenDTO.setErrorMessage(token.getErrorMessage());
-        rongYunTokenDTO.setUserId(token.getUserId());
+        if(token != null){
+            rongYunTokenDTO.setCode(token.getCode());
+            rongYunTokenDTO.setRyToken(token.getToken());
+            rongYunTokenDTO.setErrorMessage(token.getErrorMessage());
+            rongYunTokenDTO.setUserId(token.getUserId());
+        }
         return successGet(rongYunTokenDTO);
     }
 

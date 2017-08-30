@@ -453,7 +453,7 @@ public class MemberControllerTest {
         }
     }
 
-    /*@Transactional
+    @Transactional
     @Rollback
     @Test
     public void getMemberByIds() {
@@ -466,9 +466,7 @@ public class MemberControllerTest {
         memberDO.setGmtCreate(new Date());
         memberDOMapper.insertSelective(memberDO);
 
-        List<Long> memberIds = new ArrayList<>();
-        memberIds.add(memberDO.getId());
-        RequestBuilder request = get("/member/getMemberByIds").param("memberIds", memberIds.toString());
+        RequestBuilder request = get("/member/getMemberByIds").param("memberIds", memberDO.getId().toString());
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -477,7 +475,7 @@ public class MemberControllerTest {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
-    }*/
+    }
 
     @Transactional
     @Rollback
@@ -621,7 +619,7 @@ public class MemberControllerTest {
     @Rollback
     @Test
     public void freezeAccount(){
-        RequestBuilder request = put("/member/freezeAccount").param("num","123").param("isFreeze","true");
+        RequestBuilder request = put("/member/freezeAccount").param("num","123").param("isFreeze","true").param("freezeReason","test");
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();

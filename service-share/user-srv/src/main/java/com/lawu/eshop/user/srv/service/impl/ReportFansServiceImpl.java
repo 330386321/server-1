@@ -28,7 +28,7 @@ public class ReportFansServiceImpl implements ReportFansService {
 
 	@Override
 	public ReportRiseRateDTO fansRiseRate(ReportDataParam dparam) {
-		List<FansMerchantDOReportView> list = new ArrayList<FansMerchantDOReportView>();
+		List<FansMerchantDOReportView> list = new ArrayList<>();
 		int x = 0;
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(dparam.getFlag().getValue())) {
 			list = fansMerchantDOMapperExtend.fansRiseRate(DateUtil.getDateFormat(new Date(), "yyyyMM"),
@@ -45,7 +45,7 @@ public class ReportFansServiceImpl implements ReportFansService {
 	
 	@Override
 	public List<ReportRiseRerouceDTO> fansRiseSource(ReportDataParam dparam) {
-		List<FansMerchantDOReportView> list = new ArrayList<FansMerchantDOReportView>();
+		List<FansMerchantDOReportView> list = new ArrayList<>();
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(dparam.getFlag().getValue())) {
 			list = fansMerchantDOMapperExtend.fansRiseSource(DateUtil.getDateFormat(new Date(), "yyyyMMdd"),
 					dparam.getFlag().getValue(), dparam.getMerchantId());

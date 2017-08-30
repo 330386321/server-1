@@ -15,6 +15,7 @@ import com.lawu.eshop.jobs.service.MerchantStoreService;
 import com.lawu.eshop.jobs.service.PropertySrvService;
 import com.lawu.eshop.jobs.service.ReportAdEarningsCommissionService;
 import com.lawu.eshop.jobs.service.ReportAdEarningsService;
+import com.lawu.eshop.property.constants.LoveTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.dto.ReportAdEarningsPointDTO;
 import com.lawu.eshop.property.param.ReportAdEarningsPointParam;
@@ -84,10 +85,13 @@ public class ReportAdEarningsServiceImpl extends BaseController implements Repor
 					if (reportAdDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_FLAT
 							|| reportAdDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_VIDEO) {
 						reportAdEarningsPointParam.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADVERTISING);
+						reportAdEarningsPointParam.setLoveTypeEnum(LoveTypeEnum.AD_CLICK);
 					} else if (reportAdDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_PRAISE) {
 						reportAdEarningsPointParam.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.AD_QZ);
+						reportAdEarningsPointParam.setLoveTypeEnum(LoveTypeEnum.AD_QZ);
 					} else {
 						reportAdEarningsPointParam.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.RED_SWEEP);
+						reportAdEarningsPointParam.setLoveTypeEnum(LoveTypeEnum.RED_PACKAGE);
 					}
 					Result<ReportAdEarningsPointDTO> ponitResult = propertySrvService.getReportAdEarningsPoint(reportAdEarningsPointParam);
 					reportAdEarningsParam.setUserTotalPoint(ponitResult.getModel().getUserTotalPoint());

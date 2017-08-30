@@ -314,7 +314,7 @@ public class ResultCode {
         ResultCode.messageMap.put(CAN_NOT_FILL_IN_THE_RETURN_ADDRESS, "不能填写退货地址");
         
         // 广告模块 5xxx
-        ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");
+        ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "积分不足，请充值");
         ResultCode.messageMap.put(AD_PUT_NOT_TIME, "投放时间没有超过两个星期");
         ResultCode.messageMap.put(AD_FACORITE_EXIST, "广告已被收藏");
         ResultCode.messageMap.put(AD_RED_PACKGE_EXIST, "请等待红包下架");
@@ -332,7 +332,7 @@ public class ResultCode {
         ResultCode.messageMap.put(PROPERTY_INFO_NULL, "用户对应财产记录为空");
         ResultCode.messageMap.put(PROPERTY_INFO_OUT_INDEX, "用户对应财产记录错误，存在大于1条记录");
         ResultCode.messageMap.put(PROPERTY_INFO_BALANCE_LESS, "余额不足");
-        ResultCode.messageMap.put(PROPERTY_INFO_POINT_LESS, "积分不足");
+        ResultCode.messageMap.put(PROPERTY_INFO_POINT_LESS, "积分不足，请充值");
         ResultCode.messageMap.put(PROPERTY_CASH_SCALE_NULL, "提现比例系统参数未配置");
         ResultCode.messageMap.put(PROPERTY_CASH_PAY_PWD_ERROR, "支付密码错误");
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_EXIST, "提交的银行卡ID不存在");

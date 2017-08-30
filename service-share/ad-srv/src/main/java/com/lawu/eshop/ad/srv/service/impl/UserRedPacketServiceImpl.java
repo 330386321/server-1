@@ -199,7 +199,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	 * 设置红包过期
 	 * @param userRedpacketId
 	 */
-	@Deprecated
+	
 	private void setRedpacketOverDue(Long userRedpacketId) {
 		UserRedPacketDO userRedpacket =userRedPacketDOMapper.selectByPrimaryKey(userRedpacketId);
 		userRedpacket.setGmtModified(new Date());
@@ -229,18 +229,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		}
 		return totalMoney;
 	}
-	/**
-	 * @param listTaked
-	 * @return
-	 */
-	private BigDecimal getTotalBackMoneyNoUpdate(List<UserTakedRedPacketDO> listTaked) {
-		BigDecimal totalMoney = new BigDecimal(0);
-		for (int i = 0; i < listTaked.size(); i++) {
-			UserTakedRedPacketDO taked = listTaked.get(i);
-			totalMoney = totalMoney.add(taked.getMoney());
-		}
-		return totalMoney;
-	}
+	
 
 	/**
 	 * 用户领取红包

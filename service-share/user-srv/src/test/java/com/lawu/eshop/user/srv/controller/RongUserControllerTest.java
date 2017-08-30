@@ -1,7 +1,8 @@
 package com.lawu.eshop.user.srv.controller;
 
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.user.srv.UserSrvApplicationTest;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,9 +20,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.user.srv.UserSrvApplicationTest;
 
 /**
  * @author meishuquan

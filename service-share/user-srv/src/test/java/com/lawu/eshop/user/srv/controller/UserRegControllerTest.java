@@ -1,9 +1,8 @@
 package com.lawu.eshop.user.srv.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.user.param.CollectionUserRegParam;
-import com.lawu.eshop.user.srv.UserSrvApplicationTest;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +21,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.user.param.CollectionUserRegParam;
+import com.lawu.eshop.user.srv.UserSrvApplicationTest;
 
 /**
  * @author meishuquan
@@ -185,6 +186,132 @@ public class UserRegControllerTest {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
             Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMemberRegDailyArea() {
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setYear(2017);
+        param.setMonth(7);
+        param.setDay(19);
+        param.setRegionPath("44/4403");
+        String requestJson = JSONObject.toJSONString(param);
+        RequestBuilder request = post("/userReg/collectionMemberRegDailyArea").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMerchantNormalRegDailyArea() {
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setYear(2017);
+        param.setMonth(7);
+        param.setDay(19);
+        param.setRegionPath("44/4403");
+        String requestJson = JSONObject.toJSONString(param);
+        RequestBuilder request = post("/userReg/collectionMerchantNormalRegDailyArea").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMerchantEntityRegDailyArea() {
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setYear(2017);
+        param.setMonth(7);
+        param.setDay(19);
+        param.setRegionPath("44/4403");
+        String requestJson = JSONObject.toJSONString(param);
+        RequestBuilder request = post("/userReg/collectionMerchantEntityRegDailyArea").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMemberRegMonthArea() {
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setYear(2017);
+        param.setMonth(7);
+        param.setDay(19);
+        param.setRegionPath("44/4403");
+        String requestJson = JSONObject.toJSONString(param);
+        RequestBuilder request = post("/userReg/collectionMemberRegMonthArea").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMerchantNormalRegMonthArea() {
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setYear(2017);
+        param.setMonth(7);
+        param.setDay(19);
+        param.setRegionPath("44/4403");
+        String requestJson = JSONObject.toJSONString(param);
+        RequestBuilder request = post("/userReg/collectionMerchantNormalRegMonthArea").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMerchantEntityRegMonthArea() {
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setYear(2017);
+        param.setMonth(7);
+        param.setDay(19);
+        param.setRegionPath("44/4403");
+        String requestJson = JSONObject.toJSONString(param);
+        RequestBuilder request = post("/userReg/collectionMerchantEntityRegMonthArea").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());
