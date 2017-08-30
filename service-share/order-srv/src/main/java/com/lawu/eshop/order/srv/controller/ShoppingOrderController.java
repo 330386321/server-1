@@ -8,7 +8,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,7 +94,6 @@ public class ShoppingOrderController extends BaseController {
 	private ShoppingOrderItemService shoppingOrderItemService;
 
 	@Autowired
-	@Qualifier("kDNiaoExpressStrategy")
 	private ExpressStrategy expressStrategy;
 
 	@Autowired
@@ -279,12 +277,12 @@ public class ShoppingOrderController extends BaseController {
 	public Result<ShoppingOrderPaymentDTO> orderPayment(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
 		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(id);
 		if (shoppingOrderBO.getId() == null) {
-			return successCreated(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
+			return successGet(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
 		}
 		if (!shoppingOrderBO.getMemberId().equals(memberId)) {
-			return successCreated(ResultCode.ILLEGAL_OPERATION, ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+			return successGet(ResultCode.ILLEGAL_OPERATION, ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
 		}
-		return successCreated(ShoppingOrderConverter.convert(shoppingOrderBO));
+		return successGet(ShoppingOrderConverter.convert(shoppingOrderBO));
 	}
 
 	/**
