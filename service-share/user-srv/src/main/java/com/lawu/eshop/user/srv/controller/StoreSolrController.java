@@ -56,7 +56,7 @@ public class StoreSolrController extends BaseController {
         StringBuilder sb = new StringBuilder("regionPath_s:");
         sb.append(storeSolrParam.getRegionPath()).append("*");
         if (StringUtils.isNotEmpty(storeSolrParam.getName())) {
-            sb.append(" AND text:").append(storeSolrParam.getName());
+            sb.append(" AND text:").append(storeSolrParam.getName()).append("*");
         }
         if (StringUtils.isNotEmpty(storeSolrParam.getIndustryPath())) {
             sb.append(" AND industryPath_s:").append(storeSolrParam.getIndustryPath()).append("*");
