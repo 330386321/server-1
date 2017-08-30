@@ -308,7 +308,7 @@ public class AdController extends BaseController {
 	public Result<ClickAdPointDTO> clickAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		String num = UserUtil.getCurrentUserNum(getRequest());
-		Result<Boolean> result= clickAdRecordService.getClickAdRecord(memberId+id+DateUtil.getIntDate());
+		Result<Boolean> result= clickAdRecordService.getClickAdRecord(memberId+id+DateUtil.getIntDateTime());
 		if(!isSuccess(result)){
 			return successCreated(result.getRet());
 		}
@@ -317,7 +317,7 @@ public class AdController extends BaseController {
 		}else{
 			 Result<ClickAdPointDTO> res=adService.clickAd(id, memberId, num);
 			 if(isSuccess(res)){ 
-				 clickAdRecordService.setClickAdRecord(memberId+id+DateUtil.getIntDate());
+				 clickAdRecordService.setClickAdRecord(memberId+id+DateUtil.getIntDateTime());
 			 }
 			return res;
 		}
