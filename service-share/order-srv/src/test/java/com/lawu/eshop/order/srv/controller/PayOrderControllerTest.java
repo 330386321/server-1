@@ -342,7 +342,9 @@ public class PayOrderControllerTest {
 		ids.add(expected2.getId().toString());
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.put("ids", ids);
-    	RequestBuilder request = MockMvcRequestBuilders.put("/payOrder/updatePayOrderCommissionStatus").params(params);
+    	RequestBuilder request = MockMvcRequestBuilders.put("/payOrder/updatePayOrderCommissionStatus")
+    			.params(params);
+    			//.param("ids", expected.getId().toString(), expected2.getId().toString());
     			//.param("ids", expected.getId().toString()).param("ids", expected2.getId().toString());
         ResultActions perform = mvc.perform(request);
         perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))

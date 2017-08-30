@@ -98,7 +98,6 @@ public class ReportPayControllerTest {
 		ReportDataParam param = new ReportDataParam();
 		param.setFlag(ReportFansRiseRateEnum.DAY);
 		param.setMerchantId(expected.getMerchantId());
-		param.setTest(new Date());
 		String content = JSONObject.toJSONString(param);
     	RequestBuilder request = MockMvcRequestBuilders.post("/reportPay/payVolumeRiseRate").contentType(MediaType.APPLICATION_JSON).content(content);
         ResultActions perform = mvc.perform(request);

@@ -74,7 +74,8 @@ public class ShoppingRefundDetailServiceImplTest {
 	@Autowired
 	private PropertyDOMapper propertyDOMapper;
 	
-    @Transactional
+    @SuppressWarnings("deprecation")
+	@Transactional
     @Rollback
     @Test
     public void agreeToApply() {
