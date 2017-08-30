@@ -11,7 +11,7 @@
 		<context:exclude-filter type="annotation" expression="com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow" />
 		-->
 	</context:component-scan>
-
+    
 	<bean id="propertyConfigurer" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
 		<property name="nullValue" value="@null" />
 		<property name="localOverride" value="true" />
@@ -26,11 +26,48 @@
 			<value>UTF-8</value>
 		</property>
 	</bean>
-
+    
+    <!-- JSON转换器 -->
+    <bean class=" org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <!-- json转换器 -->
+                <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                    <property name="objectMapper">
+                        <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                            <!-- 处理responseBody 里面日期类型 -->
+                            <property name="dateFormat">
+                                <bean class="java.text.SimpleDateFormat">
+                                    <constructor-arg type="java.lang.String" value="${spring.jackson.date-format}" />
+                                </bean>
+                            </property>
+                            <!-- 时区指定 -->
+                            <property name="timeZone" value="${spring.jackson.time-zone}" />
+                            <!-- 为null字段时不显示 -->
+                            <property name="serializationInclusion">
+                                <value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter" />
+            </list>
+        </property>
+        <property name="webBindingInitializer">
+            <bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+                <property name="conversionService">
+                    <bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean"></bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+    
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.h2.Driver" />
 		<property name="url" value="jdbc:h2:mem:bone;DB_CLOSE_DELAY=-1;MODE=MySQL" />
 	</bean>
+	
 	<jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS">
 		<jdbc:script location="classpath:sql/ddl.sql" />
 	</jdbc:initialize-database>
