@@ -100,7 +100,8 @@ public class ReportAdEarningsServiceImpl extends BaseController implements Repor
 					// 用户总收益+爱心账户收益>投放金额*60%时为异常数据
 					if (ponitResult.getModel().getUserTotalPoint()
 							.add(ponitResult.getModel().getLoveTotalPoint()).compareTo(
-									reportAdDTO.getTotalPoint().multiply(BigDecimal.valueOf(0.6))) == 1) {
+									reportAdDTO.getTotalPoint().multiply(BigDecimal.valueOf(0.6))) == 1 &&
+									(reportAdDTO.getStatusEnum()==com.lawu.eshop.ad.constants.AdStatusEnum.AD_STATUS_PUTED || reportAdDTO.getStatusEnum()==com.lawu.eshop.ad.constants.AdStatusEnum.AD_STATUS_OUT)) {
 						reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.NORMAL);
 					} else {
 						reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.ANOMALY);
