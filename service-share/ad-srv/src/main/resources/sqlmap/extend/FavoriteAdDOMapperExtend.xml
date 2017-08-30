@@ -34,7 +34,8 @@
 	     <if test="type == 2" >
 	      and a.type =3
 	    </if>
-    	ORDER BY a.status asc, fa.gmt_create desc
+	    and a.status not in(0,1)
+    	 ORDER BY field(a.status, 2,3,4,0),fa.gmt_create desc
     	</where>
   </select>
   

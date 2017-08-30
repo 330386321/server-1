@@ -466,7 +466,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			ShoppingRefundToBeRefundRemindNotification notification = new ShoppingRefundToBeRefundRemindNotification();
 			notification.setShoppingOrderItemId(shoppingOrderDO.getId());
 			notification.setMemberNum(shoppingOrderDO.getMemberNum());
-			notification.setRefundAmount(shoppingRefundDetailUpdateDO.getAmount());
+			notification.setRefundAmount(shoppingRefundDetailDO.getAmount());
 			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_REFUND_REMIND, notification);
 		} else {
 			// 商家拒绝退款，提醒买家
@@ -688,7 +688,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			// 如果商家未处理时间超过退款时间，平台自动退款
 			if (isExceeds) {
-				agreeToRefund(shoppingOrderItemExtendDO.getId());
+				agreeToRefund(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId());
 			}
 		}
 	}

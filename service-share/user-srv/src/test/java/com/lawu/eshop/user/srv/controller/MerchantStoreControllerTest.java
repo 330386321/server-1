@@ -709,7 +709,7 @@ public class MerchantStoreControllerTest {
         }
     }
 
-    /*@Transactional
+    @Transactional
     @Rollback
     @Test
     public void getPayOrderStoreInfo() {
@@ -736,9 +736,7 @@ public class MerchantStoreControllerTest {
             merchantStoreImageDOMapper.insertSelective(storeImageDO);
         }
 
-        List<Long> merchantIds = new ArrayList<>();
-        merchantIds.add(200L);
-        RequestBuilder request = get("/merchantStore/getPayOrderStoreInfo").param("merchantIds", merchantIds.toString());
+        RequestBuilder request = get("/merchantStore/getPayOrderStoreInfo").param("merchantIds", storeDO.getMerchantId().toString());
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -766,9 +764,7 @@ public class MerchantStoreControllerTest {
         storeDO.setIsNoReasonReturn(true);
         merchantStoreDOMapper.insertSelective(storeDO);
 
-        List<Long> merchantStoreIds = new ArrayList<>();
-        merchantStoreIds.add(storeDO.getId());
-        RequestBuilder request = get("/merchantStore/getMerchantStoreByIds").param("merchantStoreIds", merchantStoreIds.toString());
+        RequestBuilder request = get("/merchantStore/getMerchantStoreByIds").param("merchantStoreIds", storeDO.getId().toString());
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -822,9 +818,7 @@ public class MerchantStoreControllerTest {
         imageDO.setGmtCreate(new Date());
         merchantStoreImageDOMapper.insertSelective(imageDO);
 
-        List<Long> merchantIds = new ArrayList<>();
-        merchantIds.add(merchantDO.getId());
-        RequestBuilder request = get("/merchantStore/getAdMerchantStoreByIds").param("merchantIds", merchantIds.toString());
+        RequestBuilder request = get("/merchantStore/getAdMerchantStoreByIds").param("merchantIds", merchantDO.getId().toString());
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -833,7 +827,7 @@ public class MerchantStoreControllerTest {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
-    }*/
+    }
 
     @Transactional
     @Rollback

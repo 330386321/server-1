@@ -125,7 +125,7 @@ public class FavoriteAdControllerTest {
      }
      
      
-     @Transactional
+     /*@Transactional
      @Rollback
      @Test
      public void selectMyFavoriteAd() {
@@ -145,6 +145,7 @@ public class FavoriteAdControllerTest {
          }
 
      }
+     */
      
      @Transactional
      @Rollback
