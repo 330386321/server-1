@@ -337,7 +337,6 @@ public class MemberController extends BaseController {
         	 dto.setUserNum(memberBO.getNum());
             return successGet(dto);
     	 }
-    	
     }
 
     /**
@@ -425,9 +424,6 @@ public class MemberController extends BaseController {
         }
         
         MemberMineInfoDTO memberMineInfoDTO = MemberProfileConverter.convert(memberProfileBO, memberBO);
-        memberProfileBO = null;
-        memberBO = null;
-        
         return successGet(memberMineInfoDTO);
     }
 

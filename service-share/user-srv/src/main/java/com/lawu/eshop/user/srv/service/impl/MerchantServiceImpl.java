@@ -348,7 +348,7 @@ public class MerchantServiceImpl implements MerchantService {
     	InviterMerchantDOView inviterMerchantDO = new InviterMerchantDOView();
         inviterMerchantDO.setInviterId(userId);
         inviterMerchantDO.setInviterType(inviterType);
-        if (pageParam.getName() != null && !"".equals(pageParam.getName().trim())){
+        if (StringUtils.isNotEmpty(pageParam.getName())){
         	inviterMerchantDO.setName("%"+pageParam.getName()+"%");
         }
         int count=inviterMerchantDOMapper.selectInviterMerchantCount(inviterMerchantDO);
@@ -531,21 +531,17 @@ public class MerchantServiceImpl implements MerchantService {
 
 	@Override
 	public Boolean isRegister(String account) {
-		 MerchantDOExample example = new MerchantDOExample();
-		 example.createCriteria().andAccountEqualTo(account);
-		 int count = merchantDOMapper.countByExample(example);
-		 if(count>0){
-			 return true;
-		 }else{
-			 return false;
-		 }
-	}
+        MerchantDOExample example = new MerchantDOExample();
+        example.createCriteria().andAccountEqualTo(account);
+        int count = merchantDOMapper.countByExample(example);
+        return count > 0;
+    }
 
     @Override
     @Transactional
     public int delMerchantGtPush(Long merchantId) {
       int row =  merchantDOMapperExtend.delMerchantGtPush(merchantId);
-        return row;
+      return row;
     }
 
     @Override

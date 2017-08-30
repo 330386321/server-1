@@ -18,7 +18,7 @@ public class MemberProfileServiceImpl implements MemberProfileService {
 	@Override
 	public Integer getMemberCount(Long id) {
 		MemberProfileDO memberProfile = memberProfileDOMapper.selectByPrimaryKey(id);
-		if(memberProfile==null){
+		if (memberProfile == null) {
 			return 0;
 		}else{
 			return memberProfile.getInviteMemberCount();
@@ -29,12 +29,11 @@ public class MemberProfileServiceImpl implements MemberProfileService {
 	@Override
 	public Integer getMerchantCount(Long id) {
 		MemberProfileDO memberProfile = memberProfileDOMapper.selectByPrimaryKey(id);
-		if(memberProfile==null){
+		if (memberProfile == null) {
 			return 0;
 		}else{
 			return memberProfile.getInviteMerchantCount();
 		}
-		
 	}
 
 	/**
@@ -46,7 +45,6 @@ public class MemberProfileServiceImpl implements MemberProfileService {
 	public MemberProfileBO get(Long id) {
 		MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(id);
 		MemberProfileBO memberProfileBO = MemberProfileConverter.convert(memberProfileDO);
-		memberProfileDO = null;
 		return memberProfileBO;
 	}
 
