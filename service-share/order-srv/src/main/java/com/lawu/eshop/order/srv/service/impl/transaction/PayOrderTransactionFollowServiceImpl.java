@@ -1,5 +1,7 @@
 package com.lawu.eshop.order.srv.service.impl.transaction;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,9 @@ public class PayOrderTransactionFollowServiceImpl extends AbstractTransactionFol
 		PayOrderDO payOrderDO = new PayOrderDO();
 		payOrderDO.setId(payOrderId);
 		payOrderDO.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
+		payOrderDO.setPayType(notification.getPayType());
+		payOrderDO.setThirdNumber(notification.getThirdNum());
+		payOrderDO.setGmtModified(new Date());
 		payOrderDOMapper.updateByPrimaryKeySelective(payOrderDO);
 
 		PayOrderDO oldOrder = payOrderDOMapper.selectByPrimaryKey(payOrderId);

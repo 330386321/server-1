@@ -8,9 +8,11 @@ import com.lawu.eshop.compensating.transaction.Notification;
  */
 public class PayOrderNotification extends Notification {
 
-	private static final long serialVersionUID = -3962777472789107260L;
-	
-	private Long payOrderId;
+    private static final long serialVersionUID = -3962777472789107260L;
+
+    private Long payOrderId;
+    private String thirdNum;
+    private Byte payType;
 
     public Long getPayOrderId() {
         return payOrderId;
@@ -18,5 +20,21 @@ public class PayOrderNotification extends Notification {
 
     public void setPayOrderId(Long payOrderId) {
         this.payOrderId = payOrderId;
+    }
+
+    public String getThirdNum() {
+        return thirdNum;
+    }
+
+    public void setThirdNum(String thirdNum) {
+        this.thirdNum = thirdNum;
+    }
+
+    public Byte getPayType() {
+        return payType;
+    }
+
+    public void setPayType(Byte payType) {
+        this.payType = payType;
     }
 }

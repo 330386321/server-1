@@ -170,7 +170,7 @@ public class OrderServiceImpl implements OrderService {
         propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
 
         // 更新订单状态
-        payOrderTransactionMainServiceImpl.sendNotice(Long.valueOf(param.getBizIds()));
+        payOrderTransactionMainServiceImpl.sendNotice(tdsParam.getId());
 
         return ResultCode.SUCCESS;
     }
