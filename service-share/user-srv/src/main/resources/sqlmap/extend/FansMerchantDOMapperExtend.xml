@@ -80,10 +80,10 @@
 
 	<select resultMap="BaseResultMap"
 			parameterType="com.lawu.eshop.user.param.ListInviteFansRealParam" id="pageListInviteFans">
-		select 	memberId,num,account,region_path,region_name,nickname,headimg,level from 
+		select 	memberId,num,account,region_path,region_name,nickname,headimg,level,gmt_create from
 		(
 			select id as
-			memberId,num,account,region_path,region_name,nickname,headimg,level
+			memberId,num,account,region_path,region_name,nickname,headimg,level,gmt_create
 			from member where id not in(select member_id from fans_merchant where merchant_id = #{merchantId,jdbcType=BIGINT})
 			<if test="regionPath != null and regionPath != ''">
 				and region_path like CONCAT(#{regionPath,jdbcType=VARCHAR},'%')
