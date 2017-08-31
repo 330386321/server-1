@@ -492,6 +492,8 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 			} else {
 				storeDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
 			}
+		}else{
+			storeDO.setStatus(merchantStoreParam.getMerchantStoreStatus().val);
 		}
 		merchantStoreDOMapper.updateByPrimaryKeySelective(storeDO);
 		merchantStoreAuditDO.setIsShow(isShow);
