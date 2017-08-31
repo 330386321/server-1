@@ -393,7 +393,7 @@ public class ShoppingOrderController extends BaseController {
 		shoppingOrderQueryToOperatorDTOPage.setCurrentPage(shoppingOrderExtendQueryBOPage.getCurrentPage());
 		shoppingOrderQueryToOperatorDTOPage.setTotalCount(shoppingOrderExtendQueryBOPage.getTotalCount());
 		shoppingOrderQueryToOperatorDTOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderQueryToOperatorDTOList(shoppingOrderExtendQueryBOPage.getRecords()));
-		return successGet(shoppingOrderQueryToOperatorDTOPage);
+		return successCreated(shoppingOrderQueryToOperatorDTOPage);
 	}
 
 	/**

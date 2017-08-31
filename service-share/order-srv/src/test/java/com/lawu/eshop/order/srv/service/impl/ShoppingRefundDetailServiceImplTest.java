@@ -232,7 +232,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	ShoppingRefundDetailAgreeToRefundForeignParam param = new ShoppingRefundDetailAgreeToRefundForeignParam();
     	param.setIsAgree(false);
     	param.setRefusalReasons("商品已经损坏");
-    	shoppingRefundDetailService.agreeToRefund(shoppingRefundDetailDO.getId(), expected.getMerchantId(), param);
+    	shoppingRefundDetailService.agreeToRefund(shoppingRefundDetailDO.getId(), expected.getMerchantId(), param, false);
     	
     	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);

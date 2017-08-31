@@ -293,7 +293,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	@RequestMapping(value = "agreeToRefund/{id}", method = RequestMethod.PUT)
 	public Result agreeToRefund(@PathVariable("id") Long id, @RequestParam(name = "merchantId", required = false) Long merchantId, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param) {
 		try {
-			shoppingRefundDetailService.agreeToRefund(id, merchantId, param);
+			shoppingRefundDetailService.agreeToRefund(id, merchantId, param, false);
 		} catch (DataNotExistException e) {
 			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
