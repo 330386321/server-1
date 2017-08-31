@@ -278,9 +278,9 @@ public class RechargeServiceImplTest {
         recharge.setGmtModified(new Date());
         rechargeDOMapper.insertSelective(recharge);
 
-        String bdate = DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth(new Date()),"yyyy-MM-dd HH:mm:ss");
-        String edate = DateUtil.getDateFormat(DateUtil.getLastDayOfMonth(new Date()),"yyyy-MM-dd HH:mm:ss");
-        List<AreaRechargePointBO> rtnList = rechargeService.selectAreaRechargePoint(bdate,edate);
+        String bdate = DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth(new Date()),"yyyy-MM-dd");
+        String edate = DateUtil.getDateFormat(DateUtil.getLastDayOfMonth(new Date()),"yyyy-MM-dd");
+        List<AreaRechargePointBO> rtnList = rechargeService.selectAreaRechargePoint(bdate+" 00:00:00",edate+" 23:59:59");
         Assert.assertEquals(1,rtnList.size());
     }
 }

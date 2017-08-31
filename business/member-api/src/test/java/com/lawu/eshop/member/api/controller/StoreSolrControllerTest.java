@@ -68,6 +68,7 @@
          }
      }
 
+     /*
      @Test
      public void listStoreSearchWord() {
          RequestBuilder request = get("/storeSolr/listStoreSearchWord").param("name","11/111");
@@ -79,7 +80,7 @@
              Assert.fail(e.getMessage());
          }
      }
-
+*/
      @Test
      public void listRecommendStore() {
          RequestBuilder request = get("/storeSolr/listRecommendStore").param("regionPath","11/111/1111");
