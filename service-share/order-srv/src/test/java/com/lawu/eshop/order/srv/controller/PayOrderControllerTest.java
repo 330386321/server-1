@@ -411,7 +411,7 @@ public class PayOrderControllerTest {
 		MerchantPayOrderListDTO actual = JSONObject.parseObject(page.getRecords().get(0).toJSONString(), MerchantPayOrderListDTO.class, mapping, JSON.DEFAULT_PARSER_FEATURE);
 		Assert.assertNotNull(actual);
 		Assert.assertEquals(expected.getActualAmount().doubleValue(), actual.getActualAmount().doubleValue(), 0D);
-		Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime(), 60*1000);
+		Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime(), 60*60*1000);
 		Assert.assertEquals(expected.getOrderNum(), actual.getOrderNum());
     }
     
