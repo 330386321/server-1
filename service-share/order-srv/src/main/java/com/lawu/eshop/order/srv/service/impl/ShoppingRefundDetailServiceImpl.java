@@ -997,6 +997,15 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	public void agreeToRefund(Long id) {
 		ShoppingRefundDetailAgreeToRefundForeignParam param = new ShoppingRefundDetailAgreeToRefundForeignParam();
 		param.setIsAgree(true);
-		agreeToRefund(id, null, param, true);
+		// 因为定时任务也有用到这个退款接口，为了防止影响后续的流程，捕捉可能产生的异常
+		try {
+			agreeToRefund(id, null, param, true);
+		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
+		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
+		} catch (CanNotAgreeToARefundException e) {
+			logger.error(e.getMessage(), e);
+		}
 	}
 }
