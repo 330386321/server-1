@@ -87,16 +87,20 @@ public interface ShoppingRefundDetailService {
 	 *            商家Id
 	 * @param param
 	 * 			      参数
+	 * @param isAutoRefund
+	 *            是否是定时任务自动退款
 	 * @author jiangxinjun
 	 * @date 2017年7月11日
 	 */
-	void agreeToRefund(Long id, Long merchantId, ShoppingRefundDetailAgreeToRefundForeignParam param);
+	void agreeToRefund(Long id, Long merchantId, ShoppingRefundDetailAgreeToRefundForeignParam param, boolean isAutoRefund);
 	
 	/**
 	 * 商家是否同意退款
 	 * 
 	 * @param id
 	 *            退款详情Id
+	 * @param isAutoRefund
+	 *            是否是定时任务自动退款
 	 * @author jiangxinjun
 	 * @date 2017年7月11日
 	 */
