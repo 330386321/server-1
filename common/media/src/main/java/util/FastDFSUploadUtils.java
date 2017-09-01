@@ -70,12 +70,12 @@ public class FastDFSUploadUtils {
 							String newName = RandomUtil.buildFileName(fileName);
 							saveLocalFile(part, uparam, newName);
 							FastDFSClient client =new FastDFSClient();
-							String fileUrl = client.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName,param);
-							result.setFileUrl(fileUrl);
 							String tmpVideoUrl = uparam.getBaseImageDir() + File.separator + uparam.getDir()
-									+ File.separator + newName;
+							+ File.separator + newName;
 							String cutUrl = uparam.getBaseImageDir() + File.separator + VideoCutImgUtil.processImg(
 									tmpVideoUrl, uparam.getDir(), uparam.getBaseImageDir(), uparam.getFfmpegUrl());
+							String fileUrl = client.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName,param);
+							result.setFileUrl(fileUrl);
 							Thread.sleep(550);
 							FastDFSClient clientImg =new FastDFSClient();
 							String cutImgUrl = clientImg.uploadFile(cutUrl,param);
