@@ -13,6 +13,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
           - /etc/localtime:/etc/localtime:ro
+          - /usr/local/eshop/media:/usr/local/eshop/media
     networks:
       - eshop_eshopNet
   merchant-api:
@@ -26,6 +27,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
           - /etc/localtime:/etc/localtime:ro
+          - /usr/local/eshop/media:/usr/local/eshop/media
     networks:
       - eshop_eshopNet
   operator-api:
