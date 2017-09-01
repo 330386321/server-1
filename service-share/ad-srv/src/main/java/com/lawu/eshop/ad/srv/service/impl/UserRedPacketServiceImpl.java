@@ -156,7 +156,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		for (UserRedPacketDO userRed : listDO) {
 			UserRedPacketBO userBO = UserRedPacketConverter.convertBO(userRed);
 			Date overdueDate = DateUtil.getDayAfter(userBO.getGmtCreate());// 获取红包过期时间
-			if(overdueDate.getTime()<new Date().getTime()){
+			if(overdueDate.getTime()<new Date().getTime()&& userRed.getStatus().equals(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val)){
 				userBO.setUserRedPacketEnum(UserRedPacketEnum.USER_STATUS_OUT);
 				setRedpacketOverDue(userBO.getId());
 			}
