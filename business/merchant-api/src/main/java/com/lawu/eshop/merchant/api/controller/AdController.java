@@ -100,8 +100,12 @@ public class AdController extends BaseController {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
 		if(adParam.getTypeEnum()!=AdTypeEnum.AD_TYPE_PACKET){
-			if(StringUtils.isEmpty(adParam.getBeginTime())){
+			if(StringUtils.isEmpty(adParam.getBeginTime()) || adParam.getBeginTime()==""){
 				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
+			}
+		}else{
+			if(adParam.getAdCount()>1000000){
+				return successCreated(ResultCode.AD_RED_PACKET_COUNT_ERROR);
 			}
 		}
     	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
@@ -183,8 +187,12 @@ public class AdController extends BaseController {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	if(adParam.getTypeEnum()!=AdTypeEnum.AD_TYPE_PACKET){
-			if(StringUtils.isEmpty(adParam.getBeginTime())){
+			if(StringUtils.isEmpty(adParam.getBeginTime()) || adParam.getBeginTime()==""){
 				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
+			}
+		}else{
+			if(adParam.getAdCount()>1000000){
+				return successCreated(ResultCode.AD_RED_PACKET_COUNT_ERROR);
 			}
 		}
     	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);

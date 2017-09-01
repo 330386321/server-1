@@ -3,7 +3,6 @@ package com.lawu.eshop.member.api.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
@@ -25,6 +24,7 @@ import com.lawu.eshop.ad.constants.AdPage;
 import com.lawu.eshop.ad.constants.AdPraiseConfig;
 import com.lawu.eshop.ad.constants.AdPraiseWords;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
 import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
@@ -104,13 +104,16 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 
 	@Override
 	public Result<Page<AdDTO>> selectListByMember(AdEgainParam adEgainParam) {
+		
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		
 		AdMemberParam param = new AdMemberParam();
 		param.setCurrentPage(adEgainParam.getCurrentPage());
 		param.setPageSize(adEgainParam.getPageSize());
 		param.setTypeEnum(AdTypeEnum.getEnum(adEgainParam.getTypeEnum().getVal()));
 		param.setLatitude(adEgainParam.getLatitude());
 		param.setLongitude(adEgainParam.getLongitude());
+		
 		Result<Page<AdDTO>> pageDTOS = adService.selectListByMember(param, memberId);
 		List<AdDTO> list = pageDTOS.getModel().getRecords();
 		List<AdDTO> newList = adFilter(param, list, memberId);
@@ -121,10 +124,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			if (isSuccess(resultFavoriteAd)) {
 				adDTO.setIsFavorite(resultFavoriteAd.getModel());
 			}
-			adDTO.setName(adDTO.getName());
-			adDTO.setMerchantStoreId(adDTO.getMerchantStoreId());
-			adDTO.setLogoUrl(adDTO.getLogoUrl());
-			
 			if(StringUtils.isEmpty(adDTO.getName())){
 				adDTO.setName("E店商家");
 			}
@@ -132,14 +131,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 				adDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
 			}
 			
-			adDTO.setManageTypeEnum(adDTO.getManageTypeEnum());
-			Date date = new Date();
-			Long time = adDTO.getBeginTime().getTime() - date.getTime();
-			if (time > 0) {
-				adDTO.setNeedBeginTime(time);
-			} else {
-				adDTO.setNeedBeginTime(0l);
-			}
 		}
 		Page<AdDTO> newPage = new Page<>();
 		newPage.setCurrentPage(pageDTOS.getModel().getCurrentPage());
@@ -186,7 +177,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		Result<Page<AdDTO>> pageDTOS = adService.selectPraiseListByMember(adPraiseParam, memberId);
 		List<AdDTO> list = pageDTOS.getModel().getRecords();
-		AdMemberParam amp = new AdMemberParam();
 		List<AdDTO> newList = adFilter(null, list, memberId);
 		AdPage<AdDTO> adpage = new AdPage<>();
 		List<AdDTO> screenList = adpage.page(newList, adPraiseParam.getPageSize(), adPraiseParam.getCurrentPage());
@@ -342,25 +332,26 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		}			
 		List<AdDTO> newList = new ArrayList<>();
 		for (AdDTO adDTO : list) {
-			if (adDTO.getPutWayEnum().val == 1) { // 区域
+			if (adDTO.getPutWayEnum().val == PutWayEnum.PUT_WAY_AREAS.val) { // 区域
 				if (adDTO.getAreas() == null || adDTO.getAreas() == "") {
 					newList.add(adDTO);
 				} else {
-					if (memberPath != null) {
-						String[] memberPaths = memberPath.split("/");
-						String[] path = adDTO.getAreas().split(",");
-						for (String s : path) {
-							for (String mp : memberPaths) {
-								if (s.equals(mp)) {
-									newList.add(adDTO);
-								}
-								continue;
+					if (memberPath == null) {
+						continue;
+					}
+					String[] memberPaths = memberPath.split("/");
+					String[] path = adDTO.getAreas().split(",");
+					for (String s : path) {
+						for (String mp : memberPaths) {
+							if (s.equals(mp)) {
+								newList.add(adDTO);
 							}
+							continue;
 						}
 					}
 				}
 
-			} else if (adDTO.getPutWayEnum().val == 2) {
+			} else if (adDTO.getPutWayEnum().val == PutWayEnum.PUT_WAY_FENS.val) {
 				// 获取商家粉丝，判断当前用户是否属于商家粉丝
 				if(memberId != 0) {
 					Result<Boolean> rs = fansMerchantService.isFansMerchant(adDTO.getMerchantId(), memberId);
@@ -373,11 +364,12 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 				} else {
 					Result<MerchantStoreDTO> rs = merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
 					MerchantStoreDTO dto = rs.getModel();
-					if (dto != null) {
-						int distance = DistanceUtil.getDistance(adMemberParam.getLongitude(), adMemberParam.getLatitude(), dto.getLongitude().doubleValue(), dto.getLatitude().doubleValue());
-						if (adDTO.getRadius() != null && adDTO.getRadius() > distance / 1000) {
-							newList.add(adDTO);
-						}
+					if (dto == null) {
+						continue;
+					}
+					int distance = DistanceUtil.getDistance(adMemberParam.getLongitude(), adMemberParam.getLatitude(), dto.getLongitude().doubleValue(), dto.getLatitude().doubleValue());
+					if (adDTO.getRadius() != null && adDTO.getRadius() > distance / 1000) {
+						newList.add(adDTO);
 					}
 				}
 			}
@@ -448,20 +440,13 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 				adDTO.setIsFavorite(resultFavoriteAd.getModel());
 			}
 			adDTO.setMerchantStoreId(adDTO.getMerchantStoreId());
-			if (StringUtils.isNotEmpty(adDTO.getName())) {
-				adDTO.setName(adDTO.getName());
-			} else {
+			if (StringUtils.isEmpty(adDTO.getName())) {
 				adDTO.setName("E店商家");
-			}
-			if (StringUtils.isNotEmpty(adDTO.getLogoUrl())) {
-				adDTO.setLogoUrl(adDTO.getLogoUrl());
-			} else {
+			} 
+			if (StringUtils.isEmpty(adDTO.getLogoUrl())) {
 				adDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
-			}
-			if (adDTO.getManageTypeEnum() != null) {
-				adDTO.setManageTypeEnum(adDTO.getManageTypeEnum());
-			}
-     		adDTO.setNeedBeginTime(adDTO.getNeedBeginTime());
+			} 
+			
 		}
 
 		newPage.setCurrentPage(adChoicenessParam.getCurrentPage());
