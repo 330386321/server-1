@@ -52,7 +52,7 @@ public class ReportUserActiveMonthServiceImplTest {
 		List<ReportUserActiveBO> list = reportUserActiveDailyService.getUserActiveListMonth(beginTime, endTime);
 		Assert.assertEquals(10, list.size());
 		beginTime = "2017-6";
-		endTime = "2017-7";
+		endTime = "2017-8";
 		list = reportUserActiveDailyService.getUserActiveListMonth(beginTime, endTime);
 		Assert.assertEquals(10, list.size());
 	}
