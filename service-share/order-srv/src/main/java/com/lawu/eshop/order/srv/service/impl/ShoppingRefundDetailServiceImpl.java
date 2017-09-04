@@ -784,7 +784,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			
 			// 如果商家未处理时间超过退款时间，平台自动退款
 			if (isExceeds) {
-				agreeToRefund(shoppingOrderItemExtendDO.getId());
+				agreeToRefund(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId());
 			}
 		}
 	}
