@@ -29,4 +29,9 @@ public class McokExpressStrategy implements ExpressStrategy {
 		return rtn;
 	}
 
+	@Override
+	public ExpressInquiriesDetailBO recognition(String expNo) {
+		return null;
+	}
+
 }

@@ -21,12 +21,15 @@ public class KDNiaoExpressStrategy implements ExpressStrategy {
 	
 	@Autowired
 	KdniaoTrackQueryAPI api;
-
+	
+	/**
+	 * 即时查询
+	 */
 	@Override
 	public ExpressInquiriesDetailBO inquiries(String expCode, String expNo) {
 		ExpressInquiriesDetailBO expressInquiriesDetailDTO = null;
 		try {
-			String result = api.getOrderTracesByJson(expCode, expNo);
+			String result = api.orderTraces(expCode, expNo);
 			
 			// JSON转换成JOPO
 			ExpressInquiriesDetail expressInquiriesDetail = JSONObject.parseObject(result, ExpressInquiriesDetail.class);
@@ -35,6 +38,20 @@ public class KDNiaoExpressStrategy implements ExpressStrategy {
 			Collections.reverse(expressInquiriesDetail.getTraces());
 			
 			expressInquiriesDetailDTO = ExpressInquiriesDetailConverter.convert(expressInquiriesDetail);
+		} catch (Exception e) {
+			logger.error("查询物流异常", e);
+		}
+		return expressInquiriesDetailDTO;
+	}
+	
+	/**
+	 * 识别快递单号
+	 */
+	@Override
+	public ExpressInquiriesDetailBO recognition(String expNo) {
+		ExpressInquiriesDetailBO expressInquiriesDetailDTO = null;
+		try {
+			String result = api.recognition(expNo);
 		} catch (Exception e) {
 			logger.error("查询物流异常", e);
 		}
