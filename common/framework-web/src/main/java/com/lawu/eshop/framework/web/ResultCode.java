@@ -115,6 +115,7 @@ public class ResultCode {
     public static final int CAN_NOT_AGREE_TO_APPLY = 4027;
     public static final int CAN_NOT_AGREE_TO_A_REFUND = 4028;
     public static final int CAN_NOT_FILL_IN_THE_RETURN_ADDRESS = 4029;
+    public static final int THIRD_PARTY_LOGISTICS_INTERFACE_EXCEPTION = 4030;
 
     // 广告模块代码 5xxx
     public static final int AD_POINT_NOT_ENOUGH = 5000;
@@ -313,6 +314,7 @@ public class ResultCode {
         ResultCode.messageMap.put(CAN_NOT_AGREE_TO_APPLY, "不能同意退款申请");
         ResultCode.messageMap.put(CAN_NOT_AGREE_TO_A_REFUND, "不能同意退款");
         ResultCode.messageMap.put(CAN_NOT_FILL_IN_THE_RETURN_ADDRESS, "不能填写退货地址");
+        ResultCode.messageMap.put(THIRD_PARTY_LOGISTICS_INTERFACE_EXCEPTION, "第三方物流接口异常");
         
         // 广告模块 5xxx
         ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "积分不足，请充值");

@@ -9,10 +9,13 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
-import com.lawu.eshop.order.srv.converter.ExpressInquiriesDetailConverter;
+import com.lawu.eshop.order.srv.bo.ExpressRecognitionDetailBO;
+import com.lawu.eshop.order.srv.converter.ExpressConverter;
 import com.lawu.eshop.order.srv.strategy.ExpressStrategy;
 import com.lawu.eshop.order.srv.utils.express.kdniao.KdniaoTrackQueryAPI;
 import com.lawu.eshop.order.srv.utils.express.kdniao.bo.ExpressInquiriesDetail;
+import com.lawu.eshop.order.srv.utils.express.kdniao.bo.ExpressRecognitionDetail;
+import com.lawu.eshop.order.srv.utils.express.kdniao.constants.CodeEnum;
 
 @Service("kDNiaoExpressStrategy")
 public class KDNiaoExpressStrategy implements ExpressStrategy {
@@ -27,35 +30,52 @@ public class KDNiaoExpressStrategy implements ExpressStrategy {
 	 */
 	@Override
 	public ExpressInquiriesDetailBO inquiries(String expCode, String expNo) {
-		ExpressInquiriesDetailBO expressInquiriesDetailDTO = null;
+		ExpressInquiriesDetailBO rtn = null;
 		try {
 			String result = api.orderTraces(expCode, expNo);
 			
 			// JSON转换成JOPO
 			ExpressInquiriesDetail expressInquiriesDetail = JSONObject.parseObject(result, ExpressInquiriesDetail.class);
 			
+			if (!expressInquiriesDetail.getSuccess()) {
+				logger.error("即时查询接口返回异常");
+				logger.error("Result:{}", result);
+			}
+			
 			// Trace按照时间倒序排序
 			Collections.reverse(expressInquiriesDetail.getTraces());
-			
-			expressInquiriesDetailDTO = ExpressInquiriesDetailConverter.convert(expressInquiriesDetail);
+			rtn = ExpressConverter.convert(expressInquiriesDetail);
 		} catch (Exception e) {
-			logger.error("查询物流异常", e);
+			logger.error("即时查询异常", e);
 		}
-		return expressInquiriesDetailDTO;
+		return rtn;
 	}
 	
 	/**
 	 * 识别快递单号
 	 */
 	@Override
-	public ExpressInquiriesDetailBO recognition(String expNo) {
-		ExpressInquiriesDetailBO expressInquiriesDetailDTO = null;
+	public ExpressRecognitionDetailBO recognition(String expNo) {
+		ExpressRecognitionDetailBO rtn = null;
 		try {
 			String result = api.recognition(expNo);
+			
+			// JSON转换成JOPO
+			ExpressRecognitionDetail expressRecognitionDetail = JSONObject.parseObject(result, ExpressRecognitionDetail.class);
+			
+			if (!expressRecognitionDetail.getSuccess()) {
+				logger.error("单号识别接口返回异常");
+				logger.error("Result:{}", result);
+				// 如果code不能空，打印详细的返回码信息
+				if (expressRecognitionDetail.getCode() != null) {
+					logger.error("CodeInfo:{}", CodeEnum.getEnum(expressRecognitionDetail.getCode()).getLabel());
+				}
+			}
+			rtn = ExpressConverter.convert(expressRecognitionDetail);
 		} catch (Exception e) {
-			logger.error("查询物流异常", e);
+			logger.error("单号识别异常", e);
 		}
-		return expressInquiriesDetailDTO;
+		return rtn;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.lawu.eshop.order.srv.strategy;
 
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
+import com.lawu.eshop.order.srv.bo.ExpressRecognitionDetailBO;
 
 /**
  * 快递策略
@@ -27,5 +28,5 @@ public interface ExpressStrategy {
 	 * @author jiangxinjun
 	 * @date 2017年9月4日
 	 */
-	ExpressInquiriesDetailBO recognition(String expNo);
+	ExpressRecognitionDetailBO recognition(String expNo);
 }

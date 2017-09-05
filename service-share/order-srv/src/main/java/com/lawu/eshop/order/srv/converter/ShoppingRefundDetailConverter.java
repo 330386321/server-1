@@ -127,7 +127,7 @@ public class ShoppingRefundDetailConverter {
 		rtn = new ShoppingOrderExpressDTO();
 		rtn.setExpressCompanyName(shoppingRefundDetailBO.getExpressCompanyName());
 		rtn.setWaybillNum(shoppingRefundDetailBO.getWaybillNum());
-		rtn.setExpressInquiriesDetailDTO(ExpressInquiriesDetailConverter.convert(expressInquiriesDetailBO));
+		rtn.setExpressInquiriesDetailDTO(ExpressConverter.convert(expressInquiriesDetailBO));
 		
 		return rtn;
     }

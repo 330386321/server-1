@@ -119,7 +119,7 @@ public class ShoppingOrderConverter {
 		rtn.setExpressCompanyName(shoppingOrderBO.getExpressCompanyName());
 		rtn.setWaybillNum(shoppingOrderBO.getWaybillNum());
 		
-		rtn.setExpressInquiriesDetailDTO(ExpressInquiriesDetailConverter.convert(expressInquiriesDetailBO));
+		rtn.setExpressInquiriesDetailDTO(ExpressConverter.convert(expressInquiriesDetailBO));
 
 		return rtn;
 	}

@@ -8,31 +8,26 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * 物流实时查询对外暴露数据
+ * 物流即时查询api对app暴露数据
  * 
  * @author Sunny
  * @date 2017/4/10
  */
 @ApiModel
-public class ExpressInquiriesDetailDTO {
+public class ExpressInquiriesDetailForeignDTO {
 	
 	/**
 	 * 快递公司编码
 	 */
+	@ApiModelProperty("快递公司编码")
 	private String shipperCode;
 	
 	/**
-	 * 成功与否
+	 * 快递公司名称
 	 */
-	@ApiModelProperty(value = "成功与否", required = true)
-	private Boolean success;
-
-	/**
-	 * 失败原因
-	 */
-	@ApiModelProperty(value = "失败原因")
-	private String reason;
-
+	@ApiModelProperty("快递公司名称")
+	private String shipperName;
+	
 	/**
 	 * 物流状态
 	 */
@@ -53,20 +48,12 @@ public class ExpressInquiriesDetailDTO {
 		this.shipperCode = shipperCode;
 	}
 
-	public Boolean getSuccess() {
-		return success;
+	public String getShipperName() {
+		return shipperName;
 	}
 
-	public void setSuccess(Boolean success) {
-		this.success = success;
-	}
-
-	public String getReason() {
-		return reason;
-	}
-
-	public void setReason(String reason) {
-		this.reason = reason;
+	public void setShipperName(String shipperName) {
+		this.shipperName = shipperName;
 	}
 
 	public ExpressInquiriesDetailStateEnum getState() {

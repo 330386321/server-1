@@ -1,7 +1,6 @@
 package com.lawu.eshop.order.srv.strategy.impl;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.lawu.eshop.order.srv.OrderSrvApplicationTest;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
+import com.lawu.eshop.order.srv.bo.ExpressRecognitionDetailBO;
 
 /**
  * 
@@ -25,16 +25,15 @@ public class KDNiaoExpressStrategyTest {
 	@Autowired
 	private KDNiaoExpressStrategy kDNiaoExpressStrategy;
 
-	@Ignore
 	@Test
 	public void inquiries() {
-		ExpressInquiriesDetailBO actual = kDNiaoExpressStrategy.inquiries("YD", "3923440690592");
+		ExpressInquiriesDetailBO actual = kDNiaoExpressStrategy.inquiries("YD", "3916525428265");
 		Assert.assertNotNull(actual);
 	}
 	
 	@Test
 	public void recognition() {
-		ExpressInquiriesDetailBO actual = kDNiaoExpressStrategy.recognition("3923440690592");
+		ExpressRecognitionDetailBO actual = kDNiaoExpressStrategy.recognition("3916525428265");
 		Assert.assertNotNull(actual);
 	}
 	

@@ -121,7 +121,7 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO {
 	/**
 	 * 物流状态
 	 */
-	@ApiModelProperty(value = "物流状态(ON_THE_WAY-在途中|SIGN_IN-签收|PROBLEM_PIECES-问题件)", required = true)
+	@ApiModelProperty(value = "物流状态(NO_INFO-此单无物流信息|ON_THE_WAY-在途中|SIGN_IN-签收|PROBLEM_PIECES-问题件)", required = true)
 	private ExpressInquiriesDetailStateEnum state;
 	
 	/**

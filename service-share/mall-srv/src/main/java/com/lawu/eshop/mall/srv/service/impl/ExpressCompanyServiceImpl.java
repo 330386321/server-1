@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.lawu.eshop.mall.constants.StatusEnum;
 import com.lawu.eshop.mall.srv.bo.ExpressCompanyBO;
 import com.lawu.eshop.mall.srv.converter.ExpressCompanyConverter;
+import com.lawu.eshop.mall.srv.domain.ExpressCompanyDO;
 import com.lawu.eshop.mall.srv.domain.ExpressCompanyDOExample;
 import com.lawu.eshop.mall.srv.mapper.ExpressCompanyDOMapper;
 import com.lawu.eshop.mall.srv.service.ExpressCompanyService;
@@ -64,6 +65,46 @@ public class ExpressCompanyServiceImpl implements ExpressCompanyService {
 	@Override
 	public ExpressCompanyBO get(Integer id) {
 		return ExpressCompanyConverter.convert(expressCompanyDOMapper.selectByPrimaryKey(id));
+	}
+
+	/**
+	 * 根据第三方快递公司编号查询快递公司
+	 * 
+	 * @param code 快递公司编号
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月5日
+	 */
+	@Override
+	public ExpressCompanyBO code(String code) {
+		ExpressCompanyBO rtn = null;
+		ExpressCompanyDOExample example = new ExpressCompanyDOExample();
+		ExpressCompanyDOExample.Criteria criteria = example.createCriteria();
+		criteria.andCodeEqualTo(code);
+		List<ExpressCompanyDO> expressCompanyDOList = expressCompanyDOMapper.selectByExample(example);
+		if (expressCompanyDOList == null || expressCompanyDOList.isEmpty()) {
+			return rtn;
+		}
+		rtn = ExpressCompanyConverter.convert(expressCompanyDOList.get(0));
+		return rtn;
+	}
+
+	/**
+	 * 根据第三方快递公司编号集合查询快递公司
+	 * 
+	 * @param codeList 快递公司编号集合
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月5日
+	 */
+	@Override
+	public List<ExpressCompanyBO> codeList(List<String> codeList) {
+		ExpressCompanyDOExample example = new ExpressCompanyDOExample();
+		ExpressCompanyDOExample.Criteria criteria = example.createCriteria();
+		criteria.andCodeIn(codeList);
+		List<ExpressCompanyDO> expressCompanyDOList = expressCompanyDOMapper.selectByExample(example);
+		List<ExpressCompanyBO> rtn = ExpressCompanyConverter.convertBOS(expressCompanyDOList);
+		return rtn;
 	}
 
 }

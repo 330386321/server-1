@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
+import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
@@ -155,8 +156,8 @@ public class ShoppingOrderExtendConverter {
 		
 		// 如果物流信息存在
 		if (expressInquiriesDetailBO != null && expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
-			rtn.setState(expressInquiriesDetailBO.getState());
-			rtn.setTrace(ExpressInquiriesDetailConverter.convert(expressInquiriesDetailBO.getTraces().get(0)));
+			rtn.setState(ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetailBO.getState().getValue()));
+			rtn.setTrace(ExpressConverter.convert(expressInquiriesDetailBO.getTraces().get(0)));
 		}
 		
 		int quantity = 0;
