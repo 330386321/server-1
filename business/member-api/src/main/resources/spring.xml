@@ -34,7 +34,7 @@
               <!--Token失效时间-->
               <property name="tokenExpireSeconds" value="86400" />
               <property name="cacheService" ref="redisCacheService" />
-              <property name="singleTokenWithUser" value="false" />
+              <property name="singleTokenWithUser" value="${eshop.single.login}" />
        </bean>
 
        <bean id="redisCacheService" class="com.lawu.eshop.member.api.service.impl.RedisCacheServiceImpl" />
