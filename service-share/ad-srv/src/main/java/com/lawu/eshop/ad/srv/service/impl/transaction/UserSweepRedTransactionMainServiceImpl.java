@@ -30,7 +30,6 @@ public class UserSweepRedTransactionMainServiceImpl extends AbstractTransactionM
     	notification.setUserNum(pointPoolDO.getMemberNum());
     	notification.setPoint(pointPoolDO.getPoint());
     	notification.setAdId(pointPoolDO.getAdId());
-    	notification.setRegionPath("");
         return notification;
     }
 

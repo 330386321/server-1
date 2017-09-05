@@ -31,7 +31,6 @@ public class UserSweepRedTransactionFollowServiceImpl extends AbstractTransactio
 		param.setUserNum(notification.getUserNum());
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.RED_SWEEP);
 		param.setLoveTypeEnum(LoveTypeEnum.RED_PACKAGE);
-		param.setRegionPath(notification.getRegionPath());
 		param.setTempBizId(notification.getAdId() == null ? "0" : notification.getAdId().toString());
 		propertyInfoDataService.doHanlderBalanceIncome(param);
 	}
