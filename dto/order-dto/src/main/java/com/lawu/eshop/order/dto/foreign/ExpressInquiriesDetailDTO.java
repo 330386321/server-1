@@ -19,6 +19,7 @@ public class ExpressInquiriesDetailDTO {
 	/**
 	 * 快递公司编码
 	 */
+	@ApiModelProperty("快递公司编码")
 	private String shipperCode;
 	
 	/**

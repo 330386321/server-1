@@ -3,8 +3,10 @@ package com.lawu.eshop.order.srv.converter;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailExtendBO;
@@ -129,6 +131,28 @@ public class ShoppingRefundDetailConverter {
 		rtn.setWaybillNum(shoppingRefundDetailBO.getWaybillNum());
 		rtn.setExpressInquiriesDetailDTO(ExpressConverter.convert(expressInquiriesDetailBO));
 		
+		return rtn;
+    }
+    
+    /**
+     * 
+     * @param shoppingRefundDetailBO
+     * @param expressInquiriesDetailBO
+     * @return
+     * @author jiangxinjun
+     * @date 2017年9月6日
+     */
+    public static ShoppingOrderExpressInfoDTO covert(ShoppingRefundDetailBO shoppingRefundDetailBO, ShoppingOrderItemBO shoppingOrderItemBO) {
+    	ShoppingOrderExpressInfoDTO rtn = null;
+		if(shoppingRefundDetailBO == null || shoppingOrderItemBO == null){
+			return rtn;
+		}
+		rtn = new ShoppingOrderExpressInfoDTO();
+		rtn.setExpressCompanyId(shoppingRefundDetailBO.getExpressCompanyId());
+		rtn.setExpressCompanyName(shoppingRefundDetailBO.getExpressCompanyName());
+		rtn.setWaybillNum(shoppingRefundDetailBO.getWaybillNum());
+		rtn.setProductFeatureImage(shoppingOrderItemBO.getProductFeatureImage());
+		rtn.setTotalQuantity(shoppingOrderItemBO.getQuantity());
 		return rtn;
     }
 

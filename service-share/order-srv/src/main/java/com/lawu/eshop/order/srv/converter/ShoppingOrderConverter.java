@@ -17,6 +17,7 @@ import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
@@ -24,7 +25,9 @@ import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
@@ -120,7 +123,36 @@ public class ShoppingOrderConverter {
 		rtn.setWaybillNum(shoppingOrderBO.getWaybillNum());
 		
 		rtn.setExpressInquiriesDetailDTO(ExpressConverter.convert(expressInquiriesDetailBO));
-
+		
+		return rtn;
+	}
+	
+	/**
+	 * 
+	 * @param shoppingOrderExtendBO
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月6日
+	 */
+	public static ShoppingOrderExpressInfoDTO covert(ShoppingOrderExtendBO shoppingOrderExtendBO) {
+		ShoppingOrderExpressInfoDTO rtn = null;
+		if (shoppingOrderExtendBO == null) {
+			return rtn;
+		}
+		rtn = new ShoppingOrderExpressInfoDTO();
+		rtn.setExpressCompanyId(shoppingOrderExtendBO.getExpressCompanyId());
+		rtn.setExpressCompanyName(shoppingOrderExtendBO.getExpressCompanyName());
+		rtn.setWaybillNum(shoppingOrderExtendBO.getWaybillNum());
+		rtn.setProductFeatureImage(shoppingOrderExtendBO.getItems().get(0).getProductFeatureImage());
+		int totalQuantity = 0;
+		if (shoppingOrderExtendBO.getItems() != null) {
+			if (shoppingOrderExtendBO.getItems() != null) {
+				for (ShoppingOrderItemBO item : shoppingOrderExtendBO.getItems()) {
+					totalQuantity += item.getQuantity();
+				}
+			}
+		}
+		rtn.setTotalQuantity(totalQuantity);
 		return rtn;
 	}
 

@@ -35,7 +35,9 @@ import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
@@ -89,7 +91,17 @@ public class ShoppingOrderController extends BaseController {
 
 		return successGet(result.getModel());
 	}
-
+	
+	/**
+	 * @deprecated
+	 * @see #expressInfo(String, Long)
+	 * @param token
+	 * @param id
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月6日
+	 */
+	@Deprecated
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询购物订单详情", notes = "根据购物订单id查询购物订单详情。[1100|1024]（蒋鑫俊）", httpMethod = "GET")
@@ -101,7 +113,29 @@ public class ShoppingOrderController extends BaseController {
 		Result<ShoppingOrderExtendDetailDTO> result = shoppingOrderService.get(id, memberId);
 		return successGet(result);
 	}
-
+	
+	
+	@SuppressWarnings("unchecked")
+	@ApiOperation(value = "查询购物订单详情", notes = "根据购物订单id查询购物订单详情。[1100|1024]（蒋鑫俊）", httpMethod = "GET")
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@Authorization
+	@RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
+	public Result<ShoppingOrderExtendDetailDTO> detail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "购物订单id", required = true) Long id) {
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result<ShoppingOrderDetailDTO> result = shoppingOrderService.detail(id, memberId);
+		return successGet(result);
+	}
+	
+	/**
+	 * @deprecated
+	 * @see #expressInfo(String, Long)
+	 * @param token
+	 * @param id
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月6日
+	 */
+	@Deprecated
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询物流动态", notes = "查询物流动态。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
@@ -111,6 +145,17 @@ public class ShoppingOrderController extends BaseController {
 	public Result<ShoppingOrderExpressDTO> getExpressInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		Result<ShoppingOrderExpressDTO> result = shoppingOrderService.getExpressInfo(id, memberId);
+		return successGet(result);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ApiOperation(value = "查询物流动态", notes = "查询物流动态。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@Authorization
+	@RequestMapping(value = "expressInfo/{id}", method = RequestMethod.GET)
+	public Result<ShoppingOrderExpressInfoDTO> expressInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result<ShoppingOrderExpressInfoDTO> result = shoppingOrderService.expressInfo(id, memberId);
 		return successGet(result);
 	}
 

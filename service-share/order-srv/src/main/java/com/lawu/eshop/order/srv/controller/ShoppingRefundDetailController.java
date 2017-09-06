@@ -19,6 +19,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
@@ -343,6 +344,40 @@ public class ShoppingRefundDetailController extends BaseController {
 	 * @author jiangxinjun
 	 * @date 2017年7月11日
 	 */
+	@RequestMapping(value = "expressInfo/{id}", method = RequestMethod.GET)
+	public Result<ShoppingOrderExpressInfoDTO> expressInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId) {
+		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);
+		if (shoppingRefundDetailBO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_REFUND_DATA_DOES_NOT_EXIST);
+		}
+		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingRefundDetailBO.getShoppingOrderItemId());
+		if (shoppingOrderItemBO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
+		}
+		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(shoppingOrderItemBO.getShoppingOrderId());
+		if (shoppingOrderBO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
+		}
+		if (merchantId != null && !shoppingOrderBO.getMerchantId().equals(merchantId)) {
+			return successGet(ResultCode.ILLEGAL_OPERATION, ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
+		ShoppingOrderExpressInfoDTO rtn = ShoppingRefundDetailConverter.covert(shoppingRefundDetailBO, shoppingOrderItemBO);
+		return successGet(rtn);
+	}
+	
+	/**
+	 * 根据id查询退款详情的物流信息
+	 * @deprecated
+	 * @see #expressInfo(Long, Long)
+	 * @param id
+	 *            退款详情id
+	 * @param merchantId
+	 *            商家id(用于鉴权)
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
+	 */
+	@Deprecated
 	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
 	public Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId) {
 		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);

@@ -27,7 +27,7 @@ public class KDNiaoExpressStrategyTest {
 
 	@Test
 	public void inquiries() {
-		ExpressInquiriesDetailBO actual = kDNiaoExpressStrategy.inquiries("YD", "3916525428265");
+		ExpressInquiriesDetailBO actual = kDNiaoExpressStrategy.inquiries("YZPY", "9891153742543");
 		Assert.assertNotNull(actual);
 	}
 	

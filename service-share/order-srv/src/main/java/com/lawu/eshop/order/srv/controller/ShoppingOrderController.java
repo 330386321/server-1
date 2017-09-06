@@ -26,7 +26,9 @@ import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
@@ -182,41 +184,6 @@ public class ShoppingOrderController extends BaseController {
 			return successCreated(ResultCode.ORDER_NOT_DELETE, e.getMessage());
 		}
 		return successCreated();
-	}
-
-	/**
-	 * 根据id查询订单物流信息
-	 * 
-	 * @param id
-	 *            购物订单id
-	 * @param memberId
-	 *            会员id
-	 * @param merchantId
-	 *            商家id
-	 * @return
-	 * @return
-	 * @author jiangxinjun
-	 * @date 2017年7月10日
-	 */
-	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
-	public Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam(name = "memberId", required = false) Long memeberId, @RequestParam(name = "merchantId", required = false) Long merchantId) {
-		ShoppingOrderBO shoppingOrderBO = null;
-		try {
-			shoppingOrderBO = shoppingOrderService.getShoppingOrder(id, memeberId, merchantId);
-		} catch (DataNotExistException e) {
-			logger.error(e.getMessage(), e);
-			return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
-		} catch (IllegalOperationException e) {
-			logger.error(e.getMessage(), e);
-			return successGet(ResultCode.ILLEGAL_OPERATION, e.getMessage());
-		}
-		// 如果快递公司编码和物流编号为空.不查询物流
-		ExpressInquiriesDetailBO expressInquiriesDetailBO = null;
-		if (StringUtils.isNotBlank(shoppingOrderBO.getExpressCompanyCode()) && StringUtils.isNotBlank(shoppingOrderBO.getWaybillNum())) {
-			expressInquiriesDetailBO = expressStrategy.inquiries(shoppingOrderBO.getExpressCompanyCode(), shoppingOrderBO.getWaybillNum());
-		}
-
-		return successGet(ShoppingOrderConverter.covert(shoppingOrderBO, expressInquiriesDetailBO));
 	}
 
 	/**
@@ -474,16 +441,71 @@ public class ShoppingOrderController extends BaseController {
 	/*********************************************************
 	 * Common
 	 ******************************************************/
-
+	
 	/**
 	 * 根据id查询订单详情
-	 * @param id
-	 *            购物订单id
-	 * @param memberId
-	 *           会员id
-	 *            
+	 * 不再集成物流信息
+	 * 
+	 * @param id 订单id
+	 * @param memberId 会员id
+	 * @param merchantId 商家id
 	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月6日
 	 */
+	@RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
+	public Result<ShoppingOrderDetailDTO> detail(@PathVariable("id") Long id, @RequestParam(value = "memberId", required = false) Long memberId, @RequestParam(value = "merchantId", required = false) Long merchantId) {
+		ShoppingOrderExtendBO shoppingOrderExtendDetailBO = null;
+		try {
+			shoppingOrderExtendDetailBO = shoppingOrderService.get(id, memberId, merchantId);
+		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
+			return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
+			return successGet(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		}
+		ShoppingOrderDetailDTO shoppingOrderDetailDTO = ShoppingOrderExtendConverter.convert(shoppingOrderExtendDetailBO);
+		// 倒计时在服务端放入
+		Long countdown = null;
+		switch (shoppingOrderDetailDTO.getOrderStatus()) {
+		case PENDING_PAYMENT:
+			// 1.自动取消订单
+			String automaticCancelOrder = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
+
+			Date automaticCancelOrderTo = DateUtil.add(shoppingOrderDetailDTO.getGmtCreate(), Integer.valueOf(automaticCancelOrder), Calendar.DAY_OF_YEAR);
+
+			countdown = DateUtil.interval(new Date(), automaticCancelOrderTo, Calendar.MILLISECOND);
+			break;
+		case TO_BE_RECEIVED:
+			// 2.自动确认收货
+			String automaticReceipt = propertyService.getByName(PropertyNameConstant.AUTOMATIC_RECEIPT);
+
+			Date automaticReceiptTo = DateUtil.add(shoppingOrderDetailDTO.getGmtTransport(), Integer.valueOf(automaticReceipt), Calendar.DAY_OF_YEAR);
+
+			countdown = DateUtil.interval(new Date(), automaticReceiptTo, Calendar.MILLISECOND);
+			break;
+		default:
+			break;
+		}
+		shoppingOrderDetailDTO.setCountdown(countdown);
+		return successGet(shoppingOrderDetailDTO);
+	}
+	
+	/**
+	 * 根据id查询订单详情
+	 * 
+	 * @deprecated 物流信息返回太慢，不再集成物流信息，使用独立的物流信息查询接口
+	 * 
+	 * @see #detail(Long, Long, Long)
+	 * @param id 订单id
+	 * @param memberId 会员id
+	 * @param merchantId 商家id
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月6日
+	 */
+	@Deprecated
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
 	public Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id, @RequestParam(value = "memberId", required = false) Long memberId, @RequestParam(value = "merchantId", required = false) Long merchantId) {
 		ShoppingOrderExtendBO shoppingOrderExtendDetailBO = null;
@@ -526,6 +548,73 @@ public class ShoppingOrderController extends BaseController {
 		}
 		shoppingOrderExtendDetailDTO.setCountdown(countdown);
 		return successGet(shoppingOrderExtendDetailDTO);
+	}
+	
+	/**
+	 * 根据id查询订单物流信息
+	 * @deprecated 物流信息返回太慢，不再集成物流信息，使用独立的物流信息查询接口
+	 * @see #expressInfo(Long, Long, Long)
+	 * @param id
+	 *            购物订单id
+	 * @param memberId
+	 *            会员id
+	 * @param merchantId
+	 *            商家id
+	 * @return
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
+	 */
+	@Deprecated
+	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
+	public Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam(name = "memberId", required = false) Long memeberId, @RequestParam(name = "merchantId", required = false) Long merchantId) {
+		ShoppingOrderBO shoppingOrderBO = null;
+		try {
+			shoppingOrderBO = shoppingOrderService.getShoppingOrder(id, memeberId, merchantId);
+		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
+			return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
+			return successGet(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		}
+		// 如果快递公司编码和物流编号为空.不查询物流
+		ExpressInquiriesDetailBO expressInquiriesDetailBO = null;
+		if (StringUtils.isNotBlank(shoppingOrderBO.getExpressCompanyCode()) && StringUtils.isNotBlank(shoppingOrderBO.getWaybillNum())) {
+			expressInquiriesDetailBO = expressStrategy.inquiries(shoppingOrderBO.getExpressCompanyCode(), shoppingOrderBO.getWaybillNum());
+		}
+
+		return successGet(ShoppingOrderConverter.covert(shoppingOrderBO, expressInquiriesDetailBO));
+	}
+	
+	/**
+	 * 根据id查询订单物流信息
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param memberId
+	 *            会员id
+	 * @param merchantId
+	 *            商家id
+	 * @return
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
+	 */
+	@RequestMapping(value = "expressInfo/{id}", method = RequestMethod.GET)
+	public Result<ShoppingOrderExpressInfoDTO> expressInfo(@PathVariable("id") Long id, @RequestParam(name = "memberId", required = false) Long memeberId, @RequestParam(name = "merchantId", required = false) Long merchantId) {
+		ShoppingOrderExtendBO shoppingOrderExtendBO = null;
+		try {
+			shoppingOrderExtendBO = shoppingOrderService.get(id, memeberId, merchantId);
+		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
+			return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
+			return successGet(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		}
+		ShoppingOrderExpressInfoDTO rtn = ShoppingOrderConverter.covert(shoppingOrderExtendBO);
+		return successGet(rtn);
 	}
 	
 	/**

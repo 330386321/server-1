@@ -14,7 +14,9 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
@@ -69,8 +71,21 @@ public interface ShoppingOrderService {
 	 *            会员id
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
+	
+	/**
+	 * 根据id查询订单详情
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param memberId
+	 *            会员id
+	 * @return
+	 */
+	@RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
+	Result<ShoppingOrderDetailDTO> detail(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
 
 	/**
 	 * 根据id查询订单物流信息
@@ -81,8 +96,21 @@ public interface ShoppingOrderService {
 	 *            会员idid
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
+	
+	/**
+	 * 根据id查询订单物流信息
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param memberId
+	 *            会员idid
+	 * @return
+	 */
+	@RequestMapping(value = "expressInfo/{id}", method = RequestMethod.GET)
+	Result<ShoppingOrderExpressInfoDTO> expressInfo(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
 
 	/**
 	 * 取消购物订单
