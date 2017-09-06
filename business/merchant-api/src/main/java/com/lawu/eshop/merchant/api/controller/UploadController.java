@@ -55,7 +55,7 @@ public class UploadController extends BaseController {
         HttpServletRequest request = getRequest();
         UploadParam uparam = new UploadParam();
         uparam.setBaseImageDir(merchantApiConfig.getImageUploadUrl());
-        //uparam.setBaseImageDir("c:/");
+        // uparam.setBaseImageDir("c:/");
         uparam.setDir(FileDirConstant.DIR_HEAD);
         uparam.setFileUploadTypeEnum(FileUploadTypeEnum.getEnum(uploadType));
         uparam.setFfmpegUrl(merchantApiConfig.getFfmpegUrl());

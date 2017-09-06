@@ -79,6 +79,8 @@ public class FastDFSUploadUtils {
 							Thread.sleep(550);
 							FastDFSClient clientImg =new FastDFSClient();
 							if(imgUrl != null){
+								File file = new File(cutUrl);
+								log.debug("截图文件大小为："+file.length());
 								String cutImgUrl = clientImg.uploadFile(cutUrl,param);
 								if (null == cutImgUrl) {
 									result.setFenum(FastDFSResultEnum.FD_FILE_CUT_ERROR);
