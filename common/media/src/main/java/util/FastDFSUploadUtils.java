@@ -72,18 +72,20 @@ public class FastDFSUploadUtils {
 							FastDFSClient client =new FastDFSClient();
 							String tmpVideoUrl = uparam.getBaseImageDir() + File.separator + uparam.getDir()
 							+ File.separator + newName;
-							String cutUrl = uparam.getBaseImageDir() + File.separator + VideoCutImgUtil.processImg(
-									tmpVideoUrl, uparam.getDir(), uparam.getBaseImageDir(), uparam.getFfmpegUrl());
+							String imgUrl = VideoCutImgUtil.processImg(tmpVideoUrl, uparam.getDir(), uparam.getBaseImageDir(), uparam.getFfmpegUrl());
+							String cutUrl = uparam.getBaseImageDir() + File.separator + imgUrl;
 							String fileUrl = client.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName,param);
 							result.setFileUrl(fileUrl);
 							Thread.sleep(550);
 							FastDFSClient clientImg =new FastDFSClient();
-							String cutImgUrl = clientImg.uploadFile(cutUrl,param);
-							if (null == cutImgUrl) {
-								result.setFenum(FastDFSResultEnum.FD_FILE_CUT_ERROR);
-								return result;
+							if(imgUrl != null){
+								String cutImgUrl = clientImg.uploadFile(cutUrl,param);
+								if (null == cutImgUrl) {
+									result.setFenum(FastDFSResultEnum.FD_FILE_CUT_ERROR);
+									return result;
+								}
+								result.setCutImgUrl(cutImgUrl);
 							}
-							result.setCutImgUrl(cutImgUrl);
 							File redeoFile = new File(tmpVideoUrl);
 							if (redeoFile.exists()) {
 								redeoFile.delete();
