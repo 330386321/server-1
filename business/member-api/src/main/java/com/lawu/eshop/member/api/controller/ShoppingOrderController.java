@@ -113,8 +113,9 @@ public class ShoppingOrderController extends BaseController {
 		Result<ShoppingOrderExtendDetailDTO> result = shoppingOrderService.get(id, memberId);
 		return successGet(result);
 	}
-	
-	
+
+
+	@Audit(date = "2017-09-07", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询购物订单详情", notes = "根据购物订单id查询购物订单详情。[1100|1024]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -147,7 +148,8 @@ public class ShoppingOrderController extends BaseController {
 		Result<ShoppingOrderExpressDTO> result = shoppingOrderService.getExpressInfo(id, memberId);
 		return successGet(result);
 	}
-	
+
+	@Audit(date = "2017-09-07", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询物流动态", notes = "查询物流动态。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
