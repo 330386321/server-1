@@ -56,6 +56,15 @@ public interface ProductService {
     @RequestMapping(method = RequestMethod.GET, value = "product/delInvalidProductIndex")
     Result delInvalidProductIndex();
 
+    /**
+     * 删除全部商品索引
+     *
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "product/delAllProductIndex")
+    Result delAllProductIndex();
+
     @RequestMapping(method = RequestMethod.PUT, value = "product/soldOutProductByMerchantId")
     Result soldOutProductByMerchantId(@RequestParam(value = "id") Long id);
 }

@@ -58,7 +58,7 @@ public class IndexController extends BaseController {
     private DiscountPackageService discountPackageService;
 
     @ApiOperation(value = "更新门店索引", notes = "更新门店索引。（梅述全）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequiresPermissions("index:store")
     @RequestMapping(value = "updateStoreIndex", method = RequestMethod.GET)
     public Result updateStoreIndex() {
@@ -122,7 +122,7 @@ public class IndexController extends BaseController {
     }
 
     @ApiOperation(value = "更新商品索引", notes = "更新商品索引。（梅述全）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequiresPermissions("index:product")
     @RequestMapping(value = "updateProductIndex", method = RequestMethod.GET)
     public Result updateProductIndex() {
@@ -130,35 +130,59 @@ public class IndexController extends BaseController {
     }
 
     @ApiOperation(value = "更新广告索引", notes = "更新广告索引。（梅述全）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequiresPermissions("index:ad")
     @RequestMapping(value = "updateAdIndex", method = RequestMethod.GET)
     public Result updateAdIndex() {
         return adService.rebuildAdIndex();
     }
 
-    @ApiOperation(value = "删除无效门店索引", notes = "更新门店索引。（梅述全）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @ApiOperation(value = "删除无效门店索引", notes = "删除无效门店索引。（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequiresPermissions("indexDel:store")
     @RequestMapping(value = "delInvalidStoreIndex", method = RequestMethod.GET)
     public Result delInvalidStoreIndex() {
         return merchantStoreService.delInvalidStoreIndex();
     }
 
-    @ApiOperation(value = "删除无效商品索引", notes = "更新商品索引。（梅述全）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @ApiOperation(value = "删除无效商品索引", notes = "删除无效商品索引。（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequiresPermissions("indexDel:product")
     @RequestMapping(value = "delInvalidProductIndex", method = RequestMethod.GET)
     public Result delInvalidProductIndex() {
         return productService.delInvalidProductIndex();
     }
 
-    @ApiOperation(value = "删除无效广告索引", notes = "更新广告索引。（梅述全）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @ApiOperation(value = "删除无效广告索引", notes = "删除无效广告索引。（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequiresPermissions("indexDel:ad")
     @RequestMapping(value = "delInvalidAdIndex", method = RequestMethod.GET)
     public Result delInvalidAdIndex() {
         return adService.delInvalidAdIndex();
+    }
+
+    @ApiOperation(value = "删除全部门店索引", notes = "删除全部门店索引。（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("indexDelAll:store")
+    @RequestMapping(value = "delAllStoreIndex", method = RequestMethod.GET)
+    public Result delAllStoreIndex() {
+        return merchantStoreService.delAllStoreIndex();
+    }
+
+    @ApiOperation(value = "删除全部商品索引", notes = "删除全部商品索引。（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("indexDelAll:product")
+    @RequestMapping(value = "delAllProductIndex", method = RequestMethod.GET)
+    public Result delAllProductIndex() {
+        return productService.delAllProductIndex();
+    }
+
+    @ApiOperation(value = "删除全部广告索引", notes = "删除全部广告索引。（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("indexDelAll:ad")
+    @RequestMapping(value = "delAllAdIndex", method = RequestMethod.GET)
+    public Result delAllAdIndex() {
+        return adService.delAllAdIndex();
     }
 
 }

@@ -1,6 +1,8 @@
 package com.lawu.eshop.mall.srv.mock.service;
 
-import com.lawu.eshop.solr.service.SolrService;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.TermsResponse;
 import org.apache.solr.common.SolrDocument;
@@ -8,8 +10,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
+import com.lawu.eshop.solr.service.SolrService;
 
 /**
  * @author meishuquan
@@ -34,6 +35,11 @@ public class MockSolrService implements SolrService {
 
     @Override
     public boolean delSolrDocsByIds(List<String> ids, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        return false;
+    }
+
+    @Override
+    public boolean delAllSolrDocs(String solrUrl, String solrCore, Boolean isCloudSolr) {
         return false;
     }
 

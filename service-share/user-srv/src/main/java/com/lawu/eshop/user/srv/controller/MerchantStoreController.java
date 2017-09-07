@@ -761,5 +761,17 @@ public class MerchantStoreController extends BaseController {
 		return successDelete();
 	}
 
+	/**
+	 * 删除全部索引数据
+	 *
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "delAllStoreIndex", method = RequestMethod.GET)
+	public Result delAllStoreIndex() {
+		solrService.delAllSolrDocs(userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+		return successGet();
+	}
+
 }
 
