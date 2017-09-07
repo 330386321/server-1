@@ -89,7 +89,7 @@ public class UploadController extends BaseController {
 				result.setMsg(ResultCode.get(ResultCode.FD_FILE_CUT_ERROR));
 				break;
 		}
-		return result;
+		return successCreated(result);
 	}
 
 }
