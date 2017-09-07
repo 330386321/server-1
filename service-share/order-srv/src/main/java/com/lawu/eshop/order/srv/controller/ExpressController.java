@@ -87,7 +87,7 @@ public class ExpressController extends BaseController {
 		if (actualShipper != null) {
 			rtn.setShipperCode(actualShipper.getShipperCode());
 		} else {
-			rtn.setReason(param.getExpCode());
+			rtn.setShipperCode(param.getExpCode());
 		}
 		return successCreated(rtn);
 	}
