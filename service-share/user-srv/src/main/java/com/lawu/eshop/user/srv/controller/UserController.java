@@ -50,7 +50,7 @@ public class UserController extends BaseController {
 					MemberBO memberBO = memberService.getMemberByNum(userNum);
 					rtn.getUserInfoList().add(UserIncomeExpenditureUserInfoConverter.convert(memberBO));
 					break;
-				case MEMCHANT:
+				case MERCHANT:
 					MerchantBO merchantBO = merchantService.getMerchantByNum(userNum);
 					rtn.getUserInfoList().add(UserIncomeExpenditureUserInfoConverter.convert(merchantBO));
 					break;
