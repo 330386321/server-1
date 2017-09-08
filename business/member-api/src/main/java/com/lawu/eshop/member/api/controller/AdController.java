@@ -106,9 +106,6 @@ public class AdController extends BaseController {
 	private MemberService memberService;
 
 	@Autowired
-	private MerchantStoreService merchantStoreService;
-
-	@Autowired
 	private FansMerchantService fansMerchantService;
 
 	@Autowired
@@ -119,9 +116,6 @@ public class AdController extends BaseController {
 
 	@Autowired
 	private PropertyInfoDataService propertyInfoDataService;
-
-	@Autowired
-	private PropertyInfoService propertyInfoService;
 
 	@Autowired
 	private VerifyCodeService verifyCodeService;
@@ -425,13 +419,17 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getRedPacketInfo/{merchantId}", method = RequestMethod.GET)
 	public Result<RedPacketInfoDTO> getRedPacketInfo(@PathVariable @ApiParam(required = true, value = "商家id") Long merchantId) {
-		Result<RedPacketInfoDTO> rs = adService.getRedPacketInfo(merchantId);
-		if (isSuccess(rs)) {
-			Result<MerchantStoreDTO> merchantStoreDTO = merchantStoreService.selectMerchantStoreByMId(merchantId);
-			rs.getModel().setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-			rs.getModel().setName(merchantStoreDTO.getModel().getName());
+		Result<RedPacketInfoDTO> result = adService.getRedPacketInfo(merchantId);
+		if(!isSuccess(result)){
+			successCreated(result.getRet());
 		}
-		return rs;
+		if(StringUtils.isEmpty(result.getModel().getName())){
+			result.getModel().setName("E店商家");
+		}
+		if(StringUtils.isEmpty(result.getModel().getLogoUrl())){
+			result.getModel().setLogoUrl(memberApiConfig.getDefaultHeadimg());
+		}
+		return result;
 	}
 
 	@SuppressWarnings("rawtypes")
