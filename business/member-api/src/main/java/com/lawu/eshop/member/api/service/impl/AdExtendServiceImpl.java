@@ -576,7 +576,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		adEgainInternalParam.setTypeEnum(adEgainParam.getTypeEnum());
 		adEgainInternalParam.setMerchantIds(adQueryMemberInfoDTO.getFansList());
 		if (StringUtils.isNotBlank(adQueryMemberInfoDTO.getRegionPath())) {
-			adEgainInternalParam.setAreas(Arrays.asList(StringUtils.split(adQueryMemberInfoDTO.getRegionPath(), "/")));
+			adEgainInternalParam.setAreas(Arrays.asList(StringUtils.split(adEgainParam.getTransRegionPath(), "/")));
 		}
 		Result<Page<AdEgainQueryDTO>> result = adService.selectPageAdEgain(memberId, adEgainInternalParam);
 		return successGet(result);
@@ -635,7 +635,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		adChoicenessInternalParam.setLongitude(adChoicenessParam.getLongitude());
 		adChoicenessInternalParam.setMerchantIds(adQueryMemberInfoDTO.getFansList());
 		if (StringUtils.isNotBlank(adQueryMemberInfoDTO.getRegionPath())) {
-			adChoicenessInternalParam.setAreas(Arrays.asList(StringUtils.split(adQueryMemberInfoDTO.getRegionPath(), "/")));
+			adChoicenessInternalParam.setAreas(Arrays.asList(StringUtils.split(adChoicenessParam.getTransRegionPath(), "/")));
 		}
 		Result<Page<ChoicenessAdDTO>> result = adService.selectChoiceness(memberId, adChoicenessInternalParam);
 		return successGet(result);
