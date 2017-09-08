@@ -75,6 +75,12 @@ sudo docker rmi $(sudo docker images -f "dangling=true" -q)
 ======
 sudo docker rmi $(sudo docker inspect -f "{{.ID}}:{{.RepoTags}}" $(sudo docker images -q) | grep "\[\]" | cut -d ":" -f 2)
 
+删除已经停止运行的容器
+======
+```bash
+sudo docker rm $(sudo docker ps -a -q)
+```
+
 清除无用的挂载目录
 ======
 ```bash
