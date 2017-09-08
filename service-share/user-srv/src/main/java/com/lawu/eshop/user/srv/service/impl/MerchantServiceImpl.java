@@ -23,6 +23,7 @@ import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
@@ -47,6 +48,7 @@ import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
+import com.lawu.eshop.user.srv.domain.UserLoginLogDO;
 import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
 import com.lawu.eshop.user.srv.domain.extend.MerchantDOView;
 import com.lawu.eshop.user.srv.domain.extend.MerchantPushView;
@@ -58,6 +60,7 @@ import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.UserLoginLogDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
@@ -122,6 +125,9 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private MerchantDOMapperExtend merchantDOMapperExtend;
+
+    @Autowired
+    private UserLoginLogDOMapper userLoginLogDOMapper;
 
 
     @Override
@@ -676,5 +682,23 @@ public class MerchantServiceImpl implements MerchantService {
             detailBO.setOtherUrl(otherUrl);
         }
         return detailBO;
+    }
+
+    @Override
+    @Transactional
+    public void saveLoginLog(UserLoginLogParam loginLogParam) {
+        UserLoginLogDO loginLogDO = new UserLoginLogDO();
+        loginLogDO.setUserNum(loginLogParam.getUserNum());
+        loginLogDO.setAccount(loginLogParam.getAccount());
+        loginLogDO.setUserType(loginLogParam.getUserType());
+        loginLogDO.setImei(loginLogParam.getImei());
+        loginLogDO.setPlatform(loginLogParam.getPlatform());
+        loginLogDO.setPlatformVer(loginLogParam.getPlatformVer());
+        loginLogDO.setAppVer(loginLogParam.getAppVer());
+        loginLogDO.setCityId(loginLogParam.getCityId());
+        loginLogDO.setChannel(loginLogParam.getChannel());
+        loginLogDO.setIpAddr(loginLogParam.getIpAddr());
+        loginLogDO.setGmtCreate(new Date());
+        userLoginLogDOMapper.insertSelective(loginLogDO);
     }
 }

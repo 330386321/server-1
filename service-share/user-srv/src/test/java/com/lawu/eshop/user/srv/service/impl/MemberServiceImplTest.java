@@ -13,7 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.type.UserType;
 import com.lawu.eshop.user.constants.StatusEnum;
@@ -22,6 +21,7 @@ import com.lawu.eshop.user.constants.UserTypeEnum;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
@@ -31,10 +31,12 @@ import com.lawu.eshop.user.srv.domain.FansMerchantDO;
 import com.lawu.eshop.user.srv.domain.InviteRelationDO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+import com.lawu.eshop.user.srv.domain.UserLoginLogDO;
 import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.UserLoginLogDOMapper;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.PwdUtil;
@@ -62,6 +64,9 @@ public class MemberServiceImplTest {
 
     @Autowired
     private FansMerchantDOMapper fansMerchantDOMapper;
+
+    @Autowired
+    private UserLoginLogDOMapper userLoginLogDOMapper;
 
     @Transactional
     @Rollback
@@ -653,5 +658,27 @@ public class MemberServiceImplTest {
         List<MemberDO> list = memberDOMapper.selectByExample(null);
         Assert.assertEquals(1, list.size());
         Assert.assertEquals(true, list.get(0).getIsFreeze());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void saveLoginLog() {
+        UserLoginLogParam loginLogParam = new UserLoginLogParam();
+        loginLogParam.setUserNum("M0001");
+        loginLogParam.setAccount("13666666666");
+        loginLogParam.setUserType(UserType.MEMBER.val);
+        loginLogParam.setImei("test");
+        loginLogParam.setPlatform(DataTransUtil.intToByte(1));
+        loginLogParam.setPlatformVer("test");
+        loginLogParam.setAppVer("test");
+        loginLogParam.setCityId(10);
+        loginLogParam.setChannel("test");
+        loginLogParam.setIpAddr("test");
+        memberService.saveLoginLog(loginLogParam);
+
+        List<UserLoginLogDO> list = userLoginLogDOMapper.selectByExample(null);
+        Assert.assertEquals(1, list.size());
+        Assert.assertEquals(loginLogParam.getUserNum(), list.get(0).getUserNum());
     }
 }

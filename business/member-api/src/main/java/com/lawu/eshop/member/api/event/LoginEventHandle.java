@@ -1,7 +1,11 @@
 package com.lawu.eshop.member.api.event;
 
-import com.lawu.eshop.framework.core.event.AsyncEventHandle;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.lawu.eshop.framework.core.event.AsyncEventHandle;
+import com.lawu.eshop.member.api.service.UserLoginLogService;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 
 /**
  * @author Leach
@@ -9,8 +13,23 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class LoginEventHandle implements AsyncEventHandle<LoginEvent> {
+
+    @Autowired
+    private UserLoginLogService userLoginLogService;
+
     @Override
     public void execute(LoginEvent event) {
-        System.out.println(event.getUserId());
+        UserLoginLogParam loginLogParam = new UserLoginLogParam();
+        loginLogParam.setUserNum(event.getUserNum());
+        loginLogParam.setAccount(event.getAccount());
+        loginLogParam.setUserType(event.getUserType());
+        loginLogParam.setImei(event.getImei());
+        loginLogParam.setPlatform(event.getPlatform());
+        loginLogParam.setPlatformVer(event.getPlatformVer());
+        loginLogParam.setAppVer(event.getAppVer());
+        loginLogParam.setCityId(event.getCityId());
+        loginLogParam.setChannel(event.getChannel());
+        loginLogParam.setIpAddr(event.getIpAddr());
+        userLoginLogService.saveLoginLog(loginLogParam);
     }
 }

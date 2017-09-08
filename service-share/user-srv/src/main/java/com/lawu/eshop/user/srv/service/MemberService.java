@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
@@ -157,4 +158,12 @@ public interface MemberService {
     Page<MemberBO> getAccountList(AccountParam param);
 
     void freezeAccount(String num, Boolean isFreeze,String freezeReason);
+
+    /**
+     * 保存会员登录日志
+     *
+     * @param loginLogParam
+     * @author meishuquan
+     */
+    void saveLoginLog(UserLoginLogParam loginLogParam);
 }

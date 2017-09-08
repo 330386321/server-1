@@ -22,6 +22,7 @@ import com.lawu.eshop.user.constants.UserTypeEnum;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
@@ -39,6 +40,7 @@ import com.lawu.eshop.user.srv.domain.MemberProfileDO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.user.srv.domain.MerchantDOExample;
 import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
+import com.lawu.eshop.user.srv.domain.UserLoginLogDO;
 import com.lawu.eshop.user.srv.domain.extend.InviterUserDOView;
 import com.lawu.eshop.user.srv.domain.extend.MemberDOView;
 import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
@@ -47,6 +49,7 @@ import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.UserLoginLogDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.MemberDOMapperExtend;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongUserService;
@@ -93,6 +96,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MemberDOMapperExtend memberDOMapperExtend;
+
+    @Autowired
+    private UserLoginLogDOMapper userLoginLogDOMapper;
 
     @Override
     public MemberBO find(String account, String pwd) {
@@ -639,6 +645,24 @@ public class MemberServiceImpl implements MemberService {
         MemberDOExample example = new MemberDOExample();
         example.createCriteria().andNumEqualTo(num);
         memberDOMapper.updateByExampleSelective(memberDO, example);
+    }
+
+    @Override
+    @Transactional
+    public void saveLoginLog(UserLoginLogParam loginLogParam) {
+        UserLoginLogDO loginLogDO = new UserLoginLogDO();
+        loginLogDO.setUserNum(loginLogParam.getUserNum());
+        loginLogDO.setAccount(loginLogParam.getAccount());
+        loginLogDO.setUserType(loginLogParam.getUserType());
+        loginLogDO.setImei(loginLogParam.getImei());
+        loginLogDO.setPlatform(loginLogParam.getPlatform());
+        loginLogDO.setPlatformVer(loginLogParam.getPlatformVer());
+        loginLogDO.setAppVer(loginLogParam.getAppVer());
+        loginLogDO.setCityId(loginLogParam.getCityId());
+        loginLogDO.setChannel(loginLogParam.getChannel());
+        loginLogDO.setIpAddr(loginLogParam.getIpAddr());
+        loginLogDO.setGmtCreate(new Date());
+        userLoginLogDOMapper.insertSelective(loginLogDO);
     }
 
 }

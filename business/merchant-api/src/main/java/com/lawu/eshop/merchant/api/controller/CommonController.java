@@ -20,6 +20,7 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.framework.web.dto.TokenDTO;
 import com.lawu.eshop.mall.dto.ConfigDTO;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
+import com.lawu.eshop.merchant.api.event.EventPublisher;
 import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 
@@ -46,6 +47,9 @@ public class CommonController extends BaseController {
     @Autowired
     private TokenManager tokenManager;
 
+    @Autowired
+    private EventPublisher eventPublisher;
+
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[2000,2015]（孙林青）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -68,6 +72,8 @@ public class CommonController extends BaseController {
         tokenDTO.setRyToken(userDTO.getRyToken());
         tokenDTO.setIsFreeze(userDTO.getIsFreeze());
         tokenDTO.setMerchantStoreType(userDTO.getMerchantStoreType() != null ? MerchantStoreTypeEnum.getEnum(userDTO.getMerchantStoreType().val) : MerchantStoreTypeEnum.NOT_MERCHANT);
+
+        eventPublisher.publishLoginEvent(getRequest(), userDTO.getNum(), userDTO.getAccount());
         return successCreated(tokenDTO);
     }
 

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import com.lawu.eshop.authorization.exception.MethodNotSupportException;
+
 /**
  * 统一异常处理
  * @author Leach
@@ -30,6 +32,13 @@ public class GlobalExceptionHandler extends BaseController {
     public Result defaultMethodArgumentErrorHandler(MethodArgumentTypeMismatchException e) throws Exception {
         logger.error("参数格式错误", e);
         return response(HttpCode.SC_NOT_ACCEPTABLE, ResultCode.FAIL, "参数格式错误", e.getMessage(), null);
+    }
+
+    @ExceptionHandler(value = MethodNotSupportException.class)
+    @ResponseBody
+    public Result defaultMethodArgumentErrorHandler(MethodNotSupportException e) throws Exception {
+        logger.error("请求参数不支持", e);
+        return response(HttpCode.SC_UNPROCESABLE_ENTITY, ResultCode.FAIL, "请求参数不支持", e.getMessage(), null);
     }
 
 }

@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantDetailBO;
@@ -153,4 +154,12 @@ public interface MerchantService {
      * @author meishuquan
      */
     MerchantDetailBO getMerchantDetailById(Long merchantId);
+
+    /**
+     * 保存商家登录日志
+     *
+     * @param loginLogParam
+     * @author meishuquan
+     */
+    void saveLoginLog(UserLoginLogParam loginLogParam);
 }
