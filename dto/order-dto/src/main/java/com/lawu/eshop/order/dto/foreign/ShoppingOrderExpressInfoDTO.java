@@ -25,13 +25,13 @@ public class ShoppingOrderExpressInfoDTO {
 	/**
 	 * 商品特征图片
 	 */
-	@ApiModelProperty("商品特征图片")
+	@ApiModelProperty(value = "商品特征图片", required = true)
 	private String productFeatureImage;
 	
 	/**
 	 * 数量
 	 */
-	@ApiModelProperty("数量")
+	@ApiModelProperty(value = "数量", required = true)
 	private Integer totalQuantity;
 
 	public String getWaybillNum() {
