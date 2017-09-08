@@ -91,7 +91,8 @@ public class ShoppingRefundDetailController extends BaseController {
 		Result<ShoppingOrderExpressDTO> result = shoppingRefundDetailService.getExpressInfo(id, merchantId);
     	return successCreated(result);
     }
-	
+
+	@Audit(date = "2017-09-07", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询退货的物流信息", notes = "查询退货的物流信息。[1003]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

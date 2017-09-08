@@ -59,6 +59,7 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.utils.DataTransUtil;
 
 import net.sf.json.JSONObject;
 
@@ -674,7 +675,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
 		// 查询粉丝数量
 		FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
-		fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(storeInfoDOView.getMerchantId());
+		fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(storeInfoDOView.getMerchantId()).andStatusEqualTo(DataTransUtil.intToByte(1));
 		int fansCount = fansMerchantDOMapper.countByExample(fansMerchantDOExample);
 		shoppingStoreDetailBO.setFansCount(fansCount);
 

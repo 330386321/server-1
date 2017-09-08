@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.product.srv.domain.ProductDO;
-import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
 import org.apache.log4j.Logger;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
@@ -44,7 +42,9 @@ import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.ProductSrvApplicationTest;
+import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductModelDO;
+import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
 
 /**
  * @author lihj
@@ -670,6 +670,21 @@ public class ProductControllerTest {
 			ResultActions perform = mvc.perform(request);
 			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
 			Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Transactional
+	@Rollback
+	@Test
+	public void delAllProductIndex(){
+		RequestBuilder request = get("/product/delAllProductIndex");
+		try {
+			ResultActions perform = mvc.perform(request);
+			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+			Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());

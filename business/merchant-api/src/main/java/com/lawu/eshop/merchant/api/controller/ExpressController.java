@@ -19,6 +19,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.merchant.api.service.ExpressCompanyService;
 import com.lawu.eshop.merchant.api.service.ExpressService;
@@ -48,6 +49,7 @@ public class ExpressController extends BaseController {
 	@Autowired
 	private ExpressCompanyService expressCompanyService;
 
+	@Audit(date = "2017-09-07", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询物流轨迹", notes = "根据快递单号和快递公司编码查询物流轨迹[1004|4030]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -92,7 +94,8 @@ public class ExpressController extends BaseController {
     	}
 		return successGet(rtn);
 	}
-	
+
+	@Audit(date = "2017-09-07", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "快递单号识别", notes = "根据快递单号识别快递公司。[1004|4030]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")

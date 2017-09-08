@@ -61,26 +61,26 @@ docker run -d -p 8888:8888 --privileged --name eureka-server \
 
 root用户
 ```bash
-docker-compose -f ~/compose/dev/23/docker-compose.yml up -d
+docker-compose -f /usr/local/eshop/docker-compose.yml up -d
 ```
 
 非root用户
 ```bash
-sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml up -d
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml up -d
 ```
 
 更新服务
 
 ```bash
-sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml down
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml down
 ```
 
 或者
 
 ```bash
-sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml stop
-sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml rm
-sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml pull
-sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml up
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml stop
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml rm
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml pull
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml up
 ```
 之后再清除无用的镜像和挂载

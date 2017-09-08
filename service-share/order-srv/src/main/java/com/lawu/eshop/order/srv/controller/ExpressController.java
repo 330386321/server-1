@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.dto.ExpressRecognitionDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
 import com.lawu.eshop.order.param.ExpressQueryParam;
@@ -22,6 +21,7 @@ import com.lawu.eshop.order.srv.bo.ExpressRecognitionDetailBO;
 import com.lawu.eshop.order.srv.bo.ShipperBO;
 import com.lawu.eshop.order.srv.converter.ExpressConverter;
 import com.lawu.eshop.order.srv.strategy.ExpressStrategy;
+import com.lawu.eshop.order.srv.utils.express.kdniao.constants.StateEnum;
 
 /**
  * 
@@ -65,14 +65,14 @@ public class ExpressController extends BaseController {
 		 *  通过快递单号查询快递公司编号
 		 */
 		ShipperBO actualShipper = null;
-		if (expressInquiriesDetailBO == null || ExpressInquiriesDetailStateEnum.NO_INFO.equals(expressInquiriesDetailBO.getState())) {
+		if (expressInquiriesDetailBO == null || StateEnum.NO_INFO.equals(expressInquiriesDetailBO.getState())) {
 			ExpressRecognitionDetailBO expressRecognitionDetailBO = expressStrategy.recognition(param.getExpNo());
 			if (expressRecognitionDetailBO != null && expressRecognitionDetailBO.getShippers() != null) {
 				// 根据可能的快递公司编码，由可信度从高到低遍历查询
 				for (ShipperBO shipper : expressRecognitionDetailBO.getShippers()) {
 					expressInquiriesDetailBO = expressStrategy.inquiries(shipper.getShipperCode(), param.getExpNo());
 					// 如果返回结果有物流轨迹，则跳出循环
-					if (!ExpressInquiriesDetailStateEnum.NO_INFO.equals(expressInquiriesDetailBO.getState())) {
+					if (!StateEnum.NO_INFO.equals(expressInquiriesDetailBO.getState())) {
 						// 放入真实的快递公司编码
 						actualShipper = shipper;
 						break;
@@ -87,7 +87,7 @@ public class ExpressController extends BaseController {
 		if (actualShipper != null) {
 			rtn.setShipperCode(actualShipper.getShipperCode());
 		} else {
-			rtn.setReason(param.getExpCode());
+			rtn.setShipperCode(param.getExpCode());
 		}
 		return successCreated(rtn);
 	}

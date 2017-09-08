@@ -1,13 +1,13 @@
 package com.lawu.eshop.solr.service;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.TermsResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -58,6 +58,16 @@ public interface SolrService {
      * @return
      */
     boolean delSolrDocsByIds(List<String> ids, String solrUrl, String solrCore, Boolean isCloudSolr);
+
+    /**
+     * 删除全部索引数据
+     *
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
+     * @return
+     */
+    boolean delAllSolrDocs(String solrUrl, String solrCore, Boolean isCloudSolr);
 
     /**
      * 根据条件查询
