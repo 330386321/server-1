@@ -9,6 +9,8 @@ public class RedPacketInfoBO {
 	private String logoUrl;
 	
 	private String name;
+	
+	private String mediaUrl;
 
 	public BigDecimal getPoint() {
 		return point;
@@ -32,6 +34,14 @@ public class RedPacketInfoBO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getMediaUrl() {
+		return mediaUrl;
+	}
+
+	public void setMediaUrl(String mediaUrl) {
+		this.mediaUrl = mediaUrl;
 	}
 	
 	

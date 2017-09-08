@@ -109,6 +109,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
           - /etc/localtime:/etc/localtime:ro
+          - /usr/local/eshop/media:/usr/local/eshop/media
   merchant-api:
     image: registry.eshop.com/merchant-api
     container_name: merchant-api
@@ -120,6 +121,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
           - /etc/localtime:/etc/localtime:ro
+          - /usr/local/eshop/media:/usr/local/eshop/media
   operator-api:
     image: registry.eshop.com/operator-api
     container_name: operator-api
@@ -131,6 +133,7 @@ services:
       - TZ=Asia/Shanghai
     volumes:
           - /etc/localtime:/etc/localtime:ro
+          - /usr/local/eshop/media:/usr/local/eshop/media
   external-api:
     image: registry.eshop.com/external-api
     container_name: external-api

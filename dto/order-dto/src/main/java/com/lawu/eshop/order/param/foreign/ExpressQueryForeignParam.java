@@ -16,7 +16,7 @@ public class ExpressQueryForeignParam {
 	 * 快递单号
 	 */
 	@NotBlank(message = "快递单号不能为空")
-	@ApiModelProperty(value = "快递单号")
+	@ApiModelProperty(value = "快递单号", required = true)
 	private String expNo;
 	
 	/**

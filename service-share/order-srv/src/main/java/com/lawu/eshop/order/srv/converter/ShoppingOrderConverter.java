@@ -146,10 +146,8 @@ public class ShoppingOrderConverter {
 		rtn.setProductFeatureImage(shoppingOrderExtendBO.getItems().get(0).getProductFeatureImage());
 		int totalQuantity = 0;
 		if (shoppingOrderExtendBO.getItems() != null) {
-			if (shoppingOrderExtendBO.getItems() != null) {
-				for (ShoppingOrderItemBO item : shoppingOrderExtendBO.getItems()) {
-					totalQuantity += item.getQuantity();
-				}
+			for (ShoppingOrderItemBO item : shoppingOrderExtendBO.getItems()) {
+				totalQuantity += item.getQuantity();
 			}
 		}
 		rtn.setTotalQuantity(totalQuantity);

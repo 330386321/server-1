@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.statistics.dto.PointConsumeDailyDTO;
+import com.lawu.eshop.statistics.dto.ReportNewDateDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 
 @FeignClient(value= "statistics-srv")
@@ -33,6 +34,12 @@ public interface StatisticsPointConsumeService {
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.DELETE, value = "pointConsume/deleteMonthByReportDate")
-	Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate);	
+	Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate);
+	
+	@RequestMapping(value = "pointConsume/getReportDatePointConsumeDaily", method = RequestMethod.GET)
+	Result<ReportNewDateDTO> getReportDateUserRegDaily();
+	
+	@RequestMapping(value = "pointConsume/getReportDatePointConsumeMonth", method = RequestMethod.GET)
+	Result<ReportNewDateDTO> getReportDateUserRegMonth();
 	
 }

@@ -1,9 +1,10 @@
 package com.lawu.eshop.statistics.srv.mapper.extend;
 
-import com.lawu.eshop.statistics.param.UserRegParam;
-import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
-
 import java.util.List;
+
+import com.lawu.eshop.statistics.param.UserRegParam;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportNewDateDOView;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
 
 /**
  * @author meishuquan
@@ -14,5 +15,9 @@ public interface UserRegDOMapperExtend {
 	List<ReportUserRegDOView> getReportUserRegDaily(UserRegParam param);
 
 	List<ReportUserRegDOView> getReportUserRegMonth(UserRegParam param);
+	
+	ReportNewDateDOView getReportDateUserRegDaily();
+	
+	ReportNewDateDOView getReportDateUserRegMonth();
 
 }

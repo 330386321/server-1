@@ -97,7 +97,7 @@ public class ExpressConverter {
 		rtn = new ExpressInquiriesDetailDTO();
 		rtn.setSuccess(expressInquiriesDetailBO.getSuccess());
 		rtn.setReason(expressInquiriesDetailBO.getReason());
-		rtn.setState(ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetailBO.getState().getValue()));
+		rtn.setState(expressInquiriesDetailBO.getState() != null ? ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetailBO.getState().getValue()) : ExpressInquiriesDetailStateEnum.NO_INFO);
 		rtn.setTraces(new ArrayList<>());
 		if (expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
 			for (TraceBO item : expressInquiriesDetailBO.getTraces()) {

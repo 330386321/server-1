@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.statistics.dto.ReportNewDateDTO;
 import com.lawu.eshop.statistics.param.UserRegAreaParam;
 
 /**
@@ -58,4 +59,18 @@ public interface UserRegService {
      */
     @RequestMapping(value = "userReg/addUserRegAreaMonth", method = RequestMethod.POST)
     Result addUserRegAreaMonth(@RequestBody UserRegAreaParam userRegAreaParam);
+    
+    /**
+     * 日统计最新统计时间
+     * @return
+     */
+    @RequestMapping(value = "userReg/getReportDateUserRegDaily", method = RequestMethod.GET)
+    Result<ReportNewDateDTO> getReportDateUserRegDaily();
+    
+    /**
+     * 月统计最新统计时间
+     * @return
+     */
+    @RequestMapping(value = "userReg/getReportDateUserRegMonth", method = RequestMethod.GET)
+    Result<ReportNewDateDTO> getReportDateUserRegMonth();
 }

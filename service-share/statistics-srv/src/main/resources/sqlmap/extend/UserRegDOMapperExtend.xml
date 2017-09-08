@@ -11,5 +11,13 @@
         select member_count as memberCount,merchant_count as merchantCount,gmt_report as gmtReport
         from report_user_reg_month where gmt_report &gt;= #{beginDate} and gmt_report &lt;= #{endDate}
     </select>
+    
+    <select id="getReportDateUserRegDaily" resultType="com.lawu.eshop.statistics.srv.domain.extend.ReportNewDateDOView" >
+         select gmt_report as gmtReport from report_user_reg_daily  ORDER BY ID DESC LIMIT 0,1
+    </select>
+
+	<select id="getReportDateUserRegMonth" resultType="com.lawu.eshop.statistics.srv.domain.extend.ReportNewDateDOView" >
+         select gmt_report as gmtReport from report_user_reg_month  ORDER BY ID DESC LIMIT 0,1
+    </select>
 
 </mapper>
