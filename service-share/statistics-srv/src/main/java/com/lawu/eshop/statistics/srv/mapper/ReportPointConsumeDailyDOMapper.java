@@ -2,6 +2,8 @@ package com.lawu.eshop.statistics.srv.mapper;
 
 import com.lawu.eshop.statistics.srv.domain.ReportPointConsumeDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportPointConsumeDailyDOExample;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportNewDateDOView;
+
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
@@ -102,4 +104,5 @@ public interface ReportPointConsumeDailyDOMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(ReportPointConsumeDailyDO record);
+
 }

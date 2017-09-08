@@ -1,6 +1,7 @@
 package com.lawu.eshop.jobs.service.impl;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,10 @@ import com.lawu.eshop.jobs.service.RegionService;
 import com.lawu.eshop.jobs.service.UserRegService;
 import com.lawu.eshop.jobs.service.UserRegStatisticsService;
 import com.lawu.eshop.mall.dto.RegionDTO;
+import com.lawu.eshop.statistics.dto.ReportNewDateDTO;
 import com.lawu.eshop.statistics.param.UserRegAreaParam;
 import com.lawu.eshop.user.param.CollectionUserRegParam;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * @author meishuquan
@@ -33,27 +36,44 @@ public class UserRegStatisticsServiceImpl implements UserRegStatisticsService {
 
     @Override
     public void executeCollectionUserRegDaily() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
-        CollectionUserRegParam param = new CollectionUserRegParam();
-        param.setYear(calendar.get(Calendar.YEAR));
-        param.setMonth(calendar.get(Calendar.MONTH) + 1);
-        param.setDay(calendar.get(Calendar.DATE));
-        Result<Integer> memberResult = collectionUserRegService.collectionMemberRegDaily(param);
-        Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegDaily(param);
-        userRegService.saveUserRegDaily(memberResult.getModel(), merchantResult.getModel());
+    	
+    	Result<ReportNewDateDTO> result=userRegService.getReportDateUserRegDaily();
+    	
+    	Date newReportDate=result.getModel().getGmtReport();
+    	
+    	for(int i=1;i <= DateUtil.daysOfTwo(newReportDate);i++){
+    		Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE, -i);
+            CollectionUserRegParam param = new CollectionUserRegParam();
+            param.setYear(calendar.get(Calendar.YEAR));
+            param.setMonth(calendar.get(Calendar.MONTH) + 1);
+            param.setDay(calendar.get(Calendar.DATE));
+            Result<Integer> memberResult = collectionUserRegService.collectionMemberRegDaily(param);
+            Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegDaily(param);
+            userRegService.saveUserRegDaily(memberResult.getModel(), merchantResult.getModel());
+    		
+    	}
+    	
     }
 
     @Override
     public void executeCollectionUserRegMonth() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, -1);
-        CollectionUserRegParam param = new CollectionUserRegParam();
-        param.setYear(calendar.get(Calendar.YEAR));
-        param.setMonth(calendar.get(Calendar.MONTH) + 1);
-        Result<Integer> memberResult = collectionUserRegService.collectionMemberRegMonth(param);
-        Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegMonth(param);
-        userRegService.saveUserRegMonth(memberResult.getModel(), merchantResult.getModel());
+       
+        Result<ReportNewDateDTO> result=userRegService.getReportDateUserRegMonth();
+    	
+    	Date newReportDate=result.getModel().getGmtReport();
+    	
+    	for(int i=1;i <= DateUtil.daysOfTwo(newReportDate);i++){
+    		Calendar calendar = Calendar.getInstance();
+	        calendar.add(Calendar.MONTH, -i);
+	        CollectionUserRegParam param = new CollectionUserRegParam();
+	        param.setYear(calendar.get(Calendar.YEAR));
+	        param.setMonth(calendar.get(Calendar.MONTH) + 1);
+	        Result<Integer> memberResult = collectionUserRegService.collectionMemberRegMonth(param);
+	        Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegMonth(param);
+	        userRegService.saveUserRegMonth(memberResult.getModel(), merchantResult.getModel());
+    		
+    	}
     }
 
     @Override

@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.statistics.dto.ReportNewDateDTO;
 import com.lawu.eshop.statistics.dto.ReportUserRegAreaDTO;
 import com.lawu.eshop.statistics.dto.ReportUserRegDTO;
 import com.lawu.eshop.statistics.param.UserRegAreaParam;
 import com.lawu.eshop.statistics.param.UserRegParam;
 import com.lawu.eshop.statistics.srv.bo.ReportUserRegAreaBO;
 import com.lawu.eshop.statistics.srv.converter.ReportUserRegConverter;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportNewDateDOView;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
 import com.lawu.eshop.statistics.srv.service.UserRegService;
 
@@ -123,5 +125,28 @@ public class UserRegController extends BaseController {
         userRegService.addUserRegAreaMonth(userRegAreaParam);
         return successCreated();
     }
+    
+    
+    /**
+     * 获取日统计最新一条记录日期
+     *
+     * @return
+     */
+    @RequestMapping(value = "getReportDateUserRegDaily", method = RequestMethod.GET)
+    public Result<ReportNewDateDTO> getReportDateUserRegDaily() {
+    	ReportNewDateDOView view = userRegService.getReportDateUserRegDaily();
+        return successGet(new ReportNewDateDTO(view.getGmtReport()));
+    }
+    
 
+    /**
+     * 获取日统计最新一条记录日期
+     *
+     * @return
+     */
+    @RequestMapping(value = "getReportDateUserRegMonth", method = RequestMethod.GET)
+    public Result<ReportNewDateDTO> getReportDateUserRegMonth() {
+    	ReportNewDateDOView view = userRegService.getReportDateUserRegMonth();
+        return successGet(new ReportNewDateDTO(view.getGmtReport()));
+    }
 }
