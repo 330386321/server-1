@@ -1,5 +1,6 @@
 namesrvAddr=192.168.1.29:9876
 brokerIP1=192.168.1.29
+listenPort=10911
 brokerName=broker-a
 brokerClusterName=DefaultCluster
 brokerId=0
