@@ -1,4 +1,4 @@
-package con.lawu.eshop.mq;
+package com.lawu.eshop.mq;
 
 import org.junit.Ignore;
 import org.junit.Test;

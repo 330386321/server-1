@@ -63,6 +63,6 @@
         </property>
     </bean>
 
-    <bean id="messageConsumerListener" class="con.lawu.eshop.mq.MessageConsumerListenerTest" />
+    <bean id="messageConsumerListener" class="com.lawu.eshop.mq.MessageConsumerListenerTest" />
 
 </beans>
