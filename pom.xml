@@ -34,6 +34,9 @@
 
         <elastic.job.version>2.1.4</elastic.job.version>
         <curator.version>2.11.1</curator.version>
+
+        <junit.version>4.12</junit.version>
+        <sprint.test.version>4.3.6.RELEASE</sprint.test.version>
     </properties>
 
 
@@ -90,6 +93,19 @@
                 <groupId>com.dangdang</groupId>
                 <artifactId>elastic-job-lite-spring</artifactId>
                 <version>${elastic.job.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>sprint-test</artifactId>
+                <version>${sprint.test.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
             </dependency>
 
         </dependencies>
