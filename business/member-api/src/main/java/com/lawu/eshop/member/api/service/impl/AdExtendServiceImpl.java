@@ -267,8 +267,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	 * @return
 	 */
 	public List<AdDTO> adFilterNoMemberId(AdMemberParam adMemberParam, List<AdDTO> list) {
-//		Result<UserDTO> memberDTO = memberService.findMemberInfo(memberId);
-//		String memberPath = memberDTO.getModel().getRegionPath();
 		String memberPath = adMemberParam.getTransRegionPath();
 		List<AdDTO> newList = new ArrayList<>();
 		for (AdDTO adDTO : list) {
@@ -323,13 +321,8 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	 * @return
 	 */
 	public List<AdDTO> adFilter(AdMemberParam adMemberParam, List<AdDTO> list, Long memberId) {
-		Result<UserDTO> memberDTO = memberService.findMemberInfo(memberId);
-		String memberPath = "";
-		if(memberId != 0)  {
-			memberPath = memberDTO.getModel().getRegionPath();
-		} else if(adMemberParam != null) {
-			memberPath = adMemberParam.getTransRegionPath();
-		}			
+		String memberPath = adMemberParam.getTransRegionPath();
+		
 		List<AdDTO> newList = new ArrayList<>();
 		for (AdDTO adDTO : list) {
 			if (adDTO.getPutWayEnum().val == PutWayEnum.PUT_WAY_AREAS.val) { // 区域
