@@ -115,6 +115,7 @@ public class ResultCode {
     public static final int CAN_NOT_AGREE_TO_APPLY = 4027;
     public static final int CAN_NOT_AGREE_TO_A_REFUND = 4028;
     public static final int CAN_NOT_FILL_IN_THE_RETURN_ADDRESS = 4029;
+    public static final int THIRD_PARTY_LOGISTICS_INTERFACE_EXCEPTION = 4030;
 
     // 广告模块代码 5xxx
     public static final int AD_POINT_NOT_ENOUGH = 5000;
@@ -128,6 +129,8 @@ public class ResultCode {
     public static final int AD_CLICK_PUTED = 5008;
     public static final int AD_RED_PACKGE_PUTED=5009;
     public static final int AD_BEGIN_TIME_NOT_EXIST=5010;
+    public static final int AD_RED_PACKET_COUNT_ERROR=5011;
+    public static final int AD_RED_PACKET_POINT_ERROR=5012;
 
 
     // 资产模块代码 6xxx
@@ -312,6 +315,7 @@ public class ResultCode {
         ResultCode.messageMap.put(CAN_NOT_AGREE_TO_APPLY, "不能同意退款申请");
         ResultCode.messageMap.put(CAN_NOT_AGREE_TO_A_REFUND, "不能同意退款");
         ResultCode.messageMap.put(CAN_NOT_FILL_IN_THE_RETURN_ADDRESS, "不能填写退货地址");
+        ResultCode.messageMap.put(THIRD_PARTY_LOGISTICS_INTERFACE_EXCEPTION, "第三方物流接口异常");
         
         // 广告模块 5xxx
         ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "积分不足，请充值");
@@ -325,6 +329,10 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_CLICK_PUTED, "广告已点击完");
         ResultCode.messageMap.put(AD_RED_PACKGE_PUTED, "红包已下架");
         ResultCode.messageMap.put(AD_BEGIN_TIME_NOT_EXIST, "投放时间不能为空");
+        ResultCode.messageMap.put(AD_RED_PACKET_COUNT_ERROR, "红包数量不能超过100万");
+        ResultCode.messageMap.put(AD_RED_PACKET_POINT_ERROR, "红包金额不合法");
+        
+        
         
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");

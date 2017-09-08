@@ -1,7 +1,8 @@
 package com.lawu.eshop.solr.impl;
 
-import com.lawu.eshop.solr.SolrUtil;
-import com.lawu.eshop.solr.service.SolrService;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -13,8 +14,8 @@ import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.List;
+import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.solr.service.SolrService;
 
 /**
  * @author meishuquan
@@ -104,6 +105,24 @@ public class SolrServiceImpl implements SolrService {
             }
         } catch (Exception e) {
             logger.error("solr批量删除异常：{}", e);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean delAllSolrDocs(String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = SolrUtil.getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return false;
+        }
+        try {
+            UpdateResponse rspAdd = solrClient.deleteByQuery("*:*");
+            UpdateResponse rspCommit = solrClient.commit();
+            if (rspAdd.getStatus() == 0 && rspCommit.getStatus() == 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            logger.error("solr全部删除异常：{}", e);
         }
         return false;
     }

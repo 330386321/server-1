@@ -15,7 +15,13 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel
 public class ExpressInquiriesDetailDTO {
-
+	
+	/**
+	 * 快递公司编码
+	 */
+	@ApiModelProperty("快递公司编码")
+	private String shipperCode;
+	
 	/**
 	 * 成功与否
 	 */
@@ -39,6 +45,14 @@ public class ExpressInquiriesDetailDTO {
 	 */
 	@ApiModelProperty(value = "物流轨迹", required = true)
 	private List<TraceDTO> traces;
+
+	public String getShipperCode() {
+		return shipperCode;
+	}
+
+	public void setShipperCode(String shipperCode) {
+		this.shipperCode = shipperCode;
+	}
 
 	public Boolean getSuccess() {
 		return success;

@@ -759,12 +759,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void soldOutProductByMerchantId(Long merchantId) {
-        ProductDO productDO = new ProductDO();
-        productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal());
-        ProductDOExample example = new ProductDOExample();
-        example.createCriteria().andMerchantIdEqualTo(merchantId);
-        productDOMapper.updateByExampleSelective(productDO, example);
-
         ProductDOExample example2 = new ProductDOExample();
         example2.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
         List<ProductDO> productDOS = productDOMapper.selectByExample(example2);
@@ -775,6 +769,12 @@ public class ProductServiceImpl implements ProductService {
             }
             solrService.delSolrDocsByIds(ids, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
+
+        ProductDO productDO = new ProductDO();
+        productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal());
+        ProductDOExample example = new ProductDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        productDOMapper.updateByExampleSelective(productDO, example);
     }
 
 	@Override

@@ -122,6 +122,7 @@ CREATE TABLE `freeze` (
   `fund_biz_type` tinyint(2) NOT NULL COMMENT '业务类型(10-(订单)用户确认收货初始化冻结资金|11-(订单)商家同意退款减冻结资金)',
   `days` int(2) NOT NULL COMMENT '冻结周期(天)',
   `biz_id` bigint(20) NOT NULL COMMENT '关联业务表主键',
+  `item_id` bigint(20) DEFAULT NULL COMMENT '业务表子项主键',
   `order_num` varchar(30) DEFAULT NULL COMMENT '订单号',
   `status` tinyint(2) NOT NULL COMMENT '状态(0-冻结1-释放)',
   `remark` varchar(200) DEFAULT NULL,

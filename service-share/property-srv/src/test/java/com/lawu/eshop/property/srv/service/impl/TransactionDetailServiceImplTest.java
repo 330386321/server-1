@@ -117,6 +117,7 @@ public class TransactionDetailServiceImplTest {
     public void verifyOrderIsPaySuccess(){
         NotifyCallBackParam param = new NotifyCallBackParam();
         param.setOutTradeNo("4545121");
+        param.setTradeNo("2313213232");
         param.setUserNum("M10001");
         Boolean bool = transactionDetailService.verifyOrderIsPaySuccess(param);
         Assert.assertEquals(false,bool);

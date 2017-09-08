@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
 import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
@@ -32,8 +33,23 @@ public interface ShoppingRefundDetailService {
 	 * @author jiangxinjun
 	 * @date 2017年7月11日
 	 */
+	@Deprecated
 	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
+	
+	/**
+	 * 根据id查询退款详情的物流信息
+	 * 
+	 * @param id
+	 *            退款详情id
+	 * @param merchantId
+	 *            商家id(用于鉴权)
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
+	 */
+	@RequestMapping(value = "expressInfo/{id}", method = RequestMethod.GET)
+	Result<ShoppingOrderExpressInfoDTO> expressInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
 
 	/**
 	 * 根据订单项id查询退款详情

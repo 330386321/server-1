@@ -192,8 +192,16 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 
 		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
 			return ResultCode.PROPERTY_INFO_NULL;
+		} else if (propertyInfoDOS.size() > 1) {
+			return ResultCode.PROPERTY_INFO_OUT_INDEX;
 		}
 
+		//校验资金是否冻结
+		if(PropertyinfoFreezeEnum.YES.getVal().equals(propertyInfoDOS.get(0).getFreeze())){
+			return ResultCode.PROPERTYINFO_FREEZE_YES;
+		}
+
+		//校验积分是否足够
 		BigDecimal dbPoint = propertyInfoDOS.get(0).getPoint();
 		double dPoint = dbPoint.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		double drPoint = Double.parseDouble(point);

@@ -67,6 +67,7 @@ import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
@@ -308,19 +309,18 @@ public class AdController extends BaseController {
 	public Result<ClickAdPointDTO> clickAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		String num = UserUtil.getCurrentUserNum(getRequest());
-		Result<Boolean> result= clickAdRecordService.getClickAdRecord(memberId+id+DateUtil.getIntDateTime());
+		Result<Boolean> result= clickAdRecordService.getClickAdRecord(memberId+num+id+DateUtil.getIntDate());
 		if(!isSuccess(result)){
 			return successCreated(result.getRet());
 		}
 		if(result.getModel()){
 			return successCreated(ResultCode.AD_CLICK_EXIST);
-		}else{
-			 Result<ClickAdPointDTO> res=adService.clickAd(id, memberId, num);
-			 if(isSuccess(res)){ 
-				 clickAdRecordService.setClickAdRecord(memberId+id+DateUtil.getIntDateTime());
-			 }
-			return res;
 		}
+		Result<ClickAdPointDTO> res=adService.clickAd(id, memberId, num);
+		if(res.getModel()!=null && res.getModel().getPoint().compareTo(BigDecimal.valueOf(0))==1){ 
+			clickAdRecordService.setClickAdRecord(memberId+num+id+DateUtil.getIntDate());
+		}
+		return res;
 		
 	}
 
@@ -390,26 +390,23 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "doHanlderMinusPoint", method = RequestMethod.POST)
 	public Result doHanlderMinusPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "广告id") Long id) {
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
-		Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
-		if (isSuccess(resultFreeze)) {
-			if (PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel().getStatus())) {
-				return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
-			}
-		} else {
-			return successCreated(resultFreeze.getRet());
+		PointDetailQueryData1Param query = new PointDetailQueryData1Param();
+		query.setBizId(id.toString());
+		query.setPointType(MemberTransactionTypeEnum.PRAISE_AD.getValue());
+		query.setUserNum(userNum);
+		Result<Integer> isDoResult = propertyInfoDataService.getPointDetailByUserNumAndPointTypeAndBizId(query);
+		if (!isSuccess(isDoResult)) {
+			return successCreated(isDoResult.getRet());
 		}
-		Result<PropertyPointDTO> result = propertyInfoService.getPropertyPoint(userNum);
-		BigDecimal point = result.getModel().getPoint();
-		if (point.compareTo(new BigDecimal(30)) == -1) {
-			return successCreated(ResultCode.PROPERTY_INFO_POINT_LESS);
-		} else {
-			PropertyInfoDataParam param = new PropertyInfoDataParam();
-			param.setUserNum(userNum);
-			param.setPoint("20");
-			param.setBizId(id.toString());
-			param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PRAISE_AD);
-			return propertyInfoDataService.doHanlderMinusPoint(param);
+		if (isDoResult.getModel() == 1){
+			return successCreated();
 		}
+		PropertyInfoDataParam param = new PropertyInfoDataParam();
+		param.setUserNum(userNum);
+		param.setPoint("20");
+		param.setBizId(id.toString());
+		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PRAISE_AD);
+		return propertyInfoDataService.doHanlderMinusPoint(param);
 
 	}
 

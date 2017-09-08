@@ -27,7 +27,7 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <docker.image.prefix>registry.eshop.com</docker.image.prefix>
-        <docker.base.image>java:8-alpine</docker.base.image>
+        <docker.base.image>registry.eshop.com/java:8-alpine</docker.base.image>
 
         <springfox.swagger>2.6.1</springfox.swagger>
         <rocketmq.version>3.2.6</rocketmq.version>

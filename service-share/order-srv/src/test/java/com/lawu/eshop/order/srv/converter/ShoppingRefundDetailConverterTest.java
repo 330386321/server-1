@@ -39,7 +39,7 @@ public class ShoppingRefundDetailConverterTest {
 	@Test
 	public void convertShoppingOrderExpressDTO() {
 		ShoppingRefundDetailBO expected = initShoppingRefundDetailBO();
-		ExpressInquiriesDetailBO expectedExpressInquiriesDetailBO = ExpressInquiriesDetailConverterTest.initExpressInquiriesDetailBO();
+		ExpressInquiriesDetailBO expectedExpressInquiriesDetailBO = ExpressConverterTest.initExpressInquiriesDetailBO();
 		ShoppingOrderExpressDTO actual = ShoppingRefundDetailConverter.covert(expected, expectedExpressInquiriesDetailBO);
 		assertShoppingRefundDetailDTO(expected, expectedExpressInquiriesDetailBO, actual);
 	}
@@ -48,7 +48,7 @@ public class ShoppingRefundDetailConverterTest {
 		Assert.assertNotNull(actual);
 		Assert.assertEquals(expected.getExpressCompanyName(), actual.getExpressCompanyName());
 		Assert.assertEquals(expected.getWaybillNum(), actual.getWaybillNum());
-		ExpressInquiriesDetailConverterTest.assertExpressInquiriesDetailDTO(expectedExpressInquiriesDetailBO, actual.getExpressInquiriesDetailDTO());
+		ExpressConverterTest.assertExpressInquiriesDetailDTO(expectedExpressInquiriesDetailBO, actual.getExpressInquiriesDetailDTO());
 	}
 	
 	public static void assertShoppingRefundDetailDTO(ShoppingOrderItemExtendBO expected, ShoppingRefundDetailDTO actual) {

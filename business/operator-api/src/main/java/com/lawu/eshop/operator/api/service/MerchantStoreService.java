@@ -58,6 +58,15 @@ public interface MerchantStoreService {
 	Result delInvalidStoreIndex();
 
 	/**
+	 * 删除全部门店索引
+	 *
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "merchantStore/delAllStoreIndex")
+	Result delAllStoreIndex();
+
+	/**
 	 *查询买单列表中商家name  account
 	 * @param merchantId
 	 * @return

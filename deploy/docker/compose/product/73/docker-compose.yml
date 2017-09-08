@@ -10,6 +10,10 @@ services:
     environment:
       - spring.cloud.config.profile=product
       - spring.cloud.config.uri=http://192.168.100.80:8080
+      - TZ=Asia/Shanghai
+    volumes:
+          - /etc/localtime:/etc/localtime:ro
+          - /usr/local/eshop/media:/usr/local/eshop/media
     networks:
       - eshopNet
   merchant-api:
@@ -20,6 +24,10 @@ services:
     environment:
       - spring.cloud.config.profile=product
       - spring.cloud.config.uri=http://192.168.100.80:8080
+      - TZ=Asia/Shanghai
+    volumes:
+          - /etc/localtime:/etc/localtime:ro
+          - /usr/local/eshop/media:/usr/local/eshop/media
     networks:
       - eshopNet
   operator-api:
@@ -30,6 +38,9 @@ services:
     environment:
       - spring.cloud.config.profile=product
       - spring.cloud.config.uri=http://192.168.100.80:8080
+      - TZ=Asia/Shanghai
+    volumes:
+          - /etc/localtime:/etc/localtime:ro
     networks:
       - eshopNet
   agent-api:
@@ -40,6 +51,9 @@ services:
     environment:
       - spring.cloud.config.profile=product
       - spring.cloud.config.uri=http://192.168.100.80:8080
+      - TZ=Asia/Shanghai
+    volumes:
+          - /etc/localtime:/etc/localtime:ro
     networks:
       - eshopNet
   external-api:
@@ -50,6 +64,9 @@ services:
     environment:
       - spring.cloud.config.profile=product
       - spring.cloud.config.uri=http://192.168.100.80:8080
+      - TZ=Asia/Shanghai
+    volumes:
+          - /etc/localtime:/etc/localtime:ro
     networks:
       - eshopNet
   jobs:
@@ -60,6 +77,9 @@ services:
     environment:
       - spring.cloud.config.profile=product
       - spring.cloud.config.uri=http://192.168.100.80:8080
+      - TZ=Asia/Shanghai
+    volumes:
+          - /etc/localtime:/etc/localtime:ro
     networks:
       - eshopNet
 

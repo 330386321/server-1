@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
@@ -28,6 +29,7 @@ public class MockMemberService extends BaseController implements MemberService {
         dto.setId(1L);
         dto.setAccount("13800138000");
         dto.setRyToken("434444444444444444");
+        dto.setUserSex(UserSexEnum.SEX_FEMALE);
         return successCreated(dto);
     }
 

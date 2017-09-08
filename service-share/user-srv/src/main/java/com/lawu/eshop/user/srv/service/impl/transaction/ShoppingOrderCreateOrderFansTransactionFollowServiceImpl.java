@@ -10,6 +10,7 @@ import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowSer
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderFansNotification;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
+import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.service.FansMerchantService;
 
 /**
@@ -32,7 +33,10 @@ public class ShoppingOrderCreateOrderFansTransactionFollowServiceImpl extends Ab
 	 */
     @Transactional
     @Override
-    public void execute(ShoppingOrderCreateOrderFansNotification notification) {
-    	fansMerchantService.saveFansMerchant(notification.getMerchantId(), notification.getMemberId(), FansMerchantChannelEnum.ORDER_PAY);
-    }
+	public void execute(ShoppingOrderCreateOrderFansNotification notification) {
+		FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchant(notification.getMemberId(), notification.getMerchantId());
+		if (fansMerchantBO == null) {
+			fansMerchantService.saveFansMerchant(notification.getMerchantId(), notification.getMemberId(), FansMerchantChannelEnum.ORDER_PAY);
+		}
+	}
 }

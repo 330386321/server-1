@@ -92,6 +92,7 @@ public class CommonController extends BaseController {
         configDTO.setVideoUrl(memberApiConfig.getVideoUrl());
         configDTO.setInviterMemberUrl(memberApiConfig.getInviterMemberUrl());
         configDTO.setInviterMerchantUrl(memberApiConfig.getInviterMerchantUrl());
+        configDTO.setMemberH5Ip(memberApiConfig.getMemberH5Ip());
         return successCreated(configDTO);
     }
 

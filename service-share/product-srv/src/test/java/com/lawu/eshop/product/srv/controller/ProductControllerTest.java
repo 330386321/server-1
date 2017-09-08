@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -41,7 +42,9 @@ import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.ProductSrvApplicationTest;
+import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductModelDO;
+import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
 
 /**
  * @author lihj
@@ -58,6 +61,8 @@ public class ProductControllerTest {
 
 	@Autowired
 	private ProductController productController;
+	@Autowired
+	private ProductDOMapper productDOMapper;
 
 	@Before
 	public void setUp() throws Exception {
@@ -254,11 +259,35 @@ public class ProductControllerTest {
 	@Rollback
 	@Test
 	public void editTotalInventory() {
-		RequestBuilder request = post("/product/editTotalInventory").param("productId", "1").param("num", "1000")
-				.param("flag", "A");
-		RequestBuilder requestQuery = get("/product/selectProductById").param("productId", "1");
 		try {
-			addProduct();
+			//addProduct();
+			ProductDO productDO  = new ProductDO();
+			productDO.setStatus(new Byte("1"));
+			productDO.setName("name");
+			productDO.setGmtModified(new Date());
+			productDO.setAverageDailySales(new BigDecimal(1));
+			productDO.setCategoryId(1);
+			productDO.setContent("content");
+			productDO.setFeatureImage("/fdf/1.jpg");
+			productDO.setGmtCreate(new Date());
+			productDO.setGmtDown(new Date());
+			productDO.setImageContent("[]");
+			productDO.setIsAllowRefund(true);
+			productDO.setKeywords("fdf");
+			productDO.setMaxPrice(new BigDecimal(1));
+			productDO.setMerchantId(1L);
+			productDO.setMerchantNum("B1000");
+			productDO.setMinPrice(new BigDecimal(1));
+			productDO.setStatus(new Byte("1"));
+			productDO.setTotalFavorite(1);
+			productDO.setTotalInventory(1);
+			productDO.setTotalSalesVolume(1);
+			productDOMapper.insertSelective(productDO);
+
+			RequestBuilder request = post("/product/editTotalInventory").param("productId", productDO.getId().toString()).param("num", "1000")
+					.param("flag", "A");
+			RequestBuilder requestQuery = get("/product/selectProductById").param("productId", productDO.getId().toString());
+
 			ResultActions perform = mvc.perform(request);
 			ResultActions performQuery = mvc.perform(requestQuery);
 			log.info(performQuery.andReturn().getResponse().getContentAsString());
@@ -279,11 +308,35 @@ public class ProductControllerTest {
 	@Rollback
 	@Test
 	public void editTotalSaleVolume() {
-		RequestBuilder request = post("/product/editTotalSaleVolume").param("productId", "1").param("num", "1000")
-				.param("flag", "A");
-		RequestBuilder requestQuery = get("/product/selectProductById").param("productId", "1");
 		try {
-			addProduct();
+			//addProduct();
+			ProductDO productDO  = new ProductDO();
+			productDO.setStatus(new Byte("1"));
+			productDO.setName("name");
+			productDO.setGmtModified(new Date());
+			productDO.setAverageDailySales(new BigDecimal(1));
+			productDO.setCategoryId(1);
+			productDO.setContent("content");
+			productDO.setFeatureImage("/fdf/1.jpg");
+			productDO.setGmtCreate(new Date());
+			productDO.setGmtDown(new Date());
+			productDO.setImageContent("[]");
+			productDO.setIsAllowRefund(true);
+			productDO.setKeywords("fdf");
+			productDO.setMaxPrice(new BigDecimal(1));
+			productDO.setMerchantId(1L);
+			productDO.setMerchantNum("B1000");
+			productDO.setMinPrice(new BigDecimal(1));
+			productDO.setStatus(new Byte("1"));
+			productDO.setTotalFavorite(1);
+			productDO.setTotalInventory(1);
+			productDO.setTotalSalesVolume(1);
+			productDOMapper.insertSelective(productDO);
+
+			RequestBuilder request = post("/product/editTotalSaleVolume").param("productId", productDO.getId().toString()).param("num", "1000")
+					.param("flag", "A");
+			RequestBuilder requestQuery = get("/product/selectProductById").param("productId", productDO.getId().toString());
+
 			ResultActions perform = mvc.perform(request);
 			ResultActions performQuery = mvc.perform(requestQuery);
 			log.info(performQuery.andReturn().getResponse().getContentAsString());
@@ -546,7 +599,7 @@ public class ProductControllerTest {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
-	}*/
+	}
 	@Transactional
 	@Rollback
 	@Test
@@ -560,7 +613,7 @@ public class ProductControllerTest {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());
 		}
-	}
+	}*/
 
 	private void addProduct() throws Exception {
 		EditProductDataParam product1 = initProduct("1");
@@ -617,6 +670,21 @@ public class ProductControllerTest {
 			ResultActions perform = mvc.perform(request);
 			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
 			Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Transactional
+	@Rollback
+	@Test
+	public void delAllProductIndex(){
+		RequestBuilder request = get("/product/delAllProductIndex");
+		try {
+			ResultActions perform = mvc.perform(request);
+			MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+			Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail(e.getMessage());

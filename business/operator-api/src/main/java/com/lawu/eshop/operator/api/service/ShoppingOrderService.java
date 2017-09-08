@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForOperatorDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
@@ -19,7 +20,7 @@ import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
  * @author Sunny
  * @date 2017/04/12
  */
-@FeignClient(value = "order-srv")
+@FeignClient(value = "order-srv", path = "shoppingOrder/")
 public interface ShoppingOrderService {
 	
 	/**
@@ -29,7 +30,7 @@ public interface ShoppingOrderService {
 	 *            查询参数
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/selectPage", method = RequestMethod.POST)
+	@RequestMapping(value = "selectPage", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderQueryToOperatorDTO>> selectPage(@RequestBody ShoppingOrderQueryForeignToOperatorParam param);
 	
 	/**
@@ -39,8 +40,19 @@ public interface ShoppingOrderService {
 	 *            购物订单id
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/get/{id}", method = RequestMethod.GET)
+	@Deprecated
+	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id);
+	
+	/**
+	 * 根据id查询订单详情
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
+	Result<ShoppingOrderDetailDTO> detail(@PathVariable("id") Long id);
 	
 	/**
 	 * 更新订单信息
@@ -51,7 +63,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingOrder/updateInformation/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "updateInformation/{id}", method = RequestMethod.PUT)
 	Result updateInformation(@PathVariable("id") Long id , @RequestBody ShoppingOrderUpdateInfomationParam param);
 	
 	/**
@@ -62,7 +74,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingOrder/cancelOrder/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "cancelOrder/{id}", method = RequestMethod.PUT)
 	public Result cancelOrder(@PathVariable("id") Long id);
 	
 	/**
@@ -74,6 +86,6 @@ public interface ShoppingOrderService {
 	 *            查询参数
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/selectRefundPage", method = RequestMethod.POST)
+	@RequestMapping(value = "selectRefundPage", method = RequestMethod.POST)
 	Result<Page<ShoppingOrderItemRefundForOperatorDTO>> selectRefundPage(@RequestBody ShoppingRefundQueryForeignParam param);
 }

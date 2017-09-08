@@ -114,6 +114,14 @@ public interface AdService {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "ad/delInvalidAdIndex")
 	Result delInvalidAdIndex();
+
+	/**
+	 * 删除全部广告索引
+	 *
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "ad/delAllAdIndex")
+	Result delAllAdIndex();
 	
 	
 	/**

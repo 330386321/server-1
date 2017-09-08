@@ -73,6 +73,11 @@ public class MockSolrServiceImpl implements SolrService {
 		return true;
 	}
 
+	@Override
+	public boolean delAllSolrDocs(String solrUrl, String solrCore, Boolean isCloudSolr) {
+		return false;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

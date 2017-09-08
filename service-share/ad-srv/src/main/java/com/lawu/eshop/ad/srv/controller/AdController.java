@@ -733,4 +733,17 @@ public class AdController extends BaseController {
 		adService.soldOutAdByMerchantId(merchantId);
 		return successCreated();
 	}
+
+	/**
+	 * 删除全部索引数据
+	 *
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "delAllAdIndex", method = RequestMethod.GET)
+	public Result delAllAdIndex() {
+		solrService.delAllSolrDocs(adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		return successGet();
+	}
+
 }

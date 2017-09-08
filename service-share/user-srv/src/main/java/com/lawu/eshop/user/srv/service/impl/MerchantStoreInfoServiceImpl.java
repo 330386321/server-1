@@ -59,6 +59,7 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.utils.DataTransUtil;
 
 import net.sf.json.JSONObject;
 
@@ -483,14 +484,17 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		merchantStoreAuditDO.setGmtModified(new Date());
 		MerchantStoreDO storeDO = new MerchantStoreDO();
 		storeDO.setId(merchantStoreId);
-		if (MerchantStatusEnum.MERCHANT_STATUS_CANCEL.val.byteValue() == merchantStoreParam.getMerchantStoreStatus().val.byteValue()
-				&& CertifTypeEnum.CERTIF_TYPE_IDCARD.val.byteValue() == merchantStoreParam.getCertifType().val.byteValue()) {
-			// 填写身份证用户需要交保证金
+		if (MerchantStatusEnum.MERCHANT_STATUS_CANCEL.val.byteValue() == merchantStoreParam.getMerchantStoreStatus().val.byteValue()) {
+			//门店注销情况
 			isShow = false;
-			//修改店铺状态
-			storeDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_NOT_MONEY.val);
-		} else {
-			storeDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
+			//修改店铺状态, 填写身份证用户需要交保证金
+			if (CertifTypeEnum.CERTIF_TYPE_IDCARD.val.byteValue() == merchantStoreParam.getCertifType().val.byteValue()) {
+				storeDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_NOT_MONEY.val);
+			} else {
+				storeDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
+			}
+		}else{
+			storeDO.setStatus(merchantStoreParam.getMerchantStoreStatus().val);
 		}
 		merchantStoreDOMapper.updateByPrimaryKeySelective(storeDO);
 		merchantStoreAuditDO.setIsShow(isShow);
@@ -671,7 +675,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
 		// 查询粉丝数量
 		FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
-		fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(storeInfoDOView.getMerchantId());
+		fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(storeInfoDOView.getMerchantId()).andStatusEqualTo(DataTransUtil.intToByte(1));
 		int fansCount = fansMerchantDOMapper.countByExample(fansMerchantDOExample);
 		shoppingStoreDetailBO.setFansCount(fansCount);
 

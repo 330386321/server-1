@@ -59,6 +59,9 @@ public class MemberApiConfig {
 	
 	@Value(value="${ffmpeg.url}")
     private String ffmpegUrl;
+	
+	@Value(value="${member.h5.ip}")
+    private String memberH5Ip;
 
 	public String getImageUrl() {
 		return imageUrl;
@@ -183,6 +186,10 @@ public class MemberApiConfig {
 
 	public String getFfmpegUrl() {
 		return ffmpegUrl;
+	}
+
+	public String getMemberH5Ip() {
+		return memberH5Ip;
 	}
 
 

@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
@@ -48,8 +50,21 @@ public interface ShoppingOrderService {
 	 *            商家id
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
+	
+	/**
+	 * 根据id查询订单详情
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param merchantId
+	 *            商家id
+	 * @return
+	 */
+	@RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
+	Result<ShoppingOrderDetailDTO> detail(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
 	
 	/**
 	 * 商家发货填写物流信息 并修改购物订单以及购物订单项的状态为待收货
@@ -110,6 +125,19 @@ public interface ShoppingOrderService {
 	 *            商家id
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
+	
+	/**
+	 * 根据id查询订单物流信息
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param merchantId
+	 *            商家id
+	 * @return
+	 */
+	@RequestMapping(value = "expressInfo/{id}", method = RequestMethod.GET)
+	Result<ShoppingOrderExpressInfoDTO> expressInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
 }

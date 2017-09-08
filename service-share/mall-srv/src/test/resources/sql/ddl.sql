@@ -423,7 +423,7 @@ INSERT INTO `region` (`id`, `parent_id`, `path`, `level`, `name`, `longitude`, `
 INSERT INTO `region` (`id`, `parent_id`, `path`, `level`, `name`, `longitude`, `latitude`) VALUES ('440305', '4403', '44/4403/440305', '3', '南山区', NULL, NULL);
 
 
-INSERT INTO `industry_type` (`id`, `parent_id`, `path`, `name`, `image_url`, `ordinal`, `status`,`type`, `gmt_modified`, `gmt_create`) VALUES ('10', '0', '10', '美食', '', '1', '1', '1', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
+INSERT INTO `industry_type` (`id`, `parent_id`, `path`, `name`, `image_url`, `ordinal`, `status`,`type`, `gmt_modified`, `gmt_create`) VALUES ('10', '0', '10', '美食', '', '1', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
 
 
 -- ----------------------------

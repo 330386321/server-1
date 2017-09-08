@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -93,15 +94,22 @@ public class AdController extends BaseController {
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "添加广告", notes = "添加广告[1011|5000|5003|5010|6024|6026]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "添加广告", notes = "添加广告[1011|5000|5003|5010|5011|5012|6024|6026]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveAd", method = RequestMethod.POST)
     public Result saveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
 		if(adParam.getTypeEnum()!=AdTypeEnum.AD_TYPE_PACKET){
-			if(StringUtils.isEmpty(adParam.getBeginTime())){
+			if(StringUtils.isEmpty(adParam.getBeginTime()) || adParam.getBeginTime()==""){
 				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
+			}
+		}else{
+			if(adParam.getAdCount()>1000000){
+				return successCreated(ResultCode.AD_RED_PACKET_COUNT_ERROR);
+			}
+			if(adParam.getTotalPoint().divide(BigDecimal.valueOf(adParam.getAdCount())).compareTo(BigDecimal.valueOf(0.01))==-1){
+				return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
 			}
 		}
     	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
@@ -176,15 +184,22 @@ public class AdController extends BaseController {
 
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "添加广告(2.4)", notes = "添加广告[1011|5000|5003|5010|6024|6026]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "添加广告(2.4)", notes = "添加广告[1011|5000|5003|5010|5011|5012|6024|6026]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveAdvert", method = RequestMethod.POST)
     public Result saveAdvert(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	if(adParam.getTypeEnum()!=AdTypeEnum.AD_TYPE_PACKET){
-			if(StringUtils.isEmpty(adParam.getBeginTime())){
+			if(StringUtils.isEmpty(adParam.getBeginTime()) || adParam.getBeginTime()==""){
 				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
+			}
+		}else{
+			if(adParam.getAdCount()>1000000){
+				return successCreated(ResultCode.AD_RED_PACKET_COUNT_ERROR);
+			}
+			if(adParam.getTotalPoint().divide(BigDecimal.valueOf(adParam.getAdCount())).compareTo(BigDecimal.valueOf(0.01))==-1){
+				return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
 			}
 		}
     	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);

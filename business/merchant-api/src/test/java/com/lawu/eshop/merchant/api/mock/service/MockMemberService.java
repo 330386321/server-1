@@ -1,18 +1,20 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.MemberService;
 import com.lawu.eshop.user.dto.EfriendDTO;
+import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.RongYunDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.user.param.MemberQuery;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author meishuquan
@@ -50,5 +52,13 @@ public class MockMemberService extends BaseController implements MemberService {
         dto.setAccount("11111111111111");
         dto.setRegionPath("1/11/111");
         return dto;
+    }
+
+    @Override
+    public Result<MemberDTO> getMemberByAccount(@PathVariable("account") String account) {
+        MemberDTO dto = new MemberDTO();
+        dto.setId(100L);
+        dto.setNum("M0001");
+        return null;
     }
 }

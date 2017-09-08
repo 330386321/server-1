@@ -36,6 +36,7 @@ import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.AddressService;
 import com.lawu.eshop.merchant.api.service.ShoppingRefundDetailService;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
 import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.RefuseRefundForeignParam;
@@ -69,6 +70,16 @@ public class ShoppingRefundDetailController extends BaseController {
 	@Autowired
 	private MerchantApiConfig merchantApiConfig;
 	
+	/**
+	 * @deprecated
+	 * @see #expressInfo(String, Long)
+	 * @param token
+	 * @param id
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月6日
+	 */
+	@Deprecated
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询退货的物流信息", notes = "查询退货的物流信息。[1003]（蒋鑫俊）", httpMethod = "GET")
@@ -78,6 +89,18 @@ public class ShoppingRefundDetailController extends BaseController {
     public Result<ShoppingOrderExpressDTO> getExpressInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id", required = true) Long id) {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		Result<ShoppingOrderExpressDTO> result = shoppingRefundDetailService.getExpressInfo(id, merchantId);
+    	return successCreated(result);
+    }
+
+	@Audit(date = "2017-09-07", reviewer = "孙林青")
+	@SuppressWarnings("unchecked")
+	@ApiOperation(value = "查询退货的物流信息", notes = "查询退货的物流信息。[1003]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "expressInfo/{id}", method = RequestMethod.GET)
+    public Result<ShoppingOrderExpressInfoDTO> expressInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id", required = true) Long id) {
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		Result<ShoppingOrderExpressInfoDTO> result = shoppingRefundDetailService.expressInfo(id, merchantId);
     	return successCreated(result);
     }
 	

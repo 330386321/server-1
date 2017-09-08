@@ -67,7 +67,7 @@ public class CashManageFrontController extends BaseController {
 		dataParam.setAccount(UserUtil.getCurrentAccount(getRequest()));
 		dataParam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		dataParam.setTransactionType(MerchantTransactionTypeEnum.WITHDRAW.getValue());
-		dataParam.setUserType(UserTypeEnum.MEMCHANT.val);
+		dataParam.setUserType(UserTypeEnum.MERCHANT.val);
 		dataParam.setCashNumber(StringUtil.getRandomNum(""));
 		dataParam.setPayPwd(param.getPayPwd());
 		

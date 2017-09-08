@@ -1,21 +1,24 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
-import com.lawu.eshop.mall.srv.bo.RegionBO;
-import com.lawu.eshop.mall.srv.domain.RegionDO;
-import com.lawu.eshop.mall.srv.mapper.RegionDOMapper;
-import com.lawu.eshop.mall.srv.service.RegionService;
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sound.midi.Soundbank;
-import java.math.BigDecimal;
-import java.util.List;
+import com.lawu.eshop.mall.srv.MallSrvApplication;
+import com.lawu.eshop.mall.srv.bo.RegionBO;
+import com.lawu.eshop.mall.srv.domain.RegionDO;
+import com.lawu.eshop.mall.srv.mapper.RegionDOMapper;
+import com.lawu.eshop.mall.srv.service.RegionService;
 
 /**
  * @author zhangyong
@@ -25,6 +28,8 @@ import java.util.List;
 @ContextConfiguration(locations = {"/spring-test.xml"})
 public class RegionServiceImplTest {
 
+	private static Logger logger = LoggerFactory.getLogger(MallSrvApplication.class);
+	
     @Autowired
     private RegionDOMapper regionDOMapper;
     @Autowired
@@ -53,8 +58,15 @@ public class RegionServiceImplTest {
     @Rollback
     @Test
     public void getAreaName(){
+    	List<RegionDO> list = regionDOMapper.selectByExample(null);
+    	for (RegionDO item : list) {
+    		logger.error("getAreaName---" + item.getId() + ","+  item.getPath() + "," + item.getName());
+    	}
+    	
         //已经初始化一条广东省深圳市南山区数据
         String name = regionService.getAreaName("44/4403/440305");
+        logger.error("getAreaName---" + name);
+        logger.error("getAreaName---" + "南山区");
         Assert.assertTrue("南山区".equals(name));
     }
 

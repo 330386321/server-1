@@ -143,7 +143,9 @@ public class MemberConverter {
         }
         memberDO.setBirthday(userParam.getBirthday());
         memberDO.setRegionName(userParam.getRegionName());
-
+        if(userParam.getRegionName() != null){
+            memberDO.setRegionName(userParam.getRegionName().replaceAll(" ","").replaceAll("-",""));
+        }
         return memberDO;
     }
 

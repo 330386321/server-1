@@ -86,7 +86,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 
         WithdrawCashDO withdrawCashDO = new WithdrawCashDO();
         WithdrawCashDOExample example = new WithdrawCashDOExample();
-        example.createCriteria().andUserNumEqualTo(cash.getUserNum()).andStatusLessThan(CashStatusEnum.FAILURE.getVal()).andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth());
+        example.createCriteria().andUserNumEqualTo(cash.getUserNum()).andStatusLessThan(CashStatusEnum.FAILURE.getVal()).andGmtCreateGreaterThanOrEqualTo(DateUtil.formatDate(DateUtil.getDateFormat(new Date(),"yyyy-MM")+"-01 00:00:00","yyyy-MM-dd HH:mm:ss"));
         int count = withdrawCashDOMapper.countByExample(example);
         String currentScale = propertyService.getValue(PropertyType.CASH_SCALE);
         double dCurrentScale = Double.parseDouble(currentScale);

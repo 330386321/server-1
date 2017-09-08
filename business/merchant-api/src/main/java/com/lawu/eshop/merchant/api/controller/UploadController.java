@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -55,9 +54,11 @@ public class UploadController extends BaseController {
         HttpServletRequest request = getRequest();
         UploadParam uparam = new UploadParam();
         uparam.setBaseImageDir(merchantApiConfig.getImageUploadUrl());
+        // uparam.setBaseImageDir("c:/");
         uparam.setDir(FileDirConstant.DIR_HEAD);
         uparam.setFileUploadTypeEnum(FileUploadTypeEnum.getEnum(uploadType));
         uparam.setFfmpegUrl(merchantApiConfig.getFfmpegUrl());
+        //uparam.setFfmpegUrl("d://ffmpeg/ffmpeg.exe");
         ClientParams cp = new ClientParams();
         cp.setTrackerServer(merchantApiConfig.getTrackerServers());
         cp.setTrackerHttpPort(merchantApiConfig.getTrackerHttpPort());
@@ -66,27 +67,27 @@ public class UploadController extends BaseController {
         Result<FileUploadDTO> result = new Result<FileUploadDTO>();
         switch (fastResult.getFenum()) {
             case FD_UPLOAD_SUCCESS:
-                result.setRet(HttpCode.SC_CREATED);
+                result.setRet(ResultCode.SUCCESS);
                 result.setModel(new FileUploadDTO(fastResult.getFileUrl(), fastResult.getCutImgUrl(),fileIndex));
                 break;
             case FD_FILE_ERROR:
-                result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);
+                result.setRet(ResultCode.FAIL);
                 result.setMsg(ResultCode.get(ResultCode.FD_FILE_ERROR));
                 break;
             case FD_FILE_IMG_BIG:
-                result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);
+                result.setRet(ResultCode.FAIL);
                 result.setMsg(ResultCode.get(ResultCode.FD_FILE_IMG_BIG));
                 break;
             case UPLOAD_SIZE_BIGER:
-                result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);
+                result.setRet(ResultCode.FAIL);
                 result.setMsg(ResultCode.get(ResultCode.UPLOAD_SIZE_BIGER));
                 break;
             case FD_FILE_CUT_ERROR:
-                result.setRet(HttpCode.SC_INTERNAL_SERVER_ERROR);
+                result.setRet(ResultCode.FAIL);
                 result.setMsg(ResultCode.get(ResultCode.FD_FILE_CUT_ERROR));
                 break;
         }
-        return successCreated(result.getModel());
+        return successCreated(result);
     }
 
 }

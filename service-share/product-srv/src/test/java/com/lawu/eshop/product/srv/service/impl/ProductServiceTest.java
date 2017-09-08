@@ -5,6 +5,7 @@ package com.lawu.eshop.product.srv.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -181,12 +182,34 @@ public class ProductServiceTest {
 	@Rollback
 	@Test
 	public void editTotalInventory() {
-		EditProductDataParam product = initProduct("1");
-		productService.eidtProduct(product);
-		EditProductDataParam product1 = initProduct("2");
-		productService.eidtProduct(product1);
-		productService.editTotalInventory(2L, 100, "A");
-		ProductInfoBO bo = productService.selectProductById(2L);
+//		EditProductDataParam product = initProduct("1");
+//		productService.eidtProduct(product);
+//		EditProductDataParam product1 = initProduct("2");
+//		productService.eidtProduct(product1);
+		ProductDO productDO  = new ProductDO();
+		productDO.setStatus(new Byte("1"));
+		productDO.setName("name");
+		productDO.setGmtModified(new Date());
+		productDO.setAverageDailySales(new BigDecimal(1));
+		productDO.setCategoryId(1);
+		productDO.setContent("content");
+		productDO.setFeatureImage("/fdf/1.jpg");
+		productDO.setGmtCreate(new Date());
+		productDO.setGmtDown(new Date());
+		productDO.setImageContent("[]");
+		productDO.setIsAllowRefund(true);
+		productDO.setKeywords("fdf");
+		productDO.setMaxPrice(new BigDecimal(1));
+		productDO.setMerchantId(1L);
+		productDO.setMerchantNum("B1000");
+		productDO.setMinPrice(new BigDecimal(1));
+		productDO.setStatus(new Byte("1"));
+		productDO.setTotalFavorite(1);
+		productDO.setTotalInventory(1);
+		productDO.setTotalSalesVolume(1);
+		productDOMapper.insertSelective(productDO);
+		productService.editTotalInventory(productDO.getId(), 100, "A");
+		ProductInfoBO bo = productService.selectProductById(productDO.getId());
 		log.info(JSON.toJSON(bo));
 	}
 
@@ -197,12 +220,35 @@ public class ProductServiceTest {
 	@Rollback
 	@Test
 	public void editTotalSaleVolume() {
-		EditProductDataParam product = initProduct("1");
-		productService.eidtProduct(product);
-		EditProductDataParam product1 = initProduct("2");
-		productService.eidtProduct(product1);
-		productService.editTotalSaleVolume(2L, 100, "A");
-		ProductInfoBO bo = productService.selectProductById(2L);
+//		EditProductDataParam product = initProduct("1");
+//		productService.eidtProduct(product);
+//		EditProductDataParam product1 = initProduct("2");
+//		productService.eidtProduct(product1);
+		ProductDO productDO  = new ProductDO();
+		productDO.setStatus(new Byte("1"));
+		productDO.setName("name");
+		productDO.setGmtModified(new Date());
+		productDO.setAverageDailySales(new BigDecimal(1));
+		productDO.setCategoryId(1);
+		productDO.setContent("content");
+		productDO.setFeatureImage("/fdf/1.jpg");
+		productDO.setGmtCreate(new Date());
+		productDO.setGmtDown(new Date());
+		productDO.setImageContent("[]");
+		productDO.setIsAllowRefund(true);
+		productDO.setKeywords("fdf");
+		productDO.setMaxPrice(new BigDecimal(1));
+		productDO.setMerchantId(1L);
+		productDO.setMerchantNum("B1000");
+		productDO.setMinPrice(new BigDecimal(1));
+		productDO.setStatus(new Byte("1"));
+		productDO.setTotalFavorite(1);
+		productDO.setTotalInventory(1);
+		productDO.setTotalSalesVolume(1);
+		productDOMapper.insertSelective(productDO);
+
+		productService.editTotalSaleVolume(productDO.getId(), 100, "A");
+		ProductInfoBO bo = productService.selectProductById(productDO.getId());
 		log.info(JSON.toJSON(bo));
 	}
 
@@ -286,20 +332,42 @@ public class ProductServiceTest {
 	@Rollback
 	@Test
 	public void listProduct() {
-		EditProductDataParam product = initProduct("1");
-		productService.eidtProduct(product);
-		EditProductDataParam product1 = initProduct("2");
-		productService.eidtProduct(product1);
+//		EditProductDataParam product = initProduct("1");
+//		productService.eidtProduct(product);
+//		EditProductDataParam product1 = initProduct("2");
+//		productService.eidtProduct(product1);
+		ProductDO productDO  = new ProductDO();
+		productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
+		productDO.setName("name");
+		productDO.setGmtModified(new Date());
+		productDO.setAverageDailySales(new BigDecimal(1));
+		productDO.setCategoryId(1);
+		productDO.setContent("content");
+		productDO.setFeatureImage("/fdf/1.jpg");
+		productDO.setGmtCreate(new Date());
+		productDO.setGmtDown(new Date());
+		productDO.setImageContent("[]");
+		productDO.setIsAllowRefund(true);
+		productDO.setKeywords("fdf");
+		productDO.setMaxPrice(new BigDecimal(1));
+		productDO.setMerchantId(1L);
+		productDO.setMerchantNum("B1000");
+		productDO.setMinPrice(new BigDecimal(1));
+		productDO.setTotalFavorite(1);
+		productDO.setTotalInventory(1);
+		productDO.setTotalSalesVolume(1);
+		productDOMapper.insertSelective(productDO);
+
 		ListProductParam param = new ListProductParam();
 		param.setCurrentPage(1);
-		param.setName("小炒肉");
+		param.setName("name");
 		param.setPageSize(10);
 		param.setSortName("id");
 		param.setSortOrder("desc");
 		param.setStatusEnum(ProductStatusEnum.PRODUCT_STATUS_UP);
 		List<ProductInfoBO> list = productService.listProduct(param);
 		log.info(JSON.toJSON(list));
-		Assert.assertEquals(list.size(), 2);
+		Assert.assertEquals(list.size(), 1);
 	}
 
 	/**
@@ -309,14 +377,36 @@ public class ProductServiceTest {
 	@Rollback
 	@Test
 	public void updateAverageDailySalesById() {
-		EditProductDataParam product = initProduct("1");
-		productService.eidtProduct(product);
-		EditProductDataParam product1 = initProduct("2");
-		productService.eidtProduct(product1);
-		productService.updateAverageDailySalesById(1L, new BigDecimal(888));
+//		EditProductDataParam product = initProduct("1");
+//		productService.eidtProduct(product);
+//		EditProductDataParam product1 = initProduct("2");
+//		productService.eidtProduct(product1);
+		ProductDO productDO  = new ProductDO();
+		productDO.setStatus(new Byte("1"));
+		productDO.setName("name");
+		productDO.setGmtModified(new Date());
+		productDO.setAverageDailySales(new BigDecimal(1));
+		productDO.setCategoryId(1);
+		productDO.setContent("content");
+		productDO.setFeatureImage("/fdf/1.jpg");
+		productDO.setGmtCreate(new Date());
+		productDO.setGmtDown(new Date());
+		productDO.setImageContent("[]");
+		productDO.setIsAllowRefund(true);
+		productDO.setKeywords("fdf");
+		productDO.setMaxPrice(new BigDecimal(1));
+		productDO.setMerchantId(1L);
+		productDO.setMerchantNum("B1000");
+		productDO.setMinPrice(new BigDecimal(1));
+		productDO.setTotalFavorite(1);
+		productDO.setTotalInventory(1);
+		productDO.setTotalSalesVolume(1);
+		productDOMapper.insertSelective(productDO);
+
+		productService.updateAverageDailySalesById(productDO.getId(), new BigDecimal(888));
 		ListProductParam param =new ListProductParam();
 		param.setCurrentPage(1);
-		param.setName("小炒肉");
+		param.setName("name");
 		param.setPageSize(10);
 		param.setSortName("id");
 		param.setSortOrder("desc");

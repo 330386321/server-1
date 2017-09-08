@@ -66,7 +66,7 @@ public class RechargeServiceImplTest {
         param.setRechargeScale("1");
         param.setUserNum("M10001");
         RechargeSaveDTO dto = rechargeService.save(param);
-        Assert.assertEquals(1,dto.getId().intValue());
+        Assert.assertNotNull(dto.getId());
     }
 
     @Transactional
@@ -273,13 +273,14 @@ public class RechargeServiceImplTest {
         recharge.setChannel(TransactionPayTypeEnum.ALIPAY.getVal());
         recharge.setStatus(ThirdPayStatusEnum.SUCCESS.getVal());
         recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setAreaId(1);
         recharge.setGmtCreate(new Date());
         recharge.setGmtModified(new Date());
         rechargeDOMapper.insertSelective(recharge);
 
         String bdate = DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth(new Date()),"yyyy-MM-dd");
         String edate = DateUtil.getDateFormat(DateUtil.getLastDayOfMonth(new Date()),"yyyy-MM-dd");
-        List<AreaRechargePointBO> rtnList = rechargeService.selectAreaRechargePoint(bdate,edate);
+        List<AreaRechargePointBO> rtnList = rechargeService.selectAreaRechargePoint(bdate+" 00:00:00",edate+" 23:59:59");
         Assert.assertEquals(1,rtnList.size());
     }
 }
