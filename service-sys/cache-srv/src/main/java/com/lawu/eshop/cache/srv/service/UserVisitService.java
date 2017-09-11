@@ -1,8 +1,8 @@
 package com.lawu.eshop.cache.srv.service;
 
-import com.lawu.eshop.framework.core.type.UserType;
-
 import java.util.Map;
+
+import com.lawu.eshop.framework.core.type.UserType;
 
 /**
  * @author zhangyong
@@ -15,4 +15,53 @@ public interface UserVisitService {
     Map<String,String> getVisitRecords(Integer currentPage,String time,Byte type);
 
     void delVisitRecords(String time);
+
+    /**
+     * 用户上次访问接口时间
+     *
+     * @param userId
+     * @param type
+     * @author meishuquan
+     */
+    void addUserVisitTime(Long userId, UserType type);
+
+    /**
+     * 用户时间周期内访问接口频率
+     *
+     * @param userId
+     * @param type
+     * @param expireTime
+     * @author meishuquan
+     */
+    void addUserVisitFrequency(Long userId, UserType type, Integer expireTime);
+
+    /**
+     * 查询用户上次访问接口时间
+     *
+     * @param userId
+     * @param type
+     * @return
+     * @author meishuquan
+     */
+    Long getUserVisitTime(Long userId, UserType type);
+
+    /**
+     * 查询用户时间周期内访问接口频率
+     *
+     * @param userId
+     * @param type
+     * @return
+     * @author meishuquan
+     */
+    Integer getUserVisitFrequency(Long userId, UserType type);
+
+    /**
+     * 删除用户时间周期内访问接口频率
+     *
+     * @param userId
+     * @param type
+     * @return
+     * @author meishuquan
+     */
+    void delUserVisitFrequency(Long userId, UserType type);
 }

@@ -2,8 +2,6 @@ package com.lawu.eshop.member.api.service;
 
 import java.util.List;
 
-import com.lawu.eshop.user.dto.VisitUserInfoDTO;
-import com.lawu.eshop.user.param.EFriendQueryDataParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +23,7 @@ import com.lawu.eshop.user.dto.RongYunDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.UserHeadImgDTO;
 import com.lawu.eshop.user.dto.UserRedPacketDTO;
+import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
@@ -227,5 +226,17 @@ public interface MemberService {
     @RequestMapping(value = "findUserAccountAndRegionPathByNum", method = RequestMethod.GET)
     VisitUserInfoDTO findUserAccountAndRegionPathByNum(@RequestParam("userNum") String userNum);
 
+    /**
+     * 冻结账号
+     *
+     * @param num
+     * @param isFreeze
+     * @param freezeReason
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "freezeAccount", method = RequestMethod.PUT)
+    Result freezeAccount(@RequestParam("num") String num, @RequestParam("isFreeze") Boolean isFreeze,
+                         @RequestParam("freezeReason") String freezeReason);
 
 }

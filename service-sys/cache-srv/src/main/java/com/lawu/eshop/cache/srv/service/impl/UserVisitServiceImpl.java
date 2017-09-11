@@ -1,18 +1,20 @@
 package com.lawu.eshop.cache.srv.service.impl;
 
-import com.lawu.eshop.cache.srv.constants.KeyConstant;
-import com.lawu.eshop.cache.srv.service.UserVisitService;
-import com.lawu.eshop.framework.core.type.UserType;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import com.lawu.eshop.cache.srv.constants.KeyConstant;
+import com.lawu.eshop.cache.srv.service.UserVisitService;
+import com.lawu.eshop.framework.core.type.UserType;
 
 /**
  * @author zhangyong
@@ -85,6 +87,64 @@ public class UserVisitServiceImpl implements UserVisitService {
         redisTemplate.delete(merchantKeys);
 
 
+    }
+
+    @Override
+    public void addUserVisitTime(Long userId, UserType type) {
+        String key = KeyConstant.REDIS_KEY_MEMBER_VISIT_TIME + userId;
+        if (UserType.MERCHANT.equals(type)) {
+            key = KeyConstant.REDIS_KEY_MERCHANT_VISIT_TIME + userId;
+        }
+        stringRedisTemplate.opsForValue().set(key, String.valueOf(System.currentTimeMillis()));
+    }
+
+    @Override
+    public void addUserVisitFrequency(Long userId, UserType type, Integer expireTime) {
+        String key = KeyConstant.REDIS_KEY_MEMBER_VISIT_FREQUENCY + userId;
+        if (UserType.MERCHANT.equals(type)) {
+            key = KeyConstant.REDIS_KEY_MERCHANT_VISIT_FREQUENCY + userId;
+        }
+        String value = stringRedisTemplate.opsForValue().get(key);
+        if (StringUtils.isEmpty(value)) {
+            stringRedisTemplate.opsForValue().set(key, "1", expireTime, TimeUnit.MINUTES);
+        } else {
+            stringRedisTemplate.boundValueOps(key).increment(1);
+        }
+    }
+
+    @Override
+    public Long getUserVisitTime(Long userId, UserType type) {
+        String key = KeyConstant.REDIS_KEY_MEMBER_VISIT_TIME + userId;
+        if (UserType.MERCHANT.equals(type)) {
+            key = KeyConstant.REDIS_KEY_MERCHANT_VISIT_TIME + userId;
+        }
+        String value = stringRedisTemplate.opsForValue().get(key);
+        if (StringUtils.isEmpty(value)) {
+            return 0L;
+        }
+        return Long.valueOf(value);
+    }
+
+    @Override
+    public Integer getUserVisitFrequency(Long userId, UserType type) {
+        String key = KeyConstant.REDIS_KEY_MEMBER_VISIT_FREQUENCY + userId;
+        if (UserType.MERCHANT.equals(type)) {
+            key = KeyConstant.REDIS_KEY_MERCHANT_VISIT_FREQUENCY + userId;
+        }
+        String value = stringRedisTemplate.opsForValue().get(key);
+        if (StringUtils.isEmpty(value)) {
+            return 0;
+        }
+        return Integer.valueOf(value);
+    }
+
+    @Override
+    public void delUserVisitFrequency(Long userId, UserType type) {
+        String key = KeyConstant.REDIS_KEY_MEMBER_VISIT_FREQUENCY + userId;
+        if (UserType.MERCHANT.equals(type)) {
+            key = KeyConstant.REDIS_KEY_MERCHANT_VISIT_FREQUENCY + userId;
+        }
+        stringRedisTemplate.delete(key);
     }
 
 }

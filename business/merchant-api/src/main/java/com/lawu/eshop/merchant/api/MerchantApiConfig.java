@@ -51,6 +51,15 @@ public class MerchantApiConfig {
     
     @Value(value="${fastdfs.trackerHttpPort}")
     private Integer trackerHttpPort;
+
+    @Value(value="${visit.time.interval}")
+    private Integer visitTimeInterval;
+
+    @Value(value="${visit.frequency.count}")
+    private Integer visitFrequencyCount;
+
+    @Value(value="${visit.frequency.count.expire.time}")
+    private Integer expireTime;
     
     public String getImageUrl() {
         return imageUrl;
@@ -122,5 +131,15 @@ public class MerchantApiConfig {
 		this.trackerHttpPort = trackerHttpPort;
 	}
 
-	
+    public Integer getVisitTimeInterval() {
+        return visitTimeInterval;
+    }
+
+    public Integer getVisitFrequencyCount() {
+        return visitFrequencyCount;
+    }
+
+    public Integer getExpireTime() {
+        return expireTime;
+    }
 }
