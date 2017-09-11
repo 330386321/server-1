@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ExpressRecognitionDetailBO;
+import com.lawu.eshop.order.srv.bo.ShipperBO;
 import com.lawu.eshop.order.srv.bo.TraceBO;
 import com.lawu.eshop.order.srv.strategy.ExpressStrategy;
+import com.lawu.eshop.order.srv.utils.express.kdniao.constants.CodeEnum;
 import com.lawu.eshop.order.srv.utils.express.kdniao.constants.StateEnum;
 
 @Primary
@@ -32,7 +34,17 @@ public class McokExpressStrategy implements ExpressStrategy {
 
 	@Override
 	public ExpressRecognitionDetailBO recognition(String expNo) {
-		return null;
+		ExpressRecognitionDetailBO rtn = new ExpressRecognitionDetailBO();
+		rtn.setSuccess(true);
+		rtn.seteBusinessId("123456");
+		rtn.setLogisticCode(expNo);
+		rtn.setCode(CodeEnum.SUCCESS);
+		rtn.setShippers(new ArrayList<>());
+		ShipperBO shipperBO = new ShipperBO();
+		shipperBO.setShipperCode("SF");
+		shipperBO.setShipperName("顺丰");
+		rtn.getShippers().add(shipperBO);
+		return rtn;
 	}
 
 }

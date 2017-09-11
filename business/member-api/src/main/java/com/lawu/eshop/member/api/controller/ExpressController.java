@@ -55,7 +55,7 @@ public class ExpressController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@Authorization
 	@RequestMapping(value = "inquiries", method = RequestMethod.GET)
-	public Result<ExpressInquiriesDetailForeignDTO> list(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @Validated ExpressQueryForeignParam param, BindingResult bindingResult) {
+	public Result<ExpressInquiriesDetailForeignDTO> inquiries(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @Validated ExpressQueryForeignParam param, BindingResult bindingResult) {
 		String message = validate(bindingResult);
     	if (message != null) {
     		return successGet(ResultCode.REQUIRED_PARM_EMPTY, message);
@@ -101,7 +101,7 @@ public class ExpressController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@Authorization
 	@RequestMapping(value = "recognition/{expNo}", method = RequestMethod.GET)
-	public Result<List<ExpressCompanyDTO>> code(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("expNo") String expNo) {
+	public Result<List<ExpressCompanyDTO>> recognition(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("expNo") String expNo) {
 		List<ExpressCompanyDTO> rtn = new ArrayList<>();
 		Result<ExpressRecognitionDetailDTO> recognitionResult = expressService.recognition(expNo);
 		if (!isSuccess(recognitionResult)) {
