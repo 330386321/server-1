@@ -436,6 +436,7 @@ public class AdConverter {
 		adDetailDTO.setNotGetPoint(adDetailBO.getNotGetPoint());
 		adDetailDTO.setBeginTime(adDetailBO.getBeginTime());
 		adDetailDTO.setProductId(adDetailBO.getProductId());
+		adDetailDTO.setRedPacketAdFileUrl(adDetailBO.getRedPacketAdFileUrl());
         return adDetailDTO;
 		
 		

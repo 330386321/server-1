@@ -52,6 +52,8 @@ public class AdDetailBO {
 	private Date beginTime;
 	
 	private Long productId;
+	
+	private String redPacketAdFileUrl;
 
 	public Long getId() {
 		return id;
@@ -227,6 +229,14 @@ public class AdDetailBO {
 
 	public void setProductId(Long productId) {
 		this.productId = productId;
+	}
+
+	public String getRedPacketAdFileUrl() {
+		return redPacketAdFileUrl;
+	}
+
+	public void setRedPacketAdFileUrl(String redPacketAdFileUrl) {
+		this.redPacketAdFileUrl = redPacketAdFileUrl;
 	}
 
 	

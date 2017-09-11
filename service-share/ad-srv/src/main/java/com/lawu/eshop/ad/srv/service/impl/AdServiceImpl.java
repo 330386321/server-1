@@ -202,9 +202,6 @@ public class AdServiceImpl implements AdService {
 			}
 			adDO.setAdCount(piontCount);
 		}
-		if (adParam.getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PRAISE.getVal()) {
-			adDO.setAdCount(adSaveParam.getCount());
-		}
 		adDO.setTotalPoint(adParam.getTotalPoint());
 		adDO.setGmtCreate(new Date());
 		adDO.setGmtModified(new Date());
@@ -1114,6 +1111,8 @@ public class AdServiceImpl implements AdService {
 				detail.setNotGetCount(adDO.getAdCount());
 				detail.setAlreadyGetPoint(BigDecimal.valueOf(0));
 				detail.setNotGetPoint(adDO.getTotalPoint());
+				detail.setRedPacketAdFileUrl(adDO.getMediaUrl());
+				detail.setVideoImgUrl(adDO.getVideoImgUrl());
 				if(adDO.getPutWay()==PutWayEnum.PUT_WAY_COMMON.val){
 					detail.setMediaUrl(adSrvConfig.getRedPacketCommonMediaUrl());
 				}else if(adDO.getPutWay()==PutWayEnum.PUT_WAY_LUCK.val){
@@ -1128,6 +1127,8 @@ public class AdServiceImpl implements AdService {
 				detail.setNotGetCount(adDO.getAdCount()-ppList.size());
 				detail.setAlreadyGetPoint(sumPoint);
 				detail.setNotGetPoint(adDO.getTotalPoint().subtract(sumPoint));
+				detail.setRedPacketAdFileUrl(adDO.getMediaUrl());
+				detail.setVideoImgUrl(adDO.getVideoImgUrl());
 				if(adDO.getPutWay()==PutWayEnum.PUT_WAY_COMMON.val){
 					detail.setMediaUrl(adSrvConfig.getRedPacketCommonMediaUrl());
 				}else if(adDO.getPutWay()==PutWayEnum.PUT_WAY_LUCK.val){

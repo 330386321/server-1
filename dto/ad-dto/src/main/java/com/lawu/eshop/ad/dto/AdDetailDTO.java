@@ -88,6 +88,9 @@ public class AdDetailDTO {
 	
 	@ApiModelProperty(value = "商品名称")
 	private String  productName;
+	
+	@ApiModelProperty(value = "红包关联广告文件路径")
+	private String redPacketAdFileUrl;
 
 	public Long getId() {
 		return id;
@@ -281,6 +284,14 @@ public class AdDetailDTO {
 
 	public void setProductName(String productName) {
 		this.productName = productName;
+	}
+
+	public String getRedPacketAdFileUrl() {
+		return redPacketAdFileUrl;
+	}
+
+	public void setRedPacketAdFileUrl(String redPacketAdFileUrl) {
+		this.redPacketAdFileUrl = redPacketAdFileUrl;
 	}
 	
 	
