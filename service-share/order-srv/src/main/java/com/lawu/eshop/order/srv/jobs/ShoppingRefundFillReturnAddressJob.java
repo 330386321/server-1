@@ -28,7 +28,7 @@ public class ShoppingRefundFillReturnAddressJob implements SimpleJob {
     public void execute(ShardingContext shardingContext) {
         logger.debug("------{}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
 
-        shoppingRefundDetailService.executeAutoRefundFailed();
+        shoppingRefundDetailService.executeAutoForFillReturnAddress();
         
         logger.debug("------{}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
     }
