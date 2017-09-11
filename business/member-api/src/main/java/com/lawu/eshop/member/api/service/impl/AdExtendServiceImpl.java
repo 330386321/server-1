@@ -177,7 +177,11 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		Result<Page<AdDTO>> pageDTOS = adService.selectPraiseListByMember(adPraiseParam, memberId);
 		List<AdDTO> list = pageDTOS.getModel().getRecords();
-		List<AdDTO> newList = adFilter(null, list, memberId);
+		AdMemberParam adMemberParam = new AdMemberParam();
+		if(adPraiseParam.getTransRegionPath()!=null){
+			adMemberParam.setTransRegionPath(adPraiseParam.getTransRegionPath());
+		}
+		List<AdDTO> newList = adFilter(adMemberParam, list, memberId);
 		AdPage<AdDTO> adpage = new AdPage<>();
 		List<AdDTO> screenList = adpage.page(newList, adPraiseParam.getPageSize(), adPraiseParam.getCurrentPage());
 		List<AdPraiseDTO> adPraiseDTOS = new ArrayList<>();
@@ -267,7 +271,10 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	 * @return
 	 */
 	public List<AdDTO> adFilterNoMemberId(AdMemberParam adMemberParam, List<AdDTO> list) {
-		String memberPath = adMemberParam.getTransRegionPath();
+		String memberPath = null;
+		if(adMemberParam.getTransRegionPath()!=null){
+			memberPath = adMemberParam.getTransRegionPath();
+		}
 		List<AdDTO> newList = new ArrayList<>();
 		for (AdDTO adDTO : list) {
 			if (adDTO.getPutWayEnum().val == 1) { // 区域
@@ -321,27 +328,30 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	 * @return
 	 */
 	public List<AdDTO> adFilter(AdMemberParam adMemberParam, List<AdDTO> list, Long memberId) {
-		String memberPath = adMemberParam.getTransRegionPath();
+		String memberPath =null;
 		
+		if(adMemberParam!=null && adMemberParam.getTransRegionPath()!=null){
+			memberPath = adMemberParam.getTransRegionPath();
+		}
 		List<AdDTO> newList = new ArrayList<>();
 		for (AdDTO adDTO : list) {
 			if (adDTO.getPutWayEnum().val == PutWayEnum.PUT_WAY_AREAS.val) { // 区域
 				if (adDTO.getAreas() == null || adDTO.getAreas() == "") {
 					newList.add(adDTO);
 				} else {
-					if (memberPath == null) {
-						continue;
-					}
-					String[] memberPaths = memberPath.split("/");
-					String[] path = adDTO.getAreas().split(",");
-					for (String s : path) {
-						for (String mp : memberPaths) {
-							if (s.equals(mp)) {
-								newList.add(adDTO);
+					if (memberPath != null) {
+						String[] memberPaths = memberPath.split("/");
+						String[] path = adDTO.getAreas().split(",");
+						for (String s : path) {
+							for (String mp : memberPaths) {
+								if (s.equals(mp)) {
+									newList.add(adDTO);
+								}
+								continue;
 							}
-							continue;
 						}
 					}
+					
 				}
 
 			} else if (adDTO.getPutWayEnum().val == PutWayEnum.PUT_WAY_FENS.val) {
