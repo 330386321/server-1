@@ -1,16 +1,17 @@
 package com.lawu.eshop.mq.message;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.alibaba.rocketmq.client.consumer.DefaultMQPushConsumer;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.common.consumer.ConsumeFromWhere;
 import com.alibaba.rocketmq.common.protocol.heartbeat.MessageModel;
 import com.lawu.eshop.mq.consumer.CustomConsumerRegister;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * MQ消息者工厂ß
@@ -44,7 +45,7 @@ public class MQConsumerFactory {
         consumer.setNamesrvAddr(namesrvAddr);
         consumer.setInstanceName(instanceName);
         //设置为广播方式接受
-        consumer.setMessageModel(MessageModel.BROADCASTING);
+        consumer.setMessageModel(MessageModel.CLUSTERING);
         //长轮询向broker拉取消息是批量拉取的， 默认设置批量的值为32
         consumer.setPullBatchSize(pullBatchSize);
         //监听器每次接受本地队列的消息是多少条，默认1个
