@@ -13,7 +13,7 @@ import com.lawu.eshop.framework.web.Result;
  * @author lihj
  * @date 2017年8月7日
  */
-@Deprecated
+
 @FeignClient(value = "ad-srv")
 public interface UserRedPacketJobService {
 
@@ -21,7 +21,6 @@ public interface UserRedPacketJobService {
 	 * 
 	 * @return
 	 */
-	@Deprecated
 	@RequestMapping(value = "userRedPacket/executeUserRedPacketData", method = RequestMethod.POST)
 	Result executeUserRedPacketData();
 }
