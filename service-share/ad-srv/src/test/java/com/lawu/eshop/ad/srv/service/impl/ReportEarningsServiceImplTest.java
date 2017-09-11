@@ -29,7 +29,6 @@ import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.service.ReportEarningsService;
 import com.lawu.eshop.utils.DateUtil;
-import com.mysql.fabric.xmlrpc.base.Data;
 
 /**
  * 广告收益测试
@@ -95,7 +94,7 @@ public class ReportEarningsServiceImplTest {
         memberAdRecordDO.setStatus(MemberAdRecordStatusEnum.NONE.getVal());
         memberAdRecordDOMapper.insert(memberAdRecordDO);
        
-        List<ReportEarningsBO>  list = reportEarningsService.getReportEarnings();
+        List<ReportEarningsBO>  list = reportEarningsService.getReportEarnings(DateUtil.getDateFormat(ad.getGmtModified()));
         Assert.assertNotNull(list);
         Assert.assertTrue(list.size() > 0);
 
@@ -138,7 +137,7 @@ public class ReportEarningsServiceImplTest {
         pointPoolDO.setMemberNum("aaa");
         pointPoolDOMapper.insert(pointPoolDO);
        
-        List<ReportEarningsBO>  list = reportEarningsService.getReportEarnings();
+        List<ReportEarningsBO>  list = reportEarningsService.getReportEarnings(DateUtil.getDateFormat(ad.getGmtModified()));
         Assert.assertNotNull(list);
         Assert.assertTrue(list.size() > 0);
 
