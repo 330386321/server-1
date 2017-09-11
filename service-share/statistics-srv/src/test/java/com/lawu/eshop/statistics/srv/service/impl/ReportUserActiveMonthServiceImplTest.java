@@ -1,5 +1,6 @@
 package com.lawu.eshop.statistics.srv.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -15,6 +16,7 @@ import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserActiveMonthDOMapper;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveDailyService;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveMonthService;
+import com.lawu.eshop.utils.DateUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/spring-test.xml" })
@@ -28,18 +30,19 @@ public class ReportUserActiveMonthServiceImplTest {
 
 	@Autowired
     private ReportUserActiveDailyService reportUserActiveDailyService;
-//	@Transactional
-//	@Rollback
-//	@Test
-//	public void saveUserActiveMonth() {
-//        Integer memberCount = 10;
-//        Integer merchantCount = 20;
-//        for(int i = 0; i < 10; i++) {
-//        	reportUserActiveMonthService.saveUserActiveMonth(memberCount, merchantCount);
-//        }
-//        int i = reportUserActiveMonthDOMapper.countByExample(null);
-//        Assert.assertEquals(10, i);
-//    }
+	@Transactional
+	@Rollback
+	@Test
+	public void saveUserActiveMonth() {
+        Integer memberCount = 10;
+        Integer merchantCount = 20;
+        String date = DateUtil.getDateFormat(new Date());
+        for(int i = 0; i < 10; i++) {
+        	reportUserActiveMonthService.saveUserActiveMonth(memberCount, merchantCount, date);
+        }
+        int i = reportUserActiveMonthDOMapper.countByExample(null);
+        Assert.assertEquals(10, i);
+    }
 
 	
 	@Transactional
