@@ -3,8 +3,8 @@ package com.lawu.eshop.ad.param;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.FileTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
@@ -60,6 +60,8 @@ public class AdParam {
 	@ApiParam (name="relateType", value = "PRODUCT_TYPE 商品  | MERCHANT_STORE_TYPE 店铺")
 	private RelateTypeEnum relateType;
 
+	@ApiParam (name="fileType", value = "VIDEO 视频  | IMG 图片")
+	private FileTypeEnum fileType;
 
 	public String getTitle() {
 		return title;
@@ -222,8 +224,18 @@ public class AdParam {
 		this.relateType = relateType;
 	}
 
-	
 
+	public FileTypeEnum getFileType() {
+		return fileType;
+	}
+
+
+	public void setFileType(FileTypeEnum fileType) {
+		this.fileType = fileType;
+	}
+
+	
+	
 	
 
 }

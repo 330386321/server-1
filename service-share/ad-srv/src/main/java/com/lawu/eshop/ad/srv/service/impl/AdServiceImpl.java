@@ -27,6 +27,7 @@ import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.constants.FileTypeEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PropertyType;
@@ -218,6 +219,9 @@ public class AdServiceImpl implements AdService {
 		}
 		if(adSaveParam.getMerchantRegionPath()!=null){
 			adDO.setMerchantRegionPath(adSaveParam.getMerchantRegionPath());
+		}
+		if(adParam.getFileType()!=null){
+			adDO.setFileType(adParam.getFileType().getVal());
 		}
 		Integer i=adDOMapper.insert(adDO);
 		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //E赞  红包
@@ -1033,6 +1037,7 @@ public class AdServiceImpl implements AdService {
 			ppexample.setOrderByClause("point desc");
 			List<PointPoolDO> ppList = pointPoolDOMapper.selectByExample(ppexample);
 			redPacketInfoBO.setPoint(ppList.get(0).getPoint());
+			redPacketInfoBO.setFileType(FileTypeEnum.getEnum(adDO.getFileType()));
 		}
 		return redPacketInfoBO;
 

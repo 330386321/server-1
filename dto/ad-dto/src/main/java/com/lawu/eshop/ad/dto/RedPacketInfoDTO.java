@@ -2,6 +2,8 @@ package com.lawu.eshop.ad.dto;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.ad.constants.FileTypeEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class RedPacketInfoDTO {
@@ -17,6 +19,9 @@ public class RedPacketInfoDTO {
 	
 	@ApiModelProperty(value = "商家账号")
 	private String inviterAccount;
+	
+	@ApiModelProperty(value = "文件类型")
+	private FileTypeEnum fileType;
 
 	public BigDecimal getPoint() {
 		return point;
@@ -48,6 +53,14 @@ public class RedPacketInfoDTO {
 
 	public void setInviterAccount(String inviterAccount) {
 		this.inviterAccount = inviterAccount;
+	}
+
+	public FileTypeEnum getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(FileTypeEnum fileType) {
+		this.fileType = fileType;
 	}
 	
 	
