@@ -42,6 +42,7 @@ import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.AccountFreezeParam;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.StoreIndexParam;
+import com.lawu.eshop.utils.DateUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -201,6 +202,7 @@ public class MemberController extends BaseController{
                 storeIndexParam.setFavoreInfo(favoredInfo);
                 storeIndexParam.setDiscountPackage(discountPackage);
                 storeIndexParam.setDiscountOrdinal(discountOrdinal);
+                storeIndexParam.setFavoreEndTime(DateUtil.getDateFormat(favoredDTOResult.getModel().getEntireEndTime()));
                 indexParamList.add(storeIndexParam);
 
                 merchantStoreService.rebuildStoreIndex(indexParamList);

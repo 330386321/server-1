@@ -159,6 +159,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             document.addField("favoriteNumber_i", solrDocument.get("favoriteNumber_i"));
             document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d") == null ? 1000 : solrDocument.get("discountOrdinal_d"));
             document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
+            document.addField("favoreEndTime_s", solrDocument.get("favoreEndTime_s"));
             document.addField("discountPackage_s", solrDocument.get("discountPackage_s"));
             document.addField("keywords", solrDocument.get("keywords"));
             if (solrDocument.get("keywords") != null && StringUtils.isNotEmpty(solrDocument.get("keywords").toString())) {
@@ -189,6 +190,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             if (merchantStoreDO != null) {
                 SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
                 document.addField("favoreInfo_s", param.getFavoreInfo());
+                document.addField("favoreEndTime_s", param.getFavoreEndTime());
                 document.addField("discountPackage_s", param.getDiscountPackage());
                 document.addField("discountOrdinal_d", param.getDiscountOrdinal());
                 documents.add(document);
