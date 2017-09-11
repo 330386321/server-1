@@ -376,11 +376,6 @@ public class ProductServiceImpl implements ProductService {
             if(ret == 0){
             	return;
             }
-            example.createCriteria().andIdEqualTo(productId);
-            if(param.getProductStatus() != null){
-                productDO.setStatus(param.getProductStatus().getVal());
-            }
-            productDOMapper.updateByExampleSelective(productDO, example);
         }
 
         String spec = param.getSpec();
@@ -491,15 +486,6 @@ public class ProductServiceImpl implements ProductService {
             }
         }
 
-        // 修改商品库存、销量、最高价、最低价
-//        ProductDOEditView productDO = new ProductDOEditView();
-//        productDO.setTotalInventory(inventory);
-//        productDO.setTotalSalesVolume(salesVolume);
-//        productDO.setMinPrice(price);
-//        productDO.setMaxPrice(mprice);
-//        productDO.setId(productId);
-//        productDO.setFlag(!isEdit ? "A" : "U");
-//        productDOMapperExtend.updateByExampleSelective(productDO);//删除型号的情况(需要删除总库存)目前不好判断
         ProductDO productDO = new ProductDO();
         productDO.setTotalInventory(inventory);
         productDO.setTotalSalesVolume(salesVolume);
@@ -552,9 +538,14 @@ public class ProductServiceImpl implements ProductService {
             pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.getVal());
             productImageDOMapper.insert(pcDO);
         }
-        ProductDO productDO1 = productDOMapper.selectByPrimaryKey(productId);
-        SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO1);
-        solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+
+        if (ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal().equals(param.getProductStatus().getVal())){
+            solrService.delSolrDocsById(productId, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        } else {
+            ProductDO productDO1 = productDOMapper.selectByPrimaryKey(productId);
+            SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO1);
+            solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        }
     }
 
 

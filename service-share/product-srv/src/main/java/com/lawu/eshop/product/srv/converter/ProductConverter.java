@@ -203,26 +203,6 @@ public class ProductConverter {
     }
 
     /**
-     * 商家编辑商品时查询商品详情DTO转换
-     *
-     * @param productBO
-     * @return
-     */
-//    public static ProductEditInfoDTO convertEditInfoDTO1(ProductEditInfoBO productBO) {
-//        ProductEditInfoDTO productEditInfoDTO = new ProductEditInfoDTO();
-//        productEditInfoDTO.setId(productBO.getId());
-//        productEditInfoDTO.setMerchantId(productBO.getMerchantId());
-//        productEditInfoDTO.setCategory(productBO.getCategory());
-//        productEditInfoDTO.setName(productBO.getName());
-//        productEditInfoDTO.setFeatureImage(productBO.getFeatureImage());
-//        productEditInfoDTO.setContent(productBO.getContent());
-//        productEditInfoDTO.setImagesUrl(productBO.getImagesUrl());
-//        productEditInfoDTO.setSpec(productBO.getSpec());
-//        productEditInfoDTO.setImageContent(productBO.getImageContent());
-//        return productEditInfoDTO;
-//    }
-
-    /**
      * Param转DO
      *
      * @param param
@@ -236,7 +216,6 @@ public class ProductConverter {
         productDO.setContent(param.getContent());
         productDO.setFeatureImage(param.getFeatureImage());
         productDO.setImageContent(param.getImageContents());
-//        productDO.setImageContent(param.getImageContents());
         productDO.setIsAllowRefund(param.getIsAllowRefund());
         if (id == 0L) {
             productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
@@ -253,13 +232,16 @@ public class ProductConverter {
         productDO.setContent(param.getContent());
         productDO.setFeatureImage(param.getFeatureImage());
         productDO.setImageContent(param.getImageContents());
-//        productDO.setImageContent(param.getImageContents());
         productDO.setIsAllowRefund(param.getIsAllowRefund());
         if (id == 0L) {
             productDO.setMerchantId(param.getMerchantId());
             productDO.setMerchantNum(param.getMerchantNum());
             productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
             productDO.setGmtCreate(new Date());
+        } else {
+            if(param.getProductStatus() != null){
+                productDO.setStatus(param.getProductStatus().getVal());
+            }
         }
         productDO.setKeywords(param.getKeywords());
         productDO.setGmtModified(new Date());
