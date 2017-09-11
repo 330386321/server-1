@@ -10,36 +10,35 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.statistics.dto.RechargeBalanceDailyDTO;
+import com.lawu.eshop.statistics.dto.PointConsumeDailyDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 
 @FeignClient(value= "statistics-srv")
-public interface StatisticsRechargeBalanceService {
+public interface StatisticsPointConsumeService {
 
-	//-----------------------------充值余额
+	//-----------------------------积分消费
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.POST, value = "rechargeBalance/saveDaily")
+	@RequestMapping(method = RequestMethod.POST, value = "pointConsume/saveDaily")
 	Result saveDaily(@RequestBody ReportKCommonParam reportWithdraw);
 
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.POST, value = "rechargeBalance/saveMonth")
+	@RequestMapping(method = RequestMethod.POST, value = "pointConsume/saveMonth")
 	Result saveMonth(@RequestBody ReportKCommonParam reportWithdraw);
 	
-	@RequestMapping(method = RequestMethod.GET, value = "rechargeBalance/getDailyList")
-	Result<List<RechargeBalanceDailyDTO>> getDailyList(@RequestParam("reportDate") String reportDate);
+	@RequestMapping(method = RequestMethod.GET, value = "pointConsume/getDailyList")
+	Result<List<PointConsumeDailyDTO>> getDailyList(@RequestParam("reportDate") String reportDate);
 
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.DELETE, value = "rechargeBalance/deleteDailyByReportDate")
+	@RequestMapping(method = RequestMethod.DELETE, value = "pointConsume/deleteDailyByReportDate")
 	Result deleteDailyByReportDate(@RequestParam("reportDate") String reportDate);
 	
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.DELETE, value = "rechargeBalance/deleteMonthByReportDate")
+	@RequestMapping(method = RequestMethod.DELETE, value = "pointConsume/deleteMonthByReportDate")
 	Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate);	
 	
-	@RequestMapping(value = "rechargeBalance/getLastRechargeDay", method = RequestMethod.GET)
-	public Date getLastRechargeDay();
+	@RequestMapping(method = RequestMethod.GET, value = "pointConsume/getDaily")
+	Date getDaily();
 	
-	@RequestMapping(value = "rechargeBalance/getLastRechargeMonth", method = RequestMethod.GET)
-	public Date getLastRechargeMonth();
-	
+	@RequestMapping(method = RequestMethod.GET, value = "pointConsume/getMonth")
+	Date getMonth();
 }

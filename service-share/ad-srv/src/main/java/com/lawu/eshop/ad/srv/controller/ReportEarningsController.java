@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.ReportAdEarningsDTO;
@@ -23,12 +24,9 @@ public class ReportEarningsController extends BaseController{
 	
 	
 	@RequestMapping(value = "getReportEarnings", method = RequestMethod.GET)
-    public Result<List<ReportAdEarningsDTO>> getReportEarnings() {
-		
-		List<ReportEarningsBO> list=reportEarningsService.getReportEarnings();
-		
+    public Result<List<ReportAdEarningsDTO>> getReportEarnings(@RequestParam String date) {
+		List<ReportEarningsBO> list=reportEarningsService.getReportEarnings(date);
 		List<ReportAdEarningsDTO> dtoList=new ArrayList<>();
-		
 		for (ReportEarningsBO reportEarningsBO : list) {
 			
 			ReportAdEarningsDTO dto=new ReportAdEarningsDTO();
@@ -37,7 +35,6 @@ public class ReportEarningsController extends BaseController{
 			dtoList.add(dto);
 			
 		}
-		
 		 return  successCreated(dtoList);
     }
 

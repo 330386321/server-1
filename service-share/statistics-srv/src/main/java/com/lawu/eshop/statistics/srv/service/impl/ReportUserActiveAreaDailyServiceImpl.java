@@ -65,4 +65,14 @@ public class ReportUserActiveAreaDailyServiceImpl implements ReportUserActiveAre
 
         }
     }
+
+	@Override
+	public Date getDaily() {
+		ReportUserActiveAreaDailyDOExample example = new ReportUserActiveAreaDailyDOExample();
+		example.setOrderByClause("gmt_report desc");
+		List<ReportUserActiveAreaDailyDO> list = reportUserActiveAreaDailyDOMapper.selectByExample(example);
+		if(list != null && !list.isEmpty())
+			return list.get(0).getGmtReport();
+		return null;
+	}
 }

@@ -1,6 +1,7 @@
 package com.lawu.eshop.statistics.srv.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -172,4 +173,25 @@ public class WithdrawCashController extends BaseController {
 		return successCreated(withdrawDTO);
 	}
 
+	
+	/**
+	 * 获取统计的最后一条提现日统计的数据
+	 * @return
+	 */
+	@RequestMapping(value = "getLastReportWithdraw", method = RequestMethod.GET)
+	Result<Date> getLastReportWithdraw() {
+		Date date = withdrawCashService.getLastReportWithdraw();
+		return successCreated(date);
+	}
+	
+	
+	/**
+	 * 获取统计的最后一条提现月统计的数据
+	 * @return
+	 */
+	@RequestMapping(value = "getLastReportWithdrawMonth", method = RequestMethod.GET)
+	Result<Date> getLastReportWithdrawMonth() {
+		Date date = withdrawCashService.getLastReportWithdrawMonth();
+		return successCreated(date);
+	}
 }

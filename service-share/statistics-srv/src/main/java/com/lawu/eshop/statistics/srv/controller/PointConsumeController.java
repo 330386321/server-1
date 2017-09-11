@@ -1,6 +1,7 @@
 package com.lawu.eshop.statistics.srv.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -51,6 +52,13 @@ public class PointConsumeController extends BaseController {
 		return successCreated(ResultCode.SUCCESS);
 	}
 	
+	
+	@RequestMapping(value = "getDaily", method = RequestMethod.GET)
+	public Date getDaily() {
+		Date date = pointConsumeService.getDaily();
+		return date;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "saveMonth", method = RequestMethod.POST)
 	public Result saveMonth(@RequestBody @Valid ReportKCommonParam param, BindingResult result) {
@@ -60,6 +68,12 @@ public class PointConsumeController extends BaseController {
     	}
     	pointConsumeService.saveMonth(param);
 		return successCreated(ResultCode.SUCCESS);
+	}
+	
+	@RequestMapping(value = "getMonth", method = RequestMethod.GET)
+	public Date getMonth() {
+		Date date = pointConsumeService.getMonth();
+		return date;
 	}
 	
 	@RequestMapping(value = "getDailyList", method = RequestMethod.GET)

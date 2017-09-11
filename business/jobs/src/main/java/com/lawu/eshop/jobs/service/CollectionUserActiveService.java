@@ -5,6 +5,7 @@ import com.lawu.eshop.statistics.dto.UserActiveDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -16,26 +17,26 @@ import java.util.List;
 public interface CollectionUserActiveService {
 
     @RequestMapping(value = "userActive/collectionMemberActiveDaily", method = RequestMethod.GET)
-    Result<Integer> collectionMemberActiveDaily();
+    Result<Integer> collectionMemberActiveDaily(@RequestParam(value = "reportDate") String  reportDate);
 
     @RequestMapping(value = "userActive/collectionMerchantActiveDaily", method = RequestMethod.GET)
-    Result<Integer> collectionMerchantActiveDaily();
+    Result<Integer> collectionMerchantActiveDaily(@RequestParam(value = "reportDate") String  reportDate);
 
     @RequestMapping(value = "userActive/collectionMemberActiveMonth", method = RequestMethod.GET)
-    Result<Integer> collectionMemberActiveMonth();
+    Result<Integer> collectionMemberActiveMonth(@RequestParam(value = "reportDate") String  reportDate);
 
     @RequestMapping(value = "userActive/collectionMerchantActiveMonth", method = RequestMethod.GET)
-    Result<Integer> collectionMerchantActiveMonth();
+    Result<Integer> collectionMerchantActiveMonth(@RequestParam(value = "reportDate") String  reportDate);
 
     @RequestMapping(value = "userActive/collectionMemberActiveAreaDaily", method = RequestMethod.GET)
-    Result<List<UserActiveDTO>> collectionMemberActiveAreaDaily();
+    Result<List<UserActiveDTO>> collectionMemberActiveAreaDaily(@RequestParam(value = "reportDate") String  reportDate);
 
     @RequestMapping(value = "userActive/collectionMerchantActiveAreaDaily", method = RequestMethod.GET)
-    Result<List<UserActiveDTO>> collectionMerchantActiveAreaDaily();
+    Result<List<UserActiveDTO>> collectionMerchantActiveAreaDaily(@RequestParam(value = "reportDate") String  reportDate);
 
     @RequestMapping(value = "userActive/collectionMemberActiveAreaMonth", method = RequestMethod.GET)
-    Result<List<UserActiveDTO>> collectionMemberActiveAreaMonth();
+    Result<List<UserActiveDTO>> collectionMemberActiveAreaMonth(@RequestParam(value = "reportDate") String  reportDate);
 
     @RequestMapping(value = "userActive/collectionMerchantActiveAreaMonth", method = RequestMethod.GET)
-    Result<List<UserActiveDTO>> collectionMerchantActiveAreaMonth();
+    Result<List<UserActiveDTO>> collectionMerchantActiveAreaMonth(@RequestParam(value = "reportDate") String  reportDate);
 }

@@ -1,5 +1,6 @@
 package com.lawu.eshop.jobs.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -44,4 +45,10 @@ public interface StatisticsWithdrawCashService {
 
 	@RequestMapping(method = RequestMethod.POST, value = "withdrawCash/saveAgentMonth")
 	Result saveAgentMonth(@RequestBody AgentWithdrawCashParam param);
+	
+	@RequestMapping(value = "withdrawCash/getLastReportWithdraw", method = RequestMethod.GET)
+	Result<Date> getLastReportWithdraw();
+	
+	@RequestMapping(value = "withdrawCash/getLastReportWithdrawMonth", method = RequestMethod.GET)
+	Result<Date> getLastReportWithdrawMonth();
 }

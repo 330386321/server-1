@@ -136,4 +136,24 @@ public class ReportEarningServiceImpl implements ReportEarningService {
 		return bo;
 	}
 
+	@Override
+	public Date getDaily() {
+		ReportEarningsDailyDOExample example = new ReportEarningsDailyDOExample();
+		example.setOrderByClause("gmt_report desc");
+		List<ReportEarningsDailyDO> list = reportEarningsDailyDOMapper.selectByExample(example);
+		if(list != null && !list.isEmpty())
+			return list.get(0).getGmtReport();
+		return null;
+	}
+
+	@Override
+	public Date getMonth() {
+		ReportEarningsMonthDOExample example = new ReportEarningsMonthDOExample();
+		example.setOrderByClause("gmt_report desc");
+		List<ReportEarningsMonthDO> list = reportEarningsMonthDOMapper.selectByExample(example);
+		if(list != null && !list.isEmpty())
+			return list.get(0).getGmtReport();
+		return null;
+	}
+
 }

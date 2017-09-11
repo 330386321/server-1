@@ -6,6 +6,7 @@ import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.statistics.srv.bo.PointConsumeDailyBO;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportNewDateDOView;
+import java.util.Date;
 
 public interface PointConsumeService {
 
@@ -20,8 +21,12 @@ public interface PointConsumeService {
 	void deleteMonthByReportDate(String reportDate);
 
 	ReportCommonBackDTO selectReport(String bdate, String edate);
+
+	Date getDaily();
 	
-	 /**
+	Date getMonth();
+	
+	/**
      * 获取日统计积分消费最后一条数据统计时间
      * @author zhangrc
      * @date 2017/09/08
@@ -37,7 +42,5 @@ public interface PointConsumeService {
      * @return
      */
     ReportNewDateDOView getReportDatePointConsumeMonth();
-
-	
 
 }

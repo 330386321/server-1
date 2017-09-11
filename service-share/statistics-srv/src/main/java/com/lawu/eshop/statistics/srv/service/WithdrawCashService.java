@@ -1,6 +1,9 @@
 package com.lawu.eshop.statistics.srv.service;
 
+import java.util.Date;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Select;
 
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 import com.lawu.eshop.statistics.param.AgentReportParam;
@@ -24,7 +27,6 @@ public interface WithdrawCashService {
 
 	ReportCommonBackDTO selectReport(String bdate,String edate);
 
-
     void saveAgentDaily(AgentWithdrawCashParam param);
 
     List<ReportAreaWithdrawDailyBO> selectReportAreaWithdrawCashList(String month, Integer cityId);
@@ -34,4 +36,8 @@ public interface WithdrawCashService {
     ReportAreaWithdrawBO selectAreaWithdrawDailyReport(AgentReportParam param);
 
 	ReportAreaWithdrawBO selectAreaWithdrawMonthReport(AgentReportParam param);
+	
+	Date getLastReportWithdraw();
+	
+	Date getLastReportWithdrawMonth();
 }

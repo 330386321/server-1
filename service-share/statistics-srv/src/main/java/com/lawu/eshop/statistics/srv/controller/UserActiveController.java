@@ -1,6 +1,7 @@
 package com.lawu.eshop.statistics.srv.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import com.lawu.eshop.statistics.srv.service.ReportUserActiveAreaMonthService;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveDailyService;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveMonthService;
 import com.lawu.eshop.statistics.srv.service.UserActiveService;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * @author zhangyong
@@ -52,57 +54,57 @@ public class UserActiveController extends BaseController{
     private ReportUserActiveAreaMonthService reportUserActiveAreaMonthService;
 
     @RequestMapping(value = "collectionMemberActiveDaily", method = RequestMethod.GET)
-    public Result<Integer> collectionMemberActiveDaily(){
-
-        Integer count = userActiveService.collectionMemberActiveDaily();
+    public Result<Integer> collectionMemberActiveDaily(@RequestParam(value = "reportDate") String  reportDate){
+        Integer count = userActiveService.collectionMemberActiveDaily(DateUtil.getDateFormat(reportDate));
         return successGet(count);
     }
 
     @RequestMapping(value = "collectionMerchantActiveDaily", method = RequestMethod.GET)
-    public Result<Integer> collectionMerchantActiveDaily(){
-        Integer count = userActiveService.collectionMerchantActiveDaily();
+    public Result<Integer> collectionMerchantActiveDaily(@RequestParam(value = "reportDate") String  reportDate){
+        Integer count = userActiveService.collectionMerchantActiveDaily(DateUtil.getDateFormat(reportDate));
         return successGet(count);
     }
 
     @RequestMapping(value = "saveUserActiveDaily", method = RequestMethod.POST)
     public Result saveUserActiveDaily(@RequestParam(value = "memberCount") Integer memberCount,
-                               @RequestParam(value = "merchantCount") Integer merchantCount){
-        reportUserActiveDailyService.saveUserActiveDaily(memberCount, merchantCount);
+                               @RequestParam(value = "merchantCount") Integer merchantCount,
+                               @RequestParam(value = "reportDate") String reportDate){
+        reportUserActiveDailyService.saveUserActiveDaily(memberCount, merchantCount, reportDate);
         return  successCreated();
     }
 
     @RequestMapping(value = "collectionMemberActiveMonth", method = RequestMethod.GET)
-    public Result<Integer> collectionMemberActiveMonth(){
-
-        Integer count = userActiveService.collectionMemberActiveMonth();
+    public Result<Integer> collectionMemberActiveMonth(@RequestParam(value = "reportDate") String reportDate){
+        Integer count = userActiveService.collectionMemberActiveMonth(DateUtil.getDateFormat(reportDate));
         return successGet(count);
     }
 
     @RequestMapping(value = "collectionMerchantActiveMonth", method = RequestMethod.GET)
-    public Result<Integer> collectionMerchantActiveMonth(){
-        Integer count = userActiveService.collectionMerchantActiveMonth();
+    public Result<Integer> collectionMerchantActiveMonth(@RequestParam(value = "reportDate") String reportDate){
+        Integer count = userActiveService.collectionMerchantActiveMonth(DateUtil.getDateFormat(reportDate));
         return successGet(count);
     }
 
     @RequestMapping(value = "saveUserActiveMonth", method = RequestMethod.POST)
     Result saveUserActiveMonth(@RequestParam(value = "memberCount") Integer memberCount,
-                               @RequestParam(value = "merchantCount") Integer merchantCount){
-        reportUserActiveMonthService.saveUserActiveMonth(memberCount, merchantCount);
+                               @RequestParam(value = "merchantCount") Integer merchantCount,
+                               @RequestParam(value = "reportDate") String reportDate){
+        reportUserActiveMonthService.saveUserActiveMonth(memberCount, merchantCount, reportDate);
         return  successCreated();
     }
 
     @RequestMapping(value = "collectionMemberActiveAreaDaily", method = RequestMethod.GET)
-    public Result<List<UserActiveDTO>> collectionMemberActiveAreaDaily() {
+    public Result<List<UserActiveDTO>> collectionMemberActiveAreaDaily(@RequestParam(value = "reportDate") String reportDate) {
 
-        List<UserActiveBO> userActiveBOS = userActiveService.collectionMemberActiveAreaDaily();
+        List<UserActiveBO> userActiveBOS = userActiveService.collectionMemberActiveAreaDaily(reportDate);
         List<UserActiveDTO> userActiveDTOS = UserActiveConverter.coverDTOS(userActiveBOS);
         return successGet(userActiveDTOS);
 
     }
 
     @RequestMapping(value = "collectionMerchantActiveAreaDaily", method = RequestMethod.GET)
-    public Result<List<UserActiveDTO>> collectionMerchantActiveAreaDaily() {
-        List<UserActiveBO> userActiveBOS = userActiveService.collectionMerchantActiveAreaDaily();
+    public Result<List<UserActiveDTO>> collectionMerchantActiveAreaDaily(@RequestParam(value = "reportDate") String reportDate) {
+        List<UserActiveBO> userActiveBOS = userActiveService.collectionMerchantActiveAreaDaily(reportDate);
         List<UserActiveDTO> userActiveDTOS = UserActiveConverter.coverDTOS(userActiveBOS);
         return successGet(userActiveDTOS);
     }
@@ -179,8 +181,8 @@ public class UserActiveController extends BaseController{
      * @return
      */
     @RequestMapping(value = "collectionMemberActiveAreaMonth", method = RequestMethod.GET)
-    public Result<List<UserActiveDTO>> collectionMemberActiveAreaMonth(){
-        List<UserActiveBO> listBOS = userActiveService.collectionMemberActiveAreaMonth();
+    public Result<List<UserActiveDTO>> collectionMemberActiveAreaMonth(@RequestParam(value = "reportDate") String  reportDate){
+        List<UserActiveBO> listBOS = userActiveService.collectionMemberActiveAreaMonth(reportDate);
         List<UserActiveDTO> userActiveDTOS = UserActiveConverter.coverDTOS(listBOS);
         return successGet(userActiveDTOS);
     }
@@ -201,8 +203,8 @@ public class UserActiveController extends BaseController{
      * @return
      */
     @RequestMapping(value = "collectionMerchantActiveAreaMonth", method = RequestMethod.GET)
-    public Result<List<UserActiveDTO>> collectionMerchantActiveAreaMonth(){
-        List<UserActiveBO> listBOS = userActiveService.collectionMerchantActiveAreaMonth();
+    public Result<List<UserActiveDTO>> collectionMerchantActiveAreaMonth(@RequestParam(value = "reportDate") String  reportDate){
+        List<UserActiveBO> listBOS = userActiveService.collectionMerchantActiveAreaMonth(reportDate);
         List<UserActiveDTO> userActiveDTOS = UserActiveConverter.coverDTOS(listBOS);
         return successGet(userActiveDTOS);
     }
@@ -254,4 +256,28 @@ public class UserActiveController extends BaseController{
         return successGet(list);
     }
 
+    @RequestMapping(value = "getMemberActiveDaily", method = RequestMethod.GET)
+    Date getDaily() {
+    	Date date = userActiveService.getMemberActiveDaily();
+    	return date;
+    }
+    
+    @RequestMapping(value = "getMemberActiveMonth", method = RequestMethod.GET)
+    Date getMonth() {
+    	Date date = userActiveService.getMemberActiveMonth();
+    	return date;
+    }
+    
+    @RequestMapping(value = "getAreaDaily", method = RequestMethod.GET)
+    Date getAreaDaily() {
+    	Date date = reportUserActiveAreaDailyService.getDaily();
+    	return date;
+    }
+    
+    @RequestMapping(value = "getAreaMonth", method = RequestMethod.GET)
+    Date getAreaMonth() {
+    	Date date = reportUserActiveAreaMonthService.getMonth();
+    	return date;
+    }
+    
 }

@@ -1,6 +1,7 @@
 package com.lawu.eshop.statistics.srv.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -105,4 +106,16 @@ public class ReportEarningsController extends BaseController{
 		return successCreated(dto);
 	}
 
+	
+	
+	@RequestMapping(value = "getDaily", method = RequestMethod.GET)
+	public Date getDaily() {
+		 return reportEarningService.getDaily();
+	}
+	
+
+	@RequestMapping(value = "getMonth", method = RequestMethod.GET)
+	public Date getMonth() {
+		 return reportEarningService.getMonth();
+	}
 }

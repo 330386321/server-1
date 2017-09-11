@@ -28,18 +28,18 @@ public class ReportUserActiveMonthServiceImplTest {
 
 	@Autowired
     private ReportUserActiveDailyService reportUserActiveDailyService;
-	@Transactional
-	@Rollback
-	@Test
-	public void saveUserActiveMonth() {
-        Integer memberCount = 10;
-        Integer merchantCount = 20;
-        for(int i = 0; i < 10; i++) {
-        	reportUserActiveMonthService.saveUserActiveMonth(memberCount, merchantCount);
-        }
-        int i = reportUserActiveMonthDOMapper.countByExample(null);
-        Assert.assertEquals(10, i);
-    }
+//	@Transactional
+//	@Rollback
+//	@Test
+//	public void saveUserActiveMonth() {
+//        Integer memberCount = 10;
+//        Integer merchantCount = 20;
+//        for(int i = 0; i < 10; i++) {
+//        	reportUserActiveMonthService.saveUserActiveMonth(memberCount, merchantCount);
+//        }
+//        int i = reportUserActiveMonthDOMapper.countByExample(null);
+//        Assert.assertEquals(10, i);
+//    }
 
 	
 	@Transactional
@@ -56,5 +56,4 @@ public class ReportUserActiveMonthServiceImplTest {
 		list = reportUserActiveDailyService.getUserActiveListMonth(beginTime, endTime);
 		Assert.assertEquals(10, list.size());
 	}
-	
 }

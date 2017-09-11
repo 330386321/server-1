@@ -1,6 +1,7 @@
 package com.lawu.eshop.statistics.srv.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -102,5 +103,23 @@ public class RechargeBalanceController extends BaseController {
 	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
 	public ReportCommonBackDTO selectReport(@RequestParam("bdate") String bdate,@RequestParam("edate") String edate) {
 		return rechargeBalanceService.selectReport(bdate,edate);
+	}
+	
+	/**
+	 * 获取最后一次统计日充值余额的日期
+	 * @return
+	 */
+	@RequestMapping(value = "getLastRechargeDay", method = RequestMethod.GET)
+	public Date getLastRechargeDay() {
+		return rechargeBalanceService.getLastRechargeDay();
+	}
+	
+	/**
+	 * 获取最后一次统计月充值余额的日期
+	 * @return
+	 */
+	@RequestMapping(value = "getLastRechargeMonth", method = RequestMethod.GET)
+	public Date getLastRechargeMonth() {
+		return rechargeBalanceService.getLastRechargeMonth();
 	}
 }

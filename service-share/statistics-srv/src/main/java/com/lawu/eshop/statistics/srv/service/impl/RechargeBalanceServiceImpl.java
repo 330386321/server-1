@@ -135,5 +135,25 @@ public class RechargeBalanceServiceImpl implements RechargeBalanceService {
 		dto.setEdate(edate);
 		return dto;
 	}
+
+	@Override
+	public Date getLastRechargeDay() {
+		ReportRechargeBalanceDailyDOExample example = new ReportRechargeBalanceDailyDOExample();
+		example.setOrderByClause("gmt_report desc");
+		List<ReportRechargeBalanceDailyDO> list = reportRechargeBalanceDailyDOMapper.selectByExample(example);
+		if(list != null && !list.isEmpty())
+			return list.get(0).getGmtReport();
+		return null;
+	}
+
+	@Override
+	public Date getLastRechargeMonth() {
+		ReportRechargeBalanceMonthDOExample example = new ReportRechargeBalanceMonthDOExample();
+		example.setOrderByClause("gmt_report desc");
+		List<ReportRechargeBalanceMonthDO> list = reportRechargeBalanceMonthDOMapper.selectByExample(example);
+		if(list != null && !list.isEmpty())
+			return list.get(0).getGmtReport();
+		return null;
+	}
 	
 }

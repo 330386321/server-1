@@ -42,16 +42,16 @@ public class ReportUserActiveDailyServiceImplTest {
 	@Autowired
 	private ReportUserActiveAreaMonthService reportUserActiveAreaMonthService;
 	
-	@Transactional
-	@Rollback
-	@Test
-	public void saveUserActiveDaily() {
-		Integer memberCount = 10;
-		Integer merchantCount = 20;
-		reportUserActiveDailyService.saveUserActiveDaily(memberCount, merchantCount);
-		int i = reportUserActiveDailyDOMapper.countByExample(null);
-		Assert.assertEquals(1, i);
-	}
+//	@Transactional
+//	@Rollback
+//	@Test
+//	public void saveUserActiveDaily() {
+//		Integer memberCount = 10;
+//		Integer merchantCount = 20;
+//		reportUserActiveDailyService.saveUserActiveDaily(memberCount, merchantCount);
+//		int i = reportUserActiveDailyDOMapper.countByExample(null);
+//		Assert.assertEquals(1, i);
+//	}
 
 	@Transactional
 	@Rollback

@@ -68,6 +68,6 @@ public interface AdSrvService {
 	
 	
 	@RequestMapping(value = "reportEarnings/getReportEarnings", method = RequestMethod.GET)
-    public Result<List<ReportAdEarningsDTO>> getReportEarnings();
+    public Result<List<ReportAdEarningsDTO>> getReportEarnings(@RequestParam("date") String date);
 
 }
