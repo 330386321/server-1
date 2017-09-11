@@ -43,7 +43,6 @@ public class AddressParam implements Serializable {
 	private String addr;
 
 	@ApiModelProperty(name = "postcode", value = "邮编")
-	@NotBlank(message = "邮编不能为空")
 	private String postcode;
 
 	public String getName() {

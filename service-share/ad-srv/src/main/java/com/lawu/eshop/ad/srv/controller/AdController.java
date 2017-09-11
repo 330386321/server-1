@@ -339,9 +339,10 @@ public class AdController extends BaseController {
 	public Result<Page<AdSolrDTO>> queryAdByTitle(@RequestBody AdsolrFindParam adSolrParam) {
 
 		SolrQuery query = new SolrQuery();
-		query.setParam("q", "*:*");
+		 StringBuilder sb = new StringBuilder("");
 		if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) { // 标题过滤
-			query.setParam("q", "title_s:" + adSolrParam.getAdSolrParam().getTitle() + "*");
+			sb.append("title_s:").append(adSolrParam.getAdSolrParam().getTitle()).append("*");
+			//query.setParam("q", "title_s:" + adSolrParam.getAdSolrParam().getTitle() + "*");
 		}
 		if (adSolrParam.getLatitude() != null || adSolrParam.getLongitude() != null) {
 			String latLon = adSolrParam.getLatitude() + "," + adSolrParam.getLongitude();
@@ -350,9 +351,8 @@ public class AdController extends BaseController {
 			query.setParam("sfield", "latLon_p");
 			query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
 		}
-		query.setSort("status_i", SolrQuery.ORDER.desc);
 		List<Long> merchantIds = adSolrParam.getMerchantIds();
-		String str = "";
+		String str = "11";
 		if (!merchantIds.isEmpty()) {
 			for (Long id : merchantIds) {
 				str += "merchantId_l:" + id + " or ";
@@ -363,22 +363,24 @@ public class AdController extends BaseController {
 			String[] path = adSolrParam.getRegionPath().split("/");
 			if(path.length < 3) {
 				if (str != "") {
-					query.setParam("" + str + " or ('area_is:" + path[0] + "') or ('area_is:" + path[1] + "')");
+					sb.append(" AND (" + str + " or 'area_is:" + path[0] + "') or ('area_is:" + path[1] + "'))");
 				} else {
-					query.setParam("area_is:" + path[0] + " or " + "area_is:" + path[1]);
+					sb.append(" AND (area_is:" + path[0] + " or " + "area_is:" + path[1]+")");
 				}
 			} else {
 				if (str != "") {
-					query.setParam("" + str + " or ('area_is:" + path[0] + "') or ('area_is:" + path[1] + "') or ('area_is:" + path[2] + "')");
+					sb.append(" AND (" + str + " or('area_is:" + path[0] + "') or ('area_is:" + path[1] + "') or ('area_is:" + path[2] + "'))");
 				} else {
-					query.setParam("area_is:" + path[0] + " or " + "area_is:" + path[1] + " or " + "area_is:" + path[2]);
+					sb.append(" AND (area_is:" + path[0] + " or " + "area_is:" + path[1] + " or " + "area_is:" + path[2]+")");
 				}
 			}
 		} else {
-			query.setParam("" + str + " or ('area_is:" + 0 + "') ");
+			sb.append(" AND (" + str + " or ('area_is:" + 0 + "'))");
 		}
+		query.setParam("q",sb.toString());
 		query.setStart(adSolrParam.getOffset());
 		query.setRows(adSolrParam.getPageSize());
+		query.setSort("status_i", SolrQuery.ORDER.desc);
 		SolrDocumentList solrDocumentList = new SolrDocumentList();
 		solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		Page<AdSolrDTO> page = new Page<AdSolrDTO>();
