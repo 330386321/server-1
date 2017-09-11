@@ -352,7 +352,7 @@ public class AdController extends BaseController {
 			query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
 		}
 		List<Long> merchantIds = adSolrParam.getMerchantIds();
-		String str = "11";
+		String str = "";
 		if (!merchantIds.isEmpty()) {
 			for (Long id : merchantIds) {
 				str += "merchantId_l:" + id + " or ";
