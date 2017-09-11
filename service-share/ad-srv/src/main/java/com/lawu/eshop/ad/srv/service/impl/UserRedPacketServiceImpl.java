@@ -203,7 +203,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	private void setRedpacketOverDue(Long userRedpacketId) {
 		UserRedPacketDO userRedpacket =userRedPacketDOMapper.selectByPrimaryKey(userRedpacketId);
 		userRedpacket.setGmtModified(new Date());
-		userRedpacket.setStatus(UserRedPacketEnum.USER_STATUS_OVER.val);
+		userRedpacket.setStatus(UserRedPacketEnum.USER_STATUS_OUT.val);
 		UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
 		userTakedExample.createCriteria().andUserRedPackIdEqualTo(userRedpacketId)
 		.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);

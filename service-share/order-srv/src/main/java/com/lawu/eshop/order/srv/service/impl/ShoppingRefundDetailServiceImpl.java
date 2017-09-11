@@ -911,21 +911,25 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	 * **********************************************/
 	@Transactional
 	public void toBeConfirmedForRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
-		
-		// 更新发送次数，但是不更新更新时间字段
-		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-		shoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
-		int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
-		shoppingOrderItemDO.setSendTime(sendTime);
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
-		
-		// 用户申请退款，提醒商家处理
-		ShoppingRefundToBeConfirmedForRefundRemindNotification notification = new ShoppingRefundToBeConfirmedForRefundRemindNotification();
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
-		notification.setShoppingOrderItemId(shoppingOrderItemExtendDO.getId());
-		notification.setMemberNum(shoppingOrderDO.getMemberNum());
-		notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
-		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND, notification);
+		try {
+			// 更新发送次数，但是不更新更新时间字段
+			ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+			shoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
+			int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
+			shoppingOrderItemDO.setSendTime(sendTime);
+			shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+			
+			// 用户申请退款，提醒商家处理
+			ShoppingRefundToBeConfirmedForRefundRemindNotification notification = new ShoppingRefundToBeConfirmedForRefundRemindNotification();
+			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
+			notification.setShoppingOrderItemId(shoppingOrderItemExtendDO.getId());
+			notification.setMemberNum(shoppingOrderDO.getMemberNum());
+			notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
+			notification.setMemberNickname(shoppingOrderDO.getMemberNickname());
+			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND, notification);
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
 		
 	}
 	

@@ -1,5 +1,5 @@
 -- 商家跟用户的称呼统一为E店商家和E店用户
-UPDATE `eshop_mall`.`message_template` SET `content`='亲爱的E店商家，您的订单{1}尚未付款，点击立即付款。' WHERE `id`='2';
+UPDATE `eshop_mall`.`message_template` SET `content`='亲爱的E店用户，您的订单{1}尚未付款，点击立即付款。' WHERE `id`='2';
 UPDATE `eshop_mall`.`message_template` SET `content`='亲爱的E店用户，您的商品{9}正在派件（{20}）。运单编号：{2}。' WHERE `id`='3';
 UPDATE `eshop_mall`.`message_template` SET `content`='亲爱的E店用户，您已签收商品{9}' WHERE `id`='4';
 UPDATE `eshop_mall`.`message_template` SET `content`='亲爱的E点用户，您购买的商品{9}已发货' WHERE `id`='5';

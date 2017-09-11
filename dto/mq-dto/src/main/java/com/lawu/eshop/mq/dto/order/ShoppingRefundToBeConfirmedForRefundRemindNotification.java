@@ -8,22 +8,27 @@ import java.io.Serializable;
  */
 public class ShoppingRefundToBeConfirmedForRefundRemindNotification implements Serializable {
 
-	private static final long serialVersionUID = 2387236513531081694L;
+	private static final long serialVersionUID = -5785320348637257261L;
 
 	/**
 	 * 购物订单项id
 	 */
 	private Long shoppingOrderItemId;
-	
-    /**
-    * 商家编号
-    */
-    private String merchantNum;
-    
-    /**
-     * 用户编号
-     */
-     private String memberNum;
+
+	/**
+	 * 商家编号
+	 */
+	private String merchantNum;
+
+	/**
+	 * 用户编号
+	 */
+	private String memberNum;
+
+	/**
+	 * 用户昵称
+	 */
+	private String memberNickname;
 
 	public Long getShoppingOrderItemId() {
 		return shoppingOrderItemId;
@@ -47,6 +52,14 @@ public class ShoppingRefundToBeConfirmedForRefundRemindNotification implements S
 
 	public void setMemberNum(String memberNum) {
 		this.memberNum = memberNum;
+	}
+
+	public String getMemberNickname() {
+		return memberNickname;
+	}
+
+	public void setMemberNickname(String memberNickname) {
+		this.memberNickname = memberNickname;
 	}
 	
 }

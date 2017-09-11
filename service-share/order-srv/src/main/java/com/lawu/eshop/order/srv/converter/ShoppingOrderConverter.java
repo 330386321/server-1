@@ -72,6 +72,7 @@ public class ShoppingOrderConverter {
 		rtn.setIsNoReasonReturn(param.getIsNoReasonReturn());
 		rtn.setMemberId(param.getMemberId());
 		rtn.setMemberNum(param.getMemberNum());
+		rtn.setMemberNickname(param.getMemberNickname());
 		rtn.setMerchantId(param.getMerchantId());
 		rtn.setMerchantName(param.getMerchantName());
 		rtn.setMerchantNum(param.getMerchantNum());

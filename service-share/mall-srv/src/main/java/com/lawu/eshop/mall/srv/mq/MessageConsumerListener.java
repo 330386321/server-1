@@ -1,9 +1,8 @@
 package com.lawu.eshop.mall.srv.mq;
 
-import com.lawu.eshop.mall.constants.BusinessDepositOperEnum;
-import com.lawu.eshop.mq.dto.property.RefundDepositDoSuccessOrFailureNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.lawu.eshop.mall.constants.BusinessDepositOperEnum;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
@@ -18,6 +17,7 @@ import com.lawu.eshop.mq.dto.order.ShoppingRefundRefuseRefundRemindNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeConfirmedForRefundRemindNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeRefundRemindNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeReturnRemindNotification;
+import com.lawu.eshop.mq.dto.property.RefundDepositDoSuccessOrFailureNotification;
 import com.lawu.eshop.mq.message.impl.AbstractMessageConsumerListener;
 
 /**
@@ -99,7 +99,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_REFUND_APPLY);
 
 				messageInfoParam.setMessageParam(new MessageTempParam());
-				messageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
+				messageInfoParam.getMessageParam().setUserName(notification.getMemberNickname());
 
 				// 保存站内信，并且发送个推
 				messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);

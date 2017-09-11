@@ -386,6 +386,76 @@ public class ShoppingOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andMemberNicknameIsNull() {
+            addCriterion("member_nickname is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameIsNotNull() {
+            addCriterion("member_nickname is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameEqualTo(String value) {
+            addCriterion("member_nickname =", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameNotEqualTo(String value) {
+            addCriterion("member_nickname <>", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameGreaterThan(String value) {
+            addCriterion("member_nickname >", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameGreaterThanOrEqualTo(String value) {
+            addCriterion("member_nickname >=", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameLessThan(String value) {
+            addCriterion("member_nickname <", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameLessThanOrEqualTo(String value) {
+            addCriterion("member_nickname <=", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameLike(String value) {
+            addCriterion("member_nickname like", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameNotLike(String value) {
+            addCriterion("member_nickname not like", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameIn(List<String> values) {
+            addCriterion("member_nickname in", values, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameNotIn(List<String> values) {
+            addCriterion("member_nickname not in", values, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameBetween(String value1, String value2) {
+            addCriterion("member_nickname between", value1, value2, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameNotBetween(String value1, String value2) {
+            addCriterion("member_nickname not between", value1, value2, "memberNickname");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchantIdIsNull() {
             addCriterion("merchant_id is null");
             return (Criteria) this;
