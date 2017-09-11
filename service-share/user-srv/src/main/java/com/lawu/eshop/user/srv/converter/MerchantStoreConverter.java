@@ -485,10 +485,11 @@ public class MerchantStoreConverter {
      */
     public static ShoppingOrderFindUserInfoDTO convert(List<ShoppingOrderFindMerchantInfoBO> merchantStoreNoReasonReturnBOList, MemberBO memberBO) {
     	ShoppingOrderFindUserInfoDTO rtn = new ShoppingOrderFindUserInfoDTO();
-    	
     	rtn.setShoppingOrderFindMerchantInfoDTOList(convertShoppingOrderFindMerchantInfoDTOList(merchantStoreNoReasonReturnBOList));
-        rtn.setMemberNum(memberBO == null ? null : memberBO.getNum());
-        
+    	if (memberBO != null) {
+    		rtn.setMemberNum(memberBO.getNum());
+    		rtn.setMemberNickname(memberBO.getNickname());
+    	}
         return rtn;
     }
 

@@ -281,6 +281,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		ShoppingOrderSettlementParam shoppingOrderSettlementParam = new ShoppingOrderSettlementParam();
     		shoppingOrderSettlementParam.setMemberId(memberId);
     		shoppingOrderSettlementParam.setMemberNum(shoppingOrderFindUserInfoDTOResult.getModel().getMemberNum());
+    		shoppingOrderSettlementParam.setMemberNickname(shoppingOrderFindUserInfoDTOResult.getModel().getMemberNickname());
     		shoppingOrderSettlementParam.setMerchantId(key);
     		shoppingOrderSettlementParam.setMerchantStoreId(shoppingOrderFindMerchantInfoDTOMap.get(key).getMerchantStoreId());
     		shoppingOrderSettlementParam.setMerchantStoreRegionPath(shoppingOrderFindMerchantInfoDTOMap.get(key).getMerchantStoreRegionPath());
@@ -567,6 +568,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		ShoppingOrderSettlementParam shoppingOrderSettlementParam = new ShoppingOrderSettlementParam();
 		shoppingOrderSettlementParam.setMemberId(memberId);
 		shoppingOrderSettlementParam.setMemberNum(shoppingOrderFindUserInfoDTOResult.getModel().getMemberNum());
+		shoppingOrderSettlementParam.setMemberNickname(shoppingOrderFindUserInfoDTOResult.getModel().getMemberNickname());
 		shoppingOrderSettlementParam.setMerchantId(shoppingCartProductModelDTO.getMerchantId());
 		shoppingOrderSettlementParam.setMerchantStoreId(shoppingOrderFindMerchantInfoDTO.getMerchantStoreId());
 		shoppingOrderSettlementParam.setMerchantStoreRegionPath(shoppingOrderFindMerchantInfoDTO.getMerchantStoreRegionPath());

@@ -925,6 +925,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			notification.setShoppingOrderItemId(shoppingOrderItemExtendDO.getId());
 			notification.setMemberNum(shoppingOrderDO.getMemberNum());
 			notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
+			notification.setMemberNickname(shoppingOrderDO.getMemberNickname());
 			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND, notification);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

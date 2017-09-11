@@ -1,20 +1,22 @@
 package com.lawu.eshop.user.dto;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Sunny
  * @date 2017/4/10
  */
-public class ShoppingOrderFindUserInfoDTO implements Serializable {
+public class ShoppingOrderFindUserInfoDTO {
 
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * 用户编号
 	 */
 	private String memberNum;
+	
+	/**
+	 * 用户昵称
+	 */
+    private String memberNickname;
 	
 	/**
 	 * 商家信息
@@ -27,6 +29,14 @@ public class ShoppingOrderFindUserInfoDTO implements Serializable {
 
 	public void setMemberNum(String memberNum) {
 		this.memberNum = memberNum;
+	}
+
+	public String getMemberNickname() {
+		return memberNickname;
+	}
+
+	public void setMemberNickname(String memberNickname) {
+		this.memberNickname = memberNickname;
 	}
 
 	public List<ShoppingOrderFindMerchantInfoDTO> getShoppingOrderFindMerchantInfoDTOList() {

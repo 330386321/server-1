@@ -572,6 +572,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				stringBuilder.append(item.getProductName());
 			}
 			shoppingOrderpaymentSuccessfulNotification.setProductName(stringBuilder.toString());
+			shoppingOrderpaymentSuccessfulNotification.setId(shoppingOrderDO.getId());
 
 			// 发送消MQ息
 			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_PAYMENT_SUCCESSFUL_PUSH, shoppingOrderpaymentSuccessfulNotification);
@@ -783,6 +784,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		notification.setShoppingOrderItemId(shoppingOrderItemDO.getId());
 		notification.setMemberNum(shoppingOrderDO.getMemberNum());
 		notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
+		notification.setMemberNickname(shoppingOrderDO.getMemberNickname());
 		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND, notification);
 	}
 
