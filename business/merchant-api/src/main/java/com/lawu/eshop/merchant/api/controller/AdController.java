@@ -234,7 +234,9 @@ public class AdController extends BaseController {
         		adSave.setLatitude(storeDTO.getLatitude());
             	adSave.setLongitude(storeDTO.getLongitude());
             	adSave.setLogoUrl(storeDTO.getLogoUrl());
-            	adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
+            	if(storeDTO.getManageType()!=null){
+            		adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
+            	}
             	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
             	adSave.setMerchantStoreName(storeDTO.getName());
             	adSave.setMerchantRegionPath(storeDTO.getRegionPath());

@@ -1,7 +1,8 @@
 namesrvAddr=192.168.1.29:9876
 brokerIP1=192.168.1.29
 listenPort=10922
-brokerName=broker-a
+haListenPort=10923
+brokerName=broker-b
 brokerClusterName=DefaultCluster
 brokerId=1
 autoCreateTopicEnable=true
@@ -22,6 +23,6 @@ accessMessageInMemoryMaxRatio=40
 messageIndexEnable=true
 messageIndexSafe=false
 #haMasterAddress=
-brokerRole=SLAVE
+brokerRole=ASYNC_MASTER
 flushDiskType=ASYNC_FLUSH
 cleanFileForciblyEnable=true

@@ -5,6 +5,7 @@ import java.util.List;
 import com.lawu.eshop.statistics.param.UserRegAreaParam;
 import com.lawu.eshop.statistics.param.UserRegParam;
 import com.lawu.eshop.statistics.srv.bo.ReportUserRegAreaBO;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportNewDateDOView;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
 
 /**
@@ -62,4 +63,21 @@ public interface UserRegService {
     void addUserRegAreaDaily(UserRegAreaParam userRegAreaParam);
 
     void addUserRegAreaMonth(UserRegAreaParam userRegAreaParam);
+    
+    /**
+     * 获取日统计最后一条数据统计时间
+     * @author zhangrc
+     * @date 2017/09/08
+     * @return
+     */
+    ReportNewDateDOView getReportDateUserRegDaily();
+    
+    
+    /**
+     * 获取月统计最后一条数据统计时间
+     * @author zhangrc
+     * @date 2017/09/08
+     * @return
+     */
+    ReportNewDateDOView getReportDateUserRegMonth();
 }

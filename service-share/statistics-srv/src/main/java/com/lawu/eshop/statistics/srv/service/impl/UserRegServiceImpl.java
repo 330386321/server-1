@@ -19,6 +19,7 @@ import com.lawu.eshop.statistics.srv.domain.ReportUserRegDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserRegDailyDOExample;
 import com.lawu.eshop.statistics.srv.domain.ReportUserRegMonthDO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserRegMonthDOExample;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportNewDateDOView;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaUserRegDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaUserRegMonthDOMapper;
@@ -153,5 +154,15 @@ public class UserRegServiceImpl implements UserRegService {
         userRegMonthDO.setGmtCreate(new Date());
         userRegMonthDO.setGmtReport(DateUtil.getMonthBefore(new Date()));
         reportAreaUserRegMonthDOMapper.insertSelective(userRegMonthDO);
+    }
+    
+    @Override
+    public ReportNewDateDOView getReportDateUserRegDaily() {
+        return userRegDOMapperExtend.getReportDateUserRegDaily();
+    }
+    
+    @Override
+    public ReportNewDateDOView getReportDateUserRegMonth() {
+        return userRegDOMapperExtend.getReportDateUserRegMonth();
     }
 }

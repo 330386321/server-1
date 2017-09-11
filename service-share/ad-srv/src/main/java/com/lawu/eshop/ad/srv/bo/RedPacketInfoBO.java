@@ -11,7 +11,9 @@ public class RedPacketInfoBO {
 	private String logoUrl;
 	
 	private String name;
-	
+
+	private String mediaUrl;
+
 	private FileTypeEnum fileType;
 
 	public BigDecimal getPoint() {
@@ -38,6 +40,14 @@ public class RedPacketInfoBO {
 		this.name = name;
 	}
 
+	public String getMediaUrl() {
+		return mediaUrl;
+	}
+
+	public void setMediaUrl(String mediaUrl) {
+		this.mediaUrl = mediaUrl;
+	}
+
 	public FileTypeEnum getFileType() {
 		return fileType;
 	}
@@ -45,7 +55,7 @@ public class RedPacketInfoBO {
 	public void setFileType(FileTypeEnum fileType) {
 		this.fileType = fileType;
 	}
-	
+
 	
 
 }

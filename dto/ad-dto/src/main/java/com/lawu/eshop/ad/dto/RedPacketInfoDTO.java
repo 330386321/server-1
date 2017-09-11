@@ -19,7 +19,10 @@ public class RedPacketInfoDTO {
 	
 	@ApiModelProperty(value = "商家账号")
 	private String inviterAccount;
-	
+
+	@ApiModelProperty(value = "广告附件路径")
+	private String mediaUrl;
+
 	@ApiModelProperty(value = "文件类型")
 	private FileTypeEnum fileType;
 
@@ -55,6 +58,14 @@ public class RedPacketInfoDTO {
 		this.inviterAccount = inviterAccount;
 	}
 
+	public String getMediaUrl() {
+		return mediaUrl;
+	}
+
+	public void setMediaUrl(String mediaUrl) {
+		this.mediaUrl = mediaUrl;
+	}
+
 	public FileTypeEnum getFileType() {
 		return fileType;
 	}
@@ -62,7 +73,7 @@ public class RedPacketInfoDTO {
 	public void setFileType(FileTypeEnum fileType) {
 		this.fileType = fileType;
 	}
-	
+
 	
 
 }

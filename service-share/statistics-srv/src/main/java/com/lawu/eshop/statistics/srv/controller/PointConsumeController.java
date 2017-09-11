@@ -18,8 +18,10 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.statistics.dto.PointConsumeDailyDTO;
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
+import com.lawu.eshop.statistics.dto.ReportNewDateDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.statistics.srv.bo.PointConsumeDailyBO;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportNewDateDOView;
 import com.lawu.eshop.statistics.srv.service.PointConsumeService;
 
 /**
@@ -103,4 +105,27 @@ public class PointConsumeController extends BaseController {
 	public ReportCommonBackDTO selectReport(@RequestParam("bdate") String bdate,@RequestParam("edate") String edate) {
 		return pointConsumeService.selectReport(bdate,edate);
 	}
+	
+	/**
+     * 获取日统计最新一条记录日期
+     *
+     * @return
+     */
+    @RequestMapping(value = "getReportDatePointConsumeDaily", method = RequestMethod.GET)
+    public Result<ReportNewDateDTO> getReportDateUserRegDaily() {
+    	ReportNewDateDOView view = pointConsumeService.getReportDatePointConsumeDaily();
+        return successGet(new ReportNewDateDTO(view.getGmtReport()));
+    }
+    
+
+    /**
+     * 获取日统计最新一条记录日期
+     *
+     * @return
+     */
+    @RequestMapping(value = "getReportDatePointConsumeMonth", method = RequestMethod.GET)
+    public Result<ReportNewDateDTO> getReportDateUserRegMonth() {
+    	ReportNewDateDOView view = pointConsumeService.getReportDatePointConsumeMonth();
+        return successGet(new ReportNewDateDTO(view.getGmtReport()));
+    }
 }

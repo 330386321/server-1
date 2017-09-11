@@ -1037,6 +1037,9 @@ public class AdServiceImpl implements AdService {
 			ppexample.setOrderByClause("point desc");
 			List<PointPoolDO> ppList = pointPoolDOMapper.selectByExample(ppexample);
 			redPacketInfoBO.setPoint(ppList.get(0).getPoint());
+			redPacketInfoBO.setMediaUrl(adDO.getMediaUrl());
+			redPacketInfoBO.setLogoUrl(adDO.getLogoUrl());
+			redPacketInfoBO.setName(adDO.getMerchantStoreName());
 			redPacketInfoBO.setFileType(FileTypeEnum.getEnum(adDO.getFileType()));
 		}
 		return redPacketInfoBO;

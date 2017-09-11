@@ -14,7 +14,7 @@
     <result column="point" jdbcType="DECIMAL" property="point" />
   </resultMap>
   <select id="getTotlePoint" parameterType="java.lang.Long" resultMap="BasePointResultMap">
-   	  SELECT sum(original_point) FROM member_ad_record  where   ad_id=#{adId,jdbcType=BIGINT}
+   	  SELECT sum(point) as totlePoint FROM member_ad_record  where   ad_id=#{adId,jdbcType=BIGINT}
   </select>
  
 </mapper>

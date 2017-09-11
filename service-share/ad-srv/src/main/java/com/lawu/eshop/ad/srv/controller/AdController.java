@@ -569,6 +569,9 @@ public class AdController extends BaseController {
 		} else {
 			RedPacketInfoDTO redPacketInfoDTO = new RedPacketInfoDTO();
 			redPacketInfoDTO.setPoint(redPacketInfoBO.getPoint());
+			redPacketInfoDTO.setMediaUrl(redPacketInfoBO.getMediaUrl());
+			redPacketInfoDTO.setName(redPacketInfoBO.getName());
+			redPacketInfoDTO.setLogoUrl(redPacketInfoBO.getLogoUrl());
 			redPacketInfoDTO.setFileType(redPacketInfoBO.getFileType());
 			return successCreated(redPacketInfoDTO);
 		}
