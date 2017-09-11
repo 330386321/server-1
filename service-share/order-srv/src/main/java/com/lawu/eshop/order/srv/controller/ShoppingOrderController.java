@@ -714,25 +714,22 @@ public class ShoppingOrderController extends BaseController {
 	}
 
 	/**
-	 * 查询已完成但是未计算提成的购物订单
+	 * 统计商家的交易数据
 	 * 
-	 * @param memberId
-	 *            会员id
+	 * @param param
 	 * @return
 	 * @author Sunny
 	 */
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "selectByTransactionData", method = RequestMethod.PUT)
-	public Result selectByTransactionData(@RequestBody ReportDataParam param) {
+	public Result<ReportRiseRateDTO> selectByTransactionData(@RequestBody ReportDataParam param) {
 		ReportRiseRateDTO reportRiseRateDTO = shoppingOrderService.selectByTransactionData(param);
 		return successCreated(reportRiseRateDTO);
 	}
 
 	/**
-	 * 查询已完成但是未计算提成的购物订单
+	 * 粉丝数据-消费转化
 	 * 
-	 * @param memberId
-	 *            会员id
+	 * @param param
 	 * @return
 	 * @author Sunny
 	 */

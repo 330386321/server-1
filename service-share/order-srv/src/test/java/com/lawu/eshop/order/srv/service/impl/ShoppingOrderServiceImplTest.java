@@ -123,14 +123,34 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
-    	
     	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(false);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(1L);
+    	shoppingOrderItemDO.setProductModelName("test");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	
     	shoppingOrderService.cancelOrder(expected.getMemberId(), expected.getId());
     	
     	ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actual.getOrderStatus());
+    	ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
+    	Assert.assertNotNull(actualShoppingOrderItemDO);
+    	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actualShoppingOrderItemDO.getOrderStatus());
     }
     
     @Transactional

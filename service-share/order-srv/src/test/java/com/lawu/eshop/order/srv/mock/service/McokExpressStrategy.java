@@ -20,6 +20,7 @@ public class McokExpressStrategy implements ExpressStrategy {
 		ExpressInquiriesDetailBO rtn = new ExpressInquiriesDetailBO();
 		rtn.setSuccess(true);
 		rtn.setState(StateEnum.ON_THE_WAY);
+		rtn.setShipperCode("SF");
 		rtn.setTraces(new ArrayList<>());
 		TraceBO traceBO = new TraceBO();
 		traceBO.setAcceptStation("等待快递员上门揽件");

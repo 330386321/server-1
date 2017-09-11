@@ -863,7 +863,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				throw new TheOrderIsBeingProcessedException(ExceptionMessageConstant.THE_ORDER_IS_BEING_PROCESSED);
 			}
 			if (ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue().equals(orderDO.getOrderStatus())) {
-				throw new OrderCreationFailedException(ExceptionMessageConstant.THE_ORDER_IS_BEING_PROCESSED);
+				throw new OrderCreationFailedException(ExceptionMessageConstant.ORDER_CREATION_FAILED);
 			}
 			total = total.add(orderDO.getOrderTotalPrice());
 		}

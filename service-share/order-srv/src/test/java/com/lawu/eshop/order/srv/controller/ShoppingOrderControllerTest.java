@@ -3,10 +3,13 @@ package com.lawu.eshop.order.srv.controller;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
+import com.lawu.eshop.order.constants.ReportFansRiseRateEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderSortEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusToMemberEnum;
@@ -40,18 +44,32 @@ import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.constants.SortOrderEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.order.dto.CommentOrderDTO;
+import com.lawu.eshop.order.dto.ReportRiseRateDTO;
+import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
+import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForOperatorDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
+import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
@@ -285,7 +303,25 @@ public class ShoppingOrderControllerTest {
     	expected.setSendTime(0);
     	shoppingOrderDOMapper.insertSelective(expected);
     	
-    	RequestBuilder request = MockMvcRequestBuilders.put("/shoppingOrder/cancelOrder/" + expected.getMemberId() + "/" + expected.getId());    	
+    	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(false);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(1L);
+    	shoppingOrderItemDO.setProductModelName("test");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.put("/shoppingOrder/cancelOrder/" + expected.getMemberId() + "/" + expected.getId());
         ResultActions perform = mvc.perform(request);
         perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
         		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -296,6 +332,9 @@ public class ShoppingOrderControllerTest {
     	ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actual.getOrderStatus());
+    	ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
+    	Assert.assertNotNull(actualShoppingOrderItemDO);
+    	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actualShoppingOrderItemDO.getOrderStatus());
     }
     
 	@Transactional
@@ -404,7 +443,10 @@ public class ShoppingOrderControllerTest {
 	        Assert.assertNotNull(actual);
 	        Assert.assertEquals(expected.getExpressCompanyName(), actual.getExpressCompanyName());
 	        Assert.assertEquals(expected.getWaybillNum(), actual.getWaybillNum());
-	        Assert.assertNotNull(actual.getExpressInquiriesDetailDTO());
+	        ExpressInquiriesDetailDTO actualExpressInquiriesDetailDTO = actual.getExpressInquiriesDetailDTO();
+	        Assert.assertNotNull(actualExpressInquiriesDetailDTO);
+	        Assert.assertNotNull(actualExpressInquiriesDetailDTO.getSuccess());
+	        Assert.assertNotNull(actualExpressInquiriesDetailDTO.getState());
     	}
     	
     	// 商家调用
@@ -422,7 +464,10 @@ public class ShoppingOrderControllerTest {
 	        Assert.assertNotNull(actual);
 	        Assert.assertEquals(expected.getExpressCompanyName(), actual.getExpressCompanyName());
 	        Assert.assertEquals(expected.getWaybillNum(), actual.getWaybillNum());
-	        Assert.assertNotNull(actual.getExpressInquiriesDetailDTO());
+	        ExpressInquiriesDetailDTO actualExpressInquiriesDetailDTO = actual.getExpressInquiriesDetailDTO();
+	        Assert.assertNotNull(actualExpressInquiriesDetailDTO);
+	        Assert.assertNotNull(actualExpressInquiriesDetailDTO.getSuccess());
+	        Assert.assertNotNull(actualExpressInquiriesDetailDTO.getState());
         }
     }
 	
@@ -1423,4 +1468,1090 @@ public class ShoppingOrderControllerTest {
 		Assert.assertEquals(shoppingOrderItemDO.getProductFeatureImage(), actual.getProductFeatureImage());
 		Assert.assertEquals(expected.getConsigneeName(), actual.getConsigneeName());
     }
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void updateInformation() throws Exception {
+    	ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("YD");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setGmtPayment(new Date());
+    	expected.setGmtTransaction(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsDone(true);
+    	expected.setThirdNumber("654321");
+    	expected.setWaybillNum("3923440690592");
+    	expected.setGmtCommission(new Date());
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	ShoppingOrderUpdateInfomationParam param = new ShoppingOrderUpdateInfomationParam();
+    	param.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION);
+    	param.setConsigneeAddress("深圳市南山区大冲商务中心");
+    	param.setConsigneeMobile("15616175989");
+    	param.setConsigneeName("John");
+    	param.setExpressCompanyCode("SF");
+    	param.setExpressCompanyId(2);
+    	param.setExpressCompanyName("顺丰");
+    	param.setWaybillNum("123456");
+    	String content = JSONObject.toJSONString(param);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.put("/shoppingOrder/updateInformation/" + expected.getId()).contentType(MediaType.APPLICATION_JSON).content(content);
+        ResultActions perform = mvc.perform(request);
+        perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(param.getConsigneeAddress(), actual.getConsigneeAddress());
+        Assert.assertEquals(param.getConsigneeMobile(), actual.getConsigneeMobile());
+        Assert.assertEquals(param.getConsigneeName(), actual.getConsigneeName());
+        Assert.assertEquals(param.getExpressCompanyCode(), actual.getExpressCompanyCode());
+        Assert.assertEquals(param.getWaybillNum(), actual.getWaybillNum());
+        Assert.assertEquals(param.getExpressCompanyName(), actual.getExpressCompanyName());
+        Assert.assertEquals(param.getExpressCompanyId(), actual.getExpressCompanyId());
+        Assert.assertEquals(param.getOrderStatus().getValue(), actual.getOrderStatus());
+	}
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void numberOfOrderStartusByMerchant() throws Exception {
+    	ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("YD");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setGmtPayment(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsDone(true);
+    	expected.setThirdNumber("654321");
+    	expected.setWaybillNum("3923440690592");
+    	expected.setGmtCommission(new Date());
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.get("/shoppingOrder/numberOfOrderStartusByMerchant/" + expected.getMerchantId());
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO actual = JSONObject.parseObject(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO.class);
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(0L, actual.getBeShippedCount().longValue());
+        Assert.assertEquals(0L, actual.getPendingPaymentCount().longValue());
+        Assert.assertEquals(0L, actual.getRefundingCount().longValue());
+        Assert.assertEquals(1L, actual.getToBeReceivedCount().longValue());
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Transactional
+    @Rollback
+    @Test
+    public void selectRefundPage() throws Exception {
+		ShoppingOrderDO expected = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setIsDone(false);
+    	expected.setShoppingCartIdsStr("1");
+    	expected.setSendTime(0);
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(false);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
+    	shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(1L);
+    	shoppingOrderItemDO.setProductModelName("test");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+    	
+    	ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
+    	shoppingRefundDetailDO.setAmount(shoppingOrderItemDO.getSalesPrice().multiply(new BigDecimal(shoppingOrderItemDO.getQuantity())));
+    	shoppingRefundDetailDO.setDescription("就是想退款");
+    	shoppingRefundDetailDO.setGmtModified(new Date());
+    	shoppingRefundDetailDO.setGmtCreate(new Date());
+    	shoppingRefundDetailDO.setReason("七天无理由退货");
+    	shoppingRefundDetailDO.setShoppingOrderItemId(shoppingOrderItemDO.getId());
+    	shoppingRefundDetailDO.setStatus(StatusEnum.VALID.getValue());
+    	shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.RETURN_REFUND.getValue());
+    	shoppingRefundDetailDOMapper.insert(shoppingRefundDetailDO);
+    	
+    	ShoppingRefundQueryForeignParam param = new ShoppingRefundQueryForeignParam();
+    	param.setCurrentPage(1);
+    	param.setPageSize(10);
+    	param.setKeyword(expected.getOrderNum());
+    	String content = JSONObject.toJSONString(param);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.post("/shoppingOrder/selectRefundPage").contentType(MediaType.APPLICATION_JSON).content(content);
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        Page<JSONObject> page = JSONObject.parseObject(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), Page.class);
+        Assert.assertNotNull(page);
+        Assert.assertEquals(param.getCurrentPage(), page.getCurrentPage());
+    	Assert.assertEquals(1, page.getTotalCount().intValue());
+        
+    	ParserConfig mapping = new ParserConfig();
+    	mapping.putDeserializer(Date.class, new JCDateDeserializer());
+    	ShoppingOrderItemRefundForOperatorDTO actual = JSONObject.parseObject(page.getRecords().get(0).toJSONString(), ShoppingOrderItemRefundForOperatorDTO.class, mapping, JSON.DEFAULT_PARSER_FEATURE);
+		Assert.assertNotNull(actual);
+		Assert.assertEquals(expected.getConsigneeAddress(), actual.getConsigneeAddress());
+		Assert.assertEquals(expected.getConsigneeMobile(), actual.getConsigneeMobile());
+		Assert.assertEquals(expected.getConsigneeName(), actual.getConsigneeName());
+		Assert.assertEquals(shoppingRefundDetailDO.getGmtCreate().getTime(), actual.getGmtCreate().getTime(), 1000);
+		Assert.assertEquals(shoppingRefundDetailDO.getId(), actual.getShoppingRefundDetailId());
+		Assert.assertEquals(shoppingOrderItemDO.getId(), actual.getId());
+		Assert.assertEquals(expected.getOrderNum(), actual.getOrderNum());
+		Assert.assertEquals(shoppingOrderItemDO.getProductFeatureImage(), actual.getProductFeatureImage());
+		Assert.assertEquals(shoppingOrderItemDO.getProductModelName(), actual.getProductModelName());
+		Assert.assertEquals(shoppingOrderItemDO.getProductName(), actual.getProductName());
+		Assert.assertEquals(shoppingOrderItemDO.getRefundStatus(), actual.getRefundStatus().getValue());
+	}
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void detail() throws Exception {
+		ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("韵达");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setGmtPayment(new Date());
+    	expected.setGmtTransaction(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsDone(true);
+    	expected.setThirdNumber("654321");
+    	expected.setWaybillNum("3923440690592");
+    	expected.setGmtCommission(new Date());
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	Map<Long, ShoppingOrderItemDO> expectedMap = new HashMap<>();
+    	// 交易成功
+    	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(true);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(1L);
+    	shoppingOrderItemDO.setProductModelName("test");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+    	expectedMap.put(shoppingOrderItemDO.getId(), shoppingOrderItemDO);
+    	
+    	// 退款成功
+    	shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(true);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(2L);
+    	shoppingOrderItemDO.setProductModelName("productModelName");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+    	expectedMap.put(shoppingOrderItemDO.getId(), shoppingOrderItemDO);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.get("/shoppingOrder/detail/" + expected.getId()).param("memberId", expected.getMemberId().toString());
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        ShoppingOrderDetailDTO actual = JSONObject.parseObject(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), ShoppingOrderDetailDTO.class);
+        assertShoppingOrderDTO(expected, actual);
+        Assert.assertEquals(null, actual.getCountdown());
+        for (ShoppingOrderItemDTO actualShoppingOrderItemDTO : actual.getItems()) {
+    		assertShoppingOrderItemBO(expectedMap.get(actualShoppingOrderItemDTO.getId()), actualShoppingOrderItemDTO);
+    	}
+	}
+	
+	@Deprecated
+	@Transactional
+    @Rollback
+    @Test
+    public void get() throws Exception {
+		ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("韵达");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setGmtPayment(new Date());
+    	expected.setGmtTransaction(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsDone(true);
+    	expected.setThirdNumber("654321");
+    	expected.setWaybillNum("3923440690592");
+    	expected.setGmtCommission(new Date());
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	Map<Long, ShoppingOrderItemDO> expectedMap = new HashMap<>();
+    	// 交易成功
+    	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(true);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(1L);
+    	shoppingOrderItemDO.setProductModelName("test");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+    	expectedMap.put(shoppingOrderItemDO.getId(), shoppingOrderItemDO);
+    	
+    	// 退款成功
+    	shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(true);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(2L);
+    	shoppingOrderItemDO.setProductModelName("productModelName");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+    	expectedMap.put(shoppingOrderItemDO.getId(), shoppingOrderItemDO);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.get("/shoppingOrder/get/" + expected.getId()).param("memberId", expected.getMemberId().toString());
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        ShoppingOrderDetailDTO actual = JSONObject.parseObject(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), ShoppingOrderDetailDTO.class);
+        assertShoppingOrderDTO(expected, actual);
+        Assert.assertEquals(null, actual.getCountdown());
+        for (ShoppingOrderItemDTO actualShoppingOrderItemDTO : actual.getItems()) {
+    		assertShoppingOrderItemBO(expectedMap.get(actualShoppingOrderItemDTO.getId()), actualShoppingOrderItemDTO);
+    	}
+	}
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void selectOrderMoney() throws Exception {
+		ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("韵达");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setIsDone(true);
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.get("/shoppingOrder/selectOrderMoney").param("orderIds", expected.getId().toString());
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        ShoppingOrderMoneyDTO actual = JSONObject.parseObject(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), ShoppingOrderMoneyDTO.class);
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(expected.getOrderTotalPrice().doubleValue(), actual.getOrderTotalPrice().doubleValue(), 0D);
+	}
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void expressInfo() throws Exception {
+		ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("韵达");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setGmtPayment(new Date());
+    	expected.setGmtTransaction(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsDone(true);
+    	expected.setThirdNumber("654321");
+    	expected.setWaybillNum("3923440690592");
+    	expected.setGmtCommission(new Date());
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(true);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(1L);
+    	shoppingOrderItemDO.setProductModelName("test");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.get("/shoppingOrder/expressInfo/" + expected.getId()).param("memberId", expected.getMemberId().toString());
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        ShoppingOrderExpressInfoDTO actual = JSONObject.parseObject(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), ShoppingOrderExpressInfoDTO.class);
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(expected.getExpressCompanyName(), actual.getExpressCompanyName());
+        Assert.assertEquals(expected.getWaybillNum(), actual.getWaybillNum());
+        Assert.assertEquals(expected.getExpressCompanyId(), actual.getExpressCompanyId());
+        Assert.assertEquals(shoppingOrderItemDO.getProductFeatureImage(), actual.getProductFeatureImage());
+        Assert.assertEquals(shoppingOrderItemDO.getQuantity(), actual.getTotalQuantity());
+	}
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void getOrderCommentStatus() throws Exception {
+		ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("韵达");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setGmtPayment(new Date());
+    	expected.setGmtTransaction(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsDone(true);
+    	expected.setThirdNumber("654321");
+    	expected.setWaybillNum("3923440690592");
+    	expected.setGmtCommission(new Date());
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(true);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(1L);
+    	shoppingOrderItemDO.setProductModelName("test");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.get("/shoppingOrder/getOrderCommentStatus/" + shoppingOrderItemDO.getId());
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        CommentOrderDTO actual = JSONObject.parseObject(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), CommentOrderDTO.class);
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(shoppingOrderItemDO.getIsEvaluation(), actual.getEvaluation());
+	}
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void isNoOnGoingOrder() throws Exception {
+		ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("韵达");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setGmtPayment(new Date());
+    	expected.setGmtTransaction(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsDone(true);
+    	expected.setThirdNumber("654321");
+    	expected.setWaybillNum("3923440690592");
+    	expected.setGmtCommission(new Date());
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(true);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(1L);
+    	shoppingOrderItemDO.setProductModelName("test");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.get("/shoppingOrder/isNoOnGoingOrder/" + expected.getMerchantId());
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        ShoppingOrderIsNoOnGoingOrderDTO actual = JSONObject.parseObject(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), ShoppingOrderIsNoOnGoingOrderDTO.class);
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(true, actual.getIsNoOnGoingOrder());
+	}
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void numberOfOrderStartus() throws Exception {
+		ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("韵达");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setGmtPayment(new Date());
+    	expected.setGmtTransaction(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsDone(true);
+    	expected.setThirdNumber("654321");
+    	expected.setWaybillNum("3923440690592");
+    	expected.setGmtCommission(new Date());
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(false);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(1L);
+    	shoppingOrderItemDO.setProductModelName("test");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.get("/shoppingOrder/numberOfOrderStartus/" + expected.getMemberId());
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        ShoppingOrderNumberOfOrderStatusDTO actual = JSONObject.parseObject(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), ShoppingOrderNumberOfOrderStatusDTO.class);
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(0L, actual.getBeShippedCount().longValue());
+        Assert.assertEquals(1L, actual.getEvaluationCount().longValue());
+        Assert.assertEquals(0L, actual.getPendingPaymentCount().longValue());
+        Assert.assertEquals(0L, actual.getToBeReceivedCount().longValue());
+	}
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void commissionShoppingOrder() throws Exception {
+		ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("韵达");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setGmtPayment(new Date());
+    	expected.setGmtTransaction(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsDone(true);
+    	expected.setThirdNumber("654321");
+    	expected.setWaybillNum("3923440690592");
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+    	shoppingOrderItemDO.setGmtCreate(new Date());
+    	shoppingOrderItemDO.setGmtModified(new Date());
+    	shoppingOrderItemDO.setIsAllowRefund(true);
+    	shoppingOrderItemDO.setIsEvaluation(false);
+    	shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+    	shoppingOrderItemDO.setProductId(1L);
+    	shoppingOrderItemDO.setProductName("productName");
+    	shoppingOrderItemDO.setProductModelId(1L);
+    	shoppingOrderItemDO.setProductModelName("test");
+    	shoppingOrderItemDO.setQuantity(1);
+    	shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+    	shoppingOrderItemDO.setSendTime(0);
+    	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+    	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.get("/shoppingOrder/commissionShoppingOrder");
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        List<ShoppingOrderCommissionDTO> list = JSONObject.parseArray(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), ShoppingOrderCommissionDTO.class);
+        ShoppingOrderCommissionDTO actual = list.get(0);
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(expected.getMemberNum(), actual.getMemberNum());
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getMerchantNum(), actual.getMerchantNum());
+        Assert.assertEquals(expected.getActualAmount().doubleValue(), actual.getActualAmount().doubleValue(), 0D);
+	}
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void updateCommissionStatus() throws Exception {
+		ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("韵达");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setGmtPayment(new Date());
+    	expected.setGmtTransaction(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsDone(true);
+    	expected.setThirdNumber("654321");
+    	expected.setWaybillNum("3923440690592");
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.put("/shoppingOrder/updateCommissionStatus").param("ids", expected.getId().toString());
+        ResultActions perform = mvc.perform(request);
+        perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
+        Assert.assertNotNull(actual);
+        Assert.assertNotNull(actual.getGmtCommission());
+        Assert.assertEquals(CommissionStatusEnum.CALCULATED.getValue(), actual.getCommissionStatus());
+	}
+	
+	/**
+	 * SQL语法不支持
+	 * @throws Exception
+	 * @author jiangxinjun
+	 * @date 2017年9月11日
+	 */
+	@Ignore
+	@Transactional
+    @Rollback
+    @Test
+    public void selectByTransactionData() throws Exception {
+		ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("韵达");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setGmtPayment(new Date());
+    	expected.setGmtTransaction(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsDone(true);
+    	expected.setThirdNumber("654321");
+    	expected.setWaybillNum("3923440690592");
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	ReportDataParam param = new ReportDataParam();
+    	param.setFlag(ReportFansRiseRateEnum.DAY);
+    	param.setMerchantId(expected.getMemberId());
+    	String content = JSONObject.toJSONString(param);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.put("/shoppingOrder/selectByTransactionData").contentType(MediaType.APPLICATION_JSON).content(content);
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        ReportRiseRateDTO actual = JSONObject.parseObject(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), ReportRiseRateDTO.class);
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(expected.getOrderTotalPrice(), actual.getTotal());
+	}
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void fansSaleTransform() throws Exception {
+		ShoppingOrderDO expected  = new ShoppingOrderDO();
+    	expected.setCommodityTotalPrice(new BigDecimal(1));
+    	expected.setActualAmount(new BigDecimal(1));
+    	expected.setFreightPrice(new BigDecimal(0));
+    	expected.setGmtCreate(new Date());
+    	expected.setGmtModified(new Date());
+    	expected.setIsFans(true);
+    	expected.setIsNeedsLogistics(true);
+    	expected.setIsNoReasonReturn(true);
+    	expected.setMemberId(1L);
+    	expected.setMemberNum("M0001");
+    	expected.setMerchantId(1L);
+    	expected.setMerchantName("拉乌网络");
+    	expected.setMerchantStoreId(1L);
+    	expected.setMerchantNum("B0001");
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+    	expected.setOrderTotalPrice(new BigDecimal(1));
+    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setStatus(StatusEnum.VALID.getValue());
+    	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+    	expected.setConsigneeAddress("大冲商务中心1301");
+    	expected.setConsigneeMobile("123456");
+    	expected.setConsigneeName("Sunny");
+    	expected.setExpressCompanyCode("韵达");
+    	expected.setExpressCompanyId(1);
+    	expected.setExpressCompanyName("韵达");
+    	expected.setGmtPayment(new Date());
+    	expected.setGmtTransaction(new Date());
+    	expected.setGmtTransport(new Date());
+    	expected.setIsDone(true);
+    	expected.setThirdNumber("654321");
+    	expected.setWaybillNum("3923440690592");
+    	expected.setShoppingCartIdsStr("1,2");
+    	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setSendTime(0);
+    	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	ReportDataParam param = new ReportDataParam();
+    	param.setFlag(ReportFansRiseRateEnum.DAY);
+    	param.setMerchantId(expected.getMerchantId());
+    	String content = JSONObject.toJSONString(param);
+    	
+    	RequestBuilder request = MockMvcRequestBuilders.put("/shoppingOrder/fansSaleTransform").contentType(MediaType.APPLICATION_JSON).content(content);
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
+        		.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+        		.andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+        		.andDo(MockMvcResultHandlers.print())
+        		.andReturn();
+        
+        List<ReportRiseRerouceDTO> list = JSONObject.parseArray(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), ReportRiseRerouceDTO.class);
+        Assert.assertNotNull(list);
+    	for (ReportRiseRerouceDTO actual : list) {
+    		if ("is_fans".equals(actual.getName())) {
+    			Assert.assertEquals("1", actual.getValue());
+    		}
+    		if ("no_fans".equals(actual.getName())) {
+    			Assert.assertEquals("0", actual.getValue());
+    		}
+    	}
+	}
+	
+	public static void assertShoppingOrderDTO(ShoppingOrderDO expected, ShoppingOrderDetailDTO actual){
+    	Assert.assertNotNull(actual);
+    	Assert.assertEquals(expected.getActualAmount().doubleValue(), actual.getActualAmount().doubleValue(), 0D);
+    	Assert.assertEquals(expected.getCommodityTotalPrice().doubleValue(), actual.getCommodityTotalPrice().doubleValue(), 0D);
+    	Assert.assertEquals(expected.getConsigneeAddress(), actual.getConsigneeAddress());
+    	Assert.assertEquals(expected.getConsigneeMobile(), actual.getConsigneeMobile());
+    	Assert.assertEquals(expected.getConsigneeName(), actual.getConsigneeName());
+    	Assert.assertEquals(expected.getExpressCompanyId(), actual.getExpressCompanyId());
+    	Assert.assertEquals(expected.getExpressCompanyName(), actual.getExpressCompanyName());
+    	Assert.assertEquals(expected.getFreightPrice().doubleValue(), actual.getFreightPrice().doubleValue(), 0D);
+    	Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime());
+    	Assert.assertEquals(expected.getGmtPayment() != null ? expected.getGmtPayment().getTime() : null, actual.getGmtPayment() != null ? actual.getGmtPayment().getTime() : null);
+    	Assert.assertEquals(expected.getId(), actual.getId());
+    	Assert.assertEquals(expected.getIsDone(), actual.getIsDone());
+    	Assert.assertEquals(expected.getIsNeedsLogistics(), actual.getIsNeedsLogistics());
+    	Assert.assertEquals(expected.getIsNoReasonReturn(), actual.getIsNoReasonReturn());
+    	Assert.assertEquals(expected.getMemberNum(), actual.getMemberNum());
+    	Assert.assertEquals(expected.getMerchantId(), actual.getMerchantId());
+    	Assert.assertEquals(expected.getMerchantName(), actual.getMerchantName());
+    	Assert.assertEquals(expected.getMerchantNum(), actual.getMerchantNum());
+    	Assert.assertEquals(expected.getMerchantStoreId(), actual.getMerchantStoreId());
+    	Assert.assertEquals(expected.getOrderNum(), actual.getOrderNum());
+    	Assert.assertEquals(expected.getOrderStatus(), actual.getOrderStatus().getValue());
+    	Assert.assertEquals(expected.getOrderTotalPrice().doubleValue(), actual.getOrderTotalPrice().doubleValue(), 0D);
+    	Assert.assertEquals(expected.getPaymentMethod(), actual.getPaymentMethod() != null ? actual.getPaymentMethod().getVal() : null);
+    	Assert.assertEquals(expected.getWaybillNum(), actual.getWaybillNum());
+    	Assert.assertEquals(expected.getGmtTransaction() != null ? expected.getGmtTransaction().getTime() : null, expected.getGmtTransaction() != null ? actual.getGmtTransaction().getTime() : null);
+    	Assert.assertEquals(expected.getGmtTransport() != null ? expected.getGmtTransport().getTime() : null, actual.getGmtTransport() != null ? actual.getGmtTransport().getTime() : null);
+    }
+	
+	public static void assertShoppingOrderItemBO(ShoppingOrderItemDO expected, ShoppingOrderItemDTO actual) {
+		Assert.assertNotNull(actual);
+		Assert.assertEquals(expected.getId(), actual.getId());
+		Assert.assertEquals(expected.getIsAllowRefund(), actual.getIsAllowRefund());
+		Assert.assertEquals(expected.getIsEvaluation(), actual.getIsEvaluation());
+		Assert.assertEquals(expected.getOrderStatus(), actual.getOrderStatus().getValue());
+		Assert.assertEquals(expected.getProductFeatureImage(), actual.getProductFeatureImage());
+		Assert.assertEquals(expected.getProductId(), actual.getProductId());
+		Assert.assertEquals(expected.getProductModelId(), actual.getProductModelId());
+		Assert.assertEquals(expected.getProductModelName(), actual.getProductModelName());
+		Assert.assertEquals(expected.getProductName(), actual.getProductName());
+		Assert.assertEquals(expected.getQuantity(), actual.getQuantity());
+		Assert.assertEquals(expected.getRefundStatus(), actual.getRefundStatus() != null ? actual.getRefundStatus().getValue() : null);
+		Assert.assertEquals(expected.getRegularPrice().doubleValue(), actual.getRegularPrice().doubleValue(), 0D);
+	}
 }
