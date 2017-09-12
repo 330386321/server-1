@@ -33,6 +33,7 @@ import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ReportFansRiseRateEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusToMemberEnum;
+import com.lawu.eshop.order.constants.ShoppingOrderStatusToMerchantEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.dto.ReportRiseRateDTO;
@@ -319,10 +320,15 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 		// 分页参数
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
-
+		
+		String orderByClause = "";
+		if (param.getOrderStatus().equals(ShoppingOrderStatusToMerchantEnum.BE_SHIPPED)) {
+			orderByClause += "so.gmt_payment asc,";
+		}
 		// 默认创建时间排序
-		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
-
+		orderByClause += "so.gmt_create desc";
+		
+		shoppingOrderExtendDOExample.setOrderByClause(orderByClause);
 		// 如果参数中的keyword有值，查询结果的订单项会缺少，所有先找出所有购物订单id再通过去查找购物订单以及级联的购物订单项
 		List<Long> idList = shoppingOrderDOExtendMapper.selectIdByExample(shoppingOrderExtendDOExample, rowBounds);
 
@@ -331,9 +337,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.createCriteria().andIdIn(idList);
 
-		// 默认创建时间排序
-		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
-
+		shoppingOrderExtendDOExample.setOrderByClause(orderByClause);
 		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
 		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
