@@ -52,6 +52,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	public List<ShoppingCartBO> findListByMemberId(Long memberId) {
 		ShoppingCartDOExample example = new ShoppingCartDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId);
+		example.setOrderByClause("gmt_create desc");
 		return ShoppingCartConverter.convertBOS(shoppingCartDOMapper.selectByExample(example));
 	}
 	
