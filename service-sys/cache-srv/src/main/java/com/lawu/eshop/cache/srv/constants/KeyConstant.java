@@ -64,4 +64,24 @@ public class KeyConstant {
      */
     public static final String REDIS_KEY_MERCHANT_COMMENT_STORE = "MERCHANT_COMMENT_STORE_";
 
+    /**
+     * 会员上次访问接口时间
+     */
+    public static final String REDIS_KEY_MEMBER_VISIT_TIME = "MEMBER_VISIT_TIME_";
+
+    /**
+     * 会员时间周期内访问接口频率
+     */
+    public static final String REDIS_KEY_MEMBER_VISIT_FREQUENCY = "MEMBER_VISIT_FREQUENCY_";
+
+    /**
+     * 商家上次访问接口时间
+     */
+    public static final String REDIS_KEY_MERCHANT_VISIT_TIME = "MERCHANT_VISIT_TIME_";
+
+    /**
+     * 商家时间周期内访问接口频率
+     */
+    public static final String REDIS_KEY_MERCHANT_VISIT_FREQUENCY = "MERCHANT_VISIT_FREQUENCY_";
+
 }

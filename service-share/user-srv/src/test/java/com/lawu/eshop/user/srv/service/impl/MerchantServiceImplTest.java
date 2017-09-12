@@ -20,6 +20,7 @@ import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantDetailBO;
@@ -33,6 +34,7 @@ import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.domain.UserLoginLogDO;
 import com.lawu.eshop.user.srv.domain.extend.MerchantDOView;
 import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
@@ -40,6 +42,7 @@ import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.UserLoginLogDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.PwdUtil;
@@ -73,6 +76,9 @@ public class MerchantServiceImplTest {
 
     @Autowired
     private MerchantStoreProfileDOMapper merchantStoreProfileDOMapper;
+
+    @Autowired
+    private UserLoginLogDOMapper userLoginLogDOMapper;
 
     @Transactional
     @Rollback
@@ -679,6 +685,28 @@ public class MerchantServiceImplTest {
         MerchantDetailBO detailBO = merchantService.getMerchantDetailById(200L);
         Assert.assertNotNull(detailBO);
         Assert.assertEquals(storeDO.getName(), detailBO.getName());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void saveLoginLog() {
+        UserLoginLogParam loginLogParam = new UserLoginLogParam();
+        loginLogParam.setUserNum("M0001");
+        loginLogParam.setAccount("13666666666");
+        loginLogParam.setUserType(UserType.MERCHANT.val);
+        loginLogParam.setImei("test");
+        loginLogParam.setPlatform(DataTransUtil.intToByte(1));
+        loginLogParam.setPlatformVer("test");
+        loginLogParam.setAppVer("test");
+        loginLogParam.setCityId(10);
+        loginLogParam.setChannel("test");
+        loginLogParam.setIpAddr("test");
+        merchantService.saveLoginLog(loginLogParam);
+
+        List<UserLoginLogDO> list = userLoginLogDOMapper.selectByExample(null);
+        Assert.assertEquals(1, list.size());
+        Assert.assertEquals(loginLogParam.getUserNum(), list.get(0).getUserNum());
     }
 
 }

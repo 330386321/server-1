@@ -32,6 +32,7 @@ import com.lawu.eshop.user.dto.UserHeadImgDTO;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantDetailBO;
@@ -389,6 +390,19 @@ public class MerchantController extends BaseController {
             return successGet(new MerchantDetailDTO());
         }
         return successGet(MerchantConverter.convertDTO(detailBO));
+    }
+
+    /**
+     * 保存商家登录日志
+     *
+     * @param loginLogParam
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "saveLoginLog", method = RequestMethod.POST)
+    public Result saveLoginLog(@RequestBody UserLoginLogParam loginLogParam) {
+        merchantService.saveLoginLog(loginLogParam);
+        return successCreated();
     }
 
 }

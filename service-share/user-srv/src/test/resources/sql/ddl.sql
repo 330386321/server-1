@@ -368,3 +368,18 @@ CREATE TABLE `fans_invite_result` (
 	PRIMARY KEY (`id`)
 );
 
+-- ----------------------------
+-- Table structure for user_freeze_record
+-- ----------------------------
+DROP TABLE IF EXISTS `user_freeze_record`;
+CREATE TABLE `user_freeze_record` (
+	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+	`user_num` VARCHAR(19) NOT NULL COMMENT '用户编号',
+	`account` VARCHAR(20) NOT NULL COMMENT '用户账号',
+	`user_type` TINYINT(2) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户类型，1是会员，2是商家',
+	`cause` VARCHAR(100) NOT NULL COMMENT '冻结原因',
+	`gmt_create` DATETIME NOT NULL COMMENT '创建时间',
+	PRIMARY KEY (`id`)
+);
+
+

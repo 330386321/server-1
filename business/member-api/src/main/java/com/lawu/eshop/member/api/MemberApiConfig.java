@@ -63,6 +63,15 @@ public class MemberApiConfig {
 	@Value(value="${member.h5.ip}")
     private String memberH5Ip;
 
+	@Value(value="${visit.time.interval}")
+	private Integer visitTimeInterval;
+
+	@Value(value="${visit.frequency.count}")
+	private Integer visitFrequencyCount;
+
+	@Value(value="${visit.frequency.count.expire.time}")
+	private Integer expireTime;
+
 	public String getImageUrl() {
 		return imageUrl;
 	}
@@ -192,6 +201,15 @@ public class MemberApiConfig {
 		return memberH5Ip;
 	}
 
+	public Integer getVisitTimeInterval() {
+		return visitTimeInterval;
+	}
 
+	public Integer getVisitFrequencyCount() {
+		return visitFrequencyCount;
+	}
 
+	public Integer getExpireTime() {
+		return expireTime;
+	}
 }
