@@ -183,12 +183,31 @@ public class WithdrawCashServiceImplTest {
 	@Transactional
 	@Rollback
 	@Test
-	public void selectAreaWithdrawMonthReport() {
-		saveAgentMonth();
-		AgentReportParam param = new AgentReportParam();
-		param.setBeginTime(DateUtil.getDateFormat(DateUtil.getMonthBefore(new Date()), "yyyy-MM"));
-		param.setEndTime(DateUtil.getDateFormat(new Date(), "yyyy-MM"));
-		param.setRegionPath("1/1/1");
-		WithdrawCashService.selectAreaWithdrawMonthReport(param);
+	public void getLastReportWithdraw() {
+		ReportWithdrawDailyDO DO = new ReportWithdrawDailyDO();
+		DO.setGmtCreate(new Date());
+		DO.setGmtReport(new Date());
+		DO.setMemberMoney(new BigDecimal("0"));
+		DO.setMerchantMoney(new BigDecimal("0"));
+		DO.setTotalMoney(new BigDecimal("0"));
+		reportWithdrawDailyDOMapper.insertSelective(DO);
+		WithdrawCashService.getLastReportWithdraw();
 	}
+	
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void getLastReportWithdrawMonth() {
+		ReportWithdrawMonthDO DO = new ReportWithdrawMonthDO();
+		DO.setGmtCreate(new Date());
+		DO.setGmtReport(new Date());
+		DO.setMemberMoney(new BigDecimal("0"));
+		DO.setMerchantMoney(new BigDecimal("0"));
+		DO.setTotalMoney(new BigDecimal("0"));
+		reportWithdrawMonthDOMapper.insertSelective(DO);
+		WithdrawCashService.getLastReportWithdrawMonth();
+	}
+	
+	
 }
