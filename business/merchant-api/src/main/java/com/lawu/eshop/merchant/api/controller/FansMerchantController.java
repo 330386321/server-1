@@ -296,7 +296,7 @@ public class FansMerchantController extends BaseController {
 
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "邀请粉丝(含邀请内容,含邀请条件)", notes = "邀请会员成为粉丝。[1002|1022|1023|1035|6002|6024] (洪钦明)", httpMethod = "POST")
+	@ApiOperation(value = "邀请粉丝(含邀请内容,含邀请条件)", notes = "邀请会员成为粉丝。[1002|1022|1023|1035|6002|6010|6024] (洪钦明)", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "inviteFansWithContentExtend", method = RequestMethod.POST)

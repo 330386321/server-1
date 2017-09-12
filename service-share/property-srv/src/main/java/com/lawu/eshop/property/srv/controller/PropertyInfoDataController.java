@@ -53,12 +53,7 @@ public class PropertyInfoDataController extends BaseController {
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-		
 		int retCode = propertyInfoDataService.doHanlderMinusPoint(param);
-		if (param.getMerchantTransactionTypeEnum() != null && param.getMerchantTransactionTypeEnum()
-				.getValue() == MerchantTransactionTypeEnum.INVITE_FANS.getValue()) {
-			return successCreated((Object)retCode);
-		}
 		return successCreated(retCode);
 	}
 
