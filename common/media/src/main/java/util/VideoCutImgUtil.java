@@ -49,7 +49,7 @@ public class VideoCutImgUtil {
 		commands.add("-f");
 		commands.add("image2");
 		commands.add("-ss");
-		commands.add("3");// 这个参数是设置截取视频多少秒时的画面
+		commands.add("1");// 这个参数是设置截取视频多少秒时的画面
 		commands.add("-s");
 		commands.add("500x300");
 		commands.add(AD_IMG_VIDEO);
