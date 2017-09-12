@@ -402,6 +402,7 @@ public class AdConverter {
 		adDetailBO.setAuditTime(adDO.getAuditTime());
 		adDetailBO.setBeginTime(adDO.getBeginTime());
 		adDetailBO.setProductId(adDO.getRelateId());
+		adDetailBO.setStoreName(adDO.getMerchantStoreName());
         return adDetailBO;
 		
 		
@@ -438,6 +439,7 @@ public class AdConverter {
 		adDetailDTO.setProductId(adDetailBO.getProductId());
 		adDetailDTO.setRedPacketAdFileUrl(adDetailBO.getRedPacketAdFileUrl());
 		adDetailDTO.setFileType(adDetailBO.getFileType());
+		adDetailDTO.setStoreName(adDetailBO.getStoreName());
         return adDetailDTO;
 		
 		

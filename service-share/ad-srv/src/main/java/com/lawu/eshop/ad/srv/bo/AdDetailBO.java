@@ -57,6 +57,8 @@ public class AdDetailBO {
 	private String redPacketAdFileUrl;
 	
 	private FileTypeEnum fileType;
+	
+	private String storeName;
 
 	public Long getId() {
 		return id;
@@ -250,6 +252,15 @@ public class AdDetailBO {
 		this.fileType = fileType;
 	}
 
+	public String getStoreName() {
+		return storeName;
+	}
+
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
+	}
+
+	
 	
 	
 }

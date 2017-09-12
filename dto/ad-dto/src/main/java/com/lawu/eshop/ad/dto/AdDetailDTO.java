@@ -95,6 +95,9 @@ public class AdDetailDTO {
 	
 	@ApiModelProperty(value = "文件类型")
 	private FileTypeEnum fileType;
+	
+	@ApiModelProperty(value = "店铺名称")
+	private String storeName;
 
 	public Long getId() {
 		return id;
@@ -304,6 +307,14 @@ public class AdDetailDTO {
 
 	public void setFileType(FileTypeEnum fileType) {
 		this.fileType = fileType;
+	}
+
+	public String getStoreName() {
+		return storeName;
+	}
+
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
 	}
 	
 	
