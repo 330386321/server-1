@@ -47,7 +47,7 @@ public class CommonController extends BaseController {
     private TokenManager tokenManager;
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[2000,2015]（孙林青）", httpMethod = "POST")
+    @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[2000|2015|2019]（孙林青）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "login/{account}", method = RequestMethod.POST)
     public Result<TokenDTO> login(@PathVariable @ApiParam(required = true, value = "账号") String account,

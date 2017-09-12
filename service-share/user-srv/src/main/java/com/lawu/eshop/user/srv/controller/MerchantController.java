@@ -15,6 +15,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
@@ -75,6 +76,9 @@ public class MerchantController extends BaseController {
         }
         if(merchantBO.getIsFreeze()){
             return successGet(ResultCode.ACCOUNT_IS_FREEZE, merchantBO.getFreezeReason());
+        }
+        if (merchantBO.getStatus().byteValue() == UserStatusEnum.MEMBER_STATUS_NOVALID.val) {
+            return successGet(ResultCode.ACCOUNT_IS_INVALID);
         }
         LoginUserDTO rtn = LoginUserConverter.convert(merchantBO);
         MerchantStoreBO merchantStoreBO = merchantStoreService.selectMerchantStore(merchantBO.getId());

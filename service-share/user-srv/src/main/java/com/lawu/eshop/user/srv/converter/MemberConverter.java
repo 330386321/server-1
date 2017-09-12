@@ -62,6 +62,7 @@ public class MemberConverter {
         memberBO.setFreezeReason(memberDO.getFreezeReason());
         memberBO.setGmtCreate(memberDO.getGmtCreate());
         memberBO.setName(memberDO.getName());
+        memberBO.setStatus(memberDO.getStatus());
         return memberBO;
     }
 
