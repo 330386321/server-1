@@ -88,4 +88,7 @@ public interface MerchantService {
      */
     @RequestMapping(value = "merchant/getMerchantDetail/{id}", method = RequestMethod.GET)
     Result<MerchantDetailDTO> getMerchantDetail(@PathVariable(value = "id") Long id);
+
+    @RequestMapping(value = "merchant/delMerchantGtPush", method = RequestMethod.PUT)
+    Result delMerchantGtPush(@RequestParam("merchantId") Long merchantId);
 }

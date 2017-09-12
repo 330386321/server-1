@@ -76,6 +76,7 @@ public class ResultCode {
     public static final int MAX_USERREDPACKET_COUNT=2016;
     public static final int MAX_USERREDPACKET_MONTY=2017;
     public static final int MIN_USERREDPACKET_MONTY=2018;
+    public static final int ACCOUNT_IS_INVALID = 2019;
 
 
     // 商品模块代码 3xxx
@@ -259,6 +260,7 @@ public class ResultCode {
         ResultCode.messageMap.put(MAX_USERREDPACKET_COUNT, "单个红包个数不能大于9999");
         ResultCode.messageMap.put(MAX_USERREDPACKET_MONTY, "单个红包金额不能大于50000");
         ResultCode.messageMap.put(MIN_USERREDPACKET_MONTY, "单个红包金额不能小于0.01");
+        ResultCode.messageMap.put(ACCOUNT_IS_INVALID, "账号已被封");
         
 
         //运营

@@ -14,6 +14,8 @@ public class StoreIndexParam {
 
     private Double discountOrdinal;
 
+    private String favoreEndTime;
+
     public Long getMerchantStoreId() {
         return merchantStoreId;
     }
@@ -44,5 +46,13 @@ public class StoreIndexParam {
 
     public void setDiscountOrdinal(Double discountOrdinal) {
         this.discountOrdinal = discountOrdinal;
+    }
+
+    public String getFavoreEndTime() {
+        return favoreEndTime;
+    }
+
+    public void setFavoreEndTime(String favoreEndTime) {
+        this.favoreEndTime = favoreEndTime;
     }
 }

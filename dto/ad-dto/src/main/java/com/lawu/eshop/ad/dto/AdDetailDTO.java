@@ -6,6 +6,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.FileTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -91,6 +92,9 @@ public class AdDetailDTO {
 	
 	@ApiModelProperty(value = "红包关联广告文件路径")
 	private String redPacketAdFileUrl;
+	
+	@ApiModelProperty(value = "文件类型")
+	private FileTypeEnum fileType;
 
 	public Long getId() {
 		return id;
@@ -292,6 +296,14 @@ public class AdDetailDTO {
 
 	public void setRedPacketAdFileUrl(String redPacketAdFileUrl) {
 		this.redPacketAdFileUrl = redPacketAdFileUrl;
+	}
+
+	public FileTypeEnum getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(FileTypeEnum fileType) {
+		this.fileType = fileType;
 	}
 	
 	

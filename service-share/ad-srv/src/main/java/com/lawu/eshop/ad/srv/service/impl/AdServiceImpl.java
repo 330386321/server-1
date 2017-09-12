@@ -1113,6 +1113,7 @@ public class AdServiceImpl implements AdService {
 				detail.setNotGetPoint(adDO.getTotalPoint());
 				detail.setRedPacketAdFileUrl(adDO.getMediaUrl());
 				detail.setVideoImgUrl(adDO.getVideoImgUrl());
+				detail.setFileType(FileTypeEnum.getEnum(adDO.getFileType()));
 				if(adDO.getPutWay()==PutWayEnum.PUT_WAY_COMMON.val){
 					detail.setMediaUrl(adSrvConfig.getRedPacketCommonMediaUrl());
 				}else if(adDO.getPutWay()==PutWayEnum.PUT_WAY_LUCK.val){
@@ -1129,6 +1130,7 @@ public class AdServiceImpl implements AdService {
 				detail.setNotGetPoint(adDO.getTotalPoint().subtract(sumPoint));
 				detail.setRedPacketAdFileUrl(adDO.getMediaUrl());
 				detail.setVideoImgUrl(adDO.getVideoImgUrl());
+				detail.setFileType(FileTypeEnum.getEnum(adDO.getFileType()));
 				if(adDO.getPutWay()==PutWayEnum.PUT_WAY_COMMON.val){
 					detail.setMediaUrl(adSrvConfig.getRedPacketCommonMediaUrl());
 				}else if(adDO.getPutWay()==PutWayEnum.PUT_WAY_LUCK.val){
