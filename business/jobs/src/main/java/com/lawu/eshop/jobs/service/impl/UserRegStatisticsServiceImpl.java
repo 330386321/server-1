@@ -131,19 +131,6 @@ public class UserRegStatisticsServiceImpl implements UserRegStatisticsService {
                 userRegAreaParam.setMerchantCount(merchantCommonResult.getModel() + merchantEntityResult.getModel());
                 userRegAreaParam.setCityId(regionDTO.getId());
                 userRegAreaParam.setName(regionDTO.getName());
-                if (regionDTO.getId() == 1102) {
-                    //北京县辖数据统计到北京市辖
-                    userRegAreaParam.setCityId(1101);
-                } else if (regionDTO.getId() == 1202) {
-                    //天津县辖数据统计到天津市辖
-                    userRegAreaParam.setCityId(1201);
-                } else if (regionDTO.getId() == 5002) {
-                    //重庆县辖数据统计到重庆市辖
-                    userRegAreaParam.setCityId(5001);
-                } else if (regionDTO.getId() == 3102) {
-                    //上海县辖数据统计到上海市辖
-                    userRegAreaParam.setCityId(3101);
-                }
                 userRegService.addUserRegAreaDaily(userRegAreaParam);
 
             }
@@ -183,19 +170,6 @@ public class UserRegStatisticsServiceImpl implements UserRegStatisticsService {
                 userRegAreaParam.setMerchantCount(merchantCommonResult.getModel() + merchantEntityResult.getModel());
                 userRegAreaParam.setCityId(regionDTO.getId());
                 userRegAreaParam.setName(regionDTO.getName());
-                if (regionDTO.getId() == 1102) {
-                    //北京县辖数据统计到北京市辖
-                    userRegAreaParam.setCityId(1101);
-                } else if (regionDTO.getId() == 5002) {
-                    //重庆县辖数据统计到重庆市辖
-                    userRegAreaParam.setCityId(5001);
-                } else if (regionDTO.getId() == 3102) {
-                    //上海县辖数据统计到上海市辖
-                    userRegAreaParam.setCityId(3101);
-                } else if (regionDTO.getId() == 1202) {
-                    //天津县辖数据统计到天津市辖
-                    userRegAreaParam.setCityId(1201);
-                }
                 userRegService.addUserRegAreaMonth(userRegAreaParam);
 
             }
