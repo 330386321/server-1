@@ -161,7 +161,7 @@
 			fans_merchant
 			WHERE
 			DATE_FORMAT(gmt_create, "%Y%m") =
-			#{formatDate} and merchant_id = #{merchantId}
+			#{formatDate} and merchant_id = #{merchantId} and status = 1
 			GROUP BY
 			DATE_FORMAT(gmt_create, "%d")
 		</if>
@@ -174,7 +174,7 @@
 			fans_merchant
 			WHERE
 			DATE_FORMAT(gmt_create, "%Y") =
-			#{formatDate} and merchant_id = #{merchantId}
+			#{formatDate} and merchant_id = #{merchantId} and status = 1
 			GROUP BY
 			DATE_FORMAT(gmt_create, "%m")
 		</if>
@@ -190,7 +190,7 @@
 			fans_merchant
 			WHERE
 			DATE_FORMAT(gmt_create, "%Y%m%d") = #{formatDate} and
-			merchant_id = #{merchantId}
+			merchant_id = #{merchantId}  and status = 1
 			GROUP BY
 			channel
 		</if>
@@ -202,7 +202,7 @@
 			fans_merchant
 			WHERE
 			DATE_FORMAT(gmt_create, "%Y%m") = #{formatDate} and merchant_id
-			= #{merchantId}
+			= #{merchantId}  and status = 1
 			GROUP BY
 			channel
 		</if>
