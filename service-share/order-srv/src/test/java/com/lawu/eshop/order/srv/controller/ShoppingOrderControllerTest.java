@@ -1684,13 +1684,18 @@ public class ShoppingOrderControllerTest {
     	Assert.assertEquals(1, page.getTotalCount().intValue());
         
     	ParserConfig mapping = new ParserConfig();
-    	mapping.putDeserializer(Date.class, new JCDateDeserializer());
+    	mapping.putDeserializer(Date.class, new JCDateDeserializer("yyyy-MM-dd HH:mm:ss"));
     	ShoppingOrderItemRefundForOperatorDTO actual = JSONObject.parseObject(page.getRecords().get(0).toJSONString(), ShoppingOrderItemRefundForOperatorDTO.class, mapping, JSON.DEFAULT_PARSER_FEATURE);
 		Assert.assertNotNull(actual);
 		Assert.assertEquals(expected.getConsigneeAddress(), actual.getConsigneeAddress());
 		Assert.assertEquals(expected.getConsigneeMobile(), actual.getConsigneeMobile());
 		Assert.assertEquals(expected.getConsigneeName(), actual.getConsigneeName());
 		Assert.assertEquals(shoppingRefundDetailDO.getGmtCreate().getTime(), actual.getGmtCreate().getTime(), 1000);
+		if (shoppingRefundDetailDO.getGmtIntervention() == null || actual.getGmtIntervention() == null) {
+			Assert.assertEquals(shoppingRefundDetailDO.getGmtIntervention(), actual.getGmtIntervention());
+		} else {
+			Assert.assertEquals(shoppingRefundDetailDO.getGmtIntervention().getTime(), actual.getGmtIntervention().getTime(), 1000);
+		}
 		Assert.assertEquals(shoppingRefundDetailDO.getId(), actual.getShoppingRefundDetailId());
 		Assert.assertEquals(shoppingOrderItemDO.getId(), actual.getId());
 		Assert.assertEquals(expected.getOrderNum(), actual.getOrderNum());

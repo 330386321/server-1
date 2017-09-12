@@ -39,7 +39,7 @@ public class ShoppingOrderExtendConverterTest {
 		for (int i = 0; i < expected.getItems().size(); i++) {
 			assertShoppingOrderItemDTO(expected.getItems().get(i), actual.getItems().get(i));
 		}
-		Assert.assertEquals(expectedExpressInquiriesDetailBO.getState(), actual.getState());
+		Assert.assertEquals(expectedExpressInquiriesDetailBO.getState().getValue(), actual.getState().getValue());
 		TraceDTO traceDTO = actual.getTrace();
 		Assert.assertEquals(expectedExpressInquiriesDetailBO.getTraces().get(0).getAcceptStation(), traceDTO.getAcceptStation());
 		Assert.assertEquals(expectedExpressInquiriesDetailBO.getTraces().get(0).getAcceptTime(), traceDTO.getAcceptTime());

@@ -185,7 +185,7 @@ public class ShoppingRefundDetailController extends BaseController {
 				break;
 		}
 		shoppingRefundDetailDTO.setCountdown(countdown);
-		return successCreated(shoppingRefundDetailDTO);
+		return successGet(shoppingRefundDetailDTO);
 	}
 
 	/**

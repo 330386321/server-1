@@ -89,7 +89,7 @@ public class ExpressConverterTest {
 	public static void assertExpressInquiriesDetailDTO(ExpressInquiriesDetailBO expected, ExpressInquiriesDetailDTO actual) {
 		Assert.assertNotNull(actual);
 		Assert.assertEquals(expected.getReason(), actual.getReason());
-		Assert.assertEquals(expected.getState(), actual.getState());
+		Assert.assertEquals(expected.getState().getValue(), actual.getState().getValue());
 		Assert.assertEquals(expected.getSuccess(), actual.getSuccess());
 		if (actual.getTraces() != null || actual.getTraces().isEmpty()) {
 			for (int i = 0; i < actual.getTraces().size(); i++) {
