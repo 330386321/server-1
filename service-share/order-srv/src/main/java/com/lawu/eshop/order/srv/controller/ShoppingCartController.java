@@ -63,7 +63,9 @@ public class ShoppingCartController extends BaseController {
 	 */
 	@RequestMapping(value = "list/{memberId}", method = RequestMethod.GET)
 	public Result<List<ShoppingCartDTO>> findListByMemberId(@PathVariable(name = "memberId") Long memberId) {
-		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartService.findListByMemberId(memberId)));
+		List<ShoppingCartBO> list = shoppingCartService.findListByMemberId(memberId);
+		List<ShoppingCartDTO> rtn = ShoppingCartConverter.convertDTOS(list);
+		return successGet(rtn);
 	}
 
 	/**
