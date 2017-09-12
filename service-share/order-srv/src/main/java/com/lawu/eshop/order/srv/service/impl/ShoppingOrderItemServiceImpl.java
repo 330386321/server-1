@@ -135,7 +135,7 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		}
 
 		// 按照退款详情的创建时间排序
-		shoppingOrderItemExtendDOExample.setOrderByClause("srd.gmt_create desc");
+		shoppingOrderItemExtendDOExample.setOrderByClause("srd.gmt_create asc");
 
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 
