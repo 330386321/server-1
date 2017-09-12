@@ -539,7 +539,7 @@ public class ProductServiceImpl implements ProductService {
             productImageDOMapper.insert(pcDO);
         }
 
-        if (ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal().equals(param.getProductStatus().getVal())){
+        if (param.getProductStatus() != null && ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal().equals(param.getProductStatus().getVal())){
             solrService.delSolrDocsById(productId, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         } else {
             ProductDO productDO1 = productDOMapper.selectByPrimaryKey(productId);
