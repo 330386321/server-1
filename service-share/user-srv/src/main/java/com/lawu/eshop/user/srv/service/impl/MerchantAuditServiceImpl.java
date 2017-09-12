@@ -96,6 +96,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                             JSONObject jsonObject = JSONObject.fromObject(oldAudit.getContent());
                             MerchantStoreParam merchantStoreParam = (MerchantStoreParam) JSONObject.toBean(jsonObject, MerchantStoreParam.class);
                             newStoreDO.setName(merchantStoreParam.getName());
+                            newStoreDO.setRegionName(merchantStoreParam.getRegionName());
                             newStoreDO.setRegionPath(merchantStoreParam.getRegionPath());
                             newStoreDO.setAddress(merchantStoreParam.getAddress());
                             newStoreDO.setLongitude(merchantStoreParam.getLongitude());
