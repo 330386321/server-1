@@ -254,7 +254,7 @@ public class ResultCode {
         ResultCode.messageMap.put(MEMBER_NO_EXIST, "用户不存在");
         ResultCode.messageMap.put(BANK_CASH_EXIST, "存在提现申请");
         ResultCode.messageMap.put(FANS_MERCHANT, "已经是商家粉丝");
-        ResultCode.messageMap.put(MOBILE_IS_NOT_EXIST, "手机号不存在");
+        ResultCode.messageMap.put(MOBILE_IS_NOT_EXIST, "该手机号码尚未注册");
         ResultCode.messageMap.put(MERCHANT_STORE_IS_FAVORITE, "门店已被收藏");
         ResultCode.messageMap.put(ACCOUNT_IS_FREEZE, "账户已被冻结");
         ResultCode.messageMap.put(MAX_USERREDPACKET_COUNT, "单个红包个数不能大于9999");
