@@ -23,7 +23,7 @@ public class UserVisitInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private UserVisitEventPublish userVisitEventPublish;
 
-    @Value(value="${is.validate.header.param}")
+    @Value(value = "${is.validate.header.param}")
     private boolean isValidate;
 
     public boolean preHandle(HttpServletRequest request,
@@ -39,7 +39,7 @@ public class UserVisitInterceptor extends HandlerInterceptorAdapter {
         String appVer = request.getHeader(VisitConstants.REQUEST_APP_VERSION);
         String cityId = request.getHeader(VisitConstants.REQUEST_LOCATION_PATH);
         String channel = request.getHeader(VisitConstants.REQUEST_CHANNEL);
-        if (isValidate && (StringUtils.isEmpty(imei) || StringUtils.isEmpty(platform) || StringUtils.isEmpty(platformVer) || StringUtils.isEmpty(appVer) || StringUtils.isEmpty(channel))) {
+        if (isValidate && (StringUtils.isEmpty(platform) || StringUtils.isEmpty(platformVer) || StringUtils.isEmpty(appVer) || StringUtils.isEmpty(channel))) {
             throw new HeaderParamException();
         }
 
