@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.lawu.eshop.authorization.exception.MethodNotSupportException;
 import com.lawu.eshop.authorization.util.UserUtil;
+import com.lawu.eshop.framework.web.exception.HeaderParamException;
 
 /**
  * 用户访问拦截器
@@ -40,7 +40,7 @@ public class UserVisitInterceptor extends HandlerInterceptorAdapter {
         String cityId = request.getHeader(VisitConstants.REQUEST_LOCATION_PATH);
         String channel = request.getHeader(VisitConstants.REQUEST_CHANNEL);
         if (isValidate && (StringUtils.isEmpty(imei) || StringUtils.isEmpty(platform) || StringUtils.isEmpty(platformVer) || StringUtils.isEmpty(appVer) || StringUtils.isEmpty(channel))) {
-            throw new MethodNotSupportException("");
+            throw new HeaderParamException();
         }
 
         // 将header中的值存放到request中
