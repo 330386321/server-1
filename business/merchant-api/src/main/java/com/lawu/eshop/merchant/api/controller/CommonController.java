@@ -70,6 +70,7 @@ public class CommonController extends BaseController {
         tokenDTO.setUserNum(userDTO.getNum());
         tokenDTO.setToken(token);
         tokenDTO.setRyToken(userDTO.getRyToken());
+        tokenDTO.setMerchantId(userDTO.getId());
         tokenDTO.setIsFreeze(userDTO.getIsFreeze());
         tokenDTO.setMerchantStoreType(userDTO.getMerchantStoreType() != null ? MerchantStoreTypeEnum.getEnum(userDTO.getMerchantStoreType().val) : MerchantStoreTypeEnum.NOT_MERCHANT);
 
