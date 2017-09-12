@@ -31,7 +31,7 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "ad/saveAd")
-	Result saveAd(@RequestBody AdSaveParam adSaveParam);
+	Result<Integer> saveAd(@RequestBody AdSaveParam adSaveParam);
 	
 	/**
 	 * 查询广告
@@ -107,5 +107,7 @@ public interface AdService {
 	 */
 	@RequestMapping(value = "ad/isMyData/{id}", method = RequestMethod.GET)
 	Result<IsMyDateDTO> isMyData(@PathVariable("id") Long id,@RequestParam("merchantId") Long merchantId);
+	
+	
 
 }

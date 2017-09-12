@@ -8,15 +8,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.framework.web.Result;
 
 @FeignClient(value = "cache-srv")
-public interface ClickAdRecordService {
+public interface AdCountRecordService {
+	
+	@RequestMapping(value = "adCount/getAdCountRecord", method = RequestMethod.GET)
+    public Result<Integer> getAdCountRecord(@RequestParam("id") Long id);
 	
 	
-	@RequestMapping(value = "clickAdRecord/setClickAdRecord", method = RequestMethod.POST)
-    Result setClickAdRecord(@RequestParam("key") String key);
-	
-	
-	@RequestMapping(value = "clickAdRecord/getClickAdRecord", method = RequestMethod.GET)
-    Result<Boolean> getClickAdRecord(@RequestParam("key") String key);
-	
-	
+	@RequestMapping(value = "adCount/updateAdCountRecord", method = RequestMethod.GET)
+	Result updateAdCountRecord(@RequestParam("id") Long  id);
+
 }

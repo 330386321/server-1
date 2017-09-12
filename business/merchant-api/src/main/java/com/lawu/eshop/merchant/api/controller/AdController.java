@@ -41,6 +41,7 @@ import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
+import com.lawu.eshop.merchant.api.service.AdCountCacheService;
 import com.lawu.eshop.merchant.api.service.AdService;
 import com.lawu.eshop.merchant.api.service.MemberCountService;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
@@ -91,6 +92,9 @@ public class AdController extends BaseController {
     
     @Autowired
    	private ProductService productService;
+    
+    @Autowired
+   	private AdCountCacheService adCountCacheService;
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
@@ -228,26 +232,36 @@ public class AdController extends BaseController {
     	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
     	AdSaveParam adSave=new AdSaveParam();
     	adSave.setAdParam(adParam);
-    	if(isSuccess(storeRs)){
-    		MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();
-        	if(storeDTO!=null){
-        		adSave.setLatitude(storeDTO.getLatitude());
-            	adSave.setLongitude(storeDTO.getLongitude());
-            	adSave.setLogoUrl(storeDTO.getLogoUrl());
-            	if(storeDTO.getManageType()!=null){
-            		adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
-            	}
-            	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
-            	adSave.setMerchantStoreName(storeDTO.getName());
-            	adSave.setMerchantRegionPath(storeDTO.getRegionPath());
+    	if(!isSuccess(storeRs)){
+    		 return successCreated(storeRs.getRet());
+    	}
+    	MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();
+    	if(storeDTO!=null){
+    		adSave.setLatitude(storeDTO.getLatitude());
+        	adSave.setLongitude(storeDTO.getLongitude());
+        	adSave.setLogoUrl(storeDTO.getLogoUrl());
+        	if(storeDTO.getManageType()!=null){
+        		adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
         	}
+        	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
+        	adSave.setMerchantStoreName(storeDTO.getName());
+        	adSave.setMerchantRegionPath(storeDTO.getRegionPath());
     	}
     	adSave.setCount(count);
     	adSave.setMediaUrl(adParam.getMediaUrl());
     	adSave.setVideoImgUrl(adParam.getVideoImgUrl());
     	adSave.setMerchantId(merchantId);
     	adSave.setUserNum(userNum);
-        return adService.saveAd(adSave);
+    	Result<Integer> result = adService.saveAd(adSave);
+    	
+    	//将抢赞广告总数存入缓存
+    	if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE ){
+    		if(isSuccess(result) && result.getModel()>0){
+    			adCountCacheService.setAdCountRecord(Long.parseLong(result.getModel().toString()), count);
+    		}
+    	}
+    	
+        return result;
     }
     
     @Audit(date = "2017-04-15", reviewer = "孙林青")

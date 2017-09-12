@@ -50,6 +50,7 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.member.api.MemberApiConfig;
+import com.lawu.eshop.member.api.service.AdCountRecordService;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdLexiconService;
 import com.lawu.eshop.member.api.service.AdService;
@@ -59,21 +60,15 @@ import com.lawu.eshop.member.api.service.FansMerchantService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantService;
-import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.PropertyInfoDataService;
-import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.VerifyCodeService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
-import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
-import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.UserRedPacketDTO;
 import com.lawu.eshop.user.param.RegisterRealParam;
@@ -131,6 +126,9 @@ public class AdController extends BaseController {
 	
 	@Autowired
 	private AdLexiconService adLexiconService;
+	
+	@Autowired
+	private AdCountRecordService adCountRecordService;
 	
 	/**
 	 * @see selectEgainAd
@@ -292,7 +290,15 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-		return adExtendService.clickPraise(id);
+		 Result<Integer> result = adCountRecordService.getAdCountRecord(id);
+		 if(result.getModel()<=0){
+			 return successCreated(ResultCode.AD_PRAISE_PUTED);
+		 }
+		 Result<PraisePointDTO> clickResult = adExtendService.clickPraise(id);
+		 if(isSuccess(clickResult) && clickResult.getModel().getPoint().compareTo(BigDecimal.valueOf(0))==1){
+			 adCountRecordService.updateAdCountRecord(id);
+		 }
+		 return clickResult;
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")

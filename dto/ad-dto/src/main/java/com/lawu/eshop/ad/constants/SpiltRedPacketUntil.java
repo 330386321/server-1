@@ -1,13 +1,10 @@
 package com.lawu.eshop.ad.constants;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-public class RedPacketArithmetic {  
+public class SpiltRedPacketUntil {  
 	
-	private RedPacketArithmetic(){}
+	private SpiltRedPacketUntil(){}
 	
     //红包最小值  
     private static final double MINVALUE = 0.2;  
@@ -76,22 +73,15 @@ public class RedPacketArithmetic {
      * @param count 
      * @return 
      */  
-    public static List<Double> spiltRedPackets(double money,int count) {  
-    	List<Double> list = new ArrayList<>();  
+    public static Double spiltRedPackets(double money,int count,int getCount) {  
         
         double max = Double.parseDouble(format.format(money/count))*MAXVALUE;  
         double min=MINVALUE*money/count;
         min=min>0.01?min:0.01;
+        double value = randomRedPacket(money,min,max,count-getCount);  
+        value= Double.parseDouble(format.format(value));  
         
-        for(int i = 0 ; i < count; i++) {  
-        	double value = randomRedPacket(money,min,max,count-i);  
-        	value= Double.parseDouble(format.format(value));  
-            list.add(value);  
-            money -= value;  
-        }  
-        Collections.shuffle(list);
-        return list;  
-    }  
-    
+        return value;  
+    }
    
 } 

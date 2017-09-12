@@ -108,7 +108,7 @@ public class AdController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "saveAd", method = RequestMethod.POST)
-	public Result saveAd(@RequestBody AdSaveParam adSaveParam) {
+	public Result<Integer> saveAd(@RequestBody AdSaveParam adSaveParam) {
 
 		if (adSaveParam.getAdParam().getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PACKET.getVal()) {
 			Integer count = adService.selectRPIsSend(adSaveParam.getMerchantId());
@@ -121,7 +121,7 @@ public class AdController extends BaseController {
 		if (id == null || id < 0) {
 			successCreated(ResultCode.SAVE_FAIL);
 		}
-		return successCreated();
+		return successCreated(id);
 
 	}
 
@@ -316,8 +316,7 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@PathVariable Long id, @RequestParam Long memberId, @RequestParam String num) {
 		Boolean flag = pointPoolService.selectStatusByMember(id, memberId);
-		if (flag)
-			return successCreated(ResultCode.AD_PRAISE_POINT_GET);
+		if (flag) return successCreated(ResultCode.AD_PRAISE_POINT_GET);
 		BigDecimal point = adService.clickPraise(id, memberId, num);
 		if (point.compareTo(new BigDecimal(0)) == 0) {
 			return successCreated(ResultCode.AD_PRAISE_PUTED);

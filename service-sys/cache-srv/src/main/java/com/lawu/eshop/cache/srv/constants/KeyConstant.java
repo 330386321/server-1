@@ -63,5 +63,10 @@ public class KeyConstant {
      * 优选美食-评价最高
      */
     public static final String REDIS_KEY_MERCHANT_COMMENT_STORE = "MERCHANT_COMMENT_STORE_";
+    
+    /**
+     * 广告可领取数量
+     */
+    public static final String REDIS_KEY_AD_COUNT = "AD_KEY_MEMBER_COUNT_";
 
 }
