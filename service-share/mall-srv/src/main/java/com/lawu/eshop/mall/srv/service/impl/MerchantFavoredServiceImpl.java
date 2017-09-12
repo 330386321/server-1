@@ -23,6 +23,7 @@ import com.lawu.eshop.mall.srv.domain.MerchantFavoredDOExample;
 import com.lawu.eshop.mall.srv.mapper.MerchantFavoredDOMapper;
 import com.lawu.eshop.mall.srv.service.MerchantFavoredService;
 import com.lawu.eshop.solr.service.SolrService;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * @author zhangyong
@@ -86,6 +87,7 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
         }
         SolrInputDocument document = SolrDocumentConverter.converFavoredSolrInputDocument(solrDocument);
         document.addField("favoreInfo_s", favoreInfo);
+        document.addField("favoreEndTime_s", DateUtil.getDateFormat(merchantFavoredDO.getEntireEndTime()));
         document.addField("discountOrdinal_d", discountOrdinal);
         solrService.addSolrDocs(document, mallSrvConfig.getSolrUrl(), mallSrvConfig.getSolrMerchantCore(), mallSrvConfig.getIsCloudSolr());
         return i;
@@ -117,6 +119,7 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
         }
         SolrInputDocument document = SolrDocumentConverter.converFavoredSolrInputDocument(solrDocument);
         document.addField("favoreInfo_s", "");
+        document.addField("favoreEndTime_s", "");
         document.addField("discountOrdinal_d", 1000);
         solrService.addSolrDocs(document, mallSrvConfig.getSolrUrl(), mallSrvConfig.getSolrMerchantCore(), mallSrvConfig.getIsCloudSolr());
     }
@@ -178,6 +181,7 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
         }
         SolrInputDocument document = SolrDocumentConverter.converFavoredSolrInputDocument(solrDocument);
         document.addField("favoreInfo_s", favoreInfo);
+        document.addField("favoreEndTime_s", DateUtil.getDateFormat(merchantFavoredDO.getEntireEndTime()));
         document.addField("discountOrdinal_d", discountOrdinal);
         solrService.addSolrDocs(document, mallSrvConfig.getSolrUrl(), mallSrvConfig.getSolrMerchantCore(), mallSrvConfig.getIsCloudSolr());
         return i;

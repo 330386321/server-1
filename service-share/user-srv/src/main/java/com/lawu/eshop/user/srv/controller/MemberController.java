@@ -16,6 +16,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.AdQueryMemberInfoDTO;
 import com.lawu.eshop.user.dto.CashUserInfoDTO;
@@ -82,6 +83,9 @@ public class MemberController extends BaseController {
         }
         if(memberBO.getIsFreeze()){
             return successGet(ResultCode.ACCOUNT_IS_FREEZE,memberBO.getFreezeReason());
+        }
+        if (memberBO.getStatus().byteValue() == UserStatusEnum.MEMBER_STATUS_NOVALID.val) {
+            return successGet(ResultCode.ACCOUNT_IS_INVALID);
         }
         return successGet(LoginUserConverter.convert(memberBO));
     }

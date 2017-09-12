@@ -201,9 +201,9 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 
 	/**
 	 *  用户收入加余额，计算爱心账户：
-	 *  用户点广告(需要乘以0.5)
+	 *  用户点广告(所得需要乘以0.5)
 	 *  抢赞
-	 *  抢红包
+	 *  抢红包(用户发的、商家发的)
 	 * @param param
 	 * @return
 	 */

@@ -28,6 +28,7 @@ import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.StoreIndexParam;
+import com.lawu.eshop.utils.DateUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -113,6 +114,7 @@ public class IndexController extends BaseController {
                 storeIndexParam.setFavoreInfo(favoreInfo);
                 storeIndexParam.setDiscountPackage(discountPackage);
                 storeIndexParam.setDiscountOrdinal(discountOrdinal);
+                storeIndexParam.setFavoreEndTime(DateUtil.getDateFormat(favoredDTOResult.getModel().getEntireEndTime()));
                 indexParamList.add(storeIndexParam);
             }
             if (!indexParamList.isEmpty()) {

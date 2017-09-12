@@ -20,6 +20,11 @@ public class ShoppingOrderSettlementParam {
 	 * 用户编号
 	 */
 	private String memberNum;
+	
+	/**
+	 * 用户昵称
+	 */
+	private String memberNickname;
 
 	/**
 	 * 商家id
@@ -110,6 +115,14 @@ public class ShoppingOrderSettlementParam {
 
 	public void setMemberNum(String memberNum) {
 		this.memberNum = memberNum;
+	}
+
+	public String getMemberNickname() {
+		return memberNickname;
+	}
+
+	public void setMemberNickname(String memberNickname) {
+		this.memberNickname = memberNickname;
 	}
 
 	public Long getMerchantId() {

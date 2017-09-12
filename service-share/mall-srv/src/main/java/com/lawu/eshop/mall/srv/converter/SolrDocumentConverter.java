@@ -59,6 +59,7 @@ public class SolrDocumentConverter {
         document.addField("averageScore_d", solrDocument.get("averageScore_d"));
         document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d"));
         document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
+        document.addField("favoreEndTime_s", solrDocument.get("favoreEndTime_s"));
         document.addField("keywords", solrDocument.get("keywords"));
         if (solrDocument.get("keywords") != null && StringUtils.isNotEmpty(solrDocument.get("keywords").toString())) {
             String keywords = solrDocument.get("keywords").toString();

@@ -41,6 +41,7 @@ import com.lawu.eshop.user.srv.domain.extend.NewMerchantStoreDOView;
 import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
 import com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview;
 import com.lawu.eshop.utils.DataTransUtil;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 商家门店信息转换
@@ -439,6 +440,12 @@ public class MerchantStoreConverter {
             if (storeSolrDTO.getAverageScore() == 0) {
                 storeSolrDTO.setAverageScore(4.0);
             }
+            if (solrDocument.get("favoreEndTime_s") != null && StringUtils.isNotEmpty(solrDocument.get("favoreEndTime_s").toString())) {
+                String favoreEndTime = solrDocument.get("favoreEndTime_s").toString();
+                if (DateUtil.isOverdue(DateUtil.formatDate(favoreEndTime, "yyyy-MM-dd"))) {
+                    storeSolrDTO.setFavoreInfo("");
+                }
+            }
             storeSolrDTOS.add(storeSolrDTO);
         }
         return storeSolrDTOS;
@@ -464,6 +471,7 @@ public class MerchantStoreConverter {
         document.addField("averageScore_d", solrDocument.get("averageScore_d"));
         document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d"));
         document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s"));
+        document.addField("favoreEndTime_s", solrDocument.get("favoreEndTime_s"));
         document.addField("discountPackage_s", solrDocument.get("discountPackage_s"));
         document.addField("keywords", solrDocument.get("keywords"));
         if (solrDocument.get("keywords") != null && StringUtils.isNotEmpty(solrDocument.get("keywords").toString())) {
@@ -485,10 +493,11 @@ public class MerchantStoreConverter {
      */
     public static ShoppingOrderFindUserInfoDTO convert(List<ShoppingOrderFindMerchantInfoBO> merchantStoreNoReasonReturnBOList, MemberBO memberBO) {
     	ShoppingOrderFindUserInfoDTO rtn = new ShoppingOrderFindUserInfoDTO();
-    	
     	rtn.setShoppingOrderFindMerchantInfoDTOList(convertShoppingOrderFindMerchantInfoDTOList(merchantStoreNoReasonReturnBOList));
-        rtn.setMemberNum(memberBO == null ? null : memberBO.getNum());
-        
+    	if (memberBO != null) {
+    		rtn.setMemberNum(memberBO.getNum());
+    		rtn.setMemberNickname(memberBO.getNickname());
+    	}
         return rtn;
     }
 

@@ -79,8 +79,8 @@
 	<job:simple id="payOrderAutoCommentJob" description="自动评论买单" class="com.lawu.eshop.jobs.impl.payorder.PayOrderAutoCommentJob" registry-center-ref="regCenter" cron="0 0/1 * * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 				
-	<!-- <job:simple id="userRedpacketJob" description="用户红包失效任务" class="com.lawu.eshop.jobs.impl.ad.UserRedpacketJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" 
-				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>-->
+	<job:simple id="userRedpacketJob" description="用户红包失效任务" class="com.lawu.eshop.jobs.impl.ad.UserRedpacketJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" 
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 
 
 	<!--############## 代理商定时任务               开始                ##############-->

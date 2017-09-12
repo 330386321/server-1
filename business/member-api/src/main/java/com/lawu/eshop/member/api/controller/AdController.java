@@ -342,12 +342,7 @@ public class AdController extends BaseController {
 		findParam.setMemberId(memberId);
 		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
 		findParam.setMerchantIds(merchantIds);
-		if(memberId != 0) {
-			Result<UserDTO> userRS = memberService.findMemberInfo(memberId);
-			if (userRS.getModel().getRegionPath() != null) {
-				findParam.setRegionPath(userRS.getModel().getRegionPath());
-			}
-		} else {
+		if(adSolrParam.getTransRegionPath()!=null){
 			findParam.setRegionPath(adSolrParam.getTransRegionPath());
 		}
 		return adService.queryAdByTitle(findParam);

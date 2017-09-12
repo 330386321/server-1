@@ -23,6 +23,7 @@ import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
 import com.lawu.eshop.mall.dto.RegionDTO;
 import com.lawu.eshop.user.dto.NewMerchantStoreDTO;
 import com.lawu.eshop.user.dto.RecommendFoodDTO;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * @author meishuquan
@@ -116,6 +117,7 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
             }
         }
         foodDTO.setFavoreInfo(favoreInfo);
+        foodDTO.setFavoreEndTime(DateUtil.getDateFormat(favoredDTOResult.getModel().getEntireEndTime()));
 
         //查询商家优惠套餐
         Result<Page<DiscountPackageQueryDTO>> discountResult = discountPackageService.listForMember(foodDTO.getMerchantId());

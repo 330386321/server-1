@@ -203,7 +203,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	private void setRedpacketOverDue(Long userRedpacketId) {
 		UserRedPacketDO userRedpacket =userRedPacketDOMapper.selectByPrimaryKey(userRedpacketId);
 		userRedpacket.setGmtModified(new Date());
-		userRedpacket.setStatus(UserRedPacketEnum.USER_STATUS_OVER.val);
+		userRedpacket.setStatus(UserRedPacketEnum.USER_STATUS_OUT.val);
 		UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
 		userTakedExample.createCriteria().andUserRedPackIdEqualTo(userRedpacketId)
 		.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
@@ -313,5 +313,34 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 			flag=true;
 		}
 		return flag;
+	}
+	
+	/**
+	 * 红包过期定时任务
+	 */
+	@Override
+	@Transactional
+	public void executeUserRedPacketData() {
+		Date date = DateUtil.getDayBefore(new Date());// 前一天的时间
+		UserRedPacketDOExample example = new UserRedPacketDOExample();
+		Criteria cr = example.createCriteria();
+		cr.andGmtCreateLessThan(date);
+		cr.andStatusEqualTo(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
+		List<UserRedPacketDO> list = userRedPacketDOMapper.selectByExample(example);
+		if (!list.isEmpty()) {
+			for (int i = 0; i < list.size(); i++) {
+				UserRedPacketDO userRed = list.get(i);
+				UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
+				userTakedExample.createCriteria().andUserRedPackIdEqualTo(userRed.getId())
+						.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+				List<UserTakedRedPacketDO> listTaked = userTakedRedPacketDOMapper.selectByExample(userTakedExample);
+				BigDecimal totalBackMoney = getTotalBackMoney(listTaked);
+				userRed.setGmtModified(new Date());
+				userRed.setStatus(UserRedPacketEnum.USER_STATUS_OUT.val);
+				userRed.setRefundMoney(totalBackMoney);
+				userRedPacketDOMapper.updateByPrimaryKeySelective(userRed);
+				memberRedPacketRefundTransactionMainServiceImpl.sendNotice(userRed.getId());
+			}
+		}
 	}
 }

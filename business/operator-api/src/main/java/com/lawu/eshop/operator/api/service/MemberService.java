@@ -65,4 +65,7 @@ public interface MemberService {
     @RequestMapping(value = "member/freezeAccount", method = RequestMethod.PUT)
     Result freezeAccount(@RequestParam("num") String num, @RequestParam("isFreeze") Boolean isFreeze,
                          @RequestParam("freezeReason") String freezeReason);
+
+    @RequestMapping(value = "member/delUserGtPush", method = RequestMethod.PUT)
+    Result delUserGtPush(@RequestParam("memberId") Long memberId);
 }

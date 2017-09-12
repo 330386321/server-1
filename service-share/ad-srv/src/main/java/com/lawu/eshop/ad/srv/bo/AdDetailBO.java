@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.FileTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 
 public class AdDetailBO {
@@ -52,6 +53,12 @@ public class AdDetailBO {
 	private Date beginTime;
 	
 	private Long productId;
+	
+	private String redPacketAdFileUrl;
+	
+	private FileTypeEnum fileType;
+	
+	private String storeName;
 
 	public Long getId() {
 		return id;
@@ -229,6 +236,31 @@ public class AdDetailBO {
 		this.productId = productId;
 	}
 
+	public String getRedPacketAdFileUrl() {
+		return redPacketAdFileUrl;
+	}
+
+	public void setRedPacketAdFileUrl(String redPacketAdFileUrl) {
+		this.redPacketAdFileUrl = redPacketAdFileUrl;
+	}
+
+	public FileTypeEnum getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(FileTypeEnum fileType) {
+		this.fileType = fileType;
+	}
+
+	public String getStoreName() {
+		return storeName;
+	}
+
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
+	}
+
+	
 	
 	
 }
