@@ -48,6 +48,9 @@ public class MerchantInfoDTO {
     @ApiModelProperty(name = "merchantStoreId ",value = "门店ID")
     private Long merchantStoreId;
 
+    @ApiModelProperty(value = "门店名称")
+    private String storeName;
+
     @ApiModelProperty(name = "merchantStoreId ",value = "门店审核状态")
     private MerchantAuditStatusEnum auditStatusEnum;
 
@@ -204,5 +207,13 @@ public class MerchantInfoDTO {
 
     public void setDepositStatusEnum(BusinessDepositStatusEnum depositStatusEnum) {
         this.depositStatusEnum = depositStatusEnum;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 }
