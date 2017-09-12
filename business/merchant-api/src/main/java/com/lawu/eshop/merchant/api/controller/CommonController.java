@@ -41,7 +41,7 @@ public class CommonController extends BaseController {
     private MerchantApiConfig merchantApiConfig;
 
     @Autowired
-    private MerchantService memberService;
+    private MerchantService merchantService;
 
     @Autowired
     private TokenManager tokenManager;
@@ -53,7 +53,7 @@ public class CommonController extends BaseController {
     public Result<TokenDTO> login(@PathVariable @ApiParam(required = true, value = "账号") String account,
                                   @RequestParam @ApiParam(required = true, value = "密码") String pwd) {
 
-        Result<LoginUserDTO> result = memberService.find(account, pwd);
+        Result<LoginUserDTO> result = merchantService.find(account, pwd);
         if (!isSuccess(result)) {
             return successGet(result);
         }
@@ -78,7 +78,7 @@ public class CommonController extends BaseController {
     @RequestMapping(value = "logout", method = RequestMethod.DELETE)
     public Result logout(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long userId = UserUtil.getCurrentUserId(getRequest());
-        memberService.delMerchantGtPush(userId);
+        merchantService.delMerchantGtPush(userId);
         tokenManager.delRelationshipByToken(token);
         return successDelete();
     }

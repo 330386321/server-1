@@ -125,6 +125,7 @@ public class MemberController extends BaseController{
             //修改用户冻结状态
             memberService.freezeAccount(param.getNum(), param.getIsFreeze(),StringUtils.isEmpty(param.getFreezeReason()) ? "解冻" : param.getFreezeReason());
             if (param.getIsFreeze()) {//冻结
+                memberService.delUserGtPush(param.getId());
                 tokenService.delMemberRelationshipByAccount(param.getAccount());//删除token
             }
             return successCreated();
@@ -140,6 +141,7 @@ public class MemberController extends BaseController{
         if (ResultCode.MERCHANT_STORE_NO_EXIST == result.getRet()) {
             //未创建门店
             if (param.getIsFreeze()) {
+                merchantService.delMerchantGtPush(param.getId());
                 tokenService.delMerchantRelationshipByAccount(param.getAccount());//删除token
             }
             //下架并删除solr广告
@@ -162,6 +164,7 @@ public class MemberController extends BaseController{
             // 下架，删除solr广告
             adService.soldOutAdByMerchantId(param.getId());
 
+            merchantService.delMerchantGtPush(param.getId());
             tokenService.delMerchantRelationshipByAccount(param.getAccount());//删除token
         }else{
             //解冻
