@@ -64,6 +64,9 @@ public class RecommendFoodDTO {
     @ApiModelProperty(value = "优惠套餐")
     private String discountPackage;
 
+    @ApiModelProperty(value = "优惠有效期")
+    private String favoreEndTime;
+
     public Long getMerchantId() {
         return merchantId;
     }
@@ -206,5 +209,13 @@ public class RecommendFoodDTO {
 
     public void setRegionPath(String regionPath) {
         this.regionPath = regionPath;
+    }
+
+    public String getFavoreEndTime() {
+        return favoreEndTime;
+    }
+
+    public void setFavoreEndTime(String favoreEndTime) {
+        this.favoreEndTime = favoreEndTime;
     }
 }
