@@ -40,4 +40,9 @@ class MockUserVisitService implements UserVisitService {
     public Result delUserVisitFrequency(@RequestParam("userId") Long userId, @RequestParam("type") UserType type) {
         return null;
     }
+
+    @Override
+    public Result<Long> addUserVisitCountAndTime(@RequestParam("userNum") String userNum, @RequestParam("nowTimeStr") String nowTimeStr, @RequestParam("userId") Long userId, @RequestParam("type") UserType type, @RequestParam("currTime") String currTime) {
+        return null;
+    }
 }

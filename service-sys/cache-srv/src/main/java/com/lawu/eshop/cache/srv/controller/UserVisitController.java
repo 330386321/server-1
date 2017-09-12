@@ -24,24 +24,24 @@ public class UserVisitController extends BaseController {
     @Autowired
     private UserVisitService userVisitService;
 
-    @RequestMapping(value = "addUserVisitCount",method = RequestMethod.POST)
+    @RequestMapping(value = "addUserVisitCount", method = RequestMethod.POST)
     public Result addUserVisitCount(@RequestParam("userNum") String userNum,
                                     @RequestParam("nowTimeStr") String nowTimeStr,
-                                    @RequestParam("userId") Long userId, @RequestParam("type") UserType type){
-        userVisitService.addUserVisitCount(userNum,nowTimeStr,userId,type);
+                                    @RequestParam("userId") Long userId, @RequestParam("type") UserType type) {
+        userVisitService.addUserVisitCount(userNum, nowTimeStr, userId, type);
         return successCreated();
     }
 
-    @RequestMapping(value = "getVisitRecords",method = RequestMethod.GET)
-    Map<String,String> getVisitRecords(@RequestParam("currentPage") Integer currentPage,
-                                       @RequestParam("time") String time,
-                                       @RequestParam("type") Byte type){
-     Map<String,String> records = userVisitService.getVisitRecords(currentPage,time,type);
+    @RequestMapping(value = "getVisitRecords", method = RequestMethod.GET)
+    Map<String, String> getVisitRecords(@RequestParam("currentPage") Integer currentPage,
+                                        @RequestParam("time") String time,
+                                        @RequestParam("type") Byte type) {
+        Map<String, String> records = userVisitService.getVisitRecords(currentPage, time, type);
         return records;
     }
 
-    @RequestMapping(value = "delVisitRecords",method = RequestMethod.DELETE)
-    public Result delVisitRecords(@RequestParam("time") String time){
+    @RequestMapping(value = "delVisitRecords", method = RequestMethod.DELETE)
+    public Result delVisitRecords(@RequestParam("time") String time) {
         userVisitService.delVisitRecords(time);
         return successDelete();
     }
@@ -54,6 +54,7 @@ public class UserVisitController extends BaseController {
      * @return
      * @author meishuquan
      */
+    @Deprecated
     @RequestMapping(value = "addUserVisitTime", method = RequestMethod.GET)
     public Result addUserVisitTime(@RequestParam Long userId, @RequestParam UserType type) {
         userVisitService.addUserVisitTime(userId, type);
@@ -83,6 +84,7 @@ public class UserVisitController extends BaseController {
      * @return
      * @author meishuquan
      */
+    @Deprecated
     @RequestMapping(value = "getUserVisitTime", method = RequestMethod.GET)
     public Result<Long> getUserVisitTime(@RequestParam Long userId, @RequestParam UserType type) {
         Long time = userVisitService.getUserVisitTime(userId, type);
@@ -115,6 +117,24 @@ public class UserVisitController extends BaseController {
     public Result delUserVisitFrequency(@RequestParam Long userId, @RequestParam UserType type) {
         userVisitService.delUserVisitFrequency(userId, type);
         return successDelete();
+    }
+
+    /**
+     * 保存用户访问接口次数和时间
+     *
+     * @param userNum
+     * @param nowTimeStr
+     * @param userId
+     * @param type
+     * @param currTime
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "addUserVisitCountAndTime", method = RequestMethod.GET)
+    public Result<Long> addUserVisitCountAndTime(@RequestParam String userNum, @RequestParam String nowTimeStr,
+                                                 @RequestParam Long userId, @RequestParam UserType type, @RequestParam String currTime) {
+        Long lastTime = userVisitService.addUserVisitCountAndTime(userNum, nowTimeStr, userId, type, currTime);
+        return successGet(lastTime);
     }
 
 }

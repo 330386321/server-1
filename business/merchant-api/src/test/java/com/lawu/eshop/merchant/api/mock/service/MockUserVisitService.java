@@ -43,4 +43,9 @@ public class MockUserVisitService extends BaseController implements UserVisitSer
     public Result delUserVisitFrequency(@RequestParam("userId") Long userId, @RequestParam("type") UserType type) {
         return null;
     }
+
+    @Override
+    public Result<Long> addUserVisitCountAndTime(@RequestParam("userNum") String userNum, @RequestParam("nowTimeStr") String nowTimeStr, @RequestParam("userId") Long userId, @RequestParam("type") UserType type, @RequestParam("currTime") String currTime) {
+        return null;
+    }
 }

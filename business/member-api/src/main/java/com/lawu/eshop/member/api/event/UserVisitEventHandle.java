@@ -40,14 +40,12 @@ public class UserVisitEventHandle implements AsyncEventHandle<UserVisitEvent> {
     @Override
     public void execute(UserVisitEvent event) {
         String nowTimeStr = DateUtil.getIntDate();
-        userVisitService.addUserVisitCount(event.getUserNum(), nowTimeStr, event.getUserId(), event.getUserType());
-
         Long currTime = System.currentTimeMillis();
-        //上次访问接口时间
-        Result<Long> timeResult = userVisitService.getUserVisitTime(event.getUserId(), event.getUserType());
+        Result<Long> timeResult = userVisitService.addUserVisitCountAndTime(event.getUserNum(), nowTimeStr, event.getUserId(), event.getUserType(), String.valueOf(currTime));
         if (currTime - timeResult.getModel() < memberApiConfig.getVisitTimeInterval()) {
             userVisitService.addUserVisitFrequency(event.getUserId(), event.getUserType(), memberApiConfig.getExpireTime());
         }
+
         //查询时间周期内访问接口频率
         Result<Integer> frequencyResult = userVisitService.getUserVisitFrequency(event.getUserId(), event.getUserType());
         if (frequencyResult.getModel() >= memberApiConfig.getVisitFrequencyCount()) {
@@ -59,16 +57,15 @@ public class UserVisitEventHandle implements AsyncEventHandle<UserVisitEvent> {
             param.setUserNum(event.getUserNum());
             param.setAccount(dtoResult.getModel().getAccount());
             param.setUserType(event.getUserType().val);
-            param.setCause("访问频率过高(" + memberApiConfig.getVisitFrequencyCount() + "次/" + memberApiConfig.getVisitTimeInterval() / 1000 + "秒)，系统冻结");
+            param.setCause("访问频率过高(" + memberApiConfig.getVisitFrequencyCount() + "次/" + memberApiConfig.getExpireTime() + "分)，系统冻结");
             userFreezeRecordService.saveUserFreezeRecord(param);
 
             //冻结账号
             memberService.freezeAccount(event.getUserNum(), true, "访问频率过高，系统冻结");
+            //删除个推id
+            memberService.delUserGtPush(event.getUserId());
             //退出登录
             tokenManager.delRelationship(dtoResult.getModel().getAccount());
-            return;
         }
-        //保存本次访问接口时间
-        userVisitService.addUserVisitTime(event.getUserId(), event.getUserType());
     }
 }

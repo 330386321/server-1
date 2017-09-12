@@ -10,9 +10,9 @@ import com.lawu.eshop.framework.core.type.UserType;
  */
 public interface UserVisitService {
 
-    void addUserVisitCount(String userNum, String nowTimeStr, Long userId,UserType type);
+    void addUserVisitCount(String userNum, String nowTimeStr, Long userId, UserType type);
 
-    Map<String,String> getVisitRecords(Integer currentPage,String time,Byte type);
+    Map<String, String> getVisitRecords(Integer currentPage, String time, Byte type);
 
     void delVisitRecords(String time);
 
@@ -23,6 +23,7 @@ public interface UserVisitService {
      * @param type
      * @author meishuquan
      */
+    @Deprecated
     void addUserVisitTime(Long userId, UserType type);
 
     /**
@@ -43,6 +44,7 @@ public interface UserVisitService {
      * @return
      * @author meishuquan
      */
+    @Deprecated
     Long getUserVisitTime(Long userId, UserType type);
 
     /**
@@ -64,4 +66,17 @@ public interface UserVisitService {
      * @author meishuquan
      */
     void delUserVisitFrequency(Long userId, UserType type);
+
+    /**
+     * 保存用户访问接口次数和时间
+     *
+     * @param userNum
+     * @param nowTimeStr
+     * @param userId
+     * @param type
+     * @param currTime
+     * @return
+     * @author meishuquan
+     */
+    Long addUserVisitCountAndTime(String userNum, String nowTimeStr, Long userId, UserType type, String currTime);
 }

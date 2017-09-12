@@ -27,20 +27,20 @@ public class UserVisitServiceImpl implements UserVisitService {
     private StringRedisTemplate stringRedisTemplate;
 
     @Autowired
-    private RedisTemplate<String,String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public void addUserVisitCount(String userNum, String nowTimeStr, Long userId,UserType type) {
+    public void addUserVisitCount(String userNum, String nowTimeStr, Long userId, UserType type) {
         String time = nowTimeStr.concat("_");
         String suffix = "";
-        if(UserType.MEMBER.equals(type)){
+        if (UserType.MEMBER.equals(type)) {
             //用户
             suffix = KeyConstant.REDIS_KEY_USER_VISIT_COUNT.concat(time);
-        }else{
+        } else {
             suffix = KeyConstant.REDIS_KEY_MERCHANT_VISIT_COUNT.concat(time);
         }
         Long currPage = userId / 100 + 1;
-        String keySuffix = suffix.concat(String.valueOf(currPage)+"_");
+        String keySuffix = suffix.concat(String.valueOf(currPage) + "_");
         String key = keySuffix.concat(userNum);
         String oldVal = stringRedisTemplate.opsForValue().get(key);
         if (StringUtils.isEmpty(oldVal)) {
@@ -52,23 +52,23 @@ public class UserVisitServiceImpl implements UserVisitService {
     }
 
     @Override
-    public Map<String, String> getVisitRecords(Integer currentPage,String time,Byte type) {
-        String suffix ="";
-        if(UserType.MEMBER.val.byteValue() == type){
-            suffix = KeyConstant.REDIS_KEY_USER_VISIT_COUNT.concat(time+"_");
-        }else{
-            suffix = KeyConstant.REDIS_KEY_MERCHANT_VISIT_COUNT.concat(time+"_");
+    public Map<String, String> getVisitRecords(Integer currentPage, String time, Byte type) {
+        String suffix = "";
+        if (UserType.MEMBER.val.byteValue() == type) {
+            suffix = KeyConstant.REDIS_KEY_USER_VISIT_COUNT.concat(time + "_");
+        } else {
+            suffix = KeyConstant.REDIS_KEY_MERCHANT_VISIT_COUNT.concat(time + "_");
         }
 
-        String pattern = suffix.concat(currentPage.toString()+"*");
+        String pattern = suffix.concat(currentPage.toString() + "*");
         //匹配对应的keys
-        Set<String> keys =  redisTemplate.keys(pattern);
+        Set<String> keys = redisTemplate.keys(pattern);
         Iterator<String> it = keys.iterator();
-        Map<String,String > map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         while (it.hasNext()) {
-            String key =  it.next();
+            String key = it.next();
             String val = stringRedisTemplate.opsForValue().get(key);
-            map.put(key,val);
+            map.put(key, val);
         }
         return map;
     }
@@ -76,19 +76,20 @@ public class UserVisitServiceImpl implements UserVisitService {
     @Override
     public void delVisitRecords(String time) {
         //用户
-        String memberPattern  = KeyConstant.REDIS_KEY_USER_VISIT_COUNT.concat(time+"*");
+        String memberPattern = KeyConstant.REDIS_KEY_USER_VISIT_COUNT.concat(time + "*");
 
-        String merchantPattern  = KeyConstant.REDIS_KEY_MERCHANT_VISIT_COUNT.concat(time+"*");
+        String merchantPattern = KeyConstant.REDIS_KEY_MERCHANT_VISIT_COUNT.concat(time + "*");
 
-        Set<String> memberKeys =  redisTemplate.keys(memberPattern);
+        Set<String> memberKeys = redisTemplate.keys(memberPattern);
         redisTemplate.delete(memberKeys);
 
-        Set<String> merchantKeys =  redisTemplate.keys(merchantPattern);
+        Set<String> merchantKeys = redisTemplate.keys(merchantPattern);
         redisTemplate.delete(merchantKeys);
 
 
     }
 
+    @Deprecated
     @Override
     public void addUserVisitTime(Long userId, UserType type) {
         String key = KeyConstant.REDIS_KEY_MEMBER_VISIT_TIME + userId;
@@ -112,6 +113,7 @@ public class UserVisitServiceImpl implements UserVisitService {
         }
     }
 
+    @Deprecated
     @Override
     public Long getUserVisitTime(Long userId, UserType type) {
         String key = KeyConstant.REDIS_KEY_MEMBER_VISIT_TIME + userId;
@@ -145,6 +147,21 @@ public class UserVisitServiceImpl implements UserVisitService {
             key = KeyConstant.REDIS_KEY_MERCHANT_VISIT_FREQUENCY + userId;
         }
         stringRedisTemplate.delete(key);
+    }
+
+    @Override
+    public Long addUserVisitCountAndTime(String userNum, String nowTimeStr, Long userId, UserType type, String currTime) {
+        addUserVisitCount(userNum, nowTimeStr, userId, type);
+
+        String key = KeyConstant.REDIS_KEY_MEMBER_VISIT_TIME + userId;
+        if (UserType.MERCHANT.equals(type)) {
+            key = KeyConstant.REDIS_KEY_MERCHANT_VISIT_TIME + userId;
+        }
+        String value = stringRedisTemplate.opsForValue().getAndSet(key, currTime);
+        if (StringUtils.isEmpty(value)) {
+            return 0L;
+        }
+        return Long.valueOf(value);
     }
 
 }

@@ -28,6 +28,7 @@ public interface UserVisitService {
      * @return
      * @author meishuquan
      */
+    @Deprecated
     @RequestMapping(value = "userVisit/addUserVisitTime", method = RequestMethod.GET)
     Result addUserVisitTime(@RequestParam("userId") Long userId, @RequestParam("type") UserType type);
 
@@ -51,6 +52,7 @@ public interface UserVisitService {
      * @return
      * @author meishuquan
      */
+    @Deprecated
     @RequestMapping(value = "userVisit/getUserVisitTime", method = RequestMethod.GET)
     Result<Long> getUserVisitTime(@RequestParam("userId") Long userId, @RequestParam("type") UserType type);
 
@@ -74,4 +76,19 @@ public interface UserVisitService {
      */
     @RequestMapping(value = "userVisit/delUserVisitFrequency", method = RequestMethod.DELETE)
     Result delUserVisitFrequency(@RequestParam("userId") Long userId, @RequestParam("type") UserType type);
+
+    /**
+     * 保存用户访问接口次数和时间并返回上次访问接口时间
+     *
+     * @param userNum
+     * @param nowTimeStr
+     * @param userId
+     * @param type
+     * @param currTime
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "userVisit/addUserVisitCountAndTime", method = RequestMethod.GET)
+    Result<Long> addUserVisitCountAndTime(@RequestParam("userNum") String userNum, @RequestParam("nowTimeStr") String nowTimeStr,
+                                          @RequestParam("userId") Long userId, @RequestParam("type") UserType type, @RequestParam("currTime") String currTime);
 }
