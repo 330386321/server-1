@@ -105,10 +105,9 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			fansInviteDetailDO.setInviteFansCount(param.getInviteFansCount());
 			fansInviteDetailDO.setConsumePoint(new BigDecimal(param.getPoint()));
 			fansInviteDetailDO.setGmtCreate(new Date());
-			int i = fansInviteDetailDOMapper.insertSelective(fansInviteDetailDO);
-			return i;
+			fansInviteDetailDOMapper.insertSelective(fansInviteDetailDO);
+			return fansInviteDetailDO.getId().intValue();
 		}
-		
 		return ResultCode.SUCCESS;
 	}
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
@@ -52,7 +53,16 @@ public class PropertyInfoDataController extends BaseController {
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-		int retCode = propertyInfoDataService.doHanlderMinusPoint(param);
+    	int retCode = propertyInfoDataService.doHanlderMinusPoint(param);
+		if (param.getMerchantTransactionTypeEnum() != null && 
+				param.getMerchantTransactionTypeEnum().getValue() == MerchantTransactionTypeEnum.INVITE_FANS.getValue() && 
+				retCode != ResultCode.BIZ_TYPE_NULL && 
+				retCode != ResultCode.PROPERTY_INFO_NULL &&
+				retCode != ResultCode.PROPERTY_INFO_OUT_INDEX &&
+				retCode != ResultCode.PROPERTYINFO_FREEZE_YES &&
+				retCode != ResultCode.PROPERTY_INFO_POINT_LESS) {
+			return successCreated((Object)retCode);
+		}
 		return successCreated(retCode);
 	}
 
