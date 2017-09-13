@@ -323,7 +323,7 @@ public class BackagePropertyinfoController extends BaseController {
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "冻结账号", notes = "冻结解冻账号[]（杨清华）", httpMethod = "PUT")
-	@RequiresPermissions("account:freeze")
+	@RequiresPermissions("property:freeze")
 	@RequestMapping(value = "updatePropertyinfoFreeze", method = RequestMethod.PUT)
 	public Result updatePropertyinfoFreeze(@RequestParam @ApiParam(required = true, value = "用户编号") String userNum) {
 		Result result =  propertyinfoService.updatePropertyinfoFreeze(userNum, PropertyinfoFreezeEnum.YES);
@@ -345,7 +345,7 @@ public class BackagePropertyinfoController extends BaseController {
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "解冻账号", notes = "冻结解冻账号[]（杨清华）", httpMethod = "PUT")
-	@RequiresPermissions("account:unfreeze")
+	@RequiresPermissions("property:unfreeze")
 	@RequestMapping(value = "updatePropertyinfoUnFreeze", method = RequestMethod.PUT)
 	public Result updatePropertyinfoUnFreeze(@RequestParam @ApiParam(required = true, value = "用户编号") String userNum) {
 		Result result = propertyinfoService.updatePropertyinfoFreeze(userNum, PropertyinfoFreezeEnum.NO);

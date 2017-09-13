@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -113,6 +114,7 @@ public class MemberController extends BaseController {
 
     @ApiOperation(value = "冻结账户", notes = "冻结账户（商家，会员）（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequiresPermissions("account:freezeOper")
     @RequestMapping(value = "freezeAccount", method = RequestMethod.POST)
     public Result freezeAccount(@ModelAttribute AccountFreezeParam param) {
 

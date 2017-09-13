@@ -1,5 +1,6 @@
 package com.lawu.eshop.operator.api.controller;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ public class WorkOrderController extends BaseController{
 	private UserService userService;
 	
 	@ApiOperation(value = "处理工单", notes = "处理工单,[]（洪钦明）", httpMethod = "PUT")
-	@Authorization
+	@RequiresPermissions("workOrder:edit")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "updateWorkOrder", method = RequestMethod.PUT)
 	public Result updateWorkOrder(@ModelAttribute DealWorkOrderParam dealWorkOrderParam) {

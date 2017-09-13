@@ -5,7 +5,9 @@ package com.lawu.eshop.operator.api.controller;
 
 import java.util.Date;
 
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,6 +76,7 @@ public class InformController extends BaseController {
 
 	@ApiOperation(value = "处理举报信息", notes = "处理举报信息(李洪军)", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+	@RequiresPermissions("inform:edit")
 	@RequestMapping(value = "editInform", method = RequestMethod.POST)
 	public Result editInform(@ModelAttribute @ApiParam(value = "下架、不处理信息") InformDownParam param) {
 		InformEditParam edit = new InformEditParam();
