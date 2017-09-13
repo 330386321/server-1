@@ -253,6 +253,7 @@ public class ShoppingOrderExtendConverter {
 		rtn.setIsNeedsLogistics(shoppingOrderExtendBO.getIsNeedsLogistics());
 		rtn.setIsNoReasonReturn(shoppingOrderExtendBO.getIsNoReasonReturn());
 		rtn.setMerchantId(shoppingOrderExtendBO.getMerchantId());
+		rtn.setMerchantNum(shoppingOrderExtendBO.getMemberNum());
 		rtn.setMerchantName(shoppingOrderExtendBO.getMerchantName());
 		rtn.setMerchantStoreId(shoppingOrderExtendBO.getMerchantStoreId());
 		rtn.setOrderStatus(shoppingOrderExtendBO.getOrderStatus());

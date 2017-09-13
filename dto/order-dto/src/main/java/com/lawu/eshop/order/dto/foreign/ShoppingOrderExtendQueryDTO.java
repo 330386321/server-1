@@ -20,7 +20,13 @@ public class ShoppingOrderExtendQueryDTO {
 	 */
 	@ApiModelProperty(value = "商家ID", required = true)
 	private Long merchantId;
-
+	
+	/**
+	 * 商家编号
+	 */
+	@ApiModelProperty(value = "商家编号", required = true)
+	private String merchantNum;
+	
 	/**
 	 * 商家门店ID
 	 */
@@ -95,6 +101,14 @@ public class ShoppingOrderExtendQueryDTO {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public String getMerchantNum() {
+		return merchantNum;
+	}
+
+	public void setMerchantNum(String merchantNum) {
+		this.merchantNum = merchantNum;
 	}
 
 	public Long getMerchantStoreId() {
