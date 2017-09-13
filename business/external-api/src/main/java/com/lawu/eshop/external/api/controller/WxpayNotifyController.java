@@ -19,6 +19,7 @@ import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.pay.sdk.weixin.base.PayCommonUtil;
 import com.lawu.eshop.pay.sdk.weixin.base.XMLUtil;
+import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
@@ -97,6 +98,7 @@ public class WxpayNotifyController extends BaseController {
         double dmoney = 0;
         int bizFlagInt = 0;
         String extra[] = null;
+        String merchantUserNum = "0";
         SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
         if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpayKeyApp())) {
             String return_code = packageParams.get("return_code") == null ? "" : packageParams.get("return_code").toString();
@@ -153,6 +155,7 @@ public class WxpayNotifyController extends BaseController {
                     } else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
                         ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
                                 .selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+                        merchantUserNum = payOrderCallback.getBusinessUserNum();
                         if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), dmoney) == 0) {
                             param.setRegionPath(extra[6]);
                             result = orderService.doHandlePayOrderNotify(param);
@@ -207,16 +210,23 @@ public class WxpayNotifyController extends BaseController {
                     messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
                 } else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))
                         || ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+                	String property_key = PropertyType.MERCHANT_BALANCE_PAY_POINT_SCALE;
+			        String scale = propertyService.getValue(property_key).getModel().toString();
+                	messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
                     messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
-                }
+                    messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
+                    messageTempParam.setRechargePoint(new BigDecimal(dmoney*Double.valueOf(scale)));
+                } else if(ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT);
+					messageTempParam.setOrderAmount(new BigDecimal(df.format(dmoney)));
+				}
                 if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
                     messageTempParam.setUserName("E店会员");
                 } else if (extra[1].startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
                     messageTempParam.setUserName("E店商家");
                 }
                 messageInfoParam.setMessageParam(messageTempParam);
-                messageService.saveMessage(extra[1], messageInfoParam);
+                messageService.saveMessage(ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt)) ? merchantUserNum : extra[1], messageInfoParam);
             }
             // ------------------------------发送站内消息
 
