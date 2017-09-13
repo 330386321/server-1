@@ -3,6 +3,7 @@ package com.lawu.eshop.ad.srv.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -466,20 +467,22 @@ public class AdServiceImpl implements AdService {
 	@Override
 	@Transactional
 	public ClickPointBO clickAd(Long id, Long memberId, String num) {
-		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
-		
-		ClickPointBO  clickBO = new ClickPointBO();
-		if(adDO.getHits()>=adDO.getAdCount()){
-			clickBO.setPoint(BigDecimal.valueOf(0));
-			clickBO.setOverClick(true);
-			return clickBO;
-		}
 
 		Boolean flag=lockService.tryLock(LockModule.LOCK_AD_SRV,"AD_CLICK_LOCK_",id);
 		
 		MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
-		
+		AdDO adDO = new AdDO();
+		ClickPointBO  clickBO = new ClickPointBO();
 		if(flag){
+			
+			adDO = adDOMapper.selectByPrimaryKey(id);
+			
+			if(adDO.getHits()>=adDO.getAdCount()){
+				clickBO.setPoint(BigDecimal.valueOf(0));
+				clickBO.setOverClick(true);
+				return clickBO;
+			}
+
 			memberAdRecordD.setAdId(adDO.getId());
 			memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
 			memberAdRecordD.setMemberId(memberId);
@@ -582,7 +585,7 @@ public class AdServiceImpl implements AdService {
 	/**
 	 * 抢赞
 	 */
-	@SuppressWarnings("unused")
+	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public BigDecimal clickPraise(Long id, Long memberId, String num) {
@@ -591,62 +594,70 @@ public class AdServiceImpl implements AdService {
 		
 		if(result.getModel()==null){ 
 			return BigDecimal.valueOf(0);
+		}else{
+			List<Object> list=(List<Object>) result.getModel();
+			if((Integer)list.get(0)<0){
+				return BigDecimal.valueOf(0);
+			}
 		}
-		
-		AdDO  adDO=adDOMapper.selectByPrimaryKey(id);
-		//已经领取个数
-		int praiseCount=adDO.getHits()==null?0:adDO.getHits();
-		
 		Boolean flag=lockService.tryLock(LockModule.LOCK_AD_SRV,"AD_PRAISE_LOCK_",id);
-		
-		if(!flag){
-			lockService.unLock(LockModule.LOCK_AD_SRV,"AD_PRAISE_LOCK_",id);
-			return BigDecimal.valueOf(0);
-		}
-		
-		PointPoolDOView  view =pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
-		//剩余积分
-		BigDecimal subMoney=new BigDecimal(0);
-		//剩余积分
-		if(view == null){
-		    subMoney=adDO.getTotalPoint().subtract(BigDecimal.valueOf(0));
-		}else{
-			subMoney=adDO.getTotalPoint().subtract(view.getPoint());
-		}
-		
-		Double point= SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), adDO.getAdCount(),praiseCount);
-		 
 		PointPoolDO pointPool = new PointPoolDO();
-		pointPool.setAdId(adDO.getId());
-		pointPool.setMerchantId(adDO.getMerchantId());
-		pointPool.setMemberId(memberId);
-		pointPool.setMemberNum(num);
-		pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
-		pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
-		pointPool.setGmtCreate(new Date());
-		pointPool.setGmtModified(new Date());
-		pointPool.setOrdinal(praiseCount);
-		pointPool.setPoint(BigDecimal.valueOf(point));
-		Integer row = pointPoolDOMapper.insert(pointPool);
+		Double point =0.0;
 		
-		if(adDO.getAdCount()-1==praiseCount || praiseCount>=adDO.getAdCount()){
-			AdDO ad = new AdDO();
-			ad.setId(adDO.getId());
-			ad.setGmtModified(new Date());
-			ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
-			adDOMapper.updateByPrimaryKeySelective(ad);
-		}
+		if(flag){
+			AdDO  adDO=adDOMapper.selectByPrimaryKey(id);
+			//已经领取个数
+			int praiseCount=adDO.getHits()==null?0:adDO.getHits();
 		
-		if(row > 0 || row !=null){
-			//修改领取次数
-			adDOMapperExtend.updateHitsByPrimaryKey(id);
+			PointPoolDOView  view =pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
+			//剩余积分
+			BigDecimal subMoney=new BigDecimal(0);
+			//剩余积分
+			if(view == null){
+			    subMoney=adDO.getTotalPoint().subtract(BigDecimal.valueOf(0));
+			}else{
+				subMoney=adDO.getTotalPoint().subtract(view.getPoint());
+			}
 			
-			adtransactionMainAddService.sendNotice(pointPool.getId());
-			return BigDecimal.valueOf(point).multiply(new BigDecimal(PropertyType.ad_account_scale_default));
-		}else{
-			return BigDecimal.valueOf(0);
+			point= SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), adDO.getAdCount(),praiseCount);
+			
+			pointPool.setAdId(adDO.getId());
+			pointPool.setMerchantId(adDO.getMerchantId());
+			pointPool.setMemberId(memberId);
+			pointPool.setMemberNum(num);
+			pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+			pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+			pointPool.setGmtCreate(new Date());
+			pointPool.setGmtModified(new Date());
+			pointPool.setOrdinal(praiseCount);
+			pointPool.setPoint(BigDecimal.valueOf(point));
+			Integer row = pointPoolDOMapper.insert(pointPool);
+			
+			if(adDO.getAdCount()-1==praiseCount || praiseCount>=adDO.getAdCount()){
+				AdDO ad = new AdDO();
+				ad.setId(adDO.getId());
+				ad.setGmtModified(new Date());
+				ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
+				adDOMapper.updateByPrimaryKeySelective(ad);
+			}
+
+			if(row > 0 || row !=null){
+				//修改领取次数
+				adDOMapperExtend.updateHitsByPrimaryKey(id);
+				lockService.unLock(LockModule.LOCK_AD_SRV,"AD_PRAISE_LOCK_",id);
+			}
+			
 		}
 		
+		//发送消息修改积分
+		new Thread(new Runnable() {
+		    @Override
+		    public void run() {
+		    	adtransactionMainAddService.sendNotice(pointPool.getId());
+		    }
+		}).start();
+		
+		return BigDecimal.valueOf(point).multiply(new BigDecimal(PropertyType.ad_account_scale_default));
 
 	}
 
