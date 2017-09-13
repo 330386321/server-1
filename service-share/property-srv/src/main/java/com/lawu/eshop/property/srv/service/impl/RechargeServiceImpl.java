@@ -155,7 +155,7 @@ public class RechargeServiceImpl implements RechargeService {
             //加余额
             PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
             infoDoView.setUserNum(param.getUserNum());
-            infoDoView.setBalance(new BigDecimal(param.getTotalFee()));
+            infoDoView.setBalance(recharge.getMoney());
             infoDoView.setGmtModified(new Date());
             propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
 
