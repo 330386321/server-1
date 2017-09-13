@@ -84,6 +84,7 @@ public class IndexController extends BaseController {
                 //查询商家优惠信息
                 favoredDTOResult = merchantFavoredService.findFavoredByMerchantId(storeDTO.getMerchantId());
                 String favoreInfo = "";
+                String favoreEndTime = "";
                 double discountOrdinal = 1000;
                 if (isSuccess(favoredDTOResult)) {
                     if (favoredDTOResult.getModel().getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL.val) {
@@ -100,6 +101,7 @@ public class IndexController extends BaseController {
                         discountOrdinal = favoredDTOResult.getModel().getDiscountRate().divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
                         discountOrdinal = discountOrdinal * 1000 + 1;
                     }
+                    favoreEndTime = DateUtil.getDateFormat(favoredDTOResult.getModel().getEntireEndTime());
                 }
 
                 //查询商家优惠套餐
@@ -114,7 +116,7 @@ public class IndexController extends BaseController {
                 storeIndexParam.setFavoreInfo(favoreInfo);
                 storeIndexParam.setDiscountPackage(discountPackage);
                 storeIndexParam.setDiscountOrdinal(discountOrdinal);
-                storeIndexParam.setFavoreEndTime(DateUtil.getDateFormat(favoredDTOResult.getModel().getEntireEndTime()));
+                storeIndexParam.setFavoreEndTime(favoreEndTime);
                 indexParamList.add(storeIndexParam);
             }
             if (!indexParamList.isEmpty()) {
