@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,12 +57,20 @@ public class VideoCutImgUtil {
 		try {
 			ProcessBuilder builder = new ProcessBuilder();
 			builder.command(commands);
-			builder.start();
-			logger.debug("截取图片成功");
+			Process p = builder.start();
+			// 等待20秒
+			boolean exitValue = p.waitFor(20, TimeUnit.SECONDS);
+			if (!exitValue) {
+				logger.error("截取图片失败");
+				//认定截图失败，销毁进程
+				p.destroy();
+				return null;
+			}
+            logger.info("截取图片成功");
 			String video_img=dir+"/"+newfileName;
 			return video_img;
 		} catch (Exception e) {
-			logger.debug("截取图片失败");
+			logger.error("截取图片失败");
 			return null;
 		}
 	}

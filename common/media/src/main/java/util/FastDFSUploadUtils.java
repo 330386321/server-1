@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import com.lawu.eshop.utils.RandomUtil;
+
 import util.upload.FastDFSClient;
 import util.upload.FastDFSResult;
 import util.upload.FastDFSResultEnum;
@@ -76,7 +77,6 @@ public class FastDFSUploadUtils {
 							String cutUrl = uparam.getBaseImageDir() + File.separator + imgUrl;
 							String fileUrl = client.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName,param);
 							result.setFileUrl(fileUrl);
-							Thread.sleep(550);
 							FastDFSClient clientImg =new FastDFSClient();
 							if(imgUrl != null){
 								File file = new File(cutUrl);
