@@ -290,15 +290,9 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-		 Result<Integer> result = adCountRecordService.getAdCountRecord(id);
-		 if(result.getModel()<=0){
-			 return successCreated(ResultCode.AD_PRAISE_PUTED);
-		 }
-		 Result<PraisePointDTO> clickResult = adExtendService.clickPraise(id);
-		 if(isSuccess(clickResult) && clickResult.getModel().getPoint().compareTo(BigDecimal.valueOf(0))==1){
-			 adCountRecordService.updateAdCountRecord(id);
-		 }
-		 return clickResult;
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		String num = UserUtil.getCurrentUserNum(getRequest()); 
+		return adService.clickPraise(id,memberId,num);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")

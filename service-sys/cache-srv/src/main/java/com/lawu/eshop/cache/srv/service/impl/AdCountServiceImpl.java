@@ -1,6 +1,14 @@
 package com.lawu.eshop.cache.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +20,7 @@ public class AdCountServiceImpl implements AdCountService {
 	
 	@Autowired
     private StringRedisTemplate stringRedisTemplate;
-
+	
 	@Override
 	public void setAdCountRecord(Long id,Integer count) {
 		 String key = KeyConstant.REDIS_KEY_AD_COUNT.concat(id.toString());
@@ -20,17 +28,17 @@ public class AdCountServiceImpl implements AdCountService {
 	}
 
 	@Override
-	public Integer getAdCountRecord(Long id) {
+	public Object getAdCountRecord(Long id) {
+		stringRedisTemplate.setEnableTransactionSupport(true);
 		String key = KeyConstant.REDIS_KEY_AD_COUNT.concat(id.toString());
-		String value = stringRedisTemplate.opsForValue().get(key);
-		return Integer.parseInt(value);
-	}
-
-	@Override
-	public void updateAdCountRecord(Long id) {
-		String key = KeyConstant.REDIS_KEY_AD_COUNT.concat(id.toString());
-		// 总数减一
+		stringRedisTemplate.watch(key);		
+		stringRedisTemplate.multi();
+		//总数减一
 		stringRedisTemplate.boundValueOps(key).increment(-1);
+		Object rs = stringRedisTemplate.exec();
+		return rs;
 	}
+	
+
 
 }

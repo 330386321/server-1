@@ -7,11 +7,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
@@ -22,7 +17,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lawu.eshop.ad.constants.AdPraiseConfig;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -33,6 +27,7 @@ import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PropertyType;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.constants.SpiltRedPacketUntil;
+import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.param.AdChoicenessInternalParam;
 import com.lawu.eshop.ad.param.AdEgainInternalParam;
 import com.lawu.eshop.ad.param.AdFindParam;
@@ -81,12 +76,16 @@ import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.mapper.extend.AdDOMapperExtend;
 import com.lawu.eshop.ad.srv.mapper.extend.MemberAdRecordDOMapperExtend;
 import com.lawu.eshop.ad.srv.mapper.extend.PointPoolDOMapperExtend;
+import com.lawu.eshop.ad.srv.service.AdCountRecordService;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.solr.service.SolrService;
+import com.lawu.eshop.synchronization.lock.constants.LockConstant.LockModule;
+import com.lawu.eshop.synchronization.lock.service.LockService;
 import com.lawu.eshop.utils.DateUtil;
 
 /**
@@ -147,6 +146,13 @@ public class AdServiceImpl implements AdService {
 
 	@Autowired
 	private SolrService solrService;
+	
+	@Autowired
+	private LockService lockService;
+	
+	@Autowired
+	private AdCountRecordService adCountRecordService;
+	
 	
 	/**
 	 * 商家发布E赚
@@ -469,24 +475,41 @@ public class AdServiceImpl implements AdService {
 			return clickBO;
 		}
 
+		Boolean flag=lockService.tryLock(LockModule.LOCK_AD_SRV,"AD_CLICK_LOCK_",id);
+		
 		MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
-		memberAdRecordD.setAdId(adDO.getId());
-		memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
-		memberAdRecordD.setMemberId(memberId);
-		memberAdRecordD.setMemberNum(num);
-		memberAdRecordD.setStatus(new Byte("0"));
-		memberAdRecordD.setGmtCreate(new Date());
-		memberAdRecordD.setClickDate(new Date());
-		memberAdRecordD.setOriginalPoint(adDO.getPoint());
-		memberAdRecordDOMapper.insert(memberAdRecordD);
+		
+		if(flag){
+			memberAdRecordD.setAdId(adDO.getId());
+			memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
+			memberAdRecordD.setMemberId(memberId);
+			memberAdRecordD.setMemberNum(num);
+			memberAdRecordD.setStatus(new Byte("0"));
+			memberAdRecordD.setGmtCreate(new Date());
+			memberAdRecordD.setClickDate(new Date());
+			memberAdRecordD.setOriginalPoint(adDO.getPoint());
+			memberAdRecordDOMapper.insert(memberAdRecordD);
 
-		// 修改点击次数记录
-		adDOMapperExtend.updateHitsByPrimaryKey(id);
-		//发送消息修改积分
-		userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
-
+			// 修改点击次数记录
+			adDOMapperExtend.updateHitsByPrimaryKey(id);
+			
+		}else{
+			lockService.unLock(LockModule.LOCK_AD_SRV,"AD_CLICK_LOCK_",id);
+			clickBO.setPoint(BigDecimal.valueOf(0));
+			clickBO.setOverClick(false);
+			return clickBO;
+		}
+		
 		clickBO.setOverClick(false);
 		clickBO.setPoint(adDO.getPoint());
+		
+		//发送消息修改积分
+		new Thread(new Runnable() {
+		    @Override
+		    public void run() {
+		    	userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
+		    }
+		}).start();
 
 		return clickBO;
 	}
@@ -564,9 +587,22 @@ public class AdServiceImpl implements AdService {
 	@Transactional
 	public BigDecimal clickPraise(Long id, Long memberId, String num) {
 		
+		Result<Object> result = adCountRecordService.getAdCountRecord(id);
+		
+		if(result.getModel()==null){ 
+			return BigDecimal.valueOf(0);
+		}
+		
 		AdDO  adDO=adDOMapper.selectByPrimaryKey(id);
 		//已经领取个数
 		int praiseCount=adDO.getHits()==null?0:adDO.getHits();
+		
+		Boolean flag=lockService.tryLock(LockModule.LOCK_AD_SRV,"AD_PRAISE_LOCK_",id);
+		
+		if(!flag){
+			lockService.unLock(LockModule.LOCK_AD_SRV,"AD_PRAISE_LOCK_",id);
+			return BigDecimal.valueOf(0);
+		}
 		
 		PointPoolDOView  view =pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
 		//剩余积分
@@ -583,6 +619,8 @@ public class AdServiceImpl implements AdService {
 		PointPoolDO pointPool = new PointPoolDO();
 		pointPool.setAdId(adDO.getId());
 		pointPool.setMerchantId(adDO.getMerchantId());
+		pointPool.setMemberId(memberId);
+		pointPool.setMemberNum(num);
 		pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
 		pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
 		pointPool.setGmtCreate(new Date());
@@ -608,6 +646,7 @@ public class AdServiceImpl implements AdService {
 		}else{
 			return BigDecimal.valueOf(0);
 		}
+		
 
 	}
 

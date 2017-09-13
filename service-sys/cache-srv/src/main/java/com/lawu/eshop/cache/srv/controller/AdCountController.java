@@ -24,14 +24,10 @@ public class AdCountController extends BaseController{
     }
 
     @RequestMapping(value = "getAdCountRecord", method = RequestMethod.GET)
-    public Result<Integer> getAdCountRecord(@RequestParam Long id) {
+    public Result<Object> getAdCountRecord(@RequestParam Long id) {
         return successAccepted(adCountService.getAdCountRecord(id));
     }
     
-    @RequestMapping(value = "updateAdCountRecord", method = RequestMethod.GET)
-    public Result updateAdCountRecord(@RequestParam Long  id) {
-    	adCountService.updateAdCountRecord(id);
-        return successCreated();
-    }
+   
 
 }

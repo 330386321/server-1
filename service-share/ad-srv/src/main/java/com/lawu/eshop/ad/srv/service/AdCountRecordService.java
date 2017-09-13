@@ -1,4 +1,4 @@
-package com.lawu.eshop.member.api.service;
+package com.lawu.eshop.ad.srv.service;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +13,5 @@ public interface AdCountRecordService {
 	@RequestMapping(value = "adCount/getAdCountRecord", method = RequestMethod.GET)
     public Result<Object> getAdCountRecord(@RequestParam("id") Long id);
 	
-	
-	@RequestMapping(value = "adCount/updateAdCountRecord", method = RequestMethod.GET)
-	Result updateAdCountRecord(@RequestParam("id") Long  id);
 
 }

@@ -66,6 +66,7 @@ import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
+import com.lawu.eshop.ad.srv.service.AdCountRecordService;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
 import com.lawu.eshop.ad.srv.service.PointPoolService;
@@ -100,6 +101,7 @@ public class AdController extends BaseController {
 
 	@Autowired
 	private SolrService solrService;
+	
 
 	/**
 	 * 添加E赚
@@ -213,6 +215,9 @@ public class AdController extends BaseController {
 		if(bo.isOverClick()){
 			return successCreated(ResultCode.AD_CLICK_PUTED);
 		}
+		if(!bo.isOverClick() && bo.getPoint().compareTo(BigDecimal.valueOf(0))==0){
+			return successCreated(ResultCode.AD_CLICK_SYS_WORDS);
+		}
 		ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
 		ClickAdPointDTO dto = new ClickAdPointDTO();
 		dto.setAddPoint(clickAdPointBO.getAddPoint());
@@ -317,6 +322,7 @@ public class AdController extends BaseController {
 	public Result<PraisePointDTO> clickPraise(@PathVariable Long id, @RequestParam Long memberId, @RequestParam String num) {
 		Boolean flag = pointPoolService.selectStatusByMember(id, memberId);
 		if (flag) return successCreated(ResultCode.AD_PRAISE_POINT_GET);
+		
 		BigDecimal point = adService.clickPraise(id, memberId, num);
 		if (point.compareTo(new BigDecimal(0)) == 0) {
 			return successCreated(ResultCode.AD_PRAISE_PUTED);

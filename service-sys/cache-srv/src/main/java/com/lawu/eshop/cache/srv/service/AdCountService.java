@@ -20,13 +20,7 @@ public interface AdCountService {
 	 * @param id
 	 * @return
 	 */
-	Integer getAdCountRecord(Long id);
+	Object getAdCountRecord(Long id);
 	
-	/**
-	 * 修改数量
-	 * @param key
-	 * @return
-	 */
-	void updateAdCountRecord(Long id);
 
 }

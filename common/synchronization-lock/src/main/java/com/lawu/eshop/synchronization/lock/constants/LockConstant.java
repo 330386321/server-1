@@ -13,7 +13,7 @@ public class LockConstant {
      * 分布式事务同步锁前缀
      */
     public static final String DISTRIBUTED_SYNCHRONIZATION_LOCK = "SYN_LOCK_";
-	
+    
 	/*******************************
 	 * Model Name
 	 *******************************/
