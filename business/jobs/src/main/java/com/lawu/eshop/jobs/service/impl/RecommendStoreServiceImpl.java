@@ -106,6 +106,7 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
         //查询商家优惠信息
         Result<MerchantFavoredDTO> favoredDTOResult = merchantFavoredService.findFavoredByMerchantId(foodDTO.getMerchantId());
         String favoreInfo = "";
+        String favoreEndTime = "";
         if (favoredDTOResult.getRet() == ResultCode.SUCCESS) {
             if (favoredDTOResult.getModel().getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL.val) {
                 favoreInfo = "买单每满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
@@ -115,9 +116,10 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
                 NumberFormat numberFormat = NumberFormat.getInstance();
                 favoreInfo = "买单" + numberFormat.format(favoredDTOResult.getModel().getDiscountRate()) + "折";
             }
+            favoreEndTime = DateUtil.getDateFormat(favoredDTOResult.getModel().getEntireEndTime());
         }
         foodDTO.setFavoreInfo(favoreInfo);
-        foodDTO.setFavoreEndTime(DateUtil.getDateFormat(favoredDTOResult.getModel().getEntireEndTime()));
+        foodDTO.setFavoreEndTime(favoreEndTime);
 
         //查询商家优惠套餐
         Result<Page<DiscountPackageQueryDTO>> discountResult = discountPackageService.listForMember(foodDTO.getMerchantId());
