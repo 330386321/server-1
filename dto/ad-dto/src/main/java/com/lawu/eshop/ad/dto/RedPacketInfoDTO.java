@@ -27,7 +27,7 @@ public class RedPacketInfoDTO {
 	private FileTypeEnum fileType;
 	
 	@ApiModelProperty(value = "视频时间")
-	private int videoTime;
+	private String videoTime;
 
 	public BigDecimal getPoint() {
 		return point;
@@ -77,11 +77,11 @@ public class RedPacketInfoDTO {
 		this.fileType = fileType;
 	}
 
-	public int getVideoTime() {
+	public String getVideoTime() {
 		return videoTime;
 	}
 
-	public void setVideoTime(int videoTime) {
+	public void setVideoTime(String videoTime) {
 		this.videoTime = videoTime;
 	}
 	
