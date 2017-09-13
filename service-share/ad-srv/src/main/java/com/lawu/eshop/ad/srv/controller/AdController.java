@@ -63,6 +63,7 @@ import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.GetRedPacketBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
@@ -111,9 +112,9 @@ public class AdController extends BaseController {
 	public Result saveAd(@RequestBody AdSaveParam adSaveParam) {
 
 		if (adSaveParam.getAdParam().getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PACKET.getVal()) {
-			Integer count = adService.selectRPIsSend(adSaveParam.getMerchantId());
-			if (count > 0) {
-				return successCreated(ResultCode.AD_RED_PACKGE_EXIST);
+			RedPacketIsSendBO bo = adService.selectRPIsSend(adSaveParam.getMerchantId());
+			if (bo.isFlag()) {
+				adService.updateStatus(bo.getId());
 			}
 		}
 		Integer id = adService.saveAd(adSaveParam);

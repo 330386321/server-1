@@ -20,8 +20,10 @@ public class MerchantFavoredDTO {
      */
     @ApiModelProperty(value = "主键ID")
     private Long id;
-
-
+    
+    @ApiModelProperty(value = "商家ID")
+    private Long merchantId;
+    
     /**
      * 1:每满、2:满减、3:全单折扣
      * merchant_favored.type
@@ -184,4 +186,13 @@ public class MerchantFavoredDTO {
     public void setEntireEndTime(Date entireEndTime) {
         this.entireEndTime = entireEndTime;
     }
+
+	public Long getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
+    
 }

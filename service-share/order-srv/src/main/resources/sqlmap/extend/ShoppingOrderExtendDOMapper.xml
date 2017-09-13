@@ -365,7 +365,7 @@
 	  
 	  <!-- 根据查询条件查询订单id，优化性能  -->
 	  <select id="selectIdByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultType="java.lang.Long">
-	  	select DISTINCT so.id, so.gmt_create
+	  	select DISTINCT so.id, so.gmt_payment, so.gmt_create
 		from shopping_order so
 		<if test="isIncludeShoppingOrderItem">
 			left join shopping_order_item soi on so.id = soi.shopping_order_id
@@ -373,7 +373,8 @@
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
-		order by so.gmt_create desc
+		<if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
 	  </select>
-	  
 </mapper>

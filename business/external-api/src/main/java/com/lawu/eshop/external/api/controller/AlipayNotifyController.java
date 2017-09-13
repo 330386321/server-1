@@ -39,6 +39,7 @@ import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.pay.sdk.alipay.AliPayConfigParam;
 import com.lawu.eshop.pay.sdk.alipay.util.AlipayNotify;
+import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
@@ -128,6 +129,7 @@ public class AlipayNotifyController extends BaseController {
 		boolean isSendMsg = false;
 		double dTotalMoney = 0;
 		boolean b = false;
+		String merchantUserNum = "0";
 		int bizFlagInt = 0;
 		String extra[] = null;
 		if (app_id_member.equals(app_id)) {
@@ -194,6 +196,7 @@ public class AlipayNotifyController extends BaseController {
 						}
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
 						ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+						merchantUserNum = payOrderCallback.getBusinessUserNum();
 						if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), dTotalMoney) == 0) {
 							param.setRegionPath(extra[6]);
 							result = orderService.doHandlePayOrderNotify(param);
@@ -238,8 +241,14 @@ public class AlipayNotifyController extends BaseController {
 					messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
 				} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))
 						|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+					String property_key = PropertyType.MERCHANT_BALANCE_PAY_POINT_SCALE;
+			        String scale = propertyService.getValue(property_key).getModel().toString();
 					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
 					messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+					messageTempParam.setRechargePoint(new BigDecimal(df.format(dTotalMoney*Double.valueOf(scale))));
+				} else if(ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT);
+					messageTempParam.setOrderAmount(new BigDecimal(df.format(Double.valueOf(total_amount))));
 				}
 				if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
 					messageTempParam.setUserName("E店会员");
@@ -247,7 +256,7 @@ public class AlipayNotifyController extends BaseController {
 					messageTempParam.setUserName("E店商家");
 				}
 				messageInfoParam.setMessageParam(messageTempParam);
-				messageService.saveMessage(extra[1], messageInfoParam);
+				messageService.saveMessage(ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt)) ? merchantUserNum : extra[1], messageInfoParam);
 			}
 			// ------------------------------发送站内消息
 

@@ -5,6 +5,7 @@ package com.lawu.eshop.ad.srv.service.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -323,9 +324,12 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	public void executeUserRedPacketData() {
 		Date date = DateUtil.getDayBefore(new Date());// 前一天的时间
 		UserRedPacketDOExample example = new UserRedPacketDOExample();
+		List<Byte> status= new ArrayList<>();
+		status.add(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
+		status.add(UserRedPacketEnum.USER_STATUS_OUT.val);
 		Criteria cr = example.createCriteria();
 		cr.andGmtCreateLessThan(date);
-		cr.andStatusEqualTo(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
+		cr.andStatusIn(status);
 		List<UserRedPacketDO> list = userRedPacketDOMapper.selectByExample(example);
 		if (!list.isEmpty()) {
 			for (int i = 0; i < list.size(); i++) {

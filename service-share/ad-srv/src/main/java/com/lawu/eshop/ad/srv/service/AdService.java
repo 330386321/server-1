@@ -26,6 +26,7 @@ import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.framework.core.page.Page;
@@ -158,7 +159,7 @@ public interface AdService {
      * @param merchantId
      * @return
      */
-    Integer selectRPIsSend(Long merchantId);
+    RedPacketIsSendBO selectRPIsSend(Long merchantId);
 
     /**
      * 领取红包

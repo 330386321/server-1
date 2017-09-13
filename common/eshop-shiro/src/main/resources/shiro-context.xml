@@ -24,18 +24,17 @@
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager"/>
 		<!-- override these for application-specific URLs if you like:-->
-        <property name="loginUrl" value="/login"/>
-        <property name="successUrl" value="/user/edit"/>
-        <property name="unauthorizedUrl" value="/unauthorized.html"/>
-		<!--<property name="filterChainDefinitions">
+        <property name="loginUrl" value="/unauthorized"/>
+        <property name="unauthorizedUrl" value="/unauthorized"/>
+		<property name="filterChainDefinitions">
 			<value>
 				/login = anon
-				&lt;!&ndash;# some example chain definitions:&ndash;&gt;
+				<!--# some example chain definitions:-->
 				/** = authc
-				&lt;!&ndash;# more URL-to-FilterChain definitions here&ndash;&gt;
-				&lt;!&ndash;/** = urlMatchingFilter&ndash;&gt;
+				<!--# more URL-to-FilterChain definitions here-->
+				<!--/** = urlMatchingFilter-->
 			</value>
-		</property>-->
+		</property>
 	</bean>
 
 	<!-- Enable Shiro Annotations for Spring-configured beans.  Only run after -->

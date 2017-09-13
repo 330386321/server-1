@@ -36,6 +36,7 @@ public class MerchantFavoredConverter {
         }
         MerchantFavoredDTO merchantFavoredDTO = new MerchantFavoredDTO();
         merchantFavoredDTO.setId(merchantFavoredBO.getId());
+        merchantFavoredDTO.setMerchantId(merchantFavoredDTO.getMerchantId());
         merchantFavoredDTO.setDiscountRate(merchantFavoredBO.getDiscountRate());
         merchantFavoredDTO.setEntireBeginTime(merchantFavoredBO.getEntireBeginTime());
         merchantFavoredDTO.setValidDayEndTime(merchantFavoredBO.getValidDayEndTime());

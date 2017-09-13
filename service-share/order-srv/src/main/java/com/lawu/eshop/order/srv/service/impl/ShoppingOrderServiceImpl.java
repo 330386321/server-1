@@ -322,7 +322,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		
 		String orderByClause = "";
-		if (param.getOrderStatus().equals(ShoppingOrderStatusToMerchantEnum.BE_SHIPPED)) {
+		if (ShoppingOrderStatusToMerchantEnum.BE_SHIPPED.equals(param.getOrderStatus())) {
 			orderByClause += "so.gmt_payment asc,";
 		}
 		// 默认创建时间排序
