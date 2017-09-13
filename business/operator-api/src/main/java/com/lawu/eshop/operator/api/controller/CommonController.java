@@ -61,4 +61,9 @@ public class CommonController extends BaseController {
         currentUserDTO.setAccount(UserUtil.getCurrentUserAccount());
         return successGet(currentUserDTO);
     }
+
+    @RequestMapping(value = "unauthorized", method = RequestMethod.GET)
+    public Result unauthorized() {
+        return failUnauthorized(ResultCode.USER_UNAUTHORIZED);
+    }
 }

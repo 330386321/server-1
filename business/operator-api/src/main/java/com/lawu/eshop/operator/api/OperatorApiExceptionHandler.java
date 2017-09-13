@@ -24,7 +24,7 @@ public class OperatorApiExceptionHandler extends BaseController {
     @ExceptionHandler(value = UnauthenticatedException.class)
     @ResponseBody
     public Result defaultUnauthenticatedHandler(UnauthenticatedException e) throws Exception {
-        return failUnauthorized(ResultCode.USER_NOT_LOGIN);
+        return failUnauthorized(ResultCode.USER_UNAUTHORIZED);
     }
 
 
