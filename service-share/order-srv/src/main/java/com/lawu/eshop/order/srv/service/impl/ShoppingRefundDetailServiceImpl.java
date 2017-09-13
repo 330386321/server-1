@@ -452,6 +452,8 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			// 如果购物订单下的所有订单项都是关闭状态关闭购物订单
 			if (count <= 0) {
 				shoppingOrderExtendDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+				// 更新交易时间
+				shoppingOrderExtendDO.setGmtTransaction(new Date());
 			}
 			// 更新实际支付给商家的金额
 			shoppingOrderExtendDO.setActualAmountSubtraction(shoppingOrderItemDO.getSalesPrice().multiply(new BigDecimal(shoppingOrderItemDO.getQuantity())));
