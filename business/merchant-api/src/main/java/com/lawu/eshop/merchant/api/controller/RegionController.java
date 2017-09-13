@@ -1,20 +1,23 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.mall.dto.RegionDTO;
-import com.lawu.eshop.merchant.api.service.RegionService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.mall.dto.RegionDTO;
+import com.lawu.eshop.mall.dto.RegionProvinceDTO;
+import com.lawu.eshop.merchant.api.service.RegionService;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 
 /**
  * @author zhangyong
@@ -35,5 +38,14 @@ public class RegionController extends BaseController {
     public Result<List<RegionDTO>> getRegionList() {
         Result<List<RegionDTO>> listResult = regionService.getRegionList();
         return listResult;
+    }
+    
+    @SuppressWarnings("unchecked")
+	@ApiOperation(value = "地区列表", notes = "所有地区列表 [1004,1000](蒋鑫俊)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "list", method = RequestMethod.GET)
+    public Result<List<RegionProvinceDTO>> list() {
+        Result<List<RegionProvinceDTO>> listResult = regionService.list();
+        return successGet(listResult);
     }
 }

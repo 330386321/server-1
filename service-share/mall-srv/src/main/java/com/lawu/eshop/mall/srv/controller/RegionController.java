@@ -1,20 +1,30 @@
 package com.lawu.eshop.mall.srv.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mall.constants.RegionLevelEnum;
+import com.lawu.eshop.mall.dto.RegionCityDTO;
 import com.lawu.eshop.mall.dto.RegionDTO;
+import com.lawu.eshop.mall.dto.RegionPathDTO;
+import com.lawu.eshop.mall.dto.RegionProvinceDTO;
 import com.lawu.eshop.mall.srv.bo.RegionBO;
 import com.lawu.eshop.mall.srv.converter.RegionConverter;
 import com.lawu.eshop.mall.srv.service.RegionService;
 import com.lawu.eshop.utils.LonLatUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author zhangyong
@@ -40,6 +50,52 @@ public class RegionController extends BaseController {
             list.add(regionDTO);
         }
         return successGet(list);
+    }
+    
+    @RequestMapping(value = "list", method = RequestMethod.GET)
+    public Result<List<RegionProvinceDTO>> list() {
+        List<RegionBO> regionBOS = regionService.getRegionList();
+        if (regionBOS.isEmpty()) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        
+        // 一级
+        Map<Integer, RegionProvinceDTO> region1 = new HashMap<>();
+        // 二级
+        Map<Integer, List<RegionCityDTO>> region2 = new HashMap<>();
+        // 三级
+        Map<Integer, List<RegionPathDTO>> region3 = new HashMap<>();
+        for (RegionBO regionBO : regionBOS) {
+            if (regionBO.getLevelEnum().equals(RegionLevelEnum.REGION_LEVEL_ONE)) {
+            	RegionProvinceDTO regionProvinceDTO = RegionConverter.coverRegionProvinceDTO(regionBO);
+            	region1.put(regionBO.getId(), regionProvinceDTO);
+            } else if (regionBO.getLevelEnum().equals(RegionLevelEnum.REGION_LEVEL_TWO)) {
+            	if (region2.get(regionBO.getParentId()) == null) {
+            		region2.put(regionBO.getParentId(), new ArrayList<>());
+            	}
+            	RegionCityDTO regionCityDTO = RegionConverter.coverRegionCityDTO(regionBO);
+            	region2.get(regionBO.getParentId()).add(regionCityDTO);
+            } else if (regionBO.getLevelEnum().equals(RegionLevelEnum.REGION_LEVEL_THREE)) {
+            	if (region3.get(regionBO.getParentId()) == null) {
+            		region3.put(regionBO.getParentId(), new ArrayList<>());
+            	}
+            	RegionPathDTO regionPathDTO = RegionConverter.coverRegionProvinceDTO(regionBO);
+            	region3.get(regionBO.getParentId()).add(regionPathDTO);
+            }
+        }
+        
+        List<RegionProvinceDTO> rtn = new ArrayList<>();
+        for (Map.Entry<Integer, RegionProvinceDTO> entry : region1.entrySet()) {
+        	RegionProvinceDTO regionProvinceDTO = entry.getValue();
+        	List<RegionCityDTO> regionCityDTOList = region2.get(regionProvinceDTO.getId());
+        	for (RegionCityDTO regionCityDTO : regionCityDTOList) {
+        		List<RegionPathDTO> regionPathDTOList = region3.get(regionCityDTO.getId());
+        		regionCityDTO.setArea(regionPathDTOList);
+        	}
+        	regionProvinceDTO.setCity(regionCityDTOList);
+        	rtn.add(regionProvinceDTO);
+        }
+        return successGet(rtn);
     }
 
     /**
@@ -99,7 +155,8 @@ public class RegionController extends BaseController {
     /**
      * 更新区域表经纬度
      */
-    @RequestMapping(value = "updateRegionLonLat", method = RequestMethod.GET)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "updateRegionLonLat", method = RequestMethod.GET)
     public Result updateRegionLonLat() {
         List<RegionBO> regionBOS = regionService.getRegionLevelTwo();
         if (!regionBOS.isEmpty()) {
