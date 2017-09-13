@@ -42,6 +42,7 @@ import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
@@ -1009,8 +1010,8 @@ public class AdServiceImplTest {
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
         Integer id=adDOMapper.insertSelective(ad);
        
-        Integer count= adService.selectRPIsSend(1002l);
-        Assert.assertTrue(count>0);
+        RedPacketIsSendBO count= adService.selectRPIsSend(1002l);
+        Assert.assertNotNull(count);
 
     }
 	

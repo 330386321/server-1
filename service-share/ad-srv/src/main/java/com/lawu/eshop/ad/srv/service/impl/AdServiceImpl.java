@@ -56,6 +56,7 @@ import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
@@ -773,11 +774,18 @@ public class AdServiceImpl implements AdService {
 	}
 
 	@Override
-	public Integer selectRPIsSend(Long merchantId) {
+	public RedPacketIsSendBO selectRPIsSend(Long merchantId) {
 		AdDOExample example = new AdDOExample();
 		example.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.getVal()).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
-		int count = (int) adDOMapper.countByExample(example);
-		return count;
+		List<AdDO> list= adDOMapper.selectByExample(example);
+		RedPacketIsSendBO bo = new RedPacketIsSendBO();
+		if(!list.isEmpty()){
+			bo.setId(list.get(0).getId());
+			bo.setFlag(true);
+		}else{
+			bo.setFlag(false);
+		}
+		return bo;
 	}
 
 	@Override
