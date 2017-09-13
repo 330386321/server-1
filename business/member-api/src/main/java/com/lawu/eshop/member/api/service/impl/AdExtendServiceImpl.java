@@ -471,7 +471,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		param.setTypeEnum(AdTypeEnum.getEnum(adEgainParam.getTypeEnum().getVal()));
 		param.setLatitude(adEgainParam.getLatitude());
 		param.setLongitude(adEgainParam.getLongitude());
-
+		param.setTransRegionPath(adEgainParam.getTransRegionPath());
 		Result<Page<AdDTO>> pageDTOS = adService.selectListByMember(param, memberId);
 
 		List<AdDTO> newList = adFilter(param, pageDTOS.getModel().getRecords(), memberId);

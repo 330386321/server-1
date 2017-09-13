@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.ad.constants.FileTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
@@ -423,7 +424,18 @@ public class AdController extends BaseController {
 		}
 		if(StringUtils.isEmpty(result.getModel().getLogoUrl())){
 			result.getModel().setLogoUrl(memberApiConfig.getDefaultHeadimg());
+			
 		}
+		if(result.getModel().getFileType()==FileTypeEnum.VIDEO){
+			 String str = VideoCutImgUtil.getVideoTime(result.getModel().getMediaUrl(), memberApiConfig.getFfmpegUrl());
+			 int index1=str.indexOf(":");
+			 int index2=str.indexOf(":",index1+1);
+			 int hh=Integer.parseInt(str.substring(0,index1));
+			 int mi=Integer.parseInt(str.substring(index1+1,index2));
+			 int ss=Integer.parseInt(str.substring(index2+1));
+			 result.getModel().setVideoTime(hh*60*60+mi*60+ss);
+		}
+		
 		return result;
 	}
 
