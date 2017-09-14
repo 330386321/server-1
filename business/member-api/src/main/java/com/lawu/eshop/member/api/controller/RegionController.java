@@ -12,6 +12,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.RegionDTO;
+import com.lawu.eshop.mall.dto.RegionPathDTO;
 import com.lawu.eshop.mall.dto.RegionProvinceDTO;
 import com.lawu.eshop.member.api.service.RegionService;
 
@@ -41,11 +42,20 @@ public class RegionController extends BaseController {
     }
     
     @SuppressWarnings("unchecked")
+	@ApiOperation(value = "地区列表", notes = "查询所有地区，分组 [1004,1000](蒋鑫俊)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "group", method = RequestMethod.GET)
+    public Result<List<RegionProvinceDTO>> group() {
+        Result<List<RegionProvinceDTO>> listResult = regionService.group();
+        return successGet(listResult);
+    }
+    
+    @SuppressWarnings("unchecked")
 	@ApiOperation(value = "地区列表", notes = "所有地区列表 [1004,1000](蒋鑫俊)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public Result<List<RegionProvinceDTO>> list() {
-        Result<List<RegionProvinceDTO>> listResult = regionService.list();
+    public Result<List<RegionPathDTO>> list() {
+        Result<List<RegionPathDTO>> listResult = regionService.list();
         return successGet(listResult);
     }
 }

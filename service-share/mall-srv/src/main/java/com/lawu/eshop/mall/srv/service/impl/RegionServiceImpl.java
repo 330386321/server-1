@@ -1,21 +1,20 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.lawu.eshop.mall.constants.RegionLevelEnum;
 import com.lawu.eshop.mall.srv.bo.RegionBO;
 import com.lawu.eshop.mall.srv.converter.RegionConverter;
 import com.lawu.eshop.mall.srv.domain.RegionDO;
 import com.lawu.eshop.mall.srv.domain.RegionDOExample;
-import com.lawu.eshop.mall.srv.domain.extend.RegionDOView;
 import com.lawu.eshop.mall.srv.mapper.RegionDOMapper;
-import com.lawu.eshop.mall.srv.mapper.extend.RegionDOMMapperExtend;
 import com.lawu.eshop.mall.srv.service.RegionService;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author zhangyong
@@ -23,8 +22,6 @@ import java.util.List;
  */
 @Service
 public class RegionServiceImpl implements RegionService {
-    @Autowired
-    private RegionDOMMapperExtend regionDOMMapperExtend;
 
     @Autowired
     private RegionDOMapper regionDOMapper;
@@ -32,13 +29,19 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public List<RegionBO> getRegionList() {
         List<RegionBO> regionBOS = new ArrayList<>();
+        /*
         List<RegionDOView> viewList = regionDOMMapperExtend.getRegionList();
         if (viewList == null) {
             return regionBOS;
         }
-
         for (RegionDOView regionDOView : viewList) {
             RegionBO regionBO = RegionConverter.coverBO(regionDOView);
+            regionBOS.add(regionBO);
+        }
+        */
+        List<RegionDO> regionDOList = regionDOMapper.selectByExample(null);
+        for (RegionDO regionDO : regionDOList) {
+            RegionBO regionBO = RegionConverter.convert(regionDO);
             regionBOS.add(regionBO);
         }
         return regionBOS;
