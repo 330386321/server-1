@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.ad.constants.FileTypeEnum;
+import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.FileTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
@@ -73,7 +74,6 @@ import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
-import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.UserRedPacketDTO;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.utils.DateUtil;
@@ -135,7 +135,7 @@ public class AdController extends BaseController {
 	private AdCountRecordService adCountRecordService;
 
 	/**
-	 * @see selectEgainAd
+	 * @see
 	 */
 	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
@@ -260,7 +260,13 @@ public class AdController extends BaseController {
 		AdSolrRealParam param = new AdSolrRealParam();
 		param.setMemberId(memberId);
 		param.setRegionPath(adPraiseParam.getTransRegionPath());
-		param.setStatusEnum(AdStatusEnum.getEnum(adPraiseParam.getStatusEnum().getVal()));
+		if (adPraiseParam.getStatusEnum().getVal().byteValue() == AdPraiseStatusEnum.AD_STATUS_SHOOT.getVal()) {
+			param.setStatusEnum(AdStatusEnum.AD_STATUS_PUTING);
+		} else if (adPraiseParam.getStatusEnum().getVal().byteValue() == AdPraiseStatusEnum.AD_STATUS_TOBEGIN.getVal()) {
+			param.setStatusEnum(AdStatusEnum.AD_STATUS_ADD);
+		} else {
+			param.setStatusEnum(AdStatusEnum.AD_STATUS_PUTED);
+		}
 		param.setCurrentPage(adPraiseParam.getCurrentPage());
 		param.setPageSize(adPraiseParam.getPageSize());
 		param.setMerchantIds(merchantIds);

@@ -311,8 +311,10 @@ public class AdController extends BaseController {
 			String[] path = param.getRegionPath().split("/");
 			if (path.length == 3) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
-			} else {
+			} else if (path.length == 2) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
 			}
 		}
 
@@ -446,8 +448,10 @@ public class AdController extends BaseController {
 			String[] path = adSolrParam.getRegionPath().split("/");
 			if (path.length == 3) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
-			} else {
+			} else if (path.length == 2) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
 			}
 		}
 		if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
@@ -599,8 +603,10 @@ public class AdController extends BaseController {
 			String[] path = param.getRegionPath().split("/");
 			if (path.length == 3) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
-			} else {
+			} else if (path.length == 2) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
 			}
 		}
 		if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_FLAT)) {
@@ -704,8 +710,10 @@ public class AdController extends BaseController {
 			String[] path = param.getRegionPath().split("/");
 			if (path.length == 3) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
-			} else {
+			} else if (path.length == 2) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
 			}
 		}
 		if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTING)) {
@@ -784,8 +792,10 @@ public class AdController extends BaseController {
 			String[] path = param.getRegionPath().split("/");
 			if (path.length == 3) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
-			} else {
+			} else if (path.length == 2) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
 			}
 		}
 
