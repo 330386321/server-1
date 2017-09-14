@@ -46,7 +46,6 @@ import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
 import com.lawu.eshop.ad.srv.bo.AdSaveInfoBO;
-import com.lawu.eshop.ad.srv.bo.AdSaveInfoBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
@@ -685,10 +684,8 @@ public class AdServiceImpl implements AdService {
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
 					adDO.setGmtModified(date);
 					adDOMapper.updateByPrimaryKey(adDO);
-					if (adDO.getType() == AdTypeEnum.AD_TYPE_FLAT.getVal() || adDO.getType() == AdTypeEnum.AD_TYPE_VIDEO.getVal()) {
-						SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-						documents.add(document);
-					}
+					SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+					documents.add(document);
 				}
 			}
 			solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
