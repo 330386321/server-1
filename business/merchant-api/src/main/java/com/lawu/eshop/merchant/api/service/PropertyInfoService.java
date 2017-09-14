@@ -89,7 +89,7 @@ public interface PropertyInfoService {
     public Result<PropertyPointDTO> getPropertyPoint(@PathVariable("userNum") String userNum);
 
     /**
-     * 邀请粉丝消费积分
+     * 减积分
      *
      * @param propertyInfoDataParam
      * @return
@@ -98,6 +98,16 @@ public interface PropertyInfoService {
 	@RequestMapping(value = "propertyInfoData/doHanlderMinusPoint", method = RequestMethod.POST)
     Result inviteFans(@ModelAttribute PropertyInfoDataParam propertyInfoDataParam);
 
+    /**
+     * 邀请粉丝消费积分
+     *
+     * @param propertyInfoDataParam
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "propertyInfoData/doHanlderMinusPointByFans", method = RequestMethod.POST)
+    Result doHanlderMinusPointByFans(@ModelAttribute PropertyInfoDataParam propertyInfoDataParam);
+    
     /**
      * 验证支付密码
      *

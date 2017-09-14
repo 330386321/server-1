@@ -1,5 +1,7 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,7 @@ public class PropertyInfoDataController extends BaseController {
 	/**
 	 * 减积分的业务：
 	 * 
-	 * 商家邀请粉丝、商家发布广告、商家发红包、大额抢占扣除积分
+	 * 商家发布广告、商家发红包、大额抢占扣除积分
 	 * 
 	 * @param param
 	 * @return
@@ -54,18 +56,28 @@ public class PropertyInfoDataController extends BaseController {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
     	int retCode = propertyInfoDataService.doHanlderMinusPoint(param);
-		if (param.getMerchantTransactionTypeEnum() != null && 
-				param.getMerchantTransactionTypeEnum().getValue() == MerchantTransactionTypeEnum.INVITE_FANS.getValue() && 
-				retCode != ResultCode.BIZ_TYPE_NULL && 
-				retCode != ResultCode.PROPERTY_INFO_NULL &&
-				retCode != ResultCode.PROPERTY_INFO_OUT_INDEX &&
-				retCode != ResultCode.PROPERTYINFO_FREEZE_YES &&
-				retCode != ResultCode.PROPERTY_INFO_POINT_LESS) {
-			return successCreated((Object)retCode);
-		}
 		return successCreated(retCode);
 	}
-
+	
+	/**
+	 * 减积分的业务：
+	 * 
+	 * 商家邀请粉丝
+	 * 
+	 * @param param
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "doHanlderMinusPointByFans", method = RequestMethod.POST)
+	public Result doHanlderMinusPointByFans(@RequestBody @Valid PropertyInfoDataParam param, BindingResult result) {
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	Map<String, Integer> map = propertyInfoDataService.doHanlderMinusPointByFans(param);
+		return successCreated(map);
+	}
+	
 	/**
 	 * 加积分的业务：
 	 * 

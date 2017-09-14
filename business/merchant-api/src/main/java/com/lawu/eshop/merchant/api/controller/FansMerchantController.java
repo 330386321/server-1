@@ -2,6 +2,7 @@ package com.lawu.eshop.merchant.api.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -357,13 +358,14 @@ public class FansMerchantController extends BaseController {
 		propertyInfoDataParam.setInviteFansCount(inviteFansCount);
 		propertyInfoDataParam.setSex(param.getUserSexEnum().val);
 		propertyInfoDataParam.setAge(param.getIsAgeLimit() ? param.getStartAge() + "-" + param.getEndAge() : "");
-		Result result = propertyInfoService.inviteFans(propertyInfoDataParam);
+		Result result = propertyInfoService.doHanlderMinusPointByFans(propertyInfoDataParam);
 		if (!isSuccess(result)) {
 			return result;
 		}
-		
+		@SuppressWarnings("unchecked")
+		Map<String, Integer> map = (Map<String, Integer>)result.getModel();
 		FansInviteContentExtendParam fansInviteContentExtendParam = new FansInviteContentExtendParam();
-		fansInviteContentExtendParam.setFansInviteDetailId(Long.valueOf(result.getModel().toString()));
+		fansInviteContentExtendParam.setFansInviteDetailId(Long.valueOf(map.get("fans_invite_detail_id")));
 		fansInviteContentExtendParam.setInviteContent(param.getInviteContent());
 		fansInviteContentExtendParam.setLogoUrl(param.getLogoUrl());
 		fansInviteContentExtendParam.setMerchantId(merchantId);
