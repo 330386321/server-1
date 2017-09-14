@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.framework.web.util.HeaderUtil;
 import com.lawu.eshop.mall.dto.AppVersionDTO;
 import com.lawu.eshop.member.api.MemberApiConfig;
@@ -21,7 +22,8 @@ public class AppVersionController extends BaseController{
 	
 	@Autowired
 	private MemberApiConfig memberApiConfig;
-	
+
+	@Audit(date = "2017-09-14", reviewer = "孙林青")
 	@RequestMapping(value = "getVersion", method = RequestMethod.GET)
 	Result<AppVersionDTO> getVersion() {
 		Result<AppVersionDTO> result = appVersionService.getAppVersion(1);
