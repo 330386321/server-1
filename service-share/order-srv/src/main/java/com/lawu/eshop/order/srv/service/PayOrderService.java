@@ -1,11 +1,14 @@
 package com.lawu.eshop.order.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.param.MerchantPayOrderListParam;
 import com.lawu.eshop.order.param.OperatorPayOrderParam;
+import com.lawu.eshop.order.param.PayOrderDataParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
+import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 
@@ -22,7 +25,7 @@ public interface PayOrderService {
      * @param param
      * @return
      */
-    PayOrderBO savePayOrderInfo(Long memberId, PayOrderParam param, String numNum);
+    PayOrderBO savePayOrderInfo(Long memberId, PayOrderDataParam param, String numNum);
 
     /**
      * 买单记录列表
@@ -84,4 +87,6 @@ public interface PayOrderService {
     Page<PayOrderBO> getOperatorPayOrderList(OperatorPayOrderParam param);
 
     List<PayOrderBO> getAutoCommentPayOrderList();
+
+    List<ReportRiseRerouceDTO> fansSaleTransformPay(ReportDataParam dparam);
 }

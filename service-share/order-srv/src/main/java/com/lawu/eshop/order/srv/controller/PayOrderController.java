@@ -7,8 +7,10 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.dto.*;
 import com.lawu.eshop.order.param.MerchantPayOrderListParam;
 import com.lawu.eshop.order.param.OperatorPayOrderParam;
+import com.lawu.eshop.order.param.PayOrderDataParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
+import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 import com.lawu.eshop.order.srv.converter.PayOrderConverter;
@@ -44,7 +46,7 @@ public class PayOrderController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "savePayOrderInfo/{memberId}", method = RequestMethod.POST)
-	public Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @RequestBody PayOrderParam param, @RequestParam("numNum") String numNum) {
+	public Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @RequestBody PayOrderDataParam param, @RequestParam("numNum") String numNum) {
 		if (memberId == null || param == null) {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
 		}
@@ -236,5 +238,17 @@ public class PayOrderController extends BaseController {
 		List<PayOrderBO> payOrderBOS = payOrderService.getAutoCommentPayOrderList();
 		List<PayOrderAutoCommentDTO> list = PayOrderConverter.coverAutoCommentDTOS(payOrderBOS);
 		return successGet(list);
+	}
+
+	/**
+	 * 粉丝数据-消费转化
+	 *
+	 * @param dparam
+	 * @return
+	 */
+	@RequestMapping(value = "fansSaleTransformPay", method = RequestMethod.PUT)
+	public Result<List<ReportRiseRerouceDTO>> fansSaleTransformPay(@RequestBody ReportDataParam dparam) {
+		List<ReportRiseRerouceDTO> reportRiseRerouceDTOList = payOrderService.fansSaleTransformPay(dparam);
+		return successCreated(reportRiseRerouceDTOList);
 	}
 }

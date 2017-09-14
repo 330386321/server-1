@@ -396,14 +396,14 @@ public class ShoppingOrderConverter {
 		
 		// 粉丝订单数量
 		ReportRiseRerouceDTO reportRiseRerouceDTO = new ReportRiseRerouceDTO();
-		reportRiseRerouceDTO.setName("粉丝消费");
+		reportRiseRerouceDTO.setName("粉丝购物消费");
 		ReportFansSaleTransFormDO reportFansSaleTransFormDO = reportFansSaleTransFormDOMap.get("1");
 		reportRiseRerouceDTO.setValue(reportFansSaleTransFormDO == null ? "0" : reportFansSaleTransFormDO.getCount().toString());
 		rtn.add(reportRiseRerouceDTO);
 		
 		// 非粉丝订单数量
 		reportRiseRerouceDTO = new ReportRiseRerouceDTO();
-		reportRiseRerouceDTO.setName("非粉丝消费");
+		reportRiseRerouceDTO.setName("非粉丝购物消费");
 		reportFansSaleTransFormDO = reportFansSaleTransFormDOMap.get("0");
 		reportRiseRerouceDTO.setValue(reportFansSaleTransFormDO == null ? "0" : reportFansSaleTransFormDO.getCount().toString());
 		rtn.add(reportRiseRerouceDTO);

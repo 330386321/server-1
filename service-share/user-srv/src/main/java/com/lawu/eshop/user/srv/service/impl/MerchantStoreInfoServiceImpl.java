@@ -458,7 +458,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		ShoppingOrderFindMerchantInfoBO shoppingOrderFindUserInfoBO = null;
 		for (MerchantStoreDO merchantStoreDO : merchantStoreDOList) {
 			fansMerchantDOExample = new FansMerchantDOExample();
-			fansMerchantDOExample.createCriteria().andMemberIdEqualTo(param.getMemberId()).andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+			fansMerchantDOExample.createCriteria().andMemberIdEqualTo(param.getMemberId()).andMerchantIdEqualTo(merchantStoreDO.getMerchantId()).andStatusEqualTo((byte)1);
 			int count = fansMerchantDOMapper.countByExample(fansMerchantDOExample);
 			boolean isFans = false;
 			if (count > 0) {

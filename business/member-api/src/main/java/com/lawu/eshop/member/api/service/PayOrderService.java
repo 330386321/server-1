@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.service;
 
+import com.lawu.eshop.order.param.PayOrderDataParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,7 @@ import com.lawu.eshop.order.param.PayOrderParam;
 public interface PayOrderService {
 
     @RequestMapping(value = "savePayOrderInfo/{memberId}", method = RequestMethod.POST)
-    Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @ModelAttribute PayOrderParam param,@RequestParam("numNum") String numNum);
+    Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @ModelAttribute PayOrderDataParam param, @RequestParam("numNum") String numNum);
 
     @RequestMapping(value = "getpayOrderList/{memberId}", method = RequestMethod.POST)
     Result<Page<PayOrderDTO>> getpayOrderList(@PathVariable("memberId") Long memberId, @ModelAttribute PayOrderListParam param);

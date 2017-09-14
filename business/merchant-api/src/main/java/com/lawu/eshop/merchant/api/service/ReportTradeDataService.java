@@ -35,8 +35,8 @@ public interface ReportTradeDataService {
 	Result<ReportRiseRateDTO> payVolumeRiseRate(@RequestBody ReportDataParam dparam);
 
 	/**
-	 * 粉丝数据-消费转化
-	 * @param param
+	 * 粉丝数据-消费转化(订单消费)
+	 * @param dparam
 	 * @return
 	 * @author yangqh
 	 * @date 2017年5月3日 下午6:21:42
@@ -53,5 +53,12 @@ public interface ReportTradeDataService {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, value = "shoppingOrder/selectByTransactionData")
 	Result<ReportRiseRateDTO> selectByTransactionData(@RequestBody ReportDataParam dparam);
-    
+
+	/**
+	 * 粉丝数据-消费转化(买单消费)
+	 * @param dparam
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.PUT, value = "payOrder/fansSaleTransformPay")
+	Result<List<ReportRiseRerouceDTO>> fansSaleTransformPay(@RequestBody ReportDataParam dparam);
 }

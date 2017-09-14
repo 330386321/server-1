@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.order.param.PayOrderDataParam;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -226,13 +227,14 @@ public class PayOrderServiceImplTest {
 	public void savePayOrderInfo() {
 		Long memberId = 1L;
 		String memberNum = "M00001";
-		PayOrderParam param = new PayOrderParam();
+		PayOrderDataParam param = new PayOrderDataParam();
 		param.setFavoredAmount(1D);
 		param.setMerchantId(1L);
 		param.setMerchantNum("B00001");
 		param.setNotFavoredAmount(1D);
 		param.setMerchantFavoredId(1L);
 		param.setTotalAmount(2D);
+		param.setFans(true);
 		PayOrderBO payOrderBO = payOrderService.savePayOrderInfo(memberId, param, memberNum);
 		
 		PayOrderDOExample example = new PayOrderDOExample();

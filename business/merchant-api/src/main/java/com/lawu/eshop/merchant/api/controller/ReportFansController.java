@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
@@ -90,6 +91,26 @@ public class ReportFansController extends BaseController {
 		}
 		ReportDataParam dparam = new ReportDataParam();
 		dparam.setMerchantId(merchantId);
-		return reportTradeDataService.fansSaleTransform(dparam);
+
+		Result<List<ReportRiseRerouceDTO>> payRet = reportTradeDataService.fansSaleTransformPay(dparam);
+		Result<List<ReportRiseRerouceDTO>> orderRet = reportTradeDataService.fansSaleTransform(dparam);
+		List<ReportRiseRerouceDTO> retList = new ArrayList<>();
+		List<ReportRiseRerouceDTO> payList = payRet.getModel();
+		List<ReportRiseRerouceDTO> orderList = orderRet.getModel();
+		retList.addAll(payList);
+		retList.addAll(orderList);
+		int i = 0;
+		for(ReportRiseRerouceDTO dto : retList){
+			Integer count = Integer.parseInt(dto.getValue());
+			if(count > 0){
+				break;
+			}
+			i++;
+		}
+		if(i == 4){
+			retList.clear();
+			return successCreated(retList);
+		}
+		return successCreated(retList);
 	}
 }

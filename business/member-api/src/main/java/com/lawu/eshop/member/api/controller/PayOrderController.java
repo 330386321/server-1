@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.lawu.eshop.member.api.service.FansMerchantService;
+import com.lawu.eshop.order.param.PayOrderDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,6 +67,8 @@ public class PayOrderController extends BaseController {
 
 	@Autowired
 	private CommentMerchantService commentMerchantService;
+	@Autowired
+	private FansMerchantService fansMerchantService;
 
     @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "新增买单记录", notes = "新增买单记录  [1004,1005,1000] （章勇）", httpMethod = "POST")
@@ -99,7 +103,19 @@ public class PayOrderController extends BaseController {
                 }
             }
         }
-        return  payOrderService.savePayOrderInfo(memberId, param,userNum);
+
+        //查询该用户是否为该商家粉丝
+	    Result<Boolean> isFans = fansMerchantService.isFansMerchant(param.getMerchantId(),memberId);
+	    PayOrderDataParam dParam = new PayOrderDataParam();
+	    dParam.setMerchantId(param.getMerchantId());
+	    dParam.setTotalAmount(param.getTotalAmount());
+	    dParam.setNotFavoredAmount(param.getNotFavoredAmount());
+	    dParam.setFavoredAmount(param.getFavoredAmount());
+	    dParam.setMerchantNum(param.getMerchantNum());
+	    dParam.setMerchantFavoredId(param.getMerchantFavoredId());
+	    dParam.setFans(isFans.getModel());
+
+        return  payOrderService.savePayOrderInfo(memberId, dParam,userNum);
     }
 
 	@Audit(date = "2017-04-12", reviewer = "孙林青")

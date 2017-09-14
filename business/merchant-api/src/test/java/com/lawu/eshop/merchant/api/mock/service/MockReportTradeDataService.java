@@ -31,4 +31,9 @@ public class MockReportTradeDataService extends BaseController implements Report
     public Result<ReportRiseRateDTO> selectByTransactionData(@RequestBody ReportDataParam dparam) {
         return successCreated();
     }
+
+    @Override
+    public Result<List<ReportRiseRerouceDTO>> fansSaleTransformPay(@RequestBody ReportDataParam dparam) {
+        return successCreated();
+    }
 }

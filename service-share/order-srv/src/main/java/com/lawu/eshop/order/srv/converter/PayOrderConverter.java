@@ -5,9 +5,12 @@ import com.lawu.eshop.order.dto.*;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.domain.extend.PayOrderExtendDOVew;
+import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangyong
@@ -151,5 +154,30 @@ public class PayOrderConverter {
             payOrderAutoCommentDTOS.add(payOrderAutoCommentDTO);
         }
         return payOrderAutoCommentDTOS;
+    }
+
+    public static List<ReportRiseRerouceDTO> convertReportRiseRerouceDTOList(List<ReportFansSaleTransFormDO> list) {
+        List<ReportRiseRerouceDTO> rtn = new ArrayList<>();
+
+        Map<String, ReportFansSaleTransFormDO> reportFansSaleTransFormDOMap = new HashMap<>();
+        for (ReportFansSaleTransFormDO item : list) {
+            reportFansSaleTransFormDOMap.put(item.getIsFans(), item);
+        }
+
+        // 粉丝订单数量
+        ReportRiseRerouceDTO reportRiseRerouceDTO = new ReportRiseRerouceDTO();
+        reportRiseRerouceDTO.setName("粉丝买单消费");
+        ReportFansSaleTransFormDO reportFansSaleTransFormDO = reportFansSaleTransFormDOMap.get("1");
+        reportRiseRerouceDTO.setValue(reportFansSaleTransFormDO == null ? "0" : reportFansSaleTransFormDO.getCount().toString());
+        rtn.add(reportRiseRerouceDTO);
+
+        // 非粉丝订单数量
+        reportRiseRerouceDTO = new ReportRiseRerouceDTO();
+        reportRiseRerouceDTO.setName("非粉丝买单消费");
+        reportFansSaleTransFormDO = reportFansSaleTransFormDOMap.get("0");
+        reportRiseRerouceDTO.setValue(reportFansSaleTransFormDO == null ? "0" : reportFansSaleTransFormDO.getCount().toString());
+        rtn.add(reportRiseRerouceDTO);
+
+        return rtn;
     }
 }
