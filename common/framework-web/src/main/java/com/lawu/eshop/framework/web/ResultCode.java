@@ -164,6 +164,7 @@ public class ResultCode {
     public static final int PROCESSED_RETURN_SUCCESS = 6025;
     public static final int PROPERTYINFO_FREEZE_EXCEPITON = 6026;
     public static final int DEPOSIT_EXIST_UP_PRODUCT = 6027;
+    public static final int BANK_ACCOUNT_LENTH_OUT_OF_RANGE = 6028;
 
 
 
@@ -196,7 +197,7 @@ public class ResultCode {
 
     // 初始化状态码与文字说明
     static {
-
+    	
         // 公共代码 1xxx
         ResultCode.messageMap.put(SUCCESS, "success");
         ResultCode.messageMap.put(FAIL, "fail");
@@ -368,7 +369,8 @@ public class ResultCode {
         ResultCode.messageMap.put(PROCESSED_RETURN_SUCCESS, "重复处理，成功返回");
         ResultCode.messageMap.put(PROPERTYINFO_FREEZE_EXCEPITON, "资金出现异常");
         ResultCode.messageMap.put(DEPOSIT_EXIST_UP_PRODUCT, "有未下架商品，完成后才可申请。");
-
+        ResultCode.messageMap.put(BANK_ACCOUNT_LENTH_OUT_OF_RANGE, "银行卡长度有误。");
+        
 
         // 商城模块 7xxx
         ResultCode.messageMap.put(MESSAGE_HAS_NO_TEMPLATE, "未配置对应的消息模板");
