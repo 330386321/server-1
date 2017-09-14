@@ -729,13 +729,13 @@ public class ShoppingOrderController extends BaseController {
 	/**
 	 * 粉丝数据-消费转化
 	 * 
-	 * @param param
+	 * @param dparam
 	 * @return
 	 * @author Sunny
 	 */
 	@RequestMapping(value = "fansSaleTransform", method = RequestMethod.PUT)
-	public Result<List<ReportRiseRerouceDTO>> fansSaleTransform(@RequestBody ReportDataParam param) {
-		List<ReportRiseRerouceDTO> reportRiseRerouceDTOList = shoppingOrderService.fansSaleTransform(param);
+	public Result<List<ReportRiseRerouceDTO>> fansSaleTransform(@RequestBody ReportDataParam dparam) {
+		List<ReportRiseRerouceDTO> reportRiseRerouceDTOList = shoppingOrderService.fansSaleTransform(dparam);
 		return successCreated(reportRiseRerouceDTOList);
 	}
 }

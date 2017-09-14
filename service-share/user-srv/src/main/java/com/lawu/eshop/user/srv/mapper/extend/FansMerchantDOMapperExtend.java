@@ -42,13 +42,11 @@ public interface FansMerchantDOMapperExtend {
 	/**
 	 * 粉丝增长来源报表
 	 * 
-	 * @param dateFormat
-	 * @param value
+	 * @param merchantId
 	 * @return
 	 * @author yangqh
 	 * @date 2017年5月2日 下午7:55:54
 	 */
-	List<FansMerchantDOReportView> fansRiseSource(@Param("formatDate") String formatDate, @Param("flag") Byte flag,
-			@Param("merchantId") Long merchantId);
+	List<FansMerchantDOReportView> fansRiseSource(@Param("merchantId") Long merchantId);
 
 }

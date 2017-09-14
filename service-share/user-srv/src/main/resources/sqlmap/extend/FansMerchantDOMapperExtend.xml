@@ -181,30 +181,15 @@
 	</select>
 
 	<select id="fansRiseSource" resultMap="ReportBaseResultMap"
-		parameterType="java.lang.String">
-		<if test="flag == 1">
+		parameterType="java.lang.Long">
 			SELECT
 			channel as keyTxt,
 			count(1) AS num
 			FROM
 			fans_merchant
 			WHERE
-			DATE_FORMAT(gmt_create, "%Y%m%d") = #{formatDate} and
 			merchant_id = #{merchantId}  and status = 1
 			GROUP BY
 			channel
-		</if>
-		<if test="flag == 2">
-			SELECT
-			channel as keyTxt,
-			count(1) AS num
-			FROM
-			fans_merchant
-			WHERE
-			DATE_FORMAT(gmt_create, "%Y%m") = #{formatDate} and merchant_id
-			= #{merchantId}  and status = 1
-			GROUP BY
-			channel
-		</if>
 	</select>
 </mapper>

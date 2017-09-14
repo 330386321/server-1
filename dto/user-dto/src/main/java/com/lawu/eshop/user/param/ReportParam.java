@@ -2,8 +2,6 @@ package com.lawu.eshop.user.param;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
-
 import com.lawu.eshop.user.constants.ReportFansRiseRateEnum;
 
 import io.swagger.annotations.ApiModel;
@@ -24,7 +22,6 @@ public class ReportParam implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@ApiModelProperty(name = "flag", required = true, value = "标记(DAY-日增长|MONTH-月增长)")
-	@NotNull(message = "flag不能为空")
 	private ReportFansRiseRateEnum flag;
 
 	public ReportFansRiseRateEnum getFlag() {
@@ -35,5 +32,5 @@ public class ReportParam implements Serializable {
 		this.flag = flag;
 	}
 
-	
+
 }

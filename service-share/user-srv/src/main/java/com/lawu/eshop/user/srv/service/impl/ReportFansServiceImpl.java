@@ -45,104 +45,14 @@ public class ReportFansServiceImpl implements ReportFansService {
 	
 	@Override
 	public List<ReportRiseRerouceDTO> fansRiseSource(ReportDataParam dparam) {
-		List<FansMerchantDOReportView> list = new ArrayList<>();
-		if (ReportFansRiseRateEnum.DAY.getValue().equals(dparam.getFlag().getValue())) {
-			list = fansMerchantDOMapperExtend.fansRiseSource(DateUtil.getDateFormat(new Date(), "yyyyMMdd"),
-					dparam.getFlag().getValue(), dparam.getMerchantId());
-		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(dparam.getFlag().getValue())) {
-			list = fansMerchantDOMapperExtend.fansRiseSource(DateUtil.getDateFormat(new Date(), "yyyyMM"),
-					dparam.getFlag().getValue(), dparam.getMerchantId());
-		}
-		int total = 0;
-		for (FansMerchantDOReportView view : list) {
-			int t = Integer.parseInt(view.getNum());
-			total = total + t;
-		}
-		Double todayDouble = Double.valueOf(total);
+		List<FansMerchantDOReportView> list = fansMerchantDOMapperExtend.fansRiseSource(dparam.getMerchantId());
 		List<ReportRiseRerouceDTO> dtos = new ArrayList<ReportRiseRerouceDTO>();
 		for (FansMerchantDOReportView view : list) {
 			ReportRiseRerouceDTO dto = new ReportRiseRerouceDTO();
-			int num = Integer.parseInt(view.getNum());
-			Double numDouble = Double.valueOf(num);
-			float p = (float) ((float) (numDouble / todayDouble) * 100);
-			DecimalFormat df = new DecimalFormat("0.00");
-			String ps = df.format(p) + "%";
-
-			dto.setName(ps + FansMerchantChannelEnum
-					.getEnum(StringUtil.intToByte(Integer.parseInt(view.getKeyTxt()))).getName());
+			dto.setName(FansMerchantChannelEnum.getEnum(StringUtil.intToByte(Integer.parseInt(view.getKeyTxt()))).getName());
 			dto.setValue(view.getNum());
 			dtos.add(dto);
 		}
 		return dtos;
 	}
-
-	// public static void main(String[] args) {
-	// List<FansMerchantDOReportView> list = new
-	// ArrayList<FansMerchantDOReportView>();
-	// FansMerchantDOReportView view1 = new FansMerchantDOReportView();
-	// view1.setDate("01");
-	// view1.setNum("10");
-	// list.add(view1);
-	// FansMerchantDOReportView view3 = new FansMerchantDOReportView();
-	// view3.setDate("03");
-	// view3.setNum("18");
-	// list.add(view3);
-	// test(ReportFansRiseRateEnum.DAY.getValue(),list);
-	// }
-	//
-	// public static void test(Byte b,List<FansMerchantDOReportView> list) {
-	// if (ReportFansRiseRateEnum.DAY.getValue().equals(b)) {
-	// int days = DateUtil.getNowMonthDay();
-	// for (int i = 0; i < days; i++) {
-	// boolean f = true;
-	// int j = i + 1;
-	// for (FansMerchantDOReportView view : list) {
-	// int num = Integer.valueOf(view.getDate()).intValue();
-	// if (num == j) {
-	// f = false;
-	// break;
-	// }
-	// }
-	// if (f) {
-	// FansMerchantDOReportView view = new FansMerchantDOReportView();
-	// view.setDate(j + "");
-	// view.setNum("0");
-	// list.add(i, view);
-	// }
-	// }
-	// } else if (ReportFansRiseRateEnum.MONTH.getValue().equals(b)) {
-	// for (int i = 0; i < 12; i++) {
-	// boolean f = true;
-	// int j = i + 1;
-	// for (FansMerchantDOReportView view : list) {
-	// int num = Integer.valueOf(view.getDate()).intValue();
-	// if (num == j) {
-	// f = false;
-	// break;
-	// }
-	// }
-	// if (f) {
-	// FansMerchantDOReportView view = new FansMerchantDOReportView();
-	// view.setDate(j + "");
-	// view.setNum("0");
-	// list.add(i, view);
-	// }
-	// }
-	// }
-	//
-	// List<String> dates = new ArrayList<String>();
-	// List<String> nums = new ArrayList<String>();
-	// for (FansMerchantDOReportView view : list) {
-	// dates.add(Integer.valueOf(view.getDate()).toString());
-	// nums.add(view.getNum());
-	// }
-	// for(String d : dates){
-	// System.out.print(d+",");
-	// }
-	// System.out.println();
-	// for(String n : nums){
-	// System.out.print(n+",");
-	// }
-	// }
-
 }

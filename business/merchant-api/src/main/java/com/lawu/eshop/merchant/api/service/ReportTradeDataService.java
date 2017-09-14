@@ -36,7 +36,7 @@ public interface ReportTradeDataService {
 
 	/**
 	 * 粉丝数据-消费转化
-	 * @param dparam
+	 * @param param
 	 * @return
 	 * @author yangqh
 	 * @date 2017年5月3日 下午6:21:42

@@ -1411,13 +1411,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		ShoppingOrderReportDataParam shoppingOrderReportDataParam = new ShoppingOrderReportDataParam();
 		shoppingOrderReportDataParam.setMerchantId(param.getMerchantId());
 
-		if (ReportFansRiseRateEnum.DAY.getValue().equals(param.getFlag().getValue())) {
-			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.DAY.getValue());
-			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyyMM"));
-		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(param.getFlag().getValue())) {
-			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.MONTH.getValue());
-			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyy"));
-		}
+//		if (ReportFansRiseRateEnum.DAY.getValue().equals(param.getFlag().getValue())) {
+//			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.DAY.getValue());
+//			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyyMM"));
+//		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(param.getFlag().getValue())) {
+//			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.MONTH.getValue());
+//			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyy"));
+//		}
 
 		List<ReportFansSaleTransFormDO> reportFansSaleTransFormDOList = shoppingOrderDOExtendMapper.selectByFansSaleTransForm(shoppingOrderReportDataParam);
 
