@@ -40,10 +40,13 @@ import com.lawu.eshop.ad.srv.domain.extend.UserRedpacketMaxMoney;
 import com.lawu.eshop.ad.srv.mapper.UserRedPacketDOMapper;
 import com.lawu.eshop.ad.srv.mapper.UserTakedRedPacketDOMapper;
 import com.lawu.eshop.ad.srv.mapper.extend.UserTakedRedpacketBOMapperExtend;
+import com.lawu.eshop.ad.srv.service.AdCountRecordService;
 import com.lawu.eshop.ad.srv.service.UserRedPacketService;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.synchronization.lock.constants.LockConstant.LockModule;
 import com.lawu.eshop.synchronization.lock.service.LockService;
 import com.lawu.eshop.utils.DateUtil;
 
@@ -69,6 +72,12 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	@Autowired
 	@Qualifier("memberGetRedPacketTransactionMainServiceImpl")
 	private TransactionMainService<Reply> memberGetRedPacketTransactionMainServiceImpl;
+	
+	@Autowired
+	private AdCountRecordService adCountRecordService;
+	
+	@Autowired
+	private LockService lockService;
 	
 	/**
 	 * 新增用户红包
@@ -181,63 +190,93 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	/**
 	 * 用户领取红包
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public UserRedpacketMaxMoney getUserRedpacketMoney(Long redPacketId, String userNum) {
 		
-		UserRedPacketDO  userRedPacketDO = userRedPacketDOMapper.selectByPrimaryKey(redPacketId);
+		Result<Object> result = adCountRecordService.getUserRedPacketCountRecord(redPacketId);
+		UserRedpacketMaxMoney getMoney=new UserRedpacketMaxMoney();
 		
-		//已领取个数
-		UserTakedRedPacketDOExample example = new UserTakedRedPacketDOExample();
-		example.createCriteria().andUserRedPackIdEqualTo(redPacketId);
-		int count = userTakedRedPacketDOMapper.countByExample(example);
-		
-		//已领取总金额
-		UserRedpacketMaxMoney  view =userTakedRedpacketBOMapperExtend.getSumMoney(redPacketId);
-		BigDecimal subMoney=new BigDecimal(0);
-		//剩余积分
-		if(view == null){
-		    subMoney=userRedPacketDO.getTotalMoney().subtract(BigDecimal.valueOf(0));
+		if(result.getModel()==null){ 
+			getMoney.setFlag(false);
+			return getMoney;
 		}else{
-			subMoney=userRedPacketDO.getTotalMoney().subtract(view.getMaxMoney());
-		}
-		BigDecimal money=new BigDecimal(0);
-		byte type;
-		if(userRedPacketDO.getType()==RedPacketPutWayEnum.PUT_WAY_LUCK.val){ //手气红包
-			 Double point= SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), userRedPacketDO.getTotalCount(),count);
-			 money=BigDecimal.valueOf(point);
-			 type=RedPacketPutWayEnum.PUT_WAY_LUCK.val;
-		}else{ //普通红包
-			if(count==userRedPacketDO.getTotalCount()-1){
-				money=subMoney;
-			}else{
-				money = userRedPacketDO.getTotalMoney().divide(new BigDecimal(userRedPacketDO.getTotalCount()), 2, RoundingMode.HALF_UP);
+			List<Object> list=(List<Object>) result.getModel();
+			if((Integer)list.get(0)<0){
+				getMoney.setSysWords(true);
+				return getMoney;
 			}
-			type=RedPacketPutWayEnum.PUT_WAY_COMMON.val;
 		}
+		
+		Boolean flag=lockService.tryLock(LockModule.LOCK_AD_SRV,"AD_USER_RED_PACKET_LOCK_",redPacketId);
 		
 		UserTakedRedPacketDO userTabed = new UserTakedRedPacketDO();
-		userTabed.setGmtModified(new Date());
-		userTabed.setGmtCreate(new Date());
-		userTabed.setTakedTime(new Date());
-		userTabed.setUserNum(userNum);
-		userTabed.setMoney(money);
-		userTabed.setOrdinal(count);
-		userTabed.setUserRedPackId(redPacketId);
-		userTabed.setType(type);
-		userTabed.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
-		userTakedRedPacketDOMapper.insert(userTabed);
 		
-		if(userRedPacketDO.getTotalCount()-1==count || count>=userRedPacketDO.getTotalCount()){
-			userRedPacketDO.setGmtModified(new Date());
-			userRedPacketDO.setStatus(UserRedPacketEnum.USER_STATUS_OVER.val);
-			userRedPacketDOMapper.updateByPrimaryKeySelective(userRedPacketDO);
+		if(flag){
+			
+			UserRedPacketDO  userRedPacketDO = userRedPacketDOMapper.selectByPrimaryKey(redPacketId);
+			
+			//已领取个数
+			UserTakedRedPacketDOExample example = new UserTakedRedPacketDOExample();
+			example.createCriteria().andUserRedPackIdEqualTo(redPacketId);
+			int count = userTakedRedPacketDOMapper.countByExample(example);
+			
+			//已领取总金额
+			UserRedpacketMaxMoney  view =userTakedRedpacketBOMapperExtend.getSumMoney(redPacketId);
+			BigDecimal subMoney=new BigDecimal(0);
+			//剩余积分
+			if(view == null){
+			    subMoney=userRedPacketDO.getTotalMoney().subtract(BigDecimal.valueOf(0));
+			}else{
+				subMoney=userRedPacketDO.getTotalMoney().subtract(view.getMaxMoney());
+			}
+			BigDecimal money=new BigDecimal(0);
+			byte type;
+			if(userRedPacketDO.getType()==RedPacketPutWayEnum.PUT_WAY_LUCK.val){ //手气红包
+				 Double point= SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), userRedPacketDO.getTotalCount(),count);
+				 money=BigDecimal.valueOf(point);
+				 type=RedPacketPutWayEnum.PUT_WAY_LUCK.val;
+			}else{ //普通红包
+				if(count==userRedPacketDO.getTotalCount()-1){
+					money=subMoney;
+				}else{
+					money = userRedPacketDO.getTotalMoney().divide(new BigDecimal(userRedPacketDO.getTotalCount()), 2, RoundingMode.HALF_UP);
+				}
+				type=RedPacketPutWayEnum.PUT_WAY_COMMON.val;
+			}
+			
+			userTabed.setGmtModified(new Date());
+			userTabed.setGmtCreate(new Date());
+			userTabed.setTakedTime(new Date());
+			userTabed.setUserNum(userNum);
+			userTabed.setMoney(money);
+			userTabed.setOrdinal(count);
+			userTabed.setUserRedPackId(redPacketId);
+			userTabed.setType(type);
+			userTabed.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+			int row = userTakedRedPacketDOMapper.insert(userTabed);
+			
+			if(userRedPacketDO.getTotalCount()-1==count || count>=userRedPacketDO.getTotalCount()){
+				userRedPacketDO.setGmtModified(new Date());
+				userRedPacketDO.setStatus(UserRedPacketEnum.USER_STATUS_OVER.val);
+				userRedPacketDOMapper.updateByPrimaryKeySelective(userRedPacketDO);
+			}
+			
+			if(row > 0){
+				getMoney.setMaxMoney(userTabed.getMoney());
+				lockService.unLock(LockModule.LOCK_AD_SRV,"AD_USER_RED_PACKET_LOCK_",redPacketId);
+			}
+			
 		}
 		
-		UserRedpacketMaxMoney getMoney=new UserRedpacketMaxMoney();
-		getMoney.setMaxMoney(userTabed.getMoney());
-		
-		memberGetRedPacketTransactionMainServiceImpl.sendNotice(userTabed.getId());
+		//发送消息修改积分
+		new Thread(new Runnable() {
+		    @Override
+		    public void run() {
+		    	memberGetRedPacketTransactionMainServiceImpl.sendNotice(userTabed.getId());
+		    }
+		}).start();
 		
 		return getMoney;
 	}

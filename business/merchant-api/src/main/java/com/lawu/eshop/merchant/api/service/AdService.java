@@ -13,6 +13,7 @@ import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
+import com.lawu.eshop.ad.dto.AdSaveInfoDTO;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.IsMyDateDTO;
 import com.lawu.eshop.ad.param.AdMerchantParam;
@@ -31,7 +32,7 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "ad/saveAd")
-	Result<Integer> saveAd(@RequestBody AdSaveParam adSaveParam);
+	Result<AdSaveInfoDTO> saveAd(@RequestBody AdSaveParam adSaveParam);
 	
 	/**
 	 * 查询广告

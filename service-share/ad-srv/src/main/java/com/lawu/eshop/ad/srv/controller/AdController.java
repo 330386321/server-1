@@ -30,6 +30,7 @@ import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.AdPointDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.AdSaveInfoDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
@@ -57,6 +58,7 @@ import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
+import com.lawu.eshop.ad.srv.bo.AdSaveInfoBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
@@ -66,7 +68,6 @@ import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
-import com.lawu.eshop.ad.srv.service.AdCountRecordService;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
 import com.lawu.eshop.ad.srv.service.PointPoolService;
@@ -110,7 +111,7 @@ public class AdController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "saveAd", method = RequestMethod.POST)
-	public Result<Integer> saveAd(@RequestBody AdSaveParam adSaveParam) {
+	public Result<AdSaveInfoDTO> saveAd(@RequestBody AdSaveParam adSaveParam) {
 
 		if (adSaveParam.getAdParam().getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PACKET.getVal()) {
 			Integer count = adService.selectRPIsSend(adSaveParam.getMerchantId());
@@ -118,12 +119,17 @@ public class AdController extends BaseController {
 				return successCreated(ResultCode.AD_RED_PACKGE_EXIST);
 			}
 		}
-		Integer id = adService.saveAd(adSaveParam);
+		AdSaveInfoBO bo = adService.saveAd(adSaveParam);
 
-		if (id == null || id < 0) {
+		if (bo.getId() == null || bo.getId() < 0) {
 			successCreated(ResultCode.SAVE_FAIL);
 		}
-		return successCreated(id);
+		
+		AdSaveInfoDTO dto = new AdSaveInfoDTO();
+		dto.setAdCount(bo.getAdCount());
+		dto.setId(bo.getId());
+		
+		return successCreated(dto);
 
 	}
 

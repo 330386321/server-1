@@ -11,7 +11,11 @@ import com.lawu.eshop.framework.web.Result;
 public interface AdCountRecordService {
 	
 	@RequestMapping(value = "adCount/getAdCountRecord", method = RequestMethod.GET)
-    public Result<Object> getAdCountRecord(@RequestParam("id") Long id);
+    Result<Object> getAdCountRecord(@RequestParam("id") Long id);
+	
+	
+	 @RequestMapping(value = "userRedPacketCount/getUserRedPacketCountRecord", method = RequestMethod.GET)
+	 Result<Object> getUserRedPacketCountRecord(@RequestParam("id") Long id) ;
 	
 
 }

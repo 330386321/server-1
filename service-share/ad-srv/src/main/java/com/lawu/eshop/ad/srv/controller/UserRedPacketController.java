@@ -112,6 +112,9 @@ public class UserRedPacketController extends BaseController {
 	@RequestMapping(value = "getUserRedpacketMoney", method = RequestMethod.POST)
 	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMoney(@RequestParam Long redPacketId, @RequestParam String userNum) {
 		UserRedpacketMaxMoney getMoney = userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
+		if(getMoney.isSysWords()){
+			return successCreated(ResultCode.AD_CLICK_SYS_WORDS);
+		}
 		UserRedpacketMaxMoneyDTO dto =new UserRedpacketMaxMoneyDTO();
 		dto.setMoney(getMoney.getMaxMoney());
 		dto.setFlag(getMoney.isFlag());

@@ -21,6 +21,7 @@ import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
+import com.lawu.eshop.ad.srv.bo.AdSaveInfoBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
@@ -44,7 +45,7 @@ public interface AdService {
      * @param adSaveParam
      * @return
      */
-    Integer saveAd(AdSaveParam adSaveParam);
+	AdSaveInfoBO saveAd(AdSaveParam adSaveParam);
 
     /**
      * 商家E赚查询

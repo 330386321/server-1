@@ -16,5 +16,8 @@ public interface AdCountRecordService {
 	
 	@RequestMapping(value = "adCount/updateAdCountRecord", method = RequestMethod.GET)
 	Result updateAdCountRecord(@RequestParam("id") Long  id);
+	
+	@RequestMapping(value = "userRedPacketCount/setUserRedPacketCountRecord", method = RequestMethod.GET)
+    Result setUserRedPacketCountRecord(@RequestParam("id") Long id, @RequestParam("count") Integer count); 
 
 }
