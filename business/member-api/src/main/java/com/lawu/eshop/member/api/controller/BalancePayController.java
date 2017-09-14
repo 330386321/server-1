@@ -137,7 +137,19 @@ public class BalancePayController extends BaseController {
 		VisitUserInfoDTO visitUserInfoDTO = merchantStoreService.findAccountAndRegionPathByNum(payOrderCallback.getBusinessUserNum());
 		dparam.setRegionPath(visitUserInfoDTO.getRegionPath());
 
-        return balancePayService.billPay(dparam);
+        Result result = balancePayService.billPay(dparam);
+        if (ResultCode.SUCCESS != result.getRet()) {
+            return result;
+        }
+        DecimalFormat df = new DecimalFormat("######0.00");
+        MessageInfoParam messageInfoParam = new MessageInfoParam();
+        messageInfoParam.setRelateId(0L);
+        messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT);
+        MessageTempParam messageTempParam = new MessageTempParam();
+        messageTempParam.setOrderAmount(new BigDecimal(df.format(payOrderCallback.getActualMoney())));
+        messageInfoParam.setMessageParam(messageTempParam);
+        messageService.saveMessage(payOrderCallback.getBusinessUserNum(), messageInfoParam);
+        return successCreated();
     }
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
