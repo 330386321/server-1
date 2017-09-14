@@ -189,5 +189,21 @@ public class FavoriteAdServiceImplTest {
         Assert.assertTrue(dos.size() >= 0);
 
     }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getFavoriteCount() {
+        FavoriteAdDO favoriteAd = new FavoriteAdDO();
+        favoriteAd.setAdId(1l);
+        favoriteAd.setMemberId(1l);
+        favoriteAd.setGmtCreate(new Date());
+        favoriteAd.setMemberNum("M000001");
+        favoriteAdDOMapper.insertSelective(favoriteAd);
+
+        int favoriteCount = favoriteAdService.getFavoriteCount(favoriteAd.getId());
+        Assert.assertNotNull(favoriteCount);
+        Assert.assertEquals(1, favoriteCount);
+    }
     
 }

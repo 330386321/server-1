@@ -238,13 +238,6 @@ public interface AdService {
     List<AdBO> listFlatVideoAd(ListAdParam listAdParam);
 
     /**
-     * 更新平面视频广告索引
-     *
-     * @param id
-     */
-    void updateAdIndex(Long id);
-
-    /**
      * 重建平面视频广告索引
      */
     void rebuildAdIndex();

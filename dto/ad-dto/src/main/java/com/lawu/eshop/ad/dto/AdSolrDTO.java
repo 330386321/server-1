@@ -5,88 +5,137 @@ import com.lawu.eshop.ad.constants.AdTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 
 public class AdSolrDTO {
-	
-	@ApiModelProperty(value = "主键")
-	private Long id;
-	
-	@ApiModelProperty(value = "广告标题")
-    private String title;
 
-	@ApiModelProperty(value = "广告附件路径")
+    @ApiModelProperty(value = "主键")
+    private Long id;
+
+    @ApiModelProperty(value = "商家门店id", required = true)
+    private Long merchantStoreId;
+
+    @ApiModelProperty(value = "广告附件路径")
     private String mediaUrl;
 
-	@ApiModelProperty(value = "广告内容")
+    @ApiModelProperty(value = "视频封面图片路径", required = true)
+    private String videoImgUrl;
+
+    @ApiModelProperty(value = "广告标题")
+    private String title;
+
+    @ApiModelProperty(value = "广告内容")
     private String content;
-	
-	@ApiModelProperty(value = "关注人数")
-    private int count;
-	
-	@ApiModelProperty(value = "广告类型(AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频 )")
+
+    @ApiModelProperty(value = "广告类型(AD_TYPE_FLAT-平面|AD_TYPE_VIDEO-视频|AD_TYPE_PRAISE-抢赞)", required = true)
     private AdTypeEnum typeEnum;
-	
-	@ApiModelProperty(value = "视频封面图片路径")
-	private String videoImgUrl;
 
-	public AdTypeEnum getTypeEnum() {
-		return typeEnum;
-	}
+    @ApiModelProperty(value = "店铺名称", required = true)
+    private String merchantStoreName;
 
-	public void setTypeEnum(AdTypeEnum typeEnum) {
-		this.typeEnum = typeEnum;
-	}
+    @ApiModelProperty(value = "门店logo", required = true)
+    private String logoUrl;
 
-	public Long getId() {
-		return id;
-	}
+    @ApiModelProperty(value = "点击次数")
+    private Integer hits;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @ApiModelProperty(value = "单价")
+    private Double point;
 
-	public String getTitle() {
-		return title;
-	}
+    @ApiModelProperty(value = "总积分")
+    private Double totalPoint;
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getMediaUrl() {
-		return mediaUrl;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setMediaUrl(String mediaUrl) {
-		this.mediaUrl = mediaUrl;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
 
-	public int getCount() {
-		return count;
-	}
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
+    }
 
-	public void setCount(int count) {
-		this.count = count;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public String getVideoImgUrl() {
-		return videoImgUrl;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public void setVideoImgUrl(String videoImgUrl) {
-		this.videoImgUrl = videoImgUrl;
-	}
+    public String getVideoImgUrl() {
+        return videoImgUrl;
+    }
 
-	
+    public void setVideoImgUrl(String videoImgUrl) {
+        this.videoImgUrl = videoImgUrl;
+    }
 
+    public Long getMerchantStoreId() {
+        return merchantStoreId;
+    }
 
+    public void setMerchantStoreId(Long merchantStoreId) {
+        this.merchantStoreId = merchantStoreId;
+    }
 
-	
-	
+    public AdTypeEnum getTypeEnum() {
+        return typeEnum;
+    }
+
+    public void setTypeEnum(AdTypeEnum typeEnum) {
+        this.typeEnum = typeEnum;
+    }
+
+    public String getMerchantStoreName() {
+        return merchantStoreName;
+    }
+
+    public void setMerchantStoreName(String merchantStoreName) {
+        this.merchantStoreName = merchantStoreName;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
+    }
+
+    public Double getPoint() {
+        return point;
+    }
+
+    public void setPoint(Double point) {
+        this.point = point;
+    }
+
+    public Double getTotalPoint() {
+        return totalPoint;
+    }
+
+    public void setTotalPoint(Double totalPoint) {
+        this.totalPoint = totalPoint;
+    }
+
+    public Integer getHits() {
+        return hits;
+    }
+
+    public void setHits(Integer hits) {
+        this.hits = hits;
+    }
+
 }

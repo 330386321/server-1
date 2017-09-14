@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -226,6 +225,8 @@ public class AdServiceImpl implements AdService {
 		Integer i=adDOMapper.insert(adDO);
 		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //E赞  红包
 			savePointPool(adDO,piontCount);
+			SolrInputDocument document= AdConverter.convertSolrInputDocument(adDO);
+			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PACKET){
 			saveRPPool(adDO);
 		}
@@ -741,17 +742,19 @@ public class AdServiceImpl implements AdService {
 		Date before14days = calendar.getTime(); 
 		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeIn(bytes).andBeginTimeLessThan(before14days);
 		List<AdDO> list = adDOMapper.selectByExample(example);
+		List<String> adIds = new ArrayList<>();
 		for (AdDO adDO : list) {
 			
 			if (adDO.getHits()  >= adDO.getAdCount()) {
 				adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); // 投放结束
 				adDO.setGmtModified(new Date());
 				adDOMapper.updateByPrimaryKey(adDO);
-				// 删除solr中的数据
-				solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+				adIds.add(String.valueOf(adDO.getId()));
 			}
 			
 		}
+		// 删除solr中的数据
+		solrService.delSolrDocsByIds(adIds, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 	}
 
 	@Override
@@ -887,11 +890,6 @@ public class AdServiceImpl implements AdService {
 		adDO.setId(id);
 		adDO.setViewcount(count);
 		adDOMapper.updateByPrimaryKeySelective(adDO);
-		// 更新solr广告浏览人数
-		adDO = adDOMapper.selectByPrimaryKey(id);
-		SolrInputDocument document = AdConverter.convertSolrUpdateDocument(adDO);
-		solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-
 	}
 
 	@Override
@@ -961,24 +959,10 @@ public class AdServiceImpl implements AdService {
 	}
 
 	@Override
-	public void updateAdIndex(Long id) {
-		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
-		if (adDO == null) {
-			return;
-		}
-
-		SolrDocument solrDocument = solrService.getSolrDocsById(id, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-		if (solrDocument == null) {
-			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-		}
-	}
-
-	@Override
 	public void rebuildAdIndex() {
 		ListAdParam listAdParam = new ListAdParam();
 		listAdParam.setPageSize(1000);
-		int currentPage = 0; 
+		int currentPage = 0;
 
 		while (true) {
 			currentPage++;
@@ -987,15 +971,31 @@ public class AdServiceImpl implements AdService {
 			List<Byte> typeList = new ArrayList<>();
 			typeList.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
 			typeList.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
-			adDOExample.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeIn(typeList);
+			List<Byte> statusList = new ArrayList<>();
+			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
+			statusList.add(AdStatusEnum.AD_STATUS_PUTED.val);
+			adDOExample.createCriteria().andTypeIn(typeList).andStatusIn(statusList);
 			RowBounds rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
 			List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
-			if (adDOS == null || adDOS.isEmpty()) {
+
+			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
+			adDOExample = new AdDOExample();
+			rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
+			adDOExample.createCriteria().andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.getVal()).andStatusIn(statusList);
+			List<AdDO> adDOList = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
+
+			if (adDOS.isEmpty() && adDOList.isEmpty()) {
 				return;
 			}
 
 			Collection<SolrInputDocument> documents = new ArrayList<>();
 			for (AdDO adDO : adDOS) {
+				SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+				documents.add(document);
+			}
+			solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			documents = new ArrayList<>();
+			for (AdDO adDO : adDOList) {
 				SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 				documents.add(document);
 			}
@@ -1016,10 +1016,15 @@ public class AdServiceImpl implements AdService {
 			List<Byte> typeList = new ArrayList<>();
 			typeList.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
 			typeList.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
-			adDOExample.createCriteria().andStatusNotEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeIn(typeList);
+			typeList.add(AdTypeEnum.AD_TYPE_PRAISE.getVal());
+			List<Byte> statusList = new ArrayList<>();
+			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
+			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
+			statusList.add(AdStatusEnum.AD_STATUS_PUTED.val);
+			adDOExample.createCriteria().andStatusNotIn(statusList).andTypeIn(typeList);
 			RowBounds rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
 			List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
-			if (adDOS == null || adDOS.isEmpty()) {
+			if (adDOS.isEmpty()) {
 				return;
 			}
 
@@ -1357,14 +1362,16 @@ public class AdServiceImpl implements AdService {
 		AdDOExample example = new AdDOExample();
 		example.createCriteria().andMerchantIdEqualTo(merchantId);
 		adDOMapper.updateByExampleSelective(adDO, example);
-		
+
 		if (!list.isEmpty()) {
+			List<String> adIds = new ArrayList<>();
 			for (AdDO ad : list) {
 				//退换积分
 				matransactionMainAddService.sendNotice(ad.getId());
-				// 删除solr中的数据
-				solrService.delSolrDocsById(ad.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+				adIds.add(String.valueOf(ad.getId()));
 			}
+			// 删除solr中的数据
+			solrService.delSolrDocsByIds(adIds, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
 	}
 

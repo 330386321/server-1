@@ -126,6 +126,9 @@
 	 
 	<job:simple id="reportAreaPointConsumeMonthJob" description="区域积分消费月统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaPointConsumeMonthJob" registry-center-ref="regCenter" cron="0 0 3 1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
+
+	<job:simple id="rebuildAdIndexJob" description="定时重建广告索引" class="com.lawu.eshop.jobs.impl.ad.RebuildAdIndexJob" registry-center-ref="regCenter" cron="0 0/10 * * * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 	
 	
 	<!-- Lock service -->

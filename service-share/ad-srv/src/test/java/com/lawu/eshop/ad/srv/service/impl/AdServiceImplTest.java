@@ -1415,44 +1415,6 @@ public class AdServiceImplTest {
 	@Transactional
     @Rollback
     @Test
-    public void updateAdIndex() {
-		AdDO ad=new AdDO();
-		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
-		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
-		ad.setMerchantId(1002l);
-		ad.setMerchantNum("B856392484215848969");
-		ad.setMediaUrl("ad_image/1494582624025648401.png");
-		ad.setMerchantStoreId(1001l);
-		ad.setMerchantStoreName("E店商家");
-		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
-		ad.setLogoUrl("store/1494582624025648402.png");
-		ad.setAdCount(20);
-		ad.setBeginTime(new Date());
-		ad.setContent("广告测试内容");
-		ad.setPoint(BigDecimal.valueOf(0.5));
-		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
-		ad.setRegionName("全国");
-		ad.setTitle("广告测试标题");
-		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
-        ad.setGmtCreate(new Date());
-        ad.setGmtModified(new Date());
-        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
-        Integer id=adDOMapper.insertSelective(ad);
-        
-        adService.updateAdIndex(ad.getId());
-        
-        List<AdDO> list=adDOMapper.selectByExample(null);
-        
-        Assert.assertNotNull(list);
-        Assert.assertTrue(list.size()>0);
-
-    }
-	
-	
-	@Transactional
-    @Rollback
-    @Test
     public void rebuildAdIndex() {
 		AdDO ad=new AdDO();
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
