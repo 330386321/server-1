@@ -196,9 +196,9 @@ public class BalancePayController extends BaseController {
             messageTempParam.setUserName("E店商家");
         }
         String property_key = PropertyType.MERCHANT_BALANCE_PAY_POINT_SCALE;
-        String scale = propertySrvPropertyService.getValue(property_key);
+        Result scale = propertySrvPropertyService.getValue(property_key);
         double dPayMoney = Double.parseDouble(String.valueOf(payOrderCallback.getActualMoney()));
-        double dPayScale = Double.parseDouble(scale);
+        double dPayScale = Double.parseDouble(scale.getModel().toString());
         double point = dPayMoney * dPayScale;
         messageTempParam.setRechargePoint(new BigDecimal(df.format(point)));
         messageInfoParam.setMessageParam(messageTempParam);
