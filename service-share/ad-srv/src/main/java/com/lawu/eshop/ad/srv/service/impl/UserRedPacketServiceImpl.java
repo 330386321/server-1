@@ -326,7 +326,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		UserRedPacketDOExample example = new UserRedPacketDOExample();
 		List<Byte> status= new ArrayList<>();
 		status.add(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
-		status.add(UserRedPacketEnum.USER_STATUS_OUT.val);
+		status.add(UserRedPacketEnum.USER_STATUS_OVER.val);
 		Criteria cr = example.createCriteria();
 		cr.andGmtCreateLessThan(date);
 		cr.andStatusIn(status);

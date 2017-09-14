@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.RegionDTO;
+import com.lawu.eshop.mall.dto.RegionPathDTO;
 import com.lawu.eshop.mall.dto.RegionProvinceDTO;
 import com.lawu.eshop.merchant.api.service.RegionService;
 
@@ -22,7 +23,12 @@ public class MockRegionService extends BaseController implements RegionService {
 	}
 
 	@Override
-	public Result<List<RegionProvinceDTO>> list() {
+	public Result<List<RegionPathDTO>> list() {
+		return successGet();
+	}
+
+	@Override
+	public Result<List<RegionProvinceDTO>> group() {
 		return successGet();
 	}
 }

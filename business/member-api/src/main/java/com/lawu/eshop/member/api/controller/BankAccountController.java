@@ -67,8 +67,11 @@ public class BankAccountController extends BaseController{
     public Result saveBankAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     						 @RequestParam @ApiParam(required = true, value = "支付密码") String payPwd,
                              @ModelAttribute @ApiParam(required = true, value = "银行卡信息") BankAccountParam bankAccountParam) {
-		if(!bankAccountParam.getAccountNumber().matches("^(?!0)\\d{15,19}$")){
+		if(!bankAccountParam.getAccountNumber().matches("^[0-9]*$")){
     		return successCreated(ResultCode.BANK_ACCOUNT_ERROR);
+    	}
+    	if(bankAccountParam.getAccountNumber().length() > 26 || bankAccountParam.getAccountNumber().length() < 12) {
+    		return successCreated(ResultCode.BANK_ACCOUNT_LENTH_OUT_OF_RANGE);
     	}
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
@@ -118,9 +121,13 @@ public class BankAccountController extends BaseController{
                          @PathVariable @ApiParam(required = true, value = "id") Long id,
                          @RequestParam @ApiParam(required = true, value = "支付密码") String payPwd,
                          @ModelAttribute @ApiParam(required = true, value = "银行卡信息") BankAccountParam bankAccountParam) {
-    	if(!bankAccountParam.getAccountNumber().matches("^(?!0)\\d{15,19}$")){
+    	if(!bankAccountParam.getAccountNumber().matches("^[0-9]*$")){
     		return successCreated(ResultCode.BANK_ACCOUNT_ERROR);
     	}
+    	if(bankAccountParam.getAccountNumber().length() > 26 || bankAccountParam.getAccountNumber().length() < 12) {
+    		return successCreated(ResultCode.BANK_ACCOUNT_LENTH_OUT_OF_RANGE);
+    	}
+    		
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	
     	Result<Boolean> bankRs= cashManageFrontService.isExistCash(userNum, id);
@@ -141,5 +148,4 @@ public class BankAccountController extends BaseController{
     	
 
     }
-
 }

@@ -202,6 +202,8 @@ public class AdServiceImpl implements AdService {
 				 piontCount=10;
 			}
 			adDO.setAdCount(piontCount);
+		}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PACKET){  //红包开始时间为创建时间
+			adDO.setBeginTime(new Date());
 		}
 		adDO.setTotalPoint(adParam.getTotalPoint());
 		adDO.setGmtCreate(new Date());

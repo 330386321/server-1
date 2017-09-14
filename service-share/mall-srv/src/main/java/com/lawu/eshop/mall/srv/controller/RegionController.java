@@ -2,7 +2,7 @@ package com.lawu.eshop.mall.srv.controller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +39,6 @@ public class RegionController extends BaseController {
 
     @RequestMapping(value = "getRegionList", method = RequestMethod.GET)
     public Result<List<RegionDTO>> getRegionList() {
-
         List<RegionBO> regionBOS = regionService.getRegionList();
         if (regionBOS.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
@@ -53,18 +52,32 @@ public class RegionController extends BaseController {
     }
     
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    public Result<List<RegionProvinceDTO>> list() {
+    public Result<List<RegionPathDTO>> list() {
+    	List<RegionBO> regionBOS = regionService.getRegionList();
+        if (regionBOS.isEmpty()) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        List<RegionPathDTO> list = new ArrayList<>();
+        for (RegionBO regionBO : regionBOS) {
+        	RegionPathDTO regionDTO = RegionConverter.coverRegionPathDTO(regionBO);
+            list.add(regionDTO);
+        }
+        return successGet(list);
+    }
+    
+    @RequestMapping(value = "group", method = RequestMethod.GET)
+    public Result<List<RegionProvinceDTO>> group() {
         List<RegionBO> regionBOS = regionService.getRegionList();
         if (regionBOS.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         
         // 一级
-        Map<Integer, RegionProvinceDTO> region1 = new HashMap<>();
+        Map<Integer, RegionProvinceDTO> region1 = new LinkedHashMap<>();
         // 二级
-        Map<Integer, List<RegionCityDTO>> region2 = new HashMap<>();
+        Map<Integer, List<RegionCityDTO>> region2 = new LinkedHashMap<>();
         // 三级
-        Map<Integer, List<RegionPathDTO>> region3 = new HashMap<>();
+        Map<Integer, List<RegionPathDTO>> region3 = new LinkedHashMap<>();
         for (RegionBO regionBO : regionBOS) {
             if (regionBO.getLevelEnum().equals(RegionLevelEnum.REGION_LEVEL_ONE)) {
             	RegionProvinceDTO regionProvinceDTO = RegionConverter.coverRegionProvinceDTO(regionBO);

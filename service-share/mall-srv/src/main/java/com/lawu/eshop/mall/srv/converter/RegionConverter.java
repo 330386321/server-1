@@ -30,6 +30,19 @@ public class RegionConverter {
         regionBO.setLevelEnum(RegionLevelEnum.getEnum(regionDOView.getLevel()));
         return regionBO;
     }
+    
+    public static RegionBO convert(RegionDO regionDO) {
+        if (regionDO == null) {
+            return null;
+        }
+        RegionBO regionBO = new RegionBO();
+        regionBO.setId(regionDO.getId());
+        regionBO.setName(regionDO.getName());
+        regionBO.setParentId(regionDO.getParentId());
+        regionBO.setPath(regionDO.getPath());
+        regionBO.setLevelEnum(RegionLevelEnum.getEnum(regionDO.getLevel()));
+        return regionBO;
+    }
 
     public static RegionDTO coverDTO(RegionBO regionBO) {
         if (regionBO == null) {
