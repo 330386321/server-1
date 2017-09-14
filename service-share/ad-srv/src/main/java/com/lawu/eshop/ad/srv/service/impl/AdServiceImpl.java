@@ -510,28 +510,20 @@ public class AdServiceImpl implements AdService {
 			memberAdRecordD.setGmtCreate(new Date());
 			memberAdRecordD.setClickDate(new Date());
 			memberAdRecordD.setOriginalPoint(adDO.getPoint());
-			int row = memberAdRecordDOMapper.insert(memberAdRecordD);
+			memberAdRecordDOMapper.insert(memberAdRecordD);
 
 			// 修改点击次数记录
 			adDOMapperExtend.updateHitsByPrimaryKey(id);
+			//修改领取次数
+			clickBO.setOverClick(false);
+			clickBO.setPoint(adDO.getPoint());
+			adDOMapperExtend.updateHitsByPrimaryKey(id);
+			//发送消息修改积分
+			userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 			
-			if(row > 0){
-				//修改领取次数
-				clickBO.setOverClick(false);
-				clickBO.setPoint(adDO.getPoint());
-				adDOMapperExtend.updateHitsByPrimaryKey(id);
-				lockService.unLock(LockModule.LOCK_AD_SRV,"AD_CLICK_LOCK_",id);
-			}
+			lockService.unLock(LockModule.LOCK_AD_SRV,"AD_CLICK_LOCK_",id);
 			
 		}
-		
-		//发送消息修改积分
-		new Thread(new Runnable() {
-		    @Override
-		    public void run() {
-		    	userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
-		    }
-		}).start();
 
 		return clickBO;
 	}
@@ -650,7 +642,7 @@ public class AdServiceImpl implements AdService {
 			pointPool.setGmtModified(new Date());
 			pointPool.setOrdinal(praiseCount);
 			pointPool.setPoint(BigDecimal.valueOf(point));
-			Integer row = pointPoolDOMapper.insert(pointPool);
+			pointPoolDOMapper.insert(pointPool);
 			
 			if(adDO.getAdCount()-1==praiseCount || praiseCount>=adDO.getAdCount()){
 				AdDO ad = new AdDO();
@@ -660,21 +652,11 @@ public class AdServiceImpl implements AdService {
 				adDOMapper.updateByPrimaryKeySelective(ad);
 			}
 
-			if(row > 0 || row !=null){
-				//修改领取次数
-				adDOMapperExtend.updateHitsByPrimaryKey(id);
-				lockService.unLock(LockModule.LOCK_AD_SRV,"AD_PRAISE_LOCK_",id);
-			}
-			
+			//修改领取次数
+			adDOMapperExtend.updateHitsByPrimaryKey(id);
+			adtransactionMainAddService.sendNotice(pointPool.getId());
+			lockService.unLock(LockModule.LOCK_AD_SRV,"AD_PRAISE_LOCK_",id);
 		}
-		
-		//发送消息修改积分
-		new Thread(new Runnable() {
-		    @Override
-		    public void run() {
-		    	adtransactionMainAddService.sendNotice(pointPool.getId());
-		    }
-		}).start();
 		
 		return BigDecimal.valueOf(point).multiply(new BigDecimal(PropertyType.ad_account_scale_default));
 
@@ -842,12 +824,12 @@ public class AdServiceImpl implements AdService {
 			pointPool.setGmtModified(new Date());
 			pointPool.setOrdinal(redPacketCount);
 			pointPool.setPoint(money);
-			int row = pointPoolDOMapper.insert(pointPool);
+			pointPoolDOMapper.insert(pointPool);
+			adDOMapperExtend.updateHitsByPrimaryKey(adDO.getId());
 			
-			if(row>0){
-				adDOMapperExtend.updateHitsByPrimaryKey(adDO.getId());
-				lockService.unLock(LockModule.LOCK_AD_SRV,"AD_PRAISE_LOCK_",adDO.getId());
-			}
+			userSweepRedtransactionMainAddService.sendNotice(pointPool.getId());
+			
+			lockService.unLock(LockModule.LOCK_AD_SRV,"AD_PRAISE_LOCK_",adDO.getId());
 			
 			if(adDO.getAdCount()-1==redPacketCount || redPacketCount>=adDO.getAdCount()){
 				AdDO ad = new AdDO();
@@ -858,13 +840,6 @@ public class AdServiceImpl implements AdService {
 			}
 			
 		}
-		//发送消息修改积分
-		new Thread(new Runnable() {
-		    @Override
-		    public void run() {
-		    	userSweepRedtransactionMainAddService.sendNotice(pointPool.getId());
-		    }
-		}).start();
 		
 		return money;
 

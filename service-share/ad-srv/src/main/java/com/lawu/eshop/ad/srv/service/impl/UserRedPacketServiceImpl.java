@@ -255,28 +255,20 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 			userTabed.setUserRedPackId(redPacketId);
 			userTabed.setType(type);
 			userTabed.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
-			int row = userTakedRedPacketDOMapper.insert(userTabed);
+			userTakedRedPacketDOMapper.insert(userTabed);
 			
 			if(userRedPacketDO.getTotalCount()-1==count || count>=userRedPacketDO.getTotalCount()){
 				userRedPacketDO.setGmtModified(new Date());
 				userRedPacketDO.setStatus(UserRedPacketEnum.USER_STATUS_OVER.val);
 				userRedPacketDOMapper.updateByPrimaryKeySelective(userRedPacketDO);
 			}
+			getMoney.setMaxMoney(userTabed.getMoney());
 			
-			if(row > 0){
-				getMoney.setMaxMoney(userTabed.getMoney());
-				lockService.unLock(LockModule.LOCK_AD_SRV,"AD_USER_RED_PACKET_LOCK_",redPacketId);
-			}
+			//发送消息修改积分
+			memberGetRedPacketTransactionMainServiceImpl.sendNotice(userTabed.getId());
+			lockService.unLock(LockModule.LOCK_AD_SRV,"AD_USER_RED_PACKET_LOCK_",redPacketId);
 			
 		}
-		
-		//发送消息修改积分
-		new Thread(new Runnable() {
-		    @Override
-		    public void run() {
-		    	memberGetRedPacketTransactionMainServiceImpl.sendNotice(userTabed.getId());
-		    }
-		}).start();
 		
 		return getMoney;
 	}
