@@ -47,6 +47,7 @@ public class WorkOrderController extends BaseController{
 	@ApiOperation(value = "查询工单", notes = "查询工单,[]（洪钦明）", httpMethod = "GET")
 	@Authorization
 	@PageBody
+	@RequiresPermissions("workOrder:list")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectWorkOrder", method = RequestMethod.GET)
 	public Result<Page<WorkOrderDTO>> selectWorkOrder(@ModelAttribute WorkOrderQuery workOrderQuery) {

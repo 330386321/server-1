@@ -68,6 +68,7 @@ public class InformController extends BaseController {
 	@RequiresAuthentication
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@PageBody
+	@RequiresPermissions("inform:list")
 	@RequestMapping(value = "selectInformList", method = RequestMethod.GET)
 	public Result<Page<InformDTO>> selectInformList(@ModelAttribute @ApiParam(value = "查询信息") InformQueryParam param) {
 		Result<Page<InformDTO>> page = informService.selectInformList(param);
