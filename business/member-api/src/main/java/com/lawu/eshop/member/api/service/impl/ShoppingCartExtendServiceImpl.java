@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -148,7 +149,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	}
     	
     	List<MemberShoppingCartDTO> shoppingCartInvalidList = new ArrayList<>();
-    	Map<Long, List<MemberShoppingCartDTO>> map = new HashMap<>();
+    	Map<Long, List<MemberShoppingCartDTO>> map = new LinkedHashMap<>();
     	ShoppingCartProductModelDTO shoppingCartProductModelDTO = null;
     	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
     		MemberShoppingCartDTO memberShoppingCartDTO = new MemberShoppingCartDTO();

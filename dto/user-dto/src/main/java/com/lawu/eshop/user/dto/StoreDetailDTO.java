@@ -38,6 +38,12 @@ public class StoreDetailDTO {
 
     @ApiModelProperty(value = "门店照")
     private String storePic;
+    
+    /**
+     * 门店Logo
+     */
+    @ApiModelProperty(value = "门店Logo", required = true)
+    private String storeLogo;
 
     @ApiModelProperty(value = "环境照数量")
     private Integer picCount;
@@ -131,7 +137,15 @@ public class StoreDetailDTO {
         this.storePic = storePic;
     }
 
-    public String getIntro() {
+    public String getStoreLogo() {
+		return storeLogo;
+	}
+
+	public void setStoreLogo(String storeLogo) {
+		this.storeLogo = storeLogo;
+	}
+
+	public String getIntro() {
         return intro;
     }
 

@@ -1,14 +1,16 @@
 package com.lawu.eshop.member.api.mock.service;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.dto.RegionDTO;
-import com.lawu.eshop.member.api.service.RegionService;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.dto.RegionDTO;
+import com.lawu.eshop.mall.dto.RegionProvinceDTO;
+import com.lawu.eshop.member.api.service.RegionService;
 
 
 @Service
@@ -26,4 +28,12 @@ public class MockRegionService extends BaseController implements RegionService {
     public Result<String> getAreaName(@RequestParam("regionPath") String regionPath) {
         return successCreated(new String("dfdf"));
     }
+
+	@Override
+	public Result<List<RegionProvinceDTO>> list() {
+		RegionProvinceDTO dto = new RegionProvinceDTO();
+        List<RegionProvinceDTO> list = new ArrayList<>();
+        list.add(dto);
+        return successCreated(list);
+	}
 }

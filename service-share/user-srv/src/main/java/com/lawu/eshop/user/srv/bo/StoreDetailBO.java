@@ -21,6 +21,11 @@ public class StoreDetailBO {
     private String principalMobile;
 
     private String storePic;
+    
+    /**
+     * 门店Logo
+     */
+    private String storeLogo;
 
     private Integer picCount;
 
@@ -76,7 +81,15 @@ public class StoreDetailBO {
         this.storePic = storePic;
     }
 
-    public String getIntro() {
+    public String getStoreLogo() {
+		return storeLogo;
+	}
+
+	public void setStoreLogo(String storeLogo) {
+		this.storeLogo = storeLogo;
+	}
+
+	public String getIntro() {
         return intro;
     }
 

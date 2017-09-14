@@ -428,12 +428,7 @@ public class AdController extends BaseController {
 		}
 		if(result.getModel().getFileType()==FileTypeEnum.VIDEO){
 			 String str = VideoCutImgUtil.getVideoTime(result.getModel().getMediaUrl(), memberApiConfig.getFfmpegUrl());
-			 int index1=str.indexOf(":");
-			 int index2=str.indexOf(":",index1+1);
-			 int hh=Integer.parseInt(str.substring(0,index1));
-			 int mi=Integer.parseInt(str.substring(index1+1,index2));
-			 int ss=Integer.parseInt(str.substring(index2+1));
-			 result.getModel().setVideoTime(hh*60*60+mi*60+ss);
+			 result.getModel().setVideoTime(str);
 		}
 		
 		return result;
