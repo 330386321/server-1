@@ -213,6 +213,7 @@ public class MerchantStoreConverter {
         storeDetailDTO.setBuyNumbers(storeDetailBO.getBuyNumbers());
         storeDetailDTO.setLongitude(storeDetailBO.getLongitude());
         storeDetailDTO.setLatitude(storeDetailBO.getLatitude());
+        storeDetailDTO.setStoreLogo(storeDetailBO.getStoreLogo());
         return storeDetailDTO;
     }
 

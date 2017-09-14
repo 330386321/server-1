@@ -541,6 +541,10 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 				}
 				storeDetailBO.setPicCount(picCount);
 			}
+			//门店logo
+			if(storeDetailDOView.getType() == MerchantStoreImageEnum.STORE_IMAGE_LOGO.val){
+				storeDetailBO.setStoreLogo(storeDetailDOView.getPath());
+			}
 		}
 		// 查询是否被收藏
 		FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
