@@ -61,7 +61,19 @@ public class MerchantApiConfig {
     @Value(value="${visit.frequency.count.expire.time}")
     private Integer expireTime;
     
-    public String getImageUrl() {
+    @Value(value="${download_url}")
+    private String downloadUrl;
+    
+   
+    public String getDownloadUrl() {
+		return downloadUrl;
+	}
+
+	public void setDownloadUrl(String downloadUrl) {
+		this.downloadUrl = downloadUrl;
+	}
+
+	public String getImageUrl() {
         return imageUrl;
     }
 

@@ -84,6 +84,17 @@ public class MemberApiConfig {
 	@Value(value="${share.ad.logo-image-path}")
 	private String shareAdLogoPath;
 
+	@Value(value="${download_url}")
+	private String downloadUrl;
+	
+	public String getDownloadUrl() {
+		return downloadUrl;
+	}
+
+	public void setDownloadUrl(String downloadUrl) {
+		this.downloadUrl = downloadUrl;
+	}
+
 	public String getImageUrl() {
 		return imageUrl;
 	}
