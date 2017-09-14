@@ -32,6 +32,7 @@ import com.lawu.eshop.merchant.api.service.MessageService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
+import com.lawu.eshop.property.dto.InviteFansReturnDTO;
 import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
@@ -362,10 +363,8 @@ public class FansMerchantController extends BaseController {
 		if (!isSuccess(result)) {
 			return result;
 		}
-		@SuppressWarnings("unchecked")
-		Map<String, Integer> map = (Map<String, Integer>)result.getModel();
 		FansInviteContentExtendParam fansInviteContentExtendParam = new FansInviteContentExtendParam();
-		fansInviteContentExtendParam.setFansInviteDetailId(Long.valueOf(map.get("fans_invite_detail_id")));
+		fansInviteContentExtendParam.setFansInviteDetailId(Long.valueOf(result.getModel().toString()));
 		fansInviteContentExtendParam.setInviteContent(param.getInviteContent());
 		fansInviteContentExtendParam.setLogoUrl(param.getLogoUrl());
 		fansInviteContentExtendParam.setMerchantId(merchantId);

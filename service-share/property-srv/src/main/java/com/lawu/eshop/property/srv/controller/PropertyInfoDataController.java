@@ -15,6 +15,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.dto.InviteFansReturnDTO;
 import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
@@ -67,7 +68,6 @@ public class PropertyInfoDataController extends BaseController {
 	 * @param param
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "doHanlderMinusPointByFans", method = RequestMethod.POST)
 	public Result doHanlderMinusPointByFans(@RequestBody @Valid PropertyInfoDataParam param, BindingResult result) {
 		String message = validate(result);
@@ -75,7 +75,7 @@ public class PropertyInfoDataController extends BaseController {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
     	Map<String, Integer> map = propertyInfoDataService.doHanlderMinusPointByFans(param);
-		return successCreated(map);
+		return successCreated(map.get("retCode"),map.get("fans_invite_detail_id"));
 	}
 	
 	/**
