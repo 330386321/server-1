@@ -156,6 +156,7 @@ public class WxpayNotifyController extends BaseController {
                         ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
                                 .selectThirdPayCallBackQueryPayOrder(param.getBizIds());
                         merchantUserNum = payOrderCallback.getBusinessUserNum();
+                        isSendMsg = true;
                         if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), dmoney) == 0) {
                             param.setRegionPath(extra[6]);
                             result = orderService.doHandlePayOrderNotify(param);

@@ -28,11 +28,13 @@ import com.lawu.eshop.member.api.service.BalancePayService;
 import com.lawu.eshop.member.api.service.MessageService;
 import com.lawu.eshop.member.api.service.PayOrderService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
+import com.lawu.eshop.member.api.service.PropertySrvPropertyService;
 import com.lawu.eshop.member.api.service.RechargeService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayParam;
@@ -71,7 +73,9 @@ public class BalancePayController extends BaseController {
 	private MerchantStoreService merchantStoreService;
 	@Autowired
     private UserRedPacketService userRedPacketService;
-
+	@Autowired
+	private PropertySrvPropertyService propertySrvPropertyService;
+	
     /**
      * 余额支付订单
      *
@@ -191,6 +195,12 @@ public class BalancePayController extends BaseController {
         } else if (userNum.startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
             messageTempParam.setUserName("E店商家");
         }
+        String property_key = PropertyType.MERCHANT_BALANCE_PAY_POINT_SCALE;
+        String scale = propertySrvPropertyService.getValue(property_key);
+        double dPayMoney = Double.parseDouble(String.valueOf(payOrderCallback.getActualMoney()));
+        double dPayScale = Double.parseDouble(scale);
+        double point = dPayMoney * dPayScale;
+        messageTempParam.setRechargePoint(new BigDecimal(df.format(point)));
         messageInfoParam.setMessageParam(messageTempParam);
         messageService.saveMessage(userNum, messageInfoParam);
         // ------------------------------发送站内消息
