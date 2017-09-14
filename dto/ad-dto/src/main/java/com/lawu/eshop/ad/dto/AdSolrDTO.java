@@ -42,6 +42,9 @@ public class AdSolrDTO {
     @ApiModelProperty(value = "总积分")
     private Double totalPoint;
 
+    @ApiModelProperty(value = "浏览次数")
+    private Integer count;
+
     public Long getId() {
         return id;
     }
@@ -138,4 +141,11 @@ public class AdSolrDTO {
         this.hits = hits;
     }
 
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 }

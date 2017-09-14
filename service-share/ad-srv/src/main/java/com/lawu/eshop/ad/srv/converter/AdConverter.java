@@ -282,6 +282,7 @@ public class AdConverter {
 		 document.addField("latLon_p", adDO.getMerchantLatitude() + "," + adDO.getMerchantLongitude());
 		 document.addField("status_i", adDO.getStatus());
 		 document.addField("hits_i", adDO.getHits());
+		 document.addField("viewCount_i", adDO.getViewcount());
 		 document.addField("radius_i", adDO.getRadius());
 		 document.addField("type_i", adDO.getType());
 		 document.addField("putWay_i", adDO.getPutWay());
@@ -320,6 +321,7 @@ public class AdConverter {
 		adSolrDTO.setLogoUrl(solrDocument.get("storeLogo_s").toString());
 		adSolrDTO.setTypeEnum(AdTypeEnum.getEnum(Byte.valueOf(solrDocument.get("type_i").toString())));
 		adSolrDTO.setHits(solrDocument.get("hits_i") == null ? 0 : Integer.valueOf(solrDocument.get("hits_i").toString()));
+		adSolrDTO.setCount(solrDocument.get("viewCount_i") == null ? 0 : Integer.valueOf(solrDocument.get("viewCount_i").toString()));
 		adSolrDTO.setPoint(solrDocument.get("point_d") == null ? 0.0 : Double.valueOf(solrDocument.get("point_d").toString()));
 		adSolrDTO.setTotalPoint(solrDocument.get("totalPoint_d") == null ? 0.0 : Double.valueOf(solrDocument.get("totalPoint_d").toString()));
 		return adSolrDTO;
@@ -796,7 +798,7 @@ public class AdConverter {
 			dto.setTypeEnum(adSolrDTO.getTypeEnum());
 			dto.setName(adSolrDTO.getMerchantStoreName());
 			dto.setLogoUrl(adSolrDTO.getLogoUrl());
-			dto.setViewCount(adSolrDTO.getHits());
+			dto.setViewCount(adSolrDTO.getCount());
 			dtos.add(dto);
 		}
 		return dtos;
@@ -819,7 +821,7 @@ public class AdConverter {
 			dto.setTypeEnum(adSolrDTO.getTypeEnum());
 			dto.setName(adSolrDTO.getMerchantStoreName());
 			dto.setLogoUrl(adSolrDTO.getLogoUrl());
-			dto.setViewCount(adSolrDTO.getHits());
+			dto.setViewCount(adSolrDTO.getCount());
 			dto.setPoint(BigDecimal.valueOf(adSolrDTO.getPoint()));
 			dto.setTotalPoint(BigDecimal.valueOf(adSolrDTO.getTotalPoint()));
 			dtos.add(dto);
