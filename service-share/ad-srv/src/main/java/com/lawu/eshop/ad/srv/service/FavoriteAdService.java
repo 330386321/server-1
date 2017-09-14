@@ -54,4 +54,13 @@ public interface FavoriteAdService {
 	 * @param id
 	 */
 	void updateIsSend(Long id);
+
+	/**
+	 * 查询广告关注人数
+	 *
+	 * @param adId
+	 * @return
+	 * @author meishuquan
+	 */
+	Integer getFavoriteCount(Long adId);
 }

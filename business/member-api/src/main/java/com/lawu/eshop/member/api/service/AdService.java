@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
+import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
 import com.lawu.eshop.ad.dto.AdPointDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
@@ -27,6 +28,7 @@ import com.lawu.eshop.ad.param.AdEgainInternalParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdPointInternalParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSolrRealParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
@@ -178,4 +180,45 @@ public interface AdService {
 	 */
 	@RequestMapping(value = "ad/choiceness/{memberId}", method = RequestMethod.PUT)
 	Result<Page<ChoicenessAdDTO>> selectChoiceness(@PathVariable("memberId") Long memberId, @RequestBody AdChoicenessInternalParam param);
+
+	/**
+	 * 根据广告类型查询推荐的广告
+	 *
+	 * @param param
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "ad/recommendAdByType", method = RequestMethod.POST)
+	Result<Page<AdFlatVideoDTO>> getRecommendAdByType(@RequestBody AdSolrRealParam param);
+
+	/**
+	 * 查询推荐抢赞
+	 *
+	 * @param param
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "ad/recommendEgain", method = RequestMethod.POST)
+	Result<Page<AdPraiseDTO>> getRecommendEgain(@RequestBody AdSolrRealParam param);
+
+	/**
+	 * 平面广告排行榜
+	 *
+	 * @param param
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "ad/listAdRank", method = RequestMethod.POST)
+	Result<List<AdDTO>> listAdRank(@RequestBody AdSolrRealParam param);
+
+	/**
+	 * 广告首页
+	 *
+	 * @param param
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "ad/selectChoiceness", method = RequestMethod.POST)
+	Result<Page<AdDTO>> listAd(@RequestBody AdSolrRealParam param);
+
 }

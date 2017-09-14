@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
@@ -37,6 +39,7 @@ import com.lawu.eshop.ad.param.AdPointForeignParam;
 import com.lawu.eshop.ad.param.AdPointParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSolrParam;
+import com.lawu.eshop.ad.param.AdSolrRealParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.param.RegisterGetRedPacketParam;
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -59,22 +62,15 @@ import com.lawu.eshop.member.api.service.FansMerchantService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantService;
-import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.PropertyInfoDataService;
-import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.VerifyCodeService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
-import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
-import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.UserRedPacketDTO;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.utils.DateUtil;
@@ -152,7 +148,18 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectChoiceness", method = RequestMethod.GET)
 	public Result<Page<AdDTO>> selectChoiceness(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdChoicenessParam param) {
-		return adExtendService.selectChoiceness(param);
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
+		AdSolrRealParam realParam = new AdSolrRealParam();
+		realParam.setMemberId(memberId);
+		realParam.setLongitude(param.getLongitude());
+		realParam.setLatitude(param.getLatitude());
+		realParam.setRegionPath(param.getTransRegionPath());
+		realParam.setCurrentPage(param.getCurrentPage());
+		realParam.setPageSize(param.getPageSize());
+		realParam.setMerchantIds(merchantIds);
+		return adService.listAd(realParam);
+		//return adExtendService.selectChoiceness(param);
 	}
 
 	@Deprecated
@@ -162,7 +169,19 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectListPointTotle", method = RequestMethod.GET)
 	public Result<List<AdDTO>> selectListPointTotle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPointParam adPointParam) {
-		return adExtendService.selectAdTopList(adPointParam);
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
+		AdSolrRealParam param = new AdSolrRealParam();
+		param.setMemberId(memberId);
+		param.setLongitude(adPointParam.getLongitude());
+		param.setLatitude(adPointParam.getLatitude());
+		param.setRegionPath(adPointParam.getTransRegionPath());
+		param.setOrderTypeEnum(adPointParam.getOrderTypeEnum());
+		param.setCurrentPage(adPointParam.getCurrentPage());
+		param.setPageSize(adPointParam.getPageSize());
+		param.setMerchantIds(merchantIds);
+		return adService.listAdRank(param);
+		//return adExtendService.selectAdTopList(adPointParam);
 	}
 
 
@@ -230,7 +249,17 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.GET)
 	public Result<Page<AdPraiseDTO>> selectAdPraiseList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPraiseParam adPraiseParam) {
-		return adExtendService.selectAdPraiseList(adPraiseParam);
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
+		AdSolrRealParam param = new AdSolrRealParam();
+		param.setMemberId(memberId);
+		param.setRegionPath(adPraiseParam.getTransRegionPath());
+		param.setStatusEnum(AdStatusEnum.getEnum(adPraiseParam.getStatusEnum().getVal()));
+		param.setCurrentPage(adPraiseParam.getCurrentPage());
+		param.setPageSize(adPraiseParam.getPageSize());
+		param.setMerchantIds(merchantIds);
+		return adService.getRecommendEgain(param);
+		//return adExtendService.selectAdPraiseList(adPraiseParam);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -406,7 +435,19 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectEgainAd", method = RequestMethod.GET)
 	public Result<Page<AdFlatVideoDTO>> selectEgainAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdEgainParam adEgainParam) {
-		return adExtendService.selectEgainAd(adEgainParam);
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
+		AdSolrRealParam param = new AdSolrRealParam();
+		param.setMemberId(memberId);
+		param.setLongitude(adEgainParam.getLongitude());
+		param.setLatitude(adEgainParam.getLatitude());
+		param.setRegionPath(adEgainParam.getTransRegionPath());
+		param.setTypeEnum(AdTypeEnum.getEnum(adEgainParam.getTypeEnum().getVal()));
+		param.setCurrentPage(adEgainParam.getCurrentPage());
+		param.setPageSize(adEgainParam.getPageSize());
+		param.setMerchantIds(merchantIds);
+		return adService.getRecommendAdByType(param);
+		//return adExtendService.selectEgainAd(adEgainParam);
 	}
 
 	@Audit(date = "2017-05-23", reviewer = "孙林青")

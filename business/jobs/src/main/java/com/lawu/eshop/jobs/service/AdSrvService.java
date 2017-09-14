@@ -70,4 +70,13 @@ public interface AdSrvService {
 	@RequestMapping(value = "reportEarnings/getReportEarnings", method = RequestMethod.GET)
     public Result<List<ReportAdEarningsDTO>> getReportEarnings(@RequestParam("date") String date);
 
+	/**
+	 * 重建广告索引
+	 *
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "ad/rebuildAdIndex")
+	Result rebuildAdIndex();
+
 }

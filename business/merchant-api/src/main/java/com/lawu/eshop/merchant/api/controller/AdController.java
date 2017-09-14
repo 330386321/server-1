@@ -233,13 +233,13 @@ public class AdController extends BaseController {
         	if(storeDTO!=null){
         		adSave.setLatitude(storeDTO.getLatitude());
             	adSave.setLongitude(storeDTO.getLongitude());
-            	adSave.setLogoUrl(storeDTO.getLogoUrl());
-            	if(storeDTO.getManageType()!=null){
+				adSave.setLogoUrl(StringUtils.isEmpty(storeDTO.getLogoUrl()) ? merchantApiConfig.getDefaultHeadimg() : storeDTO.getLogoUrl());
+				if(storeDTO.getManageType()!=null){
             		adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
             	}
             	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
-            	adSave.setMerchantStoreName(storeDTO.getName());
-            	adSave.setMerchantRegionPath(storeDTO.getRegionPath());
+				adSave.setMerchantStoreName(StringUtils.isEmpty(storeDTO.getName()) ? "E店商家" : storeDTO.getName());
+				adSave.setMerchantRegionPath(storeDTO.getRegionPath());
         	}
     	}
     	adSave.setCount(count);
@@ -598,10 +598,10 @@ public class AdController extends BaseController {
         	if(storeDTO!=null){
         		adSave.setLatitude(storeDTO.getLatitude());
             	adSave.setLongitude(storeDTO.getLongitude());
-            	adSave.setLogoUrl(storeDTO.getLogoUrl());
+				adSave.setLogoUrl(StringUtils.isEmpty(storeDTO.getLogoUrl()) ? merchantApiConfig.getDefaultHeadimg() : storeDTO.getLogoUrl());
             	adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
             	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
-            	adSave.setMerchantStoreName(storeDTO.getName());
+				adSave.setMerchantStoreName(StringUtils.isEmpty(storeDTO.getName()) ? "E店商家" : storeDTO.getName());
             	adSave.setMerchantRegionPath(storeDTO.getRegionPath());
         	}
     	}

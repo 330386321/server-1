@@ -93,15 +93,6 @@ public interface AdService {
 	Result<List<AdDTO>> listFlatVideoAd(@ModelAttribute ListAdParam listAdParam);
 
 	/**
-	 * 更新平面视频广告索引
-	 *
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(method = RequestMethod.PUT, value = "ad/updateAdIndex/{id}")
-	Result updateAdIndex(@PathVariable("id") Long id);
-
-	/**
 	 * 重建广告索引
 	 * @return
 	 */

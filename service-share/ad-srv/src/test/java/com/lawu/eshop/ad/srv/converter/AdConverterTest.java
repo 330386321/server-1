@@ -21,10 +21,12 @@ import com.lawu.eshop.ad.constants.RelateTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
+import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.AdPointDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
@@ -300,35 +302,6 @@ public class AdConverterTest {
     }
 	
 	@Test
-    public void convertSolrUpdateDocument(){
-		
-		AdDO ad=new AdDO();
-		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
-		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
-		ad.setMerchantId(1002l);
-		ad.setMerchantNum("B856392484215848969");
-		ad.setMediaUrl("ad_image/1494582624025648401.png");
-		ad.setAdCount(20);
-		ad.setBeginTime(new Date());
-		ad.setContent("广告测试内容");
-		ad.setPoint(BigDecimal.valueOf(0.5));
-		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
-		ad.setRegionName("全国");
-		ad.setTitle("广告测试标题");
-		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
-        ad.setGmtCreate(new Date());
-        ad.setGmtModified(new Date());
-        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
-        
-        SolrInputDocument  sd = AdConverter.convertSolrUpdateDocument(ad);
-        
-        Assert.assertNotNull(sd);
-    }
-	
-	
-	
-	@Test
     public void convertDetailBO(){
 		
 		AdDO ad=new AdDO();
@@ -594,5 +567,73 @@ public class AdConverterTest {
         
         Assert.assertNotNull(dto);
     }
+
+	@Test
+	public void convertAdPraiseDTO() {
+		AdSolrDTO solrDTO = new AdSolrDTO();
+		solrDTO.setId(10L);
+		solrDTO.setMerchantStoreId(200L);
+		solrDTO.setMediaUrl("test");
+		solrDTO.setTitle("test");
+		solrDTO.setContent("test");
+		solrDTO.setMerchantStoreName("test");
+		solrDTO.setTotalPoint(20.0);
+		solrDTO.setHits(10);
+		solrDTO.setLogoUrl(solrDTO.getLogoUrl());
+
+		AdBO adBO = new AdBO();
+		adBO.setId(100L);
+		adBO.setBeginTime(new Date());
+		adBO.setStatusEnum(AdStatusEnum.AD_STATUS_ADD);
+
+		AdPraiseDTO dto = AdConverter.convertDTO(solrDTO, adBO);
+		Assert.assertNotNull(dto);
+		Assert.assertEquals(solrDTO.getId(), dto.getId());
+		Assert.assertEquals(adBO.getBeginTime(), dto.getBeginTime());
+	}
+
+	@Test
+	public void convertAdFlatVideoDTOS() {
+		List<AdSolrDTO> solrDTOS = new ArrayList<>();
+		AdSolrDTO adSolrDTO = new AdSolrDTO();
+		adSolrDTO.setId(10L);
+		adSolrDTO.setMerchantStoreId(200L);
+		adSolrDTO.setMediaUrl("test");
+		adSolrDTO.setVideoImgUrl("test");
+		adSolrDTO.setTitle("test");
+		adSolrDTO.setContent("test");
+		adSolrDTO.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
+		adSolrDTO.setMerchantStoreName("test");
+		adSolrDTO.setLogoUrl("test");
+		adSolrDTO.setHits(10);
+		solrDTOS.add(adSolrDTO);
+
+		List<AdFlatVideoDTO> dtos = AdConverter.convertAdFlatVideoDTOS(solrDTOS);
+		Assert.assertNotNull(dtos);
+		Assert.assertEquals(adSolrDTO.getId(), dtos.get(0).getId());
+	}
+
+	@Test
+	public void convertAdDTOS() {
+		List<AdSolrDTO> solrDTOS = new ArrayList<>();
+		AdSolrDTO adSolrDTO = new AdSolrDTO();
+		adSolrDTO.setId(10L);
+		adSolrDTO.setMerchantStoreId(200L);
+		adSolrDTO.setMediaUrl("test");
+		adSolrDTO.setVideoImgUrl("test");
+		adSolrDTO.setTitle("test");
+		adSolrDTO.setContent("test");
+		adSolrDTO.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
+		adSolrDTO.setMerchantStoreName("test");
+		adSolrDTO.setLogoUrl("test");
+		adSolrDTO.setHits(10);
+		adSolrDTO.setPoint(10.0);
+		adSolrDTO.setTotalPoint(20.0);
+		solrDTOS.add(adSolrDTO);
+
+		List<AdDTO> dtos = AdConverter.convertAdDTOS(solrDTOS);
+		Assert.assertNotNull(dtos);
+		Assert.assertEquals(adSolrDTO.getId(), dtos.get(0).getId());
+	}
 	
 }
