@@ -195,7 +195,7 @@ public class BalancePayController extends BaseController {
         } else if (userNum.startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
             messageTempParam.setUserName("E店商家");
         }
-        String property_key = PropertyType.MERCHANT_BALANCE_PAY_POINT_SCALE;
+        String property_key = PropertyType.MEMBER_BALANCE_PAY_POINT_SCALE;
         Result scale = propertySrvPropertyService.getValue(property_key);
         double dPayMoney = Double.parseDouble(String.valueOf(payOrderCallback.getActualMoney()));
         double dPayScale = Double.parseDouble(scale.getModel().toString());
