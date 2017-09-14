@@ -32,7 +32,6 @@ import com.lawu.eshop.merchant.api.service.MessageService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
-import com.lawu.eshop.property.dto.InviteFansReturnDTO;
 import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;

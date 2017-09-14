@@ -2,7 +2,6 @@ package com.lawu.eshop.merchant.api.service;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.dto.FreezeDTO;
-import com.lawu.eshop.property.dto.InviteFansReturnDTO;
 import com.lawu.eshop.property.param.FreezeQueryParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
