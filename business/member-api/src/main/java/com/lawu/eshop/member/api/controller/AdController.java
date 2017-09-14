@@ -54,6 +54,7 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.member.api.MemberApiConfig;
+import com.lawu.eshop.member.api.service.AdCountRecordService;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdLexiconService;
 import com.lawu.eshop.member.api.service.AdService;
@@ -72,6 +73,7 @@ import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
+import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.UserRedPacketDTO;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.utils.DateUtil;
@@ -129,6 +131,9 @@ public class AdController extends BaseController {
 	@Autowired
 	private AdLexiconService adLexiconService;
 	
+	@Autowired
+	private AdCountRecordService adCountRecordService;
+
 	/**
 	 * @see selectEgainAd
 	 */
@@ -322,7 +327,9 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-		return adExtendService.clickPraise(id);
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		String num = UserUtil.getCurrentUserNum(getRequest());
+		return adService.clickPraise(id,memberId,num);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -340,7 +347,7 @@ public class AdController extends BaseController {
 		if(result.getModel()){
 			return successCreated(ResultCode.AD_CLICK_EXIST);
 		}
-		Result<ClickAdPointDTO> res=adService.clickAd(id, memberId, num);
+		Result<ClickAdPointDTO> res=adExtendService.clickAd(id, memberId, num);
 		if(res.getModel()!=null && res.getModel().getPoint().compareTo(BigDecimal.valueOf(0))==1){ 
 			clickAdRecordService.setClickAdRecord(memberId+num+id+DateUtil.getIntDate());
 		}

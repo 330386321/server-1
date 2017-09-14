@@ -17,5 +17,6 @@ public interface ClickAdRecordService {
 	
 	@RequestMapping(value = "clickAdRecord/getClickAdRecord", method = RequestMethod.GET)
     Result<Boolean> getClickAdRecord(@RequestParam("key") String key);
-
+	
+	
 }

@@ -3,9 +3,10 @@
  */
 package com.lawu.eshop.member.api.controller;
 
-import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.mall.constants.SearchWordTypeEnum;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,15 +21,12 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import com.lawu.eshop.authorization.interceptor.AuthorizationInterceptor;
-import com.lawu.eshop.member.api.MemberApiApplicationTest;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.lawu.eshop.authorization.interceptor.AuthorizationInterceptor;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.member.api.MemberApiApplicationTest;
 
 /**
  * @author lihj

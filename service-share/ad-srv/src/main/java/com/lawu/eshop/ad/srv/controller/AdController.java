@@ -35,6 +35,7 @@ import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.AdPointDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.AdSaveInfoDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
@@ -63,6 +64,7 @@ import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
+import com.lawu.eshop.ad.srv.bo.AdSaveInfoBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
@@ -108,6 +110,7 @@ public class AdController extends BaseController {
 
 	@Autowired
 	private SolrService solrService;
+	
 
 	@Autowired
 	private FavoriteAdService favoriteAdService;
@@ -119,7 +122,7 @@ public class AdController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "saveAd", method = RequestMethod.POST)
-	public Result saveAd(@RequestBody AdSaveParam adSaveParam) {
+	public Result<AdSaveInfoDTO> saveAd(@RequestBody AdSaveParam adSaveParam) {
 
 		if (adSaveParam.getAdParam().getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PACKET.getVal()) {
 			RedPacketIsSendBO bo = adService.selectRPIsSend(adSaveParam.getMerchantId());
@@ -127,12 +130,17 @@ public class AdController extends BaseController {
 				adService.updateStatus(bo.getId());
 			}
 		}
-		Integer id = adService.saveAd(adSaveParam);
+		AdSaveInfoBO bo = adService.saveAd(adSaveParam);
 
-		if (id == null || id < 0) {
+		if (bo.getId() == null || bo.getId() < 0) {
 			successCreated(ResultCode.SAVE_FAIL);
 		}
-		return successCreated();
+		
+		AdSaveInfoDTO dto = new AdSaveInfoDTO();
+		dto.setAdCount(bo.getAdCount());
+		dto.setId(bo.getId());
+		
+		return successCreated(dto);
 
 	}
 
@@ -223,6 +231,9 @@ public class AdController extends BaseController {
 		ClickPointBO bo = adService.clickAd(id, memberId, num);
 		if(bo.isOverClick()){
 			return successCreated(ResultCode.AD_CLICK_PUTED);
+		}
+		if(!bo.isOverClick() && bo.getPoint().compareTo(BigDecimal.valueOf(0))==0){
+			return successCreated(ResultCode.AD_CLICK_SYS_WORDS);
 		}
 		ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
 		ClickAdPointDTO dto = new ClickAdPointDTO();
@@ -406,8 +417,8 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@PathVariable Long id, @RequestParam Long memberId, @RequestParam String num) {
 		Boolean flag = pointPoolService.selectStatusByMember(id, memberId);
-		if (flag)
-			return successCreated(ResultCode.AD_PRAISE_POINT_GET);
+		if (flag) return successCreated(ResultCode.AD_PRAISE_POINT_GET);
+		
 		BigDecimal point = adService.clickPraise(id, memberId, num);
 		if (point.compareTo(new BigDecimal(0)) == 0) {
 			return successCreated(ResultCode.AD_PRAISE_PUTED);

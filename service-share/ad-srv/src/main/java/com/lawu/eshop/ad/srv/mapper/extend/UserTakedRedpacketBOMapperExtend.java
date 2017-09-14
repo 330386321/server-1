@@ -12,4 +12,6 @@ import com.lawu.eshop.ad.srv.domain.extend.UserRedpacketMaxMoney;
 public interface UserTakedRedpacketBOMapperExtend {
 
 	UserRedpacketMaxMoney getMaxMoney(Long userRedId);
+	
+	UserRedpacketMaxMoney getSumMoney(Long userRedId);
 }

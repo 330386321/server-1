@@ -1,6 +1,7 @@
 package com.lawu.eshop.merchant.api.controller;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,11 +26,13 @@ import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
+import com.lawu.eshop.ad.dto.AdSaveInfoDTO;
 import com.lawu.eshop.ad.dto.IsMyDateDTO;
 import com.lawu.eshop.ad.param.AdAgainPutParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.UserRedpacketValue;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -41,6 +44,7 @@ import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
+import com.lawu.eshop.merchant.api.service.AdCountCacheService;
 import com.lawu.eshop.merchant.api.service.AdService;
 import com.lawu.eshop.merchant.api.service.MemberCountService;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
@@ -91,6 +95,9 @@ public class AdController extends BaseController {
     
     @Autowired
    	private ProductService productService;
+
+    @Autowired
+   	private AdCountCacheService adCountCacheService;
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
@@ -198,7 +205,7 @@ public class AdController extends BaseController {
 			if(adParam.getAdCount()>1000000){
 				return successCreated(ResultCode.AD_RED_PACKET_COUNT_ERROR);
 			}
-			if(adParam.getTotalPoint().divide(BigDecimal.valueOf(adParam.getAdCount())).compareTo(BigDecimal.valueOf(0.01))==-1){
+			if(adParam.getTotalPoint().divide(new BigDecimal(adParam.getAdCount()), 4, RoundingMode.HALF_UP).compareTo(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT))==-1){
 				return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
 			}
 		}
@@ -216,7 +223,7 @@ public class AdController extends BaseController {
     		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
     	}
     	Integer count=0;
-    	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_AREAS){
+    	if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE && adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_AREAS){
     		String areas=adParam.getAreas();
     		if(areas==null || areas==""){
     			areas=ALL_PLACE;
@@ -228,26 +235,33 @@ public class AdController extends BaseController {
     	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
     	AdSaveParam adSave=new AdSaveParam();
     	adSave.setAdParam(adParam);
-    	if(isSuccess(storeRs)){
-    		MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();
-        	if(storeDTO!=null){
-        		adSave.setLatitude(storeDTO.getLatitude());
-            	adSave.setLongitude(storeDTO.getLongitude());
-				adSave.setLogoUrl(StringUtils.isEmpty(storeDTO.getLogoUrl()) ? merchantApiConfig.getDefaultHeadimg() : storeDTO.getLogoUrl());
-				if(storeDTO.getManageType()!=null){
-            		adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
-            	}
-            	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
-				adSave.setMerchantStoreName(StringUtils.isEmpty(storeDTO.getName()) ? "E店商家" : storeDTO.getName());
-				adSave.setMerchantRegionPath(storeDTO.getRegionPath());
+    	if(!isSuccess(storeRs)){
+    		 return successCreated(storeRs.getRet());
+    	}
+    	MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();
+    	if(storeDTO!=null){
+    		adSave.setLatitude(storeDTO.getLatitude());
+        	adSave.setLongitude(storeDTO.getLongitude());
+            adSave.setLogoUrl(StringUtils.isEmpty(storeDTO.getLogoUrl()) ? merchantApiConfig.getDefaultHeadimg() : storeDTO.getLogoUrl());
+            if(storeDTO.getManageType()!=null){
+        		adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
         	}
+        	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
+            adSave.setMerchantStoreName(StringUtils.isEmpty(storeDTO.getName()) ? "E店商家" : storeDTO.getName());
+            adSave.setMerchantRegionPath(storeDTO.getRegionPath());
     	}
     	adSave.setCount(count);
     	adSave.setMediaUrl(adParam.getMediaUrl());
     	adSave.setVideoImgUrl(adParam.getVideoImgUrl());
     	adSave.setMerchantId(merchantId);
     	adSave.setUserNum(userNum);
-        return adService.saveAd(adSave);
+    	Result<AdSaveInfoDTO> result = adService.saveAd(adSave);
+
+    	//将广告总数存入缓存
+		if(isSuccess(result) && result.getModel().getId()>0){
+		     adCountCacheService.setAdCountRecord(Long.parseLong(String.valueOf(result.getModel().getId())), result.getModel().getAdCount());
+		}
+        return result;
     }
     
     @Audit(date = "2017-04-15", reviewer = "孙林青")

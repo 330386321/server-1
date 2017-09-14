@@ -132,6 +132,7 @@ public class ResultCode {
     public static final int AD_BEGIN_TIME_NOT_EXIST=5010;
     public static final int AD_RED_PACKET_COUNT_ERROR=5011;
     public static final int AD_RED_PACKET_POINT_ERROR=5012;
+    public static final int AD_CLICK_SYS_WORDS=5013;
 
 
     // 资产模块代码 6xxx
@@ -336,6 +337,7 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_BEGIN_TIME_NOT_EXIST, "投放时间不能为空");
         ResultCode.messageMap.put(AD_RED_PACKET_COUNT_ERROR, "红包数量不能超过100万");
         ResultCode.messageMap.put(AD_RED_PACKET_POINT_ERROR, "红包金额不合法");
+        ResultCode.messageMap.put(AD_CLICK_SYS_WORDS, "系统繁忙,请稍后再试");
         
         
         
