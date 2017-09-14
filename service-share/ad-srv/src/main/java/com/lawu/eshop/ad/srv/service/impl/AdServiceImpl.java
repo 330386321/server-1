@@ -699,6 +699,7 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.getVal());
 		List<AdDO> listADD = adDOMapper.selectByExample(example);
 		if (!listADD.isEmpty()){
+            Collection<SolrInputDocument> documents = new ArrayList<>();
 			for (AdDO adDO : listADD) {
 				Calendar nowTime = Calendar.getInstance();
 				nowTime.add(Calendar.MINUTE, -20);
@@ -708,8 +709,11 @@ public class AdServiceImpl implements AdService {
 					adDOMapper.updateByPrimaryKey(adDO);
 					// 将没有领完的积分退还给用户
 					matransactionMainAddService.sendNotice(adDO.getId());
+                    SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+                    documents.add(document);
 			    }
 		    }
+            solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
 	}
 	
@@ -726,19 +730,18 @@ public class AdServiceImpl implements AdService {
 		Date before14days = calendar.getTime(); 
 		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeIn(bytes).andBeginTimeLessThan(before14days);
 		List<AdDO> list = adDOMapper.selectByExample(example);
-		List<String> adIds = new ArrayList<>();
-		for (AdDO adDO : list) {
-			
-			if (adDO.getHits()  >= adDO.getAdCount()) {
+        Collection<SolrInputDocument> documents = new ArrayList<>();
+        for (AdDO adDO : list) {
+            if (adDO.getHits()  >= adDO.getAdCount()) {
 				adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); // 投放结束
 				adDO.setGmtModified(new Date());
 				adDOMapper.updateByPrimaryKey(adDO);
-				adIds.add(String.valueOf(adDO.getId()));
+                SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+                documents.add(document);
 			}
 
 		}
-		// 删除solr中的数据
-		solrService.delSolrDocsByIds(adIds, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+        solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 	}
 
 	@Override

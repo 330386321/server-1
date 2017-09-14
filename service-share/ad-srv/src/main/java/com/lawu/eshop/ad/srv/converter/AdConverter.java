@@ -320,6 +320,7 @@ public class AdConverter {
 		adSolrDTO.setMerchantStoreName(solrDocument.get("storeName_s").toString());
 		adSolrDTO.setLogoUrl(solrDocument.get("storeLogo_s").toString());
 		adSolrDTO.setTypeEnum(AdTypeEnum.getEnum(Byte.valueOf(solrDocument.get("type_i").toString())));
+		adSolrDTO.setStatusEnum(AdStatusEnum.getEnum(Byte.valueOf(solrDocument.get("status_i").toString())));
 		adSolrDTO.setHits(solrDocument.get("hits_i") == null ? 0 : Integer.valueOf(solrDocument.get("hits_i").toString()));
 		adSolrDTO.setCount(solrDocument.get("viewCount_i") == null ? 0 : Integer.valueOf(solrDocument.get("viewCount_i").toString()));
 		adSolrDTO.setPoint(solrDocument.get("point_d") == null ? 0.0 : Double.valueOf(solrDocument.get("point_d").toString()));
@@ -819,6 +820,7 @@ public class AdConverter {
 			dto.setTitle(adSolrDTO.getTitle());
 			dto.setContent(adSolrDTO.getContent());
 			dto.setTypeEnum(adSolrDTO.getTypeEnum());
+			dto.setStatusEnum(adSolrDTO.getStatusEnum());
 			dto.setName(adSolrDTO.getMerchantStoreName());
 			dto.setLogoUrl(adSolrDTO.getLogoUrl());
 			dto.setViewCount(adSolrDTO.getCount());
