@@ -71,6 +71,18 @@ public class MemberApiConfig {
 
 	@Value(value="${visit.frequency.count.expire.time}")
 	private Integer expireTime;
+	
+	@Value(value="${share.ad.e-praise-default-image-path}")
+	private String shareEPraiseAdDefaultImagePath;
+	
+	@Value(value="${share.ad.flat-default-image-path}")
+	private String shareFlatAdDefaultImagePath;
+	
+	@Value(value="${share.ad.video-default-image-path}")
+	private String shareVideoAdDefaultImagePath;
+	
+	@Value(value="${share.ad.logo-image-path}")
+	private String shareAdLogoPath;
 
 	public String getImageUrl() {
 		return imageUrl;
@@ -212,4 +224,21 @@ public class MemberApiConfig {
 	public Integer getExpireTime() {
 		return expireTime;
 	}
+
+	public String getShareEPraiseAdDefaultImagePath() {
+		return shareEPraiseAdDefaultImagePath;
+	}
+
+	public String getShareFlatAdDefaultImagePath() {
+		return shareFlatAdDefaultImagePath;
+	}
+
+	public String getShareVideoAdDefaultImagePath() {
+		return shareVideoAdDefaultImagePath;
+	}
+
+	public String getShareAdLogoPath() {
+		return shareAdLogoPath;
+	}
+	
 }

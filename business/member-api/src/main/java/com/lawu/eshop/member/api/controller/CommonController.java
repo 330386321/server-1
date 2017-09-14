@@ -18,7 +18,7 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.constants.UserSexEnum;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.framework.web.dto.TokenDTO;
-import com.lawu.eshop.mall.dto.ConfigDTO;
+import com.lawu.eshop.mall.dto.MemberConfigDTO;
 import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.event.EventPublisher;
 import com.lawu.eshop.member.api.service.MemberService;
@@ -50,7 +50,8 @@ public class CommonController extends BaseController {
     @Autowired
     private EventPublisher eventPublisher;
 
-    @Audit(date = "2017-03-29", reviewer = "孙林青")
+    @SuppressWarnings("unchecked")
+	@Audit(date = "2017-03-29", reviewer = "孙林青")
     @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[2000|2015|2019]（孙林青）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "login/{account}", method = RequestMethod.POST)
@@ -77,7 +78,8 @@ public class CommonController extends BaseController {
         return successCreated(tokenDTO);
     }
 
-    @Audit(date = "2017-03-29", reviewer = "孙林青")
+    @SuppressWarnings("rawtypes")
+	@Audit(date = "2017-03-29", reviewer = "孙林青")
     @ApiOperation(value = "退出", notes = "退出登录，清除token。（孙林青）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
@@ -92,13 +94,17 @@ public class CommonController extends BaseController {
     @Audit(date = "2017-04-19", reviewer = "孙林青")
     @ApiOperation(value = "获取配置信息", notes = "获取配置信息。（章勇）", httpMethod = "GET")
     @RequestMapping(value = "getConfig", method = RequestMethod.GET)
-    public Result<ConfigDTO> getConfig() {
-        ConfigDTO configDTO = new ConfigDTO();
+    public Result<MemberConfigDTO> getConfig() {
+    	MemberConfigDTO configDTO = new MemberConfigDTO();
         configDTO.setImageUrl(memberApiConfig.getImageUrl());
         configDTO.setVideoUrl(memberApiConfig.getVideoUrl());
         configDTO.setInviterMemberUrl(memberApiConfig.getInviterMemberUrl());
         configDTO.setInviterMerchantUrl(memberApiConfig.getInviterMerchantUrl());
         configDTO.setMemberH5Ip(memberApiConfig.getMemberH5Ip());
+        configDTO.setShareEPraiseAdDefaultImagePath(memberApiConfig.getShareEPraiseAdDefaultImagePath());
+        configDTO.setShareFlatAdDefaultImagePath(memberApiConfig.getShareFlatAdDefaultImagePath());
+        configDTO.setShareVideoAdDefaultImagePath(memberApiConfig.getShareVideoAdDefaultImagePath());
+        configDTO.setShareAdLogoPath(memberApiConfig.getShareAdLogoPath());
         return successCreated(configDTO);
     }
 

@@ -20,9 +20,6 @@ public class ConfigDTO {
     @ApiModelProperty(value = "邀请会员URL")
     private String inviterMemberUrl;
     
-    @ApiModelProperty(value = "h5Ip")
-    private String memberH5Ip;
-
     public String getImageUrl() {
         return imageUrl;
     }
@@ -55,13 +52,4 @@ public class ConfigDTO {
 		this.inviterMemberUrl = inviterMemberUrl;
 	}
 
-	public String getMemberH5Ip() {
-		return memberH5Ip;
-	}
-
-	public void setMemberH5Ip(String memberH5Ip) {
-		this.memberH5Ip = memberH5Ip;
-	}
-    
-    
 }
