@@ -133,9 +133,7 @@ public class BankAccountController extends BaseController{
                          @PathVariable @ApiParam(required = true, value = "id") Long id,
                          @RequestParam @ApiParam(required = true, value = "支付密码") String payPwd,
                          @ModelAttribute @ApiParam(required = true, value = "银行卡信息") BankAccountParam bankAccountParam) {
-    	if(!bankAccountParam.getAccountNumber().matches("^(?!0)\\d{15,19}$")){
-    		return successCreated(ResultCode.BANK_ACCOUNT_ERROR);
-    	}
+    
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	
     	Result<Boolean> bankRs= cashManageFrontService.isExistCash(userNum, id);

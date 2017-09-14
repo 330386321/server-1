@@ -67,9 +67,6 @@ public class BankAccountController extends BaseController{
     public Result saveBankAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     						 @RequestParam @ApiParam(required = true, value = "支付密码") String payPwd,
                              @ModelAttribute @ApiParam(required = true, value = "银行卡信息") BankAccountParam bankAccountParam) {
-		if(!bankAccountParam.getAccountNumber().matches("^(?!0)\\d{15,19}$")){
-    		return successCreated(ResultCode.BANK_ACCOUNT_ERROR);
-    	}
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
 		if(flag.getModel()!=null && (Boolean)flag.getModel()){
