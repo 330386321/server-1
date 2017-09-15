@@ -10,18 +10,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gexin.fastjson.JSON;
 import com.google.common.collect.Lists;
-import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PropertyType;
-import com.lawu.eshop.ad.constants.RedPacketArithmetic;
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
 import com.lawu.eshop.ad.constants.SpiltRedPacketUntil;
 import com.lawu.eshop.ad.constants.UserRedPacketEnum;
@@ -32,9 +28,7 @@ import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
 import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
-import com.lawu.eshop.ad.srv.controller.UserRedPacketController;
 import com.lawu.eshop.ad.srv.converter.UserRedPacketConverter;
-import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.UserRedPacketDO;
 import com.lawu.eshop.ad.srv.domain.UserRedPacketDOExample;
 import com.lawu.eshop.ad.srv.domain.UserRedPacketDOExample.Criteria;
@@ -82,7 +76,6 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	
 	@Autowired
 	private LockService lockService;
-	Logger log =Logger.getLogger(UserRedPacketServiceImpl.class);
 	/**
 	 * 新增用户红包
 	 */
@@ -152,7 +145,6 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 
 	public UserPacketRefundParam selectBackTotalMoney(Long userRedpacketId){
 		UserRedPacketDO userRedpacket = userRedPacketDOMapper.selectByPrimaryKey(userRedpacketId);
-		log.info("日志记录"+JSON.toJSON(userRedpacket));
 		UserPacketRefundParam param =UserRedPacketConverter.convertReFund(userRedpacket);
 		return param;
 	}	

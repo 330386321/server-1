@@ -79,8 +79,6 @@ public class UserRedPacketController extends BaseController {
 	@Autowired
 	private AdCountRecordService adCountRecordService;
 	
-	Logger log =Logger.getLogger(UserRedPacketController.class);
-
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "新增用户红包", notes = "新增用户红包（李洪军）", httpMethod = "POST")
 	@Authorization
@@ -189,7 +187,6 @@ public class UserRedPacketController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.POST)
 	public Result<UserRedPacketReturnDTO> getUserRedpacketMaxMoney(@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId,@RequestParam @ApiParam(required = true, value = "发红包者ID") Long memberId) {
-		log.info("收到的红包id是:"+redPacketId);
 		Result<UserRedpacketMaxMoneyDTO> result = userRedPacketService.getUserRedpacketMaxMoney(redPacketId);
 		UserRedPacketReturnDTO dto =new UserRedPacketReturnDTO();
 		dto.setMoney(result.getModel().getMoney());
