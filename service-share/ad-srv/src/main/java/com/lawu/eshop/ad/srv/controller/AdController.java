@@ -304,7 +304,7 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "selectChoiceness", method = RequestMethod.POST)
 	public Result<Page<AdDTO>> selectChoiceness(@RequestBody AdSolrRealParam param) {
 		List<AdSolrDTO> solrDTOS = new ArrayList<>();
-		String areaQueryStr = "putWay_i:1";
+		String areaQueryStr = "putWay_i:1 AND -status_i:3";
 		if (StringUtils.isEmpty(param.getRegionPath())) {
 			areaQueryStr += " AND area_is:0";
 		} else {
@@ -325,7 +325,7 @@ public class AdController extends BaseController {
 				fansQueryStr += "merchantId_l:" + id + " OR ";
 			}
 			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND (" + fansQueryStr + ")";
+			fansQueryStr = "putWay_i:2 AND -status_i:3 AND (" + fansQueryStr + ")";
 		}
 
 		int hitMax = 0;
@@ -354,7 +354,7 @@ public class AdController extends BaseController {
 			query.setParam("sfield", "latLon_p");
 			query.setParam("d", "30");
 			query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
-			String radiusQueryStr = "putWay_i:3";
+			String radiusQueryStr = "putWay_i:3 AND -status_i:3";
 			if (hitMax > 0) {
 				radiusQueryStr += " AND hits_i:[" + hitMin + " TO " + hitMax + "]";
 			}
@@ -441,7 +441,7 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "queryAdByTitle", method = RequestMethod.POST)
 	public Result<Page<AdSolrDTO>> queryAdByTitle(@RequestBody AdsolrFindParam adSolrParam) {
 		List<AdSolrDTO> solrDTOS = new ArrayList<>();
-		String areaQueryStr = "putWay_i:1 AND (type_i:1 OR type_i:2)";
+		String areaQueryStr = "putWay_i:1 AND -status_i:3 AND -type_i:3";
 		if (StringUtils.isEmpty(adSolrParam.getRegionPath())) {
 			areaQueryStr += " AND area_is:0";
 		} else {
@@ -465,7 +465,7 @@ public class AdController extends BaseController {
 				fansQueryStr += "merchantId_l:" + id + " OR ";
 			}
 			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND (type_i:1 OR type_i:2) AND (" + fansQueryStr + ")";
+			fansQueryStr = "putWay_i:2 AND -status_i:3 AND -type_i:3 AND (" + fansQueryStr + ")";
 			if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
 				fansQueryStr += " AND title_s:*" + adSolrParam.getAdSolrParam().getTitle() + "*";
 			}
@@ -497,7 +497,7 @@ public class AdController extends BaseController {
 			query.setParam("sfield", "latLon_p");
 			query.setParam("d", "30");
 			query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
-			String radiusQueryStr = "putWay_i:3 AND (type_i:1 OR type_i:2)";
+			String radiusQueryStr = "putWay_i:3 AND -status_i:3 AND -type_i:3";
 			if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
 				radiusQueryStr += " AND title_s:*" + adSolrParam.getAdSolrParam().getTitle() + "*";
 			}
@@ -785,7 +785,7 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "listAdRank", method = RequestMethod.POST)
 	public Result<List<AdDTO>> listAdRank(@RequestBody AdSolrRealParam param) {
 		List<AdSolrDTO> solrDTOS = new ArrayList<>();
-		String areaQueryStr = "putWay_i:1 AND type_i:1 AND (status_i:2 OR status_i:3)";
+		String areaQueryStr = "putWay_i:1 AND type_i:1";
 		if (StringUtils.isEmpty(param.getRegionPath())) {
 			areaQueryStr += " AND area_is:0";
 		} else {
@@ -806,7 +806,7 @@ public class AdController extends BaseController {
 				fansQueryStr += "merchantId_l:" + id + " OR ";
 			}
 			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND type_i:1 AND (status_i:2 OR status_i:3) AND (" + fansQueryStr + ")";
+			fansQueryStr = "putWay_i:2 AND type_i:1 AND (" + fansQueryStr + ")";
 		}
 
 		double pointMax = 0;
@@ -844,7 +844,7 @@ public class AdController extends BaseController {
 			query.setParam("sfield", "latLon_p");
 			query.setParam("d", "30");
 			query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
-			String radiusQueryStr = "putWay_i:3 AND type_i:1 AND (status_i:2 OR status_i:3)";
+			String radiusQueryStr = "putWay_i:3 AND type_i:1";
 			if (pointMax > 0) {
 				if (param.getOrderTypeEnum().equals(OrderTypeEnum.AD_TORLEPOINT_DESC)) {
 					radiusQueryStr += " AND totalPoint_d:[" + pointMin + " TO " + pointMax + "]";
