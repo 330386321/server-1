@@ -81,6 +81,17 @@ public interface SolrService {
     SolrDocumentList getSolrDocsByQuery(SolrQuery query, String solrUrl, String solrCore, Boolean isCloudSolr);
 
     /**
+     * 根据条件查询(POST方式)
+     *
+     * @param query
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
+     * @return
+     */
+    SolrDocumentList getSolrDocsByQueryPost(SolrQuery query, String solrUrl, String solrCore, Boolean isCloudSolr);
+
+    /**
      * 根据主键查询
      *
      * @param id

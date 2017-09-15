@@ -321,12 +321,12 @@ public class AdController extends BaseController {
 		String fansQueryStr = "";
 		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
 			List<Long> merchantIds = param.getMerchantIds();
-			for (Long id : merchantIds) {
-				fansQueryStr += "merchantId_l:" + id + " OR ";
-			}
-			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND -status_i:3 AND (" + fansQueryStr + ")";
-		}
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND -status_i:3 AND merchantId_l:(" + fansQueryStr + ")";
+        }
 
 		int hitMax = 0;
 		int hitMin = 0;
@@ -339,7 +339,7 @@ public class AdController extends BaseController {
 		query.setSort("hits_i", SolrQuery.ORDER.desc);
 		query.setStart(param.getOffset());
 		query.setRows(param.getPageSize());
-		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
 			solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			hitMax = Integer.valueOf(solrDocumentList.get(0).get("hits_i").toString());
@@ -460,16 +460,16 @@ public class AdController extends BaseController {
 
 		String fansQueryStr = "";
 		if (adSolrParam.getMemberId() != null && adSolrParam.getMemberId() > 0 && !adSolrParam.getMerchantIds().isEmpty()) {
-			List<Long> merchantIds = adSolrParam.getMerchantIds();
-			for (Long id : merchantIds) {
-				fansQueryStr += "merchantId_l:" + id + " OR ";
-			}
-			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND -status_i:3 AND -type_i:3 AND (" + fansQueryStr + ")";
-			if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
-				fansQueryStr += " AND title_s:*" + adSolrParam.getAdSolrParam().getTitle() + "*";
-			}
-		}
+            List<Long> merchantIds = adSolrParam.getMerchantIds();
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND -status_i:3 AND -type_i:3 AND merchantId_l:(" + fansQueryStr + ")";
+            if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
+                fansQueryStr += " AND title_s:*" + adSolrParam.getAdSolrParam().getTitle() + "*";
+            }
+        }
 
 		int hitMax = 0;
 		int hitMin = 0;
@@ -482,7 +482,7 @@ public class AdController extends BaseController {
 		query.setSort("hits_i", SolrQuery.ORDER.desc);
 		query.setStart(adSolrParam.getAdSolrParam().getOffset());
 		query.setRows(adSolrParam.getAdSolrParam().getPageSize());
-		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
 			solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			hitMax = Integer.valueOf(solrDocumentList.get(0).get("hits_i").toString());
@@ -618,17 +618,17 @@ public class AdController extends BaseController {
 		String fansQueryStr = "";
 		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
 			List<Long> merchantIds = param.getMerchantIds();
-			for (Long id : merchantIds) {
-				fansQueryStr += "merchantId_l:" + id + " OR ";
-			}
-			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND status_i:2 AND (" + fansQueryStr + ")";
-			if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_FLAT)) {
-				fansQueryStr += " AND type_i:1";
-			} else if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_VIDEO)) {
-				fansQueryStr += " AND type_i:2";
-			}
-		}
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND status_i:2 AND merchantId_l:(" + fansQueryStr + ")";
+            if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_FLAT)) {
+                fansQueryStr += " AND type_i:1";
+            } else if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_VIDEO)) {
+                fansQueryStr += " AND type_i:2";
+            }
+        }
 
 		int hitMax = 0;
 		int hitMin = 0;
@@ -641,7 +641,7 @@ public class AdController extends BaseController {
 		query.setSort("hits_i", SolrQuery.ORDER.desc);
 		query.setStart(param.getOffset());
 		query.setRows(param.getPageSize());
-		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
 			solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			hitMax = Integer.valueOf(solrDocumentList.get(0).get("hits_i").toString());
@@ -727,19 +727,19 @@ public class AdController extends BaseController {
 		String fansQueryStr = "";
 		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
 			List<Long> merchantIds = param.getMerchantIds();
-			for (Long id : merchantIds) {
-				fansQueryStr += "merchantId_l:" + id + " OR ";
-			}
-			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND type_i:3 AND (" + fansQueryStr + ")";
-			if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTING)) {
-				fansQueryStr += " AND status_i:2";
-			} else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_ADD)) {
-				fansQueryStr += " AND status_i:1";
-			} else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTED)) {
-				fansQueryStr += " AND status_i:3";
-			}
-		}
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND type_i:3 AND merchantId_l:(" + fansQueryStr + ")";
+            if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTING)) {
+                fansQueryStr += " AND status_i:2";
+            } else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_ADD)) {
+                fansQueryStr += " AND status_i:1";
+            } else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTED)) {
+                fansQueryStr += " AND status_i:3";
+            }
+        }
 
 		SolrQuery query = new SolrQuery();
 		if (StringUtils.isEmpty(fansQueryStr)) {
@@ -754,7 +754,7 @@ public class AdController extends BaseController {
 		}
 		query.setStart(param.getOffset());
 		query.setRows(param.getPageSize());
-		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
 			List<AdSolrDTO> solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			for (AdSolrDTO solrDTO : solrDTOS) {
@@ -802,12 +802,12 @@ public class AdController extends BaseController {
 		String fansQueryStr = "";
 		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
 			List<Long> merchantIds = param.getMerchantIds();
-			for (Long id : merchantIds) {
-				fansQueryStr += "merchantId_l:" + id + " OR ";
-			}
-			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND type_i:1 AND (" + fansQueryStr + ")";
-		}
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND type_i:1 AND merchantId_l:(" + fansQueryStr + ")";
+        }
 
 		double pointMax = 0;
 		double pointMin = 0;
@@ -824,7 +824,7 @@ public class AdController extends BaseController {
 		}
 		query.setStart(param.getOffset());
 		query.setRows(param.getPageSize());
-		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
 			solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			if (param.getOrderTypeEnum().equals(OrderTypeEnum.AD_TORLEPOINT_DESC)) {

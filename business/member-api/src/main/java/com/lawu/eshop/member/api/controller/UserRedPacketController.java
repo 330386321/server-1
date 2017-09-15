@@ -185,8 +185,8 @@ public class UserRedPacketController extends BaseController {
 	@ApiOperation(value = "获取红包中最大值", notes = "获取红包中最大值", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.POST)
-	public Result<UserRedPacketReturnDTO> getUserRedpacketMaxMoney(@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId,@RequestParam @ApiParam(required = true, value = "发红包者ID") Long memberId) {
-		Result<UserRedpacketMaxMoneyDTO> result = userRedPacketService.getUserRedpacketMaxMoney(redPacketId);
+	public Result<UserRedPacketReturnDTO> getUserRedpacketMaxMoney(@RequestParam @ApiParam(required = true, value = "红包ID") String redPacketId,@RequestParam @ApiParam(required = true, value = "发红包者ID") Long memberId) {
+		Result<UserRedpacketMaxMoneyDTO> result = userRedPacketService.getUserRedpacketMaxMoney(Long.parseLong(redPacketId));
 		UserRedPacketReturnDTO dto =new UserRedPacketReturnDTO();
 		dto.setMoney(result.getModel().getMoney());
 		Result<UserDTO> user= memberService.findMemberInfo(memberId);
