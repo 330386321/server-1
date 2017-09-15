@@ -279,7 +279,6 @@ public class AdConverter {
 		 document.addField("videoImgUrl_s", adDO.getVideoImgUrl());
 		 document.addField("title_s", adDO.getTitle());
 		 document.addField("content_s", adDO.getContent());
-		 document.addField("latLon_p", adDO.getMerchantLatitude() + "," + adDO.getMerchantLongitude());
 		 document.addField("status_i", adDO.getStatus());
 		 document.addField("hits_i", adDO.getHits());
 		 document.addField("viewCount_i", adDO.getViewcount());
@@ -290,6 +289,9 @@ public class AdConverter {
 		 document.addField("totalPoint_d", adDO.getTotalPoint() == null ? 0.0 : adDO.getTotalPoint().doubleValue());
 		 document.addField("storeName_s", adDO.getMerchantStoreName());
 		 document.addField("storeLogo_s", adDO.getLogoUrl());
+		 if (adDO.getMerchantLatitude() != null && adDO.getMerchantLongitude() != null) {
+			 document.addField("latLon_p", adDO.getMerchantLatitude() + "," + adDO.getMerchantLongitude());
+		 }
 		 if (adDO.getType().byteValue() == AdTypeEnum.AD_TYPE_PRAISE.getVal() && adDO.getBeginTime() != null) {
 			 document.addField("beginTime_l", adDO.getBeginTime().getTime());
 		 }
