@@ -382,7 +382,13 @@ public class AdController extends BaseController {
     	adSave.setVideoImgUrl(adDTO.getVideoImgUrl());
     	adSave.setMerchantId(merchantId);
     	adSave.setUserNum(userNum);
-    	return adService.saveAd(adSave);
+    	Result<AdSaveInfoDTO> result = adService.saveAd(adSave);
+
+    	//将广告总数存入缓存
+		if(isSuccess(result) && result.getModel().getId()>0){
+		     adCountCacheService.setAdCountRecord(Long.parseLong(String.valueOf(result.getModel().getId())), result.getModel().getAdCount());
+		}
+    	return result;
 	}
 
 	@Audit(date = "2017-05-12", reviewer = "孙林青")
