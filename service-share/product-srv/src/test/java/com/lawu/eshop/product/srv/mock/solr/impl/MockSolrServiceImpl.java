@@ -92,6 +92,11 @@ public class MockSolrServiceImpl implements SolrService {
 		return null;
 	}
 
+	@Override
+	public SolrDocumentList getSolrDocsByQueryPost(SolrQuery query, String solrUrl, String solrCore, Boolean isCloudSolr) {
+		return null;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

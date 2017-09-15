@@ -49,6 +49,11 @@ public class MockSolrService implements SolrService {
     }
 
     @Override
+    public SolrDocumentList getSolrDocsByQueryPost(SolrQuery query, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        return null;
+    }
+
+    @Override
     public SolrDocument getSolrDocsById(Long id, String solrUrl, String solrCore, Boolean isCloudSolr) {
         return null;
     }
