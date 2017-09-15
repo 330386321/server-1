@@ -14,6 +14,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -77,6 +78,8 @@ public class UserRedPacketController extends BaseController {
 	
 	@Autowired
 	private AdCountRecordService adCountRecordService;
+	
+	Logger log =Logger.getLogger(UserRedPacketController.class);
 
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "新增用户红包", notes = "新增用户红包（李洪军）", httpMethod = "POST")
@@ -185,8 +188,9 @@ public class UserRedPacketController extends BaseController {
 	@ApiOperation(value = "获取红包中最大值", notes = "获取红包中最大值", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.POST)
-	public Result<UserRedPacketReturnDTO> getUserRedpacketMaxMoney(@RequestParam @ApiParam(required = true, value = "红包ID") String redPacketId,@RequestParam @ApiParam(required = true, value = "发红包者ID") Long memberId) {
-		Result<UserRedpacketMaxMoneyDTO> result = userRedPacketService.getUserRedpacketMaxMoney(Long.parseLong(redPacketId));
+	public Result<UserRedPacketReturnDTO> getUserRedpacketMaxMoney(@RequestParam @ApiParam(required = true, value = "红包ID") Long redPacketId,@RequestParam @ApiParam(required = true, value = "发红包者ID") Long memberId) {
+		log.info("收到的红包id是:"+redPacketId);
+		Result<UserRedpacketMaxMoneyDTO> result = userRedPacketService.getUserRedpacketMaxMoney(redPacketId);
 		UserRedPacketReturnDTO dto =new UserRedPacketReturnDTO();
 		dto.setMoney(result.getModel().getMoney());
 		Result<UserDTO> user= memberService.findMemberInfo(memberId);

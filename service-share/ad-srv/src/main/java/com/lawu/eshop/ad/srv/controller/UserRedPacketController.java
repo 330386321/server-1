@@ -3,6 +3,7 @@
  */
 package com.lawu.eshop.ad.srv.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +44,7 @@ public class UserRedPacketController extends BaseController {
 	 */
 	@Autowired
 	private UserRedPacketService userRedPacketService;
+	Logger log =Logger.getLogger(UserRedPacketController.class);
 
 	/**
 	 * 新增红包记录
@@ -126,7 +128,8 @@ public class UserRedPacketController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.POST)
-	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMaxMoney(@RequestParam Long redPacketId) {
+	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMaxMoney(@RequestParam("redPacketId") Long redPacketId) {
+		log.info("log==="+redPacketId);
 		UserRedpacketMaxMoney maxMoney =userRedPacketService.getUserRedpacketMaxMoney(redPacketId);
 		UserRedpacketMaxMoneyDTO dto =new UserRedpacketMaxMoneyDTO();
 		dto.setMoney(maxMoney.getMaxMoney());
