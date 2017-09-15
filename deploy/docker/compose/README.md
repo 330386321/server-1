@@ -40,9 +40,10 @@ docker run --name nginx -it -d -p 80:80 \
 =====
 基础服务
 -----
+
 config-server
 ```bash
-docker run -d -p 8080:8080 --privileged --name config-server \
+sudo docker run -d -p 8080:8080 --privileged --name config-server \
     -v /usr/local/eshop/config:/root/config:ro \
     -e spring.profiles.active=native,dev \
     registry.eshop.com/config-server
@@ -50,7 +51,7 @@ docker run -d -p 8080:8080 --privileged --name config-server \
 
 eureka-server
 ```bash
-docker run -d -p 8888:8888 --privileged --name eureka-server \
+sudo docker run -d -p 8888:8888 --privileged --name eureka-server \
     -e spring.profiles.active=native,dev \
     registry.eshop.com/eureka-server
 ```
@@ -73,6 +74,7 @@ sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml up -d
 
 ```bash
 sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml down
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml pull
 ```
 
 或者

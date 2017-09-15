@@ -16,7 +16,7 @@ sudo docker run -d --name=zk --net=host \
     registry.cn-hangzhou.aliyuncs.com/acs-sample/zookeeper:3.4.8
 ```
 
-启动双节点
+正式环境启动
 ======
 ```Bash
 sudo docker run -d \
@@ -37,6 +37,32 @@ sudo docker run -d \
  -e SERVER_ID=2 \
  -e ADDITIONAL_ZOOKEEPER_1=server.1=192.168.100.90:2888:3888 \
  -e ADDITIONAL_ZOOKEEPER_2=server.2=192.168.100.91:2888:3888 \
+ -e ADDITIONAL_ZOOKEEPER_3=clientPort=2181 \
+ -v /etc/localtime:/etc/localtime:ro \
+registry.cn-hangzhou.aliyuncs.com/acs-sample/zookeeper:3.4.8
+```
+
+预发布环境启动
+======
+```Bash
+sudo docker run -d \
+ --name=zookeeper \
+ --net=host \
+ -e SERVER_ID=1 \
+ -e ADDITIONAL_ZOOKEEPER_1=server.1=192.168.100.93:2888:3888 \
+ -e ADDITIONAL_ZOOKEEPER_2=server.2=192.168.100.95:2888:3888 \
+ -e ADDITIONAL_ZOOKEEPER_3=clientPort=2181 \
+ -v /etc/localtime:/etc/localtime:ro \
+ registry.cn-hangzhou.aliyuncs.com/acs-sample/zookeeper:3.4.8
+```
+
+```Bash
+sudo docker run -d \
+ --name=zookeeper \
+ --net=host \
+ -e SERVER_ID=2 \
+ -e ADDITIONAL_ZOOKEEPER_1=server.1=192.168.100.93:2888:3888 \
+ -e ADDITIONAL_ZOOKEEPER_2=server.2=192.168.100.95:2888:3888 \
  -e ADDITIONAL_ZOOKEEPER_3=clientPort=2181 \
  -v /etc/localtime:/etc/localtime:ro \
 registry.cn-hangzhou.aliyuncs.com/acs-sample/zookeeper:3.4.8

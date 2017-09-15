@@ -1,7 +1,7 @@
 创建镜像
 ======
 ```bash
-sudo docker build -t eshop/rocketmq:3.2.6 .
+sudo docker build -t registry.eshop.com/rocketmq:3.2.6 .
 ``` 
         
         

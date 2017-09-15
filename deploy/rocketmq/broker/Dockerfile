@@ -1,4 +1,4 @@
-FROM eshop/rocketmq:3.2.6
+FROM registry.eshop.com/rocketmq:3.2.6
 
 ENV ROCKETMQ_HOME /usr/local/rocketmq
 
