@@ -476,57 +476,54 @@ public class AdServiceImpl implements AdService {
 	@Override
 	@Transactional
 	public ClickPointBO clickAd(Long id, Long memberId, String num) {
-		
-		Result<Object> result = adCountRecordService.getAdCountRecord(id);
-		ClickPointBO  clickBO = new ClickPointBO();
-		if(result.getModel()==null){
-			clickBO.setPoint(BigDecimal.valueOf(0));
-			clickBO.setOverClick(false);
-			return clickBO;
-		}else{
-			List<Object> list=(List<Object>) result.getModel();
-			if((Integer)list.get(0)<0){
-				clickBO.setPoint(BigDecimal.valueOf(0));
+
+		Boolean flag = lockService.tryLock(LockModule.LOCK_AD_SRV, "AD_CLICK_LOCK_", id);
+		ClickPointBO clickBO = new ClickPointBO();
+		clickBO.setPoint(BigDecimal.valueOf(0));
+		clickBO.setOverClick(false);
+
+		// 成功抢到锁
+		if (flag) {
+
+			Result<Object> result = adCountRecordService.getAdCountRecord(id);
+			// 是否真正抢到广告
+			if (result.getModel() != null && (Long) result.getModel() >= 0L) {
+
+				MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
+
+				AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+
+				// 再次判断是否点击完
+				if (adDO.getHits() >= adDO.getAdCount()) {
+					clickBO.setOverClick(true);
+				} else {
+
+					memberAdRecordD.setAdId(adDO.getId());
+					memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
+					memberAdRecordD.setMemberId(memberId);
+					memberAdRecordD.setMemberNum(num);
+					memberAdRecordD.setStatus(MemberAdRecordStatusEnum.NONE.getVal());
+					memberAdRecordD.setGmtCreate(new Date());
+					memberAdRecordD.setClickDate(new Date());
+					memberAdRecordD.setOriginalPoint(adDO.getPoint());
+					memberAdRecordDOMapper.insert(memberAdRecordD);
+
+					// 修改点击次数记录
+					adDOMapperExtend.updateHitsByPrimaryKey(id);
+					//修改领取次数
+					clickBO.setOverClick(false);
+					clickBO.setPoint(adDO.getPoint());
+					adDOMapperExtend.updateHitsByPrimaryKey(id);
+					//发送消息修改积分
+					userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
+				}
+
+			} else {
+
 				clickBO.setOverClick(true);
-				return clickBO;
-			}
-		}
-
-		Boolean flag=lockService.tryLock(LockModule.LOCK_AD_SRV,"AD_CLICK_LOCK_",id);
-
-		MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
-		AdDO adDO = new AdDO();
-
-		if(flag){
-
-			adDO = adDOMapper.selectByPrimaryKey(id);
-
-			if(adDO.getHits()>=adDO.getAdCount()){
-				clickBO.setPoint(BigDecimal.valueOf(0));
-				clickBO.setOverClick(true);
-				return clickBO;
 			}
 
-			memberAdRecordD.setAdId(adDO.getId());
-			memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
-			memberAdRecordD.setMemberId(memberId);
-			memberAdRecordD.setMemberNum(num);
-			memberAdRecordD.setStatus(MemberAdRecordStatusEnum.NONE.getVal());
-			memberAdRecordD.setGmtCreate(new Date());
-			memberAdRecordD.setClickDate(new Date());
-			memberAdRecordD.setOriginalPoint(adDO.getPoint());
-			memberAdRecordDOMapper.insert(memberAdRecordD);
-
-			// 修改点击次数记录
-			adDOMapperExtend.updateHitsByPrimaryKey(id);
-			//修改领取次数
-			clickBO.setOverClick(false);
-			clickBO.setPoint(adDO.getPoint());
-			adDOMapperExtend.updateHitsByPrimaryKey(id);
-			//发送消息修改积分
-			userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
-
-			lockService.unLock(LockModule.LOCK_AD_SRV,"AD_CLICK_LOCK_",id);
+			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_CLICK_LOCK_", id);
 
 		}
 
@@ -605,62 +602,59 @@ public class AdServiceImpl implements AdService {
 	@Override
 	@Transactional
 	public BigDecimal clickPraise(Long id, Long memberId, String num) {
-
-		Result<Object> result = adCountRecordService.getAdCountRecord(id);
-
-		if(result.getModel()==null){
-			return BigDecimal.valueOf(0);
-		}else{
-			List<Object> list=(List<Object>) result.getModel();
-			if((Integer)list.get(0)<0){
-				return BigDecimal.valueOf(0);
-			}
-		}
-		Boolean flag=lockService.tryLock(LockModule.LOCK_AD_SRV,"AD_PRAISE_LOCK_",id);
+		Boolean flag = lockService.tryLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", id);
 		PointPoolDO pointPool = new PointPoolDO();
-		Double point =0.0;
+		Double point = 0.0;
 
-		if(flag){
-			AdDO  adDO=adDOMapper.selectByPrimaryKey(id);
-			//已经领取个数
-			int praiseCount=adDO.getHits()==null?0:adDO.getHits();
+		// 成功抢到锁
+		if (flag) {
 
-			PointPoolDOView  view =pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
-			//剩余积分
-			BigDecimal subMoney=new BigDecimal(0);
-			//剩余积分
-			if(view == null){
-			    subMoney=adDO.getTotalPoint().subtract(BigDecimal.valueOf(0));
-			}else{
-				subMoney=adDO.getTotalPoint().subtract(view.getPoint());
+			Result<Object> result = adCountRecordService.getAdCountRecord(id);
+
+			// 是否已抢完
+			if (result.getModel() != null && (Long) result.getModel() >= 0L) {
+
+				AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+				//已经领取个数
+				int praiseCount = adDO.getHits() == null ? 0 : adDO.getHits();
+
+				PointPoolDOView view = pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
+				//剩余积分
+				BigDecimal subMoney = new BigDecimal(0);
+				//剩余积分
+				if (view == null) {
+					subMoney = adDO.getTotalPoint().subtract(BigDecimal.valueOf(0));
+				} else {
+					subMoney = adDO.getTotalPoint().subtract(view.getPoint());
+				}
+
+				point = SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), adDO.getAdCount(), praiseCount);
+
+				pointPool.setAdId(adDO.getId());
+				pointPool.setMerchantId(adDO.getMerchantId());
+				pointPool.setMemberId(memberId);
+				pointPool.setMemberNum(num);
+				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+				pointPool.setGmtCreate(new Date());
+				pointPool.setGmtModified(new Date());
+				pointPool.setOrdinal(praiseCount);
+				pointPool.setPoint(BigDecimal.valueOf(point));
+				pointPoolDOMapper.insert(pointPool);
+
+				if (adDO.getAdCount() - 1 == praiseCount || praiseCount >= adDO.getAdCount()) {
+					AdDO ad = new AdDO();
+					ad.setId(adDO.getId());
+					ad.setGmtModified(new Date());
+					ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
+					adDOMapper.updateByPrimaryKeySelective(ad);
+				}
+
+				//修改领取次数
+				adDOMapperExtend.updateHitsByPrimaryKey(id);
+				adtransactionMainAddService.sendNotice(pointPool.getId());
 			}
-
-			point= SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), adDO.getAdCount(),praiseCount);
-
-			pointPool.setAdId(adDO.getId());
-			pointPool.setMerchantId(adDO.getMerchantId());
-			pointPool.setMemberId(memberId);
-			pointPool.setMemberNum(num);
-			pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
-			pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
-			pointPool.setGmtCreate(new Date());
-			pointPool.setGmtModified(new Date());
-			pointPool.setOrdinal(praiseCount);
-			pointPool.setPoint(BigDecimal.valueOf(point));
-			pointPoolDOMapper.insert(pointPool);
-
-			if(adDO.getAdCount()-1==praiseCount || praiseCount>=adDO.getAdCount()){
-				AdDO ad = new AdDO();
-				ad.setId(adDO.getId());
-				ad.setGmtModified(new Date());
-				ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
-				adDOMapper.updateByPrimaryKeySelective(ad);
-			}
-
-			//修改领取次数
-			adDOMapperExtend.updateHitsByPrimaryKey(id);
-			adtransactionMainAddService.sendNotice(pointPool.getId());
-			lockService.unLock(LockModule.LOCK_AD_SRV,"AD_PRAISE_LOCK_",id);
+			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", id);
 		}
 
 		return BigDecimal.valueOf(point).multiply(new BigDecimal(PropertyType.ad_account_scale_default));
@@ -786,73 +780,70 @@ public class AdServiceImpl implements AdService {
 
 		AdDOExample example = new AdDOExample();
 		example.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.getVal()).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
-		List<AdDO> listAd=adDOMapper.selectByExample(example);
+		List<AdDO> listAd = adDOMapper.selectByExample(example);
 		if (listAd.isEmpty()) {
 			return new BigDecimal(0);
 		}
 		AdDO adDO = listAd.get(0);
-		
-		Result<Object> result = adCountRecordService.getAdCountRecord(adDO.getId());
-		if(result.getModel()==null){
-			return BigDecimal.valueOf(0);
-		}else{
-			List<Object> list=(List<Object>) result.getModel();
-			if((Integer)list.get(0)<0){
-				return BigDecimal.valueOf(0);
-			}
-		}
 
-		Boolean flag=lockService.tryLock(LockModule.LOCK_AD_SRV,"AD_RED_PACKET_LOCK_",adDO.getId());
+		Boolean flag = lockService.tryLock(LockModule.LOCK_AD_SRV, "AD_RED_PACKET_LOCK_", adDO.getId());
 		PointPoolDO pointPool = new PointPoolDO();
-		BigDecimal money=new BigDecimal(0);
-		
-		if(flag){
-			int redPacketCount=adDO.getHits()==null?0:adDO.getHits();
+		BigDecimal money = new BigDecimal(0);
 
-			PointPoolDOView  view =pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
-			BigDecimal subMoney=new BigDecimal(0);
-			//剩余积分
-			if(view == null){
-			    subMoney=adDO.getTotalPoint().subtract(BigDecimal.valueOf(0));
-			}else{
-				subMoney=adDO.getTotalPoint().subtract(view.getPoint());
-			}
+		// 成功抢到锁
+		if (flag) {
+			Result<Object> result = adCountRecordService.getAdCountRecord(adDO.getId());
+			// 是否已抢完
+			if (result.getModel() != null && (Long) result.getModel() >= 0L) {
 
-			if(adDO.getPutWay()==PutWayEnum.PUT_WAY_LUCK.val){ //手气红包
-				 Double point= SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), adDO.getAdCount(),redPacketCount);
-				 money=BigDecimal.valueOf(point);
-			}else{ //普通红包
-				if(redPacketCount==adDO.getAdCount()-1){
-					money=subMoney;
-				}else{
-					money = adDO.getTotalPoint().divide(new BigDecimal(adDO.getAdCount()), 2, RoundingMode.HALF_UP);
+				int redPacketCount = adDO.getHits() == null ? 0 : adDO.getHits();
+
+				PointPoolDOView view = pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
+				BigDecimal subMoney = new BigDecimal(0);
+				//剩余积分
+				if (view == null) {
+					subMoney = adDO.getTotalPoint().subtract(BigDecimal.valueOf(0));
+				} else {
+					subMoney = adDO.getTotalPoint().subtract(view.getPoint());
+				}
+
+				if (adDO.getPutWay() == PutWayEnum.PUT_WAY_LUCK.val) { //手气红包
+					Double point = SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), adDO.getAdCount(), redPacketCount);
+					money = BigDecimal.valueOf(point);
+				} else { //普通红包
+					if (redPacketCount == adDO.getAdCount() - 1) {
+						money = subMoney;
+					} else {
+						money = adDO.getTotalPoint().divide(new BigDecimal(adDO.getAdCount()), 2, RoundingMode.HALF_UP);
+					}
+				}
+
+				pointPool.setAdId(adDO.getId());
+				pointPool.setMerchantId(adDO.getMerchantId());
+				pointPool.setMemberId(memberId);
+				pointPool.setMemberNum(memberNum);
+				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
+				pointPool.setGmtCreate(new Date());
+				pointPool.setGmtModified(new Date());
+				pointPool.setOrdinal(redPacketCount);
+				pointPool.setPoint(money);
+				pointPoolDOMapper.insert(pointPool);
+				adDOMapperExtend.updateHitsByPrimaryKey(adDO.getId());
+
+				userSweepRedtransactionMainAddService.sendNotice(pointPool.getId());
+
+				if (adDO.getAdCount() - 1 == redPacketCount || redPacketCount >= adDO.getAdCount()) {
+					AdDO ad = new AdDO();
+					ad.setId(adDO.getId());
+					ad.setGmtModified(new Date());
+					ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
+					adDOMapper.updateByPrimaryKeySelective(ad);
 				}
 			}
 
-			pointPool.setAdId(adDO.getId());
-			pointPool.setMerchantId(adDO.getMerchantId());
-			pointPool.setMemberId(memberId);
-			pointPool.setMemberNum(memberNum);
-			pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
-			pointPool.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
-			pointPool.setGmtCreate(new Date());
-			pointPool.setGmtModified(new Date());
-			pointPool.setOrdinal(redPacketCount);
-			pointPool.setPoint(money);
-			pointPoolDOMapper.insert(pointPool);
-			adDOMapperExtend.updateHitsByPrimaryKey(adDO.getId());
 
-			userSweepRedtransactionMainAddService.sendNotice(pointPool.getId());
-
-			lockService.unLock(LockModule.LOCK_AD_SRV,"AD_PRAISE_LOCK_",adDO.getId());
-
-			if(adDO.getAdCount()-1==redPacketCount || redPacketCount>=adDO.getAdCount()){
-				AdDO ad = new AdDO();
-				ad.setId(adDO.getId());
-				ad.setGmtModified(new Date());
-				ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
-				adDOMapper.updateByPrimaryKeySelective(ad);
-			}
+			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", adDO.getId());
 
 		}
 

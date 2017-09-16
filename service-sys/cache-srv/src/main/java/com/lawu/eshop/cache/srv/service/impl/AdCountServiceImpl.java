@@ -24,13 +24,14 @@ public class AdCountServiceImpl implements AdCountService ,InitializingBean{
 	public Object getAdCountRecord(Long id) {
 		
 		String key = KeyConstant.REDIS_KEY_AD_COUNT.concat(id.toString());
-		stringRedisTemplate.watch(key);		
+		/*stringRedisTemplate.watch(key);
 		stringRedisTemplate.multi();
 		//总数减一
 		stringRedisTemplate.boundValueOps(key).increment(-1);
 		
 		Object rs = stringRedisTemplate.exec();
-		return rs;
+		return rs;*/
+		return stringRedisTemplate.boundValueOps(key).increment(-1);
 	}
 	
 
