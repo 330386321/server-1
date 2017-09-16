@@ -15,7 +15,7 @@ services:
           - /etc/localtime:/etc/localtime:ro
           - /usr/local/eshop/media:/usr/local/eshop/media
     networks:
-      - eshop_eshopNet
+      - eshopNet
   merchant-api:
     image: registry.eshop.com/merchant-api
     container_name: merchant-api
@@ -29,7 +29,7 @@ services:
           - /etc/localtime:/etc/localtime:ro
           - /usr/local/eshop/media:/usr/local/eshop/media
     networks:
-      - eshop_eshopNet
+      - eshopNet
   operator-api:
     image: registry.eshop.com/operator-api
     container_name: operator-api
@@ -42,7 +42,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   agent-api:
     image: registry.eshop.com/agent-api
     container_name: agent-api
@@ -55,7 +55,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   external-api:
     image: registry.eshop.com/external-api
     container_name: external-api
@@ -68,7 +68,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   jobs:
     image: registry.eshop.com/jobs
     container_name: jobs
@@ -81,7 +81,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   cache-srv:
     image: registry.eshop.com/cache-srv
     container_name: cache-srv
@@ -94,7 +94,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   ad-srv:
     image: registry.eshop.com/ad-srv
     container_name: ad-srv
@@ -107,7 +107,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   mall-srv:
     image: registry.eshop.com/mall-srv
     container_name: mall-srv
@@ -120,7 +120,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   order-srv:
     image: registry.eshop.com/order-srv
     container_name: order-srv
@@ -133,7 +133,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   product-srv:
     image: registry.eshop.com/product-srv
     container_name: product-srv
@@ -146,7 +146,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   property-srv:
     image: registry.eshop.com/property-srv
     container_name: property-srv
@@ -159,7 +159,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   user-srv:
     image: registry.eshop.com/user-srv
     container_name: user-srv
@@ -172,7 +172,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   operator-srv:
     image: registry.eshop.com/operator-srv
     container_name: operator-srv
@@ -185,7 +185,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   statistics-srv:
     image: registry.eshop.com/statistics-srv
     container_name: statistics-srv
@@ -198,7 +198,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
   agent-srv:
     image: registry.eshop.com/agent-srv
     container_name: agent-srv
@@ -211,9 +211,9 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshop_eshopNet
+      - eshopNet
 
 
 networks:
-  eshop_eshopNet:
-    external: true
+  eshopNet:
+    driver: overlay
