@@ -200,7 +200,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 
 			Result<Object> result = adCountRecordService.getUserRedPacketCountRecord(redPacketId);
 			// 是否真正抢到广告
-			if (result.getModel() != null && (Long) result.getModel() >= 0L) {
+			if (result.getModel() != null && (int) result.getModel() >= 0) {
 				UserRedPacketDO userRedPacketDO = userRedPacketDOMapper.selectByPrimaryKey(redPacketId);
 
 				//已领取个数

@@ -487,7 +487,7 @@ public class AdServiceImpl implements AdService {
 
 			Result<Object> result = adCountRecordService.getAdCountRecord(id);
 			// 是否真正抢到广告
-			if (result.getModel() != null && (Long) result.getModel() >= 0L) {
+			if (result.getModel() != null && (int) result.getModel() >= 0) {
 
 				MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
 
@@ -612,7 +612,7 @@ public class AdServiceImpl implements AdService {
 			Result<Object> result = adCountRecordService.getAdCountRecord(id);
 
 			// 是否已抢完
-			if (result.getModel() != null && (Long) result.getModel() >= 0L) {
+			if (result.getModel() != null && (int) result.getModel() >= 0) {
 
 				AdDO adDO = adDOMapper.selectByPrimaryKey(id);
 				//已经领取个数
@@ -794,7 +794,7 @@ public class AdServiceImpl implements AdService {
 		if (flag) {
 			Result<Object> result = adCountRecordService.getAdCountRecord(adDO.getId());
 			// 是否已抢完
-			if (result.getModel() != null && (Long) result.getModel() >= 0L) {
+			if (result.getModel() != null && (int) result.getModel() >= 0) {
 
 				int redPacketCount = adDO.getHits() == null ? 0 : adDO.getHits();
 
