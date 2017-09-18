@@ -65,6 +65,7 @@ import com.lawu.eshop.member.api.service.FansMerchantService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantService;
+import com.lawu.eshop.member.api.service.PraiseDoHanlderMinusPointService;
 import com.lawu.eshop.member.api.service.PropertyInfoDataService;
 import com.lawu.eshop.member.api.service.VerifyCodeService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
@@ -130,9 +131,10 @@ public class AdController extends BaseController {
 	
 	@Autowired
 	private AdLexiconService adLexiconService;
+
 	
 	@Autowired
-	private AdCountRecordService adCountRecordService;
+	private PraiseDoHanlderMinusPointService praiseDoHanlderMinusPointService;
 
 	/**
 	 * @see
@@ -333,9 +335,7 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		String num = UserUtil.getCurrentUserNum(getRequest());
-		return adService.clickPraise(id,memberId,num);
+		return adExtendService.clickPraise(id);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -422,6 +422,7 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "doHanlderMinusPoint", method = RequestMethod.POST)
 	public Result doHanlderMinusPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "广告id") Long id) {
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
+		long memberId = UserUtil.getCurrentUserId(getRequest());
 		PointDetailQueryData1Param query = new PointDetailQueryData1Param();
 		query.setBizId(id.toString());
 		query.setPointType(MemberTransactionTypeEnum.PRAISE_AD.getValue());
@@ -438,7 +439,13 @@ public class AdController extends BaseController {
 		param.setPoint("20");
 		param.setBizId(id.toString());
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PRAISE_AD);
-		return propertyInfoDataService.doHanlderMinusPoint(param);
+		Result result = propertyInfoDataService.doHanlderMinusPoint(param);
+		
+		if(isSuccess(result)){
+			praiseDoHanlderMinusPointService.setAdPraiseIsDoPointRecord(String.valueOf(id)+String.valueOf(memberId));
+		}
+		
+		return result;
 
 	}
 

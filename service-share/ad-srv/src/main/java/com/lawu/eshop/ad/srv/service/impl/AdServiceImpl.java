@@ -81,6 +81,7 @@ import com.lawu.eshop.ad.srv.mapper.extend.PointPoolDOMapperExtend;
 import com.lawu.eshop.ad.srv.service.AdCountRecordService;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
+import com.lawu.eshop.ad.srv.service.PraiseDoHanlderMinusPointService;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
@@ -154,6 +155,9 @@ public class AdServiceImpl implements AdService {
 
 	@Autowired
 	private AdCountRecordService adCountRecordService;
+	
+	@Autowired
+	private PraiseDoHanlderMinusPointService praiseDoHanlderMinusPointService;
 
 
 	/**
@@ -603,11 +607,12 @@ public class AdServiceImpl implements AdService {
 	@Override
 	@Transactional
 	public AdClickPraiseInfoBO clickPraise(Long id, Long memberId, String num) {
-		Boolean flag = lockService.tryLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", id);
-		PointPoolDO pointPool = new PointPoolDO();
 		AdClickPraiseInfoBO bo = new AdClickPraiseInfoBO();
+		PointPoolDO pointPool = new PointPoolDO();
 		Double point = 0.0;
-
+		
+		Boolean flag = lockService.tryLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", id);
+		
 		// 成功抢到锁
 		if (flag) {
 
@@ -617,6 +622,17 @@ public class AdServiceImpl implements AdService {
 			if (result.getModel() != null && (int) result.getModel() >= 0) {
 
 				AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+				if(adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==1 || adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==0){
+					//再次判断用户是否扣除过积分
+					Result<Boolean>  isDoPoint = praiseDoHanlderMinusPointService.getAdPraiseIsDoPointRecord(String.valueOf(id)+String.valueOf(memberId));
+					//如果没有扣除积分 不作抢赞操作
+					if(!isDoPoint.getModel()){
+						bo.setSysWordFlag(false);
+						bo.setPoint(BigDecimal.valueOf(point));
+						return bo;
+					}
+				}
+				
 				//已经领取个数
 				int praiseCount = adDO.getHits() == null ? 0 : adDO.getHits();
 
@@ -651,12 +667,13 @@ public class AdServiceImpl implements AdService {
 					ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
 					adDOMapper.updateByPrimaryKeySelective(ad);
 				}
-				bo.setSysWordFlag(false);
-				bo.setPoint(BigDecimal.valueOf(point).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
+				
 				//修改领取次数
 				adDOMapperExtend.updateHitsByPrimaryKey(id);
 				adtransactionMainAddService.sendNotice(pointPool.getId());
 			}
+			bo.setSysWordFlag(false);
+			bo.setPoint(BigDecimal.valueOf(point).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
 			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", id);
 			
 		}else{

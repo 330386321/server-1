@@ -68,6 +68,11 @@ public class KeyConstant {
      * 广告可领取数量
      */
     public static final String REDIS_KEY_AD_COUNT = "AD_KEY_MEMBER_COUNT_";
+    
+    /**
+     * 大额抢赞记录
+     */
+    public static final String REDIS_KEY_AD_PRAISE_POINT_RECORD_ = "AD_KEY_PRAISE_POINT_RECORD_";
 
 
     /**
