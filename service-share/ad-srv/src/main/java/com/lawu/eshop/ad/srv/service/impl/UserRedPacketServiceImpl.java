@@ -130,17 +130,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	@Override
 	public boolean isExistsRedPacket(Long redPacketId) {
 		UserRedPacketDO userRedpacket =userRedPacketDOMapper.selectByPrimaryKey(redPacketId);
-		Date overdueDate = DateUtil.getDayAfter(userRedpacket.getGmtCreate());// 获取红包过期时间
-		if(overdueDate.getTime()<new Date().getTime()){//过期
-			setRedpacketOverDue(redPacketId);
-			return false;
-		}else{
-			UserTakedRedPacketDOExample example = new UserTakedRedPacketDOExample();
-			example.createCriteria().andUserRedPackIdEqualTo(redPacketId)
-			.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-			int count = userTakedRedPacketDOMapper.countByExample(example);
-			return count > 0 ? true : false;
-		}
+		return userRedpacket.getStatus()== UserRedPacketEnum.USER_STATUS_EFFECTIVE.val? true : false;
 	}
 
 	public UserPacketRefundParam selectBackTotalMoney(Long userRedpacketId){
@@ -187,7 +177,6 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	/**
 	 * 用户领取红包
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public UserRedpacketMaxMoney getUserRedpacketMoney(Long redPacketId, String userNum) {
@@ -329,11 +318,9 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		if (!list.isEmpty()) {
 			for (int i = 0; i < list.size(); i++) {
 				UserRedPacketDO userRed = list.get(i);
-				UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
-				userTakedExample.createCriteria().andUserRedPackIdEqualTo(userRed.getId())
-						.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-				List<UserTakedRedPacketDO> listTaked = userTakedRedPacketDOMapper.selectByExample(userTakedExample);
-				BigDecimal totalBackMoney = getTotalBackMoney(listTaked);
+				UserRedpacketMaxMoney view = userTakedRedpacketBOMapperExtend.getSumMoney(userRed.getId());
+				BigDecimal totalBackMoney = userRed.getTotalMoney().subtract(view.getMaxMoney());
+				
 				userRed.setGmtModified(new Date());
 				userRed.setStatus(UserRedPacketEnum.USER_STATUS_OUT.val);
 				userRed.setRefundMoney(totalBackMoney);
