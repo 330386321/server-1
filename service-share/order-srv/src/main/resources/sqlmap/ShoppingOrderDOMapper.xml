@@ -45,6 +45,7 @@
     <result column="gmt_payment" jdbcType="TIMESTAMP" property="gmtPayment" />
     <result column="gmt_transport" jdbcType="TIMESTAMP" property="gmtTransport" />
     <result column="gmt_transaction" jdbcType="TIMESTAMP" property="gmtTransaction" />
+    <result column="gmt_done" jdbcType="TIMESTAMP" property="gmtDone" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
   </resultMap>
@@ -126,7 +127,7 @@
     is_automatic_receipt, is_done, shopping_cart_ids_str, order_num, payment_method, 
     third_number, is_needs_logistics, waybill_num, express_company_id, express_company_code, 
     express_company_name, gmt_commission, gmt_payment, gmt_transport, gmt_transaction, 
-    gmt_create, gmt_modified
+    gmt_done, gmt_create, gmt_modified
   </sql>
   <select id="selectByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample" resultMap="BaseResultMap">
     <!--
@@ -194,8 +195,8 @@
       payment_method, third_number, is_needs_logistics, 
       waybill_num, express_company_id, express_company_code, 
       express_company_name, gmt_commission, gmt_payment, 
-      gmt_transport, gmt_transaction, gmt_create, 
-      gmt_modified)
+      gmt_transport, gmt_transaction, gmt_done, 
+      gmt_create, gmt_modified)
     values (#{memberId,jdbcType=BIGINT}, #{memberNum,jdbcType=VARCHAR}, #{memberNickname,jdbcType=VARCHAR}, 
       #{merchantId,jdbcType=BIGINT}, #{merchantStoreId,jdbcType=BIGINT}, #{merchantStoreRegionPath,jdbcType=VARCHAR}, 
       #{merchantNum,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, #{consigneeName,jdbcType=VARCHAR}, 
@@ -208,8 +209,8 @@
       #{paymentMethod,jdbcType=TINYINT}, #{thirdNumber,jdbcType=VARCHAR}, #{isNeedsLogistics,jdbcType=BIT}, 
       #{waybillNum,jdbcType=VARCHAR}, #{expressCompanyId,jdbcType=INTEGER}, #{expressCompanyCode,jdbcType=VARCHAR}, 
       #{expressCompanyName,jdbcType=VARCHAR}, #{gmtCommission,jdbcType=TIMESTAMP}, #{gmtPayment,jdbcType=TIMESTAMP}, 
-      #{gmtTransport,jdbcType=TIMESTAMP}, #{gmtTransaction,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModified,jdbcType=TIMESTAMP})
+      #{gmtTransport,jdbcType=TIMESTAMP}, #{gmtTransaction,jdbcType=TIMESTAMP}, #{gmtDone,jdbcType=TIMESTAMP}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderDO">
     <!--
@@ -335,6 +336,9 @@
       <if test="gmtTransaction != null">
         gmt_transaction,
       </if>
+      <if test="gmtDone != null">
+        gmt_done,
+      </if>
       <if test="gmtCreate != null">
         gmt_create,
       </if>
@@ -456,6 +460,9 @@
       </if>
       <if test="gmtTransaction != null">
         #{gmtTransaction,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtDone != null">
+        #{gmtDone,jdbcType=TIMESTAMP},
       </if>
       <if test="gmtCreate != null">
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -599,6 +606,9 @@
       <if test="record.gmtTransaction != null">
         gmt_transaction = #{record.gmtTransaction,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.gmtDone != null">
+        gmt_done = #{record.gmtDone,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.gmtCreate != null">
         gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
       </if>
@@ -655,6 +665,7 @@
       gmt_payment = #{record.gmtPayment,jdbcType=TIMESTAMP},
       gmt_transport = #{record.gmtTransport,jdbcType=TIMESTAMP},
       gmt_transaction = #{record.gmtTransaction,jdbcType=TIMESTAMP},
+      gmt_done = #{record.gmtDone,jdbcType=TIMESTAMP},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -782,6 +793,9 @@
       <if test="gmtTransaction != null">
         gmt_transaction = #{gmtTransaction,jdbcType=TIMESTAMP},
       </if>
+      <if test="gmtDone != null">
+        gmt_done = #{gmtDone,jdbcType=TIMESTAMP},
+      </if>
       <if test="gmtCreate != null">
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
@@ -835,6 +849,7 @@
       gmt_payment = #{gmtPayment,jdbcType=TIMESTAMP},
       gmt_transport = #{gmtTransport,jdbcType=TIMESTAMP},
       gmt_transaction = #{gmtTransaction,jdbcType=TIMESTAMP},
+      gmt_done = #{gmtDone,jdbcType=TIMESTAMP},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

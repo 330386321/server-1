@@ -2696,6 +2696,66 @@ public class ShoppingOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andGmtDoneIsNull() {
+            addCriterion("gmt_done is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneIsNotNull() {
+            addCriterion("gmt_done is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneEqualTo(Date value) {
+            addCriterion("gmt_done =", value, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneNotEqualTo(Date value) {
+            addCriterion("gmt_done <>", value, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneGreaterThan(Date value) {
+            addCriterion("gmt_done >", value, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneGreaterThanOrEqualTo(Date value) {
+            addCriterion("gmt_done >=", value, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneLessThan(Date value) {
+            addCriterion("gmt_done <", value, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneLessThanOrEqualTo(Date value) {
+            addCriterion("gmt_done <=", value, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneIn(List<Date> values) {
+            addCriterion("gmt_done in", values, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneNotIn(List<Date> values) {
+            addCriterion("gmt_done not in", values, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneBetween(Date value1, Date value2) {
+            addCriterion("gmt_done between", value1, value2, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneNotBetween(Date value1, Date value2) {
+            addCriterion("gmt_done not between", value1, value2, "gmtDone");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtCreateIsNull() {
             addCriterion("gmt_create is null");
             return (Criteria) this;

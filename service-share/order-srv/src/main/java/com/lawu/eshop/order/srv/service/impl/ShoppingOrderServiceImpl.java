@@ -612,6 +612,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 如果是自动收货，设置订单的状态为完成
 		if (isAutomaticReceipt) {
 			shoppingOrderUpdateDO.setIsDone(true);
+			shoppingOrderUpdateDO.setGmtDone(new Date());
 		}
 		// 更改订单状态为交易成功
 		shoppingOrderUpdateDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
@@ -1382,11 +1383,11 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(param.getFlag().getValue())) {
 			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.DAY.getValue());
-			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyyMM"));
+			shoppingOrderReportDataParam.setGmtDone(DateUtil.getDateFormat(new Date(), "yyyyMM"));
 			x = DateUtil.getNowMonthDay();
 		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(param.getFlag().getValue())) {
 			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.MONTH.getValue());
-			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyy"));
+			shoppingOrderReportDataParam.setGmtDone(DateUtil.getDateFormat(new Date(), "yyyy"));
 			x = 12;
 		}
 
@@ -1495,6 +1496,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		update.setSendTime(0);
 		update.setId(shoppingOrderExtendDO.getId());
 		update.setIsDone(true);
+		update.setGmtDone(new Date());
 		update.setGmtModified(new Date());
 		shoppingOrderDOMapper.updateByPrimaryKeySelective(update);
 

@@ -104,6 +104,7 @@
 		<result column="gmt_payment" jdbcType="TIMESTAMP" property="gmtPayment" />
 		<result column="gmt_transport" jdbcType="TIMESTAMP" property="gmtTransport" />
 		<result column="gmt_transaction" jdbcType="TIMESTAMP" property="gmtTransaction" />
+		<result column="gmt_done" jdbcType="TIMESTAMP" property="gmtDone" />
 		<result column="so_gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
 		<result column="so_gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
 	</resultMap>
@@ -173,7 +174,7 @@
 		so_express_company_id,
 		so.express_company_code as so_express_company_code, so.express_company_name as so_express_company_name, so.gmt_commission,
 		so.gmt_payment, so.gmt_transport,
-		so.gmt_transaction,
+		so.gmt_transaction,  so.gmt_done,
 		so.gmt_create as so_gmt_create, so.gmt_modified as so_gmt_modified
 	</sql>
 	
