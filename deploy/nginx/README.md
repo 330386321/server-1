@@ -32,7 +32,7 @@ docker run --name nginx_https -it -d -p 80:80 -p 81:81 \
 ----
 
 ```bash
-docker run --name nginx -it -d -p 80:80 \
+sudo docker run --name nginx -it -d -p 80:80 \
     -v /usr/local/eshop/nginx/nginx_pp.conf:/etc/nginx/nginx.conf:ro \
     -v /usr/local/eshop/media:/usr/local/eshop/media:ro \
     -v /usr/local/eshop/html:/usr/local/eshop/html:ro \

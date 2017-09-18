@@ -1,7 +1,7 @@
 namesrvAddr=192.168.100.95:9876;192.168.100.93:9876
 brokerIP1=192.168.1.93
-listenPort=10922
-haListenPort=10923
+listenPort=10911
+haListenPort=10912
 brokerName=broker-b
 brokerClusterName=DefaultCluster
 brokerId=0

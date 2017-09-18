@@ -44,7 +44,7 @@ docker run --name nginx -it -d -p 80:80 \
 config-server
 ```bash
 sudo docker run -d -p 8080:8080 --privileged --name config-server \
-    -v /usr/local/eshop/config:/root/config:ro \
+    -v /usr/local/eshop/config:/usr/local/eshop/config:ro \
     -e spring.profiles.active=native,dev \
     registry.eshop.com/config-server
 ```
