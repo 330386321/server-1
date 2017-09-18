@@ -60,6 +60,7 @@ import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.AdClickPraiseInfoBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
@@ -420,15 +421,15 @@ public class AdController extends BaseController {
 	public Result<PraisePointDTO> clickPraise(@PathVariable Long id, @RequestParam Long memberId, @RequestParam String num) {
 		Boolean flag = pointPoolService.selectStatusByMember(id, memberId);
 		if (flag) return successCreated(ResultCode.AD_PRAISE_POINT_GET);
+		AdClickPraiseInfoBO bo = adService.clickPraise(id, memberId, num);
 		
-		BigDecimal point = adService.clickPraise(id, memberId, num);
-		if (point.compareTo(new BigDecimal(0)) == 0) {
+		if (bo.getPoint().compareTo(new BigDecimal(0)) == 0 && !bo.isSysWordFlag()) {
 			return successCreated(ResultCode.AD_PRAISE_PUTED);
-		} else {
-			PraisePointDTO dto = new PraisePointDTO();
-			dto.setPoint(point);
-			return successCreated(dto);
-		}
+		} 
+		
+		PraisePointDTO dto = new PraisePointDTO();
+		dto.setPoint(bo.getPoint());
+		return successCreated(dto);
 
 	}
 

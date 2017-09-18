@@ -40,6 +40,7 @@ import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.AdClickPraiseInfoBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
@@ -601,9 +602,10 @@ public class AdServiceImpl implements AdService {
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
-	public BigDecimal clickPraise(Long id, Long memberId, String num) {
+	public AdClickPraiseInfoBO clickPraise(Long id, Long memberId, String num) {
 		Boolean flag = lockService.tryLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", id);
 		PointPoolDO pointPool = new PointPoolDO();
+		AdClickPraiseInfoBO bo = new AdClickPraiseInfoBO();
 		Double point = 0.0;
 
 		// 成功抢到锁
@@ -649,15 +651,20 @@ public class AdServiceImpl implements AdService {
 					ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
 					adDOMapper.updateByPrimaryKeySelective(ad);
 				}
-
+				bo.setSysWordFlag(false);
+				bo.setPoint(BigDecimal.valueOf(point).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
 				//修改领取次数
 				adDOMapperExtend.updateHitsByPrimaryKey(id);
 				adtransactionMainAddService.sendNotice(pointPool.getId());
 			}
 			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", id);
+			
+		}else{
+			bo.setPoint(BigDecimal.valueOf(point));
+			bo.setSysWordFlag(true);
 		}
-
-		return BigDecimal.valueOf(point).multiply(new BigDecimal(PropertyType.ad_account_scale_default));
+		
+		return bo;
 
 	}
 
