@@ -168,7 +168,8 @@ public class ProductSolrController extends BaseController {
                     searchWordDTO.setName(keyword.trim());
 
                     query = new SolrQuery();
-                    query.setQuery("keyword_ss:" + keyword.trim());
+                    //query.setQuery("keyword_ss:" + keyword.trim());
+                    query.setQuery("text:" + keyword.trim());
                     query.setFields("id");
                     solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
                     searchWordDTO.setCount((int) solrDocumentList.getNumFound());
