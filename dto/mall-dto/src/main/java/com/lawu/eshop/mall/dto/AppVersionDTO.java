@@ -1,15 +1,22 @@
 package com.lawu.eshop.mall.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class AppVersionDTO {
 	
+	@ApiModelProperty(value = "版本号")
 	private String appVersion;
 	
-	private String appBigVersion;
+	@ApiModelProperty(value = "大版本号")
+	private Integer appVersionCode;
 	
+	@ApiModelProperty(value = "更新内容")
 	private String updateDesc;
 	
+	@ApiModelProperty(value = "下载地址")
 	private String downloadUrl;
 	
+	@ApiModelProperty(value = "是否强制更新")
 	private Boolean isForce;
 	
 	public String getAppVersion() {
@@ -20,12 +27,12 @@ public class AppVersionDTO {
 		this.appVersion = appVersion;
 	}
 
-	public String getAppBigVersion() {
-		return appBigVersion;
+	public Integer getAppVersionCode() {
+		return appVersionCode;
 	}
 
-	public void setAppBigVersion(String appBigVersion) {
-		this.appBigVersion = appBigVersion;
+	public void setAppVersionCode(Integer appVersionCode) {
+		this.appVersionCode = appVersionCode;
 	}
 
 	public String getUpdateDesc() {

@@ -25,7 +25,7 @@ public class AppVersionController extends BaseController{
     	AppVersionBO bo = appVersionService.getVersion(appType);
     	AppVersionDTO dto = new AppVersionDTO();
     	if(bo != null) {
-    		dto.setAppBigVersion(bo.getAppBigVersion());
+    		dto.setAppVersionCode(Integer.valueOf(bo.getAppBigVersion()));
     		dto.setAppVersion(bo.getAppVersion());
     		dto.setIsForce(bo.getIsForce());
     		dto.setUpdateDesc(bo.getUpdateDesc());
