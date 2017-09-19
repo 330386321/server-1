@@ -73,7 +73,7 @@ public class BusinessDepositController extends BaseController {
 		if(region == null || region.split("/").length != 3){
 			return successCreated(ResultCode.STORE_REGION_PATH_ERROR);
 		}
-		bparam.setBusinessName(store.getModel().getName());
+		bparam.setBusinessName(store.getModel().getPrincipalName());
 		bparam.setProvinceId(region.split("/")[0]);
 		bparam.setCityId(region.split("/")[1]);
 		bparam.setAreaId(region.split("/")[2]);
