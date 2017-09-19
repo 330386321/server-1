@@ -31,7 +31,9 @@ public class AdCountServiceImpl implements AdCountService ,InitializingBean{
 		
 		Object rs = stringRedisTemplate.exec();
 		return rs;*/
-		return stringRedisTemplate.boundValueOps(key).increment(-1);
+		Long count = stringRedisTemplate.boundValueOps(key).increment(-1);
+		
+		return count<0?0 :count;
 	}
 	
 

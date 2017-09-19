@@ -520,14 +520,17 @@ public class AdServiceImpl implements AdService {
 					//发送消息修改积分
 					userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 				}
-
+				
 			} else {
-
-				clickBO.setSysWords(true);
+				
+				clickBO.setOverClick(true);
 			}
-
+			
 			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_CLICK_LOCK_", id);
 
+		}else{
+			//是否同时点广告
+			clickBO.setSysWords(true);
 		}
 
 		return clickBO;
