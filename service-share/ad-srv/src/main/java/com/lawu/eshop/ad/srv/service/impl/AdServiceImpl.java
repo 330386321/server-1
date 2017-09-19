@@ -1090,7 +1090,7 @@ public class AdServiceImpl implements AdService {
 		RedPacketInfoBO redPacketInfoBO = new RedPacketInfoBO();
 		if (!list.isEmpty()) {
 			AdDO adDO = list.get(0);
-			redPacketInfoBO.setPoint(adDO.getTotalPoint().divide(BigDecimal.valueOf(adDO.getAdCount())).multiply(BigDecimal.valueOf(PropertyType.ad_red_packet_default)));
+			redPacketInfoBO.setPoint(adDO.getTotalPoint().divide(BigDecimal.valueOf(adDO.getAdCount()),2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(PropertyType.ad_red_packet_default)));
 			redPacketInfoBO.setMediaUrl(adDO.getMediaUrl());
 			redPacketInfoBO.setLogoUrl(adDO.getLogoUrl());
 			redPacketInfoBO.setName(adDO.getMerchantStoreName());
