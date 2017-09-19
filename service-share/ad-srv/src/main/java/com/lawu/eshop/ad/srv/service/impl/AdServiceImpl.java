@@ -477,7 +477,6 @@ public class AdServiceImpl implements AdService {
         return adBO;
     }
 
-	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public ClickPointBO clickAd(Long id, Long memberId, String num) {
@@ -486,7 +485,7 @@ public class AdServiceImpl implements AdService {
 		ClickPointBO clickBO = new ClickPointBO();
 		clickBO.setPoint(BigDecimal.valueOf(0));
 		clickBO.setOverClick(false);
-
+		clickBO.setSysWords(false);
 		// 成功抢到锁
 		if (flag) {
 
@@ -518,18 +517,20 @@ public class AdServiceImpl implements AdService {
 					//修改领取次数
 					clickBO.setOverClick(false);
 					clickBO.setPoint(adDO.getPoint());
-					adDOMapperExtend.updateHitsByPrimaryKey(id);
 					//发送消息修改积分
 					userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 				}
-
+				
 			} else {
-
+				
 				clickBO.setOverClick(true);
 			}
-
+			
 			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_CLICK_LOCK_", id);
 
+		}else{
+			//是否同时点广告
+			clickBO.setSysWords(true);
 		}
 
 		return clickBO;
@@ -901,7 +902,11 @@ public class AdServiceImpl implements AdService {
 		MemberAdRecordDOView view = MemberAdRecordDOMapperExtend.selectPointToday(marDO);
 		ClickAdPointBO clickAdPointBO = new ClickAdPointBO();
 		clickAdPointBO.setAdTotlePoint(point.multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
-		clickAdPointBO.setAddPoint(view.getTotlePoint());
+		if(view == null){
+			clickAdPointBO.setAddPoint(BigDecimal.valueOf(0));
+		}else{
+			clickAdPointBO.setAddPoint(view.getTotlePoint());
+		}
 		return clickAdPointBO;
 	}
 
@@ -1090,7 +1095,7 @@ public class AdServiceImpl implements AdService {
 		RedPacketInfoBO redPacketInfoBO = new RedPacketInfoBO();
 		if (!list.isEmpty()) {
 			AdDO adDO = list.get(0);
-			redPacketInfoBO.setPoint(adDO.getTotalPoint().divide(BigDecimal.valueOf(adDO.getAdCount())).multiply(BigDecimal.valueOf(PropertyType.ad_red_packet_default)));
+			redPacketInfoBO.setPoint(adDO.getTotalPoint().divide(BigDecimal.valueOf(adDO.getAdCount()),2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(PropertyType.ad_red_packet_default)));
 			redPacketInfoBO.setMediaUrl(adDO.getMediaUrl());
 			redPacketInfoBO.setLogoUrl(adDO.getLogoUrl());
 			redPacketInfoBO.setName(adDO.getMerchantStoreName());

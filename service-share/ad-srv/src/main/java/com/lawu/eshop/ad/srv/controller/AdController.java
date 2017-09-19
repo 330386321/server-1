@@ -233,13 +233,14 @@ public class AdController extends BaseController {
 		if(bo.isOverClick()){
 			return successCreated(ResultCode.AD_CLICK_PUTED);
 		}
-		if(!bo.isOverClick() && bo.getPoint().compareTo(BigDecimal.valueOf(0))==0){
-			return successCreated(ResultCode.AD_CLICK_SYS_WORDS);
-		}
-		ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
+		
 		ClickAdPointDTO dto = new ClickAdPointDTO();
-		dto.setAddPoint(clickAdPointBO.getAddPoint());
-		dto.setPoint(clickAdPointBO.getAdTotlePoint());
+		if(!bo.isOverClick() && !bo.isSysWords()){
+			ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
+			dto.setAddPoint(clickAdPointBO.getAddPoint());
+			dto.setPoint(clickAdPointBO.getAdTotlePoint());
+		}
+		
 		return successCreated(dto);
 	}
 
