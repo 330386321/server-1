@@ -235,7 +235,7 @@ public class AdController extends BaseController {
 		}
 		
 		ClickAdPointDTO dto = new ClickAdPointDTO();
-		if(!bo.isOverClick() || !bo.isSysWords()){
+		if(!bo.isOverClick() && !bo.isSysWords()){
 			ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
 			dto.setAddPoint(clickAdPointBO.getAddPoint());
 			dto.setPoint(clickAdPointBO.getAdTotlePoint());
