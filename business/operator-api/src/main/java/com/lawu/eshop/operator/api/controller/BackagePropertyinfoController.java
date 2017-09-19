@@ -209,14 +209,9 @@ public class BackagePropertyinfoController extends BaseController {
 	@RequestMapping(value = "updateBalance", method = RequestMethod.POST)
 	@RequiresPermissions("balance:recharge")
 	public Result updateBalance(@Valid BackagePropertyinfoParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuilder es = new StringBuilder();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
+		String message = validate(result);
+		if (message != null) {
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
 		}
 
 		BackagePropertyinfoDataParam dparam = new BackagePropertyinfoDataParam();
