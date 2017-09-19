@@ -477,7 +477,6 @@ public class AdServiceImpl implements AdService {
         return adBO;
     }
 
-	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public ClickPointBO clickAd(Long id, Long memberId, String num) {
@@ -486,7 +485,7 @@ public class AdServiceImpl implements AdService {
 		ClickPointBO clickBO = new ClickPointBO();
 		clickBO.setPoint(BigDecimal.valueOf(0));
 		clickBO.setOverClick(false);
-
+		clickBO.setSysWords(false);
 		// 成功抢到锁
 		if (flag) {
 
@@ -518,14 +517,13 @@ public class AdServiceImpl implements AdService {
 					//修改领取次数
 					clickBO.setOverClick(false);
 					clickBO.setPoint(adDO.getPoint());
-					adDOMapperExtend.updateHitsByPrimaryKey(id);
 					//发送消息修改积分
 					userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 				}
 
 			} else {
 
-				clickBO.setOverClick(true);
+				clickBO.setSysWords(true);
 			}
 
 			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_CLICK_LOCK_", id);
