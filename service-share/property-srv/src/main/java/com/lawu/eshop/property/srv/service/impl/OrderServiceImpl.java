@@ -99,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
         boolean isPay = transactionDetailService.verifyOrderIsPaySuccess(param);
         if (isPay) {
             logger.info("重复回调(判断幂等)");
-            return ResultCode.SUCCESS;
+            return ResultCode.PROCESSED_RETURN_SUCCESS;
         }
 
         // 新增会员交易记录
@@ -130,7 +130,7 @@ public class OrderServiceImpl implements OrderService {
         boolean isPay = transactionDetailService.verifyOrderIsPaySuccess(param);
         if (isPay) {
             logger.info("重复回调(判断幂等)");
-            return ResultCode.SUCCESS;
+            return ResultCode.PROCESSED_RETURN_SUCCESS;
         }
 
         // 新增会员交易明细

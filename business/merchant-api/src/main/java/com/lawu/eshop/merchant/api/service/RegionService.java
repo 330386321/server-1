@@ -42,4 +42,11 @@ public interface RegionService {
      */
     @RequestMapping(value = "group", method = RequestMethod.GET)
     Result<List<RegionProvinceDTO>> group();
+
+    /**
+     * pc网页地区选择控件数据来源
+     * @return
+     */
+    @RequestMapping(value = "getRegionSelectorData", method = RequestMethod.GET)
+    Result<String> getRegionSelectorData();
 }

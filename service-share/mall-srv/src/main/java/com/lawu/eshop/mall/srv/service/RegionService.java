@@ -1,6 +1,7 @@
 package com.lawu.eshop.mall.srv.service;
 
 import com.lawu.eshop.mall.srv.bo.RegionBO;
+import com.lawu.eshop.mall.srv.bo.RegionSelectorDataBO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -55,4 +56,5 @@ public interface RegionService {
      */
     void updateRegionLonLat(Integer id, BigDecimal longitude, BigDecimal latitude);
 
+    List<RegionSelectorDataBO> getRegionByParentId(String s);
 }

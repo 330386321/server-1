@@ -31,4 +31,9 @@ public class MockRegionService extends BaseController implements RegionService {
 	public Result<List<RegionProvinceDTO>> group() {
 		return successGet();
 	}
+
+	@Override
+	public Result<String> getRegionSelectorData() {
+		return null;
+	}
 }
