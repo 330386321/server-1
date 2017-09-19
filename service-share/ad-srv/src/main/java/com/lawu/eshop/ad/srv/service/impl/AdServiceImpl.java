@@ -899,7 +899,11 @@ public class AdServiceImpl implements AdService {
 		MemberAdRecordDOView view = MemberAdRecordDOMapperExtend.selectPointToday(marDO);
 		ClickAdPointBO clickAdPointBO = new ClickAdPointBO();
 		clickAdPointBO.setAdTotlePoint(point.multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
-		clickAdPointBO.setAddPoint(view.getTotlePoint());
+		if(view == null){
+			clickAdPointBO.setAddPoint(BigDecimal.valueOf(0));
+		}else{
+			clickAdPointBO.setAddPoint(view.getTotlePoint());
+		}
 		return clickAdPointBO;
 	}
 
