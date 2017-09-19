@@ -665,7 +665,7 @@ public class AdServiceImpl implements AdService {
 					AdDO ad = new AdDO();
 					ad.setId(adDO.getId());
 					ad.setGmtModified(new Date());
-					ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
+					ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
 					adDOMapper.updateByPrimaryKeySelective(ad);
 				}
 				
