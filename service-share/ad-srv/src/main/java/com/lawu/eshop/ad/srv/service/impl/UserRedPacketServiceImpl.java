@@ -326,7 +326,12 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 				userRed.setStatus(UserRedPacketEnum.USER_STATUS_OUT.val);
 				userRed.setRefundMoney(totalBackMoney);
 				userRedPacketDOMapper.updateByPrimaryKeySelective(userRed);
-				memberRedPacketRefundTransactionMainServiceImpl.sendNotice(userRed.getId());
+				
+				if(totalBackMoney.compareTo(BigDecimal.valueOf(0))==1){
+					
+					memberRedPacketRefundTransactionMainServiceImpl.sendNotice(userRed.getId());
+				}
+				
 			}
 		}
 	}
