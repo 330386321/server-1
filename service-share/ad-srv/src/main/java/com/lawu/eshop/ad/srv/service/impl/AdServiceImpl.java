@@ -802,7 +802,6 @@ public class AdServiceImpl implements AdService {
 		return bo;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public BigDecimal getRedPacket(Long merchantId, Long memberId, String memberNum) {
 
@@ -857,6 +856,7 @@ public class AdServiceImpl implements AdService {
 				pointPool.setOrdinal(redPacketCount);
 				pointPool.setPoint(money);
 				pointPoolDOMapper.insert(pointPool);
+				
 				adDOMapperExtend.updateHitsByPrimaryKey(adDO.getId());
 
 				userSweepRedtransactionMainAddService.sendNotice(pointPool.getId());
@@ -871,7 +871,7 @@ public class AdServiceImpl implements AdService {
 			}
 
 
-			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", adDO.getId());
+			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_RED_PACKET_LOCK_", adDO.getId());
 
 		}
 
