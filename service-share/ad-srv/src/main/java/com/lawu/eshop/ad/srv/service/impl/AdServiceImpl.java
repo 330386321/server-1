@@ -667,6 +667,9 @@ public class AdServiceImpl implements AdService {
 					ad.setGmtModified(new Date());
 					ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
 					adDOMapper.updateByPrimaryKeySelective(ad);
+					//更新solr状态
+					SolrInputDocument document = AdConverter.convertSolrInputDocument(ad);
+					solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 				}
 				
 				//修改领取次数
