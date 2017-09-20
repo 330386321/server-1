@@ -223,7 +223,7 @@ public class AdController extends BaseController {
     		adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
     	}
     	if(StringUtils.isNotEmpty(adEgainDTO.getVideoImgUrl())){
-    		String url=memberApiConfig.getVideoUploadUrl()+"/"+adEgainDTO.getMediaUrl();
+    		String url=memberApiConfig.getVideoUploadUrl()+File.separator+adEgainDTO.getMediaUrl();
     		File f= new File(url); 
     		if (f.exists() && f.isFile()){  
     	        adEgainDTO.setFileSize(f.length()/1024/1024);
