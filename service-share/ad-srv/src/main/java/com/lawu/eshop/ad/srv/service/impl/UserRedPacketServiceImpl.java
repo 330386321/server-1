@@ -184,6 +184,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 
 		UserRedpacketMaxMoney getMoney = new UserRedpacketMaxMoney();
 		getMoney.setFlag(false);
+		getMoney.setSysWords(false);
 
 		if (flag) {
 
@@ -239,18 +240,18 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 					userRedPacketDO.setStatus(UserRedPacketEnum.USER_STATUS_OVER.val);
 					userRedPacketDOMapper.updateByPrimaryKeySelective(userRedPacketDO);
 				}
+				
+				getMoney.setFlag(true);
 				getMoney.setMaxMoney(userTabed.getMoney());
 
 				//发送消息修改积分
 				memberGetRedPacketTransactionMainServiceImpl.sendNotice(userTabed.getId());
-			} else {
-
-				getMoney.setSysWords(true);
-			}
-
+			} 
 
 			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_USER_RED_PACKET_LOCK_", redPacketId);
 
+		}else {
+			getMoney.setSysWords(true);
 		}
 		
 		return getMoney;
@@ -325,7 +326,12 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 				userRed.setStatus(UserRedPacketEnum.USER_STATUS_OUT.val);
 				userRed.setRefundMoney(totalBackMoney);
 				userRedPacketDOMapper.updateByPrimaryKeySelective(userRed);
-				memberRedPacketRefundTransactionMainServiceImpl.sendNotice(userRed.getId());
+				
+				if(totalBackMoney.compareTo(BigDecimal.valueOf(0))==1){
+					
+					memberRedPacketRefundTransactionMainServiceImpl.sendNotice(userRed.getId());
+				}
+				
 			}
 		}
 	}
