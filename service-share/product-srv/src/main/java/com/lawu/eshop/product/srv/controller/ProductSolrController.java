@@ -131,7 +131,7 @@ public class ProductSolrController extends BaseController {
         Page<ProductSearchDTO> page = new Page<>();
         page.setCurrentPage(param.getCurrentPage());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
-            page.setRecords(new ArrayList<ProductSearchDTO>());
+            page.setRecords(new ArrayList<>());
             page.setTotalCount(0);
             return successCreated(page);
         }
