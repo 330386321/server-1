@@ -870,7 +870,6 @@ public class AdServiceImpl implements AdService {
 				}
 			}
 
-
 			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_RED_PACKET_LOCK_", adDO.getId());
 
 		}
