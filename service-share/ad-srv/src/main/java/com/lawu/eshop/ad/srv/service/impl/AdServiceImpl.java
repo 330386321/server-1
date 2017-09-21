@@ -631,17 +631,20 @@ public class AdServiceImpl implements AdService {
 
 				AdDO adDO = adDOMapper.selectByPrimaryKey(id);
 				
-				
-				/*if(adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==1 || adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==0){
-					//再次判断用户是否扣除过积分
-					Result<Boolean>  isDoPoint = praiseDoHanlderMinusPointService.getAdPraiseIsDoPointRecord(String.valueOf(id)+String.valueOf(memberId));
-					//如果没有扣除积分 不作抢赞操作
-					if(!isDoPoint.getModel()){
-						bo.setSysWordFlag(false);
-						bo.setPoint(BigDecimal.valueOf(point));
-						return bo;
+				if(adSrvConfig.getIsCutPraisePoint()){
+					
+					if(adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==1 || adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==0){
+						//再次判断用户是否扣除过积分
+						Result<Boolean>  isDoPoint = praiseDoHanlderMinusPointService.getAdPraiseIsDoPointRecord(String.valueOf(id)+String.valueOf(memberId));
+						//如果没有扣除积分 不作抢赞操作
+						if(!isDoPoint.getModel()){
+							bo.setSysWordFlag(false);
+							bo.setPoint(BigDecimal.valueOf(point));
+							return bo;
+						}
 					}
-				}*/
+					
+				}
 				
 				//已经领取个数
 				int praiseCount = adDO.getHits() == null ? 0 : adDO.getHits();
