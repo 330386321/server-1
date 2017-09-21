@@ -110,9 +110,19 @@ public class UserRedPacketController extends BaseController {
 	 */
 	@RequestMapping(value = "getUserRedpacketMoney", method = RequestMethod.POST)
 	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMoney(@RequestParam Long redPacketId, @RequestParam String userNum) {
-		UserRedpacketMaxMoney getMoney = userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
-		
+		boolean flag = userRedPacketService.isExistsRedPacket(redPacketId);
 		UserRedpacketMaxMoneyDTO dto =new UserRedpacketMaxMoneyDTO();
+		if(!flag){  //红包领取完了
+			dto.setGetAll(flag);
+			return successCreated(dto);
+		}
+		boolean userIsGet = userRedPacketService.checkUserGetRedpacket(redPacketId, userNum);
+		if(!userIsGet){ //用户已经领取了红包
+			dto.setFlag(userIsGet);
+			return successCreated(dto);
+		}
+		
+		UserRedpacketMaxMoney getMoney = userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
 		if(!getMoney.isSysWords() && getMoney.isFlag()){
 			dto.setMoney(getMoney.getMaxMoney());
 			dto.setFlag(getMoney.isFlag());

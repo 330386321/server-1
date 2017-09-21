@@ -226,6 +226,12 @@ public class AdServiceImpl implements AdService {
 		if(adParam.getFileType()!=null){
 			adDO.setFileType(adParam.getFileType().getVal());
 		}
+		if(adParam.getFileSize()!=null){
+			adDO.setFileSize(adParam.getFileSize());
+		}
+		if(adParam.getFileTime()!=null){
+			adDO.setFileTime(adParam.getFileTime());
+		}
 		Integer i=adDOMapper.insert(adDO);
 		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //E赞
 			SolrInputDocument document= AdConverter.convertSolrInputDocument(adDO);
@@ -235,6 +241,7 @@ public class AdServiceImpl implements AdService {
         AdSaveInfoBO bo =new AdSaveInfoBO();
         bo.setId(adDO.getId());
         bo.setAdCount(adDO.getAdCount());
+        
         // 发送消息，通知其他模块处理事务 积分的处理
         mctransactionMainAddService.sendNotice(adDO.getId());
 
@@ -623,15 +630,20 @@ public class AdServiceImpl implements AdService {
 			if (result.getModel() != null && (int) result.getModel() >= 0) {
 
 				AdDO adDO = adDOMapper.selectByPrimaryKey(id);
-				if(adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==1 || adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==0){
-					//再次判断用户是否扣除过积分
-					Result<Boolean>  isDoPoint = praiseDoHanlderMinusPointService.getAdPraiseIsDoPointRecord(String.valueOf(id)+String.valueOf(memberId));
-					//如果没有扣除积分 不作抢赞操作
-					if(!isDoPoint.getModel()){
-						bo.setSysWordFlag(false);
-						bo.setPoint(BigDecimal.valueOf(point));
-						return bo;
+				
+				if(adSrvConfig.getIsCutPraisePoint()){
+					
+					if(adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==1 || adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==0){
+						//再次判断用户是否扣除过积分
+						Result<Boolean>  isDoPoint = praiseDoHanlderMinusPointService.getAdPraiseIsDoPointRecord(String.valueOf(id)+String.valueOf(memberId));
+						//如果没有扣除积分 不作抢赞操作
+						if(!isDoPoint.getModel()){
+							bo.setSysWordFlag(false);
+							bo.setPoint(BigDecimal.valueOf(point));
+							return bo;
+						}
 					}
+					
 				}
 				
 				//已经领取个数

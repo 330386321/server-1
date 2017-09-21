@@ -27,6 +27,9 @@ public class AdSrvConfig {
 
     @Value(value = "${ad_praise_allot_prob}")
     private Integer adPraiseAllotProb;
+    
+    @Value(value = "${is_cut_praise_point}")
+    private Boolean isCutPraisePoint;
 
     public String getSolrUrl() {
         return solrUrl;
@@ -51,6 +54,10 @@ public class AdSrvConfig {
     public Integer getAdPraiseAllotProb() {
         return adPraiseAllotProb;
     }
+
+	public Boolean getIsCutPraisePoint() {
+		return isCutPraisePoint;
+	}
 
     
 }

@@ -726,6 +726,8 @@ public class AdConverter {
 		rtn.setMerchantId(adDO.getMerchantId());
 		rtn.setRelateId(adDO.getRelateId());
 		rtn.setRelateType(RelateTypeEnum.getEnum(adDO.getRelateType()));
+		rtn.setFileSize(adDO.getFileSize());
+		rtn.setFileTime(adDO.getFileTime());
 		return rtn;
 	}
 
@@ -753,6 +755,8 @@ public class AdConverter {
 		rtn.setIsFavorite(adBO.getIsFavorite());
 		rtn.setRelateId(adBO.getRelateId());
 		rtn.setRelateType(adBO.getRelateType());
+		rtn.setFileSize(Long.parseLong(adBO.getFileSize()));
+		rtn.setVideoTime(adBO.getFileTime());
 		return rtn;
 	}
 

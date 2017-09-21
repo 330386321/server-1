@@ -222,14 +222,6 @@ public class AdController extends BaseController {
     		adEgainDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
     		adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
     	}
-    	if(StringUtils.isNotEmpty(adEgainDTO.getVideoImgUrl())){
-    		String url=memberApiConfig.getVideoUploadUrl()+File.separator+adEgainDTO.getMediaUrl();
-    		File f= new File(url); 
-    		if (f.exists() && f.isFile()){  
-    	        adEgainDTO.setFileSize(f.length()/1024/1024);
-    	    }
-    		adEgainDTO.setVideoTime(VideoCutImgUtil.getVideoTime(url, memberApiConfig.getFfmpegUrl()));
-    	}
 	    
 		Result<Set<String>> rs= adViewService.getAdviews(id.toString());
 		 
@@ -414,6 +406,7 @@ public class AdController extends BaseController {
 
 	}
 
+	@Deprecated
 	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-05-02", reviewer = "孙林青")
 	@Authorization
