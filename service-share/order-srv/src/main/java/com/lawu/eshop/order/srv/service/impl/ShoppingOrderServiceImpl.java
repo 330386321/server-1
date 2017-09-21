@@ -251,7 +251,17 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		if (count <= 0 || param.getOffset() >= count) {
 			return shoppingOrderItemBOPage;
 		}
-
+		
+		String orderByClause = "";
+		// 如果是待收货按照付款时间正序排序
+		if (ShoppingOrderStatusToMemberEnum.BE_SHIPPED.equals(param.getOrderStatus())) {
+			orderByClause += "so.gmt_payment asc,";
+		}
+		// 默认创建时间排序
+		orderByClause += "so.gmt_create desc";
+		
+		shoppingOrderExtendDOExample.setOrderByClause(orderByClause);
+		
 		// 分页参数
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 
@@ -263,8 +273,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.createCriteria().andIdIn(idList);
 
-		// 默认创建时间排序
-		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
+		shoppingOrderExtendDOExample.setOrderByClause(orderByClause);
 
 		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
