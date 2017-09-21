@@ -89,6 +89,8 @@ public class AdConverter {
 		adBO.setMerchantStoreName(adDO.getMerchantStoreName());
 		adBO.setManageType(ManageTypeEnum.getEnum(adDO.getManageType()));
 		adBO.setLogoUrl(adDO.getLogoUrl());
+		adBO.setFileSize(adDO.getFileSize());
+		adBO.setVideoTime(adDO.getFileTime());
         return adBO;
 		
 	}
@@ -370,6 +372,8 @@ public class AdConverter {
 		dto.setRegionName(adBO.getRegionName());
 		dto.setProductId(adBO.getRelateId());
 		dto.setRelateType(adBO.getRelateType());
+		dto.setFileSize(adBO.getFileSize());
+		dto.setVideoTime(adBO.getVideoTime());
 		return dto;
 	}
 

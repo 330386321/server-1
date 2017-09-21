@@ -365,6 +365,8 @@ public class AdController extends BaseController {
     	adParam.setRelateId(adDTO.getProductId());
     	adParam.setRelateType(adDTO.getRelateType());
     	adParam.setRegionName(adDTO.getRegionName());
+    	adParam.setFileSize(adDTO.getFileSize());
+    	adParam.setFileTime(adDTO.getVideoTime());
     	adSave.setAdParam(adParam);
     	if(isSuccess(storeRs)){
     		MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();
