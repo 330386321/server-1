@@ -1,6 +1,7 @@
 package com.lawu.eshop.property.srv.domain.extend;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class WithdrawCashOperDOView implements Serializable {
@@ -17,6 +18,10 @@ public class WithdrawCashOperDOView implements Serializable {
 	private Date gmtModified;
 	private Date gmtAccept;
 	private Date gmtFinish;
+
+	private String currentScale;
+	private BigDecimal money;
+
 	
 	public Integer getId() {
 		return id;
@@ -66,5 +71,20 @@ public class WithdrawCashOperDOView implements Serializable {
 	public void setGmtFinish(Date gmtFinish) {
 		this.gmtFinish = gmtFinish;
 	}
-	
+
+	public String getCurrentScale() {
+		return currentScale;
+	}
+
+	public void setCurrentScale(String currentScale) {
+		this.currentScale = currentScale;
+	}
+
+	public BigDecimal getMoney() {
+		return money;
+	}
+
+	public void setMoney(BigDecimal money) {
+		this.money = money;
+	}
 }

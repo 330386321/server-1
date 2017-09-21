@@ -1,9 +1,12 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.srv.service.PropertyService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +62,8 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 	private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
 	@Autowired
 	private TransactionDetailService transactionDetailService;
+	@Autowired
+	private PropertyService propertyService;
 
 	@Override
 	public Page<WithdrawCashBackageQueryBO> findCashInfo(CashBackageQueryDataParam param) {
@@ -212,9 +217,31 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		List<WithdrawCashOperDOView> paramList = new ArrayList<WithdrawCashOperDOView>();
 		String ids = param.getId();
 		String idsArray[] = ids.split(",");
+		String currentScale = propertyService.getValue(PropertyType.CASH_SCALE);
+		double dCurrentScale = Double.parseDouble(currentScale);
 		for (int i = 0; i < idsArray.length; i++) {
+
 			paramList.clear();
 			WithdrawCashOperDOView view = new WithdrawCashOperDOView();
+
+			if (CashStatusEnum.SUCCESS.getVal().equals(param.getCashOperEnum().getVal())) {
+				//计算手续费
+				WithdrawCashDO wcdo = withdrawCashDOMapper.selectByPrimaryKey(Long.valueOf(idsArray[i]));
+				WithdrawCashDOExample example = new WithdrawCashDOExample();
+				example.createCriteria().andUserNumEqualTo(wcdo.getUserNum()).andStatusEqualTo(CashStatusEnum.SUCCESS.getVal()).andGmtCreateGreaterThanOrEqualTo(DateUtil.formatDate(DateUtil.getDateFormat(new Date(),"yyyy-MM")+"-01 00:00:00","yyyy-MM-dd HH:mm:ss"));
+				int count = withdrawCashDOMapper.countByExample(example);
+				double dCashMoney = wcdo.getCashMoney().doubleValue();
+				double money = 0;
+				if (count > 0) {
+					String minusMoney = propertyService.getValue(PropertyType.CASH_GREATER_ONE_MINUS_MONEY);
+					money = dCashMoney * dCurrentScale - Double.parseDouble(minusMoney);
+				} else {
+					money = dCashMoney * dCurrentScale;
+				}
+				view.setCurrentScale(currentScale);
+				view.setMoney(BigDecimal.valueOf(money));
+			}
+
 			view.setId(Integer.valueOf(idsArray[i]));
 			view.setStatus(param.getCashOperEnum().getVal());
 			view.setAuditFailReason(param.getFailReason() == null ? "" : param.getFailReason());
