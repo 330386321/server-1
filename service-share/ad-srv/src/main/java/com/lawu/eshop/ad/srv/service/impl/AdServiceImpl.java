@@ -226,6 +226,12 @@ public class AdServiceImpl implements AdService {
 		if(adParam.getFileType()!=null){
 			adDO.setFileType(adParam.getFileType().getVal());
 		}
+		if(adParam.getFileSize()!=null){
+			adDO.setFileSize(adParam.getFileSize());
+		}
+		if(adParam.getFileTime()!=null){
+			adDO.setFileTime(adParam.getFileTime());
+		}
 		Integer i=adDOMapper.insert(adDO);
 		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //E赞
 			SolrInputDocument document= AdConverter.convertSolrInputDocument(adDO);
@@ -235,6 +241,7 @@ public class AdServiceImpl implements AdService {
         AdSaveInfoBO bo =new AdSaveInfoBO();
         bo.setId(adDO.getId());
         bo.setAdCount(adDO.getAdCount());
+        
         // 发送消息，通知其他模块处理事务 积分的处理
         mctransactionMainAddService.sendNotice(adDO.getId());
 

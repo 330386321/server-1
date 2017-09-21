@@ -34,6 +34,8 @@ CREATE TABLE `ad` (
   `title` varchar(100) DEFAULT NULL COMMENT '名称',
   `logo_url` varchar(255) NOT NULL COMMENT '门店logo',
   `media_url` varchar(120) DEFAULT NULL COMMENT '广附件路径',
+  `file_size` varchar(10) DEFAULT NULL COMMENT '视频大小',
+  `file_time` varchar(10) DEFAULT NULL COMMENT '视频长度',
   `file_type` tinyint(2) COMMENT '广告类型(1-图片2-视频)',
   `video_img_url` varchar(120) DEFAULT NULL COMMENT '视频封面图片路径',
   `content` varchar(500) DEFAULT NULL COMMENT '广告内容',
