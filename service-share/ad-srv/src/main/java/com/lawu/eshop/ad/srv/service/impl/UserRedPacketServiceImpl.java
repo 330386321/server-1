@@ -289,6 +289,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		return true;
 	}
 
+	@Override
 	public boolean checkUserGetRedpacket(Long redPacketId, String userNum) {
 		UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
 		userTakedExample.createCriteria().andUserRedPackIdEqualTo(redPacketId).andUserNumEqualTo(userNum)
@@ -319,9 +320,14 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		if (!list.isEmpty()) {
 			for (int i = 0; i < list.size(); i++) {
 				UserRedPacketDO userRed = list.get(i);
+				BigDecimal totalBackMoney = new BigDecimal(0);
 				UserRedpacketMaxMoney view = userTakedRedpacketBOMapperExtend.getSumMoney(userRed.getId());
-				BigDecimal totalBackMoney = userRed.getTotalMoney().subtract(view.getMaxMoney());
-				
+				if(view==null){
+					totalBackMoney = userRed.getTotalMoney();
+				}else{
+					totalBackMoney = userRed.getTotalMoney().subtract(view.getMaxMoney());
+				}
+			
 				userRed.setGmtModified(new Date());
 				userRed.setStatus(UserRedPacketEnum.USER_STATUS_OUT.val);
 				userRed.setRefundMoney(totalBackMoney);

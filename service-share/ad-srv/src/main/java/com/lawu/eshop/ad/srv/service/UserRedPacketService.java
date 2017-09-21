@@ -74,4 +74,5 @@ public interface UserRedPacketService {
 	
 	void executeUserRedPacketData();
 	
+	boolean checkUserGetRedpacket(Long redPacketId, String userNum);
 }
