@@ -406,6 +406,7 @@ public class AdController extends BaseController {
 
 	}
 
+	@Deprecated
 	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-05-02", reviewer = "孙林青")
 	@Authorization
