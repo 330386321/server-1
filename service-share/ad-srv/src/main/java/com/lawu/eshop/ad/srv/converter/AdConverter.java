@@ -760,7 +760,7 @@ public class AdConverter {
 		rtn.setRelateId(adBO.getRelateId());
 		rtn.setRelateType(adBO.getRelateType());
 		if(adBO.getFileSize()!=null){
-			rtn.setFileSize(Long.parseLong(adBO.getFileSize()));
+			rtn.setFileSize(Double.parseDouble(adBO.getFileSize()));
 		}
 		rtn.setVideoTime(adBO.getFileTime());
 		return rtn;
