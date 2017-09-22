@@ -24,9 +24,6 @@ public class AdSrvConfig {
 
     @Value(value = "${image.red_packet_luck}")
     private String redPacketLuckMediaUrl;
-
-    @Value(value = "${ad_praise_allot_prob}")
-    private Integer adPraiseAllotProb;
     
     @Value(value = "${is_cut_praise_point}")
     private Boolean isCutPraisePoint;
@@ -51,9 +48,6 @@ public class AdSrvConfig {
 		return redPacketLuckMediaUrl;
 	}
 
-    public Integer getAdPraiseAllotProb() {
-        return adPraiseAllotProb;
-    }
 
 	public Boolean getIsCutPraisePoint() {
 		return isCutPraisePoint;

@@ -219,24 +219,40 @@ public class AdController extends BaseController {
     	}
     	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
     	PropertyPointDTO propertyPointDTO=rs.getModel();
+    	
     	if(adParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
     		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
     	}
     	Integer count=0;
-    	if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE && adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_AREAS){
-    		String areas=adParam.getAreas();
-    		if(areas==null || areas==""){
-    			areas=ALL_PLACE;
-    		}
-    		count=memberCountService.findMemberCount(areas);
+    	if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){
     		
-    		/*if(adParam.getTotalPoint().divide(new BigDecimal(count*0.3), 2, RoundingMode.HALF_UP).compareTo(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT))==-1){
+    		if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_AREAS){
+    			String areas=adParam.getAreas();
+        		if(areas==null || areas==""){
+        			areas=ALL_PLACE;
+        		}
+    			count=memberCountService.findMemberCount(areas);
+    			
+    		}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_FENS){
+        		
+    			count=memberCountService.findFensCount(merchantId);
+        	}
+    		
+    		count =(int)Math.ceil(count * (merchantApiConfig.getAdPraiseAllotProb()/100));
+			
+    		count = count>10?count:10;
+    		
+    		if(adParam.getTotalPoint().divide(new BigDecimal(count), 2, RoundingMode.HALF_UP).compareTo(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT))==-1){
 				return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
-			}*/
+			}
+    		adParam.setAdCount(count);
     		
     	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_FENS){
+    		
     		count=memberCountService.findFensCount(merchantId);
+    		adParam.setAdCount(count);
     	}
+    	
     	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
     	AdSaveParam adSave=new AdSaveParam();
     	adSave.setAdParam(adParam);
