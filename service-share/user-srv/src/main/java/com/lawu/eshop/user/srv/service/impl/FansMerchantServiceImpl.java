@@ -210,15 +210,17 @@ public class FansMerchantServiceImpl implements FansMerchantService {
 			i = list.get(0).getId();
 		}
     	if(dealWay) {
-    		FansMerchantDO fansMerchantDO = new FansMerchantDO();
-    		fansMerchantDO.setId(i);
-    		fansMerchantDO.setStatus((byte)1);
-    		fansMerchantDO.setGmtCreate(new Date());
-            fansMerchantDOMapper.updateByPrimaryKeySelective(fansMerchantDO);
+            FansMerchantDO fansMerchantDO = new FansMerchantDO();
+            fansMerchantDO.setId(i);
+            fansMerchantDO.setStatus((byte) 1);
+            fansMerchantDO.setGmtCreate(new Date());
+            int rows = fansMerchantDOMapper.updateByPrimaryKeySelective(fansMerchantDO);
             fansInviteResultDO.setStatus(FansInviteResultEnum.AGREE.getValue());
             fansInviteResultDOMapper.insert(fansInviteResultDO);
-            transactionMainService.sendNotice(fansMerchantDO.getId());
-    	} else {
+            if (rows > 0) {
+                transactionMainService.sendNotice(fansMerchantDO.getId());
+            }
+        } else {
     		//fansMerchantDOMapper.deleteByPrimaryKey(i);
     		fansInviteResultDO.setStatus(FansInviteResultEnum.REFUSE.getValue());
     		fansInviteResultDOMapper.insert(fansInviteResultDO);

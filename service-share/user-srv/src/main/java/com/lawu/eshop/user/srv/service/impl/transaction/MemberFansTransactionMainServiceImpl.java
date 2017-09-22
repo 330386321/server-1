@@ -31,13 +31,7 @@ public class MemberFansTransactionMainServiceImpl extends AbstractTransactionMai
     @Override
     public MemberFansNotification selectNotification(Long id) {
         FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchantById(id);
-        if (fansMerchantBO == null) {
-            return null;
-        }
         MemberBO memberBO = memberService.getMemberById(fansMerchantBO.getMemberId());
-        if (memberBO == null) {
-            return null;
-        }
         MemberFansNotification fansNotification = new MemberFansNotification();
         fansNotification.setUserNum(memberBO.getNum());
         return fansNotification;

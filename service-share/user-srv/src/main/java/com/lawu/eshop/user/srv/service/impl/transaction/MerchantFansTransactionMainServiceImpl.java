@@ -28,10 +28,6 @@ public class MerchantFansTransactionMainServiceImpl extends AbstractTransactionM
     @Override
     public MerchantFansNotification selectNotification(Long id) {
         FansInviteContentBO fansInviteContentBO = fansInviteContentService.selectInviteContentById(id);
-        if (fansInviteContentBO == null || fansInviteContentBO.getRefuseNumber() == 0) {
-            return null;
-        }
-
         MerchantFansNotification fansNotification = new MerchantFansNotification();
         fansNotification.setUserNum(fansInviteContentBO.getMerchantNum());
         fansNotification.setPoint(BigDecimal.valueOf(fansInviteContentBO.getRefuseNumber()));

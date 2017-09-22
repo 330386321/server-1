@@ -76,7 +76,9 @@ public class FansInviteContentServiceImpl implements FansInviteContentService{
 			inviteContentDO.setRefuseNumber(count);
 			fansInviteContentDOMapper.updateByPrimaryKeySelective(inviteContentDO);
 
-			transactionMainService.sendNotice(view.getId());
+			if (count > 0) {
+				transactionMainService.sendNotice(view.getId());
+			}
 		}
 	}
 
