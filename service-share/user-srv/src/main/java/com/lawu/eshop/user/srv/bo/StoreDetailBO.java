@@ -49,6 +49,8 @@ public class StoreDetailBO {
 
     private BigDecimal latitude;
 
+    private String industryPath;
+
     public String getName() {
         return name;
     }
@@ -199,5 +201,13 @@ public class StoreDetailBO {
 
     public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
+    }
+
+    public String getIndustryPath() {
+        return industryPath;
+    }
+
+    public void setIndustryPath(String industryPath) {
+        this.industryPath = industryPath;
     }
 }

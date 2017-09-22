@@ -214,6 +214,7 @@ public class MerchantStoreConverter {
         storeDetailDTO.setLongitude(storeDetailBO.getLongitude());
         storeDetailDTO.setLatitude(storeDetailBO.getLatitude());
         storeDetailDTO.setStoreLogo(storeDetailBO.getStoreLogo());
+        storeDetailDTO.setIndustryPath(storeDetailBO.getIndustryPath());
         return storeDetailDTO;
     }
 
