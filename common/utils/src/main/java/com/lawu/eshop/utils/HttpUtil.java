@@ -1,6 +1,7 @@
 package com.lawu.eshop.utils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.HttpClientUtils;
@@ -19,6 +21,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -49,12 +52,35 @@ public class HttpUtil {
                 .setSocketTimeout(5000).build();
 	}
 	
-	public static String doPost(String url, Object body) {
+	public static String doPost(String url, Map<String, String> params, Map<String, String> headersMap) {
+		List<NameValuePair> pairList = new ArrayList<NameValuePair>();
+	    for (Map.Entry<String, String> entry : params.entrySet()) {
+	    	NameValuePair pair = new BasicNameValuePair(entry.getKey(), entry.getValue());
+	    	pairList.add(pair);
+	    }
+	    HttpEntity entity = null;
+		try {
+			entity = new UrlEncodedFormEntity(pairList, CHARSET);
+		} catch (UnsupportedEncodingException e) {
+			logger.error(e.getMessage(), e);
+		}
+	    return doPost(url, entity, headersMap);
+	}
+	
+	public static String doPost(String url, Object body, Map<String, String> headersMap) {
+	    HttpEntity entity = new StringEntity(JSON.toJSONString(body), CHARSET);
+	    return doPost(url, entity, headersMap);
+	}
+	
+	public static String doPost(String url, HttpEntity entity, Map<String, String> headersMap) {
 	    String result = null;
 	    HttpPost httpPost = null;
 	    try {
 	        httpPost = new HttpPost(url);
-	        httpPost.setEntity(new StringEntity(JSON.toJSONString(body)));
+	        for (Map.Entry<String, String> entry : headersMap.entrySet()) {
+	        	 httpPost.addHeader(new BasicHeader(entry.getKey(), entry.getValue()));
+		    }
+	        httpPost.setEntity(entity);
 	        httpPost.setConfig(requestConfig);
 
 	        // Create a custom response handler
@@ -76,7 +102,7 @@ public class HttpUtil {
 	        };
 	        result = httpClient.execute(httpPost, responseHandler);
 	    } catch (Exception e) {
-	        logger.error("do post error, url {}, body {}, e {}", url, body, e.getMessage(), e);
+	        logger.error("do post error, url {}, e {}", url, e.getMessage(), e);
 	    } finally {
 	    	httpPost.reset();
 	    }
@@ -84,8 +110,7 @@ public class HttpUtil {
 	}
 	
 	public static String doGet(String url) {
-	    String result = doGet(url, null);
-	    return result;
+	    return doGet(url, null);
 	}
 	
 	public static String doGet(String url, Map<String, String> params) {
