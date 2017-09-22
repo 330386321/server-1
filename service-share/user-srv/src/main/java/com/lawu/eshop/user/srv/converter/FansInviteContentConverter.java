@@ -43,6 +43,7 @@ public class FansInviteContentConverter {
 		fansInviteContentBO.setMerchantStoreIntro(ficDo.getMerchantStoreIntro());
 		fansInviteContentBO.setMerchantStoreName(ficDo.getMerchantStoreName());
 		fansInviteContentBO.setUrl(ficDo.getUrl());
+		fansInviteContentBO.setIsOverdue(ficDo.getIsOverdue());
 		return fansInviteContentBO;
 	}
 	

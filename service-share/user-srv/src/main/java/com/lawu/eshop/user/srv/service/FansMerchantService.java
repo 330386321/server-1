@@ -98,4 +98,13 @@ public interface FansMerchantService {
      */ 
 	void saveFansMerchantFromInvite(Long merchantId, Long memberId, Long messageId, Boolean dealWay);
 
+    /**
+     * 查询过期未处理的粉丝数
+     *
+     * @param merchantId
+     * @return
+     * @author meishuquan
+     */
+    Integer countOverdueFans(Long merchantId);
+
 }

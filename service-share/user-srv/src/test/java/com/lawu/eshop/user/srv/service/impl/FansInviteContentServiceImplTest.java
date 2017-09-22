@@ -20,6 +20,7 @@ import com.lawu.eshop.user.srv.mapper.FansInviteContentDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.service.FansInviteContentService;
 import com.lawu.eshop.utils.DataTransUtil;
+import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.PwdUtil;
 /**
  * 
@@ -127,4 +128,22 @@ public class FansInviteContentServiceImplTest {
 		saveInviteContentService();
 		fansInviteContentService.selectInviteContentById(1L);
 	}
+
+	//SUBDATE函数不支持
+	/*@Test
+	@Rollback
+	@Transactional
+	public void dealOverdueFansInvite() {
+		FansInviteContentDO inviteContentDO = new FansInviteContentDO();
+		inviteContentDO.setMerchantId(200L);
+		inviteContentDO.setMerchantNum("B0001");
+		inviteContentDO.setIsOverdue(false);
+		inviteContentDO.setGmtCreate(DateUtil.stringToDate("2017-01-01 00:00:00"));
+		fansInviteContentDOMapper.insertSelective(inviteContentDO);
+		fansInviteContentService.dealOverdueFansInvite();
+
+		FansInviteContentDO contentDO = fansInviteContentDOMapper.selectByPrimaryKey(inviteContentDO.getId());
+		Assert.assertNotNull(contentDO);
+		Assert.assertTrue(contentDO.getIsOverdue());
+	}*/
 }

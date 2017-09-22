@@ -13,6 +13,7 @@ public class FansInviteContentBO {
 	private String inviteContent;
 	private String merchantStoreIntro;
 	private Long fansInviteDetailId;
+	private Boolean isOverdue;
 	private Date gmtCreate;
 	private Date gmtModified;
 
@@ -104,4 +105,11 @@ public class FansInviteContentBO {
 		this.gmtModified = gmtModified;
 	}
 
+	public Boolean getIsOverdue() {
+		return isOverdue;
+	}
+
+	public void setIsOverdue(Boolean overdue) {
+		isOverdue = overdue;
+	}
 }

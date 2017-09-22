@@ -348,6 +348,7 @@ CREATE TABLE `fans_invite_content` (
 	`invite_content` VARCHAR(400) NOT NULL DEFAULT '' COMMENT '邀请内容',
 	`merchant_store_intro` VARCHAR(500) NULL DEFAULT NULL COMMENT '店铺介绍',
 	`fans_invite_detail_id` BIGINT(20) NOT NULL COMMENT '邀请粉丝记录的id',
+	`is_overdue` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '是否过期: 0--否, 1--是',
 	`gmt_modified` DATETIME NULL DEFAULT NULL COMMENT '修改时间',
 	`gmt_create` DATETIME NULL DEFAULT NULL COMMENT '创建时间',
 	PRIMARY KEY (`id`)

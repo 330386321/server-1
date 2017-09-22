@@ -28,6 +28,7 @@ import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.service.FansMerchantService;
 import com.lawu.eshop.utils.DataTransUtil;
+import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.RandomUtil;
 
 /**
@@ -194,6 +195,21 @@ public class FansMerchantServiceImplTest {
         fansInviteResultDOExample.createCriteria().andMerchantIdEqualTo(1L).andMemberIdEqualTo(2L);
         int i = fansInviteResultDOMapper.countByExample(fansInviteResultDOExample);
         Assert.assertEquals(1, i);
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void countOverdueFans() {
+        FansMerchantDO fansMerchantDO = new FansMerchantDO();
+        fansMerchantDO.setMemberId(100L);
+        fansMerchantDO.setMerchantId(200L);
+        fansMerchantDO.setStatus((byte) 0);
+        fansMerchantDO.setChannel(FansMerchantChannelEnum.INVITE.getValue());
+        fansMerchantDO.setGmtCreate(new Date());
+        fansMerchantDOMapper.insertSelective(fansMerchantDO);
+        int count = fansMerchantService.countOverdueFans(200L);
+        Assert.assertEquals(1, count);
     }
     
 }

@@ -6,10 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gexin.fastjson.JSONObject;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.FansInviteResultEnum;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
@@ -46,6 +48,10 @@ public class FansMerchantServiceImpl implements FansMerchantService {
 
     @Autowired
     private FansInviteResultDOMapper fansInviteResultDOMapper;
+
+    @Autowired
+    @Qualifier("memberFansTransactionMainServiceImpl")
+    private TransactionMainService transactionMainService;
     
     @Override
     public List<FansMerchantBO> listInviteFans(Long merchantId, ListInviteFansParam param) {
@@ -211,10 +217,18 @@ public class FansMerchantServiceImpl implements FansMerchantService {
             fansMerchantDOMapper.updateByPrimaryKeySelective(fansMerchantDO);
             fansInviteResultDO.setStatus(FansInviteResultEnum.AGREE.getValue());
             fansInviteResultDOMapper.insert(fansInviteResultDO);
+            transactionMainService.sendNotice(memberId);
     	} else {
-    		fansMerchantDOMapper.deleteByPrimaryKey(i);
+    		//fansMerchantDOMapper.deleteByPrimaryKey(i);
     		fansInviteResultDO.setStatus(FansInviteResultEnum.REFUSE.getValue());
     		fansInviteResultDOMapper.insert(fansInviteResultDO);
     	}
+    }
+
+    @Override
+    public Integer countOverdueFans(Long merchantId) {
+        FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
+        fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo((byte) 0).andChannelEqualTo(FansMerchantChannelEnum.INVITE.getValue());
+        return fansMerchantDOMapper.countByExample(fansMerchantDOExample);
     }
 }

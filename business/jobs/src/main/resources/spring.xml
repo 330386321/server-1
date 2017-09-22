@@ -121,6 +121,10 @@
 	<job:simple id="rebuildAdIndexJob" description="定时重建广告索引" class="com.lawu.eshop.jobs.impl.ad.RebuildAdIndexJob" registry-center-ref="regCenter" cron="0 0/10 * * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 
+	<job:simple id="userFansJob" description="更新过期的粉丝邀请" class="com.lawu.eshop.jobs.impl.user.UserFansJob" registry-center-ref="regCenter" cron="0 0/10 * * * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
+
+	
 	<!-- Lock service -->
 	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />
 	<bean id="redissonConfiguration" class="com.lawu.eshop.synchronization.lock.config.RedissonConfiguration" />

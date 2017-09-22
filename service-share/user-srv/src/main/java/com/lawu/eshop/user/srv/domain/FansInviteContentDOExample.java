@@ -795,6 +795,66 @@ public class FansInviteContentDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsOverdueIsNull() {
+            addCriterion("is_overdue is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOverdueIsNotNull() {
+            addCriterion("is_overdue is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOverdueEqualTo(Boolean value) {
+            addCriterion("is_overdue =", value, "isOverdue");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOverdueNotEqualTo(Boolean value) {
+            addCriterion("is_overdue <>", value, "isOverdue");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOverdueGreaterThan(Boolean value) {
+            addCriterion("is_overdue >", value, "isOverdue");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOverdueGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_overdue >=", value, "isOverdue");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOverdueLessThan(Boolean value) {
+            addCriterion("is_overdue <", value, "isOverdue");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOverdueLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_overdue <=", value, "isOverdue");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOverdueIn(List<Boolean> values) {
+            addCriterion("is_overdue in", values, "isOverdue");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOverdueNotIn(List<Boolean> values) {
+            addCriterion("is_overdue not in", values, "isOverdue");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOverdueBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_overdue between", value1, value2, "isOverdue");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsOverdueNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_overdue not between", value1, value2, "isOverdue");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtModifiedIsNull() {
             addCriterion("gmt_modified is null");
             return (Criteria) this;

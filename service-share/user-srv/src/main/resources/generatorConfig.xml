@@ -103,8 +103,11 @@
         </table>
         <table tableName="user_login_log" domainObjectName="UserLoginLogDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
         <table tableName="user_freeze_record" domainObjectName="UserFreezeRecordDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="fans_invite_content" domainObjectName="FansInviteContentDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
