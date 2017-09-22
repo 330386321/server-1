@@ -49,7 +49,7 @@ public class FansInviteContentDTO {
 	
 	private Date gmtModified;
 
-	@ApiModelProperty(value = "是否过期，0--否，1--是", required = true)
+	@ApiModelProperty(value = "是否过期，false--否，true--是", required = true)
 	private Boolean isOverdue;
 	
 	public FansInviteResultEnum getFansInviteResultEnum() {
