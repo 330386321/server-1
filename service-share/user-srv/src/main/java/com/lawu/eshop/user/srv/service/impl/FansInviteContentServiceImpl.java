@@ -63,14 +63,14 @@ public class FansInviteContentServiceImpl implements FansInviteContentService{
 		inviteContentDO.setIsOverdue(true);
 		inviteContentDO.setGmtModified(new Date());
 		for (FansInviteContentDOView view : viewList) {
+			transactionMainService.sendNotice(view.getMerchantId());
+
 			inviteContentDO.setId(view.getId());
 			fansInviteContentDOMapper.updateByPrimaryKeySelective(inviteContentDO);
 
 			FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
 			fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(view.getMerchantId()).andStatusEqualTo((byte) 0).andChannelEqualTo(FansMerchantChannelEnum.INVITE.getValue());
 			fansMerchantDOMapper.deleteByExample(fansMerchantDOExample);
-
-			transactionMainService.sendNotice(view.getMerchantId());
 		}
 	}
 
