@@ -336,7 +336,7 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_RED_PACKGE_PUTED, "红包已下架");
         ResultCode.messageMap.put(AD_BEGIN_TIME_NOT_EXIST, "投放时间不能为空");
         ResultCode.messageMap.put(AD_RED_PACKET_COUNT_ERROR, "红包数量不能超过100万");
-        ResultCode.messageMap.put(AD_RED_PACKET_POINT_ERROR, "红包金额不合法");
+        ResultCode.messageMap.put(AD_RED_PACKET_POINT_ERROR, "金额不合法");
         ResultCode.messageMap.put(AD_CLICK_SYS_WORDS, "系统繁忙,请稍后再试");
         
         

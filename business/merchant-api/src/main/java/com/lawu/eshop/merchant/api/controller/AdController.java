@@ -229,6 +229,11 @@ public class AdController extends BaseController {
     			areas=ALL_PLACE;
     		}
     		count=memberCountService.findMemberCount(areas);
+    		
+    		/*if(adParam.getTotalPoint().divide(new BigDecimal(count*0.3), 2, RoundingMode.HALF_UP).compareTo(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT))==-1){
+				return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
+			}*/
+    		
     	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_FENS){
     		count=memberCountService.findFensCount(merchantId);
     	}

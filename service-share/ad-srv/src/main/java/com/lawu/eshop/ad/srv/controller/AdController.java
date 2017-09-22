@@ -761,7 +761,7 @@ public class AdController extends BaseController {
 			List<AdSolrDTO> solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			for (AdSolrDTO solrDTO : solrDTOS) {
 				AdBO adBO = adService.selectById(solrDTO.getId());
-				if (adBO.getStatusEnum().val.byteValue() != AdStatusEnum.AD_STATUS_PUTED.val) {
+				if (adBO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_ADD.val) {
 					int favoriteCount = favoriteAdService.getFavoriteCount(adBO.getId());
 					solrDTO.setHits(favoriteCount);
 				}
