@@ -759,7 +759,9 @@ public class AdConverter {
 		rtn.setIsFavorite(adBO.getIsFavorite());
 		rtn.setRelateId(adBO.getRelateId());
 		rtn.setRelateType(adBO.getRelateType());
-		rtn.setFileSize(Long.parseLong(adBO.getFileSize()));
+		if(adBO.getFileSize()!=null){
+			rtn.setFileSize(Long.parseLong(adBO.getFileSize()));
+		}
 		rtn.setVideoTime(adBO.getFileTime());
 		return rtn;
 	}
