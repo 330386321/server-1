@@ -238,7 +238,7 @@ public class AdController extends BaseController {
     			count=memberCountService.findFensCount(merchantId);
         	}
     		
-    		count =(int)Math.ceil(count * (merchantApiConfig.getAdPraiseAllotProb()/100));
+    		count =(int)Math.ceil(count * (merchantApiConfig.getAdPraiseAllotProb()));
 			
     		count = count>10?count:10;
     		

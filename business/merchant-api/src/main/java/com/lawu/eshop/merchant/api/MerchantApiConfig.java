@@ -65,7 +65,7 @@ public class MerchantApiConfig {
     private String downloadUrl;
     
     @Value(value = "${ad_praise_allot_prob}")
-    private Integer adPraiseAllotProb;
+    private double adPraiseAllotProb;
    
     public String getDownloadUrl() {
 		return downloadUrl;
@@ -157,7 +157,7 @@ public class MerchantApiConfig {
         return expireTime;
     }
 
-	public Integer getAdPraiseAllotProb() {
+	public double getAdPraiseAllotProb() {
 		return adPraiseAllotProb;
 	}
     
