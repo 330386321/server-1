@@ -221,12 +221,17 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		double dCurrentScale = Double.parseDouble(currentScale);
 		for (int i = 0; i < idsArray.length; i++) {
 
+			WithdrawCashDO wcdo = withdrawCashDOMapper.selectByPrimaryKey(Long.valueOf(idsArray[i]));
+			if ((CashStatusEnum.ACCEPT.getVal().equals(param.getCashOperEnum().getVal()) && !CashStatusEnum.APPLY.getVal().equals(wcdo.getStatus()))
+					|| (!CashStatusEnum.ACCEPT.getVal().equals(param.getCashOperEnum().getVal()) && !CashStatusEnum.ACCEPT.getVal().equals(wcdo.getStatus()))) {
+				return ResultCode.REPEAT_OPERATE;
+			}
+
 			paramList.clear();
 			WithdrawCashOperDOView view = new WithdrawCashOperDOView();
 
 			if (CashStatusEnum.SUCCESS.getVal().equals(param.getCashOperEnum().getVal())) {
 				//计算手续费
-				WithdrawCashDO wcdo = withdrawCashDOMapper.selectByPrimaryKey(Long.valueOf(idsArray[i]));
 				WithdrawCashDOExample example = new WithdrawCashDOExample();
 				example.createCriteria().andUserNumEqualTo(wcdo.getUserNum()).andStatusEqualTo(CashStatusEnum.SUCCESS.getVal()).andGmtCreateGreaterThanOrEqualTo(DateUtil.formatDate(DateUtil.getDateFormat(new Date(),"yyyy-MM")+"-01 00:00:00","yyyy-MM-dd HH:mm:ss"));
 				int count = withdrawCashDOMapper.countByExample(example);
