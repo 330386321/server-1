@@ -32,10 +32,11 @@ public class MerchantFansTransactionMainServiceImpl extends AbstractTransactionM
     @Override
     public MerchantFansNotification selectNotification(Long merchantId) {
         MerchantBO merchantBO = merchantService.getMerchantBOById(merchantId);
-        if (merchantBO == null) {
+        int overdueFansCount = fansMerchantService.countOverdueFans(merchantId);
+        if (merchantBO == null || overdueFansCount == 0) {
             return null;
         }
-        int overdueFansCount = fansMerchantService.countOverdueFans(merchantId);
+
         MerchantFansNotification fansNotification = new MerchantFansNotification();
         fansNotification.setUserNum(merchantBO.getNum());
         fansNotification.setPoint(BigDecimal.valueOf(overdueFansCount));
