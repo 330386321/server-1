@@ -855,6 +855,66 @@ public class FansInviteContentDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andRefuseNumberIsNull() {
+            addCriterion("refuse_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseNumberIsNotNull() {
+            addCriterion("refuse_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseNumberEqualTo(Integer value) {
+            addCriterion("refuse_number =", value, "refuseNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseNumberNotEqualTo(Integer value) {
+            addCriterion("refuse_number <>", value, "refuseNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseNumberGreaterThan(Integer value) {
+            addCriterion("refuse_number >", value, "refuseNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("refuse_number >=", value, "refuseNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseNumberLessThan(Integer value) {
+            addCriterion("refuse_number <", value, "refuseNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("refuse_number <=", value, "refuseNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseNumberIn(List<Integer> values) {
+            addCriterion("refuse_number in", values, "refuseNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseNumberNotIn(List<Integer> values) {
+            addCriterion("refuse_number not in", values, "refuseNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseNumberBetween(Integer value1, Integer value2) {
+            addCriterion("refuse_number between", value1, value2, "refuseNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefuseNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("refuse_number not between", value1, value2, "refuseNumber");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtModifiedIsNull() {
             addCriterion("gmt_modified is null");
             return (Criteria) this;

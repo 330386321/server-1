@@ -8,8 +8,10 @@ import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactio
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.user.MemberFansNotification;
+import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.constants.TransactionConstant;
+import com.lawu.eshop.user.srv.service.FansMerchantService;
 import com.lawu.eshop.user.srv.service.MemberService;
 
 /**
@@ -23,9 +25,16 @@ public class MemberFansTransactionMainServiceImpl extends AbstractTransactionMai
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private FansMerchantService fansMerchantService;
+
     @Override
-    public MemberFansNotification selectNotification(Long memberId) {
-        MemberBO memberBO = memberService.getMemberById(memberId);
+    public MemberFansNotification selectNotification(Long id) {
+        FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchantById(id);
+        if (fansMerchantBO == null) {
+            return null;
+        }
+        MemberBO memberBO = memberService.getMemberById(fansMerchantBO.getMemberId());
         if (memberBO == null) {
             return null;
         }

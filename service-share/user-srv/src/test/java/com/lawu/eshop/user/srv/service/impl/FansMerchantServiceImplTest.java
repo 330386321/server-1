@@ -208,8 +208,9 @@ public class FansMerchantServiceImplTest {
         fansMerchantDO.setChannel(FansMerchantChannelEnum.INVITE.getValue());
         fansMerchantDO.setGmtCreate(new Date());
         fansMerchantDOMapper.insertSelective(fansMerchantDO);
-        int count = fansMerchantService.countOverdueFans(200L);
-        Assert.assertEquals(1, count);
+        FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchantById(fansMerchantDO.getId());
+        Assert.assertNotNull(fansMerchantBO);
+        Assert.assertEquals(fansMerchantDO.getMemberId(), fansMerchantBO.getMemberId());
     }
     
 }

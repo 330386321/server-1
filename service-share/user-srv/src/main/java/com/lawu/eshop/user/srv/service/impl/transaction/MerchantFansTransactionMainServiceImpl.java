@@ -10,10 +10,9 @@ import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactio
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.user.MerchantFansNotification;
-import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.bo.FansInviteContentBO;
 import com.lawu.eshop.user.srv.constants.TransactionConstant;
-import com.lawu.eshop.user.srv.service.FansMerchantService;
-import com.lawu.eshop.user.srv.service.MerchantService;
+import com.lawu.eshop.user.srv.service.FansInviteContentService;
 
 /**
  * @author meishuquan
@@ -24,22 +23,18 @@ import com.lawu.eshop.user.srv.service.MerchantService;
 public class MerchantFansTransactionMainServiceImpl extends AbstractTransactionMainService<MerchantFansNotification, Reply> {
 
     @Autowired
-    private MerchantService merchantService;
-
-    @Autowired
-    private FansMerchantService fansMerchantService;
+    private FansInviteContentService fansInviteContentService;
 
     @Override
-    public MerchantFansNotification selectNotification(Long merchantId) {
-        MerchantBO merchantBO = merchantService.getMerchantBOById(merchantId);
-        int overdueFansCount = fansMerchantService.countOverdueFans(merchantId);
-        if (merchantBO == null || overdueFansCount == 0) {
+    public MerchantFansNotification selectNotification(Long id) {
+        FansInviteContentBO fansInviteContentBO = fansInviteContentService.selectInviteContentById(id);
+        if (fansInviteContentBO == null || fansInviteContentBO.getRefuseNumber() == 0) {
             return null;
         }
 
         MerchantFansNotification fansNotification = new MerchantFansNotification();
-        fansNotification.setUserNum(merchantBO.getNum());
-        fansNotification.setPoint(BigDecimal.valueOf(overdueFansCount));
+        fansNotification.setUserNum(fansInviteContentBO.getMerchantNum());
+        fansNotification.setPoint(BigDecimal.valueOf(fansInviteContentBO.getRefuseNumber()));
         return fansNotification;
     }
 

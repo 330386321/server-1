@@ -217,7 +217,7 @@ public class FansMerchantServiceImpl implements FansMerchantService {
             fansMerchantDOMapper.updateByPrimaryKeySelective(fansMerchantDO);
             fansInviteResultDO.setStatus(FansInviteResultEnum.AGREE.getValue());
             fansInviteResultDOMapper.insert(fansInviteResultDO);
-            transactionMainService.sendNotice(memberId);
+            transactionMainService.sendNotice(fansMerchantDO.getId());
     	} else {
     		//fansMerchantDOMapper.deleteByPrimaryKey(i);
     		fansInviteResultDO.setStatus(FansInviteResultEnum.REFUSE.getValue());
@@ -226,9 +226,9 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     }
 
     @Override
-    public Integer countOverdueFans(Long merchantId) {
-        FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
-        fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo((byte) 0).andChannelEqualTo(FansMerchantChannelEnum.INVITE.getValue());
-        return fansMerchantDOMapper.countByExample(fansMerchantDOExample);
+    public FansMerchantBO getFansMerchantById(Long id) {
+        FansMerchantDO fansMerchantDO = fansMerchantDOMapper.selectByPrimaryKey(id);
+        return FansMerchantConverter.convertBO(fansMerchantDO);
     }
+
 }
