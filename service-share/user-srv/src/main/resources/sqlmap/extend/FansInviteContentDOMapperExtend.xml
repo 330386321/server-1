@@ -3,6 +3,6 @@
 <mapper namespace="com.lawu.eshop.user.srv.mapper.extend.FansInviteContentDOMapperExtend" >
 
   <select id="listOverdueFansInvite" parameterType="com.lawu.eshop.user.param.UserFansParam" resultType="com.lawu.eshop.user.srv.domain.extend.FansInviteContentDOView">
-      select id,merchant_id as merchantId from fans_invite_content where gmt_create &lt;= SUBDATE(#{gmtCreate},interval 24 hour);
+      select id,merchant_id as merchantId from fans_invite_content where gmt_create &lt;= SUBDATE(#{gmtCreate},interval 24 hour) and is_overdue = 0;
   </select>
 </mapper>
