@@ -1,5 +1,7 @@
 package com.lawu.eshop.order.srv.utils.express.kdniao.constants;
 
+import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
+
 /**
  * 物流状态码
  * 
@@ -8,21 +10,24 @@ package com.lawu.eshop.order.srv.utils.express.kdniao.constants;
  */
 public enum StateEnum {
 
-	NO_INFO("0", "无轨迹"),
+	NO_INFO("0", "无轨迹", ExpressInquiriesDetailStateEnum.NO_INFO),
 
-	ON_THE_WAY("2", "在途中"),
+	ON_THE_WAY("2", "在途中", ExpressInquiriesDetailStateEnum.ON_THE_WAY),
 
-	SIGN_IN("3", "签收"),
+	SIGN_IN("3", "签收", ExpressInquiriesDetailStateEnum.SIGN_IN),
 
-	PROBLEM_PIECES("4", "问题件");
+	PROBLEM_PIECES("4", "问题件", ExpressInquiriesDetailStateEnum.PROBLEM_PIECES);
 
 	private String value;
 	
 	private String label;
 	
-	StateEnum(String value, String label) {
+	private ExpressInquiriesDetailStateEnum state;
+	
+	StateEnum(String value, String label, ExpressInquiriesDetailStateEnum state) {
 		this.value = value;
 		this.label = label;
+		this.state = state;
 	}
 
 	public String getValue() {
@@ -31,6 +36,10 @@ public enum StateEnum {
 	
 	public String getLabel() {
 		return label;
+	}
+	
+	public ExpressInquiriesDetailStateEnum getState() {
+		return state;
 	}
 
 	public static StateEnum getEnum(String value) {

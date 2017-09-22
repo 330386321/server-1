@@ -17,10 +17,16 @@ public class ExpressCompanyDTO {
 	private Integer id;
 	
 	/**
-	 * 编码
+	 * 快递鸟编号
 	 */
-	@ApiModelProperty(value = "编码", required = true)
+	@ApiModelProperty(value = "快递鸟编号")
 	private String code;
+	
+	/**
+	 * 快递100编号
+	 */
+	@ApiModelProperty(value = "快递100编号")
+	private String kuaidi100Code;
 	
 	/**
 	 * 名称
@@ -44,6 +50,14 @@ public class ExpressCompanyDTO {
 		this.code = code;
 	}
 	
+	public String getKuaidi100Code() {
+		return kuaidi100Code;
+	}
+
+	public void setKuaidi100Code(String kuaidi100Code) {
+		this.kuaidi100Code = kuaidi100Code;
+	}
+
 	public String getName() {
 		return name;
 	}

@@ -20,11 +20,12 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.mall.constants.ExpressProviderTypeEnum;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.merchant.api.service.ExpressCompanyService;
 import com.lawu.eshop.merchant.api.service.ExpressService;
+import com.lawu.eshop.order.dto.ExpressInquiriesDTO;
 import com.lawu.eshop.order.dto.ExpressRecognitionDetailDTO;
-import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailForeignDTO;
 import com.lawu.eshop.order.dto.foreign.ShipperDTO;
 import com.lawu.eshop.order.param.ExpressQueryParam;
@@ -71,22 +72,25 @@ public class ExpressController extends BaseController {
     		expressCompanyDTO = getResult.getModel();
     	}
     	ExpressQueryParam expressQueryParam = new ExpressQueryParam();
-    	expressQueryParam.setExpCode(expressCompanyDTO != null ? expressCompanyDTO.getCode() : null);
+    	if (expressCompanyDTO != null) {
+	    	expressQueryParam.setExpCode(expressCompanyDTO.getCode());
+	    	expressQueryParam.setKuaidi100ExpCode(expressCompanyDTO.getKuaidi100Code());
+    	}
     	expressQueryParam.setExpNo(param.getExpNo());
-    	Result<ExpressInquiriesDetailDTO> inquiriesResult = expressService.inquiries(expressQueryParam);
+    	Result<ExpressInquiriesDTO> inquiriesResult = expressService.inquiries(expressQueryParam);
     	if (!isSuccess(inquiriesResult)) {
 			return successGet(inquiriesResult);
 		}
-    	ExpressInquiriesDetailDTO expressInquiriesDetailDTO = inquiriesResult.getModel();
+    	ExpressInquiriesDTO expressInquiriesDTO = inquiriesResult.getModel();
     	ExpressInquiriesDetailForeignDTO rtn = new ExpressInquiriesDetailForeignDTO();
-    	rtn.setShipperCode(expressInquiriesDetailDTO.getShipperCode());
-    	rtn.setState(expressInquiriesDetailDTO.getState());
-    	rtn.setTraces(expressInquiriesDetailDTO.getTraces());
+    	rtn.setShipperCode(expressInquiriesDTO.getShipperCode());
+    	rtn.setState(expressInquiriesDTO.getState());
+    	rtn.setTraces(expressInquiriesDTO.getTraces());
     	if (inquiriesResult.getModel().getShipperCode().equals(expressQueryParam.getExpCode())) {
     		rtn.setShipperCode(expressCompanyDTO.getCode());
     		rtn.setShipperName(expressCompanyDTO.getName());
     	} else {
-    		Result<ExpressCompanyDTO> codeResult = expressCompanyService.code(rtn.getShipperCode());
+    		Result<ExpressCompanyDTO> codeResult = expressCompanyService.code(expressInquiriesDTO.getShipperCode(), ExpressProviderTypeEnum.valueOf(expressInquiriesDTO.getExpressProviderType().name()));
     		if (!isSuccess(codeResult)) {
     			return successGet(codeResult);
     		}

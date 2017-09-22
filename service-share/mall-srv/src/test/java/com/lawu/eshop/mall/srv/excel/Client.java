@@ -14,19 +14,19 @@ import org.junit.Test;
  */
 public class Client {
 	
-	@Ignore
 	@Test
 	public void readExcelToSql() throws IOException{
-		String path = "C:/Users/Administrator/Desktop/ExpressCode.xls";
-		List<List<String>> list = new ReadExcel().readExcel(path, 1, 1);
+		String path = "C:/Users/Administrator/Desktop/CODE.xlsx";
+		List<List<String>> list = new ReadExcel().readExcel(path, 1, 3);
 		StringBuilder stringBuilder = new StringBuilder();
 		
-		String sql = "INSERT INTO `eshop_mall`.`express_company` (`id`, `code`, `name`, `homepage`, `tel`, `ordinal`, `status`, `gmt_modified`, `gmt_create`) VALUES ('%d', '%s', '%s', '', '', '1', '1', NOW(), NOW());%n";
+		//String sql = "INSERT INTO `eshop_mall`.`express_company` (`code`, `name`, `homepage`, `tel`, `ordinal`, `status`, `gmt_modified`, `gmt_create`) VALUES ('%s', '%s', '', '', '1', '1', NOW(), NOW());%n";
+		String sql = "UPDATE express_company SET kuaidi100_code='%s', gmt_modified=NOW() WHERE name = '%s';%n";
 		
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
             	List<String> data = list.get(i);
-            	String script = String.format(sql, i+1, data.get(0), data.get(1));
+            	String script = String.format(sql, data.get(1), data.get(2));
             	stringBuilder.append(script);
             }
             System.out.println(stringBuilder.toString());

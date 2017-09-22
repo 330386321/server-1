@@ -2,7 +2,8 @@ package com.lawu.eshop.order.srv.converter;
 
 import java.util.ArrayList;
 
-import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
+import com.lawu.eshop.order.constants.ExpressProviderTypeEnum;
+import com.lawu.eshop.order.dto.ExpressInquiriesDTO;
 import com.lawu.eshop.order.dto.ExpressRecognitionDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShipperDTO;
@@ -47,9 +48,8 @@ public class ExpressConverter {
 			return rtn;
 		}
 		rtn = new ExpressInquiriesDetailBO();
-		rtn.setSuccess(expressInquiriesDetail.getSuccess());
-		rtn.setReason(expressInquiriesDetail.getReason());
-		rtn.setState(StateEnum.getEnum(expressInquiriesDetail.getState()));
+		rtn.setExpressProviderType(ExpressProviderTypeEnum.KUAIDINIAO);
+		rtn.setState(StateEnum.getEnum(expressInquiriesDetail.getState()).getState());
 		if (expressInquiriesDetail.getTraces() != null && !expressInquiriesDetail.getTraces().isEmpty()) {
 			rtn.setTraces(new ArrayList<>());
 			for (Trace item : expressInquiriesDetail.getTraces()) {
@@ -58,7 +58,48 @@ public class ExpressConverter {
 		}
 		return rtn;
 	}
+	
+	/**
+	 * ExpressInquiriesDatailBO转换
+	 *
+	 * @param expressInquiriesDetail 快递100查询封装数据
+	 * @return
+	 */
+	public static ExpressInquiriesDetailBO convert(com.lawu.eshop.order.srv.utils.express.kuaidi100.bo.ExpressInquiriesDetail expressInquiriesDetail) {
+		ExpressInquiriesDetailBO rtn = null;
+		if (expressInquiriesDetail == null) {
+			return rtn;
+		}
+		rtn = new ExpressInquiriesDetailBO();
+		rtn.setExpressProviderType(ExpressProviderTypeEnum.KUAIDI100);
+		rtn.setState(com.lawu.eshop.order.srv.utils.express.kuaidi100.constants.StateEnum.getEnum(expressInquiriesDetail.getState()).getState());
+		if (expressInquiriesDetail.getData() != null && !expressInquiriesDetail.getData().isEmpty()) {
+			rtn.setTraces(new ArrayList<>());
+			for (com.lawu.eshop.order.srv.utils.express.kuaidi100.bo.Trace item : expressInquiriesDetail.getData()) {
+				rtn.getTraces().add(convert(item));
+			}
+		}
+		return rtn;
+	}
 
+	/**
+	 * 
+	 * @param trace
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月15日
+	 */
+	public static TraceBO convert(com.lawu.eshop.order.srv.utils.express.kuaidi100.bo.Trace trace) {
+		TraceBO rtn = null;
+		if (trace == null) {
+			return rtn;
+		}
+		rtn = new TraceBO();
+		rtn.setAcceptStation(trace.getContext());
+		rtn.setAcceptTime(trace.getTime());
+		return rtn;
+	}
+	
 	/**
 	 * 
 	 * @param trace
@@ -95,9 +136,30 @@ public class ExpressConverter {
 		}
 
 		rtn = new ExpressInquiriesDetailDTO();
-		rtn.setSuccess(expressInquiriesDetailBO.getSuccess());
-		rtn.setReason(expressInquiriesDetailBO.getReason());
-		rtn.setState(expressInquiriesDetailBO.getState() != null ? ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetailBO.getState().getValue()) : ExpressInquiriesDetailStateEnum.NO_INFO);
+		rtn.setState(expressInquiriesDetailBO.getState());
+		rtn.setTraces(new ArrayList<>());
+		if (expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
+			for (TraceBO item : expressInquiriesDetailBO.getTraces()) {
+				rtn.getTraces().add(convert(item));
+			}
+		}
+		return rtn;
+	}
+	
+	/**
+	 * ExpressInquiriesDTO转换
+	 *
+	 * @param expressInquiriesDetailBO
+	 * @return
+	 */
+	public static ExpressInquiriesDTO convertExpressInquiriesDTO(ExpressInquiriesDetailBO expressInquiriesDetailBO) {
+		ExpressInquiriesDTO rtn = null;
+		if (expressInquiriesDetailBO == null) {
+			return rtn;
+		}
+		rtn = new ExpressInquiriesDTO();
+		rtn.setExpressProviderType(expressInquiriesDetailBO.getExpressProviderType());
+		rtn.setState(expressInquiriesDetailBO.getState());
 		rtn.setTraces(new ArrayList<>());
 		if (expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
 			for (TraceBO item : expressInquiriesDetailBO.getTraces()) {

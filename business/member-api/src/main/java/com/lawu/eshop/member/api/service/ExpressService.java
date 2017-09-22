@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.order.dto.ExpressInquiriesDTO;
 import com.lawu.eshop.order.dto.ExpressRecognitionDetailDTO;
-import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
 import com.lawu.eshop.order.param.ExpressQueryParam;
 
 /**
@@ -28,7 +28,7 @@ public interface ExpressService {
 	 * @date 2017年9月5日
 	 */
 	@RequestMapping(value = "inquiries", method = RequestMethod.PUT)
-	Result<ExpressInquiriesDetailDTO> inquiries(@RequestBody ExpressQueryParam param);
+	Result<ExpressInquiriesDTO> inquiries(@RequestBody ExpressQueryParam param);
 	
 	/**
 	 * 根据快递单号识别快递公司

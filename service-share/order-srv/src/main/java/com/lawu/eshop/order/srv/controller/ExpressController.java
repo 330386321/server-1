@@ -2,6 +2,7 @@ package com.lawu.eshop.order.srv.controller;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.order.dto.ExpressInquiriesDTO;
 import com.lawu.eshop.order.dto.ExpressRecognitionDetailDTO;
-import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
 import com.lawu.eshop.order.param.ExpressQueryParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ExpressRecognitionDetailBO;
@@ -33,7 +34,14 @@ import com.lawu.eshop.order.srv.utils.express.kdniao.constants.StateEnum;
 public class ExpressController extends BaseController {
 
 	@Autowired
-	private ExpressStrategy expressStrategy;
+	@Qualifier("kDNiaoExpressStrategy")
+	private ExpressStrategy kDNiaoExpressStrategy;
+	
+	@Autowired
+	@Qualifier("kuaiDi100ExpressStrategy")
+	private ExpressStrategy kuaiDi100ExpressStrategy;
+	
+	
 
 	/**
 	 * 根据快递单号和快递公司编码查询物流轨迹
@@ -45,18 +53,29 @@ public class ExpressController extends BaseController {
 	 * @date 2017年9月5日
 	 */
 	@RequestMapping(value = "inquiries", method = RequestMethod.PUT)
-	public Result<ExpressInquiriesDetailDTO> inquiries(@RequestBody @Validated ExpressQueryParam param, BindingResult bindingResult) {
+	public Result<ExpressInquiriesDTO> inquiries(@RequestBody @Validated ExpressQueryParam param, BindingResult bindingResult) {
 		String message = validate(bindingResult);
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
 		ExpressInquiriesDetailBO expressInquiriesDetailBO = null;
+		
+		/*
+		 * 1.快递100查询
+		 */
+		if (StringUtils.isNotBlank(param.getKuaidi100ExpCode())) {
+			expressInquiriesDetailBO = kuaiDi100ExpressStrategy.inquiries(param.getKuaidi100ExpCode(), param.getExpNo());
+		}
+		
+		/*
+		 * 2.快递鸟查询
+		 */
 		/*
 		 * 如果快递公司编码为空，通过物流编码查询快递公司编码
 		 * 再通过快递公司编码和快递单号查询物流轨迹
 		 */
-		if (StringUtils.isNotBlank(param.getExpCode())) {
-			expressInquiriesDetailBO = expressStrategy.inquiries(param.getExpCode(), param.getExpNo());
+		if (expressInquiriesDetailBO == null && StringUtils.isNotBlank(param.getExpCode())) {
+			expressInquiriesDetailBO = kDNiaoExpressStrategy.inquiries(param.getExpCode(), param.getExpNo());
 		}
 		
 		/*
@@ -66,11 +85,11 @@ public class ExpressController extends BaseController {
 		 */
 		ShipperBO actualShipper = null;
 		if (expressInquiriesDetailBO == null || StateEnum.NO_INFO.equals(expressInquiriesDetailBO.getState())) {
-			ExpressRecognitionDetailBO expressRecognitionDetailBO = expressStrategy.recognition(param.getExpNo());
+			ExpressRecognitionDetailBO expressRecognitionDetailBO = kDNiaoExpressStrategy.recognition(param.getExpNo());
 			if (expressRecognitionDetailBO != null && expressRecognitionDetailBO.getShippers() != null) {
 				// 根据可能的快递公司编码，由可信度从高到低遍历查询
 				for (ShipperBO shipper : expressRecognitionDetailBO.getShippers()) {
-					expressInquiriesDetailBO = expressStrategy.inquiries(shipper.getShipperCode(), param.getExpNo());
+					expressInquiriesDetailBO = kDNiaoExpressStrategy.inquiries(shipper.getShipperCode(), param.getExpNo());
 					// 如果返回结果有物流轨迹，则跳出循环
 					if (!StateEnum.NO_INFO.equals(expressInquiriesDetailBO.getState())) {
 						// 放入真实的快递公司编码
@@ -81,9 +100,9 @@ public class ExpressController extends BaseController {
 			}
 		}
 		if (expressInquiriesDetailBO == null) {
-			successCreated(ResultCode.THIRD_PARTY_LOGISTICS_INTERFACE_EXCEPTION);
+			return successCreated(ResultCode.THIRD_PARTY_LOGISTICS_INTERFACE_EXCEPTION);
 		}
-		ExpressInquiriesDetailDTO rtn = ExpressConverter.convert(expressInquiriesDetailBO);
+		ExpressInquiriesDTO rtn = ExpressConverter.convertExpressInquiriesDTO(expressInquiriesDetailBO);
 		if (actualShipper != null) {
 			rtn.setShipperCode(actualShipper.getShipperCode());
 		} else {
@@ -102,7 +121,7 @@ public class ExpressController extends BaseController {
 	 */
 	@RequestMapping(value = "recognition/{expNo}", method = RequestMethod.GET)
 	public Result<ExpressRecognitionDetailDTO> recognition(@PathVariable("expNo") String expNo) {
-		ExpressRecognitionDetailBO expressRecognitionDetailBO = expressStrategy.recognition(expNo);
+		ExpressRecognitionDetailBO expressRecognitionDetailBO = kDNiaoExpressStrategy.recognition(expNo);
 		if (expressRecognitionDetailBO == null) {
 			successCreated(ResultCode.THIRD_PARTY_LOGISTICS_INTERFACE_EXCEPTION);
 		}

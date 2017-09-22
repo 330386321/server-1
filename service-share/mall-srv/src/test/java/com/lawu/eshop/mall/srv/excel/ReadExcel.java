@@ -69,7 +69,7 @@ public class ReadExcel {
             for (int rowNum = fristRowNum; rowNum <= xssfSheet.getLastRowNum(); rowNum++) {
             	XSSFRow xssfRow = xssfSheet.getRow(rowNum);
                 if (xssfRow != null) {
-                	if (StringUtils.isBlank(xssfRow.getCell(0).getStringCellValue())) {
+                	if (xssfRow.getCell(0) == null) {
         				continue;
         			}
                 	data = new ArrayList<>();
@@ -109,7 +109,7 @@ public class ReadExcel {
             for (int rowNum = fristRowNum; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
                 HSSFRow hssfRow = hssfSheet.getRow(rowNum);
                 if (hssfRow != null) {
-                	if (StringUtils.isBlank(hssfRow.getCell(0).getStringCellValue())) {
+                	if (hssfRow.getCell(0) == null) {
         				continue;
         			}
                 	data = new ArrayList<>();

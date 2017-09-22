@@ -17,9 +17,14 @@ public class ExpressQueryParam {
 	private String expNo;
 	
 	/**
-	 * 快递公司编号
+	 * 快递鸟快递公司编号
 	 */
 	private String expCode;
+	
+	/**
+	 * 快递100快递公司编号
+	 */
+	private String kuaidi100ExpCode;
 
 	public String getExpNo() {
 		return expNo;
@@ -35,6 +40,14 @@ public class ExpressQueryParam {
 
 	public void setExpCode(String expCode) {
 		this.expCode = expCode;
+	}
+
+	public String getKuaidi100ExpCode() {
+		return kuaidi100ExpCode;
+	}
+
+	public void setKuaidi100ExpCode(String kuaidi100ExpCode) {
+		this.kuaidi100ExpCode = kuaidi100ExpCode;
 	}
 	
 }

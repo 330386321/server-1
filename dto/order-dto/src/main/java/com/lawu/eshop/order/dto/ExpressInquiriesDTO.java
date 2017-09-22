@@ -1,27 +1,23 @@
-package com.lawu.eshop.order.srv.bo;
+package com.lawu.eshop.order.dto;
 
 import java.util.List;
 
 import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.constants.ExpressProviderTypeEnum;
+import com.lawu.eshop.order.dto.foreign.TraceDTO;
 
 /**
- * 物流实时查询对外暴露数据
+ * 查询物流轨迹对api暴露数据
  * 
- * @author Sunny
- * @date 2017/4/10
+ * @author jiangxinjun
+ * @date 2017年9月22日
  */
-public class ExpressInquiriesDetailBO {
+public class ExpressInquiriesDTO {
 	
 	/**
 	 * 快递公司编码
 	 */
 	private String shipperCode;
-	
-	/**
-	 * 物流运单号
-	 */
-	private String logisticCode;
 	
 	/**
 	 * 快递数据提供者类型
@@ -32,11 +28,11 @@ public class ExpressInquiriesDetailBO {
 	 * 物流状态
 	 */
 	private ExpressInquiriesDetailStateEnum state;
-	
+
 	/**
 	 * 物流轨迹
 	 */
-	private List<TraceBO> traces;
+	private List<TraceDTO> traces;
 
 	public String getShipperCode() {
 		return shipperCode;
@@ -44,14 +40,6 @@ public class ExpressInquiriesDetailBO {
 
 	public void setShipperCode(String shipperCode) {
 		this.shipperCode = shipperCode;
-	}
-
-	public String getLogisticCode() {
-		return logisticCode;
-	}
-
-	public void setLogisticCode(String logisticCode) {
-		this.logisticCode = logisticCode;
 	}
 
 	public ExpressProviderTypeEnum getExpressProviderType() {
@@ -70,12 +58,12 @@ public class ExpressInquiriesDetailBO {
 		this.state = state;
 	}
 
-	public List<TraceBO> getTraces() {
+	public List<TraceDTO> getTraces() {
 		return traces;
 	}
 
-	public void setTraces(List<TraceBO> traces) {
+	public void setTraces(List<TraceDTO> traces) {
 		this.traces = traces;
 	}
-	
+
 }

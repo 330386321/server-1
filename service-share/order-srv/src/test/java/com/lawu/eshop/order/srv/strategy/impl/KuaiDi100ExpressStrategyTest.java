@@ -12,35 +12,31 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.lawu.eshop.order.srv.OrderSrvApplicationTest;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
-import com.lawu.eshop.order.srv.bo.ExpressRecognitionDetailBO;
 import com.lawu.eshop.order.srv.strategy.ExpressStrategy;
 
 /**
  * 
  * @author jiangxinjun
- * @date 2017年9月4日
+ * @date 2017年9月21日
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = OrderSrvApplicationTest.class)
 @WebAppConfiguration
-public class KDNiaoExpressStrategyTest {
+public class KuaiDi100ExpressStrategyTest {
 
 	@Autowired
-	@Qualifier("kDNiaoExpressStrategy")
+	@Qualifier("kuaiDi100ExpressStrategy")
 	private ExpressStrategy expressStrategy;
 
-	@Ignore
 	@Test
 	public void inquiries() {
-		ExpressInquiriesDetailBO actual = expressStrategy.inquiries("YD", "3916525428265");
+		ExpressInquiriesDetailBO actual = expressStrategy.inquiries("huitongkuaidi", "70094570443407");
 		Assert.assertNotNull(actual);
 	}
 	
 	@Ignore
 	@Test
 	public void recognition() {
-		ExpressRecognitionDetailBO actual = expressStrategy.recognition("3916525428265");
-		Assert.assertNotNull(actual);
 	}
 	
 }

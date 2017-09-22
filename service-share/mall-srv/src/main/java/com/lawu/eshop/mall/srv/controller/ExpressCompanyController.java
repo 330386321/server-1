@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mall.constants.ExpressProviderTypeEnum;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyQueryDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyRetrieveDTO;
@@ -178,8 +179,8 @@ public class ExpressCompanyController extends BaseController {
 	 * @date 2017年9月5日
 	 */
 	@RequestMapping(value = "code/{code}", method = RequestMethod.GET)
-	public Result<ExpressCompanyDTO> code(@PathVariable("code") String code) {
-		ExpressCompanyBO expressCompanyBO = expressCompanyService.code(code);
+	public Result<ExpressCompanyDTO> code(@PathVariable("code") String code, @RequestParam("expressProviderType")ExpressProviderTypeEnum expressProviderType) {
+		ExpressCompanyBO expressCompanyBO = expressCompanyService.code(code, expressProviderType);
 		if (expressCompanyBO == null) {
 			return successGet(ResultCode.NOT_FOUND_DATA);
 		}

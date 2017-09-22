@@ -1,0 +1,1 @@
+ALTER TABLE `express_company` ADD COLUMN `kuaidi100_code`  varchar(30) NULL AFTER `code`;
