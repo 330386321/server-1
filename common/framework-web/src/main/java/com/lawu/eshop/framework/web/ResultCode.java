@@ -194,6 +194,7 @@ public class ResultCode {
     public static final int AGENT_ACCOUNT_EXIST = 8111;
     public static final int AGENT_MOBILE_EXIST = 8112;
     public static final int USER_UNAUTHORIZED = 8113;
+    public static final int EXISTS_ENABLE_APP_VERSION= 8114;
 
 
 
@@ -283,6 +284,8 @@ public class ResultCode {
         ResultCode.messageMap.put(AGENT_ACCOUNT_EXIST, "该账号已经存在");
         ResultCode.messageMap.put(AGENT_MOBILE_EXIST, "该手机号已经存在");
         ResultCode.messageMap.put(USER_UNAUTHORIZED, "未授权");
+        ResultCode.messageMap.put(EXISTS_ENABLE_APP_VERSION, "存在启用的版本");
+        
 
 
 

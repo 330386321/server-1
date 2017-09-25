@@ -20,4 +20,18 @@ public class HeaderUtil {
         }
         return channel.toString();
     }
+    
+    /**
+     * 获取当前登录用户platform
+     *
+     * @param request
+     * @return
+     */
+    public static byte getRequestPlatform(HttpServletRequest request) {
+        Object platform = request.getAttribute(VisitConstants.HEADER_PLATFORM);
+        if (platform == null) {
+            return 0;
+        }
+        return (byte)platform;
+    }
 }
