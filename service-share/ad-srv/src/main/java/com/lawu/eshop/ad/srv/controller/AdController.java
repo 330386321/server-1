@@ -349,7 +349,9 @@ public class AdController extends BaseController {
 		}
 
 		if (param.getLatitude() != null && param.getLongitude() != null) {
-			String latLon = param.getLatitude() + "," + param.getLongitude();
+			double lat = BigDecimal.valueOf(param.getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double lon = BigDecimal.valueOf(param.getLongitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			String latLon = lat + "," + lon;
 			query = new SolrQuery();
 			query.setParam("pt", latLon);
 			query.setParam("fq", "{!geofilt}");
@@ -492,7 +494,9 @@ public class AdController extends BaseController {
 		}
 
 		if (adSolrParam.getAdSolrParam().getLatitude() != null && adSolrParam.getAdSolrParam().getLongitude() != null) {
-			String latLon = adSolrParam.getAdSolrParam().getLatitude() + "," + adSolrParam.getAdSolrParam().getLongitude();
+			double lat = BigDecimal.valueOf(adSolrParam.getAdSolrParam().getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double lon = BigDecimal.valueOf(adSolrParam.getAdSolrParam().getLongitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			String latLon = lat + "," + lon;
 			query = new SolrQuery();
 			query.setParam("pt", latLon);
 			query.setParam("fq", "{!geofilt}");
@@ -651,7 +655,9 @@ public class AdController extends BaseController {
 		}
 
 		if (param.getLatitude() != null && param.getLongitude() != null) {
-			String latLon = param.getLatitude() + "," + param.getLongitude();
+			double lat = BigDecimal.valueOf(param.getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double lon = BigDecimal.valueOf(param.getLongitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			String latLon = lat + "," + lon;
 			query = new SolrQuery();
 			query.setParam("pt", latLon);
 			query.setParam("fq", "{!geofilt}");
@@ -839,7 +845,9 @@ public class AdController extends BaseController {
 		}
 
 		if (param.getLatitude() != null && param.getLongitude() != null) {
-			String latLon = param.getLatitude() + "," + param.getLongitude();
+			double lat = BigDecimal.valueOf(param.getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double lon = BigDecimal.valueOf(param.getLongitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			String latLon = lat + "," + lon;
 			query = new SolrQuery();
 			query.setParam("pt", latLon);
 			query.setParam("fq", "{!geofilt}");
