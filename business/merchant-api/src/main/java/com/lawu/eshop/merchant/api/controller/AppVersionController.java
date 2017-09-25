@@ -35,13 +35,13 @@ public class AppVersionController extends BaseController{
 	@RequestMapping(value = "getVersion", method = RequestMethod.GET)
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	Result<AppVersionDTO> getVersion() {
-		byte platform = HeaderUtil.getRequestPlatform(getRequest());
-		if(platform==0){
+		String platform = HeaderUtil.getRequestPlatform(getRequest());
+		if(platform==""){
 			return successCreated(ResultCode.GET_HEADER_ERROR);
 		}
-		Result<AppVersionDTO> result = appVersionService.getAppVersion(AppTypeEnum.MERCHANT.val,platform);
+		Result<AppVersionDTO> result = appVersionService.getAppVersion(AppTypeEnum.MERCHANT.val,Byte.valueOf(platform));
 		String downUrl ="";
-		if(platform==MobileTypeEnum.Android.val){
+		if(Byte.valueOf(platform)==MobileTypeEnum.Android.val){
 			downUrl = memberApiConfig.getDownloadUrl();
 			String channel = HeaderUtil.getRequestChannel(getRequest());
 			downUrl = downUrl.replace("{channel}", channel);

@@ -27,11 +27,11 @@ public class HeaderUtil {
      * @param request
      * @return
      */
-    public static byte getRequestPlatform(HttpServletRequest request) {
+    public static String getRequestPlatform(HttpServletRequest request) {
         Object platform = request.getAttribute(VisitConstants.REQUEST_PLATFORM);
         if (platform == null) {
-            return 0;
+            return "";
         }
-        return (byte)platform;
+        return platform.toString();
     }
 }
