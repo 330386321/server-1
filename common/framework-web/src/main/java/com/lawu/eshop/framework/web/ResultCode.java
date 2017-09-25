@@ -195,6 +195,7 @@ public class ResultCode {
     public static final int AGENT_MOBILE_EXIST = 8112;
     public static final int USER_UNAUTHORIZED = 8113;
     public static final int EXISTS_ENABLE_APP_VERSION= 8114;
+    public static final int GET_HEADER_ERROR= 8115;
 
 
 
@@ -285,9 +286,8 @@ public class ResultCode {
         ResultCode.messageMap.put(AGENT_MOBILE_EXIST, "该手机号已经存在");
         ResultCode.messageMap.put(USER_UNAUTHORIZED, "未授权");
         ResultCode.messageMap.put(EXISTS_ENABLE_APP_VERSION, "存在启用的版本");
+        ResultCode.messageMap.put(GET_HEADER_ERROR, "获取请求头失败");
         
-
-
 
         // 商品模块 3xxx
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品图片");

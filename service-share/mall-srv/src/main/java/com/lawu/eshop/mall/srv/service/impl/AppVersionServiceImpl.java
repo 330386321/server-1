@@ -30,16 +30,19 @@ public class AppVersionServiceImpl implements AppVersionService{
 		AppVersionDOExample example = new AppVersionDOExample();
 		example.createCriteria().andStatusEqualTo(AppStatusEnum.ENABLE.val).andAppTypeEqualTo(appType).andPlatformEqualTo(mobileType);
 		List<AppVersionDO> list = appVersionDOMapper.selectByExample(example);
-		AppVersionBO bo = new AppVersionBO();
 		if(list != null && !list.isEmpty()) {
+			AppVersionBO bo = new AppVersionBO();
 			AppVersionDO DO = list.get(0);
 			bo.setAppBigVersion(DO.getAppBigVersion());
 			bo.setAppVersion(DO.getAppVersion());
 			bo.setStatus(DO.getStatus());
 			bo.setUpdateDesc(DO.getUpdateDesc());
 			bo.setIsForce(DO.getIsForce());
+			return bo;
+		}else{
+			return null;
 		}
-		return bo;
+		
 	}
 
 	@Override

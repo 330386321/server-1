@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.framework.web.util.HeaderUtil;
 import com.lawu.eshop.mall.constants.AppTypeEnum;
@@ -35,6 +36,9 @@ public class AppVersionController extends BaseController{
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	Result<AppVersionDTO> getVersion() {
 		byte platform = HeaderUtil.getRequestPlatform(getRequest());
+		if(platform==0){
+			return successCreated(ResultCode.GET_HEADER_ERROR);
+		}
 		Result<AppVersionDTO> result = appVersionService.getAppVersion(AppTypeEnum.MERCHANT.val,platform);
 		String downUrl ="";
 		if(platform==MobileTypeEnum.Android.val){
