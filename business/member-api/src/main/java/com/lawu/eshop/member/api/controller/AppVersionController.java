@@ -40,15 +40,13 @@ public class AppVersionController extends BaseController{
 		byte platform = HeaderUtil.getRequestPlatform(getRequest());
 		Result<AppVersionDTO> result = appVersionService.getAppVersion(AppTypeEnum.MEMBER.val,platform);
 		String downUrl ="";
-		if(platform==2){
+		if(platform==MobileTypeEnum.Android.val){
 			downUrl = memberApiConfig.getDownloadUrl();
-		}else if(platform==MobileTypeEnum.IOS.val){
-			downUrl = memberApiConfig.getDownloadUrl();
+			String channel = HeaderUtil.getRequestChannel(getRequest());
+			downUrl = downUrl.replace("{channel}", channel);
+			if(result.getModel() != null && result.getModel().getAppVersion() != null)
+			downUrl = downUrl.replace("{version}", result.getModel().getAppVersion());
 		}
-		String channel = HeaderUtil.getRequestChannel(getRequest());
-		downUrl = downUrl.replace("{channel}", channel);
-		if(result.getModel() != null && result.getModel().getAppVersion() != null)
-		downUrl = downUrl.replace("{version}", result.getModel().getAppVersion());
 		result.getModel().setDownloadUrl(downUrl);
 		return result;
 	}

@@ -90,6 +90,7 @@ public class MemberApiConfig {
 	@Value(value="${download_url}")
 	private String downloadUrl;
 	
+	
 	public String getDownloadUrl() {
 		return downloadUrl;
 	}
@@ -258,5 +259,7 @@ public class MemberApiConfig {
 	public String getShareRedPacketDefaultImagePath() {
 		return shareRedPacketDefaultImagePath;
 	}
+
+	
 	
 }

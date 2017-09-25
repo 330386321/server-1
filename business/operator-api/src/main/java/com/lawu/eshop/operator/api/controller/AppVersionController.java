@@ -79,7 +79,7 @@ public class AppVersionController extends BaseController{
 	 */
 	@ApiOperation(value = "列表查询", notes = "列表查询,[]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@RequiresPermissions("app:list")
+	//@RequiresPermissions("app:list")
 	@RequestMapping(value = "getVersionOperator", method = RequestMethod.GET)
 	Result<Page<AppVersionOperatorDTO>>  getVersionOperator( @ModelAttribute @ApiParam(value = "查询信息") AppVersionOperatorParam query) {
 		return appVersionService.getVersionOperator(query);
