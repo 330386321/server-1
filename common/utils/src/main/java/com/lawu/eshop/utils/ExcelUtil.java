@@ -77,6 +77,8 @@ public class ExcelUtil {
                 		XSSFCell cell = xssfRow.getCell(cellNum);
                 		if (cell != null) {
                 			data.add(cell.getStringCellValue());
+                		} else {
+                			data.add(null);
                 		}
                 	}
                 	list.add(data);
@@ -116,6 +118,8 @@ public class ExcelUtil {
                 		HSSFCell cell = hssfRow.getCell(cellNum);
                 		if (cell != null) {
                 			data.add(cell.getStringCellValue());
+                		} else {
+                			data.add(null);
                 		}
                 	}
                 	list.add(data);

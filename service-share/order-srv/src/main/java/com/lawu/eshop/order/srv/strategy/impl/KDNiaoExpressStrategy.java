@@ -41,6 +41,7 @@ public class KDNiaoExpressStrategy implements ExpressStrategy {
 				logger.error("即时查询接口返回异常");
 				logger.error("Result:{}", result);
 				logger.error("Result:{}", expressInquiriesDetail.getReason());
+				return rtn;
 			}
 			
 			// Trace按照时间倒序排序

@@ -47,7 +47,7 @@ public class ExpressController extends BaseController {
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-		ExpressInquiriesDetailBO expressInquiriesDetailBO = expressStrategy.recognitionWithInquiries(param.getKuaidi100ExpCode(), param.getExpNo());
+		ExpressInquiriesDetailBO expressInquiriesDetailBO = expressStrategy.recognitionWithInquiries(param.getExpCode(), param.getExpNo());
 		if (expressInquiriesDetailBO == null) {
 			return successCreated(ResultCode.THIRD_PARTY_LOGISTICS_INTERFACE_EXCEPTION);
 		}

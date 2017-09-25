@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.lawu.eshop.utils.ExcelUtil;
+import com.lawu.eshop.utils.PinyinUtil;
 
 /**
  * 
@@ -16,21 +17,20 @@ public class ImportExpressData {
 
 	@Test
 	public void importExpressData() throws IOException {
-		String path = "C:/Users/Administrator/Desktop/CODE.xlsx";
-		List<List<String>> list = ExcelUtil.readExcel(path, 1, 3);
+		String path = "C:/Users/Administrator/Desktop/快递100快递公司编码-标准国际类-（截止至2017.6.27）.xlsx";
+		List<List<String>> list = ExcelUtil.readExcel(path, 1, 4);
 		StringBuilder stringBuilder = new StringBuilder();
-
-		// String sql = "INSERT INTO `eshop_mall`.`express_company` (`code`,
-		// `name`, `homepage`, `tel`, `ordinal`, `status`, `gmt_modified`,
-		// `gmt_create`) VALUES ('%s', '%s', '', '', '1', '1', NOW(),
-		// NOW());%n";
-		String sql = "UPDATE express_company SET kuaidi100_code='%s', gmt_modified=NOW() WHERE name = '%s';%n";
-
+		String sql = "INSERT INTO `eshop_mall`.`express_company` (`id`, `code`, `name`, `homepage`, `tel`, `ordinal`, `status`, `gmt_modified`, `gmt_create`) VALUES ('%d', '%s', '%s', '', '', '%s', '%d', NOW(),NOW());%n";
+		int count = 1; 
 		if (list != null) {
 			for (int i = 0; i < list.size(); i++) {
 				List<String> data = list.get(i);
-				String script = String.format(sql, data.get(1), data.get(2));
-				stringBuilder.append(script);
+				int isShow = 1;
+				if (data.get(4) != null && !"CN".equals(data.get(4))) {
+					isShow = 0;
+				}
+				stringBuilder.append(String.format(sql, count, data.get(1), data.get(0), (int)PinyinUtil.getPinYinHeadChar(data.get(1)).toUpperCase().charAt(0), isShow));
+				count++;
 			}
 			System.out.println(stringBuilder.toString());
 		}

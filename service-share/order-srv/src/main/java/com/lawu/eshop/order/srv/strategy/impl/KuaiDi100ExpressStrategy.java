@@ -40,6 +40,12 @@ public class KuaiDi100ExpressStrategy implements ExpressStrategy {
 				logger.error("快递查询接口返回异常");
 				logger.error("Result:{}", result);
 				logger.error("Result:{}", expressInquiriesDetail.getMessage());
+				return rtn;
+			}
+			
+			if (expressInquiriesDetail.getStatus().equals(StatusEnum.NO_INFO.getValue())) {
+				expressInquiriesDetail.setCom(expCode);
+				expressInquiriesDetail.setNu(expNo);
 			}
 			
 			rtn = ExpressConverter.convert(expressInquiriesDetail);

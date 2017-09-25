@@ -48,6 +48,8 @@ public class ExpressConverter {
 			return rtn;
 		}
 		rtn = new ExpressInquiriesDetailBO();
+		rtn.setLogisticCode(expressInquiriesDetail.getLogisticCode());
+		rtn.setShipperCode(expressInquiriesDetail.getShipperCode());
 		rtn.setState(expressInquiriesDetail.getState() != null ? StateEnum.getEnum(expressInquiriesDetail.getState()).getState() : ExpressInquiriesDetailStateEnum.NO_INFO);
 		if (expressInquiriesDetail.getTraces() != null && !expressInquiriesDetail.getTraces().isEmpty()) {
 			rtn.setTraces(new ArrayList<>());
@@ -70,6 +72,8 @@ public class ExpressConverter {
 			return rtn;
 		}
 		rtn = new ExpressInquiriesDetailBO();
+		rtn.setLogisticCode(expressInquiriesDetail.getNu());
+		rtn.setShipperCode(expressInquiriesDetail.getCom());
 		rtn.setState(expressInquiriesDetail.getState() != null ? com.lawu.eshop.order.srv.utils.express.kuaidi100.constants.StateEnum.getEnum(expressInquiriesDetail.getState()).getState() : ExpressInquiriesDetailStateEnum.NO_INFO);
 		if (expressInquiriesDetail.getData() != null && !expressInquiriesDetail.getData().isEmpty()) {
 			rtn.setTraces(new ArrayList<>());
@@ -128,12 +132,11 @@ public class ExpressConverter {
 	 */
 	public static ExpressInquiriesDetailDTO convert(ExpressInquiriesDetailBO expressInquiriesDetailBO) {
 		ExpressInquiriesDetailDTO rtn = null;
-
 		if (expressInquiriesDetailBO == null) {
 			return rtn;
 		}
-
 		rtn = new ExpressInquiriesDetailDTO();
+		rtn.setShipperCode(expressInquiriesDetailBO.getShipperCode());
 		rtn.setState(expressInquiriesDetailBO.getState());
 		rtn.setTraces(new ArrayList<>());
 		if (expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
@@ -156,6 +159,7 @@ public class ExpressConverter {
 			return rtn;
 		}
 		rtn = new ExpressInquiriesDTO();
+		rtn.setShipperCode(expressInquiriesDetailBO.getShipperCode());
 		rtn.setState(expressInquiriesDetailBO.getState());
 		rtn.setTraces(new ArrayList<>());
 		if (expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
@@ -225,10 +229,12 @@ public class ExpressConverter {
 		ExpressRecognitionDetailDTO rtn = null;
 		rtn = new ExpressRecognitionDetailDTO();
 		rtn.setShippers(new ArrayList<>());
-		for (ShipperBO shipperBO : expressRecognitionDetailBO.getShippers()) {
-			ShipperDTO shipperDTO = new ShipperDTO();
-			shipperDTO.setShipperCode(shipperBO.getShipperCode());
-			rtn.getShippers().add(shipperDTO);
+		if (expressRecognitionDetailBO != null) {
+			for (ShipperBO shipperBO : expressRecognitionDetailBO.getShippers()) {
+				ShipperDTO shipperDTO = new ShipperDTO();
+				shipperDTO.setShipperCode(shipperBO.getShipperCode());
+				rtn.getShippers().add(shipperDTO);
+			}
 		}
 		return rtn;
 	}
