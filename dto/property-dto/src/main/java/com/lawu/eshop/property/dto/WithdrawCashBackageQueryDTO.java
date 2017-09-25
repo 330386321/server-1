@@ -23,7 +23,13 @@ public class WithdrawCashBackageQueryDTO {
 	@ApiModelProperty(value = "区域")
 	private String regionFullName;
 
-	@ApiModelProperty(value = "金额")
+	@ApiModelProperty(value = "申请提现金额")
+	private BigDecimal cashMoney;
+
+	@ApiModelProperty(value = "手续费")
+	private BigDecimal poundage;
+
+	@ApiModelProperty(value = "到账金额")
 	private BigDecimal money;
 
 	@ApiModelProperty(value = "状态")
@@ -195,4 +201,19 @@ public class WithdrawCashBackageQueryDTO {
 		this.cashStatsuEnum = cashStatsuEnum;
 	}
 
+	public BigDecimal getCashMoney() {
+		return cashMoney;
+	}
+
+	public void setCashMoney(BigDecimal cashMoney) {
+		this.cashMoney = cashMoney;
+	}
+
+	public BigDecimal getPoundage() {
+		return poundage;
+	}
+
+	public void setPoundage(BigDecimal poundage) {
+		this.poundage = poundage;
+	}
 }

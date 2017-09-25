@@ -145,7 +145,14 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			} else {
 				bqbo.setGmtModified("");
 			}
-			bqbo.setMoney(cdo.getMoney());
+			bqbo.setCashMoney(cdo.getCashMoney());
+			if(CashStatusEnum.APPLY.getVal().equals(cdo.getStatus()) || CashStatusEnum.FAILURE.getVal().equals(cdo.getStatus())){
+				bqbo.setPoundage(new BigDecimal("0"));
+				bqbo.setMoney(new BigDecimal("0"));
+			}else{
+				bqbo.setPoundage(cdo.getCashMoney().subtract(cdo.getMoney()));
+				bqbo.setMoney(cdo.getMoney());
+			}
 			cbos.add(bqbo);
 		}
 		page.setRecords(cbos);
@@ -230,8 +237,8 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			paramList.clear();
 			WithdrawCashOperDOView view = new WithdrawCashOperDOView();
 
-			if (CashStatusEnum.SUCCESS.getVal().equals(param.getCashOperEnum().getVal())) {
-				//计算手续费
+			//受理操作时计算手续费
+			if (CashStatusEnum.ACCEPT.getVal().equals(param.getCashOperEnum().getVal())) {
 				WithdrawCashDOExample example = new WithdrawCashDOExample();
 				example.createCriteria().andUserNumEqualTo(wcdo.getUserNum()).andStatusEqualTo(CashStatusEnum.SUCCESS.getVal()).andGmtCreateGreaterThanOrEqualTo(DateUtil.formatDate(DateUtil.getDateFormat(new Date(),"yyyy-MM")+"-01 00:00:00","yyyy-MM-dd HH:mm:ss"));
 				int count = withdrawCashDOMapper.countByExample(example);
