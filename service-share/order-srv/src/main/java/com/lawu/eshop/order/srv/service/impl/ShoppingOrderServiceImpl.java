@@ -1269,6 +1269,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
 		shoppingOrderItemExtendDOExampleCriteria.andSOMemberIdEqualTo(memberId);
+		shoppingOrderItemExtendDOExampleCriteria.andSOStatusEqualTo(StatusEnum.VALID.getValue());
 		// 订单状态为交易成功并且未评价
 		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		shoppingOrderItemExtendDOExampleCriteria.andIsEvaluationEqualTo(false);

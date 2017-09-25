@@ -34,11 +34,11 @@ public class UserVisitInterceptor extends HandlerInterceptorAdapter {
         }
 
         String imei = request.getHeader(VisitConstants.HEADER_IMEI);
-        String platform = request.getHeader(VisitConstants.REQUEST_PLATFORM);
-        String platformVer = request.getHeader(VisitConstants.REQUEST_PLATFORM_VERSION);
-        String appVer = request.getHeader(VisitConstants.REQUEST_APP_VERSION);
-        String cityId = request.getHeader(VisitConstants.REQUEST_LOCATION_PATH);
-        String channel = request.getHeader(VisitConstants.REQUEST_CHANNEL);
+        String platform = request.getHeader(VisitConstants.HEADER_PLATFORM);
+        String platformVer = request.getHeader(VisitConstants.HEADER_PLATFORM_VERSION);
+        String appVer = request.getHeader(VisitConstants.HEADER_APP_VERSION);
+        String cityId = request.getHeader(VisitConstants.HEADER_LOCATION_PATH);
+        String channel = request.getHeader(VisitConstants.HEADER_CHANNEL);
         if (isValidate && (StringUtils.isEmpty(platform) || StringUtils.isEmpty(platformVer) || StringUtils.isEmpty(appVer) || StringUtils.isEmpty(channel))) {
             throw new HeaderParamException();
         }
