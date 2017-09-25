@@ -28,7 +28,7 @@ public class HeaderUtil {
      * @return
      */
     public static byte getRequestPlatform(HttpServletRequest request) {
-        Object platform = request.getAttribute(VisitConstants.HEADER_PLATFORM);
+        Object platform = request.getAttribute(VisitConstants.REQUEST_PLATFORM);
         if (platform == null) {
             return 0;
         }
