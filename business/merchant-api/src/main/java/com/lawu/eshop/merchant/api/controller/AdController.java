@@ -202,6 +202,12 @@ public class AdController extends BaseController {
 				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
 			}
 		}else{
+			if(adParam.getTypeEnum()!=AdTypeEnum.AD_TYPE_FLAT || adParam.getTypeEnum()!=AdTypeEnum.AD_TYPE_VIDEO){
+				
+				if(adParam.getTotalPoint().compareTo(adParam.getPoint().multiply(BigDecimal.valueOf(adParam.getAdCount())))!=0){
+					return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
+				}
+			}
 			if(adParam.getAdCount()>1000000){
 				return successCreated(ResultCode.AD_RED_PACKET_COUNT_ERROR);
 			}
