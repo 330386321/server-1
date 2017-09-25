@@ -13,6 +13,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.mall.constants.AppStatusEnum;
 import com.lawu.eshop.mall.dto.AppVersionOperatorDTO;
 import com.lawu.eshop.mall.param.AppVersionOperatorParam;
@@ -79,7 +80,8 @@ public class AppVersionController extends BaseController{
 	 */
 	@ApiOperation(value = "列表查询", notes = "列表查询,[]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	//@RequiresPermissions("app:list")
+	@PageBody
+	@RequiresPermissions("app:list")
 	@RequestMapping(value = "getVersionOperator", method = RequestMethod.GET)
 	Result<Page<AppVersionOperatorDTO>>  getVersionOperator( @ModelAttribute @ApiParam(value = "查询信息") AppVersionOperatorParam query) {
 		return appVersionService.getVersionOperator(query);
