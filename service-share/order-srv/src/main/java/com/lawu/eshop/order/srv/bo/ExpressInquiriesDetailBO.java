@@ -3,7 +3,6 @@ package com.lawu.eshop.order.srv.bo;
 import java.util.List;
 
 import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
-import com.lawu.eshop.order.constants.ExpressProviderTypeEnum;
 
 /**
  * 物流实时查询对外暴露数据
@@ -22,11 +21,6 @@ public class ExpressInquiriesDetailBO {
 	 * 物流运单号
 	 */
 	private String logisticCode;
-	
-	/**
-	 * 快递数据提供者类型
-	 */
-	private ExpressProviderTypeEnum expressProviderType;
 	
 	/**
 	 * 物流状态
@@ -52,14 +46,6 @@ public class ExpressInquiriesDetailBO {
 
 	public void setLogisticCode(String logisticCode) {
 		this.logisticCode = logisticCode;
-	}
-
-	public ExpressProviderTypeEnum getExpressProviderType() {
-		return expressProviderType;
-	}
-
-	public void setExpressProviderType(ExpressProviderTypeEnum expressProviderType) {
-		this.expressProviderType = expressProviderType;
 	}
 
 	public ExpressInquiriesDetailStateEnum getState() {

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.order.param.PayOrderDataParam;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,8 +22,8 @@ import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.param.MerchantPayOrderListParam;
 import com.lawu.eshop.order.param.OperatorPayOrderParam;
+import com.lawu.eshop.order.param.PayOrderDataParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
-import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 import com.lawu.eshop.order.srv.converter.PayOrderConverterTest;

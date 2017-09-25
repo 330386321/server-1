@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.constants.ExpressProviderTypeEnum;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyQueryDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyRetrieveDTO;
@@ -78,5 +77,5 @@ public interface ExpressCompanyService {
 	 * @date 2017年9月5日
 	 */
 	@RequestMapping(value = "code/{code}", method = RequestMethod.GET)
-	Result<ExpressCompanyDTO> code(@PathVariable("code") String code, @RequestParam("expressProviderType")ExpressProviderTypeEnum expressProviderType);
+	Result<ExpressCompanyDTO> code(@PathVariable("code") String code);
 }

@@ -2,7 +2,6 @@ package com.lawu.eshop.mall.srv.service;
 
 import java.util.List;
 
-import com.lawu.eshop.mall.constants.ExpressProviderTypeEnum;
 import com.lawu.eshop.mall.srv.bo.ExpressCompanyBO;
 
 /**
@@ -46,7 +45,7 @@ public interface ExpressCompanyService {
 	 * @author jiangxinjun
 	 * @date 2017年9月5日
 	 */
-	ExpressCompanyBO code(String code, ExpressProviderTypeEnum expressProviderType);
+	ExpressCompanyBO code(String code);
 	
 	/**
 	 * 根据第三方快递公司编号集合查询快递公司

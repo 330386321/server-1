@@ -23,12 +23,6 @@ public class ExpressCompanyDTO {
 	private String code;
 	
 	/**
-	 * 快递100编号
-	 */
-	@ApiModelProperty(value = "快递100编号")
-	private String kuaidi100Code;
-	
-	/**
 	 * 名称
 	 */
 	@ApiModelProperty(value = "名称", required = true)
@@ -50,14 +44,6 @@ public class ExpressCompanyDTO {
 		this.code = code;
 	}
 	
-	public String getKuaidi100Code() {
-		return kuaidi100Code;
-	}
-
-	public void setKuaidi100Code(String kuaidi100Code) {
-		this.kuaidi100Code = kuaidi100Code;
-	}
-
 	public String getName() {
 		return name;
 	}

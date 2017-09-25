@@ -2,7 +2,7 @@ package com.lawu.eshop.order.srv.converter;
 
 import java.util.ArrayList;
 
-import com.lawu.eshop.order.constants.ExpressProviderTypeEnum;
+import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.dto.ExpressInquiriesDTO;
 import com.lawu.eshop.order.dto.ExpressRecognitionDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
@@ -48,8 +48,7 @@ public class ExpressConverter {
 			return rtn;
 		}
 		rtn = new ExpressInquiriesDetailBO();
-		rtn.setExpressProviderType(ExpressProviderTypeEnum.KUAIDINIAO);
-		rtn.setState(StateEnum.getEnum(expressInquiriesDetail.getState()).getState());
+		rtn.setState(expressInquiriesDetail.getState() != null ? StateEnum.getEnum(expressInquiriesDetail.getState()).getState() : ExpressInquiriesDetailStateEnum.NO_INFO);
 		if (expressInquiriesDetail.getTraces() != null && !expressInquiriesDetail.getTraces().isEmpty()) {
 			rtn.setTraces(new ArrayList<>());
 			for (Trace item : expressInquiriesDetail.getTraces()) {
@@ -71,8 +70,7 @@ public class ExpressConverter {
 			return rtn;
 		}
 		rtn = new ExpressInquiriesDetailBO();
-		rtn.setExpressProviderType(ExpressProviderTypeEnum.KUAIDI100);
-		rtn.setState(com.lawu.eshop.order.srv.utils.express.kuaidi100.constants.StateEnum.getEnum(expressInquiriesDetail.getState()).getState());
+		rtn.setState(expressInquiriesDetail.getState() != null ? com.lawu.eshop.order.srv.utils.express.kuaidi100.constants.StateEnum.getEnum(expressInquiriesDetail.getState()).getState() : ExpressInquiriesDetailStateEnum.NO_INFO);
 		if (expressInquiriesDetail.getData() != null && !expressInquiriesDetail.getData().isEmpty()) {
 			rtn.setTraces(new ArrayList<>());
 			for (com.lawu.eshop.order.srv.utils.express.kuaidi100.bo.Trace item : expressInquiriesDetail.getData()) {
@@ -158,7 +156,6 @@ public class ExpressConverter {
 			return rtn;
 		}
 		rtn = new ExpressInquiriesDTO();
-		rtn.setExpressProviderType(expressInquiriesDetailBO.getExpressProviderType());
 		rtn.setState(expressInquiriesDetailBO.getState());
 		rtn.setTraces(new ArrayList<>());
 		if (expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {

@@ -20,7 +20,6 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.mall.constants.ExpressProviderTypeEnum;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.merchant.api.service.ExpressCompanyService;
 import com.lawu.eshop.merchant.api.service.ExpressService;
@@ -74,7 +73,6 @@ public class ExpressController extends BaseController {
     	ExpressQueryParam expressQueryParam = new ExpressQueryParam();
     	if (expressCompanyDTO != null) {
 	    	expressQueryParam.setExpCode(expressCompanyDTO.getCode());
-	    	expressQueryParam.setKuaidi100ExpCode(expressCompanyDTO.getKuaidi100Code());
     	}
     	expressQueryParam.setExpNo(param.getExpNo());
     	Result<ExpressInquiriesDTO> inquiriesResult = expressService.inquiries(expressQueryParam);
@@ -90,7 +88,7 @@ public class ExpressController extends BaseController {
     		rtn.setShipperCode(expressCompanyDTO.getCode());
     		rtn.setShipperName(expressCompanyDTO.getName());
     	} else {
-    		Result<ExpressCompanyDTO> codeResult = expressCompanyService.code(expressInquiriesDTO.getShipperCode(), ExpressProviderTypeEnum.valueOf(expressInquiriesDTO.getExpressProviderType().name()));
+    		Result<ExpressCompanyDTO> codeResult = expressCompanyService.code(expressInquiriesDTO.getShipperCode());
     		if (!isSuccess(codeResult)) {
     			return successGet(codeResult);
     		}

@@ -5,7 +5,6 @@ import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
@@ -18,7 +17,6 @@ import com.lawu.eshop.order.srv.utils.express.kdniao.bo.ExpressInquiriesDetail;
 import com.lawu.eshop.order.srv.utils.express.kdniao.bo.ExpressRecognitionDetail;
 import com.lawu.eshop.order.srv.utils.express.kdniao.constants.CodeEnum;
 
-@Primary
 @Service("kDNiaoExpressStrategy")
 public class KDNiaoExpressStrategy implements ExpressStrategy {
 	
@@ -80,5 +78,5 @@ public class KDNiaoExpressStrategy implements ExpressStrategy {
 		}
 		return rtn;
 	}
-
+	
 }

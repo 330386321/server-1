@@ -3,7 +3,6 @@ package com.lawu.eshop.order.dto;
 import java.util.List;
 
 import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
-import com.lawu.eshop.order.constants.ExpressProviderTypeEnum;
 import com.lawu.eshop.order.dto.foreign.TraceDTO;
 
 /**
@@ -18,11 +17,6 @@ public class ExpressInquiriesDTO {
 	 * 快递公司编码
 	 */
 	private String shipperCode;
-	
-	/**
-	 * 快递数据提供者类型
-	 */
-	private ExpressProviderTypeEnum expressProviderType;
 	
 	/**
 	 * 物流状态
@@ -40,14 +34,6 @@ public class ExpressInquiriesDTO {
 
 	public void setShipperCode(String shipperCode) {
 		this.shipperCode = shipperCode;
-	}
-
-	public ExpressProviderTypeEnum getExpressProviderType() {
-		return expressProviderType;
-	}
-
-	public void setExpressProviderType(ExpressProviderTypeEnum expressProviderType) {
-		this.expressProviderType = expressProviderType;
 	}
 
 	public ExpressInquiriesDetailStateEnum getState() {

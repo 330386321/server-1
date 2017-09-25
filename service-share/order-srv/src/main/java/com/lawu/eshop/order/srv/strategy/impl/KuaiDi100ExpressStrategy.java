@@ -15,6 +15,7 @@ import com.lawu.eshop.order.srv.utils.express.kuaidi100.KuaiDi100Api;
 import com.lawu.eshop.order.srv.utils.express.kuaidi100.bo.ExpressInquiriesDetail;
 import com.lawu.eshop.order.srv.utils.express.kuaidi100.constants.StatusEnum;
 
+@Primary
 @Service("kuaiDi100ExpressStrategy")
 public class KuaiDi100ExpressStrategy implements ExpressStrategy {
 	
@@ -36,14 +37,14 @@ public class KuaiDi100ExpressStrategy implements ExpressStrategy {
 			ExpressInquiriesDetail expressInquiriesDetail = JSONObject.parseObject(result, ExpressInquiriesDetail.class);
 			
 			if (expressInquiriesDetail.getStatus().equals(StatusEnum.INTERFACE_EXCEPTION.getValue())) {
-				logger.error("即时查询接口返回异常");
+				logger.error("快递查询接口返回异常");
 				logger.error("Result:{}", result);
 				logger.error("Result:{}", expressInquiriesDetail.getMessage());
 			}
 			
 			rtn = ExpressConverter.convert(expressInquiriesDetail);
 		} catch (Exception e) {
-			logger.error("即时查询异常", e);
+			logger.error("快递查询异常", e);
 		}
 		return rtn;
 	}

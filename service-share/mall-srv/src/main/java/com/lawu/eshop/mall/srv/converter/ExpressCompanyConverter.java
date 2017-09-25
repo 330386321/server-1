@@ -41,7 +41,6 @@ public class ExpressCompanyConverter {
 		}
 		rtn = new ExpressCompanyBO();
 		rtn.setCode(expressCompanyDO.getCode());
-		rtn.setKuaidi100Code(expressCompanyDO.getKuaidi100Code());
 		rtn.setHomepage(expressCompanyDO.getHomepage());
 		rtn.setName(expressCompanyDO.getName());
 		rtn.setOrdinal(expressCompanyDO.getOrdinal());
@@ -77,7 +76,6 @@ public class ExpressCompanyConverter {
 		}
 		rtn = new ExpressCompanyDTO();
 		rtn.setCode(bo.getCode());
-		rtn.setKuaidi100Code(bo.getKuaidi100Code());
 		rtn.setId(bo.getId());
 		rtn.setName(bo.getName());
 		return rtn;

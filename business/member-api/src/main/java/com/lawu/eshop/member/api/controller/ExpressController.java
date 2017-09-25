@@ -20,7 +20,6 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.mall.constants.ExpressProviderTypeEnum;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.member.api.service.ExpressCompanyService;
 import com.lawu.eshop.member.api.service.ExpressService;
@@ -87,7 +86,7 @@ public class ExpressController extends BaseController {
     		rtn.setShipperCode(expressCompanyDTO.getCode());
     		rtn.setShipperName(expressCompanyDTO.getName());
     	} else {
-    		Result<ExpressCompanyDTO> codeResult = expressCompanyService.code(expressInquiriesDTO.getShipperCode(), ExpressProviderTypeEnum.valueOf(expressInquiriesDTO.getExpressProviderType().name()));
+    		Result<ExpressCompanyDTO> codeResult = expressCompanyService.code(expressInquiriesDTO.getShipperCode());
     		if (!isSuccess(codeResult)) {
     			return successGet(codeResult);
     		}

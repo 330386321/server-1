@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.constants.ExpressProviderTypeEnum;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyQueryDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyRetrieveDTO;
@@ -49,7 +48,7 @@ public class MockExpressCompanyService extends BaseController implements Express
 	}
 
 	@Override
-	public Result<ExpressCompanyDTO> code(String code, @RequestParam("expressProviderType")ExpressProviderTypeEnum expressProviderType) {
+	public Result<ExpressCompanyDTO> code(String code) {
 		ExpressCompanyDTO rtn = new ExpressCompanyDTO();
 		return successGet(rtn);
 	}

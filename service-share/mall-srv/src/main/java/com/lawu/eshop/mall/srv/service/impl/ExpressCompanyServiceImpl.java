@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawu.eshop.mall.constants.ExpressProviderTypeEnum;
 import com.lawu.eshop.mall.constants.StatusEnum;
 import com.lawu.eshop.mall.srv.bo.ExpressCompanyBO;
 import com.lawu.eshop.mall.srv.converter.ExpressCompanyConverter;
@@ -77,15 +76,11 @@ public class ExpressCompanyServiceImpl implements ExpressCompanyService {
 	 * @date 2017年9月5日
 	 */
 	@Override
-	public ExpressCompanyBO code(String code, ExpressProviderTypeEnum expressProviderType) {
+	public ExpressCompanyBO code(String code) {
 		ExpressCompanyBO rtn = null;
 		ExpressCompanyDOExample example = new ExpressCompanyDOExample();
 		ExpressCompanyDOExample.Criteria criteria = example.createCriteria();
-		if (ExpressProviderTypeEnum.KUAIDINIAO.equals(expressProviderType)) {
-			criteria.andCodeEqualTo(code);
-		} else if (ExpressProviderTypeEnum.KUAIDI100.equals(expressProviderType)) {
-			criteria.andKuaidi100CodeEqualTo(code);
-		}
+		criteria.andCodeEqualTo(code);
 		List<ExpressCompanyDO> expressCompanyDOList = expressCompanyDOMapper.selectByExample(example);
 		if (expressCompanyDOList == null || expressCompanyDOList.isEmpty()) {
 			return rtn;
