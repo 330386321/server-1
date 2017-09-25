@@ -332,7 +332,8 @@ public class AdController extends BaseController {
 
 		int hitMax = 0;
 		int hitMin = 0;
-		SolrQuery query = new SolrQuery();
+        int totalCount = 0;
+        SolrQuery query = new SolrQuery();
 		if (StringUtils.isEmpty(fansQueryStr)) {
 			query.setParam("q", areaQueryStr);
 		} else {
@@ -346,7 +347,8 @@ public class AdController extends BaseController {
 			solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			hitMax = Integer.valueOf(solrDocumentList.get(0).get("hits_i").toString());
 			hitMin = Integer.valueOf(solrDocumentList.get(solrDocumentList.size() - 1).get("hits_i").toString());
-		}
+            totalCount = (int) solrDocumentList.getNumFound();
+        }
 
 		if (param.getLatitude() != null && param.getLongitude() != null) {
 			double lat = BigDecimal.valueOf(param.getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -366,11 +368,12 @@ public class AdController extends BaseController {
 			SolrDocumentList radiusList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 			if (radiusList != null && !radiusList.isEmpty()) {
 				for (SolrDocument solrDocument : radiusList) {
-					if (Double.valueOf(solrDocument.get("distance").toString()) <= Double.valueOf(solrDocument.get("radius_i").toString())) {
-						AdSolrDTO adSolrDTO = AdConverter.convertDTO(solrDocument);
-						solrDTOS.add(adSolrDTO);
-					}
-				}
+                    if (Double.valueOf(solrDocument.get("distance").toString()) <= Double.valueOf(solrDocument.get("radius_i").toString())) {
+                        AdSolrDTO adSolrDTO = AdConverter.convertDTO(solrDocument);
+                        solrDTOS.add(adSolrDTO);
+                        totalCount++;
+                    }
+                }
 			}
 		}
 
@@ -385,7 +388,7 @@ public class AdController extends BaseController {
 
 		Page<AdDTO> page = new Page<>();
 		page.setCurrentPage(param.getCurrentPage());
-		page.setTotalCount(solrDTOS.size());
+		page.setTotalCount(totalCount);
 		page.setRecords(AdConverter.convertAdDTOS(solrDTOS));
 
 		//Page<AdBO> pageBO = adService.selectChoiceness(adMemberParam);
@@ -477,6 +480,7 @@ public class AdController extends BaseController {
 
 		int hitMax = 0;
 		int hitMin = 0;
+        int totalCount = 0;
 		SolrQuery query = new SolrQuery();
 		if (StringUtils.isEmpty(fansQueryStr)) {
 			query.setParam("q", areaQueryStr);
@@ -491,6 +495,7 @@ public class AdController extends BaseController {
 			solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			hitMax = Integer.valueOf(solrDocumentList.get(0).get("hits_i").toString());
 			hitMin = Integer.valueOf(solrDocumentList.get(solrDocumentList.size() - 1).get("hits_i").toString());
+            totalCount = (int) solrDocumentList.getNumFound();
 		}
 
 		if (adSolrParam.getAdSolrParam().getLatitude() != null && adSolrParam.getAdSolrParam().getLongitude() != null) {
@@ -517,6 +522,7 @@ public class AdController extends BaseController {
 					if (Double.valueOf(solrDocument.get("distance").toString()) <= Double.valueOf(solrDocument.get("radius_i").toString())) {
 						AdSolrDTO adSolrDTO = AdConverter.convertDTO(solrDocument);
 						solrDTOS.add(adSolrDTO);
+                        totalCount++;
 					}
 				}
 			}
@@ -533,7 +539,7 @@ public class AdController extends BaseController {
 
 		Page<AdSolrDTO> page = new Page<>();
 		page.setCurrentPage(adSolrParam.getCurrentPage());
-		page.setTotalCount(solrDTOS.size());
+		page.setTotalCount(totalCount);
 		page.setRecords(solrDTOS);
 
 		//SolrQuery query = new SolrQuery();
@@ -638,6 +644,7 @@ public class AdController extends BaseController {
 
 		int hitMax = 0;
 		int hitMin = 0;
+        int totalCount = 0;
 		SolrQuery query = new SolrQuery();
 		if (StringUtils.isEmpty(fansQueryStr)) {
 			query.setParam("q", areaQueryStr);
@@ -652,6 +659,7 @@ public class AdController extends BaseController {
 			solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			hitMax = Integer.valueOf(solrDocumentList.get(0).get("hits_i").toString());
 			hitMin = Integer.valueOf(solrDocumentList.get(solrDocumentList.size() - 1).get("hits_i").toString());
+            totalCount = (int) solrDocumentList.getNumFound();
 		}
 
 		if (param.getLatitude() != null && param.getLongitude() != null) {
@@ -680,6 +688,7 @@ public class AdController extends BaseController {
 					if (Double.valueOf(solrDocument.get("distance").toString()) <= Double.valueOf(solrDocument.get("radius_i").toString())) {
 						AdSolrDTO adSolrDTO = AdConverter.convertDTO(solrDocument);
 						solrDTOS.add(adSolrDTO);
+                        totalCount++;
 					}
 				}
 			}
@@ -696,7 +705,7 @@ public class AdController extends BaseController {
 
 		Page<AdFlatVideoDTO> page = new Page<>();
 		page.setCurrentPage(param.getCurrentPage());
-		page.setTotalCount(solrDTOS.size());
+		page.setTotalCount(totalCount);
 		page.setRecords(AdConverter.convertAdFlatVideoDTOS(solrDTOS));
 		return successGet(page);
 	}
@@ -749,6 +758,7 @@ public class AdController extends BaseController {
             }
         }
 
+        int totalCount = 0;
 		SolrQuery query = new SolrQuery();
 		if (StringUtils.isEmpty(fansQueryStr)) {
 			query.setParam("q", areaQueryStr);
@@ -774,11 +784,12 @@ public class AdController extends BaseController {
 				AdPraiseDTO adPraiseDTO = AdConverter.convertDTO(solrDTO, adBO);
 				adPraiseDTOS.add(adPraiseDTO);
 			}
+            totalCount = (int) solrDocumentList.getNumFound();
 		}
 
 		Page<AdPraiseDTO> page = new Page<>();
 		page.setCurrentPage(param.getCurrentPage());
-		page.setTotalCount(adPraiseDTOS.size());
+		page.setTotalCount(totalCount);
 		page.setRecords(adPraiseDTOS);
 		return successGet(page);
 	}
