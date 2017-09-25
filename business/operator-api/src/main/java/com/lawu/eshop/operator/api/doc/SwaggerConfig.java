@@ -1,15 +1,16 @@
 package com.lawu.eshop.operator.api.doc;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 
 import io.swagger.annotations.ApiOperation;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -23,6 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author zhangyong
  * @date 2017/3/31
  */
+@ConditionalOnProperty(name = "swagger.api.enabled", havingValue = "true", matchIfMissing = true)
 @Configuration
 @EnableSwagger2
 @ComponentScan(basePackages = {"com.lawu.eshop.operator.api.controller"})

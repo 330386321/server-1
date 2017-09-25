@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.doc;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author Leach
  * @date 2017/3/14
  */
+@ConditionalOnProperty(name = "swagger.api.enabled", havingValue = "true", matchIfMissing = true)
 @Configuration
 @EnableSwagger2
 @ComponentScan(basePackages = {"com.lawu.eshop.member.api.controller"})

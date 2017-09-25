@@ -29,7 +29,7 @@
         <docker.image.prefix>registry.eshop.com</docker.image.prefix>
         <docker.base.image>registry.eshop.com/java:8-alpine</docker.base.image>
 
-        <springfox.swagger>2.6.1</springfox.swagger>
+        <springfox.swagger>2.7.0</springfox.swagger>
         <rocketmq.version>3.2.6</rocketmq.version>
 
         <elastic.job.version>2.1.4</elastic.job.version>
