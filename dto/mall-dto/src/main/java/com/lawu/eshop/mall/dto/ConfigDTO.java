@@ -19,7 +19,7 @@ public class ConfigDTO {
     
     @ApiModelProperty(value = "邀请会员URL")
     private String inviterMemberUrl;
-
+    
     public String getImageUrl() {
         return imageUrl;
     }
@@ -51,6 +51,5 @@ public class ConfigDTO {
 	public void setInviterMemberUrl(String inviterMemberUrl) {
 		this.inviterMemberUrl = inviterMemberUrl;
 	}
-    
-    
+
 }

@@ -64,4 +64,40 @@ public class KeyConstant {
      */
     public static final String REDIS_KEY_MERCHANT_COMMENT_STORE = "MERCHANT_COMMENT_STORE_";
 
+    /**
+     * 广告可领取数量
+     */
+    public static final String REDIS_KEY_AD_COUNT = "AD_KEY_MEMBER_COUNT_";
+    
+    /**
+     * 大额抢赞记录
+     */
+    public static final String REDIS_KEY_AD_PRAISE_POINT_RECORD_ = "AD_KEY_PRAISE_POINT_RECORD_";
+
+
+    /**
+     * 用户红包可领取数量
+     */
+    public static final String REDIS_KEY_USER_RED_PACKET_COUNT = "AD_KEY_MEMBER_RED_RACKET_COUNT_";
+
+    /**
+     * 会员上次访问接口时间
+     */
+    public static final String REDIS_KEY_MEMBER_VISIT_TIME = "MEMBER_VISIT_TIME_";
+
+    /**
+     * 会员时间周期内访问接口频率
+     */
+    public static final String REDIS_KEY_MEMBER_VISIT_FREQUENCY = "MEMBER_VISIT_FREQUENCY_";
+
+    /**
+     * 商家上次访问接口时间
+     */
+    public static final String REDIS_KEY_MERCHANT_VISIT_TIME = "MERCHANT_VISIT_TIME_";
+
+    /**
+     * 商家时间周期内访问接口频率
+     */
+    public static final String REDIS_KEY_MERCHANT_VISIT_FREQUENCY = "MERCHANT_VISIT_FREQUENCY_";
+
 }

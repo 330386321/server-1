@@ -29,17 +29,17 @@ public class ShoppingOrderBO {
 	 * 商家ID
 	 */
 	private Long merchantId;
-	
-    /**
-    * 门店id
-    */
-    private Long merchantStoreId;
-    
-    /**
-    * 商家门店区域（省市区id）
-    */
-    private String merchantStoreRegionPath;
-	
+
+	/**
+	 * 门店id
+	 */
+	private Long merchantStoreId;
+
+	/**
+	 * 商家门店区域（省市区id）
+	 */
+	private String merchantStoreRegionPath;
+
 	/**
 	 * 商家编号
 	 */
@@ -114,12 +114,12 @@ public class ShoppingOrderBO {
 	 * 发送提醒的次数
 	 */
 	private Integer sendTime;
-	
-    /**
-    * 购买前用户是否是商家的粉丝
-    */
-    private Boolean isFans;
-	
+
+	/**
+	 * 购买前用户是否是商家的粉丝
+	 */
+	private Boolean isFans;
+
 	/**
 	 * 是否支持无理由退货,0否 1是
 	 */
@@ -129,11 +129,11 @@ public class ShoppingOrderBO {
 	 * 是否自动收货(0-否|1-是)
 	 */
 	private Boolean isAutomaticReceipt;
-	
-    /**
-    * 当前订单是否完成(0-未完成|1-已完成)
-    */
-    private Boolean isDone;
+
+	/**
+	 * 当前订单是否完成(0-未完成|1-已完成)
+	 */
+	private Boolean isDone;
 
 	/**
 	 * 对应的购物车相应的id(多个id用,分隔)
@@ -199,6 +199,11 @@ public class ShoppingOrderBO {
 	 * 交易时间
 	 */
 	private Date gmtTransaction;
+
+	/**
+	 * 订单完成时间
+	 */
+	private Date gmtDone;
 
 	/**
 	 * 创建时间
@@ -512,6 +517,14 @@ public class ShoppingOrderBO {
 
 	public void setGmtTransaction(Date gmtTransaction) {
 		this.gmtTransaction = gmtTransaction;
+	}
+
+	public Date getGmtDone() {
+		return gmtDone;
+	}
+
+	public void setGmtDone(Date gmtDone) {
+		this.gmtDone = gmtDone;
 	}
 
 	public Date getGmtCreate() {

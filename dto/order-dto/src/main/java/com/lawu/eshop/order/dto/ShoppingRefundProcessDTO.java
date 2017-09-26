@@ -2,6 +2,7 @@ package com.lawu.eshop.order.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -18,6 +19,7 @@ public class ShoppingRefundProcessDTO {
      * 操作时间
      */
 	@ApiModelProperty(value = "操作时间", required = true)
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date gmtCreate;
 
 	public RefundStatusEnum getRefundStatus() {

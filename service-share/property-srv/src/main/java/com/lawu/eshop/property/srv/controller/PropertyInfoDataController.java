@@ -1,5 +1,7 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
@@ -41,7 +42,7 @@ public class PropertyInfoDataController extends BaseController {
 	/**
 	 * 减积分的业务：
 	 * 
-	 * 商家邀请粉丝、商家发布广告、商家发红包、大额抢占扣除积分
+	 * 商家发布广告、商家发红包、大额抢占扣除积分
 	 * 
 	 * @param param
 	 * @return
@@ -53,15 +54,28 @@ public class PropertyInfoDataController extends BaseController {
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-		
-		int retCode = propertyInfoDataService.doHanlderMinusPoint(param);
-		if (param.getMerchantTransactionTypeEnum() != null && param.getMerchantTransactionTypeEnum()
-				.getValue() == MerchantTransactionTypeEnum.INVITE_FANS.getValue()) {
-			return successCreated((Object)retCode);
-		}
+    	int retCode = propertyInfoDataService.doHanlderMinusPoint(param);
 		return successCreated(retCode);
 	}
-
+	
+	/**
+	 * 减积分的业务：
+	 * 
+	 * 商家邀请粉丝
+	 * 
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "doHanlderMinusPointByFans", method = RequestMethod.POST)
+	public Result doHanlderMinusPointByFans(@RequestBody @Valid PropertyInfoDataParam param, BindingResult result) {
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	Map<String, Integer> map = propertyInfoDataService.doHanlderMinusPointByFans(param);
+		return successCreated(map.get("retCode"),map.get("fans_invite_detail_id"));
+	}
+	
 	/**
 	 * 加积分的业务：
 	 * 

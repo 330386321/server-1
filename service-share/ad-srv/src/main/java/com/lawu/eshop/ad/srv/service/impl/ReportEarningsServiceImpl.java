@@ -1,7 +1,6 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,12 +37,11 @@ public class ReportEarningsServiceImpl implements ReportEarningsService {
 	
 
 	@Override
-	public List<ReportEarningsBO> getReportEarnings() {
+	public List<ReportEarningsBO> getReportEarnings(String date) {
 		
 		AdDOExample adDOExample=new AdDOExample();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
-	    String dateNowStr = sdf.format(new Date());  
+	    String dateNowStr = date.substring(0, 10);
 		
 		Date begin = DateUtil.formatDate(dateNowStr+" 00:00:00","yyyy-MM-dd HH:mm:ss");
 		Date end = DateUtil.formatDate(dateNowStr+" 23:59:59","yyyy-MM-dd HH:mm:ss");

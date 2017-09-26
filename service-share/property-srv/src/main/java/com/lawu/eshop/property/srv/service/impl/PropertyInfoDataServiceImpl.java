@@ -2,7 +2,6 @@ package com.lawu.eshop.property.srv.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -110,6 +109,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			fansInviteDetailDOMapper.insertSelective(fansInviteDetailDO);
 			return fansInviteDetailDO.getId().intValue();
 		}
+		
 		return ResultCode.SUCCESS;
 	}
 
@@ -161,11 +161,11 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		tdsParam.setThirdTransactionNum("");
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 		transactionDetailService.save(tdsParam);
-
+		
 		// 更新用户资产
 		BigDecimal point = new BigDecimal(param.getPoint());
 		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "A", point);
-
+		
 		return ResultCode.SUCCESS;
 	}
 
@@ -192,11 +192,11 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		tdsParam.setThirdTransactionNum("");
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
 		transactionDetailService.save(tdsParam);
-
+		
 		// 更新用户资产
 		BigDecimal point = new BigDecimal(param.getPoint());
 		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "M", point);
-
+		
 		return ResultCode.SUCCESS;
 	}
 
@@ -258,10 +258,10 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		tdsParam.setPreviousAmount((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getBalance());
 		tdsParam.setRegionPath(param.getRegionPath());
 		transactionDetailService.save(tdsParam);
-
+		
 		// 更新用户资产余额
 		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "A", actureMoneyIn);
-
+		
 		return ResultCode.SUCCESS;
 	}
 
@@ -276,60 +276,6 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			return Integer.valueOf(1);
 		}
 	}
-
-//	@Override
-//	public Map<String, Integer> doHanlderMinusPointByFans(PropertyInfoDataParam param) {
-//		Map<String, Integer> map = new HashMap<String, Integer>();
-//		int retCode = propertyInfoService.validatePoint(param.getUserNum(), param.getPoint());
-//		if (retCode != ResultCode.SUCCESS) {
-//			map.put("retCode", retCode);
-//			return map;
-//		}
-//		String pointNum = StringUtil.getRandomNum("");
-//		// 插入积分明细
-//		PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
-//		pointDetailSaveDataParam.setPointNum(pointNum);
-//		pointDetailSaveDataParam.setUserNum(param.getUserNum());
-//		if (param.getMemberTransactionTypeEnum() != null) {
-//			pointDetailSaveDataParam.setTitle(param.getMemberTransactionTypeEnum().getName());
-//			pointDetailSaveDataParam.setPointType(param.getMemberTransactionTypeEnum().getValue());
-//		} else if (param.getMerchantTransactionTypeEnum() != null) {
-//			pointDetailSaveDataParam.setTitle(param.getMerchantTransactionTypeEnum().getName());
-//			pointDetailSaveDataParam.setPointType(param.getMerchantTransactionTypeEnum().getValue());
-//		} else {
-//			map.put("retCode", ResultCode.BIZ_TYPE_NULL);
-//			return map;
-//		}
-//		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
-//		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
-//		pointDetailSaveDataParam.setBizId(param.getBizId());
-//		pointDetailSaveDataParam.setRegionPath(param.getRegionPath());
-//		pointDetailService.save(pointDetailSaveDataParam);
-//
-//		// 更新用户资产
-//		BigDecimal point = new BigDecimal(param.getPoint());
-//		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "M", point);
-//
-//		// 插入邀请粉丝记录
-//		if (param.getMerchantTransactionTypeEnum() != null && param.getMerchantTransactionTypeEnum()
-//				.getValue() == MerchantTransactionTypeEnum.INVITE_FANS.getValue()) {
-//			FansInviteDetailDO fansInviteDetailDO = new FansInviteDetailDO();
-//			fansInviteDetailDO.setMerchantId(param.getMerchantId());
-//			fansInviteDetailDO.setPointNum(pointNum);
-//			fansInviteDetailDO.setRegionName(param.getRegionName());
-//			fansInviteDetailDO.setSex(param.getSex());
-//			fansInviteDetailDO.setAge(param.getAge());
-//			fansInviteDetailDO.setInviteFansCount(param.getInviteFansCount());
-//			fansInviteDetailDO.setConsumePoint(new BigDecimal(param.getPoint()));
-//			fansInviteDetailDO.setGmtCreate(new Date());
-//			fansInviteDetailDOMapper.insertSelective(fansInviteDetailDO);
-//			map.put("retCode", ResultCode.SUCCESS);
-//			map.put("fans_invite_detail_id", fansInviteDetailDO.getId().intValue());
-//			return map;
-//		}
-//		map.put("retCode", ResultCode.SUCCESS);
-//		return map;
-//	}
 	
 	
 }

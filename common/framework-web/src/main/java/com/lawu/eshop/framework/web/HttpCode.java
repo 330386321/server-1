@@ -40,7 +40,7 @@ public class HttpCode {
         //HttpCode.messageMap.put(HttpCode.SC_NOT_FOUND, "请求不存在");
         HttpCode.messageMap.put(HttpCode.SC_NOT_ACCEPTABLE, "请求格式不正确");
         //HttpCode.messageMap.put(HttpCode.SC_GONE, "请求资源不存在");
-        //HttpCode.messageMap.put(HttpCode.SC_UNPROCESABLE_ENTITY, "验证错误");
+        HttpCode.messageMap.put(HttpCode.SC_UNPROCESABLE_ENTITY, "验证错误");
 
         HttpCode.messageMap.put(HttpCode.SC_INTERNAL_SERVER_ERROR, "吖~系统出错了");
 

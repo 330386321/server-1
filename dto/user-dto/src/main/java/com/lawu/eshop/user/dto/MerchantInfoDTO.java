@@ -48,6 +48,9 @@ public class MerchantInfoDTO {
     @ApiModelProperty(name = "merchantStoreId ",value = "门店ID")
     private Long merchantStoreId;
 
+    @ApiModelProperty(value = "门店名称")
+    private String storeName;
+
     @ApiModelProperty(name = "merchantStoreId ",value = "门店审核状态")
     private MerchantAuditStatusEnum auditStatusEnum;
 
@@ -77,6 +80,9 @@ public class MerchantInfoDTO {
 
     @ApiModelProperty(value = "状态['PAYING-待支付', 'VERIFY-已支付未核实', 'VERIFYD-已核实', 'APPLY_REFUND-退款申请', 'ACCPET_REFUND-退款已受理', 'REFUND_SUCCESS-退款成功', 'REFUND_FAILURE-退款失败']")
     private BusinessDepositStatusEnum depositStatusEnum;
+
+    @ApiModelProperty(value= "门店状态")
+    private MerchantStatusEnum storeStatusEnum;
 
     public Integer getInviteMemberCount() {
         return inviteMemberCount;
@@ -204,5 +210,21 @@ public class MerchantInfoDTO {
 
     public void setDepositStatusEnum(BusinessDepositStatusEnum depositStatusEnum) {
         this.depositStatusEnum = depositStatusEnum;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public MerchantStatusEnum getStoreStatusEnum() {
+        return storeStatusEnum;
+    }
+
+    public void setStoreStatusEnum(MerchantStatusEnum storeStatusEnum) {
+        this.storeStatusEnum = storeStatusEnum;
     }
 }

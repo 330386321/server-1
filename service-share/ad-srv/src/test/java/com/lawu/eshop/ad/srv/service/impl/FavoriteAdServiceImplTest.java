@@ -29,6 +29,7 @@ import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * @author zhangrc
@@ -73,7 +74,7 @@ public class FavoriteAdServiceImplTest {
 
     }
     
-    @Transactional
+    /*@Transactional
     @Rollback
     @Test
     public void selectMyFavoriteAd() {
@@ -107,11 +108,11 @@ public class FavoriteAdServiceImplTest {
     	paramQuery.setPageSize(10);
     	paramQuery.setTypeEnum(FavoriteAdTypeEnum.AD_TYPE_EGAIN);
     	Page<FavoriteAdDOViewBO> page= favoriteAdService.selectMyFavoriteAd(paramQuery, 1l);
-    	/*Assert.assertNotNull(page.getRecords());
-        Assert.assertTrue(page.getRecords().size()>0);*/
+    	Assert.assertNotNull(page.getRecords());
+        Assert.assertTrue(page.getRecords().size()>0);
 
     }
-    
+    */
     
     
     @Transactional
@@ -142,7 +143,7 @@ public class FavoriteAdServiceImplTest {
 		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
-		ad.setBeginTime(new Date());
+		ad.setBeginTime(DateUtil.stringToDate("2017-08-08 22:04:00"));
 		ad.setContent("广告测试内容");
 		ad.setPoint(BigDecimal.valueOf(0.5));
 		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
@@ -152,7 +153,7 @@ public class FavoriteAdServiceImplTest {
 		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
-        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
         adDOMapper.insertSelective(ad);
         
         FavoriteAdDO faDO = new FavoriteAdDO();
@@ -187,6 +188,22 @@ public class FavoriteAdServiceImplTest {
     	Assert.assertNotNull(dos);
         Assert.assertTrue(dos.size() >= 0);
 
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getFavoriteCount() {
+        FavoriteAdDO favoriteAd = new FavoriteAdDO();
+        favoriteAd.setAdId(1l);
+        favoriteAd.setMemberId(1l);
+        favoriteAd.setGmtCreate(new Date());
+        favoriteAd.setMemberNum("M000001");
+        favoriteAdDOMapper.insertSelective(favoriteAd);
+
+        int favoriteCount = favoriteAdService.getFavoriteCount(favoriteAd.getId());
+        Assert.assertNotNull(favoriteCount);
+        Assert.assertEquals(1, favoriteCount);
     }
     
 }

@@ -1,6 +1,7 @@
 package com.lawu.eshop.framework.web.dto;
 
 import com.lawu.eshop.framework.web.constants.MerchantStoreTypeEnum;
+import com.lawu.eshop.framework.web.constants.UserSexEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -21,6 +22,11 @@ public class TokenDTO {
 
     @ApiModelProperty(value = "true:冻结，false未冻结")
     private Boolean isFreeze;
+
+    @ApiModelProperty(value = "商家ID")
+    private Long merchantId;
+
+    private UserSexEnum userSex;
     
     /**
      * 店铺类型
@@ -67,5 +73,20 @@ public class TokenDTO {
 	public void setMerchantStoreType(MerchantStoreTypeEnum merchantStoreType) {
 		this.merchantStoreType = merchantStoreType;
 	}
-    
+
+    public Long getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
+    }
+
+    public UserSexEnum getUserSex() {
+        return userSex;
+    }
+
+    public void setUserSex(UserSexEnum userSex) {
+        this.userSex = userSex;
+    }
 }

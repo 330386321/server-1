@@ -22,7 +22,7 @@
         <result column="amount" jdbcType="DECIMAL" property="amount" />
         <result column="direction" jdbcType="TINYINT" property="direction" />
     </resultMap>
-    
+
     <!-- 根据时间获取获取买单和订单的收入 -->
 	<select id="selectTotalSales"  resultMap="TotalSalesResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample">
 		SELECT sum(amount) as amount, transaction_type FROM transaction_detail 
@@ -45,7 +45,7 @@
   
  	<select id="getReportAdEarningsPoint"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
 	    select
-	    	sum(point) as user_totle_point
+	    	sum(amount) as user_totle_point
 	    from transaction_detail
 	    where
 	      	transaction_type =#{pointType,jdbcType=TINYINT}
@@ -58,17 +58,17 @@
 	    	sum(amount) as love_totle_point
 	    from love_detail
 	    where
-	      	love_type =#{pointType,jdbcType=TINYINT}
+	      	love_type =#{loveType,jdbcType=TINYINT}
 	      	and biz_id=#{bizId,jdbcType=BIGINT}
 	 </select>
 	 
-	 <!-- 用户广告总收益统计   包括点广告  红包   广告提成  抢赞  -->
+	 <!-- 用户广告总收益统计   包括点广告  红包    抢赞  -->
 	 <select id="getUserPointByBzId"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
 	    select
-	    	sum(point) as user_totle_point
+	    	sum(amount) as user_totle_point
 	    from transaction_detail
 	    where
-	      	transaction_type in (2,3,5,16)
+	      	transaction_type in (2,3,16)
 	      	and biz_id=#{bizId,jdbcType=BIGINT}
 	 </select>
 	 
@@ -78,7 +78,7 @@
 	    	sum(amount) as love_totle_point
 	    from love_detail
 	    where
-	      	love_type in (1,2,5,6)
+	      	love_type in (1,5,6)
 	      	and biz_id=#{bizId,jdbcType=BIGINT}
 	 </select>
 	  <!-- 根据时间获取获取买单和订单的收入group by areaId -->
@@ -88,5 +88,25 @@
 			WHERE transaction_type in (100, 101)
 			AND gmt_create BETWEEN #{start} AND #{end}
 		GROUP BY transaction_type,province_id,city_id,area_id
+	</select>
+
+	<resultMap id="IncomeMsgResultMap" type="com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView">
+		<result column="user_num" jdbcType="VARCHAR" property="userNum" />
+		<result column="amount" jdbcType="DECIMAL" property="money" />
+		<result column="transaction_type" jdbcType="TINYINT" property="bType" />
+	</resultMap>
+
+	<select id="getIncomeMsgDataList"  resultMap="IncomeMsgResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample">
+		SELECT
+			user_num,
+			transaction_type,
+			sum(amount) amount
+		FROM
+			transaction_detail
+		WHERE
+			transaction_type IN (12, 13, 115, 116)
+		AND gmt_create BETWEEN #{begin}
+		AND #{end}
+		group by user_num,transaction_type
 	</select>
 </mapper>

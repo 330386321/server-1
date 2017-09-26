@@ -37,7 +37,7 @@ public class UserController extends BaseController {
 
     /**
      * 获取用户账号
-     * @param merchantId
+     * @param param
      * @return
      */
     @RequestMapping(value = "account", method = RequestMethod.PUT)
@@ -50,14 +50,13 @@ public class UserController extends BaseController {
 					MemberBO memberBO = memberService.getMemberByNum(userNum);
 					rtn.getUserInfoList().add(UserIncomeExpenditureUserInfoConverter.convert(memberBO));
 					break;
-				case MEMCHANT:
+				case MERCHANT:
 					MerchantBO merchantBO = merchantService.getMerchantByNum(userNum);
 					rtn.getUserInfoList().add(UserIncomeExpenditureUserInfoConverter.convert(merchantBO));
 					break;
 				default:
 					break;
     		}
-    		
     	}
         return successCreated(rtn);
     }

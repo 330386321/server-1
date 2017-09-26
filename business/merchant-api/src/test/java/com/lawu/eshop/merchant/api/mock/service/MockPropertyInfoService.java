@@ -95,4 +95,10 @@ public class MockPropertyInfoService extends BaseController implements PropertyI
     public Result<Page<FreezeDTO>> getFreezeList(@RequestBody FreezeQueryParam param) {
         return successCreated();
     }
+
+	@Override
+	public Result doHanlderMinusPointByFans(PropertyInfoDataParam propertyInfoDataParam) {
+		return successCreated();
+	}
+
 }

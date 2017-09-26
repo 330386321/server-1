@@ -15,7 +15,7 @@
                      <!--验证信息通用前缀，例如Bearer-->
                      <property name="httpHeaderPrefix" value="" />
                      <!--验证失败时的错误信息-->
-                     <property name="unauthorizedErrorMessage" value="令牌失效，请重新登录" />
+                     <property name="unauthorizedErrorMessage" value="登录失效，请重新登录" />
                      <!--管理验证信息的bean-->
                      <property name="manager" ref="tokenManager" />
                      <!--debug模式-->
@@ -32,7 +32,7 @@
               <!--Token失效时间-->
               <property name="tokenExpireSeconds" value="86400" />
               <property name="cacheService" ref="redisCacheService" />
-              <property name="singleTokenWithUser" value="false" />
+              <property name="singleTokenWithUser" value="${eshop.single.login}" />
        </bean>
        <bean id="redisCacheService" class="com.lawu.eshop.agent.api.service.impl.RedisCacheServiceImpl" />
        <import resource="spring-event.xml" />

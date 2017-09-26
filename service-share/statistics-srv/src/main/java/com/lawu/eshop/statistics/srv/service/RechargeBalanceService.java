@@ -1,5 +1,6 @@
 package com.lawu.eshop.statistics.srv.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
@@ -19,7 +20,8 @@ public interface RechargeBalanceService {
 	void deleteMonthByReportDate(String reportDate);
 
 	ReportCommonBackDTO selectReport(String bdate, String edate);
-
 	
-
+	Date getLastRechargeDay();
+	
+	Date getLastRechargeMonth();
 }

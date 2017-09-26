@@ -16,14 +16,18 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.constants.UserStatusEnum;
+import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantDetailBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
@@ -44,6 +48,7 @@ import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
+import com.lawu.eshop.user.srv.domain.UserLoginLogDO;
 import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
 import com.lawu.eshop.user.srv.domain.extend.MerchantDOView;
 import com.lawu.eshop.user.srv.domain.extend.MerchantPushView;
@@ -55,6 +60,7 @@ import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.UserLoginLogDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
@@ -119,6 +125,9 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private MerchantDOMapperExtend merchantDOMapperExtend;
+
+    @Autowired
+    private UserLoginLogDOMapper userLoginLogDOMapper;
 
 
     @Override
@@ -345,7 +354,7 @@ public class MerchantServiceImpl implements MerchantService {
     	InviterMerchantDOView inviterMerchantDO = new InviterMerchantDOView();
         inviterMerchantDO.setInviterId(userId);
         inviterMerchantDO.setInviterType(inviterType);
-        if (pageParam.getName() != null && !"".equals(pageParam.getName().trim())){
+        if (StringUtils.isNotEmpty(pageParam.getName())){
         	inviterMerchantDO.setName("%"+pageParam.getName()+"%");
         }
         int count=inviterMerchantDOMapper.selectInviterMerchantCount(inviterMerchantDO);
@@ -528,21 +537,17 @@ public class MerchantServiceImpl implements MerchantService {
 
 	@Override
 	public Boolean isRegister(String account) {
-		 MerchantDOExample example = new MerchantDOExample();
-		 example.createCriteria().andAccountEqualTo(account);
-		 int count = merchantDOMapper.countByExample(example);
-		 if(count>0){
-			 return true;
-		 }else{
-			 return false;
-		 }
-	}
+        MerchantDOExample example = new MerchantDOExample();
+        example.createCriteria().andAccountEqualTo(account);
+        int count = merchantDOMapper.countByExample(example);
+        return count > 0;
+    }
 
     @Override
     @Transactional
     public int delMerchantGtPush(Long merchantId) {
       int row =  merchantDOMapperExtend.delMerchantGtPush(merchantId);
-        return row;
+      return row;
     }
 
     @Override
@@ -604,4 +609,96 @@ public class MerchantServiceImpl implements MerchantService {
         merchantDOMapper.updateByExampleSelective(merchantDO, example);
     }
 
+    @Override
+    public MerchantDetailBO getMerchantDetailById(Long merchantId) {
+        MerchantDetailBO detailBO = new MerchantDetailBO();
+        MerchantStoreDOExample storeDOExample = new MerchantStoreDOExample();
+        storeDOExample.createCriteria().andMerchantIdEqualTo(merchantId);
+        List<MerchantStoreDO> storeDOS = merchantStoreDOMapper.selectByExample(storeDOExample);
+        if (!storeDOS.isEmpty()) {
+            MerchantStoreDO merchantStoreDO = storeDOS.get(0);
+            detailBO.setName(merchantStoreDO.getName());
+            detailBO.setRegionName(merchantStoreDO.getRegionName());
+            detailBO.setAddress(merchantStoreDO.getAddress());
+            detailBO.setIndustryName(merchantStoreDO.getIndustryName());
+            detailBO.setKeywords(merchantStoreDO.getKeywords());
+            detailBO.setIntro(merchantStoreDO.getIntro());
+            detailBO.setStatusEnum(MerchantStatusEnum.getEnum(merchantStoreDO.getStatus()));
+            detailBO.setPrincipalName(merchantStoreDO.getPrincipalName());
+            detailBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());
+        }
+
+        MerchantStoreProfileDOExample profileDOExample = new MerchantStoreProfileDOExample();
+        profileDOExample.createCriteria().andMerchantIdEqualTo(merchantId);
+        List<MerchantStoreProfileDO> profileDOS = merchantStoreProfileDOMapper.selectByExample(profileDOExample);
+        if (!profileDOS.isEmpty()) {
+            MerchantStoreProfileDO profileDO = profileDOS.get(0);
+            detailBO.setCompanyName(profileDO.getCompanyName());
+            detailBO.setRegNumber(profileDO.getRegNumber());
+            detailBO.setCompanyAddress(profileDO.getCompanyAddress());
+            detailBO.setLicenseIndate(profileDO.getLicenseIndate());
+            detailBO.setManageType(MerchantStoreTypeEnum.getEnum(profileDO.getManageType()));
+            detailBO.setCertifType(CertifTypeEnum.getEnum(profileDO.getCertifType()));
+            detailBO.setOperatorCardId(profileDO.getOperatorCardId());
+            detailBO.setOperatorName(profileDO.getOperatorName());
+        }
+
+        MerchantStoreImageDOExample imageDOExample = new MerchantStoreImageDOExample();
+        imageDOExample.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(true);
+        List<MerchantStoreImageDO> imageDOS = merchantStoreImageDOMapper.selectByExample(imageDOExample);
+        if (!imageDOS.isEmpty()) {
+            List<String> storeUrl = new ArrayList<>();
+            List<String> environmentUrl = new ArrayList<>();
+            List<String> idcardUrl = new ArrayList<>();
+            List<String> licenseUrl = new ArrayList<>();
+            List<String> otherUrl = new ArrayList<>();
+            for (MerchantStoreImageDO imageDO : imageDOS) {
+                if (StringUtils.isEmpty(imageDO.getPath())) {
+                    continue;
+                }
+                if (imageDO.getType().equals(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val)) {
+                    detailBO.setLogoUrl(imageDO.getPath());
+                } else {
+                    String[] imgArr = imageDO.getPath().split(",");
+                    for (String img : imgArr) {
+                        if (imageDO.getType().equals(MerchantStoreImageEnum.STORE_IMAGE_STORE.val)) {
+                            storeUrl.add(img);
+                        } else if (imageDO.getType().equals(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val)) {
+                            environmentUrl.add(img);
+                        } else if (imageDO.getType().equals(MerchantStoreImageEnum.STORE_IMAGE_LICENSE.val)) {
+                            licenseUrl.add(img);
+                        } else if (imageDO.getType().equals(MerchantStoreImageEnum.STORE_IMAGE_OTHER.val)) {
+                            otherUrl.add(img);
+                        } else if (imageDO.getType().equals(MerchantStoreImageEnum.STORE_IMAGE_IDCARD.val)) {
+                            idcardUrl.add(img);
+                        }
+                    }
+                }
+            }
+            detailBO.setStoreUrl(storeUrl);
+            detailBO.setEnvironmentUrl(environmentUrl);
+            detailBO.setIdcardUrl(idcardUrl);
+            detailBO.setLicenseUrl(licenseUrl);
+            detailBO.setOtherUrl(otherUrl);
+        }
+        return detailBO;
+    }
+
+    @Override
+    @Transactional
+    public void saveLoginLog(UserLoginLogParam loginLogParam) {
+        UserLoginLogDO loginLogDO = new UserLoginLogDO();
+        loginLogDO.setUserNum(loginLogParam.getUserNum());
+        loginLogDO.setAccount(loginLogParam.getAccount());
+        loginLogDO.setUserType(loginLogParam.getUserType());
+        loginLogDO.setImei(loginLogParam.getImei());
+        loginLogDO.setPlatform(loginLogParam.getPlatform());
+        loginLogDO.setPlatformVer(loginLogParam.getPlatformVer());
+        loginLogDO.setAppVer(loginLogParam.getAppVer());
+        loginLogDO.setCityId(loginLogParam.getCityId());
+        loginLogDO.setChannel(loginLogParam.getChannel());
+        loginLogDO.setIpAddr(loginLogParam.getIpAddr());
+        loginLogDO.setGmtCreate(new Date());
+        userLoginLogDOMapper.insertSelective(loginLogDO);
+    }
 }

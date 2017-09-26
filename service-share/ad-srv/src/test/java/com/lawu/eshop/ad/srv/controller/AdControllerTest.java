@@ -1,8 +1,6 @@
 package com.lawu.eshop.ad.srv.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
@@ -35,6 +33,7 @@ import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
+import com.lawu.eshop.ad.constants.OrderTypeEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
@@ -46,6 +45,7 @@ import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.AdSolrParam;
+import com.lawu.eshop.ad.param.AdSolrRealParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
@@ -57,6 +57,7 @@ import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * @author zhangrc
@@ -128,6 +129,39 @@ public class AdControllerTest {
     @Transactional
     @Rollback
     @Test
+    public void savePacket() {
+    	AdSaveParam adSaveParam=new AdSaveParam();
+    	adSaveParam.setLatitude(BigDecimal.valueOf(22.547153));
+    	adSaveParam.setLongitude(BigDecimal.valueOf(113.960333));
+    	adSaveParam.setMerchantId(1002l);
+    	adSaveParam.setUserNum("B856392484215848969");
+    	adSaveParam.setLogoUrl("store/1494582624025648402.png");
+    	adSaveParam.setMerchantStoreId(1001l);
+    	adSaveParam.setMerchantStoreName("E店商家");
+    	adSaveParam.setManageType(ManageTypeEnum.ENTITY);
+    	adSaveParam.setMediaUrl("ad_image/1494582624025648401.png");
+    	AdParam param=new AdParam();
+    	param.setAdCount(20);
+    	param.setPutWayEnum(PutWayEnum.PUT_WAY_COMMON);
+    	param.setTotalPoint(BigDecimal.valueOf(100));
+    	param.setTypeEnum(AdTypeEnum.AD_TYPE_PACKET);
+    	adSaveParam.setAdParam(param);
+    	String requestJson = JSONObject.toJSONString(adSaveParam);
+        RequestBuilder request = post("/ad/saveAd").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+    }
+    
+    @Transactional
+    @Rollback
+    @Test
     public void selectListByMerchant() {
     	AdMerchantParam adMerchantParam=new AdMerchantParam();
         adMerchantParam.setPageSize(10);
@@ -165,6 +199,46 @@ public class AdControllerTest {
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        adDOMapper.insertSelective(ad);
+		
+        try {
+            RequestBuilder request = put("/ad/updateStatus/"+ad.getId());
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED )).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+    }
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void updateStatusTwoWeek() {
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(DateUtil.getDateTimeFormat("2017-06-10 00:00:00"));
 		ad.setContent("广告测试内容");
 		ad.setPoint(BigDecimal.valueOf(0.5));
 		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
@@ -300,6 +374,49 @@ public class AdControllerTest {
 		ad.setTotalPoint(BigDecimal.valueOf(100));
 		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
 		ad.setHits(0);
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        adDOMapper.insertSelective(ad);
+        
+        try {
+        	
+            RequestBuilder request = put("/ad/clickAd/"+ad.getId()).param("memberId", "1").param("num", "aaa");
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED )).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+    }
+    
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void clickAdOver() {
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+		ad.setHits(20);
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -500,37 +617,166 @@ public class AdControllerTest {
 
     }
     
-    /*@Transactional
+    
+    @Transactional
     @Rollback
     @Test
-    public void queryAdByTitle() {
-    	AdsolrFindParam param=new AdsolrFindParam();
-    	param.setCurrentPage(1);
-    	param.setPageSize(20);
-    	param.setMemberId(1l);
-    	List<Long> ids=new ArrayList<>();
-    	ids.add(1002l);
-    	param.setMerchantIds(ids);
-    	AdSolrParam ap=new AdSolrParam();
-    	ap.setTitle("广告");
-    	param.setAdSolrParam(ap);
-        String requestListJson = JSONObject.toJSONString(param);
+    public void clickPraiseEnd() {
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
+		ad.setHits(0);
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        adDOMapper.insertSelective(ad);
+        
+        PointPoolDO pointPoolDO=new PointPoolDO();
+        pointPoolDO.setAdId(ad.getId());
+        pointPoolDO.setGmtCreate(new Date());
+        pointPoolDO.setGmtModified(new Date());
+        pointPoolDO.setMerchantId(1002l);
+        pointPoolDO.setMemberId(1l);
+        pointPoolDO.setOrdinal(0);
+        pointPoolDO.setPoint(BigDecimal.valueOf(15));
+        pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+        pointPoolDO.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+        pointPoolDOMapper.insert(pointPoolDO);
+        
         try {
-            RequestBuilder request = post("/ad/queryAdByTitle").contentType(MediaType.APPLICATION_JSON).content(requestListJson).param("memberId", "1");
+            RequestBuilder request = put("/ad/clickPraise/"+ad.getId()).param("memberId", "1").param("num", "aaa");
             ResultActions perform= mvc.perform(request);
-            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_ACCEPTED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED )).andDo(MockMvcResultHandlers.print()).andReturn();
 
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
 
-    }*/
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void recommendAdByType() {
+        AdSolrRealParam param=new AdSolrRealParam();
+        param.setMemberId(100L);
+        param.setMerchantIds(new ArrayList<>());
+        param.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
+        param.setStatusEnum(AdStatusEnum.AD_STATUS_ADD);
+        param.setOrderTypeEnum(OrderTypeEnum.AD_POINT_DESC);
+        String requestListJson = JSONObject.toJSONString(param);
+        try {
+            RequestBuilder request = post("/ad/recommendAdByType").contentType(MediaType.APPLICATION_JSON).content(requestListJson);
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void recommendEgain() {
+        AdSolrRealParam param=new AdSolrRealParam();
+        param.setMemberId(100L);
+        param.setMerchantIds(new ArrayList<>());
+        param.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
+        param.setStatusEnum(AdStatusEnum.AD_STATUS_ADD);
+        param.setOrderTypeEnum(OrderTypeEnum.AD_POINT_DESC);
+        String requestListJson = JSONObject.toJSONString(param);
+        try {
+            RequestBuilder request = post("/ad/recommendEgain").contentType(MediaType.APPLICATION_JSON).content(requestListJson);
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void listAdRank() {
+        AdSolrRealParam param=new AdSolrRealParam();
+        param.setMemberId(100L);
+        param.setMerchantIds(new ArrayList<>());
+        param.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
+        param.setStatusEnum(AdStatusEnum.AD_STATUS_ADD);
+        param.setOrderTypeEnum(OrderTypeEnum.AD_POINT_DESC);
+        String requestListJson = JSONObject.toJSONString(param);
+        try {
+            RequestBuilder request = post("/ad/listAdRank").contentType(MediaType.APPLICATION_JSON).content(requestListJson);
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
     
     @Transactional
     @Rollback
     @Test
     public void getRedPacket() {
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
+		ad.setHits(0);
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        adDOMapper.insertSelective(ad);
+        
+        PointPoolDO pointPoolDO=new PointPoolDO();
+        pointPoolDO.setAdId(ad.getId());
+        pointPoolDO.setGmtCreate(new Date());
+        pointPoolDO.setGmtModified(new Date());
+        pointPoolDO.setMerchantId(1002l);
+        pointPoolDO.setMemberId(1l);
+        pointPoolDO.setOrdinal(0);
+        pointPoolDO.setPoint(BigDecimal.valueOf(15));
+        pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+        pointPoolDO.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+        pointPoolDOMapper.insert(pointPoolDO);
         try {
             RequestBuilder request = put("/ad/getRedPacket").param("merchantId", "1").param("memberId", "1").param("memberNum", "aaa");
             ResultActions perform= mvc.perform(request);
@@ -547,6 +793,30 @@ public class AdControllerTest {
     @Rollback
     @Test
     public void getAllAd() {
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_VIDEO.getVal());
+		ad.setHits(0);
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
+        adDOMapper.insertSelective(ad);
         try {
             RequestBuilder request = get("/ad/getAllAd");
             ResultActions perform= mvc.perform(request);
@@ -787,47 +1057,6 @@ public class AdControllerTest {
     @Transactional
     @Rollback
     @Test
-    public void updateAdIndex() {
-    	AdDO ad=new AdDO();
-		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
-		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
-		ad.setMerchantId(1002l);
-		ad.setMerchantNum("B856392484215848969");
-		ad.setMerchantStoreId(1001l);
-		ad.setMerchantStoreName("E店商家");
-		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
-		ad.setLogoUrl("store/1494582624025648402.png");
-		ad.setMediaUrl("ad_image/1494582624025648401.png");
-		ad.setAdCount(20);
-		ad.setBeginTime(new Date());
-		ad.setContent("广告测试内容");
-		ad.setPoint(BigDecimal.valueOf(0.5));
-		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
-		ad.setRegionName("全国");
-		ad.setTitle("广告测试标题");
-		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
-		ad.setHits(0);
-        ad.setGmtCreate(new Date());
-        ad.setGmtModified(new Date());
-        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
-        adDOMapper.insertSelective(ad);
-        try {
-            RequestBuilder request = put("/ad/updateAdIndex/"+ad.getId());
-            ResultActions perform= mvc.perform(request);
-            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail(e.getMessage());
-        }
-
-    }
-    
-    
-    @Transactional
-    @Rollback
-    @Test
     public void rebuildAdIndex() {
     	
         try {
@@ -979,6 +1208,30 @@ public class AdControllerTest {
     @Rollback
     @Test
     public void selectReportAdEarnings() {
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setHits(0);
+        ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+        Integer id=adDOMapper.insertSelective(ad);
         try {
             RequestBuilder request = get("/ad/selectReportAdEarnings/");
             ResultActions perform= mvc.perform(request);
@@ -1040,6 +1293,9 @@ public class AdControllerTest {
     	param.setMemberId(1l);
         param.setCurrentPage(1);
         param.setPageSize(20);
+        
+        param.setLongitude(114.026);
+        param.setLatitude(22.5461);
         List<Long> merchantIds = new ArrayList<>();
         merchantIds.add(1001l);
         param.setMerchantIds(merchantIds);
@@ -1104,6 +1360,31 @@ public class AdControllerTest {
     @Rollback
     @Test
     public void selectOperatorAdAll() {
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setHits(0);
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        Integer id=adDOMapper.insertSelective(ad);
+        
     	OperatorAdParam operatorAdParam=new OperatorAdParam();
     	operatorAdParam.setAdEgainType(AdEgainTypeEnum.AD_TYPE_FLAT);
         String requestListJson = JSONObject.toJSONString(operatorAdParam);
@@ -1134,4 +1415,63 @@ public class AdControllerTest {
             Assert.fail(e.getMessage());
         }
     }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void delAllAdIndex(){
+        RequestBuilder request = get("/ad/delAllAdIndex");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+    
+ /*   @Transactional
+    @Rollback
+    @Test
+    public void batchDeleteAd() {
+    	
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+		ad.setHits(0);
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+        adDOMapper.insertSelective(ad);
+        List<Long> ids =new ArrayList<>();
+    	ids.add(ad.getId());
+        String requestListJson = JSONObject.toJSONString(ids);
+        try {
+            RequestBuilder request = delete("/ad/batchDeleteAd").contentType(MediaType.APPLICATION_JSON).content(requestListJson).param("merchantId", "1002");
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+    }*/
 }

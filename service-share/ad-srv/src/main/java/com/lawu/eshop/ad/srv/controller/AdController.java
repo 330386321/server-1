@@ -3,6 +3,8 @@ package com.lawu.eshop.ad.srv.controller;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,14 +25,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.constants.OrderTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
+import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.AdPointDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.AdSaveInfoDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
@@ -48,25 +54,30 @@ import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdPointInternalParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.AdSolrRealParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.AdClickPraiseInfoBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
+import com.lawu.eshop.ad.srv.bo.AdSaveInfoBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.GetRedPacketBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.service.AdService;
+import com.lawu.eshop.ad.srv.service.FavoriteAdService;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
 import com.lawu.eshop.ad.srv.service.PointPoolService;
 import com.lawu.eshop.framework.core.page.Page;
@@ -100,6 +111,10 @@ public class AdController extends BaseController {
 
 	@Autowired
 	private SolrService solrService;
+	
+
+	@Autowired
+	private FavoriteAdService favoriteAdService;
 
 	/**
 	 * 添加E赚
@@ -108,20 +123,25 @@ public class AdController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "saveAd", method = RequestMethod.POST)
-	public Result saveAd(@RequestBody AdSaveParam adSaveParam) {
+	public Result<AdSaveInfoDTO> saveAd(@RequestBody AdSaveParam adSaveParam) {
 
 		if (adSaveParam.getAdParam().getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PACKET.getVal()) {
-			Integer count = adService.selectRPIsSend(adSaveParam.getMerchantId());
-			if (count > 0) {
-				return successCreated(ResultCode.AD_RED_PACKGE_EXIST);
+			RedPacketIsSendBO bo = adService.selectRPIsSend(adSaveParam.getMerchantId());
+			if (bo.isFlag()) {
+				adService.updateStatus(bo.getId());
 			}
 		}
-		Integer id = adService.saveAd(adSaveParam);
+		AdSaveInfoBO bo = adService.saveAd(adSaveParam);
 
-		if (id == null || id < 0) {
+		if (bo.getId() == null || bo.getId() < 0) {
 			successCreated(ResultCode.SAVE_FAIL);
 		}
-		return successCreated();
+		
+		AdSaveInfoDTO dto = new AdSaveInfoDTO();
+		dto.setAdCount(bo.getAdCount());
+		dto.setId(bo.getId());
+		
+		return successCreated(dto);
 
 	}
 
@@ -213,10 +233,14 @@ public class AdController extends BaseController {
 		if(bo.isOverClick()){
 			return successCreated(ResultCode.AD_CLICK_PUTED);
 		}
-		ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
+		
 		ClickAdPointDTO dto = new ClickAdPointDTO();
-		dto.setAddPoint(clickAdPointBO.getAddPoint());
-		dto.setPoint(clickAdPointBO.getAdTotlePoint());
+		if(!bo.isOverClick() && !bo.isSysWords()){
+			ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
+			dto.setAddPoint(clickAdPointBO.getAddPoint());
+			dto.setPoint(clickAdPointBO.getAdTotlePoint());
+		}
+		
 		return successCreated(dto);
 	}
 
@@ -275,18 +299,104 @@ public class AdController extends BaseController {
 	/**
 	 * 会员查询广告
 	 * @see
-	 * @param adMemberParam
+	 * @param param
 	 * @return
 	 */
 	@Deprecated
 	@RequestMapping(value = "selectChoiceness", method = RequestMethod.POST)
-	public Result<Page<AdDTO>> selectChoiceness(@RequestBody AdMemberParam adMemberParam) {
-		Page<AdBO> pageBO = adService.selectChoiceness(adMemberParam);
-		Page<AdDTO> pageDTO = new Page<AdDTO>();
-		pageDTO.setCurrentPage(pageBO.getCurrentPage());
-		pageDTO.setTotalCount(pageBO.getTotalCount());
-		pageDTO.setRecords(AdConverter.convertDTOS(pageBO.getRecords()));
-		return successAccepted(pageDTO);
+	public Result<Page<AdDTO>> selectChoiceness(@RequestBody AdSolrRealParam param) {
+		List<AdSolrDTO> solrDTOS = new ArrayList<>();
+		String areaQueryStr = "putWay_i:1 AND -status_i:3";
+		if (StringUtils.isEmpty(param.getRegionPath())) {
+			areaQueryStr += " AND area_is:0";
+		} else {
+			String[] path = param.getRegionPath().split("/");
+			if (path.length == 3) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
+			} else if (path.length == 2) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
+			}
+		}
+
+		String fansQueryStr = "";
+		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
+			List<Long> merchantIds = param.getMerchantIds();
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND -status_i:3 AND merchantId_l:(" + fansQueryStr + ")";
+        }
+
+		int hitMax = 0;
+		int hitMin = 0;
+        int totalCount = 0;
+        SolrQuery query = new SolrQuery();
+		if (StringUtils.isEmpty(fansQueryStr)) {
+			query.setParam("q", areaQueryStr);
+		} else {
+			query.setParam("q", "(" + areaQueryStr + ") OR (" + fansQueryStr + ")");
+		}
+		query.setSort("hits_i", SolrQuery.ORDER.desc);
+		query.setStart(param.getOffset());
+		query.setRows(param.getPageSize());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
+			solrDTOS = AdConverter.convertDTO(solrDocumentList);
+			hitMax = Integer.valueOf(solrDocumentList.get(0).get("hits_i").toString());
+			hitMin = Integer.valueOf(solrDocumentList.get(solrDocumentList.size() - 1).get("hits_i").toString());
+            totalCount = (int) solrDocumentList.getNumFound();
+        }
+
+		if (param.getLatitude() != null && param.getLongitude() != null) {
+			double lat = BigDecimal.valueOf(param.getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double lon = BigDecimal.valueOf(param.getLongitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			String latLon = lat + "," + lon;
+			query = new SolrQuery();
+			query.setParam("pt", latLon);
+			query.setParam("fq", "{!geofilt}");
+			query.setParam("sfield", "latLon_p");
+			query.setParam("d", "30");
+			query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
+			String radiusQueryStr = "putWay_i:3 AND -status_i:3";
+			if (hitMax > 0) {
+				radiusQueryStr += " AND hits_i:[" + hitMin + " TO " + hitMax + "]";
+			}
+			query.setParam("q", radiusQueryStr);
+			SolrDocumentList radiusList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			if (radiusList != null && !radiusList.isEmpty()) {
+				for (SolrDocument solrDocument : radiusList) {
+                    if (Double.valueOf(solrDocument.get("distance").toString()) <= Double.valueOf(solrDocument.get("radius_i").toString())) {
+                        AdSolrDTO adSolrDTO = AdConverter.convertDTO(solrDocument);
+                        solrDTOS.add(adSolrDTO);
+                        totalCount++;
+                    }
+                }
+			}
+		}
+
+		if (!solrDTOS.isEmpty()) {
+			Collections.sort(solrDTOS, new Comparator<AdSolrDTO>() {
+				@Override
+				public int compare(AdSolrDTO o1, AdSolrDTO o2) {
+					return o2.getHits() - o1.getHits();
+				}
+			});
+		}
+
+		Page<AdDTO> page = new Page<>();
+		page.setCurrentPage(param.getCurrentPage());
+		page.setTotalCount(totalCount);
+		page.setRecords(AdConverter.convertAdDTOS(solrDTOS));
+
+		//Page<AdBO> pageBO = adService.selectChoiceness(adMemberParam);
+		//Page<AdDTO> pageDTO = new Page<AdDTO>();
+		//pageDTO.setCurrentPage(pageBO.getCurrentPage());
+		//pageDTO.setTotalCount(pageBO.getTotalCount());
+		//pageDTO.setRecords(AdConverter.convertDTOS(pageBO.getRecords()));
+		return successAccepted(page);
 	}
 
 	/**
@@ -316,16 +426,16 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@PathVariable Long id, @RequestParam Long memberId, @RequestParam String num) {
 		Boolean flag = pointPoolService.selectStatusByMember(id, memberId);
-		if (flag)
-			return successCreated(ResultCode.AD_PRAISE_POINT_GET);
-		BigDecimal point = adService.clickPraise(id, memberId, num);
-		if (point.compareTo(new BigDecimal(0)) == 0) {
+		if (flag) return successCreated(ResultCode.AD_PRAISE_POINT_GET);
+		AdClickPraiseInfoBO bo = adService.clickPraise(id, memberId, num);
+		
+		if (bo.getPoint().compareTo(new BigDecimal(0)) == 0 && !bo.isSysWordFlag()) {
 			return successCreated(ResultCode.AD_PRAISE_PUTED);
-		} else {
-			PraisePointDTO dto = new PraisePointDTO();
-			dto.setPoint(point);
-			return successCreated(dto);
-		}
+		} 
+		
+		PraisePointDTO dto = new PraisePointDTO();
+		dto.setPoint(bo.getPoint());
+		return successCreated(dto);
 
 	}
 
@@ -337,59 +447,472 @@ public class AdController extends BaseController {
 	 */
 	@RequestMapping(value = "queryAdByTitle", method = RequestMethod.POST)
 	public Result<Page<AdSolrDTO>> queryAdByTitle(@RequestBody AdsolrFindParam adSolrParam) {
-
-		SolrQuery query = new SolrQuery();
-		query.setParam("q", "*:*");
-		if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) { // 标题过滤
-			query.setParam("q", "title_s:" + adSolrParam.getAdSolrParam().getTitle() + "*");
+		List<AdSolrDTO> solrDTOS = new ArrayList<>();
+		String areaQueryStr = "putWay_i:1 AND -status_i:3 AND -type_i:3";
+		if (StringUtils.isEmpty(adSolrParam.getRegionPath())) {
+			areaQueryStr += " AND area_is:0";
+		} else {
+			String[] path = adSolrParam.getRegionPath().split("/");
+			if (path.length == 3) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
+			} else if (path.length == 2) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
+			}
 		}
-		if (adSolrParam.getLatitude() != null || adSolrParam.getLongitude() != null) {
-			String latLon = adSolrParam.getLatitude() + "," + adSolrParam.getLongitude();
+		if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
+			areaQueryStr += " AND title_s:*" + adSolrParam.getAdSolrParam().getTitle() + "*";
+		}
+
+		String fansQueryStr = "";
+		if (adSolrParam.getMemberId() != null && adSolrParam.getMemberId() > 0 && !adSolrParam.getMerchantIds().isEmpty()) {
+            List<Long> merchantIds = adSolrParam.getMerchantIds();
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND -status_i:3 AND -type_i:3 AND merchantId_l:(" + fansQueryStr + ")";
+            if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
+                fansQueryStr += " AND title_s:*" + adSolrParam.getAdSolrParam().getTitle() + "*";
+            }
+        }
+
+		int hitMax = 0;
+		int hitMin = 0;
+        int totalCount = 0;
+		SolrQuery query = new SolrQuery();
+		if (StringUtils.isEmpty(fansQueryStr)) {
+			query.setParam("q", areaQueryStr);
+		} else {
+			query.setParam("q", "(" + areaQueryStr + ") OR (" + fansQueryStr + ")");
+		}
+		query.setSort("hits_i", SolrQuery.ORDER.desc);
+		query.setStart(adSolrParam.getAdSolrParam().getOffset());
+		query.setRows(adSolrParam.getAdSolrParam().getPageSize());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
+			solrDTOS = AdConverter.convertDTO(solrDocumentList);
+			hitMax = Integer.valueOf(solrDocumentList.get(0).get("hits_i").toString());
+			hitMin = Integer.valueOf(solrDocumentList.get(solrDocumentList.size() - 1).get("hits_i").toString());
+            totalCount = (int) solrDocumentList.getNumFound();
+		}
+
+		if (adSolrParam.getAdSolrParam().getLatitude() != null && adSolrParam.getAdSolrParam().getLongitude() != null) {
+			double lat = BigDecimal.valueOf(adSolrParam.getAdSolrParam().getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double lon = BigDecimal.valueOf(adSolrParam.getAdSolrParam().getLongitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			String latLon = lat + "," + lon;
+			query = new SolrQuery();
 			query.setParam("pt", latLon);
 			query.setParam("fq", "{!geofilt}");
 			query.setParam("sfield", "latLon_p");
+			query.setParam("d", "30");
 			query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
-		}
-		query.setSort("status_i", SolrQuery.ORDER.desc);
-		List<Long> merchantIds = adSolrParam.getMerchantIds();
-		String str = "";
-		if (!merchantIds.isEmpty()) {
-			for (Long id : merchantIds) {
-				str += "merchantId_l:" + id + " or ";
+			String radiusQueryStr = "putWay_i:3 AND -status_i:3 AND -type_i:3";
+			if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
+				radiusQueryStr += " AND title_s:*" + adSolrParam.getAdSolrParam().getTitle() + "*";
 			}
-			str = str.substring(0, str.length() - 3);
-		}
-		if (adSolrParam.getRegionPath() != null) {
-			String[] path = adSolrParam.getRegionPath().split("/");
-			if(path.length < 3) {
-				if (str != "") {
-					query.setParam("" + str + " or ('area_is:" + path[0] + "') or ('area_is:" + path[1] + "')");
-				} else {
-					query.setParam("area_is:" + path[0] + " or " + "area_is:" + path[1]);
-				}
-			} else {
-				if (str != "") {
-					query.setParam("" + str + " or ('area_is:" + path[0] + "') or ('area_is:" + path[1] + "') or ('area_is:" + path[2] + "')");
-				} else {
-					query.setParam("area_is:" + path[0] + " or " + "area_is:" + path[1] + " or " + "area_is:" + path[2]);
+			if (hitMax > 0) {
+				radiusQueryStr += " AND hits_i:[" + hitMin + " TO " + hitMax + "]";
+			}
+			query.setParam("q", radiusQueryStr);
+			SolrDocumentList radiusList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			if (radiusList != null && !radiusList.isEmpty()) {
+				for (SolrDocument solrDocument : radiusList) {
+					if (Double.valueOf(solrDocument.get("distance").toString()) <= Double.valueOf(solrDocument.get("radius_i").toString())) {
+						AdSolrDTO adSolrDTO = AdConverter.convertDTO(solrDocument);
+						solrDTOS.add(adSolrDTO);
+                        totalCount++;
+					}
 				}
 			}
-		} else {
-			query.setParam("" + str + " or ('area_is:" + 0 + "') ");
 		}
-		query.setStart(adSolrParam.getOffset());
-		query.setRows(adSolrParam.getPageSize());
-		SolrDocumentList solrDocumentList = new SolrDocumentList();
-		solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-		Page<AdSolrDTO> page = new Page<AdSolrDTO>();
-		page.setRecords(AdConverter.convertDTO(solrDocumentList));
-		if (solrDocumentList == null) {
-			page.setTotalCount(0);
-		} else {
-			page.setTotalCount((int) solrDocumentList.getNumFound());
+
+		if (!solrDTOS.isEmpty()) {
+			Collections.sort(solrDTOS, new Comparator<AdSolrDTO>() {
+				@Override
+				public int compare(AdSolrDTO o1, AdSolrDTO o2) {
+					return o2.getHits() - o1.getHits();
+				}
+			});
 		}
+
+		Page<AdSolrDTO> page = new Page<>();
 		page.setCurrentPage(adSolrParam.getCurrentPage());
+		page.setTotalCount(totalCount);
+		page.setRecords(solrDTOS);
+
+		//SolrQuery query = new SolrQuery();
+		//StringBuilder sb = new StringBuilder("");
+		//if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) { // 标题过滤
+		//	sb.append("title_s:").append(adSolrParam.getAdSolrParam().getTitle()).append("*");
+		//	//query.setParam("q", "title_s:" + adSolrParam.getAdSolrParam().getTitle() + "*");
+		//}
+		//if (adSolrParam.getLatitude() != null || adSolrParam.getLongitude() != null) {
+		//	String latLon = adSolrParam.getLatitude() + "," + adSolrParam.getLongitude();
+		//	query.setParam("pt", latLon);
+		//	query.setParam("fq", "{!geofilt}");
+		//	query.setParam("sfield", "latLon_p");
+		//	query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
+		//}
+		//List<Long> merchantIds = adSolrParam.getMerchantIds();
+		//String str = "";
+		//if (!merchantIds.isEmpty()) {
+		//	for (Long id : merchantIds) {
+		//		str += "merchantId_l:" + id + " or ";
+		//	}
+		//	str = str.substring(0, str.length() - 3);
+		//}
+		//if (adSolrParam.getRegionPath() != null) {
+		//	String[] path = adSolrParam.getRegionPath().split("/");
+		//	if(path.length < 3) {
+		//		if (str != "") {
+		//			sb.append(" AND (" + str + " or 'area_is:" + path[0] + "') or ('area_is:" + path[1] + "'))");
+		//		} else {
+		//			sb.append(" AND (area_is:" + path[0] + " or " + "area_is:" + path[1]+")");
+		//		}
+		//	} else {
+		//		if (str != "") {
+		//			sb.append(" AND (" + str + " or('area_is:" + path[0] + "') or ('area_is:" + path[1] + "') or ('area_is:" + path[2] + "'))");
+		//		} else {
+		//			sb.append(" AND (area_is:" + path[0] + " or " + "area_is:" + path[1] + " or " + "area_is:" + path[2]+")");
+		//		}
+		//	}
+		//} else {
+		//	sb.append(" AND (" + str + " or ('area_is:" + 0 + "'))");
+		//}
+		//query.setParam("q",sb.toString());
+		//query.setStart(adSolrParam.getOffset());
+		//query.setRows(adSolrParam.getPageSize());
+		//query.setSort("status_i", SolrQuery.ORDER.desc);
+		//SolrDocumentList solrDocumentList = new SolrDocumentList();
+		//solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		//Page<AdSolrDTO> page = new Page<AdSolrDTO>();
+		//page.setRecords(AdConverter.convertDTO(solrDocumentList));
+		//if (solrDocumentList == null) {
+		//	page.setTotalCount(0);
+		//} else {
+		//	page.setTotalCount((int) solrDocumentList.getNumFound());
+		//}
+		//page.setCurrentPage(adSolrParam.getCurrentPage());
 		return successGet(page);
+	}
+
+	/**
+	 * 推荐广告
+	 *
+	 * @param param
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "recommendAdByType", method = RequestMethod.POST)
+	public Result<Page<AdFlatVideoDTO>> getRecommendAdByType(@RequestBody AdSolrRealParam param) {
+		List<AdSolrDTO> solrDTOS = new ArrayList<>();
+		String areaQueryStr = "putWay_i:1 AND status_i:2";
+		if (StringUtils.isEmpty(param.getRegionPath())) {
+			areaQueryStr += " AND area_is:0";
+		} else {
+			String[] path = param.getRegionPath().split("/");
+			if (path.length == 3) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
+			} else if (path.length == 2) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
+			}
+		}
+		if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_FLAT)) {
+			areaQueryStr += " AND type_i:1";
+		} else if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_VIDEO)) {
+			areaQueryStr += " AND type_i:2";
+		}
+
+		String fansQueryStr = "";
+		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
+			List<Long> merchantIds = param.getMerchantIds();
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND status_i:2 AND merchantId_l:(" + fansQueryStr + ")";
+            if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_FLAT)) {
+                fansQueryStr += " AND type_i:1";
+            } else if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_VIDEO)) {
+                fansQueryStr += " AND type_i:2";
+            }
+        }
+
+		int hitMax = 0;
+		int hitMin = 0;
+        int totalCount = 0;
+		SolrQuery query = new SolrQuery();
+		if (StringUtils.isEmpty(fansQueryStr)) {
+			query.setParam("q", areaQueryStr);
+		} else {
+			query.setParam("q", "(" + areaQueryStr + ") OR (" + fansQueryStr + ")");
+		}
+		query.setSort("hits_i", SolrQuery.ORDER.desc);
+		query.setStart(param.getOffset());
+		query.setRows(param.getPageSize());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
+			solrDTOS = AdConverter.convertDTO(solrDocumentList);
+			hitMax = Integer.valueOf(solrDocumentList.get(0).get("hits_i").toString());
+			hitMin = Integer.valueOf(solrDocumentList.get(solrDocumentList.size() - 1).get("hits_i").toString());
+            totalCount = (int) solrDocumentList.getNumFound();
+		}
+
+		if (param.getLatitude() != null && param.getLongitude() != null) {
+			double lat = BigDecimal.valueOf(param.getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double lon = BigDecimal.valueOf(param.getLongitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			String latLon = lat + "," + lon;
+			query = new SolrQuery();
+			query.setParam("pt", latLon);
+			query.setParam("fq", "{!geofilt}");
+			query.setParam("sfield", "latLon_p");
+			query.setParam("d", "30");
+			query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
+			String radiusQueryStr = "putWay_i:3 AND status_i:2";
+			if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_FLAT)) {
+				radiusQueryStr += " AND type_i:1";
+			} else if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_VIDEO)) {
+				radiusQueryStr += " AND type_i:2";
+			}
+			if (hitMax > 0) {
+				radiusQueryStr += " AND hits_i:[" + hitMin + " TO " + hitMax + "]";
+			}
+			query.setParam("q", radiusQueryStr);
+			SolrDocumentList radiusList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			if (radiusList != null && !radiusList.isEmpty()) {
+				for (SolrDocument solrDocument : radiusList) {
+					if (Double.valueOf(solrDocument.get("distance").toString()) <= Double.valueOf(solrDocument.get("radius_i").toString())) {
+						AdSolrDTO adSolrDTO = AdConverter.convertDTO(solrDocument);
+						solrDTOS.add(adSolrDTO);
+                        totalCount++;
+					}
+				}
+			}
+		}
+
+		if (!solrDTOS.isEmpty()) {
+			Collections.sort(solrDTOS, new Comparator<AdSolrDTO>() {
+				@Override
+				public int compare(AdSolrDTO o1, AdSolrDTO o2) {
+					return o2.getHits() - o1.getHits();
+				}
+			});
+		}
+
+		Page<AdFlatVideoDTO> page = new Page<>();
+		page.setCurrentPage(param.getCurrentPage());
+		page.setTotalCount(totalCount);
+		page.setRecords(AdConverter.convertAdFlatVideoDTOS(solrDTOS));
+		return successGet(page);
+	}
+
+	/**
+	 * 推荐抢赞
+	 *
+	 * @param param
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "recommendEgain", method = RequestMethod.POST)
+	public Result<Page<AdPraiseDTO>> getRecommendEgain(@RequestBody AdSolrRealParam param) {
+		List<AdPraiseDTO> adPraiseDTOS = new ArrayList<>();
+		String areaQueryStr = "putWay_i:1 AND type_i:3";
+		if (StringUtils.isEmpty(param.getRegionPath())) {
+			areaQueryStr += " AND area_is:0";
+		} else {
+			String[] path = param.getRegionPath().split("/");
+			if (path.length == 3) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
+			} else if (path.length == 2) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
+			}
+		}
+		if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTING)) {
+			areaQueryStr += " AND status_i:2";
+		} else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_ADD)) {
+			areaQueryStr += " AND status_i:1";
+		} else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTED)) {
+			areaQueryStr += " AND status_i:3";
+		}
+
+		String fansQueryStr = "";
+		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
+			List<Long> merchantIds = param.getMerchantIds();
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND type_i:3 AND merchantId_l:(" + fansQueryStr + ")";
+            if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTING)) {
+                fansQueryStr += " AND status_i:2";
+            } else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_ADD)) {
+                fansQueryStr += " AND status_i:1";
+            } else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTED)) {
+                fansQueryStr += " AND status_i:3";
+            }
+        }
+
+        int totalCount = 0;
+		SolrQuery query = new SolrQuery();
+		if (StringUtils.isEmpty(fansQueryStr)) {
+			query.setParam("q", areaQueryStr);
+		} else {
+			query.setParam("q", "(" + areaQueryStr + ") OR (" + fansQueryStr + ")");
+		}
+		if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTING) || param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_ADD)) {
+			query.setSort("beginTime_l", SolrQuery.ORDER.asc);
+		} else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTED)) {
+			query.setSort("id", SolrQuery.ORDER.desc);
+		}
+		query.setStart(param.getOffset());
+		query.setRows(param.getPageSize());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
+			List<AdSolrDTO> solrDTOS = AdConverter.convertDTO(solrDocumentList);
+			for (AdSolrDTO solrDTO : solrDTOS) {
+				AdBO adBO = adService.selectById(solrDTO.getId());
+				if (adBO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_ADD.val) {
+					int favoriteCount = favoriteAdService.getFavoriteCount(adBO.getId());
+					solrDTO.setHits(favoriteCount);
+				}
+				AdPraiseDTO adPraiseDTO = AdConverter.convertDTO(solrDTO, adBO);
+				adPraiseDTOS.add(adPraiseDTO);
+			}
+            totalCount = (int) solrDocumentList.getNumFound();
+		}
+
+		Page<AdPraiseDTO> page = new Page<>();
+		page.setCurrentPage(param.getCurrentPage());
+		page.setTotalCount(totalCount);
+		page.setRecords(adPraiseDTOS);
+		return successGet(page);
+	}
+
+	/**
+	 * 平面广告排行榜
+	 *
+	 * @param param
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "listAdRank", method = RequestMethod.POST)
+	public Result<List<AdDTO>> listAdRank(@RequestBody AdSolrRealParam param) {
+		List<AdSolrDTO> solrDTOS = new ArrayList<>();
+		String areaQueryStr = "putWay_i:1 AND type_i:1";
+		if (StringUtils.isEmpty(param.getRegionPath())) {
+			areaQueryStr += " AND area_is:0";
+		} else {
+			String[] path = param.getRegionPath().split("/");
+			if (path.length == 3) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
+			} else if (path.length == 2) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
+			}
+		}
+
+		String fansQueryStr = "";
+		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
+			List<Long> merchantIds = param.getMerchantIds();
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND type_i:1 AND merchantId_l:(" + fansQueryStr + ")";
+        }
+
+		double pointMax = 0;
+		double pointMin = 0;
+		SolrQuery query = new SolrQuery();
+		if (StringUtils.isEmpty(fansQueryStr)) {
+			query.setParam("q", areaQueryStr);
+		} else {
+			query.setParam("q", "(" + areaQueryStr + ") OR (" + fansQueryStr + ")");
+		}
+		if (param.getOrderTypeEnum().equals(OrderTypeEnum.AD_TORLEPOINT_DESC)) {
+			query.setSort("totalPoint_d", SolrQuery.ORDER.desc);
+		} else {
+			query.setSort("point_d", SolrQuery.ORDER.desc);
+		}
+		query.setStart(param.getOffset());
+		query.setRows(param.getPageSize());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
+			solrDTOS = AdConverter.convertDTO(solrDocumentList);
+			if (param.getOrderTypeEnum().equals(OrderTypeEnum.AD_TORLEPOINT_DESC)) {
+				pointMax = Double.valueOf(solrDocumentList.get(0).get("totalPoint_d").toString());
+				pointMin = Double.valueOf(solrDocumentList.get(solrDocumentList.size() - 1).get("totalPoint_d").toString());
+			} else {
+				pointMax = Double.valueOf(solrDocumentList.get(0).get("point_d").toString());
+				pointMin = Double.valueOf(solrDocumentList.get(solrDocumentList.size() - 1).get("point_d").toString());
+			}
+		}
+
+		if (param.getLatitude() != null && param.getLongitude() != null) {
+			double lat = BigDecimal.valueOf(param.getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double lon = BigDecimal.valueOf(param.getLongitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			String latLon = lat + "," + lon;
+			query = new SolrQuery();
+			query.setParam("pt", latLon);
+			query.setParam("fq", "{!geofilt}");
+			query.setParam("sfield", "latLon_p");
+			query.setParam("d", "30");
+			query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
+			String radiusQueryStr = "putWay_i:3 AND type_i:1";
+			if (pointMax > 0) {
+				if (param.getOrderTypeEnum().equals(OrderTypeEnum.AD_TORLEPOINT_DESC)) {
+					radiusQueryStr += " AND totalPoint_d:[" + pointMin + " TO " + pointMax + "]";
+				} else {
+					radiusQueryStr += " AND point_d:[" + pointMin + " TO " + pointMax + "]";
+				}
+			}
+			query.setParam("q", radiusQueryStr);
+			SolrDocumentList radiusList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			if (radiusList != null && !radiusList.isEmpty()) {
+				for (SolrDocument solrDocument : radiusList) {
+					if (Double.valueOf(solrDocument.get("distance").toString()) <= Double.valueOf(solrDocument.get("radius_i").toString())) {
+						AdSolrDTO adSolrDTO = AdConverter.convertDTO(solrDocument);
+						solrDTOS.add(adSolrDTO);
+					}
+				}
+			}
+		}
+
+		if (!solrDTOS.isEmpty()) {
+			Collections.sort(solrDTOS, new Comparator<AdSolrDTO>() {
+				@Override
+				public int compare(AdSolrDTO o1, AdSolrDTO o2) {
+					if (param.getOrderTypeEnum().equals(OrderTypeEnum.AD_TORLEPOINT_DESC)) {
+						if (o2.getTotalPoint() - o1.getTotalPoint() >= 0) {
+							return 1;
+						} else {
+							return 0;
+						}
+					} else {
+						if (o2.getPoint() - o1.getPoint() >= 0) {
+							return 1;
+						} else {
+							return 0;
+						}
+					}
+				}
+			});
+		}
+
+		List<AdSolrDTO> resultDTOS = new ArrayList<>();
+		if (solrDTOS.size() <= param.getPageSize()) {
+			resultDTOS.addAll(solrDTOS);
+		} else {
+			resultDTOS = solrDTOS.subList(param.getOffset(), param.getPageSize());
+		}
+		return successGet(AdConverter.convertAdDTOS(resultDTOS));
 	}
 
 	/**
@@ -522,18 +1045,6 @@ public class AdController extends BaseController {
 	}
 
 	/**
-	 * 更新平面视频广告索引
-	 *
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "updateAdIndex/{id}", method = RequestMethod.PUT)
-	public Result updateAdIndex(@PathVariable Long id) {
-		adService.updateAdIndex(id);
-		return successCreated();
-	}
-
-	/**
 	 * 重建平面视频广告索引
 	 *
 	 * @return
@@ -569,6 +1080,10 @@ public class AdController extends BaseController {
 		} else {
 			RedPacketInfoDTO redPacketInfoDTO = new RedPacketInfoDTO();
 			redPacketInfoDTO.setPoint(redPacketInfoBO.getPoint());
+			redPacketInfoDTO.setMediaUrl(redPacketInfoBO.getMediaUrl());
+			redPacketInfoDTO.setName(redPacketInfoBO.getName());
+			redPacketInfoDTO.setLogoUrl(redPacketInfoBO.getLogoUrl());
+			redPacketInfoDTO.setFileType(redPacketInfoBO.getFileType());
 			return successCreated(redPacketInfoDTO);
 		}
 
@@ -602,7 +1117,7 @@ public class AdController extends BaseController {
 				ids.remove(i);
 		}
 		adService.batchDeleteAd(ids);
-		return successDelete();
+		return successCreated();
 	}
 
 	/**
@@ -733,4 +1248,17 @@ public class AdController extends BaseController {
 		adService.soldOutAdByMerchantId(merchantId);
 		return successCreated();
 	}
+
+	/**
+	 * 删除全部索引数据
+	 *
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "delAllAdIndex", method = RequestMethod.GET)
+	public Result delAllAdIndex() {
+		solrService.delAllSolrDocs(adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		return successGet();
+	}
+
 }

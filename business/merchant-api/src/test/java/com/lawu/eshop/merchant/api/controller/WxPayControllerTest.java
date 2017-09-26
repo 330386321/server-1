@@ -1,7 +1,9 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.merchant.api.MerchantApiApplicationTest;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,9 +21,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.merchant.api.MerchantApiApplicationTest;
 
 /**
  * @author meishuquan
@@ -63,7 +64,7 @@ public class WxPayControllerTest {
         RequestBuilder request = get("/wxPay/initPcPay").param("token", "8888").param("bizIds", "10").param("thirdPayBodyEnum", "B_RECHARGE_BALANCE_I").param("bizFlagEnum", "BUSINESS_PAY_BALANCE");
         try {
             ResultActions perform = mvc.perform(request);
-            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andReturn();
             Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
         } catch (Exception e) {
             e.printStackTrace();

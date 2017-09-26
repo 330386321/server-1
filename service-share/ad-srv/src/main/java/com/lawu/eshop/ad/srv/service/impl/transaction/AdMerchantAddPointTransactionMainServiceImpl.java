@@ -1,19 +1,17 @@
 package com.lawu.eshop.ad.srv.service.impl.transaction;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.srv.constants.TransactionConstant;
 import com.lawu.eshop.ad.srv.domain.AdDO;
-import com.lawu.eshop.ad.srv.domain.PointPoolDO;
-import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
-import com.lawu.eshop.ad.srv.domain.PointPoolDOExample.Criteria;
+import com.lawu.eshop.ad.srv.domain.extend.PointPoolDOView;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
+import com.lawu.eshop.ad.srv.mapper.extend.PointPoolDOMapperExtend;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
@@ -32,38 +30,29 @@ public class AdMerchantAddPointTransactionMainServiceImpl extends AbstractTransa
 	private AdDOMapper adDOMapper;
 	
 	@Autowired
-	private PointPoolDOMapper pointPoolDOMapper;
+	private PointPoolDOMapperExtend pointPoolDOMapperExtend;
 
     @Override
-    public AdPointNotification selectNotification(Long adId) {
-    	 AdDO ad=adDOMapper.selectByPrimaryKey(adId);
+    public AdPointNotification selectNotification(Long id) {
+    	 AdDO ad=adDOMapper.selectByPrimaryKey(id);
     	 AdPointNotification notification=new AdPointNotification();
     	 notification.setUserNum(ad.getMerchantNum());
-    	 if(ad.getType()==3 || ad.getType()==4){
-    		PointPoolDOExample ppexample=new PointPoolDOExample();
-    		 Criteria cr=ppexample.createCriteria();
- 			 cr.andAdIdEqualTo(ad.getId()).andStatusEqualTo(new Byte("0"));
- 			 if(ad.getType()==3){
- 				 cr.andTypeEqualTo(new Byte("1"));
- 			 }else{
- 				 cr.andTypeEqualTo(new Byte("2"));
- 			 }
- 			List<PointPoolDO> list=pointPoolDOMapper.selectByExample(ppexample);
- 			BigDecimal sum=new BigDecimal(0);
- 			for (PointPoolDO pointPoolDO : list) {
- 				BigDecimal  point=pointPoolDO.getPoint();
- 				sum=sum.add(point);
- 			}
- 			notification.setPoint(sum); 
+    	 if(ad.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal() || ad.getType()==AdTypeEnum.AD_TYPE_PACKET.getVal()){
+    		PointPoolDOView view =  pointPoolDOMapperExtend.getTotlePoint(id);
+    		BigDecimal subMoney=new BigDecimal(0);
+    		//剩余积分
+    		if(view == null){
+    		    subMoney=ad.getTotalPoint().subtract(BigDecimal.valueOf(0));
+    		}else{
+    			subMoney=ad.getTotalPoint().subtract(view.getPoint());
+    		}
+ 			notification.setPoint(subMoney); 
     	 }else{
     		 Integer hits=ad.getHits();
         	 BigDecimal point=ad.getPoint();
-        	 BigDecimal totalPoint=ad.getTotalPoint();
-        	 if(hits==null)
-        		 hits=0;
-        	 notification.setPoint(totalPoint.subtract(point.multiply(new BigDecimal(hits)))); 
+        	 if(hits==null) hits=0;
+        	 notification.setPoint(ad.getTotalPoint().subtract(point.multiply(new BigDecimal(hits)))); 
     	 }
-    	notification.setRegionPath("");
         return notification;
     }
 

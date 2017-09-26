@@ -36,5 +36,24 @@ public interface ExpressCompanyService {
 	 * @return
 	 */
 	ExpressCompanyBO get(Integer id);
-
+	
+	/**
+	 * 根据第三方快递公司编号查询快递公司
+	 * 
+	 * @param code 快递公司编号
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月5日
+	 */
+	ExpressCompanyBO code(String code);
+	
+	/**
+	 * 根据第三方快递公司编号集合查询快递公司
+	 * 
+	 * @param codeList 快递公司编号集合
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月5日
+	 */
+	List<ExpressCompanyBO> codeList(List<String> codeList);
 }

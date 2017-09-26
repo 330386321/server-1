@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import com.lawu.eshop.utils.RandomUtil;
+
 import util.upload.FastDFSClient;
 import util.upload.FastDFSResult;
 import util.upload.FastDFSResultEnum;
@@ -70,20 +71,23 @@ public class FastDFSUploadUtils {
 							String newName = RandomUtil.buildFileName(fileName);
 							saveLocalFile(part, uparam, newName);
 							FastDFSClient client =new FastDFSClient();
+							String tmpVideoUrl = uparam.getBaseImageDir() + File.separator + uparam.getDir()
+							+ File.separator + newName;
+							String imgUrl = VideoCutImgUtil.processImg(tmpVideoUrl, uparam.getDir(), uparam.getBaseImageDir(), uparam.getFfmpegUrl());
+							String cutUrl = uparam.getBaseImageDir() + File.separator + imgUrl;
 							String fileUrl = client.uploadFile(FastDFSClient.getFileBuffer(in, fileSize), extName,param);
 							result.setFileUrl(fileUrl);
-							String tmpVideoUrl = uparam.getBaseImageDir() + File.separator + uparam.getDir()
-									+ File.separator + newName;
-							String cutUrl = uparam.getBaseImageDir() + File.separator + VideoCutImgUtil.processImg(
-									tmpVideoUrl, uparam.getDir(), uparam.getBaseImageDir(), uparam.getFfmpegUrl());
-							Thread.sleep(550);
 							FastDFSClient clientImg =new FastDFSClient();
-							String cutImgUrl = clientImg.uploadFile(cutUrl,param);
-							if (null == cutImgUrl) {
-								result.setFenum(FastDFSResultEnum.FD_FILE_CUT_ERROR);
-								return result;
+							if(imgUrl != null){
+								File file = new File(cutUrl);
+								log.debug("截图文件大小为："+file.length());
+								String cutImgUrl = clientImg.uploadFile(cutUrl,param);
+								if (null == cutImgUrl) {
+									result.setFenum(FastDFSResultEnum.FD_FILE_CUT_ERROR);
+									return result;
+								}
+								result.setCutImgUrl(cutImgUrl);
 							}
-							result.setCutImgUrl(cutImgUrl);
 							File redeoFile = new File(tmpVideoUrl);
 							if (redeoFile.exists()) {
 								redeoFile.delete();

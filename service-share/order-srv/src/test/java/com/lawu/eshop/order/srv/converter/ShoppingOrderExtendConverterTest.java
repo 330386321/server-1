@@ -33,13 +33,13 @@ public class ShoppingOrderExtendConverterTest {
 	@Test
 	public void convertShoppingOrderExtendDetailDTO() {
 		ShoppingOrderExtendBO expected = initShoppingOrderExtendBO();
-		ExpressInquiriesDetailBO expectedExpressInquiriesDetailBO = ExpressInquiriesDetailConverterTest.initExpressInquiriesDetailBO();
+		ExpressInquiriesDetailBO expectedExpressInquiriesDetailBO = ExpressConverterTest.initExpressInquiriesDetailBO();
 		ShoppingOrderExtendDetailDTO actual = ShoppingOrderExtendConverter.convert(expected, expectedExpressInquiriesDetailBO);
 		assertShoppingOrderExtendDetailDTO(expected, actual);
 		for (int i = 0; i < expected.getItems().size(); i++) {
 			assertShoppingOrderItemDTO(expected.getItems().get(i), actual.getItems().get(i));
 		}
-		Assert.assertEquals(expectedExpressInquiriesDetailBO.getState(), actual.getState());
+		Assert.assertEquals(expectedExpressInquiriesDetailBO.getState().getValue(), actual.getState().getValue());
 		TraceDTO traceDTO = actual.getTrace();
 		Assert.assertEquals(expectedExpressInquiriesDetailBO.getTraces().get(0).getAcceptStation(), traceDTO.getAcceptStation());
 		Assert.assertEquals(expectedExpressInquiriesDetailBO.getTraces().get(0).getAcceptTime(), traceDTO.getAcceptTime());

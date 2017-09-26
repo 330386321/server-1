@@ -1,5 +1,17 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.user.param.FavoriteMerchantParam;
@@ -8,26 +20,19 @@ import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.FavoriteMerchantBO;
 import com.lawu.eshop.user.srv.converter.FavoriteMerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.domain.FavoriteMerchantDO;
+import com.lawu.eshop.user.srv.domain.FavoriteMerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
 import com.lawu.eshop.user.srv.domain.extend.FavoriteMerchantDOView;
-import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.FavoriteMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.service.FavoriteMerchantService;
 import com.lawu.eshop.utils.DistanceUtil;
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
@@ -42,15 +47,12 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
     private FavoriteMerchantDOMapperExtend favoriteMerchantDOMapperExtend;
     
     @Resource
-    private FansMerchantDOMapper fansMerchantDOMapper;
-    
-    @Resource
     private MerchantStoreImageDOMapper  merchantStoreImageDOMapper;
 
-    @Autowired
+    @Resource
     private UserSrvConfig userSrvConfig;
 
-    @Autowired
+    @Resource
     private SolrService solrService;
 
     @Override
@@ -148,15 +150,11 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
     }
 
 	@Override
-	public Boolean get(Long memberId, FavoriteStoreParam pageQuery) {
-		
-		FavoriteMerchantDOExample exmple=new FavoriteMerchantDOExample();
-    	exmple.createCriteria().andMemberIdEqualTo(memberId).andManageTypeEqualTo(pageQuery.getManageTypeEnum().val).andMerchantIdEqualTo(pageQuery.getMerchantId());
-    	long count=favoriteMerchantDOMapper.countByExample(exmple);
-    	
-    	return count>0?true:false;
-    	
-		
-	}
+    public Boolean get(Long memberId, FavoriteStoreParam pageQuery) {
+        FavoriteMerchantDOExample exmple = new FavoriteMerchantDOExample();
+        exmple.createCriteria().andMemberIdEqualTo(memberId).andManageTypeEqualTo(pageQuery.getManageTypeEnum().val).andMerchantIdEqualTo(pageQuery.getMerchantId());
+        long count = favoriteMerchantDOMapper.countByExample(exmple);
+        return count > 0;
+    }
 
 }

@@ -30,6 +30,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.ApplyStoreParam;
@@ -322,6 +323,7 @@ public class MerchantStoreControllerTest {
         param.setLicenseIndate(new Date());
         param.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT);
         param.setCertifType(CertifTypeEnum.CERTIF_TYPE_LICENSE);
+        param.setMerchantStoreStatus(MerchantStatusEnum.MERCHANT_STATUS_CANCEL);
         String requestJson = JSONObject.toJSONString(param);
         RequestBuilder request = post("/merchantStore/saveMerchantStoreAuditInfo/300").param("merchantId", "200").contentType(MediaType.APPLICATION_JSON).content(requestJson);
         try {
@@ -707,7 +709,7 @@ public class MerchantStoreControllerTest {
         }
     }
 
-    /*@Transactional
+    @Transactional
     @Rollback
     @Test
     public void getPayOrderStoreInfo() {
@@ -734,9 +736,7 @@ public class MerchantStoreControllerTest {
             merchantStoreImageDOMapper.insertSelective(storeImageDO);
         }
 
-        List<Long> merchantIds = new ArrayList<>();
-        merchantIds.add(200L);
-        RequestBuilder request = get("/merchantStore/getPayOrderStoreInfo").param("merchantIds", merchantIds.toString());
+        RequestBuilder request = get("/merchantStore/getPayOrderStoreInfo").param("merchantIds", storeDO.getMerchantId().toString());
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -764,9 +764,7 @@ public class MerchantStoreControllerTest {
         storeDO.setIsNoReasonReturn(true);
         merchantStoreDOMapper.insertSelective(storeDO);
 
-        List<Long> merchantStoreIds = new ArrayList<>();
-        merchantStoreIds.add(storeDO.getId());
-        RequestBuilder request = get("/merchantStore/getMerchantStoreByIds").param("merchantStoreIds", merchantStoreIds.toString());
+        RequestBuilder request = get("/merchantStore/getMerchantStoreByIds").param("merchantStoreIds", storeDO.getId().toString());
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -820,9 +818,7 @@ public class MerchantStoreControllerTest {
         imageDO.setGmtCreate(new Date());
         merchantStoreImageDOMapper.insertSelective(imageDO);
 
-        List<Long> merchantIds = new ArrayList<>();
-        merchantIds.add(merchantDO.getId());
-        RequestBuilder request = get("/merchantStore/getAdMerchantStoreByIds").param("merchantIds", merchantIds.toString());
+        RequestBuilder request = get("/merchantStore/getAdMerchantStoreByIds").param("merchantIds", merchantDO.getId().toString());
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -831,7 +827,7 @@ public class MerchantStoreControllerTest {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
-    }*/
+    }
 
     @Transactional
     @Rollback
@@ -1112,6 +1108,21 @@ public class MerchantStoreControllerTest {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_NO_CONTENT)).andDo(MockMvcResultHandlers.print()).andReturn();
             Assert.assertEquals(HttpCode.SC_NO_CONTENT, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void delAllStoreIndex(){
+        RequestBuilder request = get("/merchantStore/delAllStoreIndex");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());

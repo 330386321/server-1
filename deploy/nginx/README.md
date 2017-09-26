@@ -32,7 +32,7 @@ docker run --name nginx_https -it -d -p 80:80 -p 81:81 \
 ----
 
 ```bash
-docker run --name nginx -it -d -p 80:80 \
+sudo docker run --name nginx -it -d -p 80:80 \
     -v /usr/local/eshop/nginx/nginx_pp.conf:/etc/nginx/nginx.conf:ro \
     -v /usr/local/eshop/media:/usr/local/eshop/media:ro \
     -v /usr/local/eshop/html:/usr/local/eshop/html:ro \
@@ -54,10 +54,11 @@ docker run --name nginx -it -d -p 80:80 \
 开发环境
 ----
 ```bash
-docker run --name nginx -it -d -p 80:80 \
-    -v /usr/local/eshop/nginx/nginx_dev.conf:/etc/nginx/nginx.conf:ro \
+sudo docker run --name nginx_https -it -d -p 80:80 -p 81:81 \
+    -v /usr/local/eshop/nginx/nginx_dev_https.conf:/etc/nginx/nginx.conf:ro \
     -v /usr/local/media:/usr/local/media:ro \
     -v /usr/local/eshop/html:/usr/local/eshop/html:ro \
+    -v /usr/local/eshop/nginx/cer:/etc/nginx/cer:ro \
     -v /etc/localtime:/etc/localtime:ro \
     nginx:1.10.2-alpine
 ```

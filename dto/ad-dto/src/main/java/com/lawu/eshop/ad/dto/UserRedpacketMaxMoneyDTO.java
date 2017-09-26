@@ -12,6 +12,9 @@ public class UserRedpacketMaxMoneyDTO {
 	 */
 	@ApiModelProperty(value = "是否可以领取红包，true可以领取，false不能领取")
 	private boolean flag;
+	
+	@ApiModelProperty(value = "红包是否领完")
+	private boolean isGetAll;
 
 	public BigDecimal getMoney() {
 		return money;
@@ -28,5 +31,15 @@ public class UserRedpacketMaxMoneyDTO {
 	public void setFlag(boolean flag) {
 		this.flag = flag;
 	}
+
+	public boolean isGetAll() {
+		return isGetAll;
+	}
+
+	public void setGetAll(boolean isGetAll) {
+		this.isGetAll = isGetAll;
+	}
+	
+	
 
 }

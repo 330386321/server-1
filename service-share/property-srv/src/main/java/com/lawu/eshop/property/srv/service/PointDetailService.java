@@ -8,6 +8,7 @@ import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.AreaPointConsumeBO;
+import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
 import com.lawu.eshop.property.srv.bo.PointConsumeReportBO;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.bo.ReportAdPointGroupByAreaBO;
@@ -86,4 +87,6 @@ public interface PointDetailService {
 	 * @return
 	 */
 	List<AreaPointConsumeBO> getAreaPointRefund(String bdate, String edate);
+
+    List<IncomeMsgBO> getIncomeMsgDataList(String begin, String end);
 }

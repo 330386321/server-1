@@ -21,6 +21,7 @@
     <result column="is_evaluation" property="isEvaluation" jdbcType="BIT" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="order_status" property="orderStatus" jdbcType="BIT" />
+    <result column="is_fans" property="isFans" jdbcType="BIT" />
     <result column="commission_status" property="commissionStatus" jdbcType="TINYINT" />
     <result column="comment_time" property="commentTime" jdbcType="TIMESTAMP" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
@@ -100,7 +101,8 @@
     -->
     id, member_id, member_num, merchant_id, merchant_num, order_num, third_number, total_amount, 
     actual_amount, favored_amount, not_favored_amount, pay_type, is_evaluation, status, 
-    order_status, commission_status, comment_time, gmt_modified, gmt_create, gmt_commission
+    order_status, is_fans, commission_status, comment_time, gmt_modified, gmt_create, 
+    gmt_commission
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lawu.eshop.order.srv.domain.PayOrderDOExample" >
     <!--
@@ -160,16 +162,16 @@
       merchant_num, order_num, third_number, 
       total_amount, actual_amount, favored_amount, 
       not_favored_amount, pay_type, is_evaluation, 
-      status, order_status, commission_status, 
-      comment_time, gmt_modified, gmt_create, 
-      gmt_commission)
+      status, order_status, is_fans, 
+      commission_status, comment_time, gmt_modified, 
+      gmt_create, gmt_commission)
     values (#{memberId,jdbcType=BIGINT}, #{memberNum,jdbcType=VARCHAR}, #{merchantId,jdbcType=BIGINT}, 
       #{merchantNum,jdbcType=VARCHAR}, #{orderNum,jdbcType=VARCHAR}, #{thirdNumber,jdbcType=VARCHAR}, 
       #{totalAmount,jdbcType=DECIMAL}, #{actualAmount,jdbcType=DECIMAL}, #{favoredAmount,jdbcType=DECIMAL}, 
       #{notFavoredAmount,jdbcType=DECIMAL}, #{payType,jdbcType=TINYINT}, #{isEvaluation,jdbcType=BIT}, 
-      #{status,jdbcType=TINYINT}, #{orderStatus,jdbcType=BIT}, #{commissionStatus,jdbcType=TINYINT}, 
-      #{commentTime,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtCommission,jdbcType=TIMESTAMP})
+      #{status,jdbcType=TINYINT}, #{orderStatus,jdbcType=BIT}, #{isFans,jdbcType=BIT}, 
+      #{commissionStatus,jdbcType=TINYINT}, #{commentTime,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtCommission,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.order.srv.domain.PayOrderDO" >
     <!--
@@ -222,6 +224,9 @@
       </if>
       <if test="orderStatus != null" >
         order_status,
+      </if>
+      <if test="isFans != null" >
+        is_fans,
       </if>
       <if test="commissionStatus != null" >
         commission_status,
@@ -281,6 +286,9 @@
       </if>
       <if test="orderStatus != null" >
         #{orderStatus,jdbcType=BIT},
+      </if>
+      <if test="isFans != null" >
+        #{isFans,jdbcType=BIT},
       </if>
       <if test="commissionStatus != null" >
         #{commissionStatus,jdbcType=TINYINT},
@@ -361,6 +369,9 @@
       <if test="record.orderStatus != null" >
         order_status = #{record.orderStatus,jdbcType=BIT},
       </if>
+      <if test="record.isFans != null" >
+        is_fans = #{record.isFans,jdbcType=BIT},
+      </if>
       <if test="record.commissionStatus != null" >
         commission_status = #{record.commissionStatus,jdbcType=TINYINT},
       </if>
@@ -402,6 +413,7 @@
       is_evaluation = #{record.isEvaluation,jdbcType=BIT},
       status = #{record.status,jdbcType=TINYINT},
       order_status = #{record.orderStatus,jdbcType=BIT},
+      is_fans = #{record.isFans,jdbcType=BIT},
       commission_status = #{record.commissionStatus,jdbcType=TINYINT},
       comment_time = #{record.commentTime,jdbcType=TIMESTAMP},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
@@ -460,6 +472,9 @@
       <if test="orderStatus != null" >
         order_status = #{orderStatus,jdbcType=BIT},
       </if>
+      <if test="isFans != null" >
+        is_fans = #{isFans,jdbcType=BIT},
+      </if>
       <if test="commissionStatus != null" >
         commission_status = #{commissionStatus,jdbcType=TINYINT},
       </if>
@@ -498,6 +513,7 @@
       is_evaluation = #{isEvaluation,jdbcType=BIT},
       status = #{status,jdbcType=TINYINT},
       order_status = #{orderStatus,jdbcType=BIT},
+      is_fans = #{isFans,jdbcType=BIT},
       commission_status = #{commissionStatus,jdbcType=TINYINT},
       comment_time = #{commentTime,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},

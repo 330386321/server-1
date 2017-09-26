@@ -96,6 +96,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                             JSONObject jsonObject = JSONObject.fromObject(oldAudit.getContent());
                             MerchantStoreParam merchantStoreParam = (MerchantStoreParam) JSONObject.toBean(jsonObject, MerchantStoreParam.class);
                             newStoreDO.setName(merchantStoreParam.getName());
+                            newStoreDO.setRegionName(merchantStoreParam.getRegionName());
                             newStoreDO.setRegionPath(merchantStoreParam.getRegionPath());
                             newStoreDO.setAddress(merchantStoreParam.getAddress());
                             newStoreDO.setLongitude(merchantStoreParam.getLongitude());
@@ -279,6 +280,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                         SolrDocument solrDocument = solrService.getSolrDocsById(merchantStoreDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
                         if (solrDocument != null) {
                             document.addField("favoreInfo_s", solrDocument.get("favoreInfo_s") == null ? "" : solrDocument.get("favoreInfo_s"));
+                            document.addField("favoreEndTime_s", solrDocument.get("favoreEndTime_s") == null ? "" : solrDocument.get("favoreEndTime_s"));
                             document.addField("discountPackage_s", solrDocument.get("discountPackage_s") == null ? "" : solrDocument.get("discountPackage_s"));
                             document.addField("discountOrdinal_d", solrDocument.get("discountOrdinal_d") == null ? 1000 : solrDocument.get("discountOrdinal_d"));
                         } else {

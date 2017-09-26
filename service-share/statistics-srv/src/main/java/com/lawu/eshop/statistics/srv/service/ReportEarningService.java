@@ -1,5 +1,6 @@
 package com.lawu.eshop.statistics.srv.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.lawu.eshop.statistics.param.ReportEarningParam;
@@ -15,4 +16,8 @@ public interface ReportEarningService {
 	List<ReportEarningsDailyBO> getDailyList(String reportDate);
 	
 	ReportCommonEarningsBO selectReport(String bdate, String edate);
+	
+	Date getDaily();
+	
+	Date getMonth();
 }

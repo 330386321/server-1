@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<globalConfiguration>
+    <registryCenterConfigurations>
+        <registryCenterConfiguration name="ad-job" zkAddressList="192.168.100.90:2181" namespace="ad-job" digest="" activated="false"/>
+        <registryCenterConfiguration name="mall-job" zkAddressList="192.168.100.90:2181" namespace="mall-job" digest="" activated="false"/>
+        <registryCenterConfiguration name="order-job" zkAddressList="192.168.100.90:2181" namespace="order-job" digest="" activated="false"/>
+        <registryCenterConfiguration name="product-job" zkAddressList="192.168.100.90:2181" namespace="product-job" digest="" activated="false"/>
+        <registryCenterConfiguration name="property-job" zkAddressList="192.168.100.90:2181" namespace="property-job" digest="" activated="false"/>
+        <registryCenterConfiguration name="user-job" zkAddressList="192.168.100.90:2181" namespace="user-job" digest="" activated="false"/>
+        <registryCenterConfiguration name="jobs-job" zkAddressList="192.168.100.90:2181" namespace="jobs-job" digest="" activated="false"/>
+    </registryCenterConfigurations>
+    <eventTraceDataSourceConfigurations/>
+</globalConfiguration>

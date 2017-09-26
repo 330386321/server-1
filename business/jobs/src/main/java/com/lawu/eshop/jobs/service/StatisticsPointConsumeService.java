@@ -1,5 +1,6 @@
 package com.lawu.eshop.jobs.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.statistics.dto.PointConsumeDailyDTO;
+import com.lawu.eshop.statistics.dto.ReportNewDateDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 
 @FeignClient(value= "statistics-srv")
@@ -35,4 +37,15 @@ public interface StatisticsPointConsumeService {
 	@RequestMapping(method = RequestMethod.DELETE, value = "pointConsume/deleteMonthByReportDate")
 	Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate);	
 	
+	@RequestMapping(value = "pointConsume/getReportDatePointConsumeDaily", method = RequestMethod.GET)
+	Result<ReportNewDateDTO> getReportDateUserRegDaily();
+	
+	@RequestMapping(value = "pointConsume/getReportDatePointConsumeMonth", method = RequestMethod.GET)
+	Result<ReportNewDateDTO> getReportDateUserRegMonth();
+	
+	@RequestMapping(method = RequestMethod.GET, value = "pointConsume/getDaily")
+	Date getDaily();
+	
+	@RequestMapping(method = RequestMethod.GET, value = "pointConsume/getMonth")
+	Date getMonth();
 }

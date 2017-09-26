@@ -16,16 +16,19 @@ import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.AdClickPraiseInfoBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
+import com.lawu.eshop.ad.srv.bo.AdSaveInfoBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.framework.core.page.Page;
@@ -44,7 +47,7 @@ public interface AdService {
      * @param adSaveParam
      * @return
      */
-    Integer saveAd(AdSaveParam adSaveParam);
+	AdSaveInfoBO saveAd(AdSaveParam adSaveParam);
 
     /**
      * 商家E赚查询
@@ -131,7 +134,7 @@ public interface AdService {
      * @param memberId
      * @return
      */
-    BigDecimal clickPraise(Long id, Long memberId, String num);
+    AdClickPraiseInfoBO clickPraise(Long id, Long memberId, String num);
 
     /**
      * 点击广告
@@ -158,7 +161,7 @@ public interface AdService {
      * @param merchantId
      * @return
      */
-    Integer selectRPIsSend(Long merchantId);
+    RedPacketIsSendBO selectRPIsSend(Long merchantId);
 
     /**
      * 领取红包
@@ -235,13 +238,6 @@ public interface AdService {
      * @return
      */
     List<AdBO> listFlatVideoAd(ListAdParam listAdParam);
-
-    /**
-     * 更新平面视频广告索引
-     *
-     * @param id
-     */
-    void updateAdIndex(Long id);
 
     /**
      * 重建平面视频广告索引

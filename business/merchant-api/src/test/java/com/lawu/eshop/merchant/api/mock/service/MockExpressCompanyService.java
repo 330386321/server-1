@@ -1,16 +1,18 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyQueryDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyRetrieveDTO;
 import com.lawu.eshop.merchant.api.service.ExpressCompanyService;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -38,4 +40,16 @@ public class MockExpressCompanyService extends BaseController implements Express
     public Result<ExpressCompanyRetrieveDTO> listByKeyWord(@RequestParam("keyWord") String keyWord) {
         return successGet();
     }
+
+	@Override
+	public Result<List<ExpressCompanyDTO>> codeList(List<String> codeList) {
+		List<ExpressCompanyDTO> rtn = new ArrayList<>();
+		return successGet(rtn);
+	}
+
+	@Override
+	public Result<ExpressCompanyDTO> code(String code) {
+		ExpressCompanyDTO rtn = new ExpressCompanyDTO();
+		return successGet(rtn);
+	}
 }

@@ -386,6 +386,76 @@ public class ShoppingOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andMemberNicknameIsNull() {
+            addCriterion("member_nickname is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameIsNotNull() {
+            addCriterion("member_nickname is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameEqualTo(String value) {
+            addCriterion("member_nickname =", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameNotEqualTo(String value) {
+            addCriterion("member_nickname <>", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameGreaterThan(String value) {
+            addCriterion("member_nickname >", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameGreaterThanOrEqualTo(String value) {
+            addCriterion("member_nickname >=", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameLessThan(String value) {
+            addCriterion("member_nickname <", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameLessThanOrEqualTo(String value) {
+            addCriterion("member_nickname <=", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameLike(String value) {
+            addCriterion("member_nickname like", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameNotLike(String value) {
+            addCriterion("member_nickname not like", value, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameIn(List<String> values) {
+            addCriterion("member_nickname in", values, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameNotIn(List<String> values) {
+            addCriterion("member_nickname not in", values, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameBetween(String value1, String value2) {
+            addCriterion("member_nickname between", value1, value2, "memberNickname");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNicknameNotBetween(String value1, String value2) {
+            addCriterion("member_nickname not between", value1, value2, "memberNickname");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchantIdIsNull() {
             addCriterion("merchant_id is null");
             return (Criteria) this;
@@ -2623,6 +2693,66 @@ public class ShoppingOrderDOExample {
 
         public Criteria andGmtTransactionNotBetween(Date value1, Date value2) {
             addCriterion("gmt_transaction not between", value1, value2, "gmtTransaction");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneIsNull() {
+            addCriterion("gmt_done is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneIsNotNull() {
+            addCriterion("gmt_done is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneEqualTo(Date value) {
+            addCriterion("gmt_done =", value, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneNotEqualTo(Date value) {
+            addCriterion("gmt_done <>", value, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneGreaterThan(Date value) {
+            addCriterion("gmt_done >", value, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneGreaterThanOrEqualTo(Date value) {
+            addCriterion("gmt_done >=", value, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneLessThan(Date value) {
+            addCriterion("gmt_done <", value, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneLessThanOrEqualTo(Date value) {
+            addCriterion("gmt_done <=", value, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneIn(List<Date> values) {
+            addCriterion("gmt_done in", values, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneNotIn(List<Date> values) {
+            addCriterion("gmt_done not in", values, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneBetween(Date value1, Date value2) {
+            addCriterion("gmt_done between", value1, value2, "gmtDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDoneNotBetween(Date value1, Date value2) {
+            addCriterion("gmt_done not between", value1, value2, "gmtDone");
             return (Criteria) this;
         }
 

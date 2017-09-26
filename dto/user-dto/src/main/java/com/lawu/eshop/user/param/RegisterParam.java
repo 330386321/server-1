@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.param;
 
+import com.lawu.eshop.user.constants.UserTypeEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -19,6 +21,9 @@ public class RegisterParam {
 
     @ApiModelProperty(value = "邀请人账号")
     private String inviterAccount;
+
+    @ApiModelProperty(value = "邀请类型")
+    private UserTypeEnum userTypeEnum;
 
     public String getSmsCode() {
         return smsCode;
@@ -52,4 +57,11 @@ public class RegisterParam {
         this.inviterAccount = inviterAccount;
     }
 
+    public UserTypeEnum getUserTypeEnum() {
+        return userTypeEnum;
+    }
+
+    public void setUserTypeEnum(UserTypeEnum userTypeEnum) {
+        this.userTypeEnum = userTypeEnum;
+    }
 }

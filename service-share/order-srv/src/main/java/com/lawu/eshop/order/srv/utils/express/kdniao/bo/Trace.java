@@ -1,6 +1,6 @@
 package com.lawu.eshop.order.srv.utils.express.kdniao.bo;
 
-import java.io.Serializable;
+import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * 快递鸟实时查询封装数据
@@ -9,47 +9,47 @@ import java.io.Serializable;
  * @author Sunny
  * @date 2017/4/10
  */
-public class Trace implements Serializable {
+public class Trace {
 	
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * 时间
 	 */
-	private String AcceptTime;
+	@JSONField(name = "AcceptTime")
+	private String acceptTime;
 	
 	/**
 	 * 描述
 	 */
-	private String AcceptStation;
+	@JSONField(name = "AcceptStation")
+	private String acceptStation;
 	
 	/**
 	 * 备注
 	 */
-	private String Remark;
+	@JSONField(name = "Remark")
+	private String remark;
 
 	public String getAcceptTime() {
-		return AcceptTime;
+		return acceptTime;
 	}
 
 	public void setAcceptTime(String acceptTime) {
-		AcceptTime = acceptTime;
+		this.acceptTime = acceptTime;
 	}
 
 	public String getAcceptStation() {
-		return AcceptStation;
+		return acceptStation;
 	}
 
 	public void setAcceptStation(String acceptStation) {
-		AcceptStation = acceptStation;
+		this.acceptStation = acceptStation;
 	}
 
 	public String getRemark() {
-		return Remark;
+		return remark;
 	}
 
 	public void setRemark(String remark) {
-		Remark = remark;
+		this.remark = remark;
 	}
-	
 }

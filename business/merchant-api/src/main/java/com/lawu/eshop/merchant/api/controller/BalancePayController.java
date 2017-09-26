@@ -3,6 +3,7 @@ package com.lawu.eshop.merchant.api.controller;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
+import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -23,8 +24,10 @@ import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.merchant.api.service.BalancePayService;
 import com.lawu.eshop.merchant.api.service.MessageService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.merchant.api.service.PropertySrvPropertyService;
 import com.lawu.eshop.merchant.api.service.RechargeService;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayParam;
@@ -57,6 +60,8 @@ public class BalancePayController extends BaseController {
 	private MessageService messageService;
 	@Autowired
 	private PropertyInfoService propertyInfoService;
+	@Autowired
+	private PropertySrvPropertyService propertySrvPropertyService;
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
@@ -73,6 +78,9 @@ public class BalancePayController extends BaseController {
 
 		ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
 		double money = recharge.getActualMoney();
+		if (StringUtil.doubleCompareTo(money, 0) == 0) {
+			return successCreated(ResultCode.MONEY_IS_ZERO);
+		}
 		dparam.setTotalAmount(String.valueOf(money));
 
 		Result result = balancePayService.balancePayPoint(dparam);
@@ -94,6 +102,12 @@ public class BalancePayController extends BaseController {
 		} else if (userNum.startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
 			messageTempParam.setUserName("E店商家");
 		}
+		String property_key = PropertyType.MERCHANT_BALANCE_PAY_POINT_SCALE;
+        String scale = propertySrvPropertyService.getValue(property_key).getModel().toString();
+        double dPayMoney = Double.parseDouble(String.valueOf(money));
+        double dPayScale = Double.parseDouble(scale);
+        double point = dPayMoney * dPayScale;
+        messageTempParam.setRechargePoint(new BigDecimal(df.format(point)));
 		messageInfoParam.setMessageParam(messageTempParam);
 		messageService.saveMessage(userNum, messageInfoParam);
 		// ------------------------------发送站内消息

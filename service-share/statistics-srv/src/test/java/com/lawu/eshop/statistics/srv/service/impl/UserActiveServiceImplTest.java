@@ -1,5 +1,7 @@
 package com.lawu.eshop.statistics.srv.service.impl;
 
+import java.util.Date;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.statistics.srv.service.UserActiveService;
+import com.lawu.eshop.utils.DateUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/spring-test.xml" })
@@ -23,21 +26,21 @@ public class UserActiveServiceImplTest {
 	@Rollback
 	@Test
 	public void collectionMemberActiveDaily() {
-		userActiveService.collectionMemberActiveDaily();
+		userActiveService.collectionMemberActiveDaily(new Date());
 	}
 	
 	@Transactional
 	@Rollback
 	@Test
 	public void collectionMemberActiveAreaDaily() {
-		userActiveService.collectionMemberActiveAreaDaily();
+		userActiveService.collectionMemberActiveAreaDaily(DateUtil.getDate());
 	}
 	
 	@Transactional
 	@Rollback
 	@Test
 	public void collectionMerchantActiveDaily() {
-		userActiveService.collectionMerchantActiveDaily();
+		userActiveService.collectionMerchantActiveDaily(new Date());
     }
 
 //	@Transactional
@@ -59,7 +62,7 @@ public class UserActiveServiceImplTest {
 	@Rollback
 	@Test
     public void collectionMerchantActiveAreaDaily() {
-		userActiveService.collectionMerchantActiveAreaDaily();
+		userActiveService.collectionMerchantActiveAreaDaily(DateUtil.getDate());
     }
 
 //	@Transactional

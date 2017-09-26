@@ -129,6 +129,12 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 		record.setIsSend(true);
 		favoriteAdDOMapper.updateByPrimaryKeySelective(record);
 	}
-	
+
+	@Override
+	public Integer getFavoriteCount(Long adId) {
+		FavoriteAdDOExample example = new FavoriteAdDOExample();
+		example.createCriteria().andAdIdEqualTo(adId);
+		return favoriteAdDOMapper.countByExample(example);
+	}
 
 }

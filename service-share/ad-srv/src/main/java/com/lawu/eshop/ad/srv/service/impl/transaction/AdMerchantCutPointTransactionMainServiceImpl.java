@@ -1,10 +1,14 @@
 package com.lawu.eshop.ad.srv.service.impl.transaction;
 
+import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.constants.TransactionConstant;
+import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.compensating.transaction.Reply;
@@ -12,6 +16,8 @@ import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactio
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.ad.AdPointNotification;
+import com.lawu.eshop.mq.dto.ad.reply.AdPointReply;
+import com.lawu.eshop.solr.service.SolrService;
 
 /**
  * @author zhangrc
@@ -19,10 +25,16 @@ import com.lawu.eshop.mq.dto.ad.AdPointNotification;
  */
 @Service("adMerchantCutPointTransactionMainServiceImpl")
 @CompensatingTransactionMain(value = TransactionConstant.AD_ME_CUT_POINT, topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_ME_CUT_POINT)
-public class AdMerchantCutPointTransactionMainServiceImpl extends AbstractTransactionMainService<AdPointNotification, Reply> {
+public class AdMerchantCutPointTransactionMainServiceImpl extends AbstractTransactionMainService<AdPointNotification, AdPointReply> {
 
 	@Autowired
 	private AdDOMapper adDOMapper;
+	
+	@Autowired
+	private SolrService solrService;
+	
+	@Autowired
+	private AdSrvConfig adSrvConfig;
 
     @Override
     public AdPointNotification selectNotification(Long adId) {
@@ -31,19 +43,27 @@ public class AdMerchantCutPointTransactionMainServiceImpl extends AbstractTransa
     	 notification.setUserNum(ad.getMerchantNum());
     	 notification.setPoint(ad.getTotalPoint());
     	 notification.setRegionPath(ad.getMerchantRegionPath());
-    	 notification.setRegionPath("");
          return notification;
     }
 
     @Override
-    public void afterSuccess(Long adId, Reply reply) {
-    	AdDO  ad=adDOMapper.selectByPrimaryKey(adId);
-    	if(ad.getType()==2){
-    		ad.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
-    	}else{
+    public void afterSuccess(Long adId, AdPointReply reply) {
+    	
+    	if(reply.isFlag()){
+    		
+    		AdDO  ad=adDOMapper.selectByPrimaryKey(adId);
+        	ad.setIsPay(true);
     		ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+    		
+    		//将抢赞添加到solr
+        	if(ad.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal()){
+        		SolrInputDocument document= AdConverter.convertSolrInputDocument(ad);
+    			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+        	}else if(ad.getType()==AdTypeEnum.AD_TYPE_VIDEO.getVal()){
+        		ad.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
+        	}
+        	adDOMapper.updateByPrimaryKeySelective(ad);
     	}
-    	adDOMapper.updateByPrimaryKeySelective(ad);
-        return;
+    	
     }
 }

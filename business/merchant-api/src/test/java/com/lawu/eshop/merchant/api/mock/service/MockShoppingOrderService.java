@@ -1,18 +1,25 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
-import com.lawu.eshop.order.dto.foreign.*;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderDetailDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author meishuquan
@@ -54,4 +61,14 @@ public class MockShoppingOrderService extends BaseController implements Shopping
     public Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId) {
         return successGet();
     }
+
+	@Override
+	public Result<ShoppingOrderDetailDTO> detail(Long id, Long merchantId) {
+		return successGet();
+	}
+
+	@Override
+	public Result<ShoppingOrderExpressInfoDTO> expressInfo(Long id, Long merchantId) {
+		return successGet();
+	}
 }

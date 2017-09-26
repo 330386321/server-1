@@ -33,6 +33,7 @@ import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ReportFansRiseRateEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusToMemberEnum;
+import com.lawu.eshop.order.constants.ShoppingOrderStatusToMerchantEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.dto.ReportRiseRateDTO;
@@ -250,7 +251,17 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		if (count <= 0 || param.getOffset() >= count) {
 			return shoppingOrderItemBOPage;
 		}
-
+		
+		String orderByClause = "";
+		// 如果是待收货按照付款时间正序排序
+		if (ShoppingOrderStatusToMemberEnum.BE_SHIPPED.equals(param.getOrderStatus())) {
+			orderByClause += "so.gmt_payment asc,";
+		}
+		// 默认创建时间排序
+		orderByClause += "so.gmt_create desc";
+		
+		shoppingOrderExtendDOExample.setOrderByClause(orderByClause);
+		
 		// 分页参数
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 
@@ -262,8 +273,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.createCriteria().andIdIn(idList);
 
-		// 默认创建时间排序
-		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
+		shoppingOrderExtendDOExample.setOrderByClause(orderByClause);
 
 		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
@@ -293,7 +303,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			shoppingOrderExtendDOExample.clear();
 
 			Criteria orderNumCriteria = shoppingOrderExtendDOExample.or();
-			orderNumCriteria.andOrderNumEqualTo(param.getKeyword());
+			orderNumCriteria.andOrderNumLike("%" + param.getKeyword() + "%");
 			orderNumCriteria.getAllCriteria().addAll(baseCriteria.getAllCriteria());
 
 			Criteria paroductCriteria = shoppingOrderExtendDOExample.or();
@@ -319,10 +329,15 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 		// 分页参数
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
-
+		
+		String orderByClause = "";
+		if (ShoppingOrderStatusToMerchantEnum.BE_SHIPPED.equals(param.getOrderStatus())) {
+			orderByClause += "so.gmt_payment asc,";
+		}
 		// 默认创建时间排序
-		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
-
+		orderByClause += "so.gmt_create desc";
+		
+		shoppingOrderExtendDOExample.setOrderByClause(orderByClause);
 		// 如果参数中的keyword有值，查询结果的订单项会缺少，所有先找出所有购物订单id再通过去查找购物订单以及级联的购物订单项
 		List<Long> idList = shoppingOrderDOExtendMapper.selectIdByExample(shoppingOrderExtendDOExample, rowBounds);
 
@@ -331,9 +346,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.createCriteria().andIdIn(idList);
 
-		// 默认创建时间排序
-		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
-
+		shoppingOrderExtendDOExample.setOrderByClause(orderByClause);
 		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
 		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
@@ -572,6 +585,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				stringBuilder.append(item.getProductName());
 			}
 			shoppingOrderpaymentSuccessfulNotification.setProductName(stringBuilder.toString());
+			shoppingOrderpaymentSuccessfulNotification.setId(shoppingOrderDO.getId());
 
 			// 发送消MQ息
 			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_PAYMENT_SUCCESSFUL_PUSH, shoppingOrderpaymentSuccessfulNotification);
@@ -607,6 +621,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 如果是自动收货，设置订单的状态为完成
 		if (isAutomaticReceipt) {
 			shoppingOrderUpdateDO.setIsDone(true);
+			shoppingOrderUpdateDO.setGmtDone(new Date());
 		}
 		// 更改订单状态为交易成功
 		shoppingOrderUpdateDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
@@ -622,6 +637,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		for (ShoppingOrderItemDO item : shoppingOrderItemDOList) {
 			// 如果订单项的状态是退款中的状态
 			if (item.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
+				item.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 				// 清空退款状态
 				item.setRefundStatus(null);
 				item.setGmtModified(new Date());
@@ -782,6 +798,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		notification.setShoppingOrderItemId(shoppingOrderItemDO.getId());
 		notification.setMemberNum(shoppingOrderDO.getMemberNum());
 		notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
+		notification.setMemberNickname(shoppingOrderDO.getMemberNickname());
 		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND, notification);
 	}
 
@@ -862,7 +879,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				throw new TheOrderIsBeingProcessedException(ExceptionMessageConstant.THE_ORDER_IS_BEING_PROCESSED);
 			}
 			if (ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue().equals(orderDO.getOrderStatus())) {
-				throw new OrderCreationFailedException(ExceptionMessageConstant.THE_ORDER_IS_BEING_PROCESSED);
+				throw new OrderCreationFailedException(ExceptionMessageConstant.ORDER_CREATION_FAILED);
 			}
 			total = total.add(orderDO.getOrderTotalPrice());
 		}
@@ -1252,6 +1269,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
 		shoppingOrderItemExtendDOExampleCriteria.andSOMemberIdEqualTo(memberId);
+		shoppingOrderItemExtendDOExampleCriteria.andSOStatusEqualTo(StatusEnum.VALID.getValue());
 		// 订单状态为交易成功并且未评价
 		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		shoppingOrderItemExtendDOExampleCriteria.andIsEvaluationEqualTo(false);
@@ -1375,11 +1393,11 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(param.getFlag().getValue())) {
 			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.DAY.getValue());
-			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyyMM"));
+			shoppingOrderReportDataParam.setGmtDone(DateUtil.getDateFormat(new Date(), "yyyyMM"));
 			x = DateUtil.getNowMonthDay();
 		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(param.getFlag().getValue())) {
 			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.MONTH.getValue());
-			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyy"));
+			shoppingOrderReportDataParam.setGmtDone(DateUtil.getDateFormat(new Date(), "yyyy"));
 			x = 12;
 		}
 
@@ -1404,13 +1422,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		ShoppingOrderReportDataParam shoppingOrderReportDataParam = new ShoppingOrderReportDataParam();
 		shoppingOrderReportDataParam.setMerchantId(param.getMerchantId());
 
-		if (ReportFansRiseRateEnum.DAY.getValue().equals(param.getFlag().getValue())) {
-			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.DAY.getValue());
-			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyyMM"));
-		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(param.getFlag().getValue())) {
-			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.MONTH.getValue());
-			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyy"));
-		}
+//		if (ReportFansRiseRateEnum.DAY.getValue().equals(param.getFlag().getValue())) {
+//			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.DAY.getValue());
+//			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyyMM"));
+//		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(param.getFlag().getValue())) {
+//			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.MONTH.getValue());
+//			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyy"));
+//		}
 
 		List<ReportFansSaleTransFormDO> reportFansSaleTransFormDOList = shoppingOrderDOExtendMapper.selectByFansSaleTransForm(shoppingOrderReportDataParam);
 
@@ -1488,6 +1506,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		update.setSendTime(0);
 		update.setId(shoppingOrderExtendDO.getId());
 		update.setIsDone(true);
+		update.setGmtDone(new Date());
 		update.setGmtModified(new Date());
 		shoppingOrderDOMapper.updateByPrimaryKeySelective(update);
 

@@ -71,7 +71,7 @@ public class AdEgainDTO {
 	private RelateTypeEnum relateType;
 	
 	@ApiModelProperty(value = "视频大小")
-	private Long fileSize;
+	private Double fileSize;
 	
 	@ApiModelProperty(value = "视频时间")
 	private String videoTime;
@@ -236,11 +236,11 @@ public class AdEgainDTO {
 		this.relateType = relateType;
 	}
 
-	public Long getFileSize() {
+	public Double getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(Long fileSize) {
+	public void setFileSize(Double fileSize) {
 		this.fileSize = fileSize;
 	}
 

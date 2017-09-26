@@ -6,8 +6,10 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantDetailBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
@@ -143,4 +145,21 @@ public interface MerchantService {
     Page<MerchantBO> getAccountList(AccountParam param);
 
     void freezeAccount(String num, Boolean isFreeze,String freezeReason);
+
+    /**
+     * 根据商家ID查询商家详细信息(包括门店、图片等信息)
+     *
+     * @param merchantId
+     * @return
+     * @author meishuquan
+     */
+    MerchantDetailBO getMerchantDetailById(Long merchantId);
+
+    /**
+     * 保存商家登录日志
+     *
+     * @param loginLogParam
+     * @author meishuquan
+     */
+    void saveLoginLog(UserLoginLogParam loginLogParam);
 }

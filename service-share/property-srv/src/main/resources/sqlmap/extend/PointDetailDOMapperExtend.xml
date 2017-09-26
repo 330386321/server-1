@@ -76,6 +76,24 @@
 	      	point_type = 112 and area_id is not null  and (gmt_create &gt;= #{bdate} and gmt_create &lt;= #{edate}) 
 	      	group by area_id
 	 </select>
-	 
-	 
+
+	<resultMap id="IncomeMsgResultMap" type="com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView">
+		<result column="user_num" jdbcType="VARCHAR" property="userNum" />
+		<result column="point" jdbcType="DECIMAL" property="money" />
+		<result column="point_type" jdbcType="TINYINT" property="bType" />
+	</resultMap>
+
+	<select id="getIncomeMsgDataList"  resultMap="IncomeMsgResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample">
+		SELECT
+			user_num,
+			point_type,
+			sum(point) point
+		FROM
+			point_detail
+		WHERE
+			point_type IN (12, 13, 115, 116)
+		AND gmt_create BETWEEN #{begin}
+		AND #{end}
+		group by user_num,point_type
+	</select>
 </mapper>

@@ -1,8 +1,12 @@
 package com.lawu.eshop.property.srv.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.dto.IncomeMsgDTO;
+import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
+import com.lawu.eshop.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -160,6 +164,23 @@ public class TransactionDetailController extends BaseController {
 		List<UserIncomeExpenditureBO> userIncomeExpenditureBOList = transactionDetailService.selectUserIncomeExpenditure(param);
 		UserIncomeExpenditureDatailDTO rtn = UserIncomeExpenditureConverter.convertUserIncomeExpenditureDatailDTO(userIncomeExpenditureBOList);
 		return successCreated(rtn);
+	}
+
+	@RequestMapping(value = "getIncomeMsgDataList", method = RequestMethod.GET)
+	public Result<List<IncomeMsgDTO>> getIncomeMsgDataList() {
+		String date = DateUtil.getDateFormat(DateUtil.getDayBefore(new Date()),"yyyy-MM-dd");
+		String begin = date + " 00:00:00";
+		String end = date + " 23:59:59";
+		List<IncomeMsgBO> userIncomeExpenditureBOList = transactionDetailService.getIncomeMsgDataList(begin,end);
+		List<IncomeMsgDTO> dtos = new ArrayList<>();
+		for(IncomeMsgBO bo : userIncomeExpenditureBOList){
+			IncomeMsgDTO dto = new IncomeMsgDTO();
+			dto.setUserNum(bo.getUserNum());
+			dto.setMoney(bo.getMoney());
+			dto.setType(bo.getType());
+			dtos.add(dto);
+		}
+		return successCreated(dtos);
 	}
 
 }

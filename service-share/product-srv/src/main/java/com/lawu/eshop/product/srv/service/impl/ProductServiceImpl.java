@@ -270,6 +270,9 @@ public class ProductServiceImpl implements ProductService {
         for (int i = 0; i < imageContents.size(); i++) {
             MemberProductImageDetailDTO d = new MemberProductImageDetailDTO();
             d.setDetail(imageContents.get(i));
+            if(imagesDetail.size() < (i+1)){
+                break;
+            }
             d.setImageUrl(imagesDetail.get(i));
             imageDetail.add(d);
         }
@@ -376,11 +379,6 @@ public class ProductServiceImpl implements ProductService {
             if(ret == 0){
             	return;
             }
-            example.createCriteria().andIdEqualTo(productId);
-            if(param.getProductStatus() != null){
-                productDO.setStatus(param.getProductStatus().getVal());
-            }
-            productDOMapper.updateByExampleSelective(productDO, example);
         }
 
         String spec = param.getSpec();
@@ -491,15 +489,6 @@ public class ProductServiceImpl implements ProductService {
             }
         }
 
-        // 修改商品库存、销量、最高价、最低价
-//        ProductDOEditView productDO = new ProductDOEditView();
-//        productDO.setTotalInventory(inventory);
-//        productDO.setTotalSalesVolume(salesVolume);
-//        productDO.setMinPrice(price);
-//        productDO.setMaxPrice(mprice);
-//        productDO.setId(productId);
-//        productDO.setFlag(!isEdit ? "A" : "U");
-//        productDOMapperExtend.updateByExampleSelective(productDO);//删除型号的情况(需要删除总库存)目前不好判断
         ProductDO productDO = new ProductDO();
         productDO.setTotalInventory(inventory);
         productDO.setTotalSalesVolume(salesVolume);
@@ -534,6 +523,9 @@ public class ProductServiceImpl implements ProductService {
             pcDO.setSortid(0);
             pcDO.setStatus(true);
             pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_HEAD.getVal());
+            if(StringUtils.isBlank(imgUrl)){
+                continue;
+            }
             productImageDOMapper.insert(pcDO);
         }
         // 保存商品详情图片
@@ -550,11 +542,19 @@ public class ProductServiceImpl implements ProductService {
             pcDO.setStatus(true);
             pcDO.setSortid(i + 1);
             pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.getVal());
+            if(StringUtils.isBlank(imgUrl)){
+                continue;
+            }
             productImageDOMapper.insert(pcDO);
         }
-        ProductDO productDO1 = productDOMapper.selectByPrimaryKey(productId);
-        SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO1);
-        solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+
+        if (param.getProductStatus() != null && ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal().equals(param.getProductStatus().getVal())){
+            solrService.delSolrDocsById(productId, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        } else {
+            ProductDO productDO1 = productDOMapper.selectByPrimaryKey(productId);
+            SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO1);
+            solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        }
     }
 
 
@@ -759,12 +759,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void soldOutProductByMerchantId(Long merchantId) {
-        ProductDO productDO = new ProductDO();
-        productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal());
-        ProductDOExample example = new ProductDOExample();
-        example.createCriteria().andMerchantIdEqualTo(merchantId);
-        productDOMapper.updateByExampleSelective(productDO, example);
-
         ProductDOExample example2 = new ProductDOExample();
         example2.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
         List<ProductDO> productDOS = productDOMapper.selectByExample(example2);
@@ -775,6 +769,12 @@ public class ProductServiceImpl implements ProductService {
             }
             solrService.delSolrDocsByIds(ids, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
+
+        ProductDO productDO = new ProductDO();
+        productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal());
+        ProductDOExample example = new ProductDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        productDOMapper.updateByExampleSelective(productDO, example);
     }
 
 	@Override

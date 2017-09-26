@@ -14,7 +14,8 @@ public class MessageTempParam {
      * {0}用户昵称、{1}订单编号、{2}运单编号、{3}余额、{4}充值金额、{5}当前积分、{6}消费金额
      * {7}优惠金额、{8}退款编号、{9}商品名称、{10}收益金额、{11}收益积分、{12}商家名称
      * {13}广告名称、{14}门店名称、{15}消费积分、{16}充值编号、{17}广告类型名称、{18}失败原因
-     * {19}代发货商品数量、{20}快递名称、{21}退款金额、{22}订单金额
+     * {19}代发货商品数量、{20}快递名称、{21}退款金额、{22}订单金额、{23}工单问题、{24}回复工单的内容
+     * {25}充值积分
      */
     @ApiModelProperty(value = "用户昵称{0}")
     private String userName;
@@ -91,6 +92,8 @@ public class MessageTempParam {
     @ApiModelProperty(value = "回复工单的内容{24}")
     private String replyWorkOrderContent;
     
+    @ApiModelProperty(value = "充值积分{25}")
+    private BigDecimal rechargePoint;
     
     public String getWorkOrderContent() {
 		return workOrderContent;
@@ -291,6 +294,12 @@ public class MessageTempParam {
     public void setExpressCompanyName(String expressCompanyName) {
         this.expressCompanyName = expressCompanyName;
     }
-    
-    
+
+	public BigDecimal getRechargePoint() {
+		return rechargePoint;
+	}
+
+	public void setRechargePoint(BigDecimal rechargePoint) {
+		this.rechargePoint = rechargePoint;
+	}
 }

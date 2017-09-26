@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +43,7 @@ import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.AccountFreezeParam;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.StoreIndexParam;
+import com.lawu.eshop.utils.DateUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,7 +57,7 @@ import io.swagger.annotations.ApiResponse;
 @Api(tags = "member")
 @RestController
 @RequestMapping(value = "member/")
-public class MemberController extends BaseController{
+public class MemberController extends BaseController {
 
     @Autowired
     private MemberService memberService;
@@ -88,23 +91,32 @@ public class MemberController extends BaseController{
         return memberService.getMemberByAccount(account);
     }
 
+    @ApiOperation(value = "根据会员ID查询会员信息", notes = "根据会员ID查询会员信息。（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("account:detail")
+    @RequestMapping(value = "getMemberById/{id}", method = RequestMethod.GET)
+    public Result<MemberDTO> getMemberById(@PathVariable @ApiParam(value = "会员账号") Long id) {
+        return memberService.findMember(id);
+    }
+
     @ApiOperation(value = "根据会员账号查询会员列表（商家，会员）", notes = "根据会员账号查询会员列表（商家，会员）（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getAccountList", method = RequestMethod.GET)
     @PageBody
-    public Result<Page<AccountDTO>> getAccountList(@ModelAttribute AccountParam param){
-        if(UserType.MEMBER.equals(param.getUserType())){
+    public Result<Page<AccountDTO>> getAccountList(@ModelAttribute AccountParam param) {
+        if (UserType.MEMBER.equals(param.getUserType())) {
             //用户
-            return  memberService.getAccountList(param);
-        }else{
-            return  merchantService.getAccountList(param);
+            return memberService.getAccountList(param);
+        } else {
+            return merchantService.getAccountList(param);
         }
     }
 
     @ApiOperation(value = "冻结账户", notes = "冻结账户（商家，会员）（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequiresPermissions("account:freezeOper")
     @RequestMapping(value = "freezeAccount", method = RequestMethod.POST)
-    public Result freezeAccount(@ModelAttribute AccountFreezeParam param){
+    public Result freezeAccount(@ModelAttribute AccountFreezeParam param) {
 
         if (param.getNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
             //查询用户冻结状态
@@ -113,8 +125,9 @@ public class MemberController extends BaseController{
                 return successCreated(ResultCode.FAIL);
             }
             //修改用户冻结状态
-            memberService.freezeAccount(param.getNum(), param.getIsFreeze(),StringUtils.isEmpty(param.getFreezeReason()) ? "解冻" : param.getFreezeReason());
+            memberService.freezeAccount(param.getNum(), param.getIsFreeze(), StringUtils.isEmpty(param.getFreezeReason()) ? "解冻" : param.getFreezeReason());
             if (param.getIsFreeze()) {//冻结
+                memberService.delUserGtPush(param.getId());
                 tokenService.delMemberRelationshipByAccount(param.getAccount());//删除token
             }
             return successCreated();
@@ -125,11 +138,12 @@ public class MemberController extends BaseController{
             return successCreated(ResultCode.FAIL);
         }
         //冻结商家
-        merchantService.freezeAccount(param.getNum(),param.getIsFreeze(), StringUtils.isEmpty(param.getFreezeReason()) ? "解冻" : param.getFreezeReason());
+        merchantService.freezeAccount(param.getNum(), param.getIsFreeze(), StringUtils.isEmpty(param.getFreezeReason()) ? "解冻" : param.getFreezeReason());
         Result<MerchantStoreProfileDTO> result = merchantService.getMerchantStoreProfileInfo(param.getId());
         if (ResultCode.MERCHANT_STORE_NO_EXIST == result.getRet()) {
             //未创建门店
             if (param.getIsFreeze()) {
+                merchantService.delMerchantGtPush(param.getId());
                 tokenService.delMerchantRelationshipByAccount(param.getAccount());//删除token
             }
             //下架并删除solr广告
@@ -152,8 +166,9 @@ public class MemberController extends BaseController{
             // 下架，删除solr广告
             adService.soldOutAdByMerchantId(param.getId());
 
+            merchantService.delMerchantGtPush(param.getId());
             tokenService.delMerchantRelationshipByAccount(param.getAccount());//删除token
-        }else{
+        } else {
             //解冻
             // 添加solr门店信息-实体店铺
             if (MerchantStoreTypeEnum.ENTITY_MERCHANT.equals(result.getModel().getTypeEnum())) {
@@ -163,6 +178,7 @@ public class MemberController extends BaseController{
                 StoreIndexParam storeIndexParam = new StoreIndexParam();
                 favoredDTOResult = merchantFavoredService.findFavoredByMerchantId(param.getId());
                 String favoredInfo = "";
+                String favoreEndTime = "";
                 double discountOrdinal = 1000;
                 if (isSuccess(favoredDTOResult)) {
                     if (MerchantFavoredTypeEnum.TYPE_FULL.equals(favoredDTOResult.getModel().getTypeEnum())) {
@@ -179,6 +195,7 @@ public class MemberController extends BaseController{
                         discountOrdinal = favoredDTOResult.getModel().getDiscountRate().divide(BigDecimal.valueOf(10), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
                         discountOrdinal = discountOrdinal * 1000 + 1;
                     }
+                    favoreEndTime = DateUtil.getDateFormat(favoredDTOResult.getModel().getEntireEndTime());
                 }
 
                 //查询商家优惠套餐
@@ -192,6 +209,7 @@ public class MemberController extends BaseController{
                 storeIndexParam.setFavoreInfo(favoredInfo);
                 storeIndexParam.setDiscountPackage(discountPackage);
                 storeIndexParam.setDiscountOrdinal(discountOrdinal);
+                storeIndexParam.setFavoreEndTime(favoreEndTime);
                 indexParamList.add(storeIndexParam);
 
                 merchantStoreService.rebuildStoreIndex(indexParamList);

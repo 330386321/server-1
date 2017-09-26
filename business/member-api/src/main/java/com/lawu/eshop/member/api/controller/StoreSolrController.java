@@ -40,6 +40,7 @@ import com.lawu.eshop.user.dto.StoreSolrInfoDTO;
 import com.lawu.eshop.user.param.DiscountStoreParam;
 import com.lawu.eshop.user.param.RecommendFoodParam;
 import com.lawu.eshop.user.param.StoreSolrParam;
+import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.DistanceUtil;
 
 import io.swagger.annotations.Api;
@@ -201,6 +202,9 @@ public class StoreSolrController extends BaseController {
                 if (foodDTO.getAverageScore().compareTo(BigDecimal.valueOf(0)) == 0) {
                     foodDTO.setAverageScore(BigDecimal.valueOf(4));
                 }
+                if (DateUtil.isOverdue(DateUtil.formatDate(foodDTO.getFavoreEndTime(), "yyyy-MM-dd"))) {
+                    foodDTO.setFavoreInfo("");
+                }
             }
         }
         if (!StringUtils.isEmpty(commentResult.getModel())) {
@@ -211,6 +215,9 @@ public class StoreSolrController extends BaseController {
                 foodDTO.setAverageConsumeAmount(BigDecimal.valueOf(foodDTO.getAverageConsumeAmount().intValue()));
                 if (foodDTO.getAverageScore().compareTo(BigDecimal.valueOf(0)) == 0) {
                     foodDTO.setAverageScore(BigDecimal.valueOf(4));
+                }
+                if (DateUtil.isOverdue(DateUtil.formatDate(foodDTO.getFavoreEndTime(), "yyyy-MM-dd"))) {
+                    foodDTO.setFavoreInfo("");
                 }
             }
         }

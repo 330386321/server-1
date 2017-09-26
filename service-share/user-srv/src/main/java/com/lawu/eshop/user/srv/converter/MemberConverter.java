@@ -61,6 +61,8 @@ public class MemberConverter {
         memberBO.setIsFreeze(memberDO.getIsFreeze());
         memberBO.setFreezeReason(memberDO.getFreezeReason());
         memberBO.setGmtCreate(memberDO.getGmtCreate());
+        memberBO.setName(memberDO.getName());
+        memberBO.setStatus(memberDO.getStatus());
         return memberBO;
     }
 
@@ -142,7 +144,9 @@ public class MemberConverter {
         }
         memberDO.setBirthday(userParam.getBirthday());
         memberDO.setRegionName(userParam.getRegionName());
-
+        if(userParam.getRegionName() != null){
+            memberDO.setRegionName(userParam.getRegionName().replaceAll(" ","").replaceAll("-",""));
+        }
         return memberDO;
     }
 
@@ -206,6 +210,9 @@ public class MemberConverter {
         memberDTO.setLevel(memberBO.getLevel());
         memberDTO.setMobile(memberBO.getMobile());
         memberDTO.setRegionPath(memberBO.getRegionPath());
+        memberDTO.setRegionName(memberBO.getRegionName());
+        memberDTO.setGmtCreate(memberBO.getGmtCreate());
+        memberDTO.setUserSex(memberBO.getUserSex());
         return memberDTO;
     }
 

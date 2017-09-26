@@ -32,6 +32,7 @@ import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.UserSrvApplicationTest;
 import com.lawu.eshop.user.srv.domain.MemberDO;
@@ -453,7 +454,7 @@ public class MemberControllerTest {
         }
     }
 
-    /*@Transactional
+    @Transactional
     @Rollback
     @Test
     public void getMemberByIds() {
@@ -466,9 +467,7 @@ public class MemberControllerTest {
         memberDO.setGmtCreate(new Date());
         memberDOMapper.insertSelective(memberDO);
 
-        List<Long> memberIds = new ArrayList<>();
-        memberIds.add(memberDO.getId());
-        RequestBuilder request = get("/member/getMemberByIds").param("memberIds", memberIds.toString());
+        RequestBuilder request = get("/member/getMemberByIds").param("memberIds", memberDO.getId().toString());
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -477,7 +476,7 @@ public class MemberControllerTest {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         }
-    }*/
+    }
 
     @Transactional
     @Rollback
@@ -621,7 +620,34 @@ public class MemberControllerTest {
     @Rollback
     @Test
     public void freezeAccount(){
-        RequestBuilder request = put("/member/freezeAccount").param("num","123").param("isFreeze","true");
+        RequestBuilder request = put("/member/freezeAccount").param("num","123").param("isFreeze","true").param("freezeReason","test");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void saveLoginLog(){
+        UserLoginLogParam loginLogParam = new UserLoginLogParam();
+        loginLogParam.setUserNum("M0001");
+        loginLogParam.setAccount("13666666666");
+        loginLogParam.setUserType(UserType.MEMBER.val);
+        loginLogParam.setImei("test");
+        loginLogParam.setPlatform(DataTransUtil.intToByte(1));
+        loginLogParam.setPlatformVer("test");
+        loginLogParam.setAppVer("test");
+        loginLogParam.setCityId(10);
+        loginLogParam.setChannel("test");
+        loginLogParam.setIpAddr("test");
+        String json = JSONObject.toJSONString(loginLogParam);
+        RequestBuilder request = post("/member/saveLoginLog").contentType(MediaType.APPLICATION_JSON).content(json);
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();

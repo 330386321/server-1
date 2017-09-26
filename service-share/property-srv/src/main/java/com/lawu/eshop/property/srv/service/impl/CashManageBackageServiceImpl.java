@@ -1,9 +1,12 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.srv.service.PropertyService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +62,8 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 	private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
 	@Autowired
 	private TransactionDetailService transactionDetailService;
+	@Autowired
+	private PropertyService propertyService;
 
 	@Override
 	public Page<WithdrawCashBackageQueryBO> findCashInfo(CashBackageQueryDataParam param) {
@@ -140,7 +145,14 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			} else {
 				bqbo.setGmtModified("");
 			}
-			bqbo.setMoney(cdo.getMoney());
+			bqbo.setCashMoney(cdo.getCashMoney());
+			if(CashStatusEnum.APPLY.getVal().equals(cdo.getStatus()) || CashStatusEnum.FAILURE.getVal().equals(cdo.getStatus())){
+				bqbo.setPoundage(new BigDecimal("0"));
+				bqbo.setMoney(new BigDecimal("0"));
+			}else{
+				bqbo.setPoundage(cdo.getCashMoney().subtract(cdo.getMoney()));
+				bqbo.setMoney(cdo.getMoney());
+			}
 			cbos.add(bqbo);
 		}
 		page.setRecords(cbos);
@@ -212,9 +224,36 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		List<WithdrawCashOperDOView> paramList = new ArrayList<WithdrawCashOperDOView>();
 		String ids = param.getId();
 		String idsArray[] = ids.split(",");
+		String currentScale = propertyService.getValue(PropertyType.CASH_SCALE);
+		double dCurrentScale = Double.parseDouble(currentScale);
 		for (int i = 0; i < idsArray.length; i++) {
+
+			WithdrawCashDO wcdo = withdrawCashDOMapper.selectByPrimaryKey(Long.valueOf(idsArray[i]));
+			if ((CashStatusEnum.ACCEPT.getVal().equals(param.getCashOperEnum().getVal()) && !CashStatusEnum.APPLY.getVal().equals(wcdo.getStatus()))
+					|| (!CashStatusEnum.ACCEPT.getVal().equals(param.getCashOperEnum().getVal()) && !CashStatusEnum.ACCEPT.getVal().equals(wcdo.getStatus()))) {
+				return ResultCode.REPEAT_OPERATE;
+			}
+
 			paramList.clear();
 			WithdrawCashOperDOView view = new WithdrawCashOperDOView();
+
+			//受理操作时计算手续费
+			if (CashStatusEnum.ACCEPT.getVal().equals(param.getCashOperEnum().getVal())) {
+				WithdrawCashDOExample example = new WithdrawCashDOExample();
+				example.createCriteria().andUserNumEqualTo(wcdo.getUserNum()).andStatusEqualTo(CashStatusEnum.SUCCESS.getVal()).andGmtCreateGreaterThanOrEqualTo(DateUtil.formatDate(DateUtil.getDateFormat(new Date(),"yyyy-MM")+"-01 00:00:00","yyyy-MM-dd HH:mm:ss"));
+				int count = withdrawCashDOMapper.countByExample(example);
+				double dCashMoney = wcdo.getCashMoney().doubleValue();
+				double money = 0;
+				if (count > 0) {
+					String minusMoney = propertyService.getValue(PropertyType.CASH_GREATER_ONE_MINUS_MONEY);
+					money = dCashMoney * dCurrentScale - Double.parseDouble(minusMoney);
+				} else {
+					money = dCashMoney * dCurrentScale;
+				}
+				view.setCurrentScale(currentScale);
+				view.setMoney(BigDecimal.valueOf(money));
+			}
+
 			view.setId(Integer.valueOf(idsArray[i]));
 			view.setStatus(param.getCashOperEnum().getVal());
 			view.setAuditFailReason(param.getFailReason() == null ? "" : param.getFailReason());

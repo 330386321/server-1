@@ -2,6 +2,7 @@ package com.lawu.eshop.merchant.api.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -296,7 +297,7 @@ public class FansMerchantController extends BaseController {
 
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "邀请粉丝(含邀请内容,含邀请条件)", notes = "邀请会员成为粉丝。[1002|1022|1023|1035|6002|6024] (洪钦明)", httpMethod = "POST")
+	@ApiOperation(value = "邀请粉丝(含邀请内容,含邀请条件)", notes = "邀请会员成为粉丝。[1002|1022|1023|1035|6002|6010|6024] (洪钦明)", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "inviteFansWithContentExtend", method = RequestMethod.POST)
@@ -357,11 +358,10 @@ public class FansMerchantController extends BaseController {
 		propertyInfoDataParam.setInviteFansCount(inviteFansCount);
 		propertyInfoDataParam.setSex(param.getUserSexEnum().val);
 		propertyInfoDataParam.setAge(param.getIsAgeLimit() ? param.getStartAge() + "-" + param.getEndAge() : "");
-		Result result = propertyInfoService.inviteFans(propertyInfoDataParam);
+		Result result = propertyInfoService.doHanlderMinusPointByFans(propertyInfoDataParam);
 		if (!isSuccess(result)) {
 			return result;
 		}
-		
 		FansInviteContentExtendParam fansInviteContentExtendParam = new FansInviteContentExtendParam();
 		fansInviteContentExtendParam.setFansInviteDetailId(Long.valueOf(result.getModel().toString()));
 		fansInviteContentExtendParam.setInviteContent(param.getInviteContent());

@@ -16,6 +16,9 @@ public class UserRedpacketMaxMoney {
 	 * 是否可以领取红包
 	 */
 	private boolean flag;
+	
+	
+	private boolean sysWords;
 
 	/**
 	 * @return the maxMoney
@@ -39,6 +42,16 @@ public class UserRedpacketMaxMoney {
 	public void setFlag(boolean flag) {
 		this.flag = flag;
 	}
+
+	public boolean isSysWords() {
+		return sysWords;
+	}
+
+	public void setSysWords(boolean sysWords) {
+		this.sysWords = sysWords;
+	}
+	
+	
 
 	
 }

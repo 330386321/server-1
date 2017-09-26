@@ -73,6 +73,11 @@ public class MockSolrServiceImpl implements SolrService {
 		return true;
 	}
 
+	@Override
+	public boolean delAllSolrDocs(String solrUrl, String solrCore, Boolean isCloudSolr) {
+		return false;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -84,6 +89,11 @@ public class MockSolrServiceImpl implements SolrService {
 	@Override
 	public SolrDocumentList getSolrDocsByQuery(SolrQuery query, String solrUrl, String solrCore, Boolean isCloudSolr) {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SolrDocumentList getSolrDocsByQueryPost(SolrQuery query, String solrUrl, String solrCore, Boolean isCloudSolr) {
 		return null;
 	}
 

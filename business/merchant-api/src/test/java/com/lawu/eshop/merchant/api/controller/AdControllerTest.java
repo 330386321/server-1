@@ -1,7 +1,8 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.merchant.api.MerchantApiApplicationTest;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,8 +20,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.merchant.api.MerchantApiApplicationTest;
 
 /**
  * @author meishuquan
@@ -41,7 +42,7 @@ public class AdControllerTest {
     }
 
     @Test
-    public void addAddress() {
+    public void saveAd() {
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("typeEnum", "AD_TYPE_FLAT");
         map.add("beginTime", "2017-07-26");
@@ -49,6 +50,25 @@ public class AdControllerTest {
         map.add("putWayEnum", "PUT_WAY_AREAS");
         map.add("areas", "44");
         RequestBuilder request = post("/ad/saveAd").header("authorization", "8888").params(map);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void saveAdvert() {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("typeEnum", "AD_TYPE_FLAT");
+        map.add("beginTime", "2017-07-26");
+        map.add("totalPoint", "10");
+        map.add("putWayEnum", "PUT_WAY_AREAS");
+        map.add("areas", "44");
+        RequestBuilder request = post("/ad/saveAdvert").header("authorization", "8888").params(map);
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -163,6 +183,25 @@ public class AdControllerTest {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
             Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void againPutAdvert() {
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("typeEnum", "AD_TYPE_FLAT");
+        map.add("beginTime", "2017-07-26");
+        map.add("totalPoint", "10");
+        map.add("putWayEnum", "PUT_WAY_AREAS");
+        map.add("areas", "44");
+        RequestBuilder request = post("/ad/againPutAdvert/10").header("authorization", "8888").params(map);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());

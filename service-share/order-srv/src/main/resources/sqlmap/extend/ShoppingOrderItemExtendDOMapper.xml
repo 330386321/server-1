@@ -68,6 +68,7 @@
 		<id column="so_id" jdbcType="BIGINT" property="id" />
 		<result column="member_id" jdbcType="BIGINT" property="memberId" />
 		<result column="member_num" jdbcType="VARCHAR" property="memberNum" />
+		<result column="member_nickname" jdbcType="VARCHAR" property="memberNickname" />
 		<result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
 		<result column="merchant_store_id" jdbcType="BIGINT" property="merchantStoreId" />
 		<result column="merchant_store_region_path" jdbcType="VARCHAR" property="merchantStoreRegionPath" />
@@ -103,6 +104,7 @@
 		<result column="gmt_payment" jdbcType="TIMESTAMP" property="gmtPayment" />
 		<result column="gmt_transport" jdbcType="TIMESTAMP" property="gmtTransport" />
 		<result column="gmt_transaction" jdbcType="TIMESTAMP" property="gmtTransaction" />
+		<result column="gmt_done" jdbcType="TIMESTAMP" property="gmtDone" />
 		<result column="so_gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
 		<result column="so_gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
 	</resultMap>
@@ -160,7 +162,8 @@
   	</sql>
 	
 	<sql id="ShoppingOrder_Column_List">
-		so.id as so_id, so.member_id, so.member_num, so.merchant_id, so.merchant_store_id, so.merchant_store_region_path, so.merchant_num, so.merchant_name,
+		so.id as so_id, so.member_id, so.member_num, member_nickname,
+		so.merchant_id, so.merchant_store_id, so.merchant_store_region_path, so.merchant_num, so.merchant_name,
 		so.consignee_name as so_consignee_name,
 		so.consignee_address as so_consignee_address, so.consignee_mobile as so_consignee_mobile, so.remark, so.message, so.freight_price,
 		so.commodity_total_price,so.order_total_price, so.actual_amount, so.commission_status,
@@ -171,7 +174,7 @@
 		so_express_company_id,
 		so.express_company_code as so_express_company_code, so.express_company_name as so_express_company_name, so.gmt_commission,
 		so.gmt_payment, so.gmt_transport,
-		so.gmt_transaction,
+		so.gmt_transaction,  so.gmt_done,
 		so.gmt_create as so_gmt_create, so.gmt_modified as so_gmt_modified
 	</sql>
 	

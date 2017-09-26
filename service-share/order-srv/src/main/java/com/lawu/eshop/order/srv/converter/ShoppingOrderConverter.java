@@ -17,6 +17,7 @@ import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
@@ -24,7 +25,9 @@ import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
@@ -69,6 +72,7 @@ public class ShoppingOrderConverter {
 		rtn.setIsNoReasonReturn(param.getIsNoReasonReturn());
 		rtn.setMemberId(param.getMemberId());
 		rtn.setMemberNum(param.getMemberNum());
+		rtn.setMemberNickname(param.getMemberNickname());
 		rtn.setMerchantId(param.getMerchantId());
 		rtn.setMerchantName(param.getMerchantName());
 		rtn.setMerchantNum(param.getMerchantNum());
@@ -119,8 +123,35 @@ public class ShoppingOrderConverter {
 		rtn.setExpressCompanyName(shoppingOrderBO.getExpressCompanyName());
 		rtn.setWaybillNum(shoppingOrderBO.getWaybillNum());
 		
-		rtn.setExpressInquiriesDetailDTO(ExpressInquiriesDetailConverter.convert(expressInquiriesDetailBO));
-
+		rtn.setExpressInquiriesDetailDTO(ExpressConverter.convert(expressInquiriesDetailBO));
+		
+		return rtn;
+	}
+	
+	/**
+	 * 
+	 * @param shoppingOrderExtendBO
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月6日
+	 */
+	public static ShoppingOrderExpressInfoDTO covert(ShoppingOrderExtendBO shoppingOrderExtendBO) {
+		ShoppingOrderExpressInfoDTO rtn = null;
+		if (shoppingOrderExtendBO == null) {
+			return rtn;
+		}
+		rtn = new ShoppingOrderExpressInfoDTO();
+		rtn.setExpressCompanyId(shoppingOrderExtendBO.getExpressCompanyId());
+		rtn.setExpressCompanyName(shoppingOrderExtendBO.getExpressCompanyName());
+		rtn.setWaybillNum(shoppingOrderExtendBO.getWaybillNum());
+		rtn.setProductFeatureImage(shoppingOrderExtendBO.getItems().get(0).getProductFeatureImage());
+		int totalQuantity = 0;
+		if (shoppingOrderExtendBO.getItems() != null) {
+			for (ShoppingOrderItemBO item : shoppingOrderExtendBO.getItems()) {
+				totalQuantity += item.getQuantity();
+			}
+		}
+		rtn.setTotalQuantity(totalQuantity);
 		return rtn;
 	}
 
@@ -365,14 +396,14 @@ public class ShoppingOrderConverter {
 		
 		// 粉丝订单数量
 		ReportRiseRerouceDTO reportRiseRerouceDTO = new ReportRiseRerouceDTO();
-		reportRiseRerouceDTO.setName("is_fans");
+		reportRiseRerouceDTO.setName("粉丝购物消费");
 		ReportFansSaleTransFormDO reportFansSaleTransFormDO = reportFansSaleTransFormDOMap.get("1");
 		reportRiseRerouceDTO.setValue(reportFansSaleTransFormDO == null ? "0" : reportFansSaleTransFormDO.getCount().toString());
 		rtn.add(reportRiseRerouceDTO);
 		
 		// 非粉丝订单数量
 		reportRiseRerouceDTO = new ReportRiseRerouceDTO();
-		reportRiseRerouceDTO.setName("no_fans");
+		reportRiseRerouceDTO.setName("非粉丝购物消费");
 		reportFansSaleTransFormDO = reportFansSaleTransFormDOMap.get("0");
 		reportRiseRerouceDTO.setValue(reportFansSaleTransFormDO == null ? "0" : reportFansSaleTransFormDO.getCount().toString());
 		rtn.add(reportRiseRerouceDTO);

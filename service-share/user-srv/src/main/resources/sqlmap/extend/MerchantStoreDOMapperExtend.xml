@@ -64,7 +64,6 @@
         WHERE
         s.status = 1
         AND i.type = 1
-        AND i.status = 1
         AND s.merchant_id IN
         <foreach collection="list" item="merchantId" open="(" close=")" separator=",">
             #{merchantId}
@@ -101,6 +100,7 @@
         s.region_path as regionPath,
         s.longitude,
         s.latitude,
+        s.industry_path as industryPath,
         i.type AS type,
         i.path AS path,
         m.num AS userNum

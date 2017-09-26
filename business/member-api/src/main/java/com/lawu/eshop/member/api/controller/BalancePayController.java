@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.UserRedPacketService;
 import com.lawu.eshop.user.dto.VisitUserInfoDTO;
+import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -27,11 +28,13 @@ import com.lawu.eshop.member.api.service.BalancePayService;
 import com.lawu.eshop.member.api.service.MessageService;
 import com.lawu.eshop.member.api.service.PayOrderService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
+import com.lawu.eshop.member.api.service.PropertySrvPropertyService;
 import com.lawu.eshop.member.api.service.RechargeService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayParam;
@@ -70,7 +73,9 @@ public class BalancePayController extends BaseController {
 	private MerchantStoreService merchantStoreService;
 	@Autowired
     private UserRedPacketService userRedPacketService;
-
+	@Autowired
+	private PropertySrvPropertyService propertySrvPropertyService;
+	
     /**
      * 余额支付订单
      *
@@ -97,6 +102,11 @@ public class BalancePayController extends BaseController {
             return successCreated(result.getRet());
         }
         double orderMoney = result.getModel().getOrderTotalPrice().doubleValue();
+
+        if (StringUtil.doubleCompareTo(orderMoney, 0) == 0) {
+            return successCreated(ResultCode.MONEY_IS_ZERO);
+        }
+
         dparam.setTotalAmount(String.valueOf(orderMoney));
 
         return balancePayService.orderPay(dparam);
@@ -119,6 +129,10 @@ public class BalancePayController extends BaseController {
             return successCreated(ResultCode.PAY_ORDER_NULL);
         } else if (PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal().equals(payOrderCallback.getPayOrderStatusEnum().getVal())) {
             return successCreated(ResultCode.PAY_ORDER_IS_SUCCESS);
+        }else {
+            if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), 0) == 0) {
+                return successCreated(ResultCode.MONEY_IS_ZERO);
+            }
         }
         dparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
         dparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
@@ -127,7 +141,19 @@ public class BalancePayController extends BaseController {
 		VisitUserInfoDTO visitUserInfoDTO = merchantStoreService.findAccountAndRegionPathByNum(payOrderCallback.getBusinessUserNum());
 		dparam.setRegionPath(visitUserInfoDTO.getRegionPath());
 
-        return balancePayService.billPay(dparam);
+        Result result = balancePayService.billPay(dparam);
+        if (ResultCode.SUCCESS != result.getRet()) {
+            return result;
+        }
+        DecimalFormat df = new DecimalFormat("######0.00");
+        MessageInfoParam messageInfoParam = new MessageInfoParam();
+        messageInfoParam.setRelateId(0L);
+        messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT);
+        MessageTempParam messageTempParam = new MessageTempParam();
+        messageTempParam.setOrderAmount(new BigDecimal(df.format(payOrderCallback.getActualMoney())));
+        messageInfoParam.setMessageParam(messageTempParam);
+        messageService.saveMessage(payOrderCallback.getBusinessUserNum(), messageInfoParam);
+        return successCreated();
     }
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
@@ -144,6 +170,9 @@ public class BalancePayController extends BaseController {
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
 
         ThirdPayCallBackQueryPayOrderDTO payOrderCallback = rechargeService.getRechargeMoney(param.getBizIds());
+        if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), 0) == 0) {
+            return successCreated(ResultCode.MONEY_IS_ZERO);
+        }
         dparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
         dparam.setOrderNum(payOrderCallback.getOrderNum());
 
@@ -166,6 +195,12 @@ public class BalancePayController extends BaseController {
         } else if (userNum.startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
             messageTempParam.setUserName("E店商家");
         }
+        String property_key = PropertyType.MEMBER_BALANCE_PAY_POINT_SCALE;
+        Result scale = propertySrvPropertyService.getValue(property_key);
+        double dPayMoney = Double.parseDouble(String.valueOf(payOrderCallback.getActualMoney()));
+        double dPayScale = Double.parseDouble(scale.getModel().toString());
+        double point = dPayMoney * dPayScale;
+        messageTempParam.setRechargePoint(new BigDecimal(df.format(point)));
         messageInfoParam.setMessageParam(messageTempParam);
         messageService.saveMessage(userNum, messageInfoParam);
         // ------------------------------发送站内消息
@@ -187,6 +222,9 @@ public class BalancePayController extends BaseController {
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
 
         Result<ThirdPayCallBackQueryPayOrderDTO> moneyResult = userRedPacketService.selectUserRedPacketInfoForThrid(Long.valueOf(param.getBizIds()));
+        if (StringUtil.doubleCompareTo(moneyResult.getModel().getActualMoney(), 0) == 0) {
+            return successCreated(ResultCode.MONEY_IS_ZERO);
+        }
         dparam.setTotalAmount(String.valueOf(moneyResult.getModel().getActualMoney()));
         dparam.setOrderNum(moneyResult.getModel().getOrderNum());
 

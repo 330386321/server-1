@@ -29,14 +29,14 @@ public class UserTokenServiceImpl implements UserTokenService {
             String oldTokenKey = formatMemberToken(oldToken);
             stringRedisTemplate.delete(oldTokenKey);
         }
-        stringRedisTemplate.opsForValue().set(formatMemberKey(account), token, expireSeconds);
-        stringRedisTemplate.opsForValue().set(formatMemberToken(token), account, expireSeconds);
+        stringRedisTemplate.opsForValue().set(formatMemberKey(account), token, expireSeconds, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set(formatMemberToken(token), account, expireSeconds, TimeUnit.SECONDS);
     }
 
     @Override
     public void setMemberTokenOneToMany(String account, String token, Integer expireSeconds) {
 
-        stringRedisTemplate.opsForValue().set(formatMemberToken(token), account, expireSeconds);
+        stringRedisTemplate.opsForValue().set(formatMemberToken(token), account, expireSeconds, TimeUnit.SECONDS);
     }
 
     @Override
@@ -109,14 +109,14 @@ public class UserTokenServiceImpl implements UserTokenService {
             String oldTokenKey = formatMerchantToken(oldToken);
             stringRedisTemplate.delete(oldTokenKey);
         }
-        stringRedisTemplate.opsForValue().set(formatMerchantKey(account), token, expireSeconds);
-        stringRedisTemplate.opsForValue().set(formatMerchantToken(token), account, expireSeconds);
+        stringRedisTemplate.opsForValue().set(formatMerchantKey(account), token, expireSeconds, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set(formatMerchantToken(token), account, expireSeconds, TimeUnit.SECONDS);
     }
 
     @Override
     public void setMerchantTokenOneToMany(String account, String token, Integer expireSeconds) {
 
-        stringRedisTemplate.opsForValue().set(formatMerchantToken(token), account, expireSeconds);
+        stringRedisTemplate.opsForValue().set(formatMerchantToken(token), account, expireSeconds, TimeUnit.SECONDS);
     }
 
     @Override

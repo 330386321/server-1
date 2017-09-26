@@ -1,6 +1,7 @@
 package com.lawu.eshop.jobs.service.impl;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,10 @@ import com.lawu.eshop.jobs.service.RegionService;
 import com.lawu.eshop.jobs.service.UserRegService;
 import com.lawu.eshop.jobs.service.UserRegStatisticsService;
 import com.lawu.eshop.mall.dto.RegionDTO;
+import com.lawu.eshop.statistics.dto.ReportNewDateDTO;
 import com.lawu.eshop.statistics.param.UserRegAreaParam;
 import com.lawu.eshop.user.param.CollectionUserRegParam;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * @author meishuquan
@@ -33,27 +36,44 @@ public class UserRegStatisticsServiceImpl implements UserRegStatisticsService {
 
     @Override
     public void executeCollectionUserRegDaily() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
-        CollectionUserRegParam param = new CollectionUserRegParam();
-        param.setYear(calendar.get(Calendar.YEAR));
-        param.setMonth(calendar.get(Calendar.MONTH) + 1);
-        param.setDay(calendar.get(Calendar.DATE));
-        Result<Integer> memberResult = collectionUserRegService.collectionMemberRegDaily(param);
-        Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegDaily(param);
-        userRegService.saveUserRegDaily(memberResult.getModel(), merchantResult.getModel());
+    	
+    	Result<ReportNewDateDTO> result=userRegService.getReportDateUserRegDaily();
+    	
+    	Date newReportDate=result.getModel().getGmtReport();
+    	
+    	for(int i=1;i <= DateUtil.daysOfTwo(newReportDate);i++){
+    		Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE, -i);
+            CollectionUserRegParam param = new CollectionUserRegParam();
+            param.setYear(calendar.get(Calendar.YEAR));
+            param.setMonth(calendar.get(Calendar.MONTH) + 1);
+            param.setDay(calendar.get(Calendar.DATE));
+            Result<Integer> memberResult = collectionUserRegService.collectionMemberRegDaily(param);
+            Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegDaily(param);
+            userRegService.saveUserRegDaily(memberResult.getModel(), merchantResult.getModel());
+    		
+    	}
+    	
     }
 
     @Override
     public void executeCollectionUserRegMonth() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, -1);
-        CollectionUserRegParam param = new CollectionUserRegParam();
-        param.setYear(calendar.get(Calendar.YEAR));
-        param.setMonth(calendar.get(Calendar.MONTH) + 1);
-        Result<Integer> memberResult = collectionUserRegService.collectionMemberRegMonth(param);
-        Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegMonth(param);
-        userRegService.saveUserRegMonth(memberResult.getModel(), merchantResult.getModel());
+       
+        Result<ReportNewDateDTO> result=userRegService.getReportDateUserRegMonth();
+    	
+    	Date newReportDate=result.getModel().getGmtReport();
+    	
+    	for(int i=1;i <= DateUtil.daysOfTwo(newReportDate);i++){
+    		Calendar calendar = Calendar.getInstance();
+	        calendar.add(Calendar.MONTH, -i);
+	        CollectionUserRegParam param = new CollectionUserRegParam();
+	        param.setYear(calendar.get(Calendar.YEAR));
+	        param.setMonth(calendar.get(Calendar.MONTH) + 1);
+	        Result<Integer> memberResult = collectionUserRegService.collectionMemberRegMonth(param);
+	        Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegMonth(param);
+	        userRegService.saveUserRegMonth(memberResult.getModel(), merchantResult.getModel());
+    		
+    	}
     }
 
     @Override
@@ -74,19 +94,6 @@ public class UserRegStatisticsServiceImpl implements UserRegStatisticsService {
             userRegAreaParam.setMerchantEntityCount(merchantEntityResult.getModel());
             userRegAreaParam.setMerchantCount(merchantCommonResult.getModel() + merchantEntityResult.getModel());
             userRegAreaParam.setCityId(regionDTO.getId());
-            if (regionDTO.getId() == 1102) {
-                //北京县辖数据统计到北京市辖
-                userRegAreaParam.setCityId(1101);
-            } else if (regionDTO.getId() == 1202) {
-                //天津县辖数据统计到天津市辖
-                userRegAreaParam.setCityId(1201);
-            } else if (regionDTO.getId() == 3102) {
-                //上海县辖数据统计到上海市辖
-                userRegAreaParam.setCityId(3101);
-            } else if (regionDTO.getId() == 5002) {
-                //重庆县辖数据统计到重庆市辖
-                userRegAreaParam.setCityId(5001);
-            }
             userRegService.updateUserRegArea(userRegAreaParam);
         }
     }
@@ -124,19 +131,6 @@ public class UserRegStatisticsServiceImpl implements UserRegStatisticsService {
                 userRegAreaParam.setMerchantCount(merchantCommonResult.getModel() + merchantEntityResult.getModel());
                 userRegAreaParam.setCityId(regionDTO.getId());
                 userRegAreaParam.setName(regionDTO.getName());
-                if (regionDTO.getId() == 1102) {
-                    //北京县辖数据统计到北京市辖
-                    userRegAreaParam.setCityId(1101);
-                } else if (regionDTO.getId() == 1202) {
-                    //天津县辖数据统计到天津市辖
-                    userRegAreaParam.setCityId(1201);
-                } else if (regionDTO.getId() == 5002) {
-                    //重庆县辖数据统计到重庆市辖
-                    userRegAreaParam.setCityId(5001);
-                } else if (regionDTO.getId() == 3102) {
-                    //上海县辖数据统计到上海市辖
-                    userRegAreaParam.setCityId(3101);
-                }
                 userRegService.addUserRegAreaDaily(userRegAreaParam);
 
             }
@@ -176,19 +170,6 @@ public class UserRegStatisticsServiceImpl implements UserRegStatisticsService {
                 userRegAreaParam.setMerchantCount(merchantCommonResult.getModel() + merchantEntityResult.getModel());
                 userRegAreaParam.setCityId(regionDTO.getId());
                 userRegAreaParam.setName(regionDTO.getName());
-                if (regionDTO.getId() == 1102) {
-                    //北京县辖数据统计到北京市辖
-                    userRegAreaParam.setCityId(1101);
-                } else if (regionDTO.getId() == 5002) {
-                    //重庆县辖数据统计到重庆市辖
-                    userRegAreaParam.setCityId(5001);
-                } else if (regionDTO.getId() == 3102) {
-                    //上海县辖数据统计到上海市辖
-                    userRegAreaParam.setCityId(3101);
-                } else if (regionDTO.getId() == 1202) {
-                    //天津县辖数据统计到天津市辖
-                    userRegAreaParam.setCityId(1201);
-                }
                 userRegService.addUserRegAreaMonth(userRegAreaParam);
 
             }

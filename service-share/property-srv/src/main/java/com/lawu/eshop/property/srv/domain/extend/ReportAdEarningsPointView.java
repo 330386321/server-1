@@ -8,6 +8,8 @@ public class ReportAdEarningsPointView {
 	
 	private byte pointType;
 	
+	private byte loveType;
+	
 	private BigDecimal userTotalPoint;
 
 	private BigDecimal loveTotalPoint;
@@ -43,6 +45,14 @@ public class ReportAdEarningsPointView {
 
 	public void setLoveTotalPoint(BigDecimal loveTotalPoint) {
 		this.loveTotalPoint = loveTotalPoint;
+	}
+
+	public byte getLoveType() {
+		return loveType;
+	}
+
+	public void setLoveType(byte loveType) {
+		this.loveType = loveType;
 	}
 	
 	

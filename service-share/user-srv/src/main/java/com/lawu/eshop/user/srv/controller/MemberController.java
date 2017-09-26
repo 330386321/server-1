@@ -16,6 +16,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.AdQueryMemberInfoDTO;
 import com.lawu.eshop.user.dto.CashUserInfoDTO;
@@ -33,6 +34,7 @@ import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
@@ -81,6 +83,9 @@ public class MemberController extends BaseController {
         }
         if(memberBO.getIsFreeze()){
             return successGet(ResultCode.ACCOUNT_IS_FREEZE,memberBO.getFreezeReason());
+        }
+        if (memberBO.getStatus().byteValue() == UserStatusEnum.MEMBER_STATUS_NOVALID.val) {
+            return successGet(ResultCode.ACCOUNT_IS_INVALID);
         }
         return successGet(LoginUserConverter.convert(memberBO));
     }
@@ -337,7 +342,6 @@ public class MemberController extends BaseController {
         	 dto.setUserNum(memberBO.getNum());
             return successGet(dto);
     	 }
-    	
     }
 
     /**
@@ -425,9 +429,6 @@ public class MemberController extends BaseController {
         }
         
         MemberMineInfoDTO memberMineInfoDTO = MemberProfileConverter.convert(memberProfileBO, memberBO);
-        memberProfileBO = null;
-        memberBO = null;
-        
         return successGet(memberMineInfoDTO);
     }
 
@@ -509,9 +510,22 @@ public class MemberController extends BaseController {
     }
 
     @RequestMapping(value = "freezeAccount", method = RequestMethod.PUT)
-    Result freezeAccount(@RequestParam("num") String num, @RequestParam("isFreeze") Boolean isFreeze,
+    public Result freezeAccount(@RequestParam("num") String num, @RequestParam("isFreeze") Boolean isFreeze,
                          @RequestParam("freezeReason") String freezeReason) {
         memberService.freezeAccount(num, isFreeze,freezeReason);
+        return successCreated();
+    }
+
+    /**
+     * 保存会员登录日志
+     *
+     * @param loginLogParam
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "saveLoginLog", method = RequestMethod.POST)
+    public Result saveLoginLog(@RequestBody UserLoginLogParam loginLogParam) {
+        memberService.saveLoginLog(loginLogParam);
         return successCreated();
     }
 }

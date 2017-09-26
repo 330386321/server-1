@@ -1,17 +1,19 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.merchant.api.service.ShoppingRefundDetailService;
-import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
-import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
-import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
-import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
-import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.merchant.api.service.ShoppingRefundDetailService;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
+import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 
 /**
  * @author meishuquan
@@ -43,4 +45,9 @@ public class MockShoppingRefundDetailService extends BaseController implements S
     public Result agreeToRefund(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param) {
         return successCreated();
     }
+
+	@Override
+	public Result<ShoppingOrderExpressInfoDTO> expressInfo(Long id, Long merchantId) {
+		return successGet();
+	}
 }

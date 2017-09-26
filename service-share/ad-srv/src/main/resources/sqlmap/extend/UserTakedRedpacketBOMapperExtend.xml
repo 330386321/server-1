@@ -12,5 +12,10 @@
 		user_red_pack_id=#{userRedId,jdbcType=BIGINT}
 	</select>
 	<!-- 查询最大的金额 end 一 -->
+	
+	<select id="getSumMoney" parameterType="java.lang.Long" resultMap="BaseMaxMoneyQuery">
+		select sum(money) as maxMoney from user_taked_red_packet where
+		user_red_pack_id=#{userRedId,jdbcType=BIGINT}
+	</select>
 
 </mapper>

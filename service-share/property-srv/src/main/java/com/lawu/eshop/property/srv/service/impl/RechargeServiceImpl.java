@@ -89,7 +89,7 @@ public class RechargeServiceImpl implements RechargeService {
         if(recharge.getUserNum().startsWith("M")){
             recharge.setUserType(com.lawu.eshop.user.constants.UserTypeEnum.MEMBER.val);
         } else if(recharge.getUserNum().startsWith("B")){
-            recharge.setUserType(com.lawu.eshop.user.constants.UserTypeEnum.MEMCHANT.val);
+            recharge.setUserType(com.lawu.eshop.user.constants.UserTypeEnum.MERCHANT.val);
         }
         rechargeDOMapper.insertSelective(recharge);
 
@@ -155,7 +155,7 @@ public class RechargeServiceImpl implements RechargeService {
             //加余额
             PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
             infoDoView.setUserNum(param.getUserNum());
-            infoDoView.setBalance(new BigDecimal(param.getTotalFee()));
+            infoDoView.setBalance(recharge.getMoney());
             infoDoView.setGmtModified(new Date());
             propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
 

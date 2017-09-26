@@ -31,4 +31,4 @@ DEPLOY_DIR=`pwd`
 LIB_DIR=${DEPLOY_DIR}/lib/*
 CONSOLE_MAIN=com.lawu.eshop.elastic.job.console.ElasticJobConsoleApplication
 
-java -classpath ${LIB_DIR}:. ${CONSOLE_MAIN} $port
+nohup java -classpath ${LIB_DIR}:. ${CONSOLE_MAIN} $port >/dev/null 2>&1 &

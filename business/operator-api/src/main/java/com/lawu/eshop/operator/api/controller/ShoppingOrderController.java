@@ -26,6 +26,7 @@ import com.lawu.eshop.operator.constants.ModuleEnum;
 import com.lawu.eshop.operator.constants.OperationTypeEnum;
 import com.lawu.eshop.operator.param.LogParam;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForOperatorDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
@@ -57,12 +58,6 @@ public class ShoppingOrderController extends BaseController {
     @Autowired
     private LogService logService;
 
-    /**
-     * 根据查询参数分页查询
-     *
-     * @param param 查询参数
-     * @return
-     */
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "分页查询订单", notes = "根据查询参数分页查询。[1004]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -82,13 +77,16 @@ public class ShoppingOrderController extends BaseController {
 
         return successGet(result);
     }
-
+    
     /**
-     * 根据购物订单id查询购物订单详情
-     *
+     * @deprecated
+     * @see #detail(Long)
      * @param id
      * @return
+     * @author jiangxinjun
+     * @date 2017年9月6日
      */
+    @Deprecated
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "查询购物订单详情", notes = "根据购物订单id查询购物订单详情。[1100]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -98,14 +96,17 @@ public class ShoppingOrderController extends BaseController {
         Result<ShoppingOrderExtendDetailDTO> result = shoppingOrderService.get(id);
         return successGet(result);
     }
+    
+    @SuppressWarnings("unchecked")
+    @ApiOperation(value = "查询购物订单详情", notes = "根据购物订单id查询购物订单详情。[1100]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresAuthentication
+    @RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
+    public Result<ShoppingOrderDetailDTO> detail(@PathVariable("id") @ApiParam(value = "购物订单id") Long id) {
+        Result<ShoppingOrderDetailDTO> result = shoppingOrderService.detail(id);
+        return successGet(result);
+    }
 
-    /**
-     * 更新订单信息
-     *
-     * @param id    购物订单id
-     * @param param 查询参数
-     * @return
-     */
     @SuppressWarnings("rawtypes")
     @ApiOperation(value = "更新订单信息", notes = "更新订单信息。[1002|1003]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -157,12 +158,6 @@ public class ShoppingOrderController extends BaseController {
         return successCreated(result);
     }
 
-    /**
-     * 取消购物订单
-     *
-     * @param id
-     * @return
-     */
     @SuppressWarnings("rawtypes")
     @ApiOperation(value = "取消购物订单", notes = "取消购物订单。[1002|1003|4002]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -190,14 +185,6 @@ public class ShoppingOrderController extends BaseController {
         return successCreated();
     }
 
-    /**
-     * 根据查询参数分页查询退款记录
-     * 购物订单 购物订单项 退款详情关联查询
-     * To Operator
-     *
-     * @param param 查询参数
-     * @return
-     */
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "分页查询退款记录", notes = "分页查询退款记录。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

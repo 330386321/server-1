@@ -246,4 +246,14 @@ public class MqConstant {
 	 */
 	public static final String TAG_REG = "reg";
 
+	/**
+	 * 成为粉丝收益
+	 */
+	public static final String TAG_MEMBER_FANS = "member_fans";
+
+	/**
+	 * 商家邀请粉丝退还积分
+	 */
+	public static final String TAG_MERCHANT_FANS = "merchant_fans";
+
 }

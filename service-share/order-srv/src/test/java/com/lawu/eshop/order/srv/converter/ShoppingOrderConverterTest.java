@@ -163,10 +163,10 @@ public class ShoppingOrderConverterTest {
 	@Test
 	public void convertShoppingOrderExpressDTO() {
 		ShoppingOrderBO expected = initShoppingOrderBO();
-		ExpressInquiriesDetailBO expectedExpressInquiriesDetailBO = ExpressInquiriesDetailConverterTest.initExpressInquiriesDetailBO();
+		ExpressInquiriesDetailBO expectedExpressInquiriesDetailBO = ExpressConverterTest.initExpressInquiriesDetailBO();
 		ShoppingOrderExpressDTO actual = ShoppingOrderConverter.covert(expected, expectedExpressInquiriesDetailBO);
 		assertShoppingOrderExpressDTO(expected, actual);
-		ExpressInquiriesDetailConverterTest.assertExpressInquiriesDetailDTO(expectedExpressInquiriesDetailBO, actual.getExpressInquiriesDetailDTO());
+		ExpressConverterTest.assertExpressInquiriesDetailDTO(expectedExpressInquiriesDetailBO, actual.getExpressInquiriesDetailDTO());
 	}
 	
 	public static void assertShoppingOrderExpressDTO(ShoppingOrderBO expected, ShoppingOrderExpressDTO actual) {

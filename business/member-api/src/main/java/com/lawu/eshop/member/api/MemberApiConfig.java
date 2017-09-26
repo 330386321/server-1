@@ -59,6 +59,45 @@ public class MemberApiConfig {
 	
 	@Value(value="${ffmpeg.url}")
     private String ffmpegUrl;
+	
+	@Value(value="${member.h5.ip}")
+    private String memberH5Ip;
+
+	@Value(value="${visit.time.interval}")
+	private Integer visitTimeInterval;
+
+	@Value(value="${visit.frequency.count}")
+	private Integer visitFrequencyCount;
+
+	@Value(value="${visit.frequency.count.expire.time}")
+	private Integer expireTime;
+	
+	@Value(value="${share.ad.e-praise-default-image-path}")
+	private String shareEPraiseAdDefaultImagePath;
+	
+	@Value(value="${share.ad.flat-default-image-path}")
+	private String shareFlatAdDefaultImagePath;
+	
+	@Value(value="${share.ad.video-default-image-path}")
+	private String shareVideoAdDefaultImagePath;
+	
+	@Value(value="${share.ad.logo-image-path}")
+	private String shareAdLogoPath;
+	
+	@Value(value="${share.red-packet.default-image}")
+	private String shareRedPacketDefaultImagePath;
+
+	@Value(value="${download_url}")
+	private String downloadUrl;
+	
+	
+	public String getDownloadUrl() {
+		return downloadUrl;
+	}
+
+	public void setDownloadUrl(String downloadUrl) {
+		this.downloadUrl = downloadUrl;
+	}
 
 	public String getImageUrl() {
 		return imageUrl;
@@ -185,6 +224,42 @@ public class MemberApiConfig {
 		return ffmpegUrl;
 	}
 
+	public String getMemberH5Ip() {
+		return memberH5Ip;
+	}
 
+	public Integer getVisitTimeInterval() {
+		return visitTimeInterval;
+	}
 
+	public Integer getVisitFrequencyCount() {
+		return visitFrequencyCount;
+	}
+
+	public Integer getExpireTime() {
+		return expireTime;
+	}
+
+	public String getShareEPraiseAdDefaultImagePath() {
+		return shareEPraiseAdDefaultImagePath;
+	}
+
+	public String getShareFlatAdDefaultImagePath() {
+		return shareFlatAdDefaultImagePath;
+	}
+
+	public String getShareVideoAdDefaultImagePath() {
+		return shareVideoAdDefaultImagePath;
+	}
+
+	public String getShareAdLogoPath() {
+		return shareAdLogoPath;
+	}
+
+	public String getShareRedPacketDefaultImagePath() {
+		return shareRedPacketDefaultImagePath;
+	}
+
+	
+	
 }

@@ -1,6 +1,7 @@
 package com.lawu.eshop.statistics.srv.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,8 +19,10 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.statistics.dto.PointConsumeDailyDTO;
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
+import com.lawu.eshop.statistics.dto.ReportNewDateDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.statistics.srv.bo.PointConsumeDailyBO;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportNewDateDOView;
 import com.lawu.eshop.statistics.srv.service.PointConsumeService;
 
 /**
@@ -49,6 +52,13 @@ public class PointConsumeController extends BaseController {
 		return successCreated(ResultCode.SUCCESS);
 	}
 	
+	
+	@RequestMapping(value = "getDaily", method = RequestMethod.GET)
+	public Date getDaily() {
+		Date date = pointConsumeService.getDaily();
+		return date;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "saveMonth", method = RequestMethod.POST)
 	public Result saveMonth(@RequestBody @Valid ReportKCommonParam param, BindingResult result) {
@@ -58,6 +68,12 @@ public class PointConsumeController extends BaseController {
     	}
     	pointConsumeService.saveMonth(param);
 		return successCreated(ResultCode.SUCCESS);
+	}
+	
+	@RequestMapping(value = "getMonth", method = RequestMethod.GET)
+	public Date getMonth() {
+		Date date = pointConsumeService.getMonth();
+		return date;
 	}
 	
 	@RequestMapping(value = "getDailyList", method = RequestMethod.GET)
@@ -103,4 +119,27 @@ public class PointConsumeController extends BaseController {
 	public ReportCommonBackDTO selectReport(@RequestParam("bdate") String bdate,@RequestParam("edate") String edate) {
 		return pointConsumeService.selectReport(bdate,edate);
 	}
+	
+	/**
+     * 获取日统计最新一条记录日期
+     *
+     * @return
+     */
+    @RequestMapping(value = "getReportDatePointConsumeDaily", method = RequestMethod.GET)
+    public Result<ReportNewDateDTO> getReportDateUserRegDaily() {
+    	ReportNewDateDOView view = pointConsumeService.getReportDatePointConsumeDaily();
+        return successGet(new ReportNewDateDTO(view.getGmtReport()));
+    }
+    
+
+    /**
+     * 获取日统计最新一条记录日期
+     *
+     * @return
+     */
+    @RequestMapping(value = "getReportDatePointConsumeMonth", method = RequestMethod.GET)
+    public Result<ReportNewDateDTO> getReportDateUserRegMonth() {
+    	ReportNewDateDOView view = pointConsumeService.getReportDatePointConsumeMonth();
+        return successGet(new ReportNewDateDTO(view.getGmtReport()));
+    }
 }

@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.mock.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -15,7 +16,9 @@ import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
@@ -24,12 +27,6 @@ import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Service
@@ -113,5 +110,15 @@ public class MockShoppingOrderService extends BaseController implements Shopping
 		dto.setOrderNum("M0003");
 		dto.setOrderTotalPrice(new BigDecimal(1));
 		return successCreated(dto);
+	}
+
+	@Override
+	public Result<ShoppingOrderDetailDTO> detail(Long id, Long memberId) {
+		return successCreated();
+	}
+
+	@Override
+	public Result<ShoppingOrderExpressInfoDTO> expressInfo(Long id, Long memberId) {
+		return successGet();
 	}
 }

@@ -78,6 +78,10 @@ public abstract class BaseController {
 	public <T> Result<T> successCreated(int resultCode) {
 		return response(HttpCode.SC_CREATED, resultCode, ResultCode.get(resultCode), null, null);
 	}
+	
+	public <T> Result<T> successCreated(int resultCode, T model) {
+		return response(HttpCode.SC_CREATED, resultCode, ResultCode.get(resultCode), null, model);
+	}
 
 	public <T> Result<T> successCreated(int resultCode, String message) {
 		return response(HttpCode.SC_CREATED, resultCode, message, null, null);

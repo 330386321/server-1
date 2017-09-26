@@ -20,6 +20,7 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.framework.web.dto.TokenDTO;
 import com.lawu.eshop.mall.dto.ConfigDTO;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
+import com.lawu.eshop.merchant.api.event.EventPublisher;
 import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 
@@ -41,19 +42,22 @@ public class CommonController extends BaseController {
     private MerchantApiConfig merchantApiConfig;
 
     @Autowired
-    private MerchantService memberService;
+    private MerchantService merchantService;
 
     @Autowired
     private TokenManager tokenManager;
 
+    @Autowired
+    private EventPublisher eventPublisher;
+
     @Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[2000,2015]（孙林青）", httpMethod = "POST")
+    @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[2000|2015|2019]（孙林青）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "login/{account}", method = RequestMethod.POST)
     public Result<TokenDTO> login(@PathVariable @ApiParam(required = true, value = "账号") String account,
                                   @RequestParam @ApiParam(required = true, value = "密码") String pwd) {
 
-        Result<LoginUserDTO> result = memberService.find(account, pwd);
+        Result<LoginUserDTO> result = merchantService.find(account, pwd);
         if (!isSuccess(result)) {
             return successGet(result);
         }
@@ -66,8 +70,11 @@ public class CommonController extends BaseController {
         tokenDTO.setUserNum(userDTO.getNum());
         tokenDTO.setToken(token);
         tokenDTO.setRyToken(userDTO.getRyToken());
+        tokenDTO.setMerchantId(userDTO.getId());
         tokenDTO.setIsFreeze(userDTO.getIsFreeze());
         tokenDTO.setMerchantStoreType(userDTO.getMerchantStoreType() != null ? MerchantStoreTypeEnum.getEnum(userDTO.getMerchantStoreType().val) : MerchantStoreTypeEnum.NOT_MERCHANT);
+
+        eventPublisher.publishLoginEvent(getRequest(), userDTO.getNum(), userDTO.getAccount());
         return successCreated(tokenDTO);
     }
 
@@ -78,7 +85,7 @@ public class CommonController extends BaseController {
     @RequestMapping(value = "logout", method = RequestMethod.DELETE)
     public Result logout(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long userId = UserUtil.getCurrentUserId(getRequest());
-        memberService.delMerchantGtPush(userId);
+        merchantService.delMerchantGtPush(userId);
         tokenManager.delRelationshipByToken(token);
         return successDelete();
     }

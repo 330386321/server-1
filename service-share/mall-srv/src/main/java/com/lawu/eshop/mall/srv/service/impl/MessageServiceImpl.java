@@ -121,6 +121,7 @@ public class MessageServiceImpl implements MessageService {
          * {7}优惠金额、{8}退款编号、{9}商品名称、{10}收益金额、{11}收益积分、{12}商家名称
          * {13}广告名称、{14}门店名称、{15}消费积分、{16}充值编号、{17}广告类型名称、{18}失败原因
          * {19}代发货商品数量、{20}快递名称、{21}退款金额、{22}订单金额、{23}工单的问题、{24}工单回复的内容
+         * {25}充值积分
          */
 
         //消息替换占位符
@@ -151,9 +152,8 @@ public class MessageServiceImpl implements MessageService {
             content = content.replace("{22}", messageInfoParam.getMessageParam().getOrderAmount() == null ? "" : messageInfoParam.getMessageParam().getOrderAmount().toString());
             content = content.replace("{23}", messageInfoParam.getMessageParam().getWorkOrderContent() == null ? "" : messageInfoParam.getMessageParam().getWorkOrderContent().toString());
             content = content.replace("{24}", messageInfoParam.getMessageParam().getReplyWorkOrderContent() == null ? "" : messageInfoParam.getMessageParam().getReplyWorkOrderContent().toString());
+            content = content.replace("{25}", messageInfoParam.getMessageParam().getRechargePoint() == null ? "" : messageInfoParam.getMessageParam().getRechargePoint().toString());
         }
-
-
         messageDO.setContent(content);
         messageDO.setTitle(dos.get(0).getTitle());
         if (messageInfoParam.getRelateId() != null && messageInfoParam.getRelateId() > 0) {

@@ -1,5 +1,21 @@
 package com.lawu.eshop.order.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
+import com.lawu.eshop.order.param.PayOrderDataParam;
+import com.lawu.eshop.order.param.PayOrderReportDataParam;
+import com.lawu.eshop.order.param.ReportDataParam;
+import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
@@ -23,16 +39,6 @@ import com.lawu.eshop.order.srv.mapper.extend.PayOrderExtendDOMapper;
 import com.lawu.eshop.order.srv.service.PayOrderService;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author zhangyong
@@ -48,15 +54,21 @@ public class PayOrderServiceImpl implements PayOrderService {
 
     @Override
     @Transactional
-    public PayOrderBO savePayOrderInfo(Long memberId, PayOrderParam param,String numNum) {
+    public PayOrderBO savePayOrderInfo(Long memberId, PayOrderDataParam param, String numNum) {
         PayOrderDO payOrderDO = new PayOrderDO();
         payOrderDO.setMemberId(memberId);
         payOrderDO.setMemberNum(numNum);
         payOrderDO.setMerchantId(param.getMerchantId());
-        payOrderDO.setFavoredAmount(BigDecimal.valueOf(param.getFavoredAmount()));
-        payOrderDO.setActualAmount(BigDecimal.valueOf(param.getTotalAmount()-param.getFavoredAmount()));
-        payOrderDO.setNotFavoredAmount(BigDecimal.valueOf(param.getNotFavoredAmount()));
-        payOrderDO.setTotalAmount(BigDecimal.valueOf(param.getTotalAmount()));
+		if (param.getMerchantFavoredId() != null && param.getMerchantFavoredId() > 0) {
+			payOrderDO.setActualAmount(BigDecimal.valueOf(param.getTotalAmount() - param.getFavoredAmount()));
+			payOrderDO.setFavoredAmount(BigDecimal.valueOf(param.getFavoredAmount()));
+			payOrderDO.setNotFavoredAmount(BigDecimal.valueOf(param.getNotFavoredAmount()));
+		} else {
+			payOrderDO.setActualAmount(BigDecimal.valueOf(param.getTotalAmount()));
+			payOrderDO.setFavoredAmount(BigDecimal.ZERO);
+			payOrderDO.setNotFavoredAmount(BigDecimal.ZERO);
+		}
+		payOrderDO.setTotalAmount(BigDecimal.valueOf(param.getTotalAmount()));
         String orderNum = StringUtil.getRandomNum("");
         payOrderDO.setOrderNum(orderNum);
         payOrderDO.setGmtCreate(new Date());
@@ -66,6 +78,7 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setIsEvaluation(false);//未评
         payOrderDO.setStatus(PayOrderStatusEnum.STATUS_UNPAY.getVal());//待支付
 		payOrderDO.setOrderStatus(true);
+	    payOrderDO.setIsFans(param.getFans());
         payOrderDOMapper.insert(payOrderDO);
         PayOrderBO payOrderBO = new PayOrderBO();
         payOrderBO.setOrderNum(orderNum);
@@ -256,5 +269,13 @@ public class PayOrderServiceImpl implements PayOrderService {
 		List<PayOrderExtendDOVew> list = payOrderExtendDOMapper.getAutoCommentPayOrderList(new Date());
 		List<PayOrderBO> payOrderBOS = PayOrderConverter.coverBOSWithDOVews(list);
 		return payOrderBOS;
+	}
+
+	@Override
+	public List<ReportRiseRerouceDTO> fansSaleTransformPay(ReportDataParam dparam) {
+		PayOrderReportDataParam param = new PayOrderReportDataParam();
+		param.setMerchantId(dparam.getMerchantId());
+		List<ReportFansSaleTransFormDO> reportFansSaleTransFormDOList = payOrderExtendDOMapper.selectByFansSaleTransformPay(param);
+		return PayOrderConverter.convertReportRiseRerouceDTOList(reportFansSaleTransFormDOList);
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
+import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.RongYunDTO;
 
 /**
@@ -35,5 +36,14 @@ public interface MerchantService {
      */
     @RequestMapping(value = "merchant/getMerchantById/{merchantId}", method = RequestMethod.GET)
     Result<MerchantBaseInfoDTO> getMerchantById(@PathVariable("merchantId") Long merchantId);
+
+    /**
+     * 根据账号查询商户信息
+     *
+     * @param account 商家账号
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchant/{account}")
+    Result<MerchantDTO> getMerchantByAccount(@PathVariable("account") String account);
 
 }

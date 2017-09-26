@@ -26,6 +26,7 @@
 		<id column="id" jdbcType="BIGINT" property="id" />
 		<result column="member_id" jdbcType="BIGINT" property="memberId" />
 		<result column="member_num" jdbcType="VARCHAR" property="memberNum" />
+		<result column="member_nickname" jdbcType="VARCHAR" property="memberNickname" />
 		<result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
 		<result column="merchant_store_id" jdbcType="BIGINT" property="merchantStoreId" />
 		<result column="merchant_store_region_path" jdbcType="VARCHAR" property="merchantStoreRegionPath" />
@@ -61,6 +62,7 @@
 		<result column="gmt_payment" jdbcType="TIMESTAMP" property="gmtPayment" />
 		<result column="gmt_transport" jdbcType="TIMESTAMP" property="gmtTransport" />
 		<result column="gmt_transaction" jdbcType="TIMESTAMP" property="gmtTransaction" />
+		<result column="gmt_done" jdbcType="TIMESTAMP" property="gmtDone" />
 		<result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
 		<result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
 		<!-- 级联查询 -->
@@ -115,7 +117,8 @@
 	</sql>
 	
 	<sql id="ShoppingOrder_Column_List">
-		so.id, so.member_id, so.member_num, so.merchant_id, so.merchant_store_id, so.merchant_store_region_path, so.merchant_num, so.merchant_name,
+		so.id, so.member_id, so.member_num, member_nickname,
+		so.merchant_id, so.merchant_store_id, so.merchant_store_region_path, so.merchant_num, so.merchant_name,
 		so.consignee_name,
 		so.consignee_address,
 		so.consignee_mobile, so.remark,
@@ -126,7 +129,7 @@
 		so.order_num, so.payment_method, so.third_number, so.is_needs_logistics, so.waybill_num, so.express_company_id, so.express_company_code,
 		so.express_company_name, so.gmt_commission,
 		so.gmt_payment, so.gmt_transport,
-		so.gmt_transaction, so.gmt_create, so.gmt_modified
+		so.gmt_transaction, so.gmt_done, so.gmt_create, so.gmt_modified
 	</sql>
 
 	<sql id="ShoppingOrderItem_Column_List">
@@ -321,15 +324,15 @@
 	  <!-- Report -->
 	  <select id="selectByTransactionData" parameterType="com.lawu.eshop.order.param.ShoppingOrderReportDataParam" resultMap="ReportResultMap">
 	  	<if test="flag == 1">
-		  	SELECT DATE_FORMAT(so.gmt_create, "%d") AS keyTxt, sum(so.actual_amount) AS num
+		  	SELECT DATE_FORMAT(so.gmt_done, "%d") AS keyTxt, sum(so.actual_amount) AS num
 			FROM shopping_order so
-			WHERE DATE_FORMAT(so.gmt_create, "%Y%m") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
+			WHERE DATE_FORMAT(so.gmt_done, "%Y%m") = #{gmtDone,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
 			GROUP BY keyTxt
 		</if>
 		<if test="flag == 2">
-			SELECT DATE_FORMAT(so.gmt_create, "%m") AS keyTxt, sum(so.actual_amount) AS num
+			SELECT DATE_FORMAT(so.gmt_done, "%m") AS keyTxt, sum(so.actual_amount) AS num
 			FROM shopping_order so
-			WHERE DATE_FORMAT(so.gmt_create, "%Y") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
+			WHERE DATE_FORMAT(so.gmt_done, "%Y") = #{gmtDone,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
 			GROUP BY keyTxt
 		</if>
 	  </select>
@@ -338,7 +341,7 @@
 	  	<if test="flag == 1">
 		  	SELECT sum(so.actual_amount) AS num
 			FROM shopping_order so
-			WHERE DATE_FORMAT(so.gmt_create, "%Y%m") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
+			WHERE DATE_FORMAT(so.gmt_done, "%Y%m") = #{gmtDone,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
 	  	</if>
 	  	<if test="flag == 2">
 	  		SELECT sum(so.actual_amount) AS num
@@ -363,7 +366,7 @@
 	  
 	  <!-- 根据查询条件查询订单id，优化性能  -->
 	  <select id="selectIdByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultType="java.lang.Long">
-	  	select DISTINCT so.id, so.gmt_create
+	  	select DISTINCT so.id, so.gmt_payment, so.gmt_create
 		from shopping_order so
 		<if test="isIncludeShoppingOrderItem">
 			left join shopping_order_item soi on so.id = soi.shopping_order_id
@@ -371,7 +374,8 @@
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
-		order by so.gmt_create desc
+		<if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
 	  </select>
-	  
 </mapper>

@@ -40,17 +40,18 @@ docker run --name nginx -it -d -p 80:80 \
 =====
 基础服务
 -----
+
 config-server
 ```bash
-docker run -d -p 8080:8080 --privileged --name config-server \
-    -v /usr/local/eshop/config:/root/config:ro \
+sudo docker run -d -p 8080:8080 --privileged --name config-server \
+    -v /usr/local/eshop/config:/usr/local/eshop/config:ro \
     -e spring.profiles.active=native,dev \
     registry.eshop.com/config-server
 ```
 
 eureka-server
 ```bash
-docker run -d -p 8888:8888 --privileged --name eureka-server \
+sudo docker run -d -p 8888:8888 --privileged --name eureka-server \
     -e spring.profiles.active=native,dev \
     registry.eshop.com/eureka-server
 ```
@@ -61,26 +62,27 @@ docker run -d -p 8888:8888 --privileged --name eureka-server \
 
 root用户
 ```bash
-docker-compose -f ~/compose/dev/23/docker-compose.yml up -d
+docker-compose -f /usr/local/eshop/docker-compose.yml up -d
 ```
 
 非root用户
 ```bash
-sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml up -d
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml up -d
 ```
 
 更新服务
 
 ```bash
-sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml down
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml down
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml pull
 ```
 
 或者
 
 ```bash
-sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml stop
-sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml rm
-sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml pull
-sudo /usr/local/bin/docker-compose -f ~/compose/dev/23/docker-compose.yml up
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml stop
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml rm
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml pull
+sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml up
 ```
 之后再清除无用的镜像和挂载

@@ -13,7 +13,7 @@ import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
  */
 public interface ReportUserActiveDailyService {
 
-    void saveUserActiveDaily(Integer memberCount, Integer merchantCount);
+    void saveUserActiveDaily(Integer memberCount, Integer merchantCount, String reportDate);
 
 
     List<ReportUserActiveBO> getUserActiveListDaily(String beginTime, String endTime);

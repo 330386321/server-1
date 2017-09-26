@@ -47,6 +47,7 @@ public class ResultCode {
 
     public static final int ID_CARD_RECORD_EXIST = 1029;
     public static final int REG_NUMBER_RECORD_EXIST = 1030;
+    public static final int REPEAT_OPERATE = 1031;
     
     //FastDFS上传图片异常
     public static final int FD_FILE_ERROR =1031;
@@ -76,6 +77,7 @@ public class ResultCode {
     public static final int MAX_USERREDPACKET_COUNT=2016;
     public static final int MAX_USERREDPACKET_MONTY=2017;
     public static final int MIN_USERREDPACKET_MONTY=2018;
+    public static final int ACCOUNT_IS_INVALID = 2019;
 
 
     // 商品模块代码 3xxx
@@ -115,6 +117,7 @@ public class ResultCode {
     public static final int CAN_NOT_AGREE_TO_APPLY = 4027;
     public static final int CAN_NOT_AGREE_TO_A_REFUND = 4028;
     public static final int CAN_NOT_FILL_IN_THE_RETURN_ADDRESS = 4029;
+    public static final int THIRD_PARTY_LOGISTICS_INTERFACE_EXCEPTION = 4030;
 
     // 广告模块代码 5xxx
     public static final int AD_POINT_NOT_ENOUGH = 5000;
@@ -128,6 +131,9 @@ public class ResultCode {
     public static final int AD_CLICK_PUTED = 5008;
     public static final int AD_RED_PACKGE_PUTED=5009;
     public static final int AD_BEGIN_TIME_NOT_EXIST=5010;
+    public static final int AD_RED_PACKET_COUNT_ERROR=5011;
+    public static final int AD_RED_PACKET_POINT_ERROR=5012;
+    public static final int AD_CLICK_SYS_WORDS=5013;
 
 
     // 资产模块代码 6xxx
@@ -160,6 +166,7 @@ public class ResultCode {
     public static final int PROCESSED_RETURN_SUCCESS = 6025;
     public static final int PROPERTYINFO_FREEZE_EXCEPITON = 6026;
     public static final int DEPOSIT_EXIST_UP_PRODUCT = 6027;
+    public static final int BANK_ACCOUNT_LENTH_OUT_OF_RANGE = 6028;
 
 
 
@@ -186,12 +193,15 @@ public class ResultCode {
 
     public static final int AGENT_ACCOUNT_EXIST = 8111;
     public static final int AGENT_MOBILE_EXIST = 8112;
+    public static final int USER_UNAUTHORIZED = 8113;
+    public static final int EXISTS_ENABLE_APP_VERSION= 8114;
+    public static final int GET_HEADER_ERROR= 8115;
 
 
 
     // 初始化状态码与文字说明
     static {
-
+    	
         // 公共代码 1xxx
         ResultCode.messageMap.put(SUCCESS, "success");
         ResultCode.messageMap.put(FAIL, "fail");
@@ -229,6 +239,7 @@ public class ResultCode {
 
         ResultCode.messageMap.put(ID_CARD_RECORD_EXIST, "该身份证号已经创建过门店");
         ResultCode.messageMap.put(REG_NUMBER_RECORD_EXIST, "该执照已经创建过门店");
+        ResultCode.messageMap.put(REPEAT_OPERATE, "重复操作");
 
         //FastDFS error info
         ResultCode.messageMap.put(FD_FILE_ERROR, "获取上传文件信息异常");
@@ -250,12 +261,13 @@ public class ResultCode {
         ResultCode.messageMap.put(MEMBER_NO_EXIST, "用户不存在");
         ResultCode.messageMap.put(BANK_CASH_EXIST, "存在提现申请");
         ResultCode.messageMap.put(FANS_MERCHANT, "已经是商家粉丝");
-        ResultCode.messageMap.put(MOBILE_IS_NOT_EXIST, "手机号不存在");
+        ResultCode.messageMap.put(MOBILE_IS_NOT_EXIST, "该手机号码尚未注册");
         ResultCode.messageMap.put(MERCHANT_STORE_IS_FAVORITE, "门店已被收藏");
         ResultCode.messageMap.put(ACCOUNT_IS_FREEZE, "账户已被冻结");
         ResultCode.messageMap.put(MAX_USERREDPACKET_COUNT, "单个红包个数不能大于9999");
         ResultCode.messageMap.put(MAX_USERREDPACKET_MONTY, "单个红包金额不能大于50000");
         ResultCode.messageMap.put(MIN_USERREDPACKET_MONTY, "单个红包金额不能小于0.01");
+        ResultCode.messageMap.put(ACCOUNT_IS_INVALID, "账号已被封");
         
 
         //运营
@@ -272,8 +284,10 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_AUDITED, "该广告已经审核过");
         ResultCode.messageMap.put(AGENT_ACCOUNT_EXIST, "该账号已经存在");
         ResultCode.messageMap.put(AGENT_MOBILE_EXIST, "该手机号已经存在");
-
-
+        ResultCode.messageMap.put(USER_UNAUTHORIZED, "未授权");
+        ResultCode.messageMap.put(EXISTS_ENABLE_APP_VERSION, "存在启用的版本");
+        ResultCode.messageMap.put(GET_HEADER_ERROR, "获取请求头失败");
+        
 
         // 商品模块 3xxx
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品图片");
@@ -312,9 +326,10 @@ public class ResultCode {
         ResultCode.messageMap.put(CAN_NOT_AGREE_TO_APPLY, "不能同意退款申请");
         ResultCode.messageMap.put(CAN_NOT_AGREE_TO_A_REFUND, "不能同意退款");
         ResultCode.messageMap.put(CAN_NOT_FILL_IN_THE_RETURN_ADDRESS, "不能填写退货地址");
+        ResultCode.messageMap.put(THIRD_PARTY_LOGISTICS_INTERFACE_EXCEPTION, "第三方物流接口异常");
         
         // 广告模块 5xxx
-        ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");
+        ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "积分不足，请充值");
         ResultCode.messageMap.put(AD_PUT_NOT_TIME, "投放时间没有超过两个星期");
         ResultCode.messageMap.put(AD_FACORITE_EXIST, "广告已被收藏");
         ResultCode.messageMap.put(AD_RED_PACKGE_EXIST, "请等待红包下架");
@@ -325,6 +340,11 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_CLICK_PUTED, "广告已点击完");
         ResultCode.messageMap.put(AD_RED_PACKGE_PUTED, "红包已下架");
         ResultCode.messageMap.put(AD_BEGIN_TIME_NOT_EXIST, "投放时间不能为空");
+        ResultCode.messageMap.put(AD_RED_PACKET_COUNT_ERROR, "红包数量不能超过100万");
+        ResultCode.messageMap.put(AD_RED_PACKET_POINT_ERROR, "金额不合法");
+        ResultCode.messageMap.put(AD_CLICK_SYS_WORDS, "系统繁忙,请稍后再试");
+        
+        
         
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");
@@ -332,7 +352,7 @@ public class ResultCode {
         ResultCode.messageMap.put(PROPERTY_INFO_NULL, "用户对应财产记录为空");
         ResultCode.messageMap.put(PROPERTY_INFO_OUT_INDEX, "用户对应财产记录错误，存在大于1条记录");
         ResultCode.messageMap.put(PROPERTY_INFO_BALANCE_LESS, "余额不足");
-        ResultCode.messageMap.put(PROPERTY_INFO_POINT_LESS, "积分不足");
+        ResultCode.messageMap.put(PROPERTY_INFO_POINT_LESS, "积分不足，请充值");
         ResultCode.messageMap.put(PROPERTY_CASH_SCALE_NULL, "提现比例系统参数未配置");
         ResultCode.messageMap.put(PROPERTY_CASH_PAY_PWD_ERROR, "支付密码错误");
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_EXIST, "提交的银行卡ID不存在");
@@ -356,7 +376,8 @@ public class ResultCode {
         ResultCode.messageMap.put(PROCESSED_RETURN_SUCCESS, "重复处理，成功返回");
         ResultCode.messageMap.put(PROPERTYINFO_FREEZE_EXCEPITON, "资金出现异常");
         ResultCode.messageMap.put(DEPOSIT_EXIST_UP_PRODUCT, "有未下架商品，完成后才可申请。");
-
+        ResultCode.messageMap.put(BANK_ACCOUNT_LENTH_OUT_OF_RANGE, "银行卡长度有误。");
+        
 
         // 商城模块 7xxx
         ResultCode.messageMap.put(MESSAGE_HAS_NO_TEMPLATE, "未配置对应的消息模板");

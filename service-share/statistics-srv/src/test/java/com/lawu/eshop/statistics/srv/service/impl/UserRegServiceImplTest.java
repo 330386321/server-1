@@ -101,4 +101,19 @@ public class UserRegServiceImplTest {
 		param.setName("");
 		userRegService.addUserRegAreaMonth(param);
     }
+	
+	@Transactional
+	@Rollback
+	@Test
+    public void getReportDateUserRegDaily() {
+		userRegService.getReportDateUserRegDaily();
+    }
+	
+	@Transactional
+	@Rollback
+	@Test
+    public void getReportDateUserRegMonth() {
+		userRegService.getReportDateUserRegMonth();
+    }
+	
 }

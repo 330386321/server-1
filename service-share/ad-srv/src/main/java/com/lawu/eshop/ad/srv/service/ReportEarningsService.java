@@ -13,7 +13,7 @@ public interface ReportEarningsService {
 	
 	
 	
-	List<ReportEarningsBO>  getReportEarnings();
+	List<ReportEarningsBO>  getReportEarnings(String date);
 	
 	
 	List<ReportEarningsBO>  getReportMonthEarnings();

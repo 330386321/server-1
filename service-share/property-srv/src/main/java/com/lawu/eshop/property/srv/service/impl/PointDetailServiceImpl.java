@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
+import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
+import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -249,5 +252,22 @@ public class PointDetailServiceImpl implements PointDetailService {
 			}
 		}
 		return rtnList;
+	}
+
+	@Override
+	public List<IncomeMsgBO> getIncomeMsgDataList(String begin,String end) {
+		IncomeMsgExample example = new IncomeMsgExample();
+		example.setBegin(begin);
+		example.setEnd(end);
+		List<IncomeMsgDOView> list = pointDetailDOMapperExtend.getIncomeMsgDataList(example);
+		List<IncomeMsgBO> bos = new ArrayList<>();
+		for(IncomeMsgDOView view : list){
+			IncomeMsgBO bo = new IncomeMsgBO();
+			bo.setType(view.getbType());
+			bo.setMoney(view.getMoney());
+			bo.setUserNum(view.getUserNum());
+			bos.add(bo);
+		}
+		return bos;
 	}
 }

@@ -57,13 +57,13 @@ public class ReportUserActiveDailyServiceImpl implements ReportUserActiveDailySe
 
     @Override
     @Transactional
-    public void saveUserActiveDaily(Integer memberCount, Integer merchantCount) {
+    public void saveUserActiveDaily(Integer memberCount, Integer merchantCount, String reportDate) {
 
         ReportUserActiveDailyDO userActiveDailyDO = new ReportUserActiveDailyDO();
         userActiveDailyDO.setMemberCount(memberCount);
         userActiveDailyDO.setMerchantCount(merchantCount);
         userActiveDailyDO.setGmtCreate(new Date());
-        userActiveDailyDO.setGmtReport(DateUtil.getDayBefore(DateUtil.getNowDate()));
+        userActiveDailyDO.setGmtReport(DateUtil.getDateFormat(reportDate));
         reportUserActiveDailyDOMapper.insertSelective(userActiveDailyDO);
     }
 

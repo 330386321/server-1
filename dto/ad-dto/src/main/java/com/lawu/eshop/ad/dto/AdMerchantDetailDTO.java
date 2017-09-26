@@ -72,6 +72,12 @@ public class AdMerchantDetailDTO {
 	
 	@ApiModelProperty(value = "商品名称")
 	private String  productName;
+	
+	@ApiModelProperty(value = "视频大小")
+	private String fileSize;
+	
+	@ApiModelProperty(value = "视频时间")
+	private String videoTime;
 
 	public Long getId() {
 		return id;
@@ -225,6 +231,22 @@ public class AdMerchantDetailDTO {
 
 	public void setProductName(String productName) {
 		this.productName = productName;
+	}
+
+	public String getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(String fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	public String getVideoTime() {
+		return videoTime;
+	}
+
+	public void setVideoTime(String videoTime) {
+		this.videoTime = videoTime;
 	}
 	
 	

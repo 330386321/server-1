@@ -23,8 +23,9 @@ public class ReportAdEarningsPointServiceImpl implements ReportAdEarningsPointSe
 		ReportAdEarningsPointView view=new ReportAdEarningsPointView();
 		view.setBizId(ReportAdEarningsPointParam.getBizId());
 		view.setPointType(ReportAdEarningsPointParam.getMemberTransactionTypeEnum().getValue());
+		view.setLoveType(ReportAdEarningsPointParam.getLoveTypeEnum().getValue());
 		ReportAdEarningsPointView  viewDate=transactionDetailExtendDOMapper.getReportAdEarningsPoint(view);
-		ReportAdEarningsPointView  viewLoveDate=transactionDetailExtendDOMapper.getReportAdEarningsLovePoint(viewDate);
+		ReportAdEarningsPointView  viewLoveDate=transactionDetailExtendDOMapper.getReportAdEarningsLovePoint(view);
 		ReportAdEarningsPointBO bo=new ReportAdEarningsPointBO();
 		if(viewDate==null){
 			bo.setUserTotalPoint(BigDecimal.valueOf(0));

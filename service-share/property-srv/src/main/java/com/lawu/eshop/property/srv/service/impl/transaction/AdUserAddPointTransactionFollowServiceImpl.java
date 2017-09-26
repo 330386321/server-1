@@ -31,7 +31,6 @@ public class AdUserAddPointTransactionFollowServiceImpl extends AbstractTransact
 		param.setUserNum(notification.getUserNum());
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.AD_QZ);
 		param.setLoveTypeEnum(LoveTypeEnum.AD_QZ);
-		param.setRegionPath(notification.getRegionPath());
 		param.setTempBizId(notification.getAdId() == null ? "0" : notification.getAdId().toString());
 		propertyInfoDataService.doHanlderBalanceIncome(param);
 	}

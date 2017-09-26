@@ -1,5 +1,15 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -13,10 +23,6 @@ import com.lawu.eshop.user.param.PageListInviteFansParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.converter.FansMerchantConverter;
 import com.lawu.eshop.user.srv.service.FansMerchantService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -106,9 +112,9 @@ public class FansMerchantController extends BaseController {
     @RequestMapping(value = "isFansMerchant/{merchantId}", method = RequestMethod.GET)
     public Result<Boolean> isFansMerchant(@PathVariable Long merchantId, @RequestParam Long memberId) {
         FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchant(memberId, merchantId);
-        if (fansMerchantBO == null || fansMerchantBO.getAccount() == null) {
+        if (fansMerchantBO == null) {
             return successGet(false);
-        }
+        } 
         return successGet(true);
     }
 
@@ -167,7 +173,7 @@ public class FansMerchantController extends BaseController {
      *
      * @param merchantId
      * @param memberId
-     * @param channelEnum
+     * @param dealWay
      * @return
      */
     @RequestMapping(value = "saveFansMerchantFromInvite/{merchantId}", method = RequestMethod.PUT)

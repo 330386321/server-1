@@ -21,6 +21,7 @@ import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
+import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
 import com.lawu.eshop.ad.dto.AdPointDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
@@ -35,6 +36,7 @@ import com.lawu.eshop.ad.param.AdEgainInternalParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdPointInternalParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSolrRealParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
@@ -284,7 +286,28 @@ public class MockAdService extends BaseController implements AdService{
         return successCreated(page);
     }
 
-	@Override
+    @Override
+    public Result<Page<AdFlatVideoDTO>> getRecommendAdByType(@RequestBody AdSolrRealParam param) {
+        return null;
+    }
+
+    @Override
+    public Result<Page<AdPraiseDTO>> getRecommendEgain(@RequestBody AdSolrRealParam param) {
+        return null;
+    }
+
+    @Override
+    public Result<List<AdDTO>> listAdRank(@RequestBody AdSolrRealParam param) {
+        return null;
+    }
+
+
+    @Override
+    public Result<Page<AdDTO>> listAd(@RequestBody AdSolrRealParam param) {
+        return null;
+    }
+
+    @Override
 	public Result<AdPraiseDTO> selectAdPraiseById(Long id, Long memberId) {
 		AdPraiseDTO addto = new AdPraiseDTO();
         addto.setId(1L);

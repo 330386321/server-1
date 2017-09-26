@@ -13,6 +13,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
+import com.lawu.eshop.user.dto.MerchantDetailDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.dto.MerchantStoreProfileDTO;
 import com.lawu.eshop.user.dto.MerchantViewDTO;
@@ -77,4 +78,17 @@ public interface MerchantService {
 
     @RequestMapping(value = "merchant/getMerchantStoreProfileInfo", method = RequestMethod.GET)
     Result<MerchantStoreProfileDTO> getMerchantStoreProfileInfo(@RequestParam(value ="id" )  Long id);
+
+    /**
+     * 根据商家ID查询商家详细信息(包括门店、图片等信息)
+     *
+     * @param id
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "merchant/getMerchantDetail/{id}", method = RequestMethod.GET)
+    Result<MerchantDetailDTO> getMerchantDetail(@PathVariable(value = "id") Long id);
+
+    @RequestMapping(value = "merchant/delMerchantGtPush", method = RequestMethod.PUT)
+    Result delMerchantGtPush(@RequestParam("merchantId") Long merchantId);
 }

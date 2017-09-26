@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,11 +20,13 @@ import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.constants.FileTypeEnum;
+import com.lawu.eshop.ad.constants.MemberAdRecordStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PropertyType;
 import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.constants.RedPacketArithmetic;
+import com.lawu.eshop.ad.constants.SpiltRedPacketUntil;
 import com.lawu.eshop.ad.param.AdChoicenessInternalParam;
 import com.lawu.eshop.ad.param.AdEgainInternalParam;
 import com.lawu.eshop.ad.param.AdFindParam;
@@ -39,16 +40,19 @@ import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.AdClickPraiseInfoBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
 import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
+import com.lawu.eshop.ad.srv.bo.AdSaveInfoBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
@@ -62,6 +66,7 @@ import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
 import com.lawu.eshop.ad.srv.domain.extend.AdDOView;
 import com.lawu.eshop.ad.srv.domain.extend.MemberAdRecordDOView;
+import com.lawu.eshop.ad.srv.domain.extend.PointPoolDOView;
 import com.lawu.eshop.ad.srv.domain.extend.ReportAdView;
 import com.lawu.eshop.ad.srv.domain.extend.SelectAdEgainIdExample;
 import com.lawu.eshop.ad.srv.domain.extend.SelectAdPointIdExample;
@@ -73,13 +78,17 @@ import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.mapper.extend.AdDOMapperExtend;
 import com.lawu.eshop.ad.srv.mapper.extend.MemberAdRecordDOMapperExtend;
 import com.lawu.eshop.ad.srv.mapper.extend.PointPoolDOMapperExtend;
+import com.lawu.eshop.ad.srv.service.AdCountRecordService;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
+import com.lawu.eshop.ad.srv.service.PraiseDoHanlderMinusPointService;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.solr.service.SolrService;
-import com.lawu.eshop.utils.AdArithmeticUtil;
+import com.lawu.eshop.synchronization.lock.constants.LockConstant.LockModule;
+import com.lawu.eshop.synchronization.lock.service.LockService;
 import com.lawu.eshop.utils.DateUtil;
 
 /**
@@ -140,10 +149,15 @@ public class AdServiceImpl implements AdService {
 
 	@Autowired
 	private SolrService solrService;
+	
+	@Autowired
+	private LockService lockService;
 
-	private int currentPage = 1;
-
-	private int reportCurrentPage = 1;
+	@Autowired
+	private AdCountRecordService adCountRecordService;
+	
+	@Autowired
+	private PraiseDoHanlderMinusPointService praiseDoHanlderMinusPointService;
 
 
 	/**
@@ -154,7 +168,7 @@ public class AdServiceImpl implements AdService {
 	 */
 	@Override
 	@Transactional
-	public Integer saveAd(AdSaveParam adSaveParam) {
+	public AdSaveInfoBO saveAd(AdSaveParam adSaveParam) {
 		AdParam adParam = adSaveParam.getAdParam();
 		AdDO adDO = new AdDO();
 		adDO.setTitle(adParam.getTitle());
@@ -174,26 +188,16 @@ public class AdServiceImpl implements AdService {
 		adDO.setPutWay(adParam.getPutWayEnum().val);
 		adDO.setViewcount(0);
 		adDO.setHits(0);
+		adDO.setIsPay(false);
 		if(adParam.getBeginTime()!=null){
 			adDO.setBeginTime(DateUtil.formatDate(adParam.getBeginTime(), "yyyy-MM-dd HH:mm"));
 		}
-		adDO.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+		adDO.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
 		adDO.setPoint(adParam.getPoint());
 		adDO.setAdCount(adParam.getAdCount());
 		adDO.setRadius(adParam.getRadius());
-		Integer piontCount=0;
-		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_VIDEO){
-			adDO.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val); //视频广告默认为审核中
-		}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){
-			Integer praiseCount=adSaveParam.getCount();
-			piontCount =(int)Math.ceil(praiseCount * (adSrvConfig.getAdPraiseAllotProb()/100));
-			if(piontCount<=10){
-				 piontCount=10;
-			}
-			adDO.setAdCount(piontCount);
-		}
-		if (adParam.getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PRAISE.getVal()) {
-			adDO.setAdCount(adSaveParam.getCount());
+		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PACKET){  //红包开始时间为创建时间
+			adDO.setBeginTime(new Date());
 		}
 		adDO.setTotalPoint(adParam.getTotalPoint());
 		adDO.setGmtCreate(new Date());
@@ -210,73 +214,29 @@ public class AdServiceImpl implements AdService {
 		if(adSaveParam.getMerchantRegionPath()!=null){
 			adDO.setMerchantRegionPath(adSaveParam.getMerchantRegionPath());
 		}
+		if(adParam.getFileType()!=null){
+			adDO.setFileType(adParam.getFileType().getVal());
+		}
+		if(adParam.getFileSize()!=null){
+			adDO.setFileSize(adParam.getFileSize());
+		}
+		if(adParam.getFileTime()!=null){
+			adDO.setFileTime(adParam.getFileTime());
+		}
 		Integer i=adDOMapper.insert(adDO);
-		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //E赞  红包
-			savePointPool(adDO,piontCount);
-		}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PACKET){
-			saveRPPool(adDO);
-		}
-		// 发送消息，通知其他模块处理事务 积分的处理
-		mctransactionMainAddService.sendNotice(adDO.getId());
-		return i;
-	}
-
-	/**
-	 * 分配积分
-	 */
-	public void savePointPool(AdDO adDO, Integer count) {
-		// 算法生成积分明细
-		double[] points = AdArithmeticUtil.getMoney(adDO.getTotalPoint().doubleValue(), count);
-		for (int j = 0; j < count; j++) {
-			PointPoolDO pointPool = new PointPoolDO();
-			pointPool.setAdId(adDO.getId());
-			pointPool.setMerchantId(adDO.getMerchantId());
-			pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-			pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
-			pointPool.setGmtCreate(new Date());
-			pointPool.setGmtModified(new Date());
-			pointPool.setOrdinal(j);
-			pointPool.setPoint(BigDecimal.valueOf(points[j]));
-			pointPoolDOMapper.insert(pointPool);
-		}
-	}
-
-	/**
-	 * 分配红包
-	 *
-	 * @param adDO
-	 */
-	public void saveRPPool(AdDO adDO) {
-		if (adDO.getPutWay() == 4) { // 普通红包
-			BigDecimal point = adDO.getTotalPoint().divide(new BigDecimal(adDO.getAdCount()), 2, RoundingMode.HALF_UP);
-			for (int j = 0; j < adDO.getAdCount(); j++) {
-				PointPoolDO pointPool = new PointPoolDO();
-				pointPool.setAdId(adDO.getId());
-				pointPool.setMerchantId(adDO.getMerchantId());
-				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
-				pointPool.setGmtCreate(new Date());
-				pointPool.setGmtModified(new Date());
-				pointPool.setOrdinal(j);
-				pointPool.setPoint(point);
-				pointPoolDOMapper.insert(pointPool);
-			}
-		} else if (adDO.getPutWay() == 5) { // 手气红包
-			List<Double> points = RedPacketArithmetic.spiltRedPackets(adDO.getTotalPoint().doubleValue(), adDO.getAdCount());
-			for (int j = 0; j < adDO.getAdCount(); j++) {
-				PointPoolDO pointPool = new PointPoolDO();
-				pointPool.setAdId(adDO.getId());
-				pointPool.setMerchantId(adDO.getMerchantId());
-				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
-				pointPool.setGmtCreate(new Date());
-				pointPool.setGmtModified(new Date());
-				pointPool.setOrdinal(j);
-				pointPool.setPoint(new BigDecimal(points.get(j)));
-				pointPoolDOMapper.insert(pointPool);
-			}
+		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //E赞
+			SolrInputDocument document= AdConverter.convertSolrInputDocument(adDO);
+			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
 
+        AdSaveInfoBO bo =new AdSaveInfoBO();
+        bo.setId(adDO.getId());
+        bo.setAdCount(adDO.getAdCount());
+        
+        // 发送消息，通知其他模块处理事务 积分的处理
+        mctransactionMainAddService.sendNotice(adDO.getId());
+
+		return bo;
 	}
 
 	/**
@@ -367,12 +327,13 @@ public class AdServiceImpl implements AdService {
 		adDO.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
 		Integer i = adDOMapper.updateByPrimaryKeySelective(adDO);
 		AdDO ad = adDOMapper.selectByPrimaryKey(id);
-		matransactionMainAddService.sendNotice(ad.getId());
 		if(ad.getType()==AdTypeEnum.AD_TYPE_PACKET.getVal() || ad.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal() ){
 			pointPoolDOMapperExtend.updatePointOut(id);
 		}
 		// 删除solr中的数据
 		solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+
+		matransactionMainAddService.sendNotice(ad.getId());
 		return i;
 	}
 
@@ -517,33 +478,58 @@ public class AdServiceImpl implements AdService {
 	@Override
 	@Transactional
 	public ClickPointBO clickAd(Long id, Long memberId, String num) {
-		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
-		
-		ClickPointBO  clickBO = new ClickPointBO();
-		if(adDO.getHits()>=adDO.getAdCount()){
-			clickBO.setPoint(BigDecimal.valueOf(0));
-			clickBO.setOverClick(true);
-			return clickBO;
-		}
 
-		MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
-		memberAdRecordD.setAdId(adDO.getId());
-		memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
-		memberAdRecordD.setMemberId(memberId);
-		memberAdRecordD.setMemberNum(num);
-		memberAdRecordD.setStatus(new Byte("0"));
-		memberAdRecordD.setGmtCreate(new Date());
-		memberAdRecordD.setClickDate(new Date());
-		memberAdRecordD.setOriginalPoint(adDO.getPoint());
-		memberAdRecordDOMapper.insert(memberAdRecordD);
-
-		// 修改点击次数记录
-		adDOMapperExtend.updateHitsByPrimaryKey(id);
-		//发送消息修改积分
-		userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
-
+		Boolean flag = lockService.tryLock(LockModule.LOCK_AD_SRV, "AD_CLICK_LOCK_", id);
+		ClickPointBO clickBO = new ClickPointBO();
+		clickBO.setPoint(BigDecimal.valueOf(0));
 		clickBO.setOverClick(false);
-		clickBO.setPoint(adDO.getPoint());
+		clickBO.setSysWords(false);
+		// 成功抢到锁
+		if (flag) {
+
+			Result<Object> result = adCountRecordService.getAdCountRecord(id);
+			// 是否真正抢到广告
+			if (result.getModel() != null && (int) result.getModel() >= 0) {
+
+				MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
+
+				AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+
+				// 再次判断是否点击完
+				if (adDO.getHits() >= adDO.getAdCount()) {
+					clickBO.setOverClick(true);
+				} else {
+
+					memberAdRecordD.setAdId(adDO.getId());
+					memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
+					memberAdRecordD.setMemberId(memberId);
+					memberAdRecordD.setMemberNum(num);
+					memberAdRecordD.setStatus(MemberAdRecordStatusEnum.NONE.getVal());
+					memberAdRecordD.setGmtCreate(new Date());
+					memberAdRecordD.setClickDate(new Date());
+					memberAdRecordD.setOriginalPoint(adDO.getPoint());
+					memberAdRecordDOMapper.insert(memberAdRecordD);
+
+					// 修改点击次数记录
+					adDOMapperExtend.updateHitsByPrimaryKey(id);
+					//修改领取次数
+					clickBO.setOverClick(false);
+					clickBO.setPoint(adDO.getPoint());
+					//发送消息修改积分
+					userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
+				}
+				
+			} else {
+				
+				clickBO.setOverClick(true);
+			}
+			
+			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_CLICK_LOCK_", id);
+
+		}else{
+			//是否同时点广告
+			clickBO.setSysWords(true);
+		}
 
 		return clickBO;
 	}
@@ -616,28 +602,93 @@ public class AdServiceImpl implements AdService {
 	/**
 	 * 抢赞
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
-	public BigDecimal clickPraise(Long id, Long memberId, String num) {
-		// 查询出没有领取的积分，取出一个给用户
-		PointPoolDO pointPoolDO = pointPoolDOMapperExtend.selectPoint(id);
-		if (pointPoolDO == null) { // 说明积分领取完
-			AdDO ad = new AdDO();
-			ad.setId(memberId);
-			ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
-			ad.setGmtModified(new Date());
-			adDOMapper.updateByPrimaryKeySelective(ad);
-			return new BigDecimal(0);
-		} else {
-			pointPoolDO.setMemberId(memberId);
-			pointPoolDO.setMemberNum(num);
-			pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
-			pointPoolDO.setGmtModified(new Date());
-			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
-			// 给用户加积分
-			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
-			return pointPoolDO.getPoint().multiply(new BigDecimal(PropertyType.ad_account_scale_default));
+	public AdClickPraiseInfoBO clickPraise(Long id, Long memberId, String num) {
+		AdClickPraiseInfoBO bo = new AdClickPraiseInfoBO();
+		PointPoolDO pointPool = new PointPoolDO();
+		Double point = 0.0;
+		
+		Boolean flag = lockService.tryLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", id);
+		
+		// 成功抢到锁
+		if (flag) {
+
+			Result<Object> result = adCountRecordService.getAdCountRecord(id);
+
+			// 是否已抢完
+			if (result.getModel() != null && (int) result.getModel() >= 0) {
+
+				AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+				
+				if(adSrvConfig.getIsCutPraisePoint()){
+					
+					if(adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==1 || adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==0){
+						//再次判断用户是否扣除过积分
+						Result<Boolean>  isDoPoint = praiseDoHanlderMinusPointService.getAdPraiseIsDoPointRecord(String.valueOf(id)+String.valueOf(memberId));
+						//如果没有扣除积分 不作抢赞操作
+						if(!isDoPoint.getModel()){
+							bo.setSysWordFlag(false);
+							bo.setPoint(BigDecimal.valueOf(point));
+							return bo;
+						}
+					}
+					
+				}
+				
+				//已经领取个数
+				int praiseCount = adDO.getHits() == null ? 0 : adDO.getHits();
+
+				PointPoolDOView view = pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
+				//剩余积分
+				BigDecimal subMoney = new BigDecimal(0);
+				//剩余积分
+				if (view == null) {
+					subMoney = adDO.getTotalPoint().subtract(BigDecimal.valueOf(0));
+				} else {
+					subMoney = adDO.getTotalPoint().subtract(view.getPoint());
+				}
+
+				point = SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), adDO.getAdCount(), praiseCount);
+
+				pointPool.setAdId(adDO.getId());
+				pointPool.setMerchantId(adDO.getMerchantId());
+				pointPool.setMemberId(memberId);
+				pointPool.setMemberNum(num);
+				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+				pointPool.setGmtCreate(new Date());
+				pointPool.setGmtModified(new Date());
+				pointPool.setOrdinal(praiseCount);
+				pointPool.setPoint(BigDecimal.valueOf(point));
+				pointPoolDOMapper.insert(pointPool);
+
+				if (adDO.getAdCount() - 1 == praiseCount || praiseCount >= adDO.getAdCount()) {
+					AdDO ad = new AdDO();
+					ad.setId(adDO.getId());
+					ad.setGmtModified(new Date());
+					ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+					adDOMapper.updateByPrimaryKeySelective(ad);
+					//更新solr状态
+					SolrInputDocument document = AdConverter.convertSolrInputDocument(ad);
+					solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+				}
+				
+				//修改领取次数
+				adDOMapperExtend.updateHitsByPrimaryKey(id);
+				adtransactionMainAddService.sendNotice(pointPool.getId());
+			}
+			bo.setSysWordFlag(false);
+			bo.setPoint(BigDecimal.valueOf(point).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
+			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", id);
+			
+		}else{
+			bo.setPoint(BigDecimal.valueOf(point));
+			bo.setSysWordFlag(true);
 		}
+		
+		return bo;
 
 	}
 
@@ -658,10 +709,8 @@ public class AdServiceImpl implements AdService {
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
 					adDO.setGmtModified(date);
 					adDOMapper.updateByPrimaryKey(adDO);
-					if (adDO.getType() == AdTypeEnum.AD_TYPE_FLAT.getVal() || adDO.getType() == AdTypeEnum.AD_TYPE_VIDEO.getVal()) {
-						SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-						documents.add(document);
-					}
+					SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+					documents.add(document);
 				}
 			}
 			solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
@@ -675,18 +724,21 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.getVal());
 		List<AdDO> listADD = adDOMapper.selectByExample(example);
 		if (!listADD.isEmpty()){
+            Collection<SolrInputDocument> documents = new ArrayList<>();
 			for (AdDO adDO : listADD) {
-				Date date = new Date();
 				Calendar nowTime = Calendar.getInstance();
 				nowTime.add(Calendar.MINUTE, -20);
 				if ((nowTime.getTime().getTime() - adDO.getBeginTime().getTime()) > 0) {
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
-					adDO.setGmtModified(date);
+					adDO.setGmtModified(new Date());
 					adDOMapper.updateByPrimaryKey(adDO);
 					// 将没有领完的积分退还给用户
 					matransactionMainAddService.sendNotice(adDO.getId());
+                    SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+                    documents.add(document);
 			    }
 		    }
+            solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
 	}
 	
@@ -703,17 +755,18 @@ public class AdServiceImpl implements AdService {
 		Date before14days = calendar.getTime(); 
 		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeIn(bytes).andBeginTimeLessThan(before14days);
 		List<AdDO> list = adDOMapper.selectByExample(example);
-		for (AdDO adDO : list) {
-			
-			if (adDO.getHits()  >= adDO.getAdCount()) {
+        Collection<SolrInputDocument> documents = new ArrayList<>();
+        for (AdDO adDO : list) {
+            if (adDO.getHits()  >= adDO.getAdCount()) {
 				adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); // 投放结束
 				adDO.setGmtModified(new Date());
 				adDOMapper.updateByPrimaryKey(adDO);
-				// 删除solr中的数据
-				solrService.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+                SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+                documents.add(document);
 			}
-			
+
 		}
+        solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 	}
 
 	@Override
@@ -738,39 +791,93 @@ public class AdServiceImpl implements AdService {
 	}
 
 	@Override
-	public Integer selectRPIsSend(Long merchantId) {
+	public RedPacketIsSendBO selectRPIsSend(Long merchantId) {
 		AdDOExample example = new AdDOExample();
 		example.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.getVal()).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
-		int count = (int) adDOMapper.countByExample(example);
-		return count;
+		List<AdDO> list= adDOMapper.selectByExample(example);
+		RedPacketIsSendBO bo = new RedPacketIsSendBO();
+		if(!list.isEmpty()){
+			bo.setId(list.get(0).getId());
+			bo.setFlag(true);
+		}else{
+			bo.setFlag(false);
+		}
+		return bo;
 	}
 
 	@Override
 	public BigDecimal getRedPacket(Long merchantId, Long memberId, String memberNum) {
-		PointPoolDOExample ppexample = new PointPoolDOExample();
-		ppexample.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-		// 查询出没有领取的积分，取出一个给用户
-		List<PointPoolDO> list = pointPoolDOMapper.selectByExample(ppexample);
-		if (!list.isEmpty()) {
-			PointPoolDO pointPoolDO = list.get(0);
-			pointPoolDO.setStatus(new Byte("1"));
-			pointPoolDO.setMemberId(memberId);
-			pointPoolDO.setMemberNum(memberNum);
-			pointPoolDO.setGmtModified(new Date());
-			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
-			// 给用户加积分
-			userSweepRedtransactionMainAddService.sendNotice(pointPoolDO.getId());
-			if (list.size() == 1) { // 红包领取完成 将红包下架
-				AdDO ad = new AdDO();
-				ad.setId(pointPoolDO.getAdId());
-				ad.setGmtModified(new Date());
-				ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
-				adDOMapper.updateByPrimaryKeySelective(ad);
-			}
-			return pointPoolDO.getPoint();
-		} else {
+
+		AdDOExample example = new AdDOExample();
+		example.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.getVal()).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+		List<AdDO> listAd = adDOMapper.selectByExample(example);
+		if (listAd.isEmpty()) {
 			return new BigDecimal(0);
 		}
+		AdDO adDO = listAd.get(0);
+
+		Boolean flag = lockService.tryLock(LockModule.LOCK_AD_SRV, "AD_RED_PACKET_LOCK_", adDO.getId());
+		PointPoolDO pointPool = new PointPoolDO();
+		BigDecimal money = new BigDecimal(0);
+
+		// 成功抢到锁
+		if (flag) {
+			Result<Object> result = adCountRecordService.getAdCountRecord(adDO.getId());
+			// 是否已抢完
+			if (result.getModel() != null && (int) result.getModel() >= 0) {
+
+				int redPacketCount = adDO.getHits() == null ? 0 : adDO.getHits();
+
+				PointPoolDOView view = pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
+				BigDecimal subMoney = new BigDecimal(0);
+				//剩余积分
+				if (view == null) {
+					subMoney = adDO.getTotalPoint().subtract(BigDecimal.valueOf(0));
+				} else {
+					subMoney = adDO.getTotalPoint().subtract(view.getPoint());
+				}
+
+				if (adDO.getPutWay() == PutWayEnum.PUT_WAY_LUCK.val) { //手气红包
+					Double point = SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), adDO.getAdCount(), redPacketCount);
+					money = BigDecimal.valueOf(point);
+				} else { //普通红包
+					if (redPacketCount == adDO.getAdCount() - 1) {
+						money = subMoney;
+					} else {
+						money = adDO.getTotalPoint().divide(new BigDecimal(adDO.getAdCount()), 2, RoundingMode.HALF_UP);
+					}
+				}
+
+				pointPool.setAdId(adDO.getId());
+				pointPool.setMerchantId(adDO.getMerchantId());
+				pointPool.setMemberId(memberId);
+				pointPool.setMemberNum(memberNum);
+				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
+				pointPool.setGmtCreate(new Date());
+				pointPool.setGmtModified(new Date());
+				pointPool.setOrdinal(redPacketCount);
+				pointPool.setPoint(money);
+				pointPoolDOMapper.insert(pointPool);
+				
+				adDOMapperExtend.updateHitsByPrimaryKey(adDO.getId());
+
+				userSweepRedtransactionMainAddService.sendNotice(pointPool.getId());
+
+				if (adDO.getAdCount() - 1 == redPacketCount || redPacketCount >= adDO.getAdCount()) {
+					AdDO ad = new AdDO();
+					ad.setId(adDO.getId());
+					ad.setGmtModified(new Date());
+					ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
+					adDOMapper.updateByPrimaryKeySelective(ad);
+				}
+			}
+
+			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_RED_PACKET_LOCK_", adDO.getId());
+
+		}
+
+		return money;
 
 	}
 
@@ -784,7 +891,7 @@ public class AdServiceImpl implements AdService {
 	@Override
 	public Boolean selectRedPacketByMember(Long merchantId, Long memberId) {
 		AdDOExample rpexample = new AdDOExample();
-		rpexample.createCriteria().andStatusEqualTo(new Byte("1")).andMerchantIdEqualTo(merchantId);
+		rpexample.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val).andMerchantIdEqualTo(merchantId);
 		AdDO adDO = adDOMapper.selectByExample(rpexample).get(0);
 		PointPoolDOExample example = new PointPoolDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PACKET.val).andAdIdEqualTo(adDO.getId());
@@ -800,7 +907,11 @@ public class AdServiceImpl implements AdService {
 		MemberAdRecordDOView view = MemberAdRecordDOMapperExtend.selectPointToday(marDO);
 		ClickAdPointBO clickAdPointBO = new ClickAdPointBO();
 		clickAdPointBO.setAdTotlePoint(point.multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
-		clickAdPointBO.setAddPoint(view.getTotlePoint());
+		if(view == null){
+			clickAdPointBO.setAddPoint(BigDecimal.valueOf(0));
+		}else{
+			clickAdPointBO.setAddPoint(view.getTotlePoint());
+		}
 		return clickAdPointBO;
 	}
 
@@ -835,11 +946,6 @@ public class AdServiceImpl implements AdService {
 		adDO.setId(id);
 		adDO.setViewcount(count);
 		adDOMapper.updateByPrimaryKeySelective(adDO);
-		// 更新solr广告浏览人数
-		adDO = adDOMapper.selectByPrimaryKey(id);
-		SolrInputDocument document = AdConverter.convertSolrUpdateDocument(adDO);
-		solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-
 	}
 
 	@Override
@@ -909,20 +1015,6 @@ public class AdServiceImpl implements AdService {
 	}
 
 	@Override
-	public void updateAdIndex(Long id) {
-		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
-		if (adDO == null) {
-			return;
-		}
-
-		SolrDocument solrDocument = solrService.getSolrDocsById(id, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-		if (solrDocument == null) {
-			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-		}
-	}
-
-	@Override
 	public void rebuildAdIndex() {
 		ListAdParam listAdParam = new ListAdParam();
 		listAdParam.setPageSize(1000);
@@ -935,15 +1027,31 @@ public class AdServiceImpl implements AdService {
 			List<Byte> typeList = new ArrayList<>();
 			typeList.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
 			typeList.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
-			adDOExample.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeIn(typeList);
+			List<Byte> statusList = new ArrayList<>();
+			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
+			statusList.add(AdStatusEnum.AD_STATUS_PUTED.val);
+			adDOExample.createCriteria().andTypeIn(typeList).andStatusIn(statusList);
 			RowBounds rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
 			List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
-			if (adDOS == null || adDOS.isEmpty()) {
+
+			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
+			adDOExample = new AdDOExample();
+			rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
+			adDOExample.createCriteria().andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.getVal()).andStatusIn(statusList);
+			List<AdDO> adDOList = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
+
+			if (adDOS.isEmpty() && adDOList.isEmpty()) {
 				return;
 			}
 
 			Collection<SolrInputDocument> documents = new ArrayList<>();
 			for (AdDO adDO : adDOS) {
+				SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+				documents.add(document);
+			}
+			solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+			documents = new ArrayList<>();
+			for (AdDO adDO : adDOList) {
 				SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 				documents.add(document);
 			}
@@ -964,10 +1072,15 @@ public class AdServiceImpl implements AdService {
 			List<Byte> typeList = new ArrayList<>();
 			typeList.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
 			typeList.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
-			adDOExample.createCriteria().andStatusNotEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeIn(typeList);
+			typeList.add(AdTypeEnum.AD_TYPE_PRAISE.getVal());
+			List<Byte> statusList = new ArrayList<>();
+			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
+			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
+			statusList.add(AdStatusEnum.AD_STATUS_PUTED.val);
+			adDOExample.createCriteria().andStatusNotIn(statusList).andTypeIn(typeList);
 			RowBounds rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
 			List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
-			if (adDOS == null || adDOS.isEmpty()) {
+			if (adDOS.isEmpty()) {
 				return;
 			}
 
@@ -987,11 +1100,11 @@ public class AdServiceImpl implements AdService {
 		RedPacketInfoBO redPacketInfoBO = new RedPacketInfoBO();
 		if (!list.isEmpty()) {
 			AdDO adDO = list.get(0);
-			PointPoolDOExample ppexample = new PointPoolDOExample();
-			ppexample.createCriteria().andAdIdEqualTo(adDO.getId());
-			ppexample.setOrderByClause("point desc");
-			List<PointPoolDO> ppList = pointPoolDOMapper.selectByExample(ppexample);
-			redPacketInfoBO.setPoint(ppList.get(0).getPoint());
+			redPacketInfoBO.setPoint(adDO.getTotalPoint().divide(BigDecimal.valueOf(adDO.getAdCount()),2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(PropertyType.ad_red_packet_default)));
+			redPacketInfoBO.setMediaUrl(adDO.getMediaUrl());
+			redPacketInfoBO.setLogoUrl(adDO.getLogoUrl());
+			redPacketInfoBO.setName(adDO.getMerchantStoreName());
+			redPacketInfoBO.setFileType(FileTypeEnum.getEnum(adDO.getFileType()));
 		}
 		return redPacketInfoBO;
 
@@ -1065,6 +1178,9 @@ public class AdServiceImpl implements AdService {
 				detail.setNotGetCount(adDO.getAdCount());
 				detail.setAlreadyGetPoint(BigDecimal.valueOf(0));
 				detail.setNotGetPoint(adDO.getTotalPoint());
+				detail.setRedPacketAdFileUrl(adDO.getMediaUrl());
+				detail.setVideoImgUrl(adDO.getVideoImgUrl());
+				detail.setFileType(FileTypeEnum.getEnum(adDO.getFileType()));
 				if(adDO.getPutWay()==PutWayEnum.PUT_WAY_COMMON.val){
 					detail.setMediaUrl(adSrvConfig.getRedPacketCommonMediaUrl());
 				}else if(adDO.getPutWay()==PutWayEnum.PUT_WAY_LUCK.val){
@@ -1079,6 +1195,9 @@ public class AdServiceImpl implements AdService {
 				detail.setNotGetCount(adDO.getAdCount()-ppList.size());
 				detail.setAlreadyGetPoint(sumPoint);
 				detail.setNotGetPoint(adDO.getTotalPoint().subtract(sumPoint));
+				detail.setRedPacketAdFileUrl(adDO.getMediaUrl());
+				detail.setVideoImgUrl(adDO.getVideoImgUrl());
+				detail.setFileType(FileTypeEnum.getEnum(adDO.getFileType()));
 				if(adDO.getPutWay()==PutWayEnum.PUT_WAY_COMMON.val){
 					detail.setMediaUrl(adSrvConfig.getRedPacketCommonMediaUrl());
 				}else if(adDO.getPutWay()==PutWayEnum.PUT_WAY_LUCK.val){
@@ -1100,34 +1219,28 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public List<ReportAdBO> selectReportAdEarnings() {
-		int count = adDOMapperExtend.selectReportAdEarningscount();
-		int totalPageNum;
-		if (count % 1000 == 0) {
-			totalPageNum = count / 1000;
-		} else {
-			totalPageNum = count / 1000 + 1;
-		}
-		if (reportCurrentPage >= totalPageNum) {
-			reportCurrentPage = 1;
-		} else {
-			reportCurrentPage++;
-		}
-		RowBounds rowBounds = new RowBounds(1000 * (reportCurrentPage - 1), 1000);
-		List<ReportAdView> list = adDOMapperExtend.selectReportAdEarningsByRowbounds(rowBounds);
+		int currentPage = 0;
 		List<ReportAdBO> listBO = new ArrayList<>();
-		for (ReportAdView reportAdView : list) {
-			ReportAdBO bo = new ReportAdBO();
-			bo.setGmtCreate(reportAdView.getGmtCreate());
-			bo.setId(reportAdView.getId());
-			bo.setMerchantId(reportAdView.getMerchantId());
-			bo.setMerchantNum(reportAdView.getMerchantNum());
-			bo.setStatusEnum(AdStatusEnum.getEnum(reportAdView.getStatus()));
-			bo.setTypeEnum(AdTypeEnum.getEnum(reportAdView.getType()));
-			bo.setTotalPoint(reportAdView.getTotalPoint());
-			bo.setTitle(reportAdView.getTitle());
-			listBO.add(bo);
+		while (true) {
+			currentPage++;
+			RowBounds rowBounds = new RowBounds(1000 * (currentPage - 1), 1000);
+			List<ReportAdView> list = adDOMapperExtend.selectReportAdEarningsByRowbounds(rowBounds);
+			if (list == null || list.isEmpty()) {
+				break ;
+			}
+			for (ReportAdView reportAdView : list) {
+				ReportAdBO bo = new ReportAdBO();
+				bo.setGmtCreate(reportAdView.getGmtCreate());
+				bo.setId(reportAdView.getId());
+				bo.setMerchantId(reportAdView.getMerchantId());
+				bo.setMerchantNum(reportAdView.getMerchantNum());
+				bo.setStatusEnum(AdStatusEnum.getEnum(reportAdView.getStatus()));
+				bo.setTypeEnum(AdTypeEnum.getEnum(reportAdView.getType()));
+				bo.setTotalPoint(reportAdView.getTotalPoint());
+				bo.setTitle(reportAdView.getTitle());
+				listBO.add(bo);
+			}
 		}
-
 		return listBO;
 	}
 
@@ -1292,21 +1405,25 @@ public class AdServiceImpl implements AdService {
 	@Override
 	@Transactional
 	public void soldOutAdByMerchantId(Long merchantId) {
+		AdDOExample example2 = new AdDOExample();
+		example2.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
+		List<AdDO> list = adDOMapper.selectByExample(example2);
+		
 		AdDO adDO = new AdDO();
 		adDO.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
 		AdDOExample example = new AdDOExample();
 		example.createCriteria().andMerchantIdEqualTo(merchantId);
 		adDOMapper.updateByExampleSelective(adDO, example);
-		AdDOExample example2 = new AdDOExample();
-		example2.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
-		List<AdDO> list = adDOMapper.selectByExample(example2);
+
 		if (!list.isEmpty()) {
+			List<String> adIds = new ArrayList<>();
 			for (AdDO ad : list) {
 				//退换积分
 				matransactionMainAddService.sendNotice(ad.getId());
-				// 删除solr中的数据
-				solrService.delSolrDocsById(ad.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+				adIds.add(String.valueOf(ad.getId()));
 			}
+			// 删除solr中的数据
+			solrService.delSolrDocsByIds(adIds, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
 	}
 

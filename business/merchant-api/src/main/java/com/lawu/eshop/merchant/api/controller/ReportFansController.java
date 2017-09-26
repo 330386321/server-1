@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
@@ -65,37 +66,51 @@ public class ReportFansController extends BaseController {
 		return reportFansService.fansRiseRate(dparam);
 	}
 
-	@Audit(date = "2017-05-03", reviewer = "孙林青")
-	@ApiOperation(value = "粉丝数据，增长来源", notes = "粉丝数据，增长来源(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
+	@Audit(date = "2017-09-14", reviewer = "孙林青")
+	@ApiOperation(value = "粉丝数据，增长来源", notes = "粉丝数据，增长来源。[]，(杨清华)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "fansRiseSource", method = RequestMethod.GET)
-	public Result<List<ReportRiseRerouceDTO>> fansRiseSource(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam ReportParam param) throws Exception {
+	public Result<List<ReportRiseRerouceDTO>> fansRiseSource(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		if (merchantId == 0L) {
 			return successCreated(ResultCode.MEMBER_NO_EXIST);
 		}
 		ReportDataParam dparam = new ReportDataParam();
-		BeanUtil.copyProperties(param, dparam);
 		dparam.setMerchantId(merchantId);
-		dparam.setFlag(param.getFlag());
 		return reportFansService.fansRiseSource(dparam);
 	}
 
 	@Audit(date = "2017-05-04", reviewer = "孙林青")
-	@ApiOperation(value = "粉丝数据，消费转化", notes = "粉丝数据，消费转化(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
+	@ApiOperation(value = "粉丝数据，消费转化", notes = "粉丝数据，消费转化。[]，(杨清华)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "fansSaleTransform", method = RequestMethod.GET)
-	public Result<List<ReportRiseRerouceDTO>> fansSaleTransform(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam ReportParam param) throws Exception {
+	public Result<List<ReportRiseRerouceDTO>> fansSaleTransform(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		if (merchantId == 0L) {
 			return successCreated(ResultCode.MEMBER_NO_EXIST);
 		}
 		ReportDataParam dparam = new ReportDataParam();
-		BeanUtil.copyProperties(param, dparam);
 		dparam.setMerchantId(merchantId);
-		dparam.setFlag(param.getFlag());
-		return reportTradeDataService.fansSaleTransform(dparam);
+
+		Result<List<ReportRiseRerouceDTO>> payRet = reportTradeDataService.fansSaleTransformPay(dparam);
+		Result<List<ReportRiseRerouceDTO>> orderRet = reportTradeDataService.fansSaleTransform(dparam);
+		List<ReportRiseRerouceDTO> retList = new ArrayList<>();
+		List<ReportRiseRerouceDTO> payList = payRet.getModel();
+		List<ReportRiseRerouceDTO> orderList = orderRet.getModel();
+		retList.addAll(payList);
+		retList.addAll(orderList);
+		int i = 0;
+		for(ReportRiseRerouceDTO dto : retList){
+			Integer count = Integer.parseInt(dto.getValue());
+			if(count > 0){
+				break;
+			}
+			i++;
+		}
+		if(i == 4){
+			retList.clear();
+			return successCreated(retList);
+		}
+		return successCreated(retList);
 	}
 }

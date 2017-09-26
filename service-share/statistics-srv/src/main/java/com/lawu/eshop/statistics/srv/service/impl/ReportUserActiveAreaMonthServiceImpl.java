@@ -3,6 +3,8 @@ package com.lawu.eshop.statistics.srv.service.impl;
 import com.lawu.eshop.statistics.dto.UserActiveDTO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaMonthBO;
 import com.lawu.eshop.statistics.srv.converter.UserActiveConverter;
+import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaDailyDO;
+import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaDailyDOExample;
 import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaMonthDO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaMonthDOExample;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserActiveAreaMonthDOMapper;
@@ -39,7 +41,7 @@ public class ReportUserActiveAreaMonthServiceImpl implements ReportUserActiveAre
         for (UserActiveDTO userActiveDTO : userActiveDTOS) {
             ReportUserActiveAreaMonthDO  reportUserActiveAreaMonthDO = new ReportUserActiveAreaMonthDO();
             reportUserActiveAreaMonthDO.setCityName(userActiveDTO.getCityName());
-            reportUserActiveAreaMonthDO.setGmtReport(DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(new Date())));
+            reportUserActiveAreaMonthDO.setGmtReport(DateUtil.getFirstDayOfMonth(userActiveDTO.getVisitDate()));
             reportUserActiveAreaMonthDO.setGmtCreate(new Date());
             reportUserActiveAreaMonthDO.setMemberCount(userActiveDTO.getUserCount());
             reportUserActiveAreaMonthDO.setCityId(userActiveDTO.getCityId());
@@ -58,7 +60,7 @@ public class ReportUserActiveAreaMonthServiceImpl implements ReportUserActiveAre
                 //不存在新增一条统计记录
                 ReportUserActiveAreaMonthDO  reportUserActiveAreaMonthDO = new ReportUserActiveAreaMonthDO();
                 reportUserActiveAreaMonthDO.setCityName(userActiveDTO.getCityName());
-                reportUserActiveAreaMonthDO.setGmtReport(DateUtil.getMonthBefore(new Date()));
+                reportUserActiveAreaMonthDO.setGmtReport(DateUtil.getFirstDayOfMonth(userActiveDTO.getVisitDate()));
                 reportUserActiveAreaMonthDO.setGmtCreate(new Date());
                 reportUserActiveAreaMonthDO.setMerchantCount(userActiveDTO.getUserCount());
                 reportUserActiveAreaMonthDO.setCityId(userActiveDTO.getCityId());
@@ -73,4 +75,14 @@ public class ReportUserActiveAreaMonthServiceImpl implements ReportUserActiveAre
 
         }
     }
+    
+    @Override
+	public Date getMonth() {
+    	ReportUserActiveAreaMonthDOExample example = new ReportUserActiveAreaMonthDOExample();
+		example.setOrderByClause("gmt_report desc");
+		List<ReportUserActiveAreaMonthDO> list = reportUserActiveAreaMonthDOMapper.selectByExample(example);
+		if(list != null && !list.isEmpty())
+			return list.get(0).getGmtReport();
+		return null;
+	}
 }

@@ -62,9 +62,9 @@
 
     <!-- 配置作业-->
     <job:simple id="transactionScheduledJob" description="补偿事务" class="com.lawu.eshop.compensating.transaction.job.TransactionScheduledJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" /> 
-    <job:simple id="AdPuttedJob" description="广告结束" class="com.lawu.eshop.ad.srv.job.AdPuttedJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
-    <job:simple id="AdPuttingJob" description="广告开始" class="com.lawu.eshop.ad.srv.job.AdPuttingJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
-    <job:simple id="AdFlatAndVideoJob" description="平面视频广告下架" class="com.lawu.eshop.ad.srv.job.AdFlatAndVideoJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+    <job:simple id="AdPuttedJob" description="广告结束" class="com.lawu.eshop.ad.srv.job.AdPuttedJob" registry-center-ref="regCenter" cron="3/10 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+    <job:simple id="AdPuttingJob" description="广告开始" class="com.lawu.eshop.ad.srv.job.AdPuttingJob" registry-center-ref="regCenter" cron="6/10 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+    <job:simple id="AdFlatAndVideoJob" description="平面视频广告下架" class="com.lawu.eshop.ad.srv.job.AdFlatAndVideoJob" registry-center-ref="regCenter" cron="9/10 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	
 	<!-- Lock service -->
 	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />

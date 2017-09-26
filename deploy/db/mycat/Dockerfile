@@ -15,7 +15,12 @@ RUN chown -R mycat.mycat /usr/local/mycat
 RUN apt-get update && apt-get install -y --no-install-recommends \
 		ca-certificates \
 		wget \
-	&& rm -rf /var/lib/apt/lists/*
+		supervisor \
+		tcpd \
+        xinetd \
+        && \
+        apt-get clean && \
+        rm -rf /var/lib/apt/lists/
 
 RUN set -x \
 	\
@@ -23,8 +28,13 @@ RUN set -x \
 	&& tar -xvf mycat.tar.gz --strip-components=1 \
 	&& rm mycat.tar.gz*
 
-EXPOSE 8066 9066
+RUN echo 'mycat_status    48700/tcp                       # mycat_status' >> /etc/services
+
+ADD program.conf /etc/supervisor/conf.d/program.conf
+
+EXPOSE 8066 9066 1984 48700
 
 VOLUME ["/usr/local/mycat/conf","/usr/local/mycat/logs"]
 
-CMD ["./bin/mycat", "console"]
+#CMD ["./bin/mycat", "console"]
+CMD ["/usr/bin/supervisord"]

@@ -168,6 +168,4 @@ public class UserRegController extends BaseController {
         return successCreated(userRegService.collectionMerchantEntityRegMonthArea(param));
     }
 
-
-
 }

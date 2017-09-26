@@ -48,7 +48,7 @@ public class ShoppingOrderItemRefundForMerchantDTO {
 	/**
 	 * 申请时间
 	 */
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "申请时间", required = true)
 	private Date gmtCreate;
 	

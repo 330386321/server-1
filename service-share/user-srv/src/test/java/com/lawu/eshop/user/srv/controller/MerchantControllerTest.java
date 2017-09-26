@@ -34,6 +34,7 @@ import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.user.srv.UserSrvApplicationTest;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
@@ -144,7 +145,7 @@ public class MerchantControllerTest {
     @Transactional
     @Rollback
     @Test
-    public void getMerchant() {
+    public void getMerchantByAccount() {
         RequestBuilder request = get("/merchant/getMerchant/13888888888");
         try {
             ResultActions perform = mvc.perform(request);
@@ -507,7 +508,7 @@ public class MerchantControllerTest {
     @Rollback
     @Test
     public void freezeAccount(){
-        RequestBuilder request = put("/merchant/freezeAccount").param("num","123").param("isFreeze","true");
+        RequestBuilder request = put("/merchant/freezeAccount").param("num","123").param("isFreeze","true").param("freezeReason","test");
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -538,6 +539,48 @@ public class MerchantControllerTest {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
             Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getMerchantDetailById() {
+        RequestBuilder request = get("/merchant/getMerchantDetail/200");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void saveLoginLog(){
+        UserLoginLogParam loginLogParam = new UserLoginLogParam();
+        loginLogParam.setUserNum("M0001");
+        loginLogParam.setAccount("13666666666");
+        loginLogParam.setUserType(UserType.MERCHANT.val);
+        loginLogParam.setImei("test");
+        loginLogParam.setPlatform(DataTransUtil.intToByte(1));
+        loginLogParam.setPlatformVer("test");
+        loginLogParam.setAppVer("test");
+        loginLogParam.setCityId(10);
+        loginLogParam.setChannel("test");
+        loginLogParam.setIpAddr("test");
+        String json = JSONObject.toJSONString(loginLogParam);
+        RequestBuilder request = post("/merchant/saveLoginLog").contentType(MediaType.APPLICATION_JSON).content(json);
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());

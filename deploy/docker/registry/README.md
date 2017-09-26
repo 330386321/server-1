@@ -35,13 +35,13 @@ sudo systemctl restart docker
 ----
 ```bash
 sudo docker run -d -p 443:5000 --restart=always --name registry \
--v /etc/localtime:/etc/localtime:ro \
--v ~/certs:/certs \
--v ~/docker-image:/var/lib/registry/docker/registry/v2/repositories \
--e STORAGE_PATH=/opt/docker-image \
--e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.eshop.com.crt \
--e REGISTRY_HTTP_TLS_KEY=/certs/registry.eshop.com.key \
-registry:2
+    -v /etc/localtime:/etc/localtime:ro \
+    -v /usr/local/eshop/certs:/certs \
+    -v /usr/local/eshop/docker-image:/var/lib/registry/docker/registry/v2 \
+    -e STORAGE_PATH=/opt/docker-image \
+    -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/registry.eshop.com.crt \
+    -e REGISTRY_HTTP_TLS_KEY=/certs/registry.eshop.com.key \
+    registry:2
 ```
 
 二、客户机

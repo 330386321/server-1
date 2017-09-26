@@ -29,7 +29,6 @@ import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.service.ReportEarningsService;
 import com.lawu.eshop.utils.DateUtil;
-import com.mysql.fabric.xmlrpc.base.Data;
 
 /**
  * 广告收益测试
@@ -95,7 +94,50 @@ public class ReportEarningsServiceImplTest {
         memberAdRecordDO.setStatus(MemberAdRecordStatusEnum.NONE.getVal());
         memberAdRecordDOMapper.insert(memberAdRecordDO);
        
-        List<ReportEarningsBO>  list = reportEarningsService.getReportEarnings();
+        List<ReportEarningsBO>  list = reportEarningsService.getReportEarnings(DateUtil.getDateFormat(ad.getGmtModified()));
+        Assert.assertNotNull(list);
+        Assert.assertTrue(list.size() > 0);
+
+    }
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void getReportEarningsPacket() {
+		
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setAdCount(2);
+		ad.setPutWay(PutWayEnum.PUT_WAY_COMMON.val);
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_PACKET.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+        adDOMapper.insertSelective(ad);
+        
+        PointPoolDO pointPoolDO=new PointPoolDO();
+        pointPoolDO.setAdId(1l);
+        pointPoolDO.setGmtCreate(new Date());
+        pointPoolDO.setGmtModified(new Date());
+        pointPoolDO.setMerchantId(1002l);
+        pointPoolDO.setOrdinal(0);
+        pointPoolDO.setPoint(BigDecimal.valueOf(15));
+        pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+        pointPoolDO.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
+        pointPoolDO.setMemberId(1l);
+        pointPoolDO.setMemberNum("aaa");
+        pointPoolDOMapper.insert(pointPoolDO);
+       
+        List<ReportEarningsBO>  list = reportEarningsService.getReportEarnings(DateUtil.getDateFormat(ad.getGmtModified()));
         Assert.assertNotNull(list);
         Assert.assertTrue(list.size() > 0);
 

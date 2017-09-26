@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
+import com.lawu.eshop.product.srv.ProductSrvConfig;
 import com.lawu.eshop.product.srv.bo.ProductBO;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
@@ -37,6 +39,7 @@ import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.bo.ProductRelateAdInfoBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.service.ProductService;
+import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.utils.BeanUtil;
 
 /**
@@ -49,6 +52,12 @@ public class ProductController extends BaseController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private SolrService solrService;
+
+    @Autowired
+    private ProductSrvConfig productSrvConfig;
 
     /**
      * 查询商品列表
@@ -117,8 +126,8 @@ public class ProductController extends BaseController {
         productDTO.setName(productBO.getName());
         productDTO.setFeatureImage(productBO.getFeatureImage());
         productDTO.setImagesHeadUrl(productBO.getImagesHeadUrl());
-        productDTO.setMaxPrice(productBO.getMaxPrice());
-        productDTO.setMinPrice(productBO.getMinPrice());
+        productDTO.setMaxPrice(StringUtil.moneyPrecisionConvert(productBO.getMaxPrice()));
+        productDTO.setMinPrice(StringUtil.moneyPrecisionConvert(productBO.getMinPrice()));
         productDTO.setTotalSalesVolume(productBO.getTotalSalesVolume());
         productDTO.setTotalInventory(productBO.getTotalInventory());
         productDTO.setSpec(productBO.getSpec());
@@ -361,4 +370,17 @@ public class ProductController extends BaseController {
         
         return successGet(dto);
     }
+
+    /**
+     * 删除全部索引数据
+     *
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "delAllProductIndex", method = RequestMethod.GET)
+    public Result delAllProductIndex() {
+        solrService.delAllSolrDocs(productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        return successGet();
+    }
+
 }

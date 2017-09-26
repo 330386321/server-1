@@ -27,6 +27,7 @@ public class LoginUserConverter {
         loginUserDTO.setAccount(memberBO.getAccount());
         loginUserDTO.setRyToken(memberBO.getRyToken());
         loginUserDTO.setIsFreeze(memberBO.getIsFreeze());
+        loginUserDTO.setUserSex(memberBO.getUserSex());
         return loginUserDTO;
     }
 

@@ -1,5 +1,6 @@
 package com.lawu.eshop.statistics.srv.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -15,6 +16,7 @@ import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserActiveMonthDOMapper;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveDailyService;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveMonthService;
+import com.lawu.eshop.utils.DateUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/spring-test.xml" })
@@ -34,8 +36,9 @@ public class ReportUserActiveMonthServiceImplTest {
 	public void saveUserActiveMonth() {
         Integer memberCount = 10;
         Integer merchantCount = 20;
+        String date = DateUtil.getDateFormat(new Date());
         for(int i = 0; i < 10; i++) {
-        	reportUserActiveMonthService.saveUserActiveMonth(memberCount, merchantCount);
+        	reportUserActiveMonthService.saveUserActiveMonth(memberCount, merchantCount, date);
         }
         int i = reportUserActiveMonthDOMapper.countByExample(null);
         Assert.assertEquals(10, i);
@@ -52,9 +55,8 @@ public class ReportUserActiveMonthServiceImplTest {
 		List<ReportUserActiveBO> list = reportUserActiveDailyService.getUserActiveListMonth(beginTime, endTime);
 		Assert.assertEquals(10, list.size());
 		beginTime = "2017-6";
-		endTime = "2017-7";
+		endTime = "2017-8";
 		list = reportUserActiveDailyService.getUserActiveListMonth(beginTime, endTime);
 		Assert.assertEquals(10, list.size());
 	}
-	
 }

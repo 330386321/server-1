@@ -15,61 +15,48 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.lawu.eshop.order.srv.OrderSrvConfig;
+import com.lawu.eshop.order.srv.utils.express.kdniao.config.KdniaoConfig;
 
 @Component
 public class KdniaoTrackQueryAPI {
-
-    @Autowired
-    private OrderSrvConfig orderSrvConfig;
-
-    /*
-    //DEMO
-    String EBusinessID = "1272920";
-    String AppKey = "58eeb7b2-950e-40c2-ab94-54b9a20c50c2";
-    String ReqURL = "http://api.kdniao.cc/Ebusiness/EbusinessOrderHandle.aspx";
-
-	public static void main(String[] args) {
-		KdniaoTrackQueryAPI api = new KdniaoTrackQueryAPI();
-
-		try {
-
-			String result = api.getOrderTracesByJson("YD", "39017481149");
-			System.out.print(result);
-
-			ExpressInquiriesDetail detail = JSONObject.parseObject(result, ExpressInquiriesDetail.class);
-
-			System.out.println(detail);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	*/
-
-    /**
-     * Json方式 查询订单物流轨迹
+	
+	@Autowired
+	private KdniaoConfig config;
+	
+	/**
+     * 即时查询
      *
      * @throws Exception
      */
-    public String getOrderTracesByJson(String expCode, String expNo) throws Exception {
+    public String orderTraces(String expCode, String expNo) throws Exception {
         String requestData = "{'OrderCode':'','ShipperCode':'" + expCode + "','LogisticCode':'" + expNo + "'}";
-
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("RequestData", urlEncoder(requestData, "UTF-8"));
-        params.put("EBusinessID", orderSrvConfig.getKdnEbusinessID());
-        params.put("RequestType", "1002");
-        String dataSign = encrypt(requestData, orderSrvConfig.getKdnAppKey(), "UTF-8");
-        params.put("DataSign", urlEncoder(dataSign, "UTF-8"));
-        params.put("DataType", "2");
-
-        String result = sendPost(orderSrvConfig.getKdnReqURL(), params);
-
-        //根据公司业务处理返回的信息......
-
-        return result;
+        return send(requestData, "1002");
     }
-
+    
+    /**
+     * 单号识别
+	 * @throws Exception 
+     */
+	public String recognition(String expNo) throws Exception{
+		String requestData= "{'LogisticCode':'" + expNo + "'}";
+		return send(requestData, "2002");
+	}
+	
+	 /**
+     * 组装请求参数
+	 * @throws Exception 
+     */
+	public String send(String requestData, String requestType) throws Exception{
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("RequestData", urlEncoder(requestData, "UTF-8"));
+		params.put("EBusinessID", config.getEBusinessId());
+		params.put("RequestType", requestType);
+		String dataSign=encrypt(requestData, config.getAppKey(), "UTF-8");
+		params.put("DataSign", urlEncoder(dataSign, "UTF-8"));
+		params.put("DataType", "2");
+		return sendPost(config.getReqUrl(), params);
+	}
+    
     /**
      * MD5加密
      *

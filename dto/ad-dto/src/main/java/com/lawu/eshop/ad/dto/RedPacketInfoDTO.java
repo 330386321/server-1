@@ -2,6 +2,8 @@ package com.lawu.eshop.ad.dto;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.ad.constants.FileTypeEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class RedPacketInfoDTO {
@@ -17,6 +19,15 @@ public class RedPacketInfoDTO {
 	
 	@ApiModelProperty(value = "商家账号")
 	private String inviterAccount;
+
+	@ApiModelProperty(value = "广告附件路径")
+	private String mediaUrl;
+
+	@ApiModelProperty(value = "文件类型")
+	private FileTypeEnum fileType;
+	
+	@ApiModelProperty(value = "视频时间")
+	private String videoTime;
 
 	public BigDecimal getPoint() {
 		return point;
@@ -48,6 +59,30 @@ public class RedPacketInfoDTO {
 
 	public void setInviterAccount(String inviterAccount) {
 		this.inviterAccount = inviterAccount;
+	}
+
+	public String getMediaUrl() {
+		return mediaUrl;
+	}
+
+	public void setMediaUrl(String mediaUrl) {
+		this.mediaUrl = mediaUrl;
+	}
+
+	public FileTypeEnum getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(FileTypeEnum fileType) {
+		this.fileType = fileType;
+	}
+
+	public String getVideoTime() {
+		return videoTime;
+	}
+
+	public void setVideoTime(String videoTime) {
+		this.videoTime = videoTime;
 	}
 	
 	

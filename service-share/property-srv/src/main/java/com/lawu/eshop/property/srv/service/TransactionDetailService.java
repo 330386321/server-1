@@ -10,10 +10,12 @@ import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
+import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
 import com.lawu.eshop.property.srv.bo.TotalSalesGroupByAreaBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 交易明细服务接口
@@ -90,4 +92,5 @@ public interface TransactionDetailService {
 	 */
 	List<UserIncomeExpenditureBO> selectUserIncomeExpenditure(UserIncomeExpenditureQueryParam param);
 
+    List<IncomeMsgBO> getIncomeMsgDataList(String begin, String end);
 }

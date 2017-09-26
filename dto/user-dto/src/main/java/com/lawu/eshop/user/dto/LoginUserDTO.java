@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.dto;
 
+import com.lawu.eshop.user.constants.UserSexEnum;
+
 /**
  * @author Leach
  * @date 2017/3/27
@@ -15,6 +17,8 @@ public class LoginUserDTO {
     private String ryToken;
 
     private Boolean isFreeze;
+
+    private UserSexEnum userSex;
     
     /**
      * 门店类型
@@ -68,4 +72,12 @@ public class LoginUserDTO {
 	public void setMerchantStoreType(MerchantStoreTypeEnum merchantStoreType) {
 		this.merchantStoreType = merchantStoreType;
 	}
+
+    public UserSexEnum getUserSex() {
+        return userSex;
+    }
+
+    public void setUserSex(UserSexEnum userSex) {
+        this.userSex = userSex;
+    }
 }

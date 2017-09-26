@@ -27,8 +27,14 @@ import com.gexin.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.user.param.FansInviteContentExtendParam;
 import com.lawu.eshop.user.srv.UserSrvApplicationTest;
+import com.lawu.eshop.user.srv.domain.FansInviteContentDO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.mapper.FansInviteContentDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.PwdUtil;
 
@@ -48,6 +54,15 @@ public class FansInviteContentControllerTest {
 
     @Autowired
     private MemberDOMapper memberDOMapper;
+
+    @Autowired
+    private FansInviteContentDOMapper fansInviteContentDOMapper;
+
+    @Autowired
+    private MerchantStoreProfileDOMapper merchantStoreProfileDOMapper;
+
+    @Autowired
+    private MerchantStoreDOMapper merchantStoreDOMapper;
     
     @Before
     public void setUp() throws Exception {
@@ -150,7 +165,20 @@ public class FansInviteContentControllerTest {
     @Rollback
     @Test
     public void selectInviteContentById() {
-        RequestBuilder request = post("/fansInviteContent/selectInviteContentById/1/1").param("id", "1").param("relateId", "1");
+        FansInviteContentDO fansInviteContentDO = new FansInviteContentDO();
+        fansInviteContentDO.setMerchantId(1L);
+        fansInviteContentDOMapper.insertSelective(fansInviteContentDO);
+
+        MerchantStoreProfileDO merchantStoreProfileDO = new MerchantStoreProfileDO();
+        merchantStoreProfileDO.setMerchantId(1L);
+        merchantStoreProfileDO.setManageType((byte) 1);
+        merchantStoreProfileDOMapper.insertSelective(merchantStoreProfileDO);
+
+        MerchantStoreDO merchantStoreDO = new MerchantStoreDO();
+        merchantStoreDO.setMerchantId(1L);
+        merchantStoreDOMapper.insertSelective(merchantStoreDO);
+
+        RequestBuilder request = post("/fansInviteContent/selectInviteContentById/1/" + fansInviteContentDO.getId());
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
@@ -160,4 +188,27 @@ public class FansInviteContentControllerTest {
             Assert.fail(e.getMessage());
         }
     }
+
+    //SUBDATE函数不支持
+    /*@Transactional
+    @Rollback
+    @Test
+    public void dealOverdueFansInvite() {
+        FansInviteContentDO inviteContentDO = new FansInviteContentDO();
+        inviteContentDO.setMerchantId(200L);
+        inviteContentDO.setMerchantNum("B0001");
+        inviteContentDO.setIsOverdue(false);
+        inviteContentDO.setGmtCreate(DateUtil.stringToDate("2017-01-01 00:00:00"));
+        fansInviteContentDOMapper.insertSelective(inviteContentDO);
+
+        RequestBuilder request = get("/fansInviteContent/dealOverdueFansInvite");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }*/
 }

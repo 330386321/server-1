@@ -31,23 +31,23 @@ public class BusinessDepositDetailDTO {
 	private String remark;
 
 	@ApiModelProperty(value = "支付时间")
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date gmtPay;
 
 	@ApiModelProperty(value = "核实时间")
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date gmtVerify;
 
 	@ApiModelProperty(value = "退款时间")
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date gmtRefund;
 
 	@ApiModelProperty(value = "受理时间")
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date gmtAccpet;
 
 	@ApiModelProperty(value = "退款申请完成时间")
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date gmtResult;
 	
 	public Long getId() {

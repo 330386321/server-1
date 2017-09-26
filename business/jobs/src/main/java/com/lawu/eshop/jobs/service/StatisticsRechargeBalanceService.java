@@ -1,5 +1,6 @@
 package com.lawu.eshop.jobs.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -34,5 +35,11 @@ public interface StatisticsRechargeBalanceService {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.DELETE, value = "rechargeBalance/deleteMonthByReportDate")
 	Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate);	
+	
+	@RequestMapping(value = "rechargeBalance/getLastRechargeDay", method = RequestMethod.GET)
+	public Date getLastRechargeDay();
+	
+	@RequestMapping(value = "rechargeBalance/getLastRechargeMonth", method = RequestMethod.GET)
+	public Date getLastRechargeMonth();
 	
 }

@@ -15,8 +15,10 @@ import com.lawu.eshop.statistics.srv.domain.ReportPointConsumeDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportPointConsumeDailyDOExample;
 import com.lawu.eshop.statistics.srv.domain.ReportPointConsumeMonthDO;
 import com.lawu.eshop.statistics.srv.domain.ReportPointConsumeMonthDOExample;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportNewDateDOView;
 import com.lawu.eshop.statistics.srv.mapper.ReportPointConsumeDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportPointConsumeMonthDOMapper;
+import com.lawu.eshop.statistics.srv.mapper.extend.PointConsumeMonthDOMapperExtend;
 import com.lawu.eshop.statistics.srv.service.PointConsumeService;
 import com.lawu.eshop.utils.DateUtil;
 
@@ -27,6 +29,9 @@ public class PointConsumeServiceImpl implements PointConsumeService {
 	private ReportPointConsumeDailyDOMapper reportPointConsumeDailyDOMapper;
 	@Autowired
 	private ReportPointConsumeMonthDOMapper reportPointConsumeMonthDOMapper;
+	@Autowired
+	private PointConsumeMonthDOMapperExtend pointConsumeMonthDOMapperExtend;
+	
 	
 	@Override
 	public void saveDaily(ReportKCommonParam param) {
@@ -134,5 +139,35 @@ public class PointConsumeServiceImpl implements PointConsumeService {
 		dto.setBdate(bdate);
 		dto.setEdate(edate);
 		return dto;
+	}
+
+	@Override
+	public Date getDaily() {
+		ReportPointConsumeDailyDOExample example = new ReportPointConsumeDailyDOExample();
+		example.setOrderByClause("gmt_report desc");
+		List<ReportPointConsumeDailyDO> list = reportPointConsumeDailyDOMapper.selectByExample(example);
+		if(list != null && !list.isEmpty()) 
+			return list.get(0).getGmtReport();
+		return null;
+	}
+
+	@Override
+	public Date getMonth() {
+		ReportPointConsumeMonthDOExample example = new ReportPointConsumeMonthDOExample();
+		example.setOrderByClause("gmt_report desc");
+		List<ReportPointConsumeMonthDO> list = reportPointConsumeMonthDOMapper.selectByExample(example);
+		if(list != null && !list.isEmpty()) 
+			return list.get(0).getGmtReport();
+		return null;
+	}
+	
+	@Override
+	public ReportNewDateDOView getReportDatePointConsumeDaily() {
+		return pointConsumeMonthDOMapperExtend.getReportDatePointConsumeDaily();
+	}
+
+	@Override
+	public ReportNewDateDOView getReportDatePointConsumeMonth() {
+		return pointConsumeMonthDOMapperExtend.getReportDatePointConsumeMonth();
 	}
 }

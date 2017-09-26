@@ -5,5 +5,5 @@ package com.lawu.eshop.statistics.srv.service;
  * @date 2017/6/30.
  */
 public interface ReportUserActiveMonthService {
-    void saveUserActiveMonth(Integer memberCount, Integer merchantCount);
+    void saveUserActiveMonth(Integer memberCount, Integer merchantCount, String reportDate);
 }

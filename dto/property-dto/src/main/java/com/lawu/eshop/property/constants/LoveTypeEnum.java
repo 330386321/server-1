@@ -16,7 +16,8 @@ public enum LoveTypeEnum {
 	SALES_COMMISSION((byte) 0x03, "推荐E友收益"),
 	VOLUME_COMMISSION((byte) 0x04, "推荐商家收益"),
 	AD_QZ((byte) 0x05, "抢赞"),
-	RED_PACKAGE((byte) 0x06, "红包");
+	RED_PACKAGE((byte) 0x06, "红包"),
+	MEMBER_FANS((byte) 0x07, "成为粉丝");
 
 	private Byte value;
 

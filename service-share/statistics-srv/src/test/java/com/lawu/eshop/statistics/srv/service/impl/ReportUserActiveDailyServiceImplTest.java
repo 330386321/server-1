@@ -19,6 +19,7 @@ import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaMonthBO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaMonthDO;
+import com.lawu.eshop.statistics.srv.domain.ReportUserActiveDailyDO;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserActiveDailyDOMapper;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveAreaDailyService;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveAreaMonthService;
@@ -41,29 +42,32 @@ public class ReportUserActiveDailyServiceImplTest {
 	@Autowired
 	private ReportUserActiveAreaMonthService reportUserActiveAreaMonthService;
 	
-	@Transactional
-	@Rollback
-	@Test
-	public void saveUserActiveDaily() {
-		Integer memberCount = 10;
-		Integer merchantCount = 20;
-		reportUserActiveDailyService.saveUserActiveDaily(memberCount, merchantCount);
-		int i = reportUserActiveDailyDOMapper.countByExample(null);
-		Assert.assertEquals(1, i);
-	}
+//	@Transactional
+//	@Rollback
+//	@Test
+//	public void saveUserActiveDaily() {
+//		Integer memberCount = 10;
+//		Integer merchantCount = 20;
+//		reportUserActiveDailyService.saveUserActiveDaily(memberCount, merchantCount);
+//		int i = reportUserActiveDailyDOMapper.countByExample(null);
+//		Assert.assertEquals(1, i);
+//	}
 
 	@Transactional
 	@Rollback
 	@Test
 	public void getUserActiveListDaily() {
-		saveUserActiveDaily();
+		ReportUserActiveDailyDO userActiveDailyDO = new ReportUserActiveDailyDO();
+        userActiveDailyDO.setMemberCount(10);
+        userActiveDailyDO.setMerchantCount(20);
+        userActiveDailyDO.setGmtCreate(new Date());
+        userActiveDailyDO.setGmtReport(DateUtil.getDayAfter(DateUtil.getNowDate()));
+        reportUserActiveDailyDOMapper.insertSelective(userActiveDailyDO);
 		String beginTime = "";
 		String endTime = "";
-		List<ReportUserActiveBO> list = reportUserActiveDailyService.getUserActiveListDaily(beginTime, endTime);
-		Assert.assertEquals(1, list.size());
 		beginTime = DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth());
 		endTime = DateUtil.getDateFormat(DateUtil.getLastDayOfMonth());
-		list = reportUserActiveDailyService.getUserActiveListDaily(beginTime, endTime);
+		List<ReportUserActiveBO> list = reportUserActiveDailyService.getUserActiveListDaily(beginTime, endTime);
 		Assert.assertEquals(1, list.size());
 	}
 

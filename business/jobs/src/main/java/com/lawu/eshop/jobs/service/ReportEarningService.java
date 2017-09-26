@@ -1,5 +1,6 @@
 package com.lawu.eshop.jobs.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -24,4 +25,10 @@ public interface ReportEarningService {
 	
 	@RequestMapping(value = "reportEarning/getDailyList", method = RequestMethod.GET)
 	Result<List<ReportEarningsDailyDTO>> getDailyList(@RequestParam("reportDate") String reportDate);
+	
+	@RequestMapping(value = "reportEarning/getDaily", method = RequestMethod.GET)
+	public Date getDaily();
+	
+	@RequestMapping(value = "reportEarning/getMonth", method = RequestMethod.GET)
+	public Date getMonth();
 }

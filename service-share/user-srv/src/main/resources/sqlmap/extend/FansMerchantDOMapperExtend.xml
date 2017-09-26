@@ -80,27 +80,28 @@
 
 	<select resultMap="BaseResultMap"
 			parameterType="com.lawu.eshop.user.param.ListInviteFansRealParam" id="pageListInviteFans">
-		select id as
-		memberId,num,account,region_path,region_name,nickname,headimg,level
-		from member where id not in(select member_id from fans_merchant where merchant_id = #{merchantId,jdbcType=BIGINT})
-		<if test="regionPath != null and regionPath != ''">
-			and region_path like CONCAT(#{regionPath,jdbcType=VARCHAR},'%')
-		</if>
-		<if test="sex != 1">
-			and sex = #{sex,jdbcType=TINYINT}
-		</if>
-		<if test="ageLimit == true">
-			and TIMESTAMPDIFF(YEAR,birthday,CURRENT_DATE) &gt;=
-			#{startAge,jdbcType=INTEGER} and
-			TIMESTAMPDIFF(YEAR,birthday,CURRENT_DATE) &lt;=
-			#{endAge,jdbcType=INTEGER}
-		</if>
-		<if test="inviteCount != null">
-			limit #{inviteCount,jdbcType=INTEGER}
-		</if>
-		<if test="inviteCount == null">
-			limit #{offset,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
-		</if>
+		select 	memberId,num,account,region_path,region_name,nickname,headimg,level,gmt_create from
+		(
+			select id as
+			memberId,num,account,region_path,region_name,nickname,headimg,level,gmt_create
+			from member where id not in(select member_id from fans_merchant where merchant_id = #{merchantId,jdbcType=BIGINT})
+			<if test="regionPath != null and regionPath != ''">
+				and region_path like CONCAT(#{regionPath,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="sex != 1">
+				and sex = #{sex,jdbcType=TINYINT}
+			</if>
+			<if test="ageLimit == true">
+				and TIMESTAMPDIFF(YEAR,birthday,CURRENT_DATE) &gt;=
+				#{startAge,jdbcType=INTEGER} and
+				TIMESTAMPDIFF(YEAR,birthday,CURRENT_DATE) &lt;=
+				#{endAge,jdbcType=INTEGER}
+			</if>
+			<if test="inviteCount != null">
+				limit #{inviteCount,jdbcType=INTEGER}
+			</if>
+		) t
+		limit #{offset,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
 	</select>
 
 	<select resultType="java.lang.Integer" parameterType="com.lawu.eshop.user.param.ListInviteFansRealParam"
@@ -160,7 +161,7 @@
 			fans_merchant
 			WHERE
 			DATE_FORMAT(gmt_create, "%Y%m") =
-			#{formatDate} and merchant_id = #{merchantId}
+			#{formatDate} and merchant_id = #{merchantId} and status = 1
 			GROUP BY
 			DATE_FORMAT(gmt_create, "%d")
 		</if>
@@ -173,37 +174,30 @@
 			fans_merchant
 			WHERE
 			DATE_FORMAT(gmt_create, "%Y") =
-			#{formatDate} and merchant_id = #{merchantId}
+			#{formatDate} and merchant_id = #{merchantId} and status = 1
 			GROUP BY
 			DATE_FORMAT(gmt_create, "%m")
 		</if>
 	</select>
 
 	<select id="fansRiseSource" resultMap="ReportBaseResultMap"
-		parameterType="java.lang.String">
-		<if test="flag == 1">
+		parameterType="java.lang.Long">
 			SELECT
 			channel as keyTxt,
 			count(1) AS num
 			FROM
 			fans_merchant
 			WHERE
-			DATE_FORMAT(gmt_create, "%Y%m%d") = #{formatDate} and
-			merchant_id = #{merchantId}
+			merchant_id = #{merchantId}  and status = 1
 			GROUP BY
 			channel
-		</if>
-		<if test="flag == 2">
-			SELECT
-			channel as keyTxt,
-			count(1) AS num
-			FROM
-			fans_merchant
-			WHERE
-			DATE_FORMAT(gmt_create, "%Y%m") = #{formatDate} and merchant_id
-			= #{merchantId}
-			GROUP BY
-			channel
-		</if>
+	</select>
+
+	<select id="countOverdueFans" parameterType="com.lawu.eshop.user.param.UserFansParam" resultType="java.lang.Integer">
+		SELECT count(1) FROM fans_merchant WHERE merchant_id = #{merchantId} and status = 0 and channel = 2 and gmt_create &lt;= SUBDATE(#{gmtCreate},interval 24 hour);
+	</select>
+
+	<select id="delOverdueFans" parameterType="com.lawu.eshop.user.param.UserFansParam">
+		DELETE FROM fans_merchant WHERE merchant_id = #{merchantId} and status = 0 and channel = 2 and gmt_create &lt;= SUBDATE(#{gmtCreate},interval 24 hour);
 	</select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.service.impl.transaction;
 
+import com.lawu.eshop.property.constants.LoveTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,8 @@ public class MemberGetRedPacketTransactionFollowServiceImpl extends AbstractTran
         param.setPoint(notification.getMoney().toString());
         param.setUserNum(notification.getUserNum());
         param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.RED_SWEEP);
-        propertyInfoDataService.doHanlderAddBalance(param);
+        param.setLoveTypeEnum(LoveTypeEnum.RED_PACKAGE);
+        param.setTempBizId("0");
+        propertyInfoDataService.doHanlderBalanceIncome(param);
     }
 }

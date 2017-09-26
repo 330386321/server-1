@@ -17,7 +17,7 @@ import com.lawu.eshop.pay.sdk.weixin.sdk.common.Signature;
  *
  */
 public class RefundReqData {
-	//public static final Logger logger = Logger.getLogger(RefundReqData.class);
+	public static final Logger logger = Logger.getLogger(RefundReqData.class);
     //每个字段具体的意思请查看API文档
     private String appid = "";
     private String mch_id = "";
@@ -31,14 +31,14 @@ public class RefundReqData {
 
     /**
      * 请求退款服务
-     * @param transactionID 是微信系统为每一笔支付交易分配的订单号，通过这个订单号可以标识这笔交易，它由支付订单API支付成功时返回的数据里面获取到。建议优先使用
-     * @param outTradeNo 商户系统内部的订单号,transaction_id 、out_trade_no 二选一，如果同时存在优先级：transaction_id>out_trade_no
-     * @param deviceInfo 微信支付分配的终端设备号，与下单一致
-     * @param outRefundNo 商户系统内部的退款单号，商户系统内部唯一，同一退款单号多次请求只退一笔
-     * @param totalFee 订单总金额，单位为分
-     * @param refundFee 退款总金额，单位为分,可以做部分退款
-     * @param opUserID 操作员帐号, 默认为商户号
-     * @param refundFeeType 货币类型，符合ISO 4217标准的三位字母代码，默认为CNY（人民币）
+     * @param appId
+     * @param mchId
+     * @param transactionID
+     * @param outRefundNo
+     * @param totalFee
+     * @param refundFee
+     * @param opUserID
+     * @param key_app
      */
     public RefundReqData(String appId,String mchId,String transactionID,String outRefundNo,int totalFee,int refundFee,String opUserID,String key_app){
 

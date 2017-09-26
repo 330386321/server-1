@@ -1,7 +1,8 @@
 package com.lawu.eshop.order.srv.utils.express.kdniao.bo;
 
-import java.io.Serializable;
 import java.util.List;
+
+import com.alibaba.fastjson.annotation.JSONField;
 
 /**
  * 快递鸟实时查询封装数据
@@ -9,102 +10,131 @@ import java.util.List;
  * @author Sunny
  * @date 2017/4/10
  */
-public class ExpressInquiriesDetail implements Serializable {
+public class ExpressInquiriesDetail {
 	
-	private static final long serialVersionUID = 1L;
-	
-
 	/**
-	 * 用户ID
+	 * 电商用户ID
 	 */
-	private String EBusinessID;
+	@JSONField(name = "EBusinessID")
+	private String eBusinessId;
 	
 	/**
 	 * 订单编号
 	 */
-	private String OrderCode;
+	@JSONField(name = "OrderCode")
+	private String orderCode;
 	
 	/**
 	 * 快递公司编码
 	 */
-	private String ShipperCode;
+	@JSONField(name = "ShipperCode")
+	private String shipperCode;
+	
+	/**
+	 * 物流运单号
+	 */
+	@JSONField(name = "LogisticCode")
+	private String logisticCode;
+	
+	/**
+	 * 用户标识
+	 */
+	@JSONField(name = "CallBack")
+	private String callBack;
 	
 	/**
 	 * 成功与否
 	 */
-	private Boolean Success;
+	@JSONField(name = "Success")
+	private Boolean success;
 	
 	/**
 	 * 失败原因
 	 */
-	private String Reason;
+	@JSONField(name = "Reason")
+	private String reason;
 	
 	/**
 	 * 物流状态
-	 * 
-	 * 0-此单无物流信息,2-在途中,3-签收,4-问题件
 	 */
-	private String State;
+	@JSONField(name = "State")
+	private String state;
 	
 	/**
 	 * 物流轨迹
 	 */
-	private List<Trace> Traces;
+	@JSONField(name = "Traces")
+	private List<Trace> traces;
 
-	public String getEBusinessID() {
-		return EBusinessID;
+	public String geteBusinessId() {
+		return eBusinessId;
 	}
 
-	public void setEBusinessID(String eBusinessID) {
-		EBusinessID = eBusinessID;
+	public void seteBusinessId(String eBusinessId) {
+		this.eBusinessId = eBusinessId;
 	}
 
 	public String getOrderCode() {
-		return OrderCode;
+		return orderCode;
 	}
 
 	public void setOrderCode(String orderCode) {
-		OrderCode = orderCode;
+		this.orderCode = orderCode;
 	}
 
 	public String getShipperCode() {
-		return ShipperCode;
+		return shipperCode;
 	}
 
 	public void setShipperCode(String shipperCode) {
-		ShipperCode = shipperCode;
+		this.shipperCode = shipperCode;
+	}
+
+	public String getLogisticCode() {
+		return logisticCode;
+	}
+
+	public void setLogisticCode(String logisticCode) {
+		this.logisticCode = logisticCode;
+	}
+
+	public String getCallBack() {
+		return callBack;
+	}
+
+	public void setCallBack(String callBack) {
+		this.callBack = callBack;
 	}
 
 	public Boolean getSuccess() {
-		return Success;
+		return success;
 	}
 
 	public void setSuccess(Boolean success) {
-		Success = success;
+		this.success = success;
 	}
 
 	public String getReason() {
-		return Reason;
+		return reason;
 	}
 
 	public void setReason(String reason) {
-		Reason = reason;
+		this.reason = reason;
 	}
 
 	public String getState() {
-		return State;
+		return state;
 	}
 
 	public void setState(String state) {
-		State = state;
+		this.state = state;
 	}
 
 	public List<Trace> getTraces() {
-		return Traces;
+		return traces;
 	}
 
 	public void setTraces(List<Trace> traces) {
-		Traces = traces;
+		this.traces = traces;
 	}
-	
 }

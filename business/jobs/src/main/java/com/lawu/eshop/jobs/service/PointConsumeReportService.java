@@ -17,7 +17,8 @@ public interface PointConsumeReportService {
 	 * @date 2017年6月29日 下午5:07:10
 	 */
 	void executeCollectMonthData();
-
+	
+	
 	
 
 }

@@ -5,9 +5,11 @@ import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
+import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
@@ -153,11 +155,69 @@ public class ShoppingOrderExtendConverter {
 		rtn.setPaymentMethod(shoppingOrderExtendBO.getPaymentMethod());
 		rtn.setRemark(shoppingOrderExtendBO.getRemark());
 		
+		int quantity = 0;
+		if (shoppingOrderExtendBO.getItems() != null) {
+			if (shoppingOrderExtendBO.getItems() != null) {
+				rtn.setItems(new ArrayList<>());
+				for (ShoppingOrderItemBO item : shoppingOrderExtendBO.getItems()) {
+					quantity += item.getQuantity();
+					rtn.getItems().add(ShoppingOrderItemConverter.convert(item));
+				}
+			}
+		}
+		rtn.setAmountOfGoods(quantity);
+		
 		// 如果物流信息存在
 		if (expressInquiriesDetailBO != null && expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
-			rtn.setState(expressInquiriesDetailBO.getState());
-			rtn.setTrace(ExpressInquiriesDetailConverter.convert(expressInquiriesDetailBO.getTraces().get(0)));
+			rtn.setState(ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetailBO.getState().getValue()));
+			rtn.setTrace(ExpressConverter.convert(expressInquiriesDetailBO.getTraces().get(0)));
 		}
+		
+		return rtn;
+	}
+	
+	/**
+	 * 
+	 * @param shoppingOrderExtendBO
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月6日
+	 */
+	public static ShoppingOrderDetailDTO convert(ShoppingOrderExtendBO shoppingOrderExtendBO) {
+		ShoppingOrderDetailDTO rtn = null;
+		
+		if (shoppingOrderExtendBO == null) {
+			return rtn;
+		}
+
+		rtn = new ShoppingOrderDetailDTO();
+		rtn.setId(shoppingOrderExtendBO.getId());
+		rtn.setMemberNum(shoppingOrderExtendBO.getMemberNum());
+		rtn.setMerchantId(shoppingOrderExtendBO.getMerchantId());
+		rtn.setMerchantStoreId(shoppingOrderExtendBO.getMerchantStoreId());
+		rtn.setMerchantNum(shoppingOrderExtendBO.getMerchantNum());
+		rtn.setMerchantName(shoppingOrderExtendBO.getMerchantName());
+		rtn.setConsigneeName(shoppingOrderExtendBO.getConsigneeName());
+		rtn.setConsigneeAddress(shoppingOrderExtendBO.getConsigneeAddress());
+		rtn.setConsigneeMobile(shoppingOrderExtendBO.getConsigneeMobile());
+		rtn.setFreightPrice(shoppingOrderExtendBO.getFreightPrice());
+		rtn.setCommodityTotalPrice(shoppingOrderExtendBO.getCommodityTotalPrice());
+		rtn.setOrderTotalPrice(shoppingOrderExtendBO.getOrderTotalPrice());
+		rtn.setActualAmount(shoppingOrderExtendBO.getActualAmount());
+		rtn.setIsNoReasonReturn(shoppingOrderExtendBO.getIsNoReasonReturn());
+		rtn.setIsDone(shoppingOrderExtendBO.getIsDone());
+		rtn.setOrderNum(shoppingOrderExtendBO.getOrderNum());
+		rtn.setIsNeedsLogistics(shoppingOrderExtendBO.getIsNeedsLogistics());
+		rtn.setWaybillNum(shoppingOrderExtendBO.getWaybillNum());
+		rtn.setExpressCompanyId(shoppingOrderExtendBO.getExpressCompanyId());
+		rtn.setExpressCompanyName(shoppingOrderExtendBO.getExpressCompanyName());
+		rtn.setGmtPayment(shoppingOrderExtendBO.getGmtPayment());
+		rtn.setGmtTransport(shoppingOrderExtendBO.getGmtTransport());
+		rtn.setGmtTransaction(shoppingOrderExtendBO.getGmtTransaction());
+		rtn.setGmtCreate(shoppingOrderExtendBO.getGmtCreate());
+		rtn.setOrderStatus(shoppingOrderExtendBO.getOrderStatus());
+		rtn.setPaymentMethod(shoppingOrderExtendBO.getPaymentMethod());
+		rtn.setRemark(shoppingOrderExtendBO.getRemark());
 		
 		int quantity = 0;
 		if (shoppingOrderExtendBO.getItems() != null) {
@@ -193,6 +253,7 @@ public class ShoppingOrderExtendConverter {
 		rtn.setIsNeedsLogistics(shoppingOrderExtendBO.getIsNeedsLogistics());
 		rtn.setIsNoReasonReturn(shoppingOrderExtendBO.getIsNoReasonReturn());
 		rtn.setMerchantId(shoppingOrderExtendBO.getMerchantId());
+		rtn.setMerchantNum(shoppingOrderExtendBO.getMemberNum());
 		rtn.setMerchantName(shoppingOrderExtendBO.getMerchantName());
 		rtn.setMerchantStoreId(shoppingOrderExtendBO.getMerchantStoreId());
 		rtn.setOrderStatus(shoppingOrderExtendBO.getOrderStatus());

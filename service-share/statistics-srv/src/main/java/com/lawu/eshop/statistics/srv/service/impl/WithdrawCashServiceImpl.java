@@ -274,4 +274,23 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 		return reportAreaWithdrawBO;
 	}
 
+	@Override
+	public Date getLastReportWithdraw() {
+		ReportWithdrawDailyDOExample example = new ReportWithdrawDailyDOExample();
+		example.setOrderByClause("gmt_report desc");
+		List<ReportWithdrawDailyDO> list = reportWithdrawDailyDOMapper.selectByExample(example);
+		if(list != null && !list.isEmpty())
+			return list.get(0).getGmtReport();
+		return null;
+	}
+
+	@Override
+	public Date getLastReportWithdrawMonth() {
+		ReportWithdrawMonthDOExample example = new ReportWithdrawMonthDOExample();
+		example.setOrderByClause("gmt_report desc");
+		List<ReportWithdrawMonthDO> list = reportWithdrawMonthDOMapper.selectByExample(example);
+		if(list != null && !list.isEmpty())
+			return list.get(0).getGmtReport();
+		return null;
+	}
 }

@@ -15,6 +15,7 @@ import com.lawu.eshop.jobs.service.MerchantStoreService;
 import com.lawu.eshop.jobs.service.PropertySrvService;
 import com.lawu.eshop.jobs.service.ReportAdEarningsCommissionService;
 import com.lawu.eshop.jobs.service.ReportAdEarningsService;
+import com.lawu.eshop.property.constants.LoveTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.dto.ReportAdEarningsPointDTO;
 import com.lawu.eshop.property.param.ReportAdEarningsPointParam;
@@ -84,10 +85,13 @@ public class ReportAdEarningsServiceImpl extends BaseController implements Repor
 					if (reportAdDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_FLAT
 							|| reportAdDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_VIDEO) {
 						reportAdEarningsPointParam.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADVERTISING);
+						reportAdEarningsPointParam.setLoveTypeEnum(LoveTypeEnum.AD_CLICK);
 					} else if (reportAdDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_PRAISE) {
 						reportAdEarningsPointParam.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.AD_QZ);
+						reportAdEarningsPointParam.setLoveTypeEnum(LoveTypeEnum.AD_QZ);
 					} else {
 						reportAdEarningsPointParam.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.RED_SWEEP);
+						reportAdEarningsPointParam.setLoveTypeEnum(LoveTypeEnum.RED_PACKAGE);
 					}
 					Result<ReportAdEarningsPointDTO> ponitResult = propertySrvService.getReportAdEarningsPoint(reportAdEarningsPointParam);
 					reportAdEarningsParam.setUserTotalPoint(ponitResult.getModel().getUserTotalPoint());
@@ -96,7 +100,8 @@ public class ReportAdEarningsServiceImpl extends BaseController implements Repor
 					// 用户总收益+爱心账户收益>投放金额*60%时为异常数据
 					if (ponitResult.getModel().getUserTotalPoint()
 							.add(ponitResult.getModel().getLoveTotalPoint()).compareTo(
-									reportAdDTO.getTotalPoint().multiply(BigDecimal.valueOf(0.6))) == 1) {
+									reportAdDTO.getTotalPoint().multiply(BigDecimal.valueOf(0.6))) == 1 &&
+									(reportAdDTO.getStatusEnum()==com.lawu.eshop.ad.constants.AdStatusEnum.AD_STATUS_PUTED || reportAdDTO.getStatusEnum()==com.lawu.eshop.ad.constants.AdStatusEnum.AD_STATUS_OUT)) {
 						reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.NORMAL);
 					} else {
 						reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.ANOMALY);

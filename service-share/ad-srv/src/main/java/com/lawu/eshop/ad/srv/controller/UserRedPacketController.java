@@ -95,10 +95,9 @@ public class UserRedPacketController extends BaseController {
 	 * 
 	 * @return
 	 */
-	@Deprecated
 	@RequestMapping(value = "executeUserRedPacketData", method = RequestMethod.POST)
 	public Result executeUserRedPacketData() {
-		//userRedPacketService.executeUserRedPacketData();
+		userRedPacketService.executeUserRedPacketData();
 		return successCreated();
 	}
 
@@ -111,10 +110,23 @@ public class UserRedPacketController extends BaseController {
 	 */
 	@RequestMapping(value = "getUserRedpacketMoney", method = RequestMethod.POST)
 	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMoney(@RequestParam Long redPacketId, @RequestParam String userNum) {
-		UserRedpacketMaxMoney getMoney = userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
+		boolean flag = userRedPacketService.isExistsRedPacket(redPacketId);
 		UserRedpacketMaxMoneyDTO dto =new UserRedpacketMaxMoneyDTO();
-		dto.setMoney(getMoney.getMaxMoney());
-		dto.setFlag(getMoney.isFlag());
+		if(!flag){  //红包领取完了
+			dto.setGetAll(flag);
+			return successCreated(dto);
+		}
+		boolean userIsGet = userRedPacketService.checkUserGetRedpacket(redPacketId, userNum);
+		if(!userIsGet){ //用户已经领取了红包
+			dto.setFlag(userIsGet);
+			return successCreated(dto);
+		}
+		
+		UserRedpacketMaxMoney getMoney = userRedPacketService.getUserRedpacketMoney(redPacketId, userNum);
+		if(!getMoney.isSysWords() && getMoney.isFlag()){
+			dto.setMoney(getMoney.getMaxMoney());
+			dto.setFlag(getMoney.isFlag());
+		}
 		return successCreated(dto);
 	}
 	
@@ -124,7 +136,7 @@ public class UserRedPacketController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.POST)
-	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMaxMoney(@RequestParam Long redPacketId) {
+	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMaxMoney(@RequestParam("redPacketId") Long redPacketId) {
 		UserRedpacketMaxMoney maxMoney =userRedPacketService.getUserRedpacketMaxMoney(redPacketId);
 		UserRedpacketMaxMoneyDTO dto =new UserRedpacketMaxMoneyDTO();
 		dto.setMoney(maxMoney.getMaxMoney());

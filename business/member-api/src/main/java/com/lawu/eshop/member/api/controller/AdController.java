@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.FileTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
@@ -37,6 +41,7 @@ import com.lawu.eshop.ad.param.AdPointForeignParam;
 import com.lawu.eshop.ad.param.AdPointParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSolrParam;
+import com.lawu.eshop.ad.param.AdSolrRealParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.param.RegisterGetRedPacketParam;
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -50,6 +55,7 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.member.api.MemberApiConfig;
+import com.lawu.eshop.member.api.service.AdCountRecordService;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdLexiconService;
 import com.lawu.eshop.member.api.service.AdService;
@@ -59,21 +65,16 @@ import com.lawu.eshop.member.api.service.FansMerchantService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantService;
-import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.member.api.service.PraiseDoHanlderMinusPointService;
 import com.lawu.eshop.member.api.service.PropertyInfoDataService;
-import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.VerifyCodeService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
-import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
-import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.UserRedPacketDTO;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.utils.DateUtil;
@@ -105,9 +106,6 @@ public class AdController extends BaseController {
 	private MemberService memberService;
 
 	@Autowired
-	private MerchantStoreService merchantStoreService;
-
-	@Autowired
 	private FansMerchantService fansMerchantService;
 
 	@Autowired
@@ -118,9 +116,6 @@ public class AdController extends BaseController {
 
 	@Autowired
 	private PropertyInfoDataService propertyInfoDataService;
-
-	@Autowired
-	private PropertyInfoService propertyInfoService;
 
 	@Autowired
 	private VerifyCodeService verifyCodeService;
@@ -136,9 +131,13 @@ public class AdController extends BaseController {
 	
 	@Autowired
 	private AdLexiconService adLexiconService;
+
 	
+	@Autowired
+	private PraiseDoHanlderMinusPointService praiseDoHanlderMinusPointService;
+
 	/**
-	 * @see selectEgainAd
+	 * @see
 	 */
 	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
@@ -157,7 +156,18 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectChoiceness", method = RequestMethod.GET)
 	public Result<Page<AdDTO>> selectChoiceness(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdChoicenessParam param) {
-		return adExtendService.selectChoiceness(param);
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
+		AdSolrRealParam realParam = new AdSolrRealParam();
+		realParam.setMemberId(memberId);
+		realParam.setLongitude(param.getLongitude());
+		realParam.setLatitude(param.getLatitude());
+		realParam.setRegionPath(param.getTransRegionPath());
+		realParam.setCurrentPage(param.getCurrentPage());
+		realParam.setPageSize(param.getPageSize());
+		realParam.setMerchantIds(merchantIds);
+		return adService.listAd(realParam);
+		//return adExtendService.selectChoiceness(param);
 	}
 
 	@Deprecated
@@ -167,7 +177,19 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectListPointTotle", method = RequestMethod.GET)
 	public Result<List<AdDTO>> selectListPointTotle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPointParam adPointParam) {
-		return adExtendService.selectAdTopList(adPointParam);
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
+		AdSolrRealParam param = new AdSolrRealParam();
+		param.setMemberId(memberId);
+		param.setLongitude(adPointParam.getLongitude());
+		param.setLatitude(adPointParam.getLatitude());
+		param.setRegionPath(adPointParam.getTransRegionPath());
+		param.setOrderTypeEnum(adPointParam.getOrderTypeEnum());
+		param.setCurrentPage(adPointParam.getCurrentPage());
+		param.setPageSize(adPointParam.getPageSize());
+		param.setMerchantIds(merchantIds);
+		return adService.listAdRank(param);
+		//return adExtendService.selectAdTopList(adPointParam);
 	}
 
 
@@ -200,14 +222,6 @@ public class AdController extends BaseController {
     		adEgainDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
     		adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
     	}
-    	if(StringUtils.isNotEmpty(adEgainDTO.getVideoImgUrl())){
-    		String url=memberApiConfig.getVideoUploadUrl()+"/"+adEgainDTO.getMediaUrl();
-    		File f= new File(url); 
-    		if (f.exists() && f.isFile()){  
-    	        adEgainDTO.setFileSize(f.length()/1024/1024);
-    	    }
-    		adEgainDTO.setVideoTime(VideoCutImgUtil.getVideoTime(url, memberApiConfig.getFfmpegUrl()));
-    	}
 	    
 		Result<Set<String>> rs= adViewService.getAdviews(id.toString());
 		 
@@ -235,7 +249,23 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.GET)
 	public Result<Page<AdPraiseDTO>> selectAdPraiseList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPraiseParam adPraiseParam) {
-		return adExtendService.selectAdPraiseList(adPraiseParam);
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
+		AdSolrRealParam param = new AdSolrRealParam();
+		param.setMemberId(memberId);
+		param.setRegionPath(adPraiseParam.getTransRegionPath());
+		if (adPraiseParam.getStatusEnum().getVal().byteValue() == AdPraiseStatusEnum.AD_STATUS_SHOOT.getVal()) {
+			param.setStatusEnum(AdStatusEnum.AD_STATUS_PUTING);
+		} else if (adPraiseParam.getStatusEnum().getVal().byteValue() == AdPraiseStatusEnum.AD_STATUS_TOBEGIN.getVal()) {
+			param.setStatusEnum(AdStatusEnum.AD_STATUS_ADD);
+		} else {
+			param.setStatusEnum(AdStatusEnum.AD_STATUS_PUTED);
+		}
+		param.setCurrentPage(adPraiseParam.getCurrentPage());
+		param.setPageSize(adPraiseParam.getPageSize());
+		param.setMerchantIds(merchantIds);
+		return adService.getRecommendEgain(param);
+		//return adExtendService.selectAdPraiseList(adPraiseParam);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -308,19 +338,18 @@ public class AdController extends BaseController {
 	public Result<ClickAdPointDTO> clickAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		String num = UserUtil.getCurrentUserNum(getRequest());
-		Result<Boolean> result= clickAdRecordService.getClickAdRecord(memberId+id+DateUtil.getIntDate());
+		Result<Boolean> result= clickAdRecordService.getClickAdRecord(memberId+num+id+DateUtil.getIntDate());
 		if(!isSuccess(result)){
 			return successCreated(result.getRet());
 		}
 		if(result.getModel()){
 			return successCreated(ResultCode.AD_CLICK_EXIST);
-		}else{
-			 Result<ClickAdPointDTO> res=adService.clickAd(id, memberId, num);
-			 if(isSuccess(res)){ 
-				 clickAdRecordService.setClickAdRecord(memberId+id+DateUtil.getIntDate());
-			 }
-			return res;
 		}
+		Result<ClickAdPointDTO> res=adExtendService.clickAd(id, memberId, num);
+		if(res.getModel()!=null && res.getModel().getPoint().compareTo(BigDecimal.valueOf(0))==1){ 
+			clickAdRecordService.setClickAdRecord(memberId+num+id+DateUtil.getIntDate());
+		}
+		return res;
 		
 	}
 
@@ -348,12 +377,7 @@ public class AdController extends BaseController {
 		findParam.setMemberId(memberId);
 		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
 		findParam.setMerchantIds(merchantIds);
-		if(memberId != 0) {
-			Result<UserDTO> userRS = memberService.findMemberInfo(memberId);
-			if (userRS.getModel().getRegionPath() != null) {
-				findParam.setRegionPath(userRS.getModel().getRegionPath());
-			}
-		} else {
+		if(adSolrParam.getTransRegionPath()!=null){
 			findParam.setRegionPath(adSolrParam.getTransRegionPath());
 		}
 		return adService.queryAdByTitle(findParam);
@@ -382,6 +406,7 @@ public class AdController extends BaseController {
 
 	}
 
+	@Deprecated
 	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-05-02", reviewer = "孙林青")
 	@Authorization
@@ -390,26 +415,30 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "doHanlderMinusPoint", method = RequestMethod.POST)
 	public Result doHanlderMinusPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "广告id") Long id) {
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
-		Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
-		if (isSuccess(resultFreeze)) {
-			if (PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel().getStatus())) {
-				return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
-			}
-		} else {
-			return successCreated(resultFreeze.getRet());
+		long memberId = UserUtil.getCurrentUserId(getRequest());
+		PointDetailQueryData1Param query = new PointDetailQueryData1Param();
+		query.setBizId(id.toString());
+		query.setPointType(MemberTransactionTypeEnum.PRAISE_AD.getValue());
+		query.setUserNum(userNum);
+		Result<Integer> isDoResult = propertyInfoDataService.getPointDetailByUserNumAndPointTypeAndBizId(query);
+		if (!isSuccess(isDoResult)) {
+			return successCreated(isDoResult.getRet());
 		}
-		Result<PropertyPointDTO> result = propertyInfoService.getPropertyPoint(userNum);
-		BigDecimal point = result.getModel().getPoint();
-		if (point.compareTo(new BigDecimal(30)) == -1) {
-			return successCreated(ResultCode.PROPERTY_INFO_POINT_LESS);
-		} else {
-			PropertyInfoDataParam param = new PropertyInfoDataParam();
-			param.setUserNum(userNum);
-			param.setPoint("20");
-			param.setBizId(id.toString());
-			param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PRAISE_AD);
-			return propertyInfoDataService.doHanlderMinusPoint(param);
+		if (isDoResult.getModel() == 1){
+			return successCreated();
 		}
+		PropertyInfoDataParam param = new PropertyInfoDataParam();
+		param.setUserNum(userNum);
+		param.setPoint("20");
+		param.setBizId(id.toString());
+		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PRAISE_AD);
+		Result result = propertyInfoDataService.doHanlderMinusPoint(param);
+		
+		if(isSuccess(result)){
+			praiseDoHanlderMinusPointService.setAdPraiseIsDoPointRecord(String.valueOf(id)+String.valueOf(memberId));
+		}
+		
+		return result;
 
 	}
 
@@ -420,7 +449,19 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectEgainAd", method = RequestMethod.GET)
 	public Result<Page<AdFlatVideoDTO>> selectEgainAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdEgainParam adEgainParam) {
-		return adExtendService.selectEgainAd(adEgainParam);
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
+		AdSolrRealParam param = new AdSolrRealParam();
+		param.setMemberId(memberId);
+		param.setLongitude(adEgainParam.getLongitude());
+		param.setLatitude(adEgainParam.getLatitude());
+		param.setRegionPath(adEgainParam.getTransRegionPath());
+		param.setTypeEnum(AdTypeEnum.getEnum(adEgainParam.getTypeEnum().getVal()));
+		param.setCurrentPage(adEgainParam.getCurrentPage());
+		param.setPageSize(adEgainParam.getPageSize());
+		param.setMerchantIds(merchantIds);
+		return adService.getRecommendAdByType(param);
+		//return adExtendService.selectEgainAd(adEgainParam);
 	}
 
 	@Audit(date = "2017-05-23", reviewer = "孙林青")
@@ -428,13 +469,23 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "getRedPacketInfo/{merchantId}", method = RequestMethod.GET)
 	public Result<RedPacketInfoDTO> getRedPacketInfo(@PathVariable @ApiParam(required = true, value = "商家id") Long merchantId) {
-		Result<RedPacketInfoDTO> rs = adService.getRedPacketInfo(merchantId);
-		if (isSuccess(rs)) {
-			Result<MerchantStoreDTO> merchantStoreDTO = merchantStoreService.selectMerchantStoreByMId(merchantId);
-			rs.getModel().setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-			rs.getModel().setName(merchantStoreDTO.getModel().getName());
+		Result<RedPacketInfoDTO> result = adService.getRedPacketInfo(merchantId);
+		if(!isSuccess(result)){
+			successCreated(result.getRet());
 		}
-		return rs;
+		if(StringUtils.isEmpty(result.getModel().getName())){
+			result.getModel().setName("E店商家");
+		}
+		if(StringUtils.isEmpty(result.getModel().getLogoUrl())){
+			result.getModel().setLogoUrl(memberApiConfig.getDefaultHeadimg());
+
+		}
+		if(result.getModel().getFileType()==FileTypeEnum.VIDEO){
+			 String str = VideoCutImgUtil.getVideoTime(result.getModel().getMediaUrl(), memberApiConfig.getFfmpegUrl());
+			 result.getModel().setVideoTime(str);
+		}
+
+		return result;
 	}
 
 	@SuppressWarnings("rawtypes")

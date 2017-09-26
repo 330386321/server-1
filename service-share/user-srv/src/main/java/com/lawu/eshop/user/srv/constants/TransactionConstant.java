@@ -17,4 +17,14 @@ public class TransactionConstant {
      * 商家注册
      */
     public static final byte MERCHANT_REGISTER = 0x02;
+
+    /**
+     * 成为粉丝
+     */
+    public static final byte MEMBER_FANS = 0x03;
+
+    /**
+     * 邀请粉丝退还积分
+     */
+    public static final byte MERCHANT_FANS = 0x04;
 }

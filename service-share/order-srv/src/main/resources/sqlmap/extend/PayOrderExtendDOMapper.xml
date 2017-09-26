@@ -7,6 +7,11 @@
 		<result column="num" property="num" jdbcType="VARCHAR" />
 	</resultMap>
 
+	<resultMap id="ReportFansSaleTransFormResultMap" type="com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO">
+		<result column="is_fans" property="isFans" jdbcType="VARCHAR" />
+		<result column="count" property="count" jdbcType="BIGINT" />
+	</resultMap>
+
 	<select id="payVolumeRiseRate" resultMap="ReportBaseResultMap"
 		parameterType="java.lang.String">
 		<if test="flag == 1">
@@ -78,5 +83,12 @@
 		AND is_evaluation = 0
 		AND DATE_ADD(gmt_create, INTERVAL 7 DAY) <![CDATA[  <=  ]]> #{value}
 		limit 0 ,20
+	</select>
+
+	<select id="selectByFansSaleTransformPay" parameterType="com.lawu.eshop.order.param.PayOrderReportDataParam" resultMap="ReportFansSaleTransFormResultMap">
+		SELECT so.is_fans, COUNT(so.id) as count
+		FROM pay_order so
+		WHERE so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.status = 2
+		GROUP BY so.is_fans
 	</select>
 </mapper>

@@ -23,6 +23,7 @@ import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
 import com.lawu.eshop.mall.dto.RegionDTO;
 import com.lawu.eshop.user.dto.NewMerchantStoreDTO;
 import com.lawu.eshop.user.dto.RecommendFoodDTO;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * @author meishuquan
@@ -105,6 +106,7 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
         //查询商家优惠信息
         Result<MerchantFavoredDTO> favoredDTOResult = merchantFavoredService.findFavoredByMerchantId(foodDTO.getMerchantId());
         String favoreInfo = "";
+        String favoreEndTime = "";
         if (favoredDTOResult.getRet() == ResultCode.SUCCESS) {
             if (favoredDTOResult.getModel().getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL.val) {
                 favoreInfo = "买单每满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
@@ -114,8 +116,10 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
                 NumberFormat numberFormat = NumberFormat.getInstance();
                 favoreInfo = "买单" + numberFormat.format(favoredDTOResult.getModel().getDiscountRate()) + "折";
             }
+            favoreEndTime = DateUtil.getDateFormat(favoredDTOResult.getModel().getEntireEndTime());
         }
         foodDTO.setFavoreInfo(favoreInfo);
+        foodDTO.setFavoreEndTime(favoreEndTime);
 
         //查询商家优惠套餐
         Result<Page<DiscountPackageQueryDTO>> discountResult = discountPackageService.listForMember(foodDTO.getMerchantId());
