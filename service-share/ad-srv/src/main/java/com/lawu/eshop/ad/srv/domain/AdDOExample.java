@@ -2236,6 +2236,66 @@ public class AdDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsPayIsNull() {
+            addCriterion("is_pay is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayIsNotNull() {
+            addCriterion("is_pay is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayEqualTo(Boolean value) {
+            addCriterion("is_pay =", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayNotEqualTo(Boolean value) {
+            addCriterion("is_pay <>", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayGreaterThan(Boolean value) {
+            addCriterion("is_pay >", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_pay >=", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayLessThan(Boolean value) {
+            addCriterion("is_pay <", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_pay <=", value, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayIn(List<Boolean> values) {
+            addCriterion("is_pay in", values, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayNotIn(List<Boolean> values) {
+            addCriterion("is_pay not in", values, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_pay between", value1, value2, "isPay");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPayNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_pay not between", value1, value2, "isPay");
+            return (Criteria) this;
+        }
+
         public Criteria andAuditorIdIsNull() {
             addCriterion("auditor_id is null");
             return (Criteria) this;

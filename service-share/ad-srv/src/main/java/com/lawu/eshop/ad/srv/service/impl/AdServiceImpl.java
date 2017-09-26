@@ -188,16 +188,15 @@ public class AdServiceImpl implements AdService {
 		adDO.setPutWay(adParam.getPutWayEnum().val);
 		adDO.setViewcount(0);
 		adDO.setHits(0);
+		adDO.setIsPay(false);
 		if(adParam.getBeginTime()!=null){
 			adDO.setBeginTime(DateUtil.formatDate(adParam.getBeginTime(), "yyyy-MM-dd HH:mm"));
 		}
-		adDO.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+		adDO.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
 		adDO.setPoint(adParam.getPoint());
 		adDO.setAdCount(adParam.getAdCount());
 		adDO.setRadius(adParam.getRadius());
-		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_VIDEO){
-			adDO.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val); //视频广告默认为审核中
-		}else if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PACKET){  //红包开始时间为创建时间
+		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PACKET){  //红包开始时间为创建时间
 			adDO.setBeginTime(new Date());
 		}
 		adDO.setTotalPoint(adParam.getTotalPoint());
