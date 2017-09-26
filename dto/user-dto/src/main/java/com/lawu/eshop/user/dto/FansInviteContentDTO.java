@@ -51,6 +51,9 @@ public class FansInviteContentDTO {
 
 	@ApiModelProperty(value = "是否过期，false--否，true--是", required = true)
 	private Boolean isOverdue;
+
+	@ApiModelProperty(value = "是否已是粉丝，false--否，true--是", required = true)
+	private Boolean isFans;
 	
 	public FansInviteResultEnum getFansInviteResultEnum() {
 		return fansInviteResultEnum;
@@ -170,5 +173,13 @@ public class FansInviteContentDTO {
 
 	public void setIsOverdue(Boolean overdue) {
 		isOverdue = overdue;
+	}
+
+	public Boolean getIsFans() {
+		return isFans;
+	}
+
+	public void setIsFans(Boolean fans) {
+		isFans = fans;
 	}
 }

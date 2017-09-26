@@ -10,7 +10,7 @@ import com.lawu.eshop.user.dto.FansInviteContentDTO;
 public class MockFansInviteContentService extends BaseController implements FansInviteContentService {
 
 	@Override
-	public Result<FansInviteContentDTO> selectInviteContentById(Long id, Long relateId) {
+	public Result<FansInviteContentDTO> selectInviteContentById(Long id, Long relateId, Long memberId) {
 		FansInviteContentDTO fansInviteContentDTO = new FansInviteContentDTO();
 		return successCreated(fansInviteContentDTO);
 	}
