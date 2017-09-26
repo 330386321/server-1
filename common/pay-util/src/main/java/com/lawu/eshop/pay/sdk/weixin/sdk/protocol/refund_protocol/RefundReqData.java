@@ -17,7 +17,6 @@ import com.lawu.eshop.pay.sdk.weixin.sdk.common.Signature;
  *
  */
 public class RefundReqData {
-	public static final Logger logger = Logger.getLogger(RefundReqData.class);
     //每个字段具体的意思请查看API文档
     private String appid = "";
     private String mch_id = "";
