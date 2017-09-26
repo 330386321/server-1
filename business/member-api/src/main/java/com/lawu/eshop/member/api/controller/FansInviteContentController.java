@@ -40,7 +40,8 @@ public class FansInviteContentController extends BaseController{
     @Authorization
     @RequestMapping(value = "selectInviteContentById/{id}/{relateId}", method = RequestMethod.GET)
     public Result<FansInviteContentDTO> selectInviteContentById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable("id") @ApiParam(value = "messageId", required = true) Long id,@PathVariable("relateId") @ApiParam(value = "mesasge里的relateId", required = true) Long relateId) {
-		Result<FansInviteContentDTO> result = fansInviteContentService.selectInviteContentById(id,relateId);
+        Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result<FansInviteContentDTO> result = fansInviteContentService.selectInviteContentById(id,relateId,memberId);
 		return result;
     }
 }

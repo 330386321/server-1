@@ -1452,8 +1452,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 查找订单以及订单项状态都为交易成功的订单
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		criteria.andIsDoneEqualTo(false);
-		criteria.andGmtTransactionAddDayLessThanOrEqualTo(Integer.valueOf(refundRequestTime), new Date());
-
+		criteria.andGmtTransactionGreaterThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(refundRequestTime) * -1, Calendar.DAY_OF_YEAR));
+		
 		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
 		logger.info("需要释放冻结资金的订单数量:{}", shoppingOrderDOList.size());
