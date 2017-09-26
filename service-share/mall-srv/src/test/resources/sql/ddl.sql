@@ -448,3 +448,21 @@ CREATE TABLE `work_order` (
 )
 ;
 
+
+-- ----------------------------
+-- Table structure for app_version
+-- ----------------------------
+DROP TABLE IF EXISTS `app_version`;
+CREATE TABLE `app_version` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `app_version` varchar(16) NOT NULL COMMENT '版本号',
+  `app_big_version` varchar(8) NOT NULL COMMENT '大版本号',
+  `update_desc` varchar(500) NOT NULL DEFAULT '' COMMENT '更新内容',
+  `platform` tinyint(2) NOT NULL COMMENT '1-ios 2-安卓',
+  `app_type` tinyint(2) NOT NULL COMMENT 'APP类型，1：会员端，2：商家端',
+  `status` tinyint(2) NOT NULL COMMENT '1:启用，2：禁用',
+  `is_force` tinyint(1) NOT NULL COMMENT '是否强制更新',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+);
+

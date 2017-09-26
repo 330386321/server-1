@@ -30,7 +30,7 @@
 			<value>
 				/login = anon
 				<!--# some example chain definitions:-->
-				/** = authc 
+				/** = authc  
 				<!--# more URL-to-FilterChain definitions here-->
 				<!--/** = urlMatchingFilter-->
 			</value>
