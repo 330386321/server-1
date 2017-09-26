@@ -86,6 +86,7 @@ import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mq.dto.ad.reply.AdPointReply;
 import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.synchronization.lock.constants.LockConstant.LockModule;
 import com.lawu.eshop.synchronization.lock.service.LockService;
@@ -126,7 +127,7 @@ public class AdServiceImpl implements AdService {
 
 	@Autowired
 	@Qualifier("adMerchantCutPointTransactionMainServiceImpl")
-	private TransactionMainService<Reply> mctransactionMainAddService;
+	private TransactionMainService<AdPointReply> mctransactionMainAddService;
 
 	@Autowired
 	@Qualifier("adMerchantAddPointTransactionMainServiceImpl")
@@ -224,10 +225,6 @@ public class AdServiceImpl implements AdService {
 			adDO.setFileTime(adParam.getFileTime());
 		}
 		Integer i=adDOMapper.insert(adDO);
-		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){ //E赞
-			SolrInputDocument document= AdConverter.convertSolrInputDocument(adDO);
-			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-		}
 
         AdSaveInfoBO bo =new AdSaveInfoBO();
         bo.setId(adDO.getId());
@@ -251,7 +248,7 @@ public class AdServiceImpl implements AdService {
 		AdDOExample example=new AdDOExample();
 		if(adMerchantParam.getStatusEnum()==null && adMerchantParam.getTypeEnum()==null && adMerchantParam.getPutWayEnum()==null ){
 			example.createCriteria().andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
-					.andMerchantIdEqualTo(merchantId);
+					.andMerchantIdEqualTo(merchantId).andIsPayEqualTo(true);
 		}else{
 			Criteria c1=example.createCriteria();
 			List<Byte> status=new ArrayList<>();
@@ -262,7 +259,7 @@ public class AdServiceImpl implements AdService {
 					status.add(AdStatusEnum.AD_STATUS_OUT.val);
 					status.add(AdStatusEnum.AD_STATUS_AUDIT_FAIL.val);
 					c1.andStatusIn(status)
-					.andMerchantIdEqualTo(merchantId);
+					.andMerchantIdEqualTo(merchantId).andIsPayEqualTo(true);
 					if(adMerchantParam.getTypeEnum()!=null){
 						c1.andTypeEqualTo(adMerchantParam.getTypeEnum().getVal());
 					}
@@ -274,7 +271,7 @@ public class AdServiceImpl implements AdService {
 					status.add(AdStatusEnum.AD_STATUS_ADD.val);
 					status.add(AdStatusEnum.AD_STATUS_PUTING.val);
 					status.add(AdStatusEnum.AD_STATUS_AUDIT.val);
-					c1.andStatusIn(status).andMerchantIdEqualTo(merchantId);
+					c1.andStatusIn(status).andMerchantIdEqualTo(merchantId).andIsPayEqualTo(true);
 					if (adMerchantParam.getTypeEnum() != null) {
 						c1.andTypeEqualTo(adMerchantParam.getTypeEnum().getVal());
 					}
@@ -284,7 +281,7 @@ public class AdServiceImpl implements AdService {
 				}
 
 			} else {
-				c1.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val).andMerchantIdEqualTo(merchantId);
+				c1.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val).andMerchantIdEqualTo(merchantId).andIsPayEqualTo(true);
 				if (adMerchantParam.getTypeEnum() != null) {
 					c1.andTypeEqualTo(adMerchantParam.getTypeEnum().getVal());
 				}
@@ -368,7 +365,7 @@ public class AdServiceImpl implements AdService {
 	public Page<AdBO> selectListByPlatForm(AdFindParam adPlatParam) {
 		AdDOExample example = new AdDOExample();
 		Criteria cr = example.createCriteria();
-		cr.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val);
+		cr.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val).andIsPayEqualTo(true);
 		if (adPlatParam.getPutWayEnum() != null) {
 			cr.andPutWayEqualTo(adPlatParam.getPutWayEnum().val);
 		} else if (adPlatParam.getTypeEnum() != null) {
