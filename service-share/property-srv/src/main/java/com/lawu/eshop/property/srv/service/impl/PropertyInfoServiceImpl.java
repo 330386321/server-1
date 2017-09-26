@@ -192,8 +192,16 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 
 		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
 			return ResultCode.PROPERTY_INFO_NULL;
+		} else if (propertyInfoDOS.size() > 1) {
+			return ResultCode.PROPERTY_INFO_OUT_INDEX;
 		}
 
+		//校验资金是否冻结
+		if(PropertyinfoFreezeEnum.YES.getVal().equals(propertyInfoDOS.get(0).getFreeze())){
+			return ResultCode.PROPERTYINFO_FREEZE_YES;
+		}
+
+		//校验积分是否足够
 		BigDecimal dbPoint = propertyInfoDOS.get(0).getPoint();
 		double dPoint = dbPoint.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		double drPoint = Double.parseDouble(point);
@@ -247,12 +255,23 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	@Override
 	@Transactional
 	public int updateBalanceAndPoint(BackagePropertyinfoDataParam dparam) {
+
+		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
+		propertyInfoDOExample.createCriteria().andUserNumEqualTo(dparam.getUserNum());
+		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
+		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
+			return ResultCode.PROPERTY_INFO_NULL;
+		} else if (propertyInfoDOS.size() > 1) {
+			return ResultCode.PROPERTY_INFO_OUT_INDEX;
+		}
+		//校验资金是否冻结
+		if(PropertyinfoFreezeEnum.YES.getVal().equals(propertyInfoDOS.get(0).getFreeze())){
+			return ResultCode.PROPERTYINFO_FREEZE_YES;
+		}
+
 		PropertyInfoDOEiditView editView = new PropertyInfoDOEiditView();
 		editView.setUserNum(dparam.getUserNum());
 		if (PayTypeEnum.BALANCE.getVal().equals(dparam.getPayTypeEnum().getVal())) {
-			editView.setBalance(new BigDecimal(dparam.getMoney()));
-			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(editView);
-			
 			TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 			tdsParam.setTitle(TransactionTitleEnum.BACKAGE.getVal());
 			tdsParam.setUserNum(dparam.getUserNum());
@@ -265,10 +284,11 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 			tdsParam.setAmount(new BigDecimal(dparam.getMoney()));
 			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 			transactionDetailService.save(tdsParam);
+
+			editView.setBalance(new BigDecimal(dparam.getMoney()));
+			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(editView);
+
 		} else if (PayTypeEnum.POINT.getVal().equals(dparam.getPayTypeEnum().getVal())) {
-			editView.setPoint(new BigDecimal(dparam.getMoney()));
-			propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(editView);
-			
 			PointDetailSaveDataParam pdsParam = new PointDetailSaveDataParam();
 			pdsParam.setTitle(TransactionTitleEnum.BACKAGE.getVal());
 			pdsParam.setUserNum(dparam.getUserNum());
@@ -276,10 +296,14 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 				pdsParam.setPointType(MemberTransactionTypeEnum.BACKAGE.getValue());
 			}else if(dparam.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
 				pdsParam.setPointType(MerchantTransactionTypeEnum.BACKAGE.getValue());
-			} 
+			}
 			pdsParam.setPoint(new BigDecimal(dparam.getMoney()));
 			pdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 			pointDetailService.save(pdsParam);
+
+			editView.setPoint(new BigDecimal(dparam.getMoney()));
+			propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(editView);
+
 		}
 		return ResultCode.SUCCESS;
 	}
