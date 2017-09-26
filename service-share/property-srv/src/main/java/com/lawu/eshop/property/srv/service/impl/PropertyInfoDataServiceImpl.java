@@ -143,6 +143,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	}
 
 	@Override
+	@Transactional
 	public int doHanlderAddBalance(PropertyInfoDataParam param) {
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
@@ -170,6 +171,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	}
 
 	@Override
+	@Transactional
 	public int doHanlderMinusBalance(PropertyInfoDataParam param) {
 		int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getPoint(),false,"");
 		if (retCode != ResultCode.SUCCESS) {
@@ -278,6 +280,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	}
 
 	@Override
+	@Transactional
 	public Map<String, Integer> doHanlderMinusPointByFans(PropertyInfoDataParam param) {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		int retCode = propertyInfoService.validatePoint(param.getUserNum(), param.getPoint());
