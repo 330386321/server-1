@@ -686,7 +686,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
 		// 查询是否关注
 		fansMerchantDOExample = new FansMerchantDOExample();
-		fansMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(storeInfoDOView.getMerchantId());
+		fansMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(storeInfoDOView.getMerchantId()).andStatusEqualTo(DataTransUtil.intToByte(1));
 		List<FansMerchantDO> fansMerchantDOS = fansMerchantDOMapper.selectByExample(fansMerchantDOExample);
 		if (fansMerchantDOS.isEmpty()) {
 			shoppingStoreDetailBO.setFans(false);
