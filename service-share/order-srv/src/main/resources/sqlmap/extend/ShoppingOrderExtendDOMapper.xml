@@ -62,6 +62,7 @@
 		<result column="gmt_payment" jdbcType="TIMESTAMP" property="gmtPayment" />
 		<result column="gmt_transport" jdbcType="TIMESTAMP" property="gmtTransport" />
 		<result column="gmt_transaction" jdbcType="TIMESTAMP" property="gmtTransaction" />
+		<result column="gmt_done" jdbcType="TIMESTAMP" property="gmtDone" />
 		<result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
 		<result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
 		<!-- 级联查询 -->
@@ -128,7 +129,7 @@
 		so.order_num, so.payment_method, so.third_number, so.is_needs_logistics, so.waybill_num, so.express_company_id, so.express_company_code,
 		so.express_company_name, so.gmt_commission,
 		so.gmt_payment, so.gmt_transport,
-		so.gmt_transaction, so.gmt_create, so.gmt_modified
+		so.gmt_transaction, so.gmt_done, so.gmt_create, so.gmt_modified
 	</sql>
 
 	<sql id="ShoppingOrderItem_Column_List">
@@ -323,15 +324,15 @@
 	  <!-- Report -->
 	  <select id="selectByTransactionData" parameterType="com.lawu.eshop.order.param.ShoppingOrderReportDataParam" resultMap="ReportResultMap">
 	  	<if test="flag == 1">
-		  	SELECT DATE_FORMAT(so.gmt_create, "%d") AS keyTxt, sum(so.actual_amount) AS num
+		  	SELECT DATE_FORMAT(so.gmt_done, "%d") AS keyTxt, sum(so.actual_amount) AS num
 			FROM shopping_order so
-			WHERE DATE_FORMAT(so.gmt_create, "%Y%m") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
+			WHERE DATE_FORMAT(so.gmt_done, "%Y%m") = #{gmtDone,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
 			GROUP BY keyTxt
 		</if>
 		<if test="flag == 2">
-			SELECT DATE_FORMAT(so.gmt_create, "%m") AS keyTxt, sum(so.actual_amount) AS num
+			SELECT DATE_FORMAT(so.gmt_done, "%m") AS keyTxt, sum(so.actual_amount) AS num
 			FROM shopping_order so
-			WHERE DATE_FORMAT(so.gmt_create, "%Y") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
+			WHERE DATE_FORMAT(so.gmt_done, "%Y") = #{gmtDone,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
 			GROUP BY keyTxt
 		</if>
 	  </select>
@@ -340,7 +341,7 @@
 	  	<if test="flag == 1">
 		  	SELECT sum(so.actual_amount) AS num
 			FROM shopping_order so
-			WHERE DATE_FORMAT(so.gmt_create, "%Y%m") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
+			WHERE DATE_FORMAT(so.gmt_done, "%Y%m") = #{gmtDone,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
 	  	</if>
 	  	<if test="flag == 2">
 	  		SELECT sum(so.actual_amount) AS num

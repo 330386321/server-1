@@ -1,6 +1,9 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -103,8 +106,16 @@ public class ExpressCompanyServiceImpl implements ExpressCompanyService {
 		ExpressCompanyDOExample.Criteria criteria = example.createCriteria();
 		criteria.andCodeIn(codeList);
 		List<ExpressCompanyDO> expressCompanyDOList = expressCompanyDOMapper.selectByExample(example);
-		List<ExpressCompanyBO> rtn = ExpressCompanyConverter.convertBOS(expressCompanyDOList);
-		return rtn;
+		// 保证list的顺序与code一致
+		Map<String, ExpressCompanyDO> expressCompanyDOMap = new HashMap<String, ExpressCompanyDO>();
+		for (ExpressCompanyDO expressCompanyDO : expressCompanyDOList) {
+			expressCompanyDOMap.put(expressCompanyDO.getCode(), expressCompanyDO);
+		}
+		List<ExpressCompanyDO> list = new ArrayList<>();
+		for (String code : codeList) {
+			list.add(expressCompanyDOMap.get(code));
+		}
+		return ExpressCompanyConverter.convertBOS(list);
 	}
 
 }

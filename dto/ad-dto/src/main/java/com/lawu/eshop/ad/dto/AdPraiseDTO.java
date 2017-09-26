@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
@@ -73,6 +74,10 @@ public class AdPraiseDTO {
 	
 	@ApiModelProperty (name="relateType", value = "PRODUCT_TYPE 商品  | MERCHANT_STORE_TYPE 店铺")
 	private RelateTypeEnum relateType;
+	
+	@ApiModelProperty(value = "AD_STATUS_DELETE 删除 AD_STATUS_ADD 上架 AD_STATUS_PUTING 投放中  AD_STATUS_PUTED 投放结束"
+			+ "AD_STATUS_OUT 下架 AD_STATUS_AUDIT 审核中")
+	private AdStatusEnum statusEnum;
 	
 
 	public Integer getCount() {
@@ -241,6 +246,14 @@ public class AdPraiseDTO {
 
 	public void setRelateType(RelateTypeEnum relateType) {
 		this.relateType = relateType;
+	}
+
+	public AdStatusEnum getStatusEnum() {
+		return statusEnum;
+	}
+
+	public void setStatusEnum(AdStatusEnum statusEnum) {
+		this.statusEnum = statusEnum;
 	}
 
 	

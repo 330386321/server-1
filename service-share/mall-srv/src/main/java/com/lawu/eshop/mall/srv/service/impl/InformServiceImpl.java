@@ -53,14 +53,17 @@ public class InformServiceImpl implements InformService {
 		InformDOExample example = new InformDOExample();
 		Criteria cr = example.createCriteria();
 		if (!StringUtils.isEmpty(param.getContent())) {
-			cr.andContentLike(param.getContent().trim());
+			cr.andContentLike("%" + param.getContent().trim() + "%");
 		}
 		if (!StringUtils.isEmpty(param.getInformtItemName())) {
-			
-			cr.andInformtItemNameLike(param.getInformtItemName().trim());
+
+			cr.andInformtItemNameLike("%" + param.getInformtItemName().trim() + "%");
 		}
-		if(param.getStatus()!=null){
+		if (param.getStatus() != null) {
 			cr.andStatusEqualTo(param.getStatus().getVal());
+		}
+		if (param.getInformType() != null) {
+			cr.andInformTypeEqualTo(param.getInformType().getVal());
 		}
 		example.setOrderByClause("gmt_create desc");
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
@@ -70,7 +73,7 @@ public class InformServiceImpl implements InformService {
 			InformBO bo = InformConverter.converBO(info);
 			listbo.add(bo);
 		}
-		Page<InformBO> page = new Page<InformBO>();
+		Page<InformBO> page = new Page<>();
 		page.setCurrentPage(param.getCurrentPage());
 		page.setTotalCount(informDOMapper.countByExample(example));
 		page.setRecords(listbo);

@@ -79,6 +79,10 @@ public class AdEgainDetailBO {
 	private Long relateId;
 	
 	private RelateTypeEnum relateType;
+	
+	private String fileSize;
+	
+	private String fileTime;
 
 	public Long getId() {
 		return id;
@@ -214,6 +218,22 @@ public class AdEgainDetailBO {
 
 	public void setRelateType(RelateTypeEnum relateType) {
 		this.relateType = relateType;
+	}
+
+	public String getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(String fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	public String getFileTime() {
+		return fileTime;
+	}
+
+	public void setFileTime(String fileTime) {
+		this.fileTime = fileTime;
 	}
 	
 	

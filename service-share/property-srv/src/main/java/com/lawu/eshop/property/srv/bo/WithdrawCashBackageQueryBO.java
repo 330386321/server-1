@@ -3,6 +3,7 @@ package com.lawu.eshop.property.srv.bo;
 import java.math.BigDecimal;
 
 import com.lawu.eshop.property.constants.CashStatusEnum;
+import io.swagger.annotations.ApiModelProperty;
 
 public class WithdrawCashBackageQueryBO {
 
@@ -15,6 +16,10 @@ public class WithdrawCashBackageQueryBO {
 	private String name;
 
 	private String regionFullName;
+
+	private BigDecimal cashMoney;
+
+	private BigDecimal poundage;
 
 	private BigDecimal money;
 
@@ -176,4 +181,19 @@ public class WithdrawCashBackageQueryBO {
 		this.cashStatsuEnum = cashStatsuEnum;
 	}
 
+	public BigDecimal getCashMoney() {
+		return cashMoney;
+	}
+
+	public void setCashMoney(BigDecimal cashMoney) {
+		this.cashMoney = cashMoney;
+	}
+
+	public BigDecimal getPoundage() {
+		return poundage;
+	}
+
+	public void setPoundage(BigDecimal poundage) {
+		this.poundage = poundage;
+	}
 }

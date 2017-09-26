@@ -16,6 +16,7 @@ import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.AdClickPraiseInfoBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
@@ -133,7 +134,7 @@ public interface AdService {
      * @param memberId
      * @return
      */
-    BigDecimal clickPraise(Long id, Long memberId, String num);
+    AdClickPraiseInfoBO clickPraise(Long id, Long memberId, String num);
 
     /**
      * 点击广告

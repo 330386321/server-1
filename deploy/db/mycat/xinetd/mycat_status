@@ -1,0 +1,11 @@
+service mycat_status
+{
+    flags = REUSE
+    socket_type = stream
+    port = 48700
+    wait = no
+    user = root
+    server =/usr/local/bin/mycat_status_check.sh
+    log_on_failure += USERID
+    disable = no
+}

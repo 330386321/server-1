@@ -44,6 +44,8 @@ public class StoreDetailDOView implements Serializable {
 
     private BigDecimal latitude;
 
+    private String industryPath;
+
     public Long getMerchantId() {
         return merchantId;
     }
@@ -178,5 +180,13 @@ public class StoreDetailDOView implements Serializable {
 
     public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
+    }
+
+    public String getIndustryPath() {
+        return industryPath;
+    }
+
+    public void setIndustryPath(String industryPath) {
+        this.industryPath = industryPath;
     }
 }

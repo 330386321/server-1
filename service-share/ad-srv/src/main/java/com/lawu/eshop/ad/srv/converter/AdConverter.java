@@ -89,6 +89,8 @@ public class AdConverter {
 		adBO.setMerchantStoreName(adDO.getMerchantStoreName());
 		adBO.setManageType(ManageTypeEnum.getEnum(adDO.getManageType()));
 		adBO.setLogoUrl(adDO.getLogoUrl());
+		adBO.setFileSize(adDO.getFileSize());
+		adBO.setVideoTime(adDO.getFileTime());
         return adBO;
 		
 	}
@@ -279,9 +281,9 @@ public class AdConverter {
 		 document.addField("videoImgUrl_s", adDO.getVideoImgUrl());
 		 document.addField("title_s", adDO.getTitle());
 		 document.addField("content_s", adDO.getContent());
-		 document.addField("latLon_p", adDO.getMerchantLatitude() + "," + adDO.getMerchantLongitude());
 		 document.addField("status_i", adDO.getStatus());
 		 document.addField("hits_i", adDO.getHits());
+		 document.addField("viewCount_i", adDO.getViewcount());
 		 document.addField("radius_i", adDO.getRadius());
 		 document.addField("type_i", adDO.getType());
 		 document.addField("putWay_i", adDO.getPutWay());
@@ -289,6 +291,9 @@ public class AdConverter {
 		 document.addField("totalPoint_d", adDO.getTotalPoint() == null ? 0.0 : adDO.getTotalPoint().doubleValue());
 		 document.addField("storeName_s", adDO.getMerchantStoreName());
 		 document.addField("storeLogo_s", adDO.getLogoUrl());
+		 if (adDO.getMerchantLatitude() != null && adDO.getMerchantLongitude() != null) {
+			 document.addField("latLon_p", adDO.getMerchantLatitude() + "," + adDO.getMerchantLongitude());
+		 }
 		 if (adDO.getType().byteValue() == AdTypeEnum.AD_TYPE_PRAISE.getVal() && adDO.getBeginTime() != null) {
 			 document.addField("beginTime_l", adDO.getBeginTime().getTime());
 		 }
@@ -319,7 +324,9 @@ public class AdConverter {
 		adSolrDTO.setMerchantStoreName(solrDocument.get("storeName_s").toString());
 		adSolrDTO.setLogoUrl(solrDocument.get("storeLogo_s").toString());
 		adSolrDTO.setTypeEnum(AdTypeEnum.getEnum(Byte.valueOf(solrDocument.get("type_i").toString())));
+		adSolrDTO.setStatusEnum(AdStatusEnum.getEnum(Byte.valueOf(solrDocument.get("status_i").toString())));
 		adSolrDTO.setHits(solrDocument.get("hits_i") == null ? 0 : Integer.valueOf(solrDocument.get("hits_i").toString()));
+		adSolrDTO.setCount(solrDocument.get("viewCount_i") == null ? 0 : Integer.valueOf(solrDocument.get("viewCount_i").toString()));
 		adSolrDTO.setPoint(solrDocument.get("point_d") == null ? 0.0 : Double.valueOf(solrDocument.get("point_d").toString()));
 		adSolrDTO.setTotalPoint(solrDocument.get("totalPoint_d") == null ? 0.0 : Double.valueOf(solrDocument.get("totalPoint_d").toString()));
 		return adSolrDTO;
@@ -365,6 +372,8 @@ public class AdConverter {
 		dto.setRegionName(adBO.getRegionName());
 		dto.setProductId(adBO.getRelateId());
 		dto.setRelateType(adBO.getRelateType());
+		dto.setFileSize(adBO.getFileSize());
+		dto.setVideoTime(adBO.getVideoTime());
 		return dto;
 	}
 
@@ -652,6 +661,7 @@ public class AdConverter {
 		adBO.setStatusEnum(AdStatusEnum.getEnum(adDO.getStatus()));
 		adBO.setRelateId(adDO.getRelateId());
 		adBO.setRelateType(RelateTypeEnum.getEnum(adDO.getRelateType()));
+		adBO.setStatusEnum(AdStatusEnum.getEnum(adDO.getStatus()));
         return adBO;
 
 	}
@@ -680,6 +690,7 @@ public class AdConverter {
 		dto.setCount(adBO.getNumber());
 		dto.setRelateId(adBO.getRelateId());
 		dto.setRelateType(adBO.getRelateType());
+		dto.setStatusEnum(adBO.getStatusEnum());
 		Date date=new Date();
 		if(adBO.getStatusEnum().val==2){ //结束倒计时
 			Long time=adBO.getBeginTime().getTime()+ (20*60*1000)-date.getTime();
@@ -719,6 +730,8 @@ public class AdConverter {
 		rtn.setMerchantId(adDO.getMerchantId());
 		rtn.setRelateId(adDO.getRelateId());
 		rtn.setRelateType(RelateTypeEnum.getEnum(adDO.getRelateType()));
+		rtn.setFileSize(adDO.getFileSize());
+		rtn.setFileTime(adDO.getFileTime());
 		return rtn;
 	}
 
@@ -746,6 +759,10 @@ public class AdConverter {
 		rtn.setIsFavorite(adBO.getIsFavorite());
 		rtn.setRelateId(adBO.getRelateId());
 		rtn.setRelateType(adBO.getRelateType());
+		if(adBO.getFileSize()!=null){
+			rtn.setFileSize(Double.parseDouble(adBO.getFileSize()));
+		}
+		rtn.setVideoTime(adBO.getFileTime());
 		return rtn;
 	}
 
@@ -796,7 +813,7 @@ public class AdConverter {
 			dto.setTypeEnum(adSolrDTO.getTypeEnum());
 			dto.setName(adSolrDTO.getMerchantStoreName());
 			dto.setLogoUrl(adSolrDTO.getLogoUrl());
-			dto.setViewCount(adSolrDTO.getHits());
+			dto.setViewCount(adSolrDTO.getCount());
 			dtos.add(dto);
 		}
 		return dtos;
@@ -817,9 +834,10 @@ public class AdConverter {
 			dto.setTitle(adSolrDTO.getTitle());
 			dto.setContent(adSolrDTO.getContent());
 			dto.setTypeEnum(adSolrDTO.getTypeEnum());
+			dto.setStatusEnum(adSolrDTO.getStatusEnum());
 			dto.setName(adSolrDTO.getMerchantStoreName());
 			dto.setLogoUrl(adSolrDTO.getLogoUrl());
-			dto.setViewCount(adSolrDTO.getHits());
+			dto.setViewCount(adSolrDTO.getCount());
 			dto.setPoint(BigDecimal.valueOf(adSolrDTO.getPoint()));
 			dto.setTotalPoint(BigDecimal.valueOf(adSolrDTO.getTotalPoint()));
 			dtos.add(dto);

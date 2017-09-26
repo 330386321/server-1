@@ -202,6 +202,12 @@ public class AdController extends BaseController {
 				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
 			}
 		}else{
+			if(adParam.getTypeEnum()!=AdTypeEnum.AD_TYPE_FLAT || adParam.getTypeEnum()!=AdTypeEnum.AD_TYPE_VIDEO){
+				
+				if(adParam.getTotalPoint().compareTo(adParam.getPoint().multiply(BigDecimal.valueOf(adParam.getAdCount())))!=0){
+					return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
+				}
+			}
 			if(adParam.getAdCount()>1000000){
 				return successCreated(ResultCode.AD_RED_PACKET_COUNT_ERROR);
 			}
@@ -219,19 +225,36 @@ public class AdController extends BaseController {
     	}
     	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
     	PropertyPointDTO propertyPointDTO=rs.getModel();
+    	
     	if(adParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
     		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
     	}
     	Integer count=0;
-    	if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE && adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_AREAS){
-    		String areas=adParam.getAreas();
-    		if(areas==null || areas==""){
-    			areas=ALL_PLACE;
-    		}
-    		count=memberCountService.findMemberCount(areas);
-    	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_FENS){
-    		count=memberCountService.findFensCount(merchantId);
+    	if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){
+    		
+    		if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_AREAS){
+    			String areas=adParam.getAreas();
+        		if(areas==null || areas==""){
+        			areas=ALL_PLACE;
+        		}
+    			count=memberCountService.findMemberCount(areas);
+    			
+    		}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum()==PutWayEnum.PUT_WAY_FENS){
+        		
+    			count=memberCountService.findFensCount(merchantId);
+        	}
+    		
+    		count =(int)Math.ceil(count * (merchantApiConfig.getAdPraiseAllotProb()));
+			
+    		count = count>10?count:10;
+    		
+    		if(adParam.getTotalPoint().divide(new BigDecimal(count), 2, RoundingMode.HALF_UP).compareTo(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT))==-1){
+				return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
+			}
+    		adParam.setAdCount(count);
+    		
     	}
+    	
     	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
     	AdSaveParam adSave=new AdSaveParam();
     	adSave.setAdParam(adParam);
@@ -365,16 +388,21 @@ public class AdController extends BaseController {
     	adParam.setRelateId(adDTO.getProductId());
     	adParam.setRelateType(adDTO.getRelateType());
     	adParam.setRegionName(adDTO.getRegionName());
+    	adParam.setFileSize(adDTO.getFileSize());
+    	adParam.setFileTime(adDTO.getVideoTime());
     	adSave.setAdParam(adParam);
     	if(isSuccess(storeRs)){
     		MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();
         	if(storeDTO!=null){
         		adSave.setLatitude(storeDTO.getLatitude());
             	adSave.setLongitude(storeDTO.getLongitude());
-            	adSave.setLogoUrl(storeDTO.getLogoUrl());
-            	adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
+                adSave.setLogoUrl(StringUtils.isEmpty(storeDTO.getLogoUrl()) ? merchantApiConfig.getDefaultHeadimg() : storeDTO.getLogoUrl());
+                if(storeDTO.getManageType()!=null){
+            		adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
+            	}
             	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
-            	adSave.setMerchantStoreName(storeDTO.getName());
+                adSave.setMerchantStoreName(StringUtils.isEmpty(storeDTO.getName()) ? "E店商家" : storeDTO.getName());
+                adSave.setMerchantRegionPath(storeDTO.getRegionPath());
         	}
     	}
     	adSave.setCount(count);
@@ -382,7 +410,13 @@ public class AdController extends BaseController {
     	adSave.setVideoImgUrl(adDTO.getVideoImgUrl());
     	adSave.setMerchantId(merchantId);
     	adSave.setUserNum(userNum);
-    	return adService.saveAd(adSave);
+    	Result<AdSaveInfoDTO> result = adService.saveAd(adSave);
+
+    	//将广告总数存入缓存
+		if(isSuccess(result) && result.getModel().getId()>0){
+		     adCountCacheService.setAdCountRecord(Long.parseLong(String.valueOf(result.getModel().getId())), result.getModel().getAdCount());
+		}
+    	return result;
 	}
 
 	@Audit(date = "2017-05-12", reviewer = "孙林青")

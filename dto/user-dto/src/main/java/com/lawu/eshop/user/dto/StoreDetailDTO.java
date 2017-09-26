@@ -105,6 +105,9 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "纬度")
     private BigDecimal latitude;
 
+    @ApiModelProperty(value = "门店行业")
+    private String industryPath;
+
     public String getName() {
         return name;
     }
@@ -343,5 +346,13 @@ public class StoreDetailDTO {
 
     public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
+    }
+
+    public String getIndustryPath() {
+        return industryPath;
+    }
+
+    public void setIndustryPath(String industryPath) {
+        this.industryPath = industryPath;
     }
 }

@@ -83,6 +83,21 @@ public class MemberApiConfig {
 	
 	@Value(value="${share.ad.logo-image-path}")
 	private String shareAdLogoPath;
+	
+	@Value(value="${share.red-packet.default-image}")
+	private String shareRedPacketDefaultImagePath;
+
+	@Value(value="${download_url}")
+	private String downloadUrl;
+	
+	
+	public String getDownloadUrl() {
+		return downloadUrl;
+	}
+
+	public void setDownloadUrl(String downloadUrl) {
+		this.downloadUrl = downloadUrl;
+	}
 
 	public String getImageUrl() {
 		return imageUrl;
@@ -240,5 +255,11 @@ public class MemberApiConfig {
 	public String getShareAdLogoPath() {
 		return shareAdLogoPath;
 	}
+
+	public String getShareRedPacketDefaultImagePath() {
+		return shareRedPacketDefaultImagePath;
+	}
+
+	
 	
 }

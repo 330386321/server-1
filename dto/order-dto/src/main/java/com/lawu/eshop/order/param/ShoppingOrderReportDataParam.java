@@ -8,9 +8,9 @@ package com.lawu.eshop.order.param;
 public class ShoppingOrderReportDataParam {
 	
 	/**
-	 * 创建时间
+	 * 订单完成时间
 	 */
-	private String gmtCreate;
+	private String gmtDone;
 	
 	/**
 	 * 商家id
@@ -22,12 +22,12 @@ public class ShoppingOrderReportDataParam {
 	 */
 	private Byte flag;
 
-	public String getGmtCreate() {
-		return gmtCreate;
+	public String getGmtDone() {
+		return gmtDone;
 	}
 
-	public void setGmtCreate(String gmtCreate) {
-		this.gmtCreate = gmtCreate;
+	public void setGmtDone(String gmtDone) {
+		this.gmtDone = gmtDone;
 	}
 
 	public Long getMerchantId() {

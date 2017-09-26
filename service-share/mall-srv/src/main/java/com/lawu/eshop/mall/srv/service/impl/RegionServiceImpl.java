@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.mall.srv.bo.RegionSelectorDataBO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -107,5 +108,20 @@ public class RegionServiceImpl implements RegionService {
         regionDO.setLongitude(longitude);
         regionDO.setLatitude(latitude);
         regionDOMapper.updateByPrimaryKeySelective(regionDO);
+    }
+
+    @Override
+    public List<RegionSelectorDataBO> getRegionByParentId(String s) {
+        RegionDOExample example = new RegionDOExample();
+        example.createCriteria().andParentIdEqualTo(Integer.valueOf(s));
+        List<RegionDO> regionDOS = regionDOMapper.selectByExample(example);
+        List<RegionSelectorDataBO> bos = new ArrayList<>();
+        for(RegionDO rdo : regionDOS){
+            RegionSelectorDataBO bo = new RegionSelectorDataBO();
+            bo.setCode(rdo.getId().toString());
+            bo.setAddress(rdo.getName());
+            bos.add(bo);
+        }
+        return bos;
     }
 }

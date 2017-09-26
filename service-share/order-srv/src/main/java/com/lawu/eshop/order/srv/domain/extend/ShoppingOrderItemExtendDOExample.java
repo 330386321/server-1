@@ -1331,6 +1331,11 @@ public class ShoppingOrderItemExtendDOExample {
             addCriterion("DATE_ADD(so.gmt_transaction,INTERVAL " + expr + " DAY) <=", value, "gmtTransaction");
             return (Criteria) this;
         }
+        
+        public Criteria andSOStatusEqualTo(Byte value) {
+            addCriterion("so.status =", value, "status");
+            return (Criteria) this;
+        }
     }
 
     /**

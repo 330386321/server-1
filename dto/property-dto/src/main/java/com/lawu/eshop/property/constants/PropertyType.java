@@ -61,6 +61,8 @@ public class PropertyType {
 	public final static String sale_commission_3_default = "0.001";
 	public final static String sale_commission_add_scope = "sale_commission_add_scope";
 	public final static String sale_commission_add_scope_default = "0.0005";
-	
+
+	//会员成为商家粉丝获得积分比例
+	public final static String MEMBER_FANS_POINT = "member_fans_point";
 	
 }

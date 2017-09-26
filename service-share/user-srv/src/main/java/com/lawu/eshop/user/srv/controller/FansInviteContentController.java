@@ -79,4 +79,16 @@ public class FansInviteContentController extends BaseController {
     	dto.setMerchantStoreId(merchantStoreInfoBO.getMerchantStoreId());
     	return successGet(dto);
     }
+
+	/**
+	 * 处理过期的粉丝邀请(更改过期状态，删除粉丝记录，退还商家积分)
+	 *
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "dealOverdueFansInvite", method = RequestMethod.GET)
+	public Result dealOverdueFansInvite() {
+		fansInviteContentService.dealOverdueFansInvite();
+		return successGet();
+	}
 }

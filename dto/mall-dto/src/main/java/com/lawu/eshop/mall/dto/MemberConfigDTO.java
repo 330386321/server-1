@@ -36,6 +36,12 @@ public class MemberConfigDTO extends ConfigDTO {
     @ApiModelProperty(value = "广告分享Logo路径", required = true)
     private String shareAdLogoPath;
     
+    /**
+     * 红包分享默认图片路径
+     */
+    @ApiModelProperty(value = "红包分享默认图片路径", required = true)
+	private String shareRedPacketDefaultImagePath;
+    
 	public String getMemberH5Ip() {
 		return memberH5Ip;
 	}
@@ -65,6 +71,12 @@ public class MemberConfigDTO extends ConfigDTO {
 	}
 	public void setShareAdLogoPath(String shareAdLogoPath) {
 		this.shareAdLogoPath = shareAdLogoPath;
+	}
+	public String getShareRedPacketDefaultImagePath() {
+		return shareRedPacketDefaultImagePath;
+	}
+	public void setShareRedPacketDefaultImagePath(String shareRedPacketDefaultImagePath) {
+		this.shareRedPacketDefaultImagePath = shareRedPacketDefaultImagePath;
 	}
     
 }

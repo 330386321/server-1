@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.ad.constants.FileTypeEnum;
+import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.FileTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
@@ -64,6 +65,7 @@ import com.lawu.eshop.member.api.service.FansMerchantService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantService;
+import com.lawu.eshop.member.api.service.PraiseDoHanlderMinusPointService;
 import com.lawu.eshop.member.api.service.PropertyInfoDataService;
 import com.lawu.eshop.member.api.service.VerifyCodeService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
@@ -73,7 +75,6 @@ import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
-import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.UserRedPacketDTO;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.utils.DateUtil;
@@ -130,12 +131,13 @@ public class AdController extends BaseController {
 	
 	@Autowired
 	private AdLexiconService adLexiconService;
+
 	
 	@Autowired
-	private AdCountRecordService adCountRecordService;
+	private PraiseDoHanlderMinusPointService praiseDoHanlderMinusPointService;
 
 	/**
-	 * @see selectEgainAd
+	 * @see
 	 */
 	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
@@ -220,14 +222,6 @@ public class AdController extends BaseController {
     		adEgainDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
     		adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
     	}
-    	if(StringUtils.isNotEmpty(adEgainDTO.getVideoImgUrl())){
-    		String url=memberApiConfig.getVideoUploadUrl()+"/"+adEgainDTO.getMediaUrl();
-    		File f= new File(url); 
-    		if (f.exists() && f.isFile()){  
-    	        adEgainDTO.setFileSize(f.length()/1024/1024);
-    	    }
-    		adEgainDTO.setVideoTime(VideoCutImgUtil.getVideoTime(url, memberApiConfig.getFfmpegUrl()));
-    	}
 	    
 		Result<Set<String>> rs= adViewService.getAdviews(id.toString());
 		 
@@ -260,7 +254,13 @@ public class AdController extends BaseController {
 		AdSolrRealParam param = new AdSolrRealParam();
 		param.setMemberId(memberId);
 		param.setRegionPath(adPraiseParam.getTransRegionPath());
-		param.setStatusEnum(AdStatusEnum.getEnum(adPraiseParam.getStatusEnum().getVal()));
+		if (adPraiseParam.getStatusEnum().getVal().byteValue() == AdPraiseStatusEnum.AD_STATUS_SHOOT.getVal()) {
+			param.setStatusEnum(AdStatusEnum.AD_STATUS_PUTING);
+		} else if (adPraiseParam.getStatusEnum().getVal().byteValue() == AdPraiseStatusEnum.AD_STATUS_TOBEGIN.getVal()) {
+			param.setStatusEnum(AdStatusEnum.AD_STATUS_ADD);
+		} else {
+			param.setStatusEnum(AdStatusEnum.AD_STATUS_PUTED);
+		}
 		param.setCurrentPage(adPraiseParam.getCurrentPage());
 		param.setPageSize(adPraiseParam.getPageSize());
 		param.setMerchantIds(merchantIds);
@@ -327,9 +327,7 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		String num = UserUtil.getCurrentUserNum(getRequest());
-		return adService.clickPraise(id,memberId,num);
+		return adExtendService.clickPraise(id);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -408,6 +406,7 @@ public class AdController extends BaseController {
 
 	}
 
+	@Deprecated
 	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-05-02", reviewer = "孙林青")
 	@Authorization
@@ -416,6 +415,7 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "doHanlderMinusPoint", method = RequestMethod.POST)
 	public Result doHanlderMinusPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "广告id") Long id) {
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
+		long memberId = UserUtil.getCurrentUserId(getRequest());
 		PointDetailQueryData1Param query = new PointDetailQueryData1Param();
 		query.setBizId(id.toString());
 		query.setPointType(MemberTransactionTypeEnum.PRAISE_AD.getValue());
@@ -432,7 +432,13 @@ public class AdController extends BaseController {
 		param.setPoint("20");
 		param.setBizId(id.toString());
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PRAISE_AD);
-		return propertyInfoDataService.doHanlderMinusPoint(param);
+		Result result = propertyInfoDataService.doHanlderMinusPoint(param);
+		
+		if(isSuccess(result)){
+			praiseDoHanlderMinusPointService.setAdPraiseIsDoPointRecord(String.valueOf(id)+String.valueOf(memberId));
+		}
+		
+		return result;
 
 	}
 

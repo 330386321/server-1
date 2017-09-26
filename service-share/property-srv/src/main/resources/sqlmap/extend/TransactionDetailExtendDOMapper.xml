@@ -22,7 +22,7 @@
         <result column="amount" jdbcType="DECIMAL" property="amount" />
         <result column="direction" jdbcType="TINYINT" property="direction" />
     </resultMap>
-    
+
     <!-- 根据时间获取获取买单和订单的收入 -->
 	<select id="selectTotalSales"  resultMap="TotalSalesResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample">
 		SELECT sum(amount) as amount, transaction_type FROM transaction_detail 
@@ -88,5 +88,25 @@
 			WHERE transaction_type in (100, 101)
 			AND gmt_create BETWEEN #{start} AND #{end}
 		GROUP BY transaction_type,province_id,city_id,area_id
+	</select>
+
+	<resultMap id="IncomeMsgResultMap" type="com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView">
+		<result column="user_num" jdbcType="VARCHAR" property="userNum" />
+		<result column="amount" jdbcType="DECIMAL" property="money" />
+		<result column="transaction_type" jdbcType="TINYINT" property="bType" />
+	</resultMap>
+
+	<select id="getIncomeMsgDataList"  resultMap="IncomeMsgResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample">
+		SELECT
+			user_num,
+			transaction_type,
+			sum(amount) amount
+		FROM
+			transaction_detail
+		WHERE
+			transaction_type IN (12, 13, 115, 116)
+		AND gmt_create BETWEEN #{begin}
+		AND #{end}
+		group by user_num,transaction_type
 	</select>
 </mapper>

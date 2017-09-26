@@ -14,6 +14,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -77,7 +78,7 @@ public class UserRedPacketController extends BaseController {
 	
 	@Autowired
 	private AdCountRecordService adCountRecordService;
-
+	
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "新增用户红包", notes = "新增用户红包（李洪军）", httpMethod = "POST")
 	@Authorization

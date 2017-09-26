@@ -98,4 +98,13 @@ public interface FansMerchantService {
      */ 
 	void saveFansMerchantFromInvite(Long merchantId, Long memberId, Long messageId, Boolean dealWay);
 
+    /**
+     * 根据ID查询粉丝记录
+     *
+     * @param id
+     * @return
+     * @author meishuquan
+     */
+    FansMerchantBO getFansMerchantById(Long id);
+
 }

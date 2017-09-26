@@ -27,12 +27,18 @@
 			audit_user_name =
 			#{item.auditUserName,jdbcType=VARCHAR},
 			gmt_modified =
-			#{item.gmtModified,jdbcType=TIMESTAMP},
+			#{item.gmtModified,jdbcType=TIMESTAMP}
 			<if test="item.gmtAccept != null">
-				gmt_accept = #{item.gmtAccept,jdbcType=TIMESTAMP}
+				,gmt_accept = #{item.gmtAccept,jdbcType=TIMESTAMP}
 			</if>
 			<if test="item.gmtFinish != null">
-				gmt_finish = #{item.gmtFinish,jdbcType=TIMESTAMP}
+				,gmt_finish = #{item.gmtFinish,jdbcType=TIMESTAMP}
+			</if>
+			<if test="item.currentScale != null">
+				,current_scale = #{item.currentScale,jdbcType=VARCHAR}
+			</if>
+			<if test="item.money != null">
+				,money = #{item.money,jdbcType=DECIMAL}
 			</if>
 			where id =
 			#{item.id,jdbcType=BIGINT}

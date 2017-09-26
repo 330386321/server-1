@@ -72,7 +72,7 @@ public class UploadController extends BaseController {
                 break;
             case FD_FILE_ERROR:
                 result.setRet(ResultCode.FAIL);
-                result.setMsg(ResultCode.get(ResultCode.FD_FILE_ERROR));
+                result.setMsg(ResultCode.get(ResultCode.FD_FILE_ERROR)); 
                 break;
             case FD_FILE_IMG_BIG:
                 result.setRet(ResultCode.FAIL);

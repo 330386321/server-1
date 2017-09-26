@@ -48,6 +48,9 @@ public class FansInviteContentDTO {
 	private FansInviteResultEnum fansInviteResultEnum;
 	
 	private Date gmtModified;
+
+	@ApiModelProperty(value = "是否过期，false--否，true--是", required = true)
+	private Boolean isOverdue;
 	
 	public FansInviteResultEnum getFansInviteResultEnum() {
 		return fansInviteResultEnum;
@@ -160,5 +163,12 @@ public class FansInviteContentDTO {
 	public void setManageTypeEnum(ManageTypeEnum manageTypeEnum) {
 		this.manageTypeEnum = manageTypeEnum;
 	}
-	
+
+	public Boolean getIsOverdue() {
+		return isOverdue;
+	}
+
+	public void setIsOverdue(Boolean overdue) {
+		isOverdue = overdue;
+	}
 }

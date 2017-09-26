@@ -270,6 +270,9 @@ public class ProductServiceImpl implements ProductService {
         for (int i = 0; i < imageContents.size(); i++) {
             MemberProductImageDetailDTO d = new MemberProductImageDetailDTO();
             d.setDetail(imageContents.get(i));
+            if(imagesDetail.size() < (i+1)){
+                break;
+            }
             d.setImageUrl(imagesDetail.get(i));
             imageDetail.add(d);
         }
@@ -520,6 +523,9 @@ public class ProductServiceImpl implements ProductService {
             pcDO.setSortid(0);
             pcDO.setStatus(true);
             pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_HEAD.getVal());
+            if(StringUtils.isBlank(imgUrl)){
+                continue;
+            }
             productImageDOMapper.insert(pcDO);
         }
         // 保存商品详情图片
@@ -536,6 +542,9 @@ public class ProductServiceImpl implements ProductService {
             pcDO.setStatus(true);
             pcDO.setSortid(i + 1);
             pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.getVal());
+            if(StringUtils.isBlank(imgUrl)){
+                continue;
+            }
             productImageDOMapper.insert(pcDO);
         }
 

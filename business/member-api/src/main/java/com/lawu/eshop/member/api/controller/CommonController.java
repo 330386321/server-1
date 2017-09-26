@@ -105,6 +105,7 @@ public class CommonController extends BaseController {
         configDTO.setShareFlatAdDefaultImagePath(memberApiConfig.getShareFlatAdDefaultImagePath());
         configDTO.setShareVideoAdDefaultImagePath(memberApiConfig.getShareVideoAdDefaultImagePath());
         configDTO.setShareAdLogoPath(memberApiConfig.getShareAdLogoPath());
+        configDTO.setShareRedPacketDefaultImagePath(memberApiConfig.getShareRedPacketDefaultImagePath());
         return successCreated(configDTO);
     }
 

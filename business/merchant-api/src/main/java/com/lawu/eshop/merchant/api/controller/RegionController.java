@@ -58,4 +58,12 @@ public class RegionController extends BaseController {
         Result<List<RegionPathDTO>> listResult = regionService.list();
         return successGet(listResult);
     }
+
+    @Audit(date = "2017-09-19", reviewer = "杨清华")
+    @ApiOperation(value = "pc地区控件数据来源", notes = "pc地区控件数据来源-杨清华", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "region/getRegionSelectorData", method = RequestMethod.GET)
+    public Result<String> getRegionSelectorData() {
+        return regionService.getRegionSelectorData();
+    }
 }

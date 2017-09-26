@@ -20,6 +20,7 @@ public class UserRedPacketReturnDTO {
 	
 	@ApiModelProperty(value = "总金额")
 	private BigDecimal money;
+	
 
 	public String getNickName() {
 		return nickName;

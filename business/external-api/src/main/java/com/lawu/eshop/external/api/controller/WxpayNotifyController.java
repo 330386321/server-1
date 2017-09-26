@@ -156,6 +156,7 @@ public class WxpayNotifyController extends BaseController {
                         ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
                                 .selectThirdPayCallBackQueryPayOrder(param.getBizIds());
                         merchantUserNum = payOrderCallback.getBusinessUserNum();
+                        isSendMsg = true;
                         if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), dmoney) == 0) {
                             param.setRegionPath(extra[6]);
                             result = orderService.doHandlePayOrderNotify(param);
@@ -211,6 +212,9 @@ public class WxpayNotifyController extends BaseController {
                 } else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))
                         || ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
                 	String property_key = PropertyType.MERCHANT_BALANCE_PAY_POINT_SCALE;
+                	if(ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                		property_key = PropertyType.MEMBER_BALANCE_PAY_POINT_SCALE;
+                	}
 			        String scale = propertyService.getValue(property_key).getModel().toString();
                 	messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
                     messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));

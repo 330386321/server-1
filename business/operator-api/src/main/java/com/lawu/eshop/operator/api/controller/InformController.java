@@ -68,6 +68,7 @@ public class InformController extends BaseController {
 	@RequiresAuthentication
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@PageBody
+	@RequiresPermissions("inform:list")
 	@RequestMapping(value = "selectInformList", method = RequestMethod.GET)
 	public Result<Page<InformDTO>> selectInformList(@ModelAttribute @ApiParam(value = "查询信息") InformQueryParam param) {
 		Result<Page<InformDTO>> page = informService.selectInformList(param);
@@ -92,10 +93,10 @@ public class InformController extends BaseController {
 			edit.setStatus(InformStatusEnum.INFORM_NOT_HANDLED.getVal());
 		}
 		if (param.getInformType() == InformEnum.INFORM_TYPE_PLAT) {
-			//adPlatformService.unShelve(param.getInformtItemId());// 平面广告
+			adPlatformService.unShelve(param.getInformtItemId());// 平面广告
 		} else if (param.getInformType() == InformEnum.INFORM_TYPE_GOODS) {// 商品
-			/*productAuditService.updateProductStatus(param.getInformtItemId().toString(),
-					ProductStatusEnum.PRODUCT_STATUS_DOWN);*/
+			productAuditService.updateProductStatus(param.getInformtItemId().toString(),
+					ProductStatusEnum.PRODUCT_STATUS_DOWN);
 		} else if (param.getInformType() == InformEnum.INFORM_TYPE_MERCHANT) {// 商家
 
 		} else if (param.getInformType() == InformEnum.INFORM_TYPE_PRAISE) {// E赞

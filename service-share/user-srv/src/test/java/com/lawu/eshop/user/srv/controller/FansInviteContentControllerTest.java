@@ -188,4 +188,27 @@ public class FansInviteContentControllerTest {
             Assert.fail(e.getMessage());
         }
     }
+
+    //SUBDATE函数不支持
+    /*@Transactional
+    @Rollback
+    @Test
+    public void dealOverdueFansInvite() {
+        FansInviteContentDO inviteContentDO = new FansInviteContentDO();
+        inviteContentDO.setMerchantId(200L);
+        inviteContentDO.setMerchantNum("B0001");
+        inviteContentDO.setIsOverdue(false);
+        inviteContentDO.setGmtCreate(DateUtil.stringToDate("2017-01-01 00:00:00"));
+        fansInviteContentDOMapper.insertSelective(inviteContentDO);
+
+        RequestBuilder request = get("/fansInviteContent/dealOverdueFansInvite");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }*/
 }

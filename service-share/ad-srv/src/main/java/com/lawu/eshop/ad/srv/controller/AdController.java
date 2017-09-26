@@ -60,6 +60,7 @@ import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.AdClickPraiseInfoBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPointBO;
@@ -232,13 +233,14 @@ public class AdController extends BaseController {
 		if(bo.isOverClick()){
 			return successCreated(ResultCode.AD_CLICK_PUTED);
 		}
-		if(!bo.isOverClick() && bo.getPoint().compareTo(BigDecimal.valueOf(0))==0){
-			return successCreated(ResultCode.AD_CLICK_SYS_WORDS);
-		}
-		ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
+		
 		ClickAdPointDTO dto = new ClickAdPointDTO();
-		dto.setAddPoint(clickAdPointBO.getAddPoint());
-		dto.setPoint(clickAdPointBO.getAdTotlePoint());
+		if(!bo.isOverClick() && !bo.isSysWords()){
+			ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
+			dto.setAddPoint(clickAdPointBO.getAddPoint());
+			dto.setPoint(clickAdPointBO.getAdTotlePoint());
+		}
+		
 		return successCreated(dto);
 	}
 
@@ -304,31 +306,34 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "selectChoiceness", method = RequestMethod.POST)
 	public Result<Page<AdDTO>> selectChoiceness(@RequestBody AdSolrRealParam param) {
 		List<AdSolrDTO> solrDTOS = new ArrayList<>();
-		String areaQueryStr = "putWay_i:1";
+		String areaQueryStr = "putWay_i:1 AND -status_i:3";
 		if (StringUtils.isEmpty(param.getRegionPath())) {
 			areaQueryStr += " AND area_is:0";
 		} else {
 			String[] path = param.getRegionPath().split("/");
 			if (path.length == 3) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
-			} else {
+			} else if (path.length == 2) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
 			}
 		}
 
 		String fansQueryStr = "";
 		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
 			List<Long> merchantIds = param.getMerchantIds();
-			for (Long id : merchantIds) {
-				fansQueryStr += "merchantId_l:" + id + " OR ";
-			}
-			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND (" + fansQueryStr + ")";
-		}
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND -status_i:3 AND merchantId_l:(" + fansQueryStr + ")";
+        }
 
 		int hitMax = 0;
 		int hitMin = 0;
-		SolrQuery query = new SolrQuery();
+        int totalCount = 0;
+        SolrQuery query = new SolrQuery();
 		if (StringUtils.isEmpty(fansQueryStr)) {
 			query.setParam("q", areaQueryStr);
 		} else {
@@ -337,22 +342,25 @@ public class AdController extends BaseController {
 		query.setSort("hits_i", SolrQuery.ORDER.desc);
 		query.setStart(param.getOffset());
 		query.setRows(param.getPageSize());
-		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
 			solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			hitMax = Integer.valueOf(solrDocumentList.get(0).get("hits_i").toString());
 			hitMin = Integer.valueOf(solrDocumentList.get(solrDocumentList.size() - 1).get("hits_i").toString());
-		}
+            totalCount = (int) solrDocumentList.getNumFound();
+        }
 
 		if (param.getLatitude() != null && param.getLongitude() != null) {
-			String latLon = param.getLatitude() + "," + param.getLongitude();
+			double lat = BigDecimal.valueOf(param.getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double lon = BigDecimal.valueOf(param.getLongitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			String latLon = lat + "," + lon;
 			query = new SolrQuery();
 			query.setParam("pt", latLon);
 			query.setParam("fq", "{!geofilt}");
 			query.setParam("sfield", "latLon_p");
 			query.setParam("d", "30");
 			query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
-			String radiusQueryStr = "putWay_i:3";
+			String radiusQueryStr = "putWay_i:3 AND -status_i:3";
 			if (hitMax > 0) {
 				radiusQueryStr += " AND hits_i:[" + hitMin + " TO " + hitMax + "]";
 			}
@@ -360,11 +368,12 @@ public class AdController extends BaseController {
 			SolrDocumentList radiusList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 			if (radiusList != null && !radiusList.isEmpty()) {
 				for (SolrDocument solrDocument : radiusList) {
-					if (Double.valueOf(solrDocument.get("distance").toString()) <= Double.valueOf(solrDocument.get("radius_i").toString())) {
-						AdSolrDTO adSolrDTO = AdConverter.convertDTO(solrDocument);
-						solrDTOS.add(adSolrDTO);
-					}
-				}
+                    if (Double.valueOf(solrDocument.get("distance").toString()) <= Double.valueOf(solrDocument.get("radius_i").toString())) {
+                        AdSolrDTO adSolrDTO = AdConverter.convertDTO(solrDocument);
+                        solrDTOS.add(adSolrDTO);
+                        totalCount++;
+                    }
+                }
 			}
 		}
 
@@ -379,7 +388,7 @@ public class AdController extends BaseController {
 
 		Page<AdDTO> page = new Page<>();
 		page.setCurrentPage(param.getCurrentPage());
-		page.setTotalCount(solrDTOS.size());
+		page.setTotalCount(totalCount);
 		page.setRecords(AdConverter.convertAdDTOS(solrDTOS));
 
 		//Page<AdBO> pageBO = adService.selectChoiceness(adMemberParam);
@@ -418,15 +427,15 @@ public class AdController extends BaseController {
 	public Result<PraisePointDTO> clickPraise(@PathVariable Long id, @RequestParam Long memberId, @RequestParam String num) {
 		Boolean flag = pointPoolService.selectStatusByMember(id, memberId);
 		if (flag) return successCreated(ResultCode.AD_PRAISE_POINT_GET);
+		AdClickPraiseInfoBO bo = adService.clickPraise(id, memberId, num);
 		
-		BigDecimal point = adService.clickPraise(id, memberId, num);
-		if (point.compareTo(new BigDecimal(0)) == 0) {
+		if (bo.getPoint().compareTo(new BigDecimal(0)) == 0 && !bo.isSysWordFlag()) {
 			return successCreated(ResultCode.AD_PRAISE_PUTED);
-		} else {
-			PraisePointDTO dto = new PraisePointDTO();
-			dto.setPoint(point);
-			return successCreated(dto);
-		}
+		} 
+		
+		PraisePointDTO dto = new PraisePointDTO();
+		dto.setPoint(bo.getPoint());
+		return successCreated(dto);
 
 	}
 
@@ -439,15 +448,17 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "queryAdByTitle", method = RequestMethod.POST)
 	public Result<Page<AdSolrDTO>> queryAdByTitle(@RequestBody AdsolrFindParam adSolrParam) {
 		List<AdSolrDTO> solrDTOS = new ArrayList<>();
-		String areaQueryStr = "putWay_i:1";
+		String areaQueryStr = "putWay_i:1 AND -status_i:3 AND -type_i:3";
 		if (StringUtils.isEmpty(adSolrParam.getRegionPath())) {
 			areaQueryStr += " AND area_is:0";
 		} else {
 			String[] path = adSolrParam.getRegionPath().split("/");
 			if (path.length == 3) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
-			} else {
+			} else if (path.length == 2) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
 			}
 		}
 		if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
@@ -456,19 +467,20 @@ public class AdController extends BaseController {
 
 		String fansQueryStr = "";
 		if (adSolrParam.getMemberId() != null && adSolrParam.getMemberId() > 0 && !adSolrParam.getMerchantIds().isEmpty()) {
-			List<Long> merchantIds = adSolrParam.getMerchantIds();
-			for (Long id : merchantIds) {
-				fansQueryStr += "merchantId_l:" + id + " OR ";
-			}
-			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND (" + fansQueryStr + ")";
-			if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
-				fansQueryStr += " AND title_s:*" + adSolrParam.getAdSolrParam().getTitle() + "*";
-			}
-		}
+            List<Long> merchantIds = adSolrParam.getMerchantIds();
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND -status_i:3 AND -type_i:3 AND merchantId_l:(" + fansQueryStr + ")";
+            if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
+                fansQueryStr += " AND title_s:*" + adSolrParam.getAdSolrParam().getTitle() + "*";
+            }
+        }
 
 		int hitMax = 0;
 		int hitMin = 0;
+        int totalCount = 0;
 		SolrQuery query = new SolrQuery();
 		if (StringUtils.isEmpty(fansQueryStr)) {
 			query.setParam("q", areaQueryStr);
@@ -478,22 +490,25 @@ public class AdController extends BaseController {
 		query.setSort("hits_i", SolrQuery.ORDER.desc);
 		query.setStart(adSolrParam.getAdSolrParam().getOffset());
 		query.setRows(adSolrParam.getAdSolrParam().getPageSize());
-		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
 			solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			hitMax = Integer.valueOf(solrDocumentList.get(0).get("hits_i").toString());
 			hitMin = Integer.valueOf(solrDocumentList.get(solrDocumentList.size() - 1).get("hits_i").toString());
+            totalCount = (int) solrDocumentList.getNumFound();
 		}
 
 		if (adSolrParam.getAdSolrParam().getLatitude() != null && adSolrParam.getAdSolrParam().getLongitude() != null) {
-			String latLon = adSolrParam.getAdSolrParam().getLatitude() + "," + adSolrParam.getAdSolrParam().getLongitude();
+			double lat = BigDecimal.valueOf(adSolrParam.getAdSolrParam().getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double lon = BigDecimal.valueOf(adSolrParam.getAdSolrParam().getLongitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			String latLon = lat + "," + lon;
 			query = new SolrQuery();
 			query.setParam("pt", latLon);
 			query.setParam("fq", "{!geofilt}");
 			query.setParam("sfield", "latLon_p");
 			query.setParam("d", "30");
 			query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
-			String radiusQueryStr = "putWay_i:3";
+			String radiusQueryStr = "putWay_i:3 AND -status_i:3 AND -type_i:3";
 			if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
 				radiusQueryStr += " AND title_s:*" + adSolrParam.getAdSolrParam().getTitle() + "*";
 			}
@@ -507,6 +522,7 @@ public class AdController extends BaseController {
 					if (Double.valueOf(solrDocument.get("distance").toString()) <= Double.valueOf(solrDocument.get("radius_i").toString())) {
 						AdSolrDTO adSolrDTO = AdConverter.convertDTO(solrDocument);
 						solrDTOS.add(adSolrDTO);
+                        totalCount++;
 					}
 				}
 			}
@@ -523,7 +539,7 @@ public class AdController extends BaseController {
 
 		Page<AdSolrDTO> page = new Page<>();
 		page.setCurrentPage(adSolrParam.getCurrentPage());
-		page.setTotalCount(solrDTOS.size());
+		page.setTotalCount(totalCount);
 		page.setRecords(solrDTOS);
 
 		//SolrQuery query = new SolrQuery();
@@ -599,8 +615,10 @@ public class AdController extends BaseController {
 			String[] path = param.getRegionPath().split("/");
 			if (path.length == 3) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
-			} else {
+			} else if (path.length == 2) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
 			}
 		}
 		if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_FLAT)) {
@@ -612,20 +630,21 @@ public class AdController extends BaseController {
 		String fansQueryStr = "";
 		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
 			List<Long> merchantIds = param.getMerchantIds();
-			for (Long id : merchantIds) {
-				fansQueryStr += "merchantId_l:" + id + " OR ";
-			}
-			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND status_i:2 AND (" + fansQueryStr + ")";
-			if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_FLAT)) {
-				fansQueryStr += " AND type_i:1";
-			} else if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_VIDEO)) {
-				fansQueryStr += " AND type_i:2";
-			}
-		}
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND status_i:2 AND merchantId_l:(" + fansQueryStr + ")";
+            if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_FLAT)) {
+                fansQueryStr += " AND type_i:1";
+            } else if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_VIDEO)) {
+                fansQueryStr += " AND type_i:2";
+            }
+        }
 
 		int hitMax = 0;
 		int hitMin = 0;
+        int totalCount = 0;
 		SolrQuery query = new SolrQuery();
 		if (StringUtils.isEmpty(fansQueryStr)) {
 			query.setParam("q", areaQueryStr);
@@ -635,15 +654,18 @@ public class AdController extends BaseController {
 		query.setSort("hits_i", SolrQuery.ORDER.desc);
 		query.setStart(param.getOffset());
 		query.setRows(param.getPageSize());
-		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
 			solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			hitMax = Integer.valueOf(solrDocumentList.get(0).get("hits_i").toString());
 			hitMin = Integer.valueOf(solrDocumentList.get(solrDocumentList.size() - 1).get("hits_i").toString());
+            totalCount = (int) solrDocumentList.getNumFound();
 		}
 
 		if (param.getLatitude() != null && param.getLongitude() != null) {
-			String latLon = param.getLatitude() + "," + param.getLongitude();
+			double lat = BigDecimal.valueOf(param.getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double lon = BigDecimal.valueOf(param.getLongitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			String latLon = lat + "," + lon;
 			query = new SolrQuery();
 			query.setParam("pt", latLon);
 			query.setParam("fq", "{!geofilt}");
@@ -666,6 +688,7 @@ public class AdController extends BaseController {
 					if (Double.valueOf(solrDocument.get("distance").toString()) <= Double.valueOf(solrDocument.get("radius_i").toString())) {
 						AdSolrDTO adSolrDTO = AdConverter.convertDTO(solrDocument);
 						solrDTOS.add(adSolrDTO);
+                        totalCount++;
 					}
 				}
 			}
@@ -682,7 +705,7 @@ public class AdController extends BaseController {
 
 		Page<AdFlatVideoDTO> page = new Page<>();
 		page.setCurrentPage(param.getCurrentPage());
-		page.setTotalCount(solrDTOS.size());
+		page.setTotalCount(totalCount);
 		page.setRecords(AdConverter.convertAdFlatVideoDTOS(solrDTOS));
 		return successGet(page);
 	}
@@ -704,8 +727,10 @@ public class AdController extends BaseController {
 			String[] path = param.getRegionPath().split("/");
 			if (path.length == 3) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
-			} else {
+			} else if (path.length == 2) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
 			}
 		}
 		if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTING)) {
@@ -719,20 +744,21 @@ public class AdController extends BaseController {
 		String fansQueryStr = "";
 		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
 			List<Long> merchantIds = param.getMerchantIds();
-			for (Long id : merchantIds) {
-				fansQueryStr += "merchantId_l:" + id + " OR ";
-			}
-			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND type_i:3 AND (" + fansQueryStr + ")";
-			if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTING)) {
-				fansQueryStr += " AND status_i:2";
-			} else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_ADD)) {
-				fansQueryStr += " AND status_i:1";
-			} else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTED)) {
-				fansQueryStr += " AND status_i:3";
-			}
-		}
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND type_i:3 AND merchantId_l:(" + fansQueryStr + ")";
+            if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTING)) {
+                fansQueryStr += " AND status_i:2";
+            } else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_ADD)) {
+                fansQueryStr += " AND status_i:1";
+            } else if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTED)) {
+                fansQueryStr += " AND status_i:3";
+            }
+        }
 
+        int totalCount = 0;
 		SolrQuery query = new SolrQuery();
 		if (StringUtils.isEmpty(fansQueryStr)) {
 			query.setParam("q", areaQueryStr);
@@ -746,23 +772,24 @@ public class AdController extends BaseController {
 		}
 		query.setStart(param.getOffset());
 		query.setRows(param.getPageSize());
-		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
 			List<AdSolrDTO> solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			for (AdSolrDTO solrDTO : solrDTOS) {
 				AdBO adBO = adService.selectById(solrDTO.getId());
-				if (adBO.getStatusEnum().val.byteValue() != AdStatusEnum.AD_STATUS_PUTED.val) {
+				if (adBO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_ADD.val) {
 					int favoriteCount = favoriteAdService.getFavoriteCount(adBO.getId());
 					solrDTO.setHits(favoriteCount);
 				}
 				AdPraiseDTO adPraiseDTO = AdConverter.convertDTO(solrDTO, adBO);
 				adPraiseDTOS.add(adPraiseDTO);
 			}
+            totalCount = (int) solrDocumentList.getNumFound();
 		}
 
 		Page<AdPraiseDTO> page = new Page<>();
 		page.setCurrentPage(param.getCurrentPage());
-		page.setTotalCount(adPraiseDTOS.size());
+		page.setTotalCount(totalCount);
 		page.setRecords(adPraiseDTOS);
 		return successGet(page);
 	}
@@ -777,27 +804,29 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "listAdRank", method = RequestMethod.POST)
 	public Result<List<AdDTO>> listAdRank(@RequestBody AdSolrRealParam param) {
 		List<AdSolrDTO> solrDTOS = new ArrayList<>();
-		String areaQueryStr = "putWay_i:1 AND type_i:1 AND (status_i:2 OR status_i:3)";
+		String areaQueryStr = "putWay_i:1 AND type_i:1";
 		if (StringUtils.isEmpty(param.getRegionPath())) {
 			areaQueryStr += " AND area_is:0";
 		} else {
 			String[] path = param.getRegionPath().split("/");
 			if (path.length == 3) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:" + path[2] + " OR area_is:0)";
-			} else {
+			} else if (path.length == 2) {
 				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:" + path[1] + " OR area_is:0)";
+			} else if (path.length == 1) {
+				areaQueryStr += " AND (area_is:" + path[0] + " OR area_is:0)";
 			}
 		}
 
 		String fansQueryStr = "";
 		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
 			List<Long> merchantIds = param.getMerchantIds();
-			for (Long id : merchantIds) {
-				fansQueryStr += "merchantId_l:" + id + " OR ";
-			}
-			fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-			fansQueryStr = "putWay_i:2 AND type_i:1 AND (status_i:2 OR status_i:3) AND (" + fansQueryStr + ")";
-		}
+            for (Long id : merchantIds) {
+                fansQueryStr += id + " OR ";
+            }
+            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+            fansQueryStr = "putWay_i:2 AND type_i:1 AND merchantId_l:(" + fansQueryStr + ")";
+        }
 
 		double pointMax = 0;
 		double pointMin = 0;
@@ -814,7 +843,7 @@ public class AdController extends BaseController {
 		}
 		query.setStart(param.getOffset());
 		query.setRows(param.getPageSize());
-		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		SolrDocumentList solrDocumentList = solrService.getSolrDocsByQueryPost(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		if (solrDocumentList != null && !solrDocumentList.isEmpty()) {
 			solrDTOS = AdConverter.convertDTO(solrDocumentList);
 			if (param.getOrderTypeEnum().equals(OrderTypeEnum.AD_TORLEPOINT_DESC)) {
@@ -827,14 +856,16 @@ public class AdController extends BaseController {
 		}
 
 		if (param.getLatitude() != null && param.getLongitude() != null) {
-			String latLon = param.getLatitude() + "," + param.getLongitude();
+			double lat = BigDecimal.valueOf(param.getLatitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double lon = BigDecimal.valueOf(param.getLongitude()).setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+			String latLon = lat + "," + lon;
 			query = new SolrQuery();
 			query.setParam("pt", latLon);
 			query.setParam("fq", "{!geofilt}");
 			query.setParam("sfield", "latLon_p");
 			query.setParam("d", "30");
 			query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
-			String radiusQueryStr = "putWay_i:3 AND type_i:1 AND (status_i:2 OR status_i:3)";
+			String radiusQueryStr = "putWay_i:3 AND type_i:1";
 			if (pointMax > 0) {
 				if (param.getOrderTypeEnum().equals(OrderTypeEnum.AD_TORLEPOINT_DESC)) {
 					radiusQueryStr += " AND totalPoint_d:[" + pointMin + " TO " + pointMax + "]";

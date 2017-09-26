@@ -1,5 +1,6 @@
 package com.lawu.eshop.ad.dto;
 
+import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -27,6 +28,9 @@ public class AdSolrDTO {
     @ApiModelProperty(value = "广告类型(AD_TYPE_FLAT-平面|AD_TYPE_VIDEO-视频|AD_TYPE_PRAISE-抢赞)", required = true)
     private AdTypeEnum typeEnum;
 
+    @ApiModelProperty(value = "状态")
+    private AdStatusEnum statusEnum;
+
     @ApiModelProperty(value = "店铺名称", required = true)
     private String merchantStoreName;
 
@@ -41,6 +45,9 @@ public class AdSolrDTO {
 
     @ApiModelProperty(value = "总积分")
     private Double totalPoint;
+
+    @ApiModelProperty(value = "浏览次数")
+    private Integer count;
 
     public Long getId() {
         return id;
@@ -138,4 +145,19 @@ public class AdSolrDTO {
         this.hits = hits;
     }
 
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public AdStatusEnum getStatusEnum() {
+        return statusEnum;
+    }
+
+    public void setStatusEnum(AdStatusEnum statusEnum) {
+        this.statusEnum = statusEnum;
+    }
 }

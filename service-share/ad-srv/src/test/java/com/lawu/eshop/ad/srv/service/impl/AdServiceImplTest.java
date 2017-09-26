@@ -35,6 +35,7 @@ import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.AdClickPraiseInfoBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
@@ -851,9 +852,8 @@ public class AdServiceImplTest {
         pointPoolDO.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
         pointPoolDOMapper.insert(pointPoolDO);
         
-        BigDecimal point= adService.clickPraise(ad.getId(), 1l, "aaa");
+        AdClickPraiseInfoBO point= adService.clickPraise(ad.getId(), 1l, "aaa");
         Assert.assertNotNull(point);
-        Assert.assertTrue(point.compareTo(BigDecimal.valueOf(0))==1);
 
     }
 	
@@ -884,7 +884,7 @@ public class AdServiceImplTest {
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
         Integer id=adDOMapper.insertSelective(ad);
         
-        BigDecimal point= adService.clickPraise(0l, 0l, "aaa");
+        AdClickPraiseInfoBO point= adService.clickPraise(0l, 0l, "aaa");
         Assert.assertNotNull(point);
 
     }

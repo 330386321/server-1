@@ -178,4 +178,28 @@ public class StringUtil {
     		return -1;
     	}
     }
+
+    /**
+     * 金额经度转换，去掉金额字符串后面的0
+     * @param money
+     * @return
+     */
+    public static String moneyPrecisionConvert(String money){
+        if(money == null || money.equals("")){
+            return "0";
+        }
+        String[] moneys = money.split("");
+        int j = 0;
+        for(int i = money.length() -1 ; i >= 0 ; i--){
+            if(!moneys[i].equals("0")){
+                j = i;
+                break;
+            }
+        }
+        money = money.substring(0,j+1);
+        if(money.endsWith(".")){
+            money = money.substring(0,money.indexOf("."));
+        }
+        return money;
+    }
 }

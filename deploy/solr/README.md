@@ -2,7 +2,7 @@
 ======
 
 ```Bash
-sudo docker build -t eshop/solr:6.5.1-alpine .
+sudo docker build -t registry.eshop.com/solr:6.5.1-alpine .
 ```
 
 solr单节点部署
@@ -11,7 +11,7 @@ solr单节点部署
 sudo docker run --name solr -t -d -p 8983:8983 \
     -v /etc/localtime:/etc/localtime:ro \
     -v /usr/local/eshop/solr/config/solr:/opt/solr/server/solr \
-    eshop/solr:6.5.1-alpine
+    registry.eshop.com/solr:6.5.1-alpine
 ```
 
 solr集群部署
@@ -20,6 +20,12 @@ solr集群部署
 创建znode节点
 ------
 
+#预发布环境
+```Bash
+sudo docker exec -it zookeeper /opt/zookeeper/bin/zkCli.sh -server 192.168.100.93:2181 create /solr "solr"
+```
+
+#正式环境
 ```Bash
 sudo docker exec -it zookeeper /opt/zookeeper/bin/zkCli.sh -server 192.168.100.90:2181 create /solr "solr"
 ```
@@ -29,19 +35,40 @@ sudo docker exec -it zookeeper /opt/zookeeper/bin/zkCli.sh -server 192.168.100.9
 
 第一个solr节点
 ------
+
+#预发布环境
+```Bash
+sudo docker run --name solr --net=host -t -d -p 8983:8983 -m 1g \
+    --add-host web93.lovelawu.com:192.168.100.93 \
+    -v /etc/localtime:/etc/localtime:ro \
+    registry.eshop.com/solr:6.5.1-alpine \
+    -c -z "192.168.100.93:2181,192.168.100.95:2181/solr" -force
+```
+
+#正式环境
 ```Bash
 sudo docker run --name solr --net=host -t -d -p 8983:8983 -m 1g \
     --add-host lvs90.lovelawu.com:192.168.100.90 \
     -v /etc/localtime:/etc/localtime:ro \
-    eshop/solr:6.5.1-alpine \
+    registry.eshop.com/solr:6.5.1-alpine \
     -c -z "192.168.100.90:2181,192.168.100.91:2181/solr" -force
 ```
 
 通过第一个节点上传配置到zookeeper
 ------
-```Bash
-sudo docker cp ~/solr/cloud containId:/opt
+```bash
+sudo docker cp /usr/local/eshop/solr/cloud solr:/opt
+```
 
+#预发布环境
+```Bash
+sudo docker exec -it solr /opt/solr/bin/solr \
+    zk -z 192.168.100.93:2181/solr \
+    -upconfig -n solr -d /opt/cloud
+```
+
+#正式环境
+```Bash
 sudo docker exec -it solr /opt/solr/bin/solr \
     zk -z 192.168.100.90:2181/solr \
     -upconfig -n solr -d /opt/cloud
@@ -50,10 +77,20 @@ sudo docker exec -it solr /opt/solr/bin/solr \
 第二个solr节点
 ------
 
+#预发布环境
+```Bash
+sudo docker run --name solr --net=host -t -d -p 8983:8983 -m 1g \
+    --add-host web95.lovelawu.com:192.168.100.95 \
+    -v /etc/localtime:/etc/localtime:ro \
+    registry.eshop.com/solr:6.5.1-alpine \
+    -c -z "192.168.100.93:2181,192.168.100.95:2181/solr" -force
+```
+
+#正式环境
 ```Bash
 sudo docker run --name solr --net=host -t -d -p 8983:8983 -m 1g \
     --add-host kingshard91.lovelawu.com:192.168.100.91 \
     -v /etc/localtime:/etc/localtime:ro \
-    eshop/solr:6.5.1-alpine \
+    registry.eshop.com/solr:6.5.1-alpine \
     -c -z "192.168.100.90:2181,192.168.100.91:2181/solr" -force
 ```

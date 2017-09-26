@@ -2,6 +2,8 @@ package com.lawu.eshop.property.srv.mapper.extend;
 
 import java.util.List;
 
+import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
+import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
 import org.apache.ibatis.annotations.Param;
 
 import com.lawu.eshop.property.srv.domain.extend.AreaPointConsumeDOView;
@@ -23,4 +25,6 @@ public interface PointDetailDOMapperExtend {
 	List<AreaPointConsumeDOView> getAreaPointConsume(@Param("bdate") String bdate, @Param("edate")String edate);
 	
 	List<AreaPointConsumeDOView> getAreaPointRefund(@Param("bdate") String bdate, @Param("edate")String edate);
+
+    List<IncomeMsgDOView> getIncomeMsgDataList(IncomeMsgExample example);
 }

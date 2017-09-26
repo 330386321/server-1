@@ -192,4 +192,12 @@
 			GROUP BY
 			channel
 	</select>
+
+	<select id="countOverdueFans" parameterType="com.lawu.eshop.user.param.UserFansParam" resultType="java.lang.Integer">
+		SELECT count(1) FROM fans_merchant WHERE merchant_id = #{merchantId} and status = 0 and channel = 2 and gmt_create &lt;= SUBDATE(#{gmtCreate},interval 24 hour);
+	</select>
+
+	<select id="delOverdueFans" parameterType="com.lawu.eshop.user.param.UserFansParam">
+		DELETE FROM fans_merchant WHERE merchant_id = #{merchantId} and status = 0 and channel = 2 and gmt_create &lt;= SUBDATE(#{gmtCreate},interval 24 hour);
+	</select>
 </mapper>

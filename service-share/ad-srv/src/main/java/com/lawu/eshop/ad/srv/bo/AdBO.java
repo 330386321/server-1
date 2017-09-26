@@ -10,6 +10,8 @@ import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class AdBO {
 
 	private Long id;
@@ -89,6 +91,10 @@ public class AdBO {
 	private ManageTypeEnum manageType;
 	 
 	private String logoUrl;
+	
+	private String fileSize;
+	
+	private String videoTime;
 
 	public Boolean getIsPraise() {
 		return isPraise;
@@ -352,6 +358,22 @@ public class AdBO {
 
 	public void setLogoUrl(String logoUrl) {
 		this.logoUrl = logoUrl;
+	}
+
+	public String getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(String fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	public String getVideoTime() {
+		return videoTime;
+	}
+
+	public void setVideoTime(String videoTime) {
+		this.videoTime = videoTime;
 	}
 	
 	

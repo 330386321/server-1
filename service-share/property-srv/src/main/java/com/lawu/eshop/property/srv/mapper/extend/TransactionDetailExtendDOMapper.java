@@ -2,6 +2,8 @@ package com.lawu.eshop.property.srv.mapper.extend;
 
 import java.util.List;
 
+import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
+import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
 import com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesDO;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesGroupByAreaDO;
@@ -48,5 +50,6 @@ public interface TransactionDetailExtendDOMapper {
 	List<TotalSalesGroupByAreaDO> selectTotalSalesGroupByArea(TotalSalesQueryExample example);
 	
 	ReportAdEarningsPointView getLovePointByBzId(ReportAdEarningsPointView view);
-	
+
+    List<IncomeMsgDOView> getIncomeMsgDataList(IncomeMsgExample example);
 }

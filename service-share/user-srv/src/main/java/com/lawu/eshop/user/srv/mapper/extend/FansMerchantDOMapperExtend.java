@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.lawu.eshop.user.param.ListFansRealParam;
 import com.lawu.eshop.user.param.ListInviteFansRealParam;
 import com.lawu.eshop.user.param.ListInviteFansRealWithContentParam;
+import com.lawu.eshop.user.param.UserFansParam;
 import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOReportView;
 import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOView;
 
@@ -48,5 +49,22 @@ public interface FansMerchantDOMapperExtend {
 	 * @date 2017年5月2日 下午7:55:54
 	 */
 	List<FansMerchantDOReportView> fansRiseSource(@Param("merchantId") Long merchantId);
+
+	/**
+	 * 查询过期的粉丝数量
+	 *
+	 * @param param
+	 * @return
+	 * @author meishuquan
+	 */
+	Integer countOverdueFans(UserFansParam param);
+
+	/**
+	 * 删除过期的粉丝
+	 *
+	 * @param param
+	 * @author meishuquan
+	 */
+	void delOverdueFans(UserFansParam param);
 
 }

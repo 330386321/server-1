@@ -100,6 +100,7 @@
         s.region_path as regionPath,
         s.longitude,
         s.latitude,
+        s.industry_path as industryPath,
         i.type AS type,
         i.path AS path,
         m.num AS userNum

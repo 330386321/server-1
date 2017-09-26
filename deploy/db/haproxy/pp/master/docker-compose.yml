@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+
+  haproxy:
+    image: registry.eshop.com/keepalived-haproxy:1.7.9
+    container_name: haproxy
+    ports:
+      - "8096:8096"
+      - "8097:8097"
+      - "48800:48800"
+    volumes:
+      - /usr/local/eshop/haproxy/config/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    environment:
+      INTERFACE: "em1"
+      STATE: "MASTER"
+      VIRTUAL_ROUTER_ID: "51"
+      PRIORITY: "101"
+      VIRTUAL_IP: "192.168.100.125"
+      VIRTUAL_MASK: "24"
+    command: [-f, /usr/local/etc/haproxy/haproxy.cfg]
+    restart: always
+    network_mode: host
+    privileged: true

@@ -214,6 +214,7 @@ public class MerchantStoreConverter {
         storeDetailDTO.setLongitude(storeDetailBO.getLongitude());
         storeDetailDTO.setLatitude(storeDetailBO.getLatitude());
         storeDetailDTO.setStoreLogo(storeDetailBO.getStoreLogo());
+        storeDetailDTO.setIndustryPath(storeDetailBO.getIndustryPath());
         return storeDetailDTO;
     }
 
@@ -339,6 +340,7 @@ public class MerchantStoreConverter {
         bo.setIndustryName(merchantStoreDO.getIndustryName());
         bo.setRegionPath(merchantStoreDO.getRegionPath());
         bo.setId(merchantStoreDO.getId());
+        bo.setPrincipalName(merchantStoreDO.getPrincipalName());
         return bo;
     }
 
@@ -356,6 +358,7 @@ public class MerchantStoreConverter {
         dto.setIndustryName(merchantStoreBO.getIndustryName());
         dto.setRegionPath(merchantStoreBO.getRegionPath());
         dto.setManageType(merchantStoreBO.getManageTypeEnum());
+        dto.setPrincipalName(merchantStoreBO.getPrincipalName());
         return dto;
     }
 

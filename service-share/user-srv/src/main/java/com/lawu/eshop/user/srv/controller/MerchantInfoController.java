@@ -96,6 +96,7 @@ public class MerchantInfoController extends BaseController{
             merchantInfoDTO.setPrincipalName(merchantStoreBO.getPrincipalName());
             merchantInfoDTO.setNOReasonReturn(merchantStoreBO.getIsNoReasonReturn());
             merchantInfoDTO.setStoreName(merchantStoreBO.getName());
+            merchantInfoDTO.setStoreStatusEnum(merchantStoreBO.getStatusEnum());
             //门店类型
             MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreProfileService.findMerchantStoreInfo(merchantId);
             if(merchantStoreProfileBO !=null){

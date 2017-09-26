@@ -5,11 +5,11 @@
 ------
 关闭防火墙
 ```bash
-systemctl disable firewalld
+sudo systemctl disable firewalld
 ```
 如果安装之前没有关闭防火墙，需要关闭防火墙后再清掉防火墙配置，再重启docker
 ```bash
-iptables -F;iptables -X
+sudo iptables -F;sudo iptables -X
 ```
 
 通过阿里云加速安装docker

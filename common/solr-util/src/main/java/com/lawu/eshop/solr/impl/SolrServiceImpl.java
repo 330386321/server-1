@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.TermsResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
@@ -135,6 +136,21 @@ public class SolrServiceImpl implements SolrService {
         }
         try {
             QueryResponse rsp = solrClient.query(query);
+            return rsp.getResults();
+        } catch (Exception e) {
+            logger.error("solr查询异常：{}", e);
+        }
+        return null;
+    }
+
+    @Override
+    public SolrDocumentList getSolrDocsByQueryPost(SolrQuery query, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = SolrUtil.getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return null;
+        }
+        try {
+            QueryResponse rsp = solrClient.query(query, SolrRequest.METHOD.POST);
             return rsp.getResults();
         } catch (Exception e) {
             logger.error("solr查询异常：{}", e);

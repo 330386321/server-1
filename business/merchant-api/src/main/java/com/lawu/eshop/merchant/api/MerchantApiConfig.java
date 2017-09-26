@@ -61,7 +61,21 @@ public class MerchantApiConfig {
     @Value(value="${visit.frequency.count.expire.time}")
     private Integer expireTime;
     
-    public String getImageUrl() {
+    @Value(value="${download_url}")
+    private String downloadUrl;
+    
+    @Value(value = "${ad_praise_allot_prob}")
+    private double adPraiseAllotProb;
+   
+    public String getDownloadUrl() {
+		return downloadUrl;
+	}
+
+	public void setDownloadUrl(String downloadUrl) {
+		this.downloadUrl = downloadUrl;
+	}
+
+	public String getImageUrl() {
         return imageUrl;
     }
 
@@ -142,4 +156,10 @@ public class MerchantApiConfig {
     public Integer getExpireTime() {
         return expireTime;
     }
+
+	public double getAdPraiseAllotProb() {
+		return adPraiseAllotProb;
+	}
+    
+    
 }

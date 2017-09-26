@@ -56,6 +56,8 @@ DELETE FROM eshop_mall.work_order;
 alter table eshop_mall.work_order AUTO_INCREMENT=1;
 DELETE FROM eshop_mall.inform;
 alter table eshop_mall.inform AUTO_INCREMENT=1;
+DELETE FROM eshop_mall.app_version;
+alter table eshop_mall.app_version AUTO_INCREMENT=1;
 
 -- eshop_operator
 DELETE FROM eshop_operator.log;
@@ -229,4 +231,6 @@ DELETE FROM eshop_user.transaction_record;
 alter table eshop_user.transaction_record AUTO_INCREMENT=1;
 DELETE FROM eshop_user.user_login_log;
 alter table eshop_user.user_login_log AUTO_INCREMENT=1;
+DELETE FROM eshop_user.user_freeze_record;
+alter table eshop_user.user_freeze_record AUTO_INCREMENT=1;
 */

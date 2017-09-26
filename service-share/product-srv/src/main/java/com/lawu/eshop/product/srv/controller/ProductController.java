@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -125,8 +126,8 @@ public class ProductController extends BaseController {
         productDTO.setName(productBO.getName());
         productDTO.setFeatureImage(productBO.getFeatureImage());
         productDTO.setImagesHeadUrl(productBO.getImagesHeadUrl());
-        productDTO.setMaxPrice(productBO.getMaxPrice());
-        productDTO.setMinPrice(productBO.getMinPrice());
+        productDTO.setMaxPrice(StringUtil.moneyPrecisionConvert(productBO.getMaxPrice()));
+        productDTO.setMinPrice(StringUtil.moneyPrecisionConvert(productBO.getMinPrice()));
         productDTO.setTotalSalesVolume(productBO.getTotalSalesVolume());
         productDTO.setTotalInventory(productBO.getTotalInventory());
         productDTO.setSpec(productBO.getSpec());

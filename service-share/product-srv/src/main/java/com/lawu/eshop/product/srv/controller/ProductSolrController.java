@@ -128,14 +128,15 @@ public class ProductSolrController extends BaseController {
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
         SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
-        if (solrDocumentList == null || solrDocumentList.isEmpty()) {
-            return successCreated(ResultCode.NOT_FOUND_DATA);
-        }
-
         Page<ProductSearchDTO> page = new Page<>();
+        page.setCurrentPage(param.getCurrentPage());
+        if (solrDocumentList == null || solrDocumentList.isEmpty()) {
+            page.setRecords(new ArrayList<>());
+            page.setTotalCount(0);
+            return successCreated(page);
+        }
         page.setRecords(ProductConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
-        page.setCurrentPage(param.getCurrentPage());
         return successCreated(page);
     }
 
@@ -168,7 +169,8 @@ public class ProductSolrController extends BaseController {
                     searchWordDTO.setName(keyword.trim());
 
                     query = new SolrQuery();
-                    query.setQuery("keyword_ss:" + keyword.trim());
+                    //query.setQuery("keyword_ss:" + keyword.trim());
+                    query.setQuery("text:" + keyword.trim());
                     query.setFields("id");
                     solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
                     searchWordDTO.setCount((int) solrDocumentList.getNumFound());
