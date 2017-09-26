@@ -1,5 +1,7 @@
 package com.lawu.eshop.property.srv.service.impl.transaction;
 
+import com.lawu.eshop.property.param.PropertyInfoDataQueryPointDetailParam;
+import com.lawu.eshop.property.srv.service.PointDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 
 /**
+ * 商家投放广告扣除积分 -- 从事务
  * @author zhangrc
  * @date 2017/4/12
  */
@@ -23,12 +26,16 @@ public class AdMerchantCutPointTransactionFollowServiceImpl extends AbstractTran
 	@Autowired
 	private PropertyInfoDataService propertyInfoDataService;
 
+	@Autowired
+	private PointDetailService pointDetailService;
+
 	@Override
 	public void execute(AdPointNotification notification) {
 		PropertyInfoDataParam param = new PropertyInfoDataParam();
 		param.setPoint(notification.getPoint().toString());
 		param.setUserNum(notification.getUserNum());
 		// param.setTransactionTitleEnum(TransactionTitleEnum.AD_RETURN_POINT);
+		param.setBizId(notification.getAdId() == null ? "" : notification.getAdId().toString());
 		param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.ADD_AD);
 		propertyInfoDataService.doHanlderMinusPoint(param);
 	}
@@ -36,7 +43,13 @@ public class AdMerchantCutPointTransactionFollowServiceImpl extends AbstractTran
 	@Override
 	public AdPointReply getReply(AdPointNotification notification) {
 		AdPointReply  reply = new AdPointReply();
-		reply.setFlag(true);
+		//校验投放广告是否有扣除积分，查询积分明细记录是否存在
+		PropertyInfoDataQueryPointDetailParam param = new PropertyInfoDataQueryPointDetailParam();
+		param.setBizId(notification.getAdId() == null ? "" : notification.getId().toString());
+		param.setUserNum(notification.getUserNum());
+		param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.ADD_AD);
+		boolean flag = pointDetailService.getPointDetailByUserNumAndBizIdAndType(param);
+		reply.setFlag(flag);
 		return reply;
 	}
 }

@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
+import com.lawu.eshop.property.param.PropertyInfoDataQueryPointDetailParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.AreaPointConsumeBO;
 import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
@@ -89,4 +90,11 @@ public interface PointDetailService {
 	List<AreaPointConsumeBO> getAreaPointRefund(String bdate, String edate);
 
     List<IncomeMsgBO> getIncomeMsgDataList(String begin, String end);
+
+	/**
+	 * 根据用户编号、业务ID、类型查询记录
+	 * @param param
+	 * @return
+	 */
+	boolean getPointDetailByUserNumAndBizIdAndType(PropertyInfoDataQueryPointDetailParam param);
 }

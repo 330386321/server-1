@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.param.PropertyInfoDataQueryPointDetailParam;
 import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
@@ -269,5 +270,16 @@ public class PointDetailServiceImpl implements PointDetailService {
 			bos.add(bo);
 		}
 		return bos;
+	}
+
+	@Override
+	public boolean getPointDetailByUserNumAndBizIdAndType(PropertyInfoDataQueryPointDetailParam param) {
+		PointDetailDOExample example = new PointDetailDOExample();
+		example.createCriteria().andUserNumEqualTo(param.getUserNum()).andBizIdEqualTo(param.getBizId()).andPointTypeEqualTo(param.getMerchantTransactionTypeEnum().getValue());
+		int count = pointDetailDOMapper.countByExample(example);
+		if(count > 0){
+			return true;
+		}
+		return false;
 	}
 }
