@@ -2,7 +2,6 @@ package com.lawu.eshop.order.srv.mock.service;
 
 import java.util.ArrayList;
 
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
@@ -11,9 +10,7 @@ import com.lawu.eshop.order.srv.bo.ExpressRecognitionDetailBO;
 import com.lawu.eshop.order.srv.bo.ShipperBO;
 import com.lawu.eshop.order.srv.bo.TraceBO;
 import com.lawu.eshop.order.srv.strategy.ExpressStrategy;
-import com.lawu.eshop.order.srv.utils.express.kdniao.constants.CodeEnum;
 
-@Primary
 @Service
 public class McokExpressStrategy implements ExpressStrategy {
 	
@@ -34,10 +31,6 @@ public class McokExpressStrategy implements ExpressStrategy {
 	@Override
 	public ExpressRecognitionDetailBO recognition(String expNo) {
 		ExpressRecognitionDetailBO rtn = new ExpressRecognitionDetailBO();
-		rtn.setSuccess(true);
-		rtn.seteBusinessId("123456");
-		rtn.setLogisticCode(expNo);
-		rtn.setCode(CodeEnum.SUCCESS);
 		rtn.setShippers(new ArrayList<>());
 		ShipperBO shipperBO = new ShipperBO();
 		shipperBO.setShipperCode("SF");

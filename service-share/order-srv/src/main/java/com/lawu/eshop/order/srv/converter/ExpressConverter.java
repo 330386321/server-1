@@ -1,6 +1,7 @@
 package com.lawu.eshop.order.srv.converter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.dto.ExpressInquiriesDTO;
@@ -16,8 +17,9 @@ import com.lawu.eshop.order.srv.utils.express.kdniao.bo.ExpressInquiriesDetail;
 import com.lawu.eshop.order.srv.utils.express.kdniao.bo.ExpressRecognitionDetail;
 import com.lawu.eshop.order.srv.utils.express.kdniao.bo.Shipper;
 import com.lawu.eshop.order.srv.utils.express.kdniao.bo.Trace;
-import com.lawu.eshop.order.srv.utils.express.kdniao.constants.CodeEnum;
 import com.lawu.eshop.order.srv.utils.express.kdniao.constants.StateEnum;
+import com.lawu.eshop.order.srv.utils.express.kuaidi100.bo.Express;
+import com.lawu.eshop.order.srv.utils.express.kuaidi100.bo.ExpressTracesDetail;
 
 /**
  *
@@ -78,6 +80,30 @@ public class ExpressConverter {
 		if (expressInquiriesDetail.getData() != null && !expressInquiriesDetail.getData().isEmpty()) {
 			rtn.setTraces(new ArrayList<>());
 			for (com.lawu.eshop.order.srv.utils.express.kuaidi100.bo.Trace item : expressInquiriesDetail.getData()) {
+				rtn.getTraces().add(convert(item));
+			}
+		}
+		return rtn;
+	}
+	
+	/**
+	 * ExpressInquiriesDatailBO转换
+	 *
+	 * @param expressTracesDetail 快递100查询封装数据
+	 * @return
+	 */
+	public static ExpressInquiriesDetailBO convert(ExpressTracesDetail expressTracesDetail) {
+		ExpressInquiriesDetailBO rtn = null;
+		if (expressTracesDetail == null) {
+			return rtn;
+		}
+		rtn = new ExpressInquiriesDetailBO();
+		rtn.setLogisticCode(expressTracesDetail.getNu());
+		rtn.setShipperCode(expressTracesDetail.getCom());
+		rtn.setState(expressTracesDetail.getState() != null ? com.lawu.eshop.order.srv.utils.express.kuaidi100.constants.StateEnum.getEnum(expressTracesDetail.getState()).getState() : ExpressInquiriesDetailStateEnum.NO_INFO);
+		if (expressTracesDetail.getData() != null && !expressTracesDetail.getData().isEmpty()) {
+			rtn.setTraces(new ArrayList<>());
+			for (com.lawu.eshop.order.srv.utils.express.kuaidi100.bo.Trace item : expressTracesDetail.getData()) {
 				rtn.getTraces().add(convert(item));
 			}
 		}
@@ -204,15 +230,33 @@ public class ExpressConverter {
 			return rtn;
 		}
 		rtn = new ExpressRecognitionDetailBO();
-		rtn.setCode(CodeEnum.getEnum(expressRecognitionDetail.getCode()));
-		rtn.seteBusinessId(expressRecognitionDetail.geteBusinessId());
-		rtn.setLogisticCode(expressRecognitionDetail.getLogisticCode());
-		rtn.setSuccess(expressRecognitionDetail.getSuccess());
 		rtn.setShippers(new ArrayList<>());
 		for (Shipper shipper : expressRecognitionDetail.getShippers()) {
 			ShipperBO shipperBO = new ShipperBO();
 			shipperBO.setShipperCode(shipper.getShipperCode());
 			shipperBO.setShipperName(shipper.getShipperName());
+			rtn.getShippers().add(shipperBO);
+		}
+		return rtn;
+	}
+	
+	/**
+	 * 
+	 * @param expressList
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月5日
+	 */
+	public static ExpressRecognitionDetailBO convert(List<Express> expressList) {
+		ExpressRecognitionDetailBO rtn = null;
+		if (expressList == null || expressList.isEmpty()) {
+			return rtn;
+		}
+		rtn = new ExpressRecognitionDetailBO();
+		rtn.setShippers(new ArrayList<>());
+		for (Express express : expressList) {
+			ShipperBO shipperBO = new ShipperBO();
+			shipperBO.setShipperCode(express.getComCode());
 			rtn.getShippers().add(shipperBO);
 		}
 		return rtn;

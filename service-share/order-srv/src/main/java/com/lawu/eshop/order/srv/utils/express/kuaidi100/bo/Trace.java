@@ -18,6 +18,11 @@ public class Trace {
 	 * 每条跟综信息的描述
 	 */
 	private String context;
+	
+	/**
+	 * 格式化后时间
+	 */
+	private String ftime;
 
 	public String getTime() {
 		return time;
@@ -33,6 +38,14 @@ public class Trace {
 
 	public void setContext(String context) {
 		this.context = context;
+	}
+
+	public String getFtime() {
+		return ftime;
+	}
+
+	public void setFtime(String ftime) {
+		this.ftime = ftime;
 	}
 	
 }

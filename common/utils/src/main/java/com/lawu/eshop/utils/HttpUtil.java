@@ -52,6 +52,10 @@ public class HttpUtil {
                 .setSocketTimeout(5000).build();
 	}
 	
+	public static String doPost(String url, Map<String, String> params) {
+	    return doPost(url, params, null);
+	}
+	
 	public static String doPost(String url, Map<String, String> params, Map<String, String> headersMap) {
 		List<NameValuePair> pairList = new ArrayList<NameValuePair>();
 	    for (Map.Entry<String, String> entry : params.entrySet()) {
@@ -77,9 +81,11 @@ public class HttpUtil {
 	    HttpPost httpPost = null;
 	    try {
 	        httpPost = new HttpPost(url);
-	        for (Map.Entry<String, String> entry : headersMap.entrySet()) {
-	        	 httpPost.addHeader(new BasicHeader(entry.getKey(), entry.getValue()));
-		    }
+	        if (headersMap != null) {
+		        for (Map.Entry<String, String> entry : headersMap.entrySet()) {
+		        	 httpPost.addHeader(new BasicHeader(entry.getKey(), entry.getValue()));
+			    }
+	        }
 	        httpPost.setEntity(entity);
 	        httpPost.setConfig(requestConfig);
 

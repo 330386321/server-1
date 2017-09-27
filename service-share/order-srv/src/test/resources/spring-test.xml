@@ -10,6 +10,7 @@
 		<context:exclude-filter type="annotation" expression="com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain" />
 		<context:exclude-filter type="annotation" expression="com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow" />
 		-->
+		<context:exclude-filter type="assignable" expression="com.lawu.eshop.order.srv.strategy.ExpressStrategy" />
 	</context:component-scan>
     
 	<bean id="propertyConfigurer" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">

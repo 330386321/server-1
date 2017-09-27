@@ -43,4 +43,11 @@ public class KDNiaoExpressStrategyTest {
 		Assert.assertNotNull(actual);
 	}
 	
+	@Ignore
+	@Test
+	public void recognitionWithInquiries() {
+		ExpressInquiriesDetailBO actual = expressStrategy.recognitionWithInquiries("huitongkuaid", "70094570443407");
+		Assert.assertNotNull(actual);
+	}
+	
 }

@@ -12,6 +12,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.lawu.eshop.order.srv.OrderSrvApplicationTest;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
+import com.lawu.eshop.order.srv.bo.ExpressRecognitionDetailBO;
 import com.lawu.eshop.order.srv.strategy.ExpressStrategy;
 
 /**
@@ -28,15 +29,25 @@ public class KuaiDi100ExpressStrategyTest {
 	@Qualifier("kuaiDi100ExpressStrategy")
 	private ExpressStrategy expressStrategy;
 
+	@Ignore
 	@Test
 	public void inquiries() {
-		ExpressInquiriesDetailBO actual = expressStrategy.inquiries("huitongkuaidi", "70094570443407");
+		ExpressInquiriesDetailBO actual = expressStrategy.inquiries("huitongkuaid", "70094570443407");
 		Assert.assertNotNull(actual);
 	}
 	
 	@Ignore
 	@Test
 	public void recognition() {
+		ExpressRecognitionDetailBO actual = expressStrategy.recognition("70094570443407");
+		Assert.assertNotNull(actual);
+	}
+	
+	@Ignore
+	@Test
+	public void recognitionWithInquiries() {
+		ExpressInquiriesDetailBO actual = expressStrategy.recognitionWithInquiries("huitongkuaid", "70094570443407");
+		Assert.assertNotNull(actual);
 	}
 	
 }

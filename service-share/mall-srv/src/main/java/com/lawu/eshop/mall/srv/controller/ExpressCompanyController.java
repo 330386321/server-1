@@ -168,4 +168,22 @@ public class ExpressCompanyController extends BaseController {
 		List<ExpressCompanyDTO> rtn = ExpressCompanyConverter.convertDTOS(expressCompanyBOList);
 		return successGet(rtn);
 	}
+	
+	/**
+	 * 根据第三方快递公司编号查询快递公司
+	 * 
+	 * @param code 快递公司编号
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月5日
+	 */
+	@RequestMapping(value = "code/{code}", method = RequestMethod.GET)
+	public Result<ExpressCompanyDTO> code(@PathVariable("code") String code) {
+		ExpressCompanyBO expressCompanyBO = expressCompanyService.code(code);
+		if (expressCompanyBO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA);
+		}
+		ExpressCompanyDTO rtn = ExpressCompanyConverter.convert(expressCompanyBO);
+		return successGet(rtn);
+	}
 }
