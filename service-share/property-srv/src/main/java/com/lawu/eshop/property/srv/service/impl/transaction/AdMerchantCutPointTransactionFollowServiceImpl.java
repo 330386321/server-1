@@ -45,7 +45,7 @@ public class AdMerchantCutPointTransactionFollowServiceImpl extends AbstractTran
 		AdPointReply  reply = new AdPointReply();
 		//校验投放广告是否有扣除积分，查询积分明细记录是否存在
 		PropertyInfoDataQueryPointDetailParam param = new PropertyInfoDataQueryPointDetailParam();
-		param.setBizId(notification.getAdId() == null ? "" : notification.getId().toString());
+		param.setBizId(notification.getAdId() == null ? "" : notification.getAdId().toString());
 		param.setUserNum(notification.getUserNum());
 		param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.ADD_AD);
 		boolean flag = pointDetailService.getPointDetailByUserNumAndBizIdAndType(param);
