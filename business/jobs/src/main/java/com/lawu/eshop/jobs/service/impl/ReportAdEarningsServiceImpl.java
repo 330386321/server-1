@@ -102,9 +102,9 @@ public class ReportAdEarningsServiceImpl extends BaseController implements Repor
 							.add(ponitResult.getModel().getLoveTotalPoint()).compareTo(
 									reportAdDTO.getTotalPoint().multiply(BigDecimal.valueOf(0.6))) == 1 &&
 									(reportAdDTO.getStatusEnum()==com.lawu.eshop.ad.constants.AdStatusEnum.AD_STATUS_PUTED || reportAdDTO.getStatusEnum()==com.lawu.eshop.ad.constants.AdStatusEnum.AD_STATUS_OUT)) {
-						reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.NORMAL);
-					} else {
 						reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.ANOMALY);
+					} else {
+						reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.NORMAL);
 					}
 					reportAdEarningsService.saveReportAdEarnings(reportAdEarningsParam);
 				}
