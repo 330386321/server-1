@@ -221,6 +221,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 			// 查找待评价的订单
 			if (param.getOrderStatus().equals(ShoppingOrderStatusToMemberEnum.BE_EVALUATED)) {
+				// 只有订单状态为交易成功并且未评价才显示
+				baseCriteria.andSOIOrderStatusEqualTo(param.getOrderStatus().getValue());
 				baseCriteria.andSOIIsEvaluationEqualTo(false);
 			}
 		}
