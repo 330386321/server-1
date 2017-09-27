@@ -1,0 +1,1 @@
+alter table ad_platform add column  `region_name` varchar(25)  COMMENT '地区名称' after region_path;
