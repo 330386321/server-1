@@ -20,6 +20,7 @@ import com.lawu.eshop.mq.dto.ad.reply.AdPointReply;
 import com.lawu.eshop.solr.service.SolrService;
 
 /**
+ * 商家投放广告扣除积分 -- 主事务
  * @author zhangrc
  * @date 2017/4/12
  */
@@ -42,6 +43,7 @@ public class AdMerchantCutPointTransactionMainServiceImpl extends AbstractTransa
     	 AdPointNotification notification=new AdPointNotification();
     	 notification.setUserNum(ad.getMerchantNum());
     	 notification.setPoint(ad.getTotalPoint());
+    	 notification.setAdId(adId);
     	 notification.setRegionPath(ad.getMerchantRegionPath());
          return notification;
     }
