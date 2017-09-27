@@ -20,7 +20,7 @@
     update property_info set 
         point = point - #{point,jdbcType=DECIMAL},
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
-    where user_num = #{userNum,jdbcType=VARCHAR}
+    where user_num = #{userNum,jdbcType=VARCHAR} and point >= #{point,jdbcType=DECIMAL}
   </update>
   
   <update id="updatePropertyInfoAddBalance" parameterType="com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView" >
@@ -34,7 +34,7 @@
     update property_info set 
         balance = balance - #{balance,jdbcType=DECIMAL},
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
-    where user_num = #{userNum,jdbcType=VARCHAR}
+    where user_num = #{userNum,jdbcType=VARCHAR} and balance >= #{balance,jdbcType=DECIMAL}
   </update>
   
   <update id="updatePropertyInfoAddLove" parameterType="com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView" >

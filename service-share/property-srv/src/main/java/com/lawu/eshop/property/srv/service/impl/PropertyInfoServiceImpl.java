@@ -12,6 +12,8 @@ import com.lawu.eshop.property.srv.domain.FreezeDOExample;
 import com.lawu.eshop.property.srv.mapper.FreezeDOMapper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +58,8 @@ import com.lawu.eshop.utils.PwdUtil;
  */
 @Service
 public class PropertyInfoServiceImpl implements PropertyInfoService {
+
+	private static Logger logger = LoggerFactory.getLogger(PropertyInfoServiceImpl.class);
 
 	@Autowired
 	private PropertyInfoDOMapper propertyInfoDOMapper;
@@ -120,19 +124,26 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 				&& ("A".equals(flag) || "M".equals(flag))) {
 			PropertyInfoDOEiditView editView = new PropertyInfoDOEiditView();
 			editView.setUserNum(userNum);
+			editView.setGmtModified(new Date());
 			if ("B".equals(column)) {
 				editView.setBalance(number);
 				if ("A".equals(flag)) {
 					propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(editView);
 				} else if ("M".equals(flag)) {
-					propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(editView);
+					int ret = propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(editView);
+					if(ret < 1){
+						return ResultCode.ERROR_BALANCE_NEGATIVE;
+					}
 				}
 			} else if ("P".equals(column)) {
 				editView.setPoint(number);
 				if ("A".equals(flag)) {
 					propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(editView);
 				} else if ("M".equals(flag)) {
-					propertyInfoDOMapperExtend.updatePropertyInfoMinusPoint(editView);
+					int ret = propertyInfoDOMapperExtend.updatePropertyInfoMinusPoint(editView);
+					if(ret < 1){
+						return ResultCode.ERROR_POINT_NEGATIVE;
+					}
 				}
 			} else if ("L".equals(column)) {
 				editView.setLoveAccount(number);

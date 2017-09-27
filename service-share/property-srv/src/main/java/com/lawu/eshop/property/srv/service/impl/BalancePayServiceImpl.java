@@ -3,6 +3,7 @@ package com.lawu.eshop.property.srv.service.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.lawu.eshop.property.srv.exception.BalanceNegativeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -80,11 +81,10 @@ public class BalancePayServiceImpl implements BalancePayService {
         transactionDetailService.save(tdsParam);
 
         //减会员财产余额
-        PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
-        infoDoView.setUserNum(param.getUserNum());
-        infoDoView.setBalance(new BigDecimal(param.getTotalAmount()));
-        infoDoView.setGmtModified(new Date());
-        propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(infoDoView);
+        int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "M", new BigDecimal(param.getTotalAmount()));
+        if(ResultCode.ERROR_BALANCE_NEGATIVE == ret){
+            throw new BalanceNegativeException(ResultCode.get(ResultCode.ERROR_BALANCE_NEGATIVE));
+        }
 
         //发异步消息更新购物订单状态
         shoppingOrderPaymentTransactionMainServiceImpl.sendNotice(tdsParam.getId());
@@ -114,11 +114,10 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam.setBizNum(transactionNum);
         transactionDetailService.save(tdsParam);
         //减会员财产余额
-        PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
-        infoDoView.setUserNum(param.getUserNum());
-        infoDoView.setBalance(new BigDecimal(param.getTotalAmount()));
-        infoDoView.setGmtModified(new Date());
-        propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(infoDoView);
+        int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "M", new BigDecimal(param.getTotalAmount()));
+        if(ResultCode.ERROR_BALANCE_NEGATIVE == ret){
+            throw new BalanceNegativeException(ResultCode.get(ResultCode.ERROR_BALANCE_NEGATIVE));
+        }
 
         //新增商家交易明细
         TransactionDetailSaveDataParam tdsParam1 = new TransactionDetailSaveDataParam();
@@ -140,11 +139,6 @@ public class BalancePayServiceImpl implements BalancePayService {
         infoDoView1.setGmtModified(new Date());
         propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView1);
 
-        //发异步消息更新买单状态
-//        String[] bizIds = param.getBizIds().split(",");
-//        for (int i = 0; i < bizIds.length; i++) {
-//            payOrderTransactionMainServiceImpl.sendNotice(Long.valueOf(bizIds[i]));
-//        }
         payOrderTransactionMainServiceImpl.sendNotice(tdsParam.getId());
         return ResultCode.SUCCESS;
     }
@@ -201,12 +195,14 @@ public class BalancePayServiceImpl implements BalancePayService {
         pointDetailService.save(pdsParam);
 
         //减财产余额
+        int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "M", new BigDecimal(param.getTotalAmount()));
+        if(ResultCode.ERROR_BALANCE_NEGATIVE == ret){
+            throw new BalanceNegativeException(ResultCode.get(ResultCode.ERROR_BALANCE_NEGATIVE));
+        }
+        //加财产积分
         PropertyInfoDOEiditView infoDoView1 = new PropertyInfoDOEiditView();
         infoDoView1.setUserNum(param.getUserNum());
-        infoDoView1.setBalance(new BigDecimal(param.getTotalAmount()));
         infoDoView1.setGmtModified(new Date());
-        propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(infoDoView1);
-        //加财产积分
         infoDoView1.setPoint(BigDecimal.valueOf(point));
         propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(infoDoView1);
 
@@ -241,11 +237,10 @@ public class BalancePayServiceImpl implements BalancePayService {
         transactionDetailService.save(tdsParam);
 
         //减财产余额
-        PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
-        infoDoView.setUserNum(param.getUserNum());
-        infoDoView.setBalance(new BigDecimal(param.getTotalAmount()));
-        infoDoView.setGmtModified(new Date());
-        propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(infoDoView);
+        int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "M", new BigDecimal(param.getTotalAmount()));
+        if(ResultCode.ERROR_BALANCE_NEGATIVE == ret){
+            throw new BalanceNegativeException(ResultCode.get(ResultCode.ERROR_BALANCE_NEGATIVE));
+        }
 
         memberRedPacketPaymentTransactionMainServiceImpl.sendNotice(tdsParam.getId());
 

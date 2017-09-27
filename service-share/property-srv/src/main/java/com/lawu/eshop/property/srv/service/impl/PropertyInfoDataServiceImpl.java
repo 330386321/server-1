@@ -8,6 +8,8 @@ import java.util.Map;
 
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
+import com.lawu.eshop.property.srv.exception.BalanceNegativeException;
+import com.lawu.eshop.property.srv.exception.PointNegativeException;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -93,7 +95,10 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 
 		// 更新用户资产
 		BigDecimal point = new BigDecimal(param.getPoint());
-		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "M", point);
+		int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "M", point);
+		if(ResultCode.ERROR_POINT_NEGATIVE == ret){
+			throw new PointNegativeException(ResultCode.get(ResultCode.ERROR_POINT_NEGATIVE));
+		}
 
 		// 插入邀请粉丝记录
 		if (param.getMerchantTransactionTypeEnum() != null && param.getMerchantTransactionTypeEnum()
@@ -144,6 +149,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	}
 
 	@Override
+	@Transactional
 	public int doHanlderAddBalance(PropertyInfoDataParam param) {
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
@@ -171,6 +177,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	}
 
 	@Override
+	@Transactional
 	public int doHanlderMinusBalance(PropertyInfoDataParam param) {
 		int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getPoint(),false,"");
 		if (retCode != ResultCode.SUCCESS) {
@@ -196,7 +203,10 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		
 		// 更新用户资产
 		BigDecimal point = new BigDecimal(param.getPoint());
-		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "M", point);
+		int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "M", point);
+		if(ResultCode.ERROR_BALANCE_NEGATIVE == ret){
+			throw new PointNegativeException(ResultCode.get(ResultCode.ERROR_BALANCE_NEGATIVE));
+		}
 		
 		return ResultCode.SUCCESS;
 	}
@@ -310,7 +320,10 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 
 		// 更新用户资产
 		BigDecimal point = new BigDecimal(param.getPoint());
-		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "M", point);
+		int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "M", point);
+		if(ResultCode.ERROR_POINT_NEGATIVE == ret){
+			throw new PointNegativeException(ResultCode.get(ResultCode.ERROR_POINT_NEGATIVE));
+		}
 
 		// 插入邀请粉丝记录
 		if (param.getMerchantTransactionTypeEnum() != null && param.getMerchantTransactionTypeEnum()

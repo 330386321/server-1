@@ -167,6 +167,8 @@ public class ResultCode {
     public static final int PROPERTYINFO_FREEZE_EXCEPITON = 6026;
     public static final int DEPOSIT_EXIST_UP_PRODUCT = 6027;
     public static final int BANK_ACCOUNT_LENTH_OUT_OF_RANGE = 6028;
+    public static final int ERROR_BALANCE_NEGATIVE = 6029;
+    public static final int ERROR_POINT_NEGATIVE = 6030;
 
 
 
@@ -377,6 +379,8 @@ public class ResultCode {
         ResultCode.messageMap.put(PROPERTYINFO_FREEZE_EXCEPITON, "资金出现异常");
         ResultCode.messageMap.put(DEPOSIT_EXIST_UP_PRODUCT, "有未下架商品，完成后才可申请。");
         ResultCode.messageMap.put(BANK_ACCOUNT_LENTH_OUT_OF_RANGE, "银行卡长度有误。");
+        ResultCode.messageMap.put(ERROR_POINT_NEGATIVE, "非法操作，积分减到负数");
+        ResultCode.messageMap.put(ERROR_BALANCE_NEGATIVE, "非法操作，余额减到负数");
         
 
         // 商城模块 7xxx

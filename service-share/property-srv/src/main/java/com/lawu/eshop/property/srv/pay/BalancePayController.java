@@ -2,6 +2,7 @@ package com.lawu.eshop.property.srv.pay;
 
 import javax.validation.Valid;
 
+import com.lawu.eshop.property.srv.exception.BalanceNegativeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,7 +50,12 @@ public class BalancePayController extends BaseController {
 
         param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY_ORDERS);
         param.setTitle(TransactionTitleEnum.ORDER_PAY.getVal());
-        int retCode = balancePayService.balancePayProductOrder(param);
+        int retCode = ResultCode.FAIL;
+        try {
+            retCode = balancePayService.balancePayProductOrder(param);
+        }catch (BalanceNegativeException e){
+            return successCreated(ResultCode.ERROR_BALANCE_NEGATIVE);
+        }
         return successCreated(retCode);
     }
 
@@ -71,7 +77,12 @@ public class BalancePayController extends BaseController {
         param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY);
         param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.PAY);
         param.setTitle(TransactionTitleEnum.PAY.getVal());
-        int retCode = balancePayService.balancePay(param);
+        int retCode = ResultCode.FAIL;
+        try {
+            retCode = balancePayService.balancePay(param);
+        }catch (BalanceNegativeException e){
+            return successCreated(ResultCode.ERROR_BALANCE_NEGATIVE);
+        }
         return successCreated(retCode);
     }
 
@@ -93,7 +104,12 @@ public class BalancePayController extends BaseController {
         param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.INTEGRAL_RECHARGE);
         param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INTEGRAL_RECHARGE);
         param.setTitle(TransactionTitleEnum.INTEGRAL_RECHARGE.getVal());
-        int retCode = balancePayService.balancePayPoint(param);
+        int retCode = ResultCode.FAIL;
+        try {
+            retCode = balancePayService.balancePayPoint(param);
+        }catch (BalanceNegativeException e){
+            return successCreated(ResultCode.ERROR_BALANCE_NEGATIVE);
+        }
         return successCreated(retCode);
     }
 
@@ -114,7 +130,12 @@ public class BalancePayController extends BaseController {
 
         param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.USER_REDPACKET_CUT);
         param.setTitle(MemberTransactionTypeEnum.USER_REDPACKET_CUT.getName());
-        int retCode = balancePayService.memberRedPacketPay(param);
+        int retCode = ResultCode.FAIL;
+        try {
+            retCode = balancePayService.memberRedPacketPay(param);
+        }catch (BalanceNegativeException e){
+            return successCreated(ResultCode.ERROR_BALANCE_NEGATIVE);
+        }
         return successCreated(retCode);
     }
 }

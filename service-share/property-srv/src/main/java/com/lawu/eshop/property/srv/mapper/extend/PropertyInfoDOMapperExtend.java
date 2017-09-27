@@ -26,7 +26,7 @@ public interface PropertyInfoDOMapperExtend {
 	 * 减积分
 	 * @param editView
 	 */
-	void updatePropertyInfoMinusPoint(PropertyInfoDOEiditView editView);
+	int updatePropertyInfoMinusPoint(PropertyInfoDOEiditView editView);
 
 	/**
 	 * 加余额
@@ -38,7 +38,7 @@ public interface PropertyInfoDOMapperExtend {
 	 * 减余额
 	 * @param editView
 	 */
-	void updatePropertyInfoMinusBalance(PropertyInfoDOEiditView editView);
+	int updatePropertyInfoMinusBalance(PropertyInfoDOEiditView editView);
 
 	/**
 	 * 加爱心账户
