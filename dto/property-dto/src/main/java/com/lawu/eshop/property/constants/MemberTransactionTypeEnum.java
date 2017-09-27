@@ -20,9 +20,9 @@ public enum MemberTransactionTypeEnum {
 	REFUND_ORDERS((byte) 0x0B, "退款"),
 	SALES_COMMISSION((byte) 0x0C, "推荐E友收益"),
 	VOLUME_COMMISSION((byte) 0x0D, "推荐商家收益"),
-	PRAISE_AD((byte) 0x0E, "抢赞消费"),//抢赞大于300积分的广告扣除20积分
+	PRAISE_AD((byte) 0x0E, "E咻消费"),//抢赞大于300积分的广告扣除20积分
 	BACKAGE((byte) 0x0F, "平台充值"),//后台充值
-	AD_QZ((byte) 0x10, "抢赞"),
+	AD_QZ((byte) 0x10, "E咻"),
 	USER_REDPACKET_ADD((byte)0x11,"用户红包退款"),
 	USER_REDPACKET_CUT((byte)0x12,"扣除用户发红包金额"),
 	MEMBER_FANS((byte) 0x13, "成为粉丝");
