@@ -48,7 +48,7 @@ public class ReportAdEarningsServiceImpl implements ReportAdEarningsService {
 		reportAdEarningsDO.setAdTotalPoint(reportAdEarningsParam.getAdTotalPoint());
 		reportAdEarningsDO.setAdType(reportAdEarningsParam.getAdTypeEnum().val);
 		reportAdEarningsDO.setMerchantNum(reportAdEarningsParam.getMerchantNum());
-		reportAdEarningsDO.setMerchantName(reportAdEarningsParam.getMerchantNum());
+		reportAdEarningsDO.setMerchantName(reportAdEarningsParam.getMerchantName());
 		reportAdEarningsDO.setLoveTotalPoint(reportAdEarningsParam.getLoveTotalPoint());
 		reportAdEarningsDO.setUserTotalPoint(reportAdEarningsParam.getUserTotalPoint());
 		reportAdEarningsDO.setGmtCreate(new Date());

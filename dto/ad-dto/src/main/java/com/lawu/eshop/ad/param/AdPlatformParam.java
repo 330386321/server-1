@@ -33,6 +33,9 @@ public class AdPlatformParam {
 	@ApiParam(name = "regionPath", value = "区域")
 	private String regionPath;
 	
+	@ApiParam(name = "regionName", value = "区域名称")
+	private String regionName;
+	
 	@ApiParam(name = "mediaUrl", value = "附件路径")
 	private String mediaUrl;
 	
@@ -117,6 +120,14 @@ public class AdPlatformParam {
 
 	public void setAdId(Long adId) {
 		this.adId = adId;
+	}
+
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
 	}
 	
 	

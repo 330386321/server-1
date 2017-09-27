@@ -69,6 +69,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         adPlatformDO.setStatus(AdPlatformStatusEnum.UP.val);
         adPlatformDO.setGmtCreate(new Date());
         adPlatformDO.setGmtModified(new Date());
+        adPlatformDO.setRegionName(adPlatformParam.getRegionName());
         adPlatformDO.setContent(adPlatformParam.getContent());
         return adPlatformDOMapper.insert(adPlatformDO);
     }
@@ -139,6 +140,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         adPlatformDO.setMerchantStoreId(adPlatformParam.getMerchantStoreId());
         adPlatformDO.setPosition(adPlatformParam.getPositionEnum().val);
         adPlatformDO.setRegionPath(adPlatformParam.getRegionPath());
+        adPlatformDO.setRegionName(adPlatformParam.getRegionName());
         adPlatformDO.setAdId(adPlatformParam.getAdId());
         return adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
     }

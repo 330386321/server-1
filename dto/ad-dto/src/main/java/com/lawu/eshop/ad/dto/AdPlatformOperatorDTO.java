@@ -58,6 +58,17 @@ public class AdPlatformOperatorDTO {
 	@ApiModelProperty(value = "广告ID")
 	private Long adId;
 	
+	@ApiModelProperty(value = "区域名称")
+	private String regionName;
+	
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+	
 	public String getContent() {
 		return content;
 	}

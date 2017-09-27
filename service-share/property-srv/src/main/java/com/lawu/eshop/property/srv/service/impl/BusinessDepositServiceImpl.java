@@ -293,6 +293,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
     }
 
     @Override
+    @Transactional
     public int refundDeposit(BusinessRefundDepositDataParam dparam) {
 
         // 校验支付密码

@@ -266,7 +266,7 @@ public class ResultCode {
         ResultCode.messageMap.put(MOBILE_IS_NOT_EXIST, "该手机号码尚未注册");
         ResultCode.messageMap.put(MERCHANT_STORE_IS_FAVORITE, "门店已被收藏");
         ResultCode.messageMap.put(ACCOUNT_IS_FREEZE, "账户已被冻结");
-        ResultCode.messageMap.put(MAX_USERREDPACKET_COUNT, "单个红包个数不能大于9999");
+        ResultCode.messageMap.put(MAX_USERREDPACKET_COUNT, "单个红包个数不能大于1000");
         ResultCode.messageMap.put(MAX_USERREDPACKET_MONTY, "单个红包金额不能大于50000");
         ResultCode.messageMap.put(MIN_USERREDPACKET_MONTY, "单个红包金额不能小于0.01");
         ResultCode.messageMap.put(ACCOUNT_IS_INVALID, "账号已被封");

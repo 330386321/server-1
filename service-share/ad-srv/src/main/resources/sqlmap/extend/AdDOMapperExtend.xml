@@ -63,7 +63,7 @@
    <update id="updateHitsByPrimaryKey" parameterType="java.lang.Long">
     update ad set 
       hits = hits+1
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}  and ad_count > hits
   </update>
   
   <!-- 精选广告 -->
