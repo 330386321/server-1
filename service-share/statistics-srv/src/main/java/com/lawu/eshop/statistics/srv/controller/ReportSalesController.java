@@ -38,7 +38,7 @@ public class ReportSalesController extends BaseController {
 	 * @date 2017年7月3日
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value = "/", method = RequestMethod.POST)
     public Result save(@RequestBody PlatformTotalSalesSaveParam param){
 		reportSalesService.save(param);
     	return successCreated();

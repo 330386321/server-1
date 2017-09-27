@@ -14,7 +14,7 @@ import com.lawu.eshop.statistics.param.PlatformTotalSalesSaveParam;
  * @author Sunny
  * @date 2017年7月3日
  */
-@FeignClient(value = "statistics-srv", path = "reportSales")
+@FeignClient(value = "statistics-srv", path = "reportSales/")
 public interface ReportSalesService {
 
 	/**
@@ -25,7 +25,7 @@ public interface ReportSalesService {
 	 * @date 2017年7月3日
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value = "/", method = RequestMethod.POST)
 	Result save(@RequestBody PlatformTotalSalesSaveParam param);
 
 }
