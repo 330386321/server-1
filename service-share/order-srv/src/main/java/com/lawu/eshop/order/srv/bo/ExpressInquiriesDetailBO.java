@@ -2,7 +2,7 @@ package com.lawu.eshop.order.srv.bo;
 
 import java.util.List;
 
-import com.lawu.eshop.order.srv.utils.express.kdniao.constants.StateEnum;
+import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 
 /**
  * 物流实时查询对外暴露数据
@@ -23,19 +23,9 @@ public class ExpressInquiriesDetailBO {
 	private String logisticCode;
 	
 	/**
-	 * 成功与否
-	 */
-	private Boolean success;
-	
-	/**
-	 * 失败原因
-	 */
-	private String reason;
-	
-	/**
 	 * 物流状态
 	 */
-	private StateEnum state;
+	private ExpressInquiriesDetailStateEnum state;
 	
 	/**
 	 * 物流轨迹
@@ -58,27 +48,11 @@ public class ExpressInquiriesDetailBO {
 		this.logisticCode = logisticCode;
 	}
 
-	public Boolean getSuccess() {
-		return success;
-	}
-
-	public void setSuccess(Boolean success) {
-		this.success = success;
-	}
-
-	public String getReason() {
-		return reason;
-	}
-
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
-
-	public StateEnum getState() {
+	public ExpressInquiriesDetailStateEnum getState() {
 		return state;
 	}
 
-	public void setState(StateEnum state) {
+	public void setState(ExpressInquiriesDetailStateEnum state) {
 		this.state = state;
 	}
 

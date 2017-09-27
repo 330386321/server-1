@@ -1,16 +1,16 @@
 package com.lawu.eshop.mall.srv.converter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyGroupDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyQueryDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyRetrieveDTO;
 import com.lawu.eshop.mall.srv.bo.ExpressCompanyBO;
 import com.lawu.eshop.mall.srv.domain.ExpressCompanyDO;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -39,7 +39,6 @@ public class ExpressCompanyConverter {
 		if (expressCompanyDO == null || expressCompanyDO.getId() == null || expressCompanyDO.getId() <= 0) {
 			return rtn;
 		}
-
 		rtn = new ExpressCompanyBO();
 		rtn.setCode(expressCompanyDO.getCode());
 		rtn.setHomepage(expressCompanyDO.getHomepage());
@@ -47,7 +46,6 @@ public class ExpressCompanyConverter {
 		rtn.setOrdinal(expressCompanyDO.getOrdinal());
 		rtn.setTel(expressCompanyDO.getTel());
 		rtn.setId(expressCompanyDO.getId());
-
 		return rtn;
 	}
 
@@ -76,12 +74,10 @@ public class ExpressCompanyConverter {
 		if (bo == null) {
 			return null;
 		}
-
 		rtn = new ExpressCompanyDTO();
 		rtn.setCode(bo.getCode());
 		rtn.setId(bo.getId());
 		rtn.setName(bo.getName());
-
 		return rtn;
 	}
 

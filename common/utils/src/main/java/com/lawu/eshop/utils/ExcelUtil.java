@@ -1,4 +1,4 @@
-package com.lawu.eshop.mall.srv.excel;
+package com.lawu.eshop.utils;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -17,30 +16,32 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
- * @author Hongten
- * @created 2014-5-20
+ * 
+ * @author jiangxinjun
+ * @date 2017年9月22日
  */
-public class ReadExcel {
+public class ExcelUtil {
     
+    public static final String OFFICE_EXCEL_2003_POSTFIX = "xls";
+    public static final String OFFICE_EXCEL_2010_POSTFIX = "xlsx";
+	
     /**
      * read the Excel file
      * @param path the path of the Excel file
      * @return
      * @throws IOException
      */
-    public List<List<String>> readExcel(String path, int fristRowNum, int lastCellNum) throws IOException {
-        if (path == null || Common.EMPTY.equals(path)) {
+    public static List<List<String>> readExcel(String path, int fristRowNum, int lastCellNum) throws IOException {
+        if (path == null || "".equals(path)) {
             return null;
         } else {
-            String postfix = Util.getPostfix(path);
-            if (!Common.EMPTY.equals(postfix)) {
-                if (Common.OFFICE_EXCEL_2003_POSTFIX.equals(postfix)) {
+            String postfix = getPostfix(path);
+            if (!"".equals(postfix)) {
+                if (OFFICE_EXCEL_2003_POSTFIX.equals(postfix)) {
                     return readXls(path, fristRowNum, lastCellNum);
-                } else if (Common.OFFICE_EXCEL_2010_POSTFIX.equals(postfix)) {
+                } else if (OFFICE_EXCEL_2010_POSTFIX.equals(postfix)) {
                     return readXlsx(path, fristRowNum, lastCellNum);
                 }
-            } else {
-                System.out.println(path + Common.NOT_EXCEL_FILE);
             }
         }
         return null;
@@ -53,8 +54,7 @@ public class ReadExcel {
      * @throws IOException
      */
     @SuppressWarnings("resource")
-	public List<List<String>> readXlsx(String path, int fristRowNum, int lastCellNum) throws IOException {
-        System.out.println(Common.PROCESSING + path);
+	public static List<List<String>> readXlsx(String path, int fristRowNum, int lastCellNum) throws IOException {
         InputStream is = new FileInputStream(path);
         XSSFWorkbook xssfWorkbook = new XSSFWorkbook(is);
         List<List<String>> list = new ArrayList<>();
@@ -69,7 +69,7 @@ public class ReadExcel {
             for (int rowNum = fristRowNum; rowNum <= xssfSheet.getLastRowNum(); rowNum++) {
             	XSSFRow xssfRow = xssfSheet.getRow(rowNum);
                 if (xssfRow != null) {
-                	if (StringUtils.isBlank(xssfRow.getCell(0).getStringCellValue())) {
+                	if (xssfRow.getCell(0) == null) {
         				continue;
         			}
                 	data = new ArrayList<>();
@@ -77,6 +77,8 @@ public class ReadExcel {
                 		XSSFCell cell = xssfRow.getCell(cellNum);
                 		if (cell != null) {
                 			data.add(cell.getStringCellValue());
+                		} else {
+                			data.add(null);
                 		}
                 	}
                 	list.add(data);
@@ -93,8 +95,7 @@ public class ReadExcel {
      * @throws IOException
      */
     @SuppressWarnings("resource")
-	public List<List<String>> readXls(String path, int fristRowNum, int lastCellNum) throws IOException {
-        System.out.println(Common.PROCESSING + path);
+	public static List<List<String>> readXls(String path, int fristRowNum, int lastCellNum) throws IOException {
         InputStream is = new FileInputStream(path);
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook(is);
         List<List<String>> list = new ArrayList<>();
@@ -109,7 +110,7 @@ public class ReadExcel {
             for (int rowNum = fristRowNum; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
                 HSSFRow hssfRow = hssfSheet.getRow(rowNum);
                 if (hssfRow != null) {
-                	if (StringUtils.isBlank(hssfRow.getCell(0).getStringCellValue())) {
+                	if (hssfRow.getCell(0) == null) {
         				continue;
         			}
                 	data = new ArrayList<>();
@@ -117,6 +118,8 @@ public class ReadExcel {
                 		HSSFCell cell = hssfRow.getCell(cellNum);
                 		if (cell != null) {
                 			data.add(cell.getStringCellValue());
+                		} else {
+                			data.add(null);
                 		}
                 	}
                 	list.add(data);
@@ -124,5 +127,20 @@ public class ReadExcel {
             }
         }
         return list;
+    }
+    
+    /**
+     * get postfix of the path
+     * @param path
+     * @return
+     */
+    private static String getPostfix(String path) {
+        if (path == null || "".equals(path.trim())) {
+            return "";
+        }
+        if (path.contains(".")) {
+            return path.substring(path.lastIndexOf(".") + 1, path.length());
+        }
+        return "";
     }
 }

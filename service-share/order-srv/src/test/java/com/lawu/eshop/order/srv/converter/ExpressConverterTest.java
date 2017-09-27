@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
 import com.lawu.eshop.order.dto.foreign.TraceDTO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
@@ -69,9 +70,7 @@ public class ExpressConverterTest {
 	
 	public static void assertExpressInquiriesDetailBO(ExpressInquiriesDetail expected, ExpressInquiriesDetailBO actual) {
 		Assert.assertNotNull(actual);
-		Assert.assertEquals(expected.getReason(), actual.getReason());
-		Assert.assertEquals(expected.getState(), actual.getState().getValue());
-		Assert.assertEquals(expected.getSuccess(), actual.getSuccess());
+		Assert.assertEquals(StateEnum.getEnum(expected.getState()), actual.getState());
 		if (actual.getTraces() != null && !actual.getTraces().isEmpty()) {
 			for (int i = 0; i < actual.getTraces().size(); i++) {
 				assertTraceBO(expected.getTraces().get(i), actual.getTraces().get(i));
@@ -88,9 +87,7 @@ public class ExpressConverterTest {
 	
 	public static void assertExpressInquiriesDetailDTO(ExpressInquiriesDetailBO expected, ExpressInquiriesDetailDTO actual) {
 		Assert.assertNotNull(actual);
-		Assert.assertEquals(expected.getReason(), actual.getReason());
-		Assert.assertEquals(expected.getState().getValue(), actual.getState().getValue());
-		Assert.assertEquals(expected.getSuccess(), actual.getSuccess());
+		Assert.assertEquals(expected.getState(), actual.getState());
 		if (actual.getTraces() != null || actual.getTraces().isEmpty()) {
 			for (int i = 0; i < actual.getTraces().size(); i++) {
 				assertTraceDTO(expected.getTraces().get(i), actual.getTraces().get(i));
@@ -107,9 +104,7 @@ public class ExpressConverterTest {
 	
     public static ExpressInquiriesDetailBO initExpressInquiriesDetailBO() {
     	ExpressInquiriesDetailBO rtn = new ExpressInquiriesDetailBO();
-    	rtn.setReason("快递未揽收");
-    	rtn.setState(StateEnum.ON_THE_WAY);
-    	rtn.setSuccess(true);
+    	rtn.setState(ExpressInquiriesDetailStateEnum.ON_THE_WAY);
     	rtn.setTraces(new ArrayList<>());
     	TraceBO traceBO = new TraceBO();
     	traceBO.setAcceptStation("等待快递揽收");

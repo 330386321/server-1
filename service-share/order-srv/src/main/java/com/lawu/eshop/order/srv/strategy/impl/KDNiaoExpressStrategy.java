@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ExpressRecognitionDetailBO;
 import com.lawu.eshop.order.srv.converter.ExpressConverter;
@@ -41,6 +42,11 @@ public class KDNiaoExpressStrategy implements ExpressStrategy {
 				logger.error("即时查询接口返回异常");
 				logger.error("Result:{}", result);
 				logger.error("Result:{}", expressInquiriesDetail.getReason());
+				rtn = new ExpressInquiriesDetailBO();
+				rtn.setLogisticCode(expNo);
+				rtn.setShipperCode(expCode);
+				rtn.setState(ExpressInquiriesDetailStateEnum.NO_INFO);
+				return rtn;
 			}
 			
 			// Trace按照时间倒序排序
@@ -78,5 +84,5 @@ public class KDNiaoExpressStrategy implements ExpressStrategy {
 		}
 		return rtn;
 	}
-
+	
 }

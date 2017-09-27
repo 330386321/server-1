@@ -15,7 +15,7 @@ public class ExpressCompanyDO implements Serializable {
 
     /**
      *
-     * 编码
+     * 快递鸟快递公司编号
      * express_company.code
      *
      * @mbg.generated
@@ -51,7 +51,7 @@ public class ExpressCompanyDO implements Serializable {
 
     /**
      *
-     * 排序(对应name首字母ASCII编码的十进制
+     * 排序(对应name首字母ASCII编码的十进制)
      * express_company.ordinal
      *
      * @mbg.generated

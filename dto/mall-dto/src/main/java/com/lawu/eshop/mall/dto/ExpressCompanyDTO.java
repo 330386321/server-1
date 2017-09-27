@@ -17,9 +17,9 @@ public class ExpressCompanyDTO {
 	private Integer id;
 	
 	/**
-	 * 编码
+	 * 快递鸟编号
 	 */
-	@ApiModelProperty(value = "编码", required = true)
+	@ApiModelProperty(value = "快递鸟编号")
 	private String code;
 	
 	/**
