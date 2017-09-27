@@ -92,14 +92,12 @@ public class InformController extends BaseController {
 		} else if (param.getStatus() == 2) {
 			edit.setStatus(InformStatusEnum.INFORM_NOT_HANDLED.getVal());
 		}
-		if (param.getInformType() == InformEnum.INFORM_TYPE_PLAT) {
-			adPlatformService.unShelve(param.getInformtItemId());// 平面广告
-		} else if (param.getInformType() == InformEnum.INFORM_TYPE_GOODS) {// 商品
+		if (param.getInformType() == InformEnum.INFORM_TYPE_GOODS) {// 商品
 			productAuditService.updateProductStatus(param.getInformtItemId().toString(),
 					ProductStatusEnum.PRODUCT_STATUS_DOWN);
 		} else if (param.getInformType() == InformEnum.INFORM_TYPE_MERCHANT) {// 商家
 
-		} else if (param.getInformType() == InformEnum.INFORM_TYPE_PRAISE) {// E赞
+		} else{// E赞
 			adService.operatorUpdateAdStatus(param.getInformtItemId(), AdStatusEnum.AD_STATUS_OUT);
 		}
 		return informService.editInform(edit);
