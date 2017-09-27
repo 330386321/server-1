@@ -44,6 +44,7 @@ public class AdPlatformConverter {
         adPlatformBO.setProductId(adPlatformDO.getProductId());
         adPlatformBO.setRegionPath(adPlatformDO.getRegionPath());
         adPlatformBO.setAdId(adPlatformDO.getAdId());
+        adPlatformBO.setRegionName(adPlatformDO.getRegionName());
         return adPlatformBO;
 
     }
@@ -182,6 +183,7 @@ public class AdPlatformConverter {
         adPlatformDTO.setProductId(adPlatformBO.getProductId());
         adPlatformDTO.setRegionPath(adPlatformBO.getRegionPath());
         adPlatformDTO.setAdId(adPlatformBO.getAdId());
+        adPlatformDTO.setRegionName(adPlatformBO.getRegionName());
         return adPlatformDTO;
     }
 

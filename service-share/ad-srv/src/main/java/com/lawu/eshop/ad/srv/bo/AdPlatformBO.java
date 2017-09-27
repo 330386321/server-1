@@ -34,6 +34,8 @@ public class AdPlatformBO {
 	 private String regionPath;
 	 
 	 private Long adId;
+	 
+	 private String regionName;
 	
 	public TypeEnum getTypeEnum() {
 		return typeEnum;
@@ -146,6 +148,15 @@ public class AdPlatformBO {
 	public void setAdId(Long adId) {
 		this.adId = adId;
 	}
+
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+	
 	
 	
 }
