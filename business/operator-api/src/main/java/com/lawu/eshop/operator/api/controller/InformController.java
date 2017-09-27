@@ -5,12 +5,15 @@ package com.lawu.eshop.operator.api.controller;
 
 import java.util.Date;
 
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
@@ -29,6 +32,7 @@ import com.lawu.eshop.operator.api.service.AdPlatformService;
 import com.lawu.eshop.operator.api.service.AdService;
 import com.lawu.eshop.operator.api.service.InformService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
+import com.lawu.eshop.operator.api.service.ProductService;
 import com.lawu.eshop.operator.api.service.UserService;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 
@@ -87,13 +91,13 @@ public class InformController extends BaseController {
 			edit.setStatus(InformStatusEnum.INFORM_ALREADY_PROCESSED.getVal());
 		} else if (param.getStatus() == 2) {
 			edit.setStatus(InformStatusEnum.INFORM_NOT_HANDLED.getVal());
-		}
+		} 
 		if (param.getInformType() == InformEnum.INFORM_TYPE_GOODS) {// 商品
 			productAuditService.updateProductStatus(param.getInformtItemId().toString(),
 					ProductStatusEnum.PRODUCT_STATUS_DOWN);
 		} else if (param.getInformType() == InformEnum.INFORM_TYPE_MERCHANT) {// 商家
 
-		} else{// E赞
+		} else {// 广告
 			adService.operatorUpdateAdStatus(param.getInformtItemId(), AdStatusEnum.AD_STATUS_OUT);
 		}
 		return informService.editInform(edit);
