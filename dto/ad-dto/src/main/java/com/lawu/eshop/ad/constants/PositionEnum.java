@@ -11,9 +11,9 @@ public enum PositionEnum {
 	    SHOPPING_GOODS((byte) 0x07, "特色好货"), // 特色好货
 	    SHOPPING_BENEFIT((byte) 0x08, "实惠单品"), // 实惠单品
 	    SHOPPING_HOT((byte) 0x09, "热门商品"),  //热门商品
-	    AD_POSITION_TWO((byte) 0x0A, "广告模块位置2") ,
-	    AD_POSITION_THREE((byte) 0x0B, "广告模块位置3") ,
-	    AD_POSITION_FOUR((byte) 0x0C, "广告模块位置4") ;
+	    AD_POSITION_TWO((byte) 0x0A, "三个视频广告位") ,
+	    AD_POSITION_THREE((byte) 0x0B, "一个平面广告位") ,
+	    AD_POSITION_FOUR((byte) 0x0C, "五个平面广告位") ;
 	    public Byte val;
 	    private String name;
 
