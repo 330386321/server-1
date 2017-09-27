@@ -94,3 +94,7 @@ sudo docker run --name solr --net=host -t -d -p 8983:8983 -m 1g \
     registry.eshop.com/solr:6.5.1-alpine \
     -c -z "192.168.100.90:2181,192.168.100.91:2181/solr" -force
 ```
+
+清空索引
+======
+<delete><query>*:*</query></delete><commit/>
