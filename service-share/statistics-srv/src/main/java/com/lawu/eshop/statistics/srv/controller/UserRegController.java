@@ -21,6 +21,7 @@ import com.lawu.eshop.statistics.srv.converter.ReportUserRegConverter;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportNewDateDOView;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
 import com.lawu.eshop.statistics.srv.service.UserRegService;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * @author meishuquan
@@ -134,8 +135,12 @@ public class UserRegController extends BaseController {
      */
     @RequestMapping(value = "getReportDateUserRegDaily", method = RequestMethod.GET)
     public Result<ReportNewDateDTO> getReportDateUserRegDaily() {
-    	ReportNewDateDOView view = userRegService.getReportDateUserRegDaily();
-        return successGet(new ReportNewDateDTO(view.getGmtReport()));
+        ReportNewDateDOView view = userRegService.getReportDateUserRegDaily();
+        ReportNewDateDTO reportNewDateDTO = new ReportNewDateDTO(DateUtil.getNowDate());
+        if (view != null) {
+            reportNewDateDTO.setGmtReport(view.getGmtReport());
+        }
+        return successGet(reportNewDateDTO);
     }
     
 
@@ -146,7 +151,11 @@ public class UserRegController extends BaseController {
      */
     @RequestMapping(value = "getReportDateUserRegMonth", method = RequestMethod.GET)
     public Result<ReportNewDateDTO> getReportDateUserRegMonth() {
-    	ReportNewDateDOView view = userRegService.getReportDateUserRegMonth();
-        return successGet(new ReportNewDateDTO(view.getGmtReport()));
+        ReportNewDateDOView view = userRegService.getReportDateUserRegMonth();
+        ReportNewDateDTO reportNewDateDTO = new ReportNewDateDTO(DateUtil.getNowDate());
+        if (view != null) {
+            reportNewDateDTO.setGmtReport(view.getGmtReport());
+        }
+        return successGet(reportNewDateDTO);
     }
 }

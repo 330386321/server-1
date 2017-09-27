@@ -242,6 +242,20 @@ public class DateUtil {
 		return (int) (intervalMilli / (24 * 60 * 60 * 1000));
 	}
 
+	public static int monthsOfTwo(Date beginDate) {
+		Calendar c1 = Calendar.getInstance();
+		Calendar c2 = Calendar.getInstance();
+		c1.setTime(beginDate);
+		c2.setTime(new Date());
+		int year = c2.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
+		if (year < 0) {
+			year = -year;
+			return year * 12 + c1.get(Calendar.MONTH) - c2.get(Calendar.MONTH);
+		} else {
+			return year * 12 + c2.get(Calendar.MONTH) - c1.get(Calendar.MONTH);
+		}
+	}
+
 	/**
 	 * 判断是否超过当前时间
 	 *

@@ -36,13 +36,23 @@ public class UserRegStatisticsServiceImpl implements UserRegStatisticsService {
 
     @Override
     public void executeCollectionUserRegDaily() {
-    	
-    	Result<ReportNewDateDTO> result=userRegService.getReportDateUserRegDaily();
-    	
-    	Date newReportDate=result.getModel().getGmtReport();
-    	
-    	for(int i=1;i <= DateUtil.daysOfTwo(newReportDate);i++){
-    		Calendar calendar = Calendar.getInstance();
+        Result<ReportNewDateDTO> result = userRegService.getReportDateUserRegDaily();
+        Date newReportDate = result.getModel().getGmtReport();
+
+        Calendar calendar = Calendar.getInstance();
+        if (DateUtil.daysOfTwo(newReportDate) == 0) {
+            calendar.add(Calendar.DATE, -1);
+            CollectionUserRegParam param = new CollectionUserRegParam();
+            param.setYear(calendar.get(Calendar.YEAR));
+            param.setMonth(calendar.get(Calendar.MONTH) + 1);
+            param.setDay(calendar.get(Calendar.DATE));
+            Result<Integer> memberResult = collectionUserRegService.collectionMemberRegDaily(param);
+            Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegDaily(param);
+            userRegService.saveUserRegDaily(memberResult.getModel(), merchantResult.getModel());
+            return;
+        }
+
+        for (int i = 1; i < DateUtil.daysOfTwo(newReportDate); i++) {
             calendar.add(Calendar.DATE, -i);
             CollectionUserRegParam param = new CollectionUserRegParam();
             param.setYear(calendar.get(Calendar.YEAR));
@@ -51,29 +61,36 @@ public class UserRegStatisticsServiceImpl implements UserRegStatisticsService {
             Result<Integer> memberResult = collectionUserRegService.collectionMemberRegDaily(param);
             Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegDaily(param);
             userRegService.saveUserRegDaily(memberResult.getModel(), merchantResult.getModel());
-    		
-    	}
-    	
+        }
+
     }
 
     @Override
     public void executeCollectionUserRegMonth() {
-       
-        Result<ReportNewDateDTO> result=userRegService.getReportDateUserRegMonth();
-    	
-    	Date newReportDate=result.getModel().getGmtReport();
-    	
-    	for(int i=1;i <= DateUtil.daysOfTwo(newReportDate);i++){
-    		Calendar calendar = Calendar.getInstance();
-	        calendar.add(Calendar.MONTH, -i);
-	        CollectionUserRegParam param = new CollectionUserRegParam();
-	        param.setYear(calendar.get(Calendar.YEAR));
-	        param.setMonth(calendar.get(Calendar.MONTH) + 1);
-	        Result<Integer> memberResult = collectionUserRegService.collectionMemberRegMonth(param);
-	        Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegMonth(param);
-	        userRegService.saveUserRegMonth(memberResult.getModel(), merchantResult.getModel());
-    		
-    	}
+        Result<ReportNewDateDTO> result = userRegService.getReportDateUserRegMonth();
+        Date newReportDate = result.getModel().getGmtReport();
+
+        Calendar calendar = Calendar.getInstance();
+        if (DateUtil.monthsOfTwo(newReportDate) == 0) {
+            calendar.add(Calendar.MONTH, -1);
+            CollectionUserRegParam param = new CollectionUserRegParam();
+            param.setYear(calendar.get(Calendar.YEAR));
+            param.setMonth(calendar.get(Calendar.MONTH) + 1);
+            Result<Integer> memberResult = collectionUserRegService.collectionMemberRegMonth(param);
+            Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegMonth(param);
+            userRegService.saveUserRegMonth(memberResult.getModel(), merchantResult.getModel());
+            return;
+        }
+
+        for (int i = 1; i < DateUtil.monthsOfTwo(newReportDate); i++) {
+            calendar.add(Calendar.MONTH, -i);
+            CollectionUserRegParam param = new CollectionUserRegParam();
+            param.setYear(calendar.get(Calendar.YEAR));
+            param.setMonth(calendar.get(Calendar.MONTH) + 1);
+            Result<Integer> memberResult = collectionUserRegService.collectionMemberRegMonth(param);
+            Result<Integer> merchantResult = collectionUserRegService.collectionMerchantRegMonth(param);
+            userRegService.saveUserRegMonth(memberResult.getModel(), merchantResult.getModel());
+        }
     }
 
     @Override
