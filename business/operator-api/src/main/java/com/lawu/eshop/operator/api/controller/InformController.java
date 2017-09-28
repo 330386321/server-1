@@ -5,15 +5,12 @@ package com.lawu.eshop.operator.api.controller;
 
 import java.util.Date;
 
-import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
@@ -32,7 +29,6 @@ import com.lawu.eshop.operator.api.service.AdPlatformService;
 import com.lawu.eshop.operator.api.service.AdService;
 import com.lawu.eshop.operator.api.service.InformService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
-import com.lawu.eshop.operator.api.service.ProductService;
 import com.lawu.eshop.operator.api.service.UserService;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 
