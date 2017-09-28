@@ -103,10 +103,10 @@ public class ReportEarningServiceImpl implements ReportEarningService {
 			for(ReportEarningsDailyDO rdo : rntList){
 				String day = DateUtil.getDateFormat(rdo.getGmtReport(), "MM-dd");
 				xAxisData.add(day);
-				yAxisAdPointData.add(rdo.getAdPoint().setScale(2));
-				yAxisUserPointData.add(rdo.getUserPoint().setScale(2));
-				yAxisLovePointData.add(rdo.getLovePoint().setScale(2));
-				yAxisPlateformPointData.add(rdo.getPlatformPoint().setScale(2));
+				yAxisAdPointData.add(rdo.getAdPoint());
+				yAxisUserPointData.add(rdo.getUserPoint());
+				yAxisLovePointData.add(rdo.getLovePoint());
+				yAxisPlateformPointData.add(rdo.getPlatformPoint());
 			}
 		}else {
 			ReportEarningsMonthDOExample example = new ReportEarningsMonthDOExample();
@@ -119,10 +119,10 @@ public class ReportEarningServiceImpl implements ReportEarningService {
 			for(ReportEarningsMonthDO rdo : rntList){
 				String day = DateUtil.getDateFormat(rdo.getGmtReport(), "yyyy-MM");
 				xAxisData.add(day);
-				yAxisAdPointData.add(rdo.getAdPoint().setScale(2));
-				yAxisUserPointData.add(rdo.getUserPoint().setScale(2));
-				yAxisLovePointData.add(rdo.getLovePoint().setScale(2));
-				yAxisPlateformPointData.add(rdo.getPlatformPoint().setScale(2));
+				yAxisAdPointData.add(rdo.getAdPoint());
+				yAxisUserPointData.add(rdo.getUserPoint());
+				yAxisLovePointData.add(rdo.getLovePoint());
+				yAxisPlateformPointData.add(rdo.getPlatformPoint());
 			}
 		}
 		ReportCommonEarningsBO bo=new ReportCommonEarningsBO();
