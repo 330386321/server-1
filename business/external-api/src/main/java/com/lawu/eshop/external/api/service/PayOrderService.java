@@ -38,4 +38,15 @@ public interface PayOrderService {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "shoppingOrder/selectOrderMoney")
 	Result<ShoppingOrderMoneyDTO> selectOrderMoney(@RequestParam("orderIds") String orderIds);
+	
+	/**
+	 * 用于第三方回调获取订单总金额
+	 * 
+	 * @param orderIds
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月29日
+	 */
+	@RequestMapping(value = "orderMoneyForNotify", method = RequestMethod.GET)
+	Result<ShoppingOrderMoneyDTO> orderMoneyForNotify(@RequestParam String orderIds);
 }

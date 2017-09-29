@@ -640,6 +640,22 @@ public class ShoppingOrderController extends BaseController {
 		shoppingOrderMoneyDTO.setOrderTotalPrice(shoppingOrderMoneyBO.getOrderTotalPrice());
 		return successGet(shoppingOrderMoneyDTO);
 	}
+	
+	/**
+	 * 用于第三方回调获取订单总金额
+	 * 
+	 * @param orderIds
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月29日
+	 */
+	@RequestMapping(value = "orderMoneyForNotify", method = RequestMethod.GET)
+	public Result<ShoppingOrderMoneyDTO> orderMoneyForNotify(@RequestParam String orderIds) {
+		ShoppingOrderMoneyBO shoppingOrderMoneyBO = shoppingOrderService.orderMoneyForNotify(orderIds);
+		ShoppingOrderMoneyDTO shoppingOrderMoneyDTO = new ShoppingOrderMoneyDTO();
+		shoppingOrderMoneyDTO.setOrderTotalPrice(shoppingOrderMoneyBO.getOrderTotalPrice());
+		return successGet(shoppingOrderMoneyDTO);
+	}
 
 	/**
 	 * 获取商品评价状态

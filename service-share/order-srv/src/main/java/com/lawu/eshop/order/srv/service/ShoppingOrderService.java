@@ -227,6 +227,16 @@ public interface ShoppingOrderService {
 	 * @author Yangqh
 	 */
 	ShoppingOrderMoneyBO selectOrderMoney(String orderIds) throws TheOrderIsBeingProcessedException, OrderCreationFailedException;
+	
+	/**
+	 * 用于第三方回调获取订单总金额
+	 * 
+	 * @param orderIds
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月29日
+	 */
+	ShoppingOrderMoneyBO orderMoneyForNotify(String orderIds);
 
 	/**
 	 * 减少产品库存成功回调 更改订单的状态为待支付状态 删除对应的购物车记录

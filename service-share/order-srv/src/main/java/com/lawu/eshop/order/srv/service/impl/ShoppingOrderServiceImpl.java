@@ -538,16 +538,14 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		if (notification == null) {
 			return;
 		}
-
 		String[] shoppingOrderIds = StringUtils.split(notification.getShoppingOrderIds(), ",");
-
 		for (String shoppingOrderId : shoppingOrderIds) {
-			/*
-			 * 实现MQ幂等性 只有订单是待支付的状态才允许更新购物订单的状态
-			 */
 			Long id = Long.valueOf(shoppingOrderId);
 			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
-
+			// 如果回调时，订单状态不是待支付，对于订单不做任何操作
+			if (ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(shoppingOrderDO.getOrderStatus())) {
+				continue;
+			}
 			// 更新购物订单的状态
 			shoppingOrderDO.setGmtModified(new Date());
 			// 更改订单状态为待发货
@@ -883,6 +881,27 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			if (ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue().equals(orderDO.getOrderStatus())) {
 				throw new OrderCreationFailedException(ExceptionMessageConstant.ORDER_CREATION_FAILED);
 			}
+			total = total.add(orderDO.getOrderTotalPrice());
+		}
+		ShoppingOrderMoneyBO rtn = new ShoppingOrderMoneyBO();
+		rtn.setOrderTotalPrice(total);
+		return rtn;
+	}
+	
+	/**
+	 * 用于第三方回调获取订单总金额
+	 * 
+	 * @param orderIds
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年9月29日
+	 */
+	@Override
+	public ShoppingOrderMoneyBO orderMoneyForNotify(String orderIds) {
+		String[] orderIdsArray = orderIds.split(",");
+		BigDecimal total = new BigDecimal(0);
+		for (int i = 0; i < orderIdsArray.length; i++) {
+			ShoppingOrderDO orderDO = shoppingOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderIdsArray[i]));
 			total = total.add(orderDO.getOrderTotalPrice());
 		}
 		ShoppingOrderMoneyBO rtn = new ShoppingOrderMoneyBO();

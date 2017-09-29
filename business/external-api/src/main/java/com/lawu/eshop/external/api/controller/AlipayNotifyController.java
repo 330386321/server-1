@@ -11,8 +11,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.lawu.eshop.external.api.service.AdUserRedPacketService;
-import com.lawu.eshop.external.api.service.PropertyinfoUserRedPacketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.lawu.eshop.external.api.ExternalApiConfig;
+import com.lawu.eshop.external.api.service.AdUserRedPacketService;
 import com.lawu.eshop.external.api.service.DepositService;
 import com.lawu.eshop.external.api.service.MessageService;
 import com.lawu.eshop.external.api.service.OrderService;
 import com.lawu.eshop.external.api.service.PayOrderService;
 import com.lawu.eshop.external.api.service.PropertySrvService;
+import com.lawu.eshop.external.api.service.PropertyinfoUserRedPacketService;
 import com.lawu.eshop.external.api.service.RechargeService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -186,7 +186,7 @@ public class AlipayNotifyController extends BaseController {
 						result = depositService.doHandleDepositNotify(param);
 						
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-						Result<ShoppingOrderMoneyDTO> order = payOrderService.selectOrderMoney(param.getBizIds());
+						Result<ShoppingOrderMoneyDTO> order = payOrderService.orderMoneyForNotify(param.getBizIds());
 						double money = order.getModel().getOrderTotalPrice().doubleValue();
 						if (StringUtil.doubleCompareTo(money, dTotalMoney) == 0) {
 							result = orderService.doHandleOrderPayNotify(param);
