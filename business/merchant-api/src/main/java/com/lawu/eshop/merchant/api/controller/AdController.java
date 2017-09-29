@@ -99,6 +99,7 @@ public class AdController extends BaseController {
     @Autowired
    	private AdCountCacheService adCountCacheService;
 
+    @Deprecated
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "添加广告", notes = "添加广告[1011|5000|5003|5010|5011|5012|6024|6026]（张荣成）", httpMethod = "POST")
@@ -459,6 +460,7 @@ public class AdController extends BaseController {
 	}
 
 
+	@Deprecated
 	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-07-04", reviewer = "孙林青")
     @ApiOperation(value = "广告再次投放(2.2.0)", notes = "广告再次投放,[1011|5000|5003|5010|6024|6026](张荣成)", httpMethod = "POST")
@@ -585,6 +587,7 @@ public class AdController extends BaseController {
     }
 
 
+	@Deprecated
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "广告再次投放(2.4)", notes = "广告再次投放,[1011|5000|5003|5010|6024|6026](张荣成)", httpMethod = "POST")
     @Authorization
