@@ -49,7 +49,7 @@ public class ProductSolrController extends BaseController {
     public Result<Page<ProductSearchDTO>> listProductByCategoryId(@RequestBody ProductSearchRealParam param) {
         SolrQuery query = new SolrQuery();
         query.setQuery("categoryId_i:" + param.getCategoryId());
-        query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
+        query.setParam("sort", "averageDailySales_d desc,id desc");
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
         SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
@@ -75,7 +75,7 @@ public class ProductSolrController extends BaseController {
         SolrQuery query = new SolrQuery();
         query.setQuery("categoryId_i:" + param.getCategoryId());
         query.addFilterQuery("-id:" + param.getProductId());
-        query.setSort("salesVolume_i", SolrQuery.ORDER.desc);
+        query.setParam("sort", "salesVolume_i desc,id desc");
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
         SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
@@ -100,7 +100,7 @@ public class ProductSolrController extends BaseController {
     public Result<Page<ProductSearchDTO>> listYouLikeProduct(@RequestBody ProductSearchParam productSearchParam) {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
-        query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
+        query.setParam("sort", "averageDailySales_d desc,id desc");
         query.setStart(productSearchParam.getOffset());
         query.setRows(productSearchParam.getPageSize());
         SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
@@ -198,7 +198,7 @@ public class ProductSolrController extends BaseController {
     public List<ProductSearchDTO> findProductSearchList(@RequestBody  ProductSearchParam searchParam){
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
-        query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
+        query.setParam("sort", "averageDailySales_d desc,id desc");
         query.setStart(searchParam.getOffset());
         query.setRows(searchParam.getPageSize());
         SolrDocumentList solrDocumentList = solrService.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
