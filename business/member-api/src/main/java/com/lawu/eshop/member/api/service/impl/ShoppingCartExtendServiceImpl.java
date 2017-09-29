@@ -334,7 +334,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		}
     		shoppingOrderSettlementParam.setItems(items);
     		// 订单总价等于货物总价+运费
-    		shoppingOrderSettlementParam.setOrderTotalPrice(commodityTotalPrice.add(shoppingOrderSettlementForeignParamMap.get(key).getFreightPrice()));
+    		shoppingOrderSettlementParam.setOrderTotalPrice(commodityTotalPrice);
     		shoppingOrderSettlementParam.setCommodityTotalPrice(commodityTotalPrice);
     		shoppingOrderSettlementParams.add(shoppingOrderSettlementParam);
     	}
@@ -619,7 +619,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		items.add(shoppingOrderSettlementItemParam);
 		shoppingOrderSettlementParam.setItems(items);
 		// 订单总价等于货物总价+运费
-		shoppingOrderSettlementParam.setOrderTotalPrice(commodityTotalPrice.add(param.getFreightPrice()));
+		shoppingOrderSettlementParam.setOrderTotalPrice(commodityTotalPrice);
 		shoppingOrderSettlementParam.setCommodityTotalPrice(commodityTotalPrice);
 		shoppingOrderSettlementParams.add(shoppingOrderSettlementParam);
     	
