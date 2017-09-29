@@ -32,8 +32,4 @@ public class MockRegionService extends BaseController implements RegionService {
 		return successGet();
 	}
 
-	@Override
-	public Result<String> getRegionSelectorData() {
-		return null;
-	}
 }

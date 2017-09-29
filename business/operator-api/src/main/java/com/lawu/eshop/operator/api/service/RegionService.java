@@ -1,17 +1,19 @@
 package com.lawu.eshop.operator.api.service;
 
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.dto.RegionDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.dto.RegionDTO;
+
 /**
  * @author zhangyong
  * @date 2017/4/10.
  */
-@FeignClient(value = "mall-srv")
+@FeignClient(value = "mall-srv", path ="region")
 public interface RegionService {
 
     /**
@@ -19,7 +21,7 @@ public interface RegionService {
      *
      * @return
      */
-    @RequestMapping(value = "region/getRegionFullName/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "getRegionFullName/{id}", method = RequestMethod.GET)
     Result<String> getRegionFullName(@PathVariable("id") Integer id);
 
     /**
@@ -28,7 +30,14 @@ public interface RegionService {
      * @param id
      * @return
      */
-    @RequestMapping(value = "region/getRegion/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "getRegion/{id}", method = RequestMethod.GET)
     Result<RegionDTO> getRegionById(@PathVariable("id") Integer id);
+    
+    /**
+     * pc网页地区选择控件数据来源
+     * @return
+     */
+    @RequestMapping(value = "getRegionSelectorData", method = RequestMethod.GET)
+    Result<JSONObject> getRegionSelectorData();
 
 }
