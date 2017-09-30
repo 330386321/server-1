@@ -543,7 +543,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			Long id = Long.valueOf(shoppingOrderId);
 			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
 			// 如果回调时，订单状态不是待支付，对于订单不做任何操作
-			if (ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(shoppingOrderDO.getOrderStatus())) {
+			if (!ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(shoppingOrderDO.getOrderStatus())) {
 				continue;
 			}
 			// 更新购物订单的状态
