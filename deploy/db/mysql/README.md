@@ -7,7 +7,7 @@ docker pull mysql:5.7.18
 
 启动
 ======
-
+拷贝deploy/db/mysql到/usr/local/eshop/mysql
 #预发布环境
 ```Bash
 sudo docker run --name mysql -e MYSQL_ROOT_PASSWORD=123456 -d -p 3306:3306 \
@@ -31,6 +31,9 @@ MySQL主从配置
 
 1、连接主节点MySQL容器
 ------
+```bash
+sudo docker exec -it mysql /bin/sh
+```
 
 2、登录MySQL
 ------

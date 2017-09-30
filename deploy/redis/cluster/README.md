@@ -1,9 +1,11 @@
-拉取镜像
+构建镜像
 ======
+拷贝项目中deploy下的redis目录到私库服务器的/usr/local/eshop/redis
 ```Bash
+cd /usr/local/eshop/redis/cluster
 sudo docker build -t registry.eshop.com/redis:3.2.6-alpine .
+sudo docker push registry.eshop.com/redis:3.2.6-alpine
 ```
-
 
 启动
 ======
@@ -50,7 +52,7 @@ gem install redis
 
 #正式环境
 ```Bash
-./redis-trib.rb create --replicas 1 192.168.100.90:7000 192.168.100.90:7001 \
+/usr/local/eshop/redis/cluster/redis-trib.rb create --replicas 1 192.168.100.90:7000 192.168.100.90:7001 \
 192.168.100.90:7002 192.168.100.91:7000 192.168.100.91:7001 192.168.100.91:7002
 ```
 

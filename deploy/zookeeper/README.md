@@ -18,6 +18,7 @@ sudo docker run -d --name=zk --net=host \
 
 正式环境启动
 ======
+在90运行
 ```Bash
 sudo docker run -d \
  --name=zookeeper \
@@ -30,6 +31,7 @@ sudo docker run -d \
  registry.cn-hangzhou.aliyuncs.com/acs-sample/zookeeper:3.4.8
 ```
 
+在91运行
 ```Bash
 sudo docker run -d \
  --name=zookeeper \

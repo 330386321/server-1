@@ -26,6 +26,10 @@ https://docs.docker.com/compose/install/
 创建网络
 -----
 通过服务编排创建网络,会以当前文件夹为前缀
+或者
+```bash
+sudo docker network create -d overlay --attachable eshop_eshopNet
+```
 
 加入网络
 -----
@@ -59,13 +63,6 @@ sudo docker run -d -p 8888:8888 --privileged --name eureka-server \
 业务服务
 -----
 使用服务编排，第一次启动
-
-root用户
-```bash
-docker-compose -f /usr/local/eshop/docker-compose.yml up -d
-```
-
-非root用户
 ```bash
 sudo /usr/local/bin/docker-compose -f /usr/local/eshop/docker-compose.yml up -d
 ```

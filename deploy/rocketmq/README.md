@@ -1,6 +1,8 @@
 创建镜像
 ======
+拷贝项目中deploy下的rocketmq目录到/usr/local/eshop
 ```bash
+cd /usr/local/eshop/rocketmq
 sudo docker build -t registry.eshop.com/rocketmq:3.2.6 .
 ``` 
         
@@ -9,16 +11,17 @@ sudo docker build -t registry.eshop.com/rocketmq:3.2.6 .
 ====
 
 ```bash
-    cd /usr/local/eshop/rocketmq/alibaba-rocketmq/bin
+cd /usr/local/eshop/rocketmq/alibaba-rocketmq/bin
 ``` 
 1、配置broker.p
-----  
+----
 
     第一步生成 Broker 默认配置模版 sh mqbroker -m > broker.p
     第二步修改配置文件, broker.p
 
 2、新建日志目录
 ----
+
 ```bash
     mkdir /usr/local/eshop/rocketmq/log
 ```
@@ -42,9 +45,9 @@ cd /usr/local/rocketmq/bin
 sh mqshutdown broker
 sh mqshutdown namesrv
 --等待停止
-rm -rf /usr/local/rocketmq/store
-mkdir /usr/local/rocketmq/store
-mkdir /usr/local/rocketmq/store/commitlog
-mkdir /usr/local/rocketmq/store/consumequeue
-mkdir /usr/local/rocketmq/store/index
+rm -rf /root/store
+mkdir /root/store
+mkdir /root/store/commitlog
+mkdir /root/store/consumequeue
+mkdir /root/store/index
 ```

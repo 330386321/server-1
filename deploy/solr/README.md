@@ -1,8 +1,10 @@
 构建镜像
 ======
-
+拷贝项目中deploy下的solr文件夹到/usr/local/eshop
 ```Bash
+cd /usr/local/eshop/solr
 sudo docker build -t registry.eshop.com/solr:6.5.1-alpine .
+sudo docker push registry.eshop.com/solr:6.5.1-alpine
 ```
 
 solr单节点部署
@@ -56,6 +58,8 @@ sudo docker run --name solr --net=host -t -d -p 8983:8983 -m 1g \
 
 通过第一个节点上传配置到zookeeper
 ------
+拷贝deploy/solr/cloud到/usr/local/eshop/solr/cloud
+上传文件到solr容器
 ```bash
 sudo docker cp /usr/local/eshop/solr/cloud solr:/opt
 ```

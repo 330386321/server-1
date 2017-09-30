@@ -15,7 +15,7 @@ services:
           - /etc/localtime:/etc/localtime:ro
           - /usr/local/eshop/media:/usr/local/eshop/media
     networks:
-      - eshopNet
+      - eshop_eshopNet
   merchant-api:
     image: registry.eshop.com/merchant-api
     container_name: merchant-api
@@ -29,7 +29,7 @@ services:
           - /etc/localtime:/etc/localtime:ro
           - /usr/local/eshop/media:/usr/local/eshop/media
     networks:
-      - eshopNet
+      - eshop_eshopNet
   operator-api:
     image: registry.eshop.com/operator-api
     container_name: operator-api
@@ -42,7 +42,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshopNet
+      - eshop_eshopNet
   agent-api:
     image: registry.eshop.com/agent-api
     container_name: agent-api
@@ -55,7 +55,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshopNet
+      - eshop_eshopNet
   external-api:
     image: registry.eshop.com/external-api
     container_name: external-api
@@ -68,7 +68,7 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshopNet
+      - eshop_eshopNet
   jobs:
     image: registry.eshop.com/jobs
     container_name: jobs
@@ -81,9 +81,9 @@ services:
     volumes:
           - /etc/localtime:/etc/localtime:ro
     networks:
-      - eshopNet
+      - eshop_eshopNet
 
 
 networks:
-  eshopNet:
-    driver: overlay
+  eshop_eshopNet:
+    external: true

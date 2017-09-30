@@ -14,20 +14,25 @@ http://blog.csdn.net/j903829182/article/details/73502756
 - `PRIORITY`:            101 on master, 100 on backups
 
 ##构建镜像
-```
+拷贝项目中deploy下的db/haproxy/build到/usr/local/eshop/haproxy/build
+```bash
+cd /usr/local/eshop/haproxy/build
 sudo docker build -t registry.eshop.com/keepalived-haproxy:1.7.9 .
 ```
 
+拷贝项目中deploy下的db/haproxy/product到/usr/local/eshop/haproxy/
 docker-compose方式启动
 ======
 主节点
 ------
-master/docker-compose.yml
-
+```bash
+sudo /usr/local/bin/docker-compose -f master/docker-compose.yml up -d
+```
 从节点
 ------
-backup/docker-compose.yml
-
+```bash
+sudo /usr/local/bin/docker-compose -f backup/docker-compose.yml up -d
+```
 docker run 方式启动（以下启动方式在容器重启时会无法启动，具体原因未知，暂无解决方法，建议通过docker-compose方式启动）
 ======
 
