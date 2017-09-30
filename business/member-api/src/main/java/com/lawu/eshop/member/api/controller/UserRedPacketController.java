@@ -194,6 +194,7 @@ public class UserRedPacketController extends BaseController {
 		if(null==user||null==user.getModel()){
 			return successGet(ResultCode.NOT_FOUND_DATA);
 		}
+		dto.setInviterAccount(user.getModel().getAccount());
 		dto.setHeadUrl(user.getModel().getHeadimg());
 		dto.setNickName(user.getModel().getNickname());
 		return successGet(dto);

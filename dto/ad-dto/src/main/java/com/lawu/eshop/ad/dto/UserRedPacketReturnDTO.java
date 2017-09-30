@@ -21,6 +21,9 @@ public class UserRedPacketReturnDTO {
 	@ApiModelProperty(value = "总金额")
 	private BigDecimal money;
 	
+	@ApiModelProperty(value = "邀请人账号")
+	private String inviterAccount;
+	
 
 	public String getNickName() {
 		return nickName;
@@ -44,6 +47,14 @@ public class UserRedPacketReturnDTO {
 
 	public void setMoney(BigDecimal money) {
 		this.money = money;
+	}
+
+	public String getInviterAccount() {
+		return inviterAccount;
+	}
+
+	public void setInviterAccount(String inviterAccount) {
+		this.inviterAccount = inviterAccount;
 	}
 
 	
