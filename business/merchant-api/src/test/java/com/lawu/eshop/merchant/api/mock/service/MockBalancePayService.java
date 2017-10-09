@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.BalancePayService;
 import com.lawu.eshop.property.param.BalancePayParam;
+import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,5 +16,10 @@ public class MockBalancePayService extends BaseController implements BalancePayS
     @Override
     public Result balancePayPoint(BalancePayParam param) {
         return successCreated();
+    }
+
+    @Override
+    public Result balancePayPointValidatePwd(BalancePayValidateDataParam param) {
+        return null;
     }
 }

@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.UserRedPacketService;
+import com.lawu.eshop.property.param.BalancePayValidateDataParam;
+import com.lawu.eshop.property.param.BalancePayValidateParam;
 import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +95,6 @@ public class BalancePayController extends BaseController {
         dparam.setBizIds(param.getBizIds());
         dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
-        dparam.setPayPwd(param.getPayPwd());
             /*
 		 *  获取订单金额
 		 *  考虑商品可能有减库存失败可能
@@ -124,7 +125,6 @@ public class BalancePayController extends BaseController {
         dparam.setBizIds(param.getBizIds());
         dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
-        dparam.setPayPwd(param.getPayPwd());
         ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
                 .selectThirdPayCallBackQueryPayOrder(param.getBizIds());
         if (payOrderCallback == null) {
@@ -170,7 +170,6 @@ public class BalancePayController extends BaseController {
         dparam.setBizIds(param.getBizIds());
         dparam.setUserNum(userNum);
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
-        dparam.setPayPwd(param.getPayPwd());
 
         ThirdPayCallBackQueryPayOrderDTO payOrderCallback = rechargeService.getRechargeMoney(param.getBizIds());
         if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), 0) == 0) {
@@ -223,7 +222,6 @@ public class BalancePayController extends BaseController {
         dparam.setBizIds(param.getBizIds());
         dparam.setUserNum(userNum);
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
-        dparam.setPayPwd(param.getPayPwd());
 
         Result<ThirdPayCallBackQueryPayOrderDTO> moneyResult = userRedPacketService.selectUserRedPacketInfoForThrid(Long.valueOf(param.getBizIds()));
         if (StringUtil.doubleCompareTo(moneyResult.getModel().getActualMoney(), 0) == 0) {
@@ -233,5 +231,168 @@ public class BalancePayController extends BaseController {
         dparam.setOrderNum(moneyResult.getModel().getOrderNum());
 
         return balancePayService.memberRedPacketPay(dparam);
+    }
+
+    //#########################################################以下接口需要校验支付密码
+
+    /**
+     * 余额支付订单
+     *
+     * @param param
+     * @return
+     */
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
+    @SuppressWarnings("rawtypes")
+    @Authorization
+    @ApiOperation(value = "商品订单余额支付", notes = "商品订单余额支付，校验支付密码（杨清华）", httpMethod = "POST")
+    @RequestMapping(value = "orderPayValidatePwd", method = RequestMethod.POST)
+    public Result orderPayValidatePwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                            @ModelAttribute @ApiParam BalancePayValidateParam param) {
+        BalancePayValidateDataParam dparam = new BalancePayValidateDataParam();
+        dparam.setBizIds(param.getBizIds());
+        dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+        dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+        dparam.setPayPwd(param.getPayPwd());
+
+            /*
+		 *  获取订单金额
+		 *  考虑商品可能有减库存失败可能
+		 */
+        Result<ShoppingOrderMoneyDTO> result = shoppingOrderService.selectOrderMoney(param.getBizIds());
+        if (!isSuccess(result)) {
+            return successCreated(result.getRet());
+        }
+        double orderMoney = result.getModel().getOrderTotalPrice().doubleValue();
+
+        if (StringUtil.doubleCompareTo(orderMoney, 0) == 0) {
+            return successCreated(ResultCode.MONEY_IS_ZERO);
+        }
+
+        dparam.setTotalAmount(String.valueOf(orderMoney));
+
+        return balancePayService.orderPayValidatePwd(dparam);
+    }
+
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
+    @SuppressWarnings("rawtypes")
+    @Authorization
+    @ApiOperation(value = "买单余额支付", notes = "买单余额支付,校验支付密码（杨清华）", httpMethod = "POST")
+    @RequestMapping(value = "billPayValidatePwd", method = RequestMethod.POST)
+    public Result billPayValidatePwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                          @ModelAttribute @ApiParam BalancePayValidateParam param) {
+        BalancePayValidateDataParam dparam = new BalancePayValidateDataParam();
+        dparam.setBizIds(param.getBizIds());
+        dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+        dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+        dparam.setPayPwd(param.getPayPwd());
+
+        ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
+                .selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+        if (payOrderCallback == null) {
+            return successCreated(ResultCode.PAY_ORDER_NULL);
+        } else if (PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal().equals(payOrderCallback.getPayOrderStatusEnum().getVal())) {
+            return successCreated(ResultCode.PAY_ORDER_IS_SUCCESS);
+        }else {
+            if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), 0) == 0) {
+                return successCreated(ResultCode.MONEY_IS_ZERO);
+            }
+        }
+        dparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
+        dparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
+        dparam.setOrderNum(payOrderCallback.getOrderNum());
+
+        VisitUserInfoDTO visitUserInfoDTO = merchantStoreService.findAccountAndRegionPathByNum(payOrderCallback.getBusinessUserNum());
+        dparam.setRegionPath(visitUserInfoDTO.getRegionPath());
+
+        Result result = balancePayService.billPayValidatePwd(dparam);
+        if (ResultCode.SUCCESS != result.getRet()) {
+            return result;
+        }
+        DecimalFormat df = new DecimalFormat("######0.00");
+        MessageInfoParam messageInfoParam = new MessageInfoParam();
+        messageInfoParam.setRelateId(0L);
+        messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT);
+        MessageTempParam messageTempParam = new MessageTempParam();
+        messageTempParam.setOrderAmount(new BigDecimal(df.format(payOrderCallback.getActualMoney())));
+        messageInfoParam.setMessageParam(messageTempParam);
+        messageService.saveMessage(payOrderCallback.getBusinessUserNum(), messageInfoParam);
+        return successCreated();
+    }
+
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
+    @SuppressWarnings("rawtypes")
+    @Authorization
+    @ApiOperation(value = "余额充值积分", notes = "余额充值积分,校验支付密码（杨清华）", httpMethod = "POST")
+    @RequestMapping(value = "balancePayPointValidatePwd", method = RequestMethod.POST)
+    public Result balancePayPointValidatePwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                  @ModelAttribute @ApiParam BalancePayValidateParam param) {
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        BalancePayValidateDataParam dparam = new BalancePayValidateDataParam();
+        dparam.setBizIds(param.getBizIds());
+        dparam.setUserNum(userNum);
+        dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+        dparam.setPayPwd(param.getPayPwd());
+
+        ThirdPayCallBackQueryPayOrderDTO payOrderCallback = rechargeService.getRechargeMoney(param.getBizIds());
+        if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), 0) == 0) {
+            return successCreated(ResultCode.MONEY_IS_ZERO);
+        }
+        dparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
+        dparam.setOrderNum(payOrderCallback.getOrderNum());
+
+        Result result = balancePayService.balancePayPointValidatePwd(dparam);
+        if (ResultCode.SUCCESS != result.getRet()) {
+            return result;
+        }
+
+        // ------------------------------发送站内消息
+        DecimalFormat df = new DecimalFormat("######0.00");
+        MessageInfoParam messageInfoParam = new MessageInfoParam();
+        messageInfoParam.setRelateId(0L);
+        messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+        MessageTempParam messageTempParam = new MessageTempParam();
+        messageTempParam.setRechargeBalance(new BigDecimal(df.format(payOrderCallback.getActualMoney())));
+        Result<PropertyPointAndBalanceDTO> moneyResult = propertyInfoService.getPropertyInfoMoney(userNum);
+        messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+        if (userNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+            messageTempParam.setUserName("E店会员");
+        } else if (userNum.startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+            messageTempParam.setUserName("E店商家");
+        }
+        String property_key = PropertyType.MEMBER_BALANCE_PAY_POINT_SCALE;
+        Result scale = propertySrvPropertyService.getValue(property_key);
+        double dPayMoney = Double.parseDouble(String.valueOf(payOrderCallback.getActualMoney()));
+        double dPayScale = Double.parseDouble(scale.getModel().toString());
+        double point = dPayMoney * dPayScale;
+        messageTempParam.setRechargePoint(new BigDecimal(df.format(point)));
+        messageInfoParam.setMessageParam(messageTempParam);
+        messageService.saveMessage(userNum, messageInfoParam);
+        // ------------------------------发送站内消息
+
+        return successCreated();
+    }
+
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
+    @SuppressWarnings("rawtypes")
+    @Authorization
+    @ApiOperation(value = "用户发红包余额支付", notes = "用户发红包余额支付,[]（杨清华）", httpMethod = "POST")
+    @RequestMapping(value = "memberRedPacketPayValidatePwd", method = RequestMethod.POST)
+    public Result memberRedPacketPayValidatePwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                     @ModelAttribute @ApiParam BalancePayValidateParam param) {
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        BalancePayValidateDataParam dparam = new BalancePayValidateDataParam();
+        dparam.setBizIds(param.getBizIds());
+        dparam.setUserNum(userNum);
+        dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+        dparam.setPayPwd(param.getPayPwd());
+
+        Result<ThirdPayCallBackQueryPayOrderDTO> moneyResult = userRedPacketService.selectUserRedPacketInfoForThrid(Long.valueOf(param.getBizIds()));
+        if (StringUtil.doubleCompareTo(moneyResult.getModel().getActualMoney(), 0) == 0) {
+            return successCreated(ResultCode.MONEY_IS_ZERO);
+        }
+        dparam.setTotalAmount(String.valueOf(moneyResult.getModel().getActualMoney()));
+        dparam.setOrderNum(moneyResult.getModel().getOrderNum());
+
+        return balancePayService.memberRedPacketPayValidatePwd(dparam);
     }
 }
