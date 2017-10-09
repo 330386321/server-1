@@ -11,9 +11,10 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -23,7 +24,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.framework.web.doc.dto.ApiDocumentVO;
+import com.lawu.eshop.framework.web.doc.dto.ApiDocumentDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,7 @@ import io.swagger.annotations.ApiOperation;
  * @author Sunny
  * @date 2017/03/31
  */
+@Profile({"local", "dev", "test"})
 @Controller
 public class DocumentController extends BaseController{
 	
@@ -46,31 +48,12 @@ public class DocumentController extends BaseController{
 	 * @return
 	 * @author Sunny
 	 */
-    @RequestMapping(value = "document.html")
-    public String api(ModelMap map) {
-    	
-    	List<ApiDocumentVO> voList = getVoList(true);
-    	
-    	map.addAttribute("voList", voList);
-    	return "document";
+    @ResponseBody
+    @RequestMapping(value = "document")
+    public List<ApiDocumentDTO> api(@RequestParam Boolean isAudit) {
+    	return getVoList(isAudit);
     }
     
-	/**
-	 * 显示未审核通过的接口列表
-	 * 
-	 * @param map
-	 * @return
-	 * @author Sunny
-	 */
-    @RequestMapping(value = "documentUnAudit.html")
-    public String apiUnAudit(ModelMap map) {
-    	
-    	List<ApiDocumentVO> voList = getVoList(false);
-    	
-    	map.addAttribute("voList", voList);
-    	return "document";
-    }
-
     /**
      * 返回接口VoList
      * 
@@ -79,8 +62,8 @@ public class DocumentController extends BaseController{
      * @author Sunny
      */
     @SuppressWarnings("unused")
-	private List<ApiDocumentVO> getVoList(Boolean isAudit) {
-    	List<ApiDocumentVO> rtn = new ArrayList<>();
+	private List<ApiDocumentDTO> getVoList(Boolean isAudit) {
+    	List<ApiDocumentDTO> rtn = new ArrayList<>();
     	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     	
     	try {
@@ -93,6 +76,7 @@ public class DocumentController extends BaseController{
     	    	Api api = null;
     	    	Audit audit = null;
     	    	ApiOperation apiOperation = null;
+    	    	Deprecated deprecated = null;
     			
     	    	RequestMappingInfo info = null;
     	    	HandlerMethod method = null;
@@ -107,6 +91,7 @@ public class DocumentController extends BaseController{
 		        	method = entry.getValue();
 		            apiOperation = method.getMethodAnnotation(ApiOperation.class);
 		            audit = method.getMethodAnnotation(Audit.class);
+		            deprecated = method.getMethodAnnotation(Deprecated.class);
 		            
 		            boolean isShow = ((audit != null && isAudit) || (!isAudit && audit == null)) && apiOperation != null;
 		            if (isShow) {
@@ -114,7 +99,7 @@ public class DocumentController extends BaseController{
 		            	api = method.getBeanType().getAnnotation(Api.class);
 		            	
 		            	// 组装VO对象
-		            	ApiDocumentVO vo = new ApiDocumentVO();
+		            	ApiDocumentDTO vo = new ApiDocumentDTO();
 		            	if (api != null && api.tags() != null) {
 		            		vo.setApiName(Arrays.toString(api.tags()));
 		            	} else {
@@ -132,6 +117,7 @@ public class DocumentController extends BaseController{
 			            	vo.setNotes(apiOperation.notes());
 			            	vo.setHttpMethod(apiOperation.httpMethod());
 		            	}
+		            	vo.setIsDeprecated(deprecated == null ? false : true);
 		            	rtn.add(vo);
 		            }
 		        }
@@ -144,6 +130,7 @@ public class DocumentController extends BaseController{
     	    	ApiOperation apiOperation = null;
     	    	RequestMapping beanRequestMapping = null;
     	    	RequestMapping requestMapping = null;
+    	    	Deprecated deprecated = null;
     	    	StringBuilder sb = new StringBuilder();
 				
 				Class<? extends Object> clazz = null;  
@@ -156,6 +143,7 @@ public class DocumentController extends BaseController{
 		            Method[]  methods = clazz.getMethods();
 		            for (Method method : methods) {
 		            	
+		            	deprecated = method.getAnnotation(Deprecated.class);
 		            	audit = method.getAnnotation(Audit.class);
 		            	apiOperation = method.getAnnotation(ApiOperation.class);
 		            	requestMapping = method.getAnnotation(RequestMapping.class);
@@ -163,7 +151,7 @@ public class DocumentController extends BaseController{
 		            	boolean isShow = ((audit != null && isAudit) || (!isAudit && audit == null)) && apiOperation != null;
 		            	if (isShow) {
 		            		// 组装VO对象
-			            	ApiDocumentVO vo = new ApiDocumentVO();
+			            	ApiDocumentDTO vo = new ApiDocumentDTO();
 			            	if (api != null && api.tags() != null) {
 			            		vo.setApiName(Arrays.toString(api.tags()));
 			            	} else {
@@ -192,6 +180,7 @@ public class DocumentController extends BaseController{
 				            	vo.setNotes(apiOperation.notes());
 				            	vo.setHttpMethod(apiOperation.httpMethod());
 			            	}
+			            	vo.setIsDeprecated(deprecated == null ? false : true);
 			            	rtn.add(vo);
 		            	}
 		            }
@@ -218,19 +207,6 @@ public class DocumentController extends BaseController{
     	});
     	
     	return rtn;
-    }
-    
-	/**
-	 * 显示审核通过接口列表
-	 * 
-	 * @param map
-	 * @return
-	 * @author Sunny
-	 */
-    @ResponseBody
-    @RequestMapping(value = "document")
-    public List<ApiDocumentVO> api() {
-    	return getVoList(true);
     }
     
     private WebApplicationContext getWebApplicationContext() {  

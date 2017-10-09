@@ -36,7 +36,7 @@ public class SwaggerConfig {
     @Bean
     public Docket adminApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("Merchant API")
+                .groupName("API")
                 .forCodeGeneration(true)
                 .pathMapping("/")
                 .select()

@@ -2,10 +2,13 @@ package com.lawu.eshop.framework.web.doc.dto;
 
 import java.util.Date;
 
-public class ApiDocumentVO {
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+public class ApiDocumentDTO {
 	
 	private String name;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date date;
 	
 	private String apiName;
@@ -17,6 +20,8 @@ public class ApiDocumentVO {
 	private String notes;
 	
 	private String reviewer;
+	
+	private Boolean isDeprecated;
 
 	public String getName() {
 		return name;
@@ -72,6 +77,14 @@ public class ApiDocumentVO {
 
 	public void setReviewer(String reviewer) {
 		this.reviewer = reviewer;
+	}
+
+	public Boolean getIsDeprecated() {
+		return isDeprecated;
+	}
+
+	public void setIsDeprecated(Boolean isDeprecated) {
+		this.isDeprecated = isDeprecated;
 	}
 	
 }
