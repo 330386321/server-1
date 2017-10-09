@@ -5,7 +5,6 @@ import org.apache.commons.lang.StringUtils;
 import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ExpressRecognitionDetailBO;
-import com.lawu.eshop.order.srv.bo.ShipperBO;
 
 /**
  * 快递策略
@@ -56,13 +55,9 @@ public interface ExpressStrategy {
 			ExpressRecognitionDetailBO expressRecognitionDetailBO = recognition(expNo);
 			if (expressRecognitionDetailBO != null && expressRecognitionDetailBO.getShippers() != null) {
 				// 根据可能的快递公司编码，由可信度从高到低遍历查询
-				for (ShipperBO shipper : expressRecognitionDetailBO.getShippers()) {
-					rtn = inquiries(shipper.getShipperCode(), expNo);
-					// 如果返回结果有物流轨迹，则跳出循环
-					if (!ExpressInquiriesDetailStateEnum.NO_INFO.equals(rtn.getState())) {
-						// 放入真实的快递公司编码
-						break;
-					}
+				if (!expressRecognitionDetailBO.getShippers().isEmpty()) {
+					// 只通过可信度最高的快递公司编码去查询
+					rtn = inquiries(expressRecognitionDetailBO.getShippers().get(0).getShipperCode(), expNo);
 				}
 			}
 		}
