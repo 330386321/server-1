@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.method.HandlerMethod;
@@ -219,7 +220,20 @@ public class DocumentController extends BaseController{
     	return rtn;
     }
     
-    public WebApplicationContext getWebApplicationContext() {  
+	/**
+	 * 显示审核通过接口列表
+	 * 
+	 * @param map
+	 * @return
+	 * @author Sunny
+	 */
+    @ResponseBody
+    @RequestMapping(value = "document")
+    public List<ApiDocumentVO> api() {
+    	return getVoList(true);
+    }
+    
+    private WebApplicationContext getWebApplicationContext() {  
         return WebApplicationContextUtils.getRequiredWebApplicationContext(getRequest().getSession().getServletContext());  
     }  
 
