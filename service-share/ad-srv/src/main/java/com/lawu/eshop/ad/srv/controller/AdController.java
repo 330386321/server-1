@@ -401,14 +401,14 @@ public class AdController extends BaseController {
 				solrDTOS.addAll(latLonDTOS);
 			} else {
 				for (AdSolrDTO solrDTO : latLonDTOS) {
-					if (solrDTO.getHits() <= hitMax) {
+					if (hitMax > 0 && solrDTO.getHits() <= hitMax) {
 						solrDTOS.add(solrDTO);
 					}
 				}
 			}
 		} else {
 			for (AdSolrDTO solrDTO : latLonDTOS) {
-				if (hitMin > 0 && hitMax > 0 && solrDTO.getHits() >= hitMin && solrDTO.getHits() <= hitMax) {
+				if ((hitMin > 0 || hitMax > 0) && solrDTO.getHits() >= hitMin && solrDTO.getHits() <= hitMax) {
 					solrDTOS.add(solrDTO);
 				}
 			}
@@ -580,14 +580,14 @@ public class AdController extends BaseController {
 				solrDTOS.addAll(latLonDTOS);
 			} else {
 				for (AdSolrDTO solrDTO : latLonDTOS) {
-					if (solrDTO.getHits() <= hitMax) {
+					if (hitMax > 0 && solrDTO.getHits() <= hitMax) {
 						solrDTOS.add(solrDTO);
 					}
 				}
 			}
 		} else {
 			for (AdSolrDTO solrDTO : latLonDTOS) {
-				if (hitMin > 0 && hitMax > 0 && solrDTO.getHits() >= hitMin && solrDTO.getHits() <= hitMax) {
+				if ((hitMin > 0 || hitMax > 0) && solrDTO.getHits() >= hitMin && solrDTO.getHits() <= hitMax) {
 					solrDTOS.add(solrDTO);
 				}
 			}
@@ -726,14 +726,14 @@ public class AdController extends BaseController {
 				solrDTOS.addAll(latLonDTOS);
 			} else {
 				for (AdSolrDTO solrDTO : latLonDTOS) {
-					if (solrDTO.getHits() <= hitMax) {
+					if (hitMax > 0 && solrDTO.getHits() <= hitMax) {
 						solrDTOS.add(solrDTO);
 					}
 				}
 			}
 		} else {
 			for (AdSolrDTO solrDTO : latLonDTOS) {
-				if (hitMin > 0 && hitMax > 0 && solrDTO.getHits() >= hitMin && solrDTO.getHits() <= hitMax) {
+				if ((hitMin > 0 || hitMax > 0) && solrDTO.getHits() >= hitMin && solrDTO.getHits() <= hitMax) {
 					solrDTOS.add(solrDTO);
 				}
 			}
