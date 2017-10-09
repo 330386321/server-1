@@ -47,6 +47,6 @@ public interface PayOrderService {
 	 * @author jiangxinjun
 	 * @date 2017年9月29日
 	 */
-	@RequestMapping(value = "orderMoneyForNotify", method = RequestMethod.GET)
+	@RequestMapping(value = "shoppingOrder/orderMoneyForNotify", method = RequestMethod.GET)
 	Result<ShoppingOrderMoneyDTO> orderMoneyForNotify(@RequestParam("orderIds") String orderIds);
 }
