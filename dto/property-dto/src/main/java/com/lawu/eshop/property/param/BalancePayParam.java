@@ -21,6 +21,10 @@ public class BalancePayParam {
 	@ApiParam (name="bizIds",required = true, value = "业务表ID(支持多个,用英文逗号分割)")
 	private String bizIds;
 
+	@NotBlank(message = "支付密码不能为空")
+	@ApiParam (name="payPwd",required = true, value = "支付密码")
+	private String payPwd;
+
 	public String getBizIds() {
 		return bizIds;
 	}
@@ -29,4 +33,11 @@ public class BalancePayParam {
 		this.bizIds = bizIds;
 	}
 
+	public String getPayPwd() {
+		return payPwd;
+	}
+
+	public void setPayPwd(String payPwd) {
+		this.payPwd = payPwd;
+	}
 }

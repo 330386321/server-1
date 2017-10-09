@@ -75,6 +75,7 @@ public class BalancePayController extends BaseController {
 		dparam.setBizIds(param.getBizIds());
 		dparam.setUserNum(userNum);
 		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+		dparam.setPayPwd(param.getPayPwd());
 
 		ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
 		double money = recharge.getActualMoney();

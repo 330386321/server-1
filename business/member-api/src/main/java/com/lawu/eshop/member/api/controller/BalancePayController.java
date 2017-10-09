@@ -93,6 +93,7 @@ public class BalancePayController extends BaseController {
         dparam.setBizIds(param.getBizIds());
         dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+        dparam.setPayPwd(param.getPayPwd());
             /*
 		 *  获取订单金额
 		 *  考虑商品可能有减库存失败可能
@@ -123,6 +124,7 @@ public class BalancePayController extends BaseController {
         dparam.setBizIds(param.getBizIds());
         dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+        dparam.setPayPwd(param.getPayPwd());
         ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
                 .selectThirdPayCallBackQueryPayOrder(param.getBizIds());
         if (payOrderCallback == null) {
@@ -168,6 +170,7 @@ public class BalancePayController extends BaseController {
         dparam.setBizIds(param.getBizIds());
         dparam.setUserNum(userNum);
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+        dparam.setPayPwd(param.getPayPwd());
 
         ThirdPayCallBackQueryPayOrderDTO payOrderCallback = rechargeService.getRechargeMoney(param.getBizIds());
         if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), 0) == 0) {
@@ -220,6 +223,7 @@ public class BalancePayController extends BaseController {
         dparam.setBizIds(param.getBizIds());
         dparam.setUserNum(userNum);
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+        dparam.setPayPwd(param.getPayPwd());
 
         Result<ThirdPayCallBackQueryPayOrderDTO> moneyResult = userRedPacketService.selectUserRedPacketInfoForThrid(Long.valueOf(param.getBizIds()));
         if (StringUtil.doubleCompareTo(moneyResult.getModel().getActualMoney(), 0) == 0) {
