@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.MerchantInfoDTO;
 import com.lawu.eshop.ad.dto.OperatorAdDTO;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.ListAdParam;
@@ -130,4 +131,10 @@ public interface AdService {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, value = "ad/soldOutAdByMerchantId")
 	Result soldOutAdByMerchantId(@RequestParam(value = "merchantId") Long merchantId);
+	
+	@RequestMapping(value = "ad/selectMerchantNumByAdId", method = RequestMethod.GET)
+	Result<MerchantInfoDTO> selectMerchantNumByAdId(@RequestParam("id") Long id);
+	
+	@RequestMapping(value = "ad/downOperatorById", method = RequestMethod.PUT)
+	Result downOperatorById(@RequestParam("id") Long id, @RequestParam("remark") String remark);
 }

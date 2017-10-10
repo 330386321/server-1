@@ -67,4 +67,10 @@ public interface ProductService {
 
     @RequestMapping(method = RequestMethod.PUT, value = "product/soldOutProductByMerchantId")
     Result soldOutProductByMerchantId(@RequestParam(value = "id") Long id);
+    
+    @RequestMapping(value = "product/selectProductById", method = RequestMethod.GET)
+    Result<ProductInfoDTO> selectProductById(@RequestParam("productId") Long productId);
+    
+    @RequestMapping(value = "product/downOperatorById", method = RequestMethod.PUT)
+	Result downOperatorById(@RequestParam("id") Long id, @RequestParam("remark") String remark);
 }

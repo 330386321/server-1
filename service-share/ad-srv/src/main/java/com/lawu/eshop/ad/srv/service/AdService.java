@@ -26,6 +26,7 @@ import com.lawu.eshop.ad.srv.bo.AdSaveInfoBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
+import com.lawu.eshop.ad.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
@@ -352,4 +353,13 @@ public interface AdService {
 	 * 定时任务修改两个星期平面和视频结束
 	 */
 	void updatFlatAndVideoToPuted();
+	
+	MerchantInfoBO selectMerchantNumByAdId(Long id);
+	
+	/**
+	 * 运营平台强制下架广告
+	 * @param id
+	 * @param remark
+	 */
+	void downOperatorById(Long id,String remark);
 }

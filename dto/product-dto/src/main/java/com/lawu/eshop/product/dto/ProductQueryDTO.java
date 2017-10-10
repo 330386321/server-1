@@ -53,6 +53,10 @@ public class ProductQueryDTO {
 
     @ApiModelProperty(value = "商家账号", required = true)
     private String account;
+    
+    @ApiModelProperty(value = "商品备注", required = true)
+    private String remark;
+    
 
     public Long getId() {
         return id;
@@ -165,4 +169,14 @@ public class ProductQueryDTO {
     public void setAccount(String account) {
         this.account = account;
     }
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+    
+    
 }

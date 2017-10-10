@@ -22,6 +22,7 @@ public class ProductQueryBO {
     private String featureImage;
     private String spec;
     private String minPrice;
+    private String remark;
 
     public Long getId() {
         return id;
@@ -118,5 +119,14 @@ public class ProductQueryBO {
     public void setMinPrice(String minPrice) {
         this.minPrice = minPrice;
     }
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+    
 
 }

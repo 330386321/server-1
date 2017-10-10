@@ -1,31 +1,44 @@
 package com.lawu.eshop.operator.api.controller;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.annotation.PageBody;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.operator.api.service.LogService;
 import com.lawu.eshop.operator.api.service.MerchantService;
+import com.lawu.eshop.operator.api.service.MessageService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
+import com.lawu.eshop.operator.api.service.ProductService;
 import com.lawu.eshop.operator.constants.LogTitleEnum;
 import com.lawu.eshop.operator.constants.ModuleEnum;
 import com.lawu.eshop.operator.constants.OperationTypeEnum;
 import com.lawu.eshop.operator.param.LogParam;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
+import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.user.dto.MerchantViewDTO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import om.lawu.eshop.shiro.util.UserUtil;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan
@@ -44,6 +57,13 @@ public class ProductAuditController extends BaseController {
 
     @Autowired
     private MerchantService merchantService;
+    
+    @Autowired
+    private ProductService productService;
+    
+    @Autowired
+    private MessageService messageService;
+    
 
     @ApiOperation(value = "商品审列表", notes = "查询所有门店上架中商品  [1002]（梅述全）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -72,16 +92,30 @@ public class ProductAuditController extends BaseController {
         return productAuditService.selectEditProductById(id);
     }
 
-    @ApiOperation(value = "商品批量下架", notes = "商品批量下架，[1002]。(梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "商品批量下架", notes = "商品批量下架，[1002]。(梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequiresPermissions("productAudit:soldOut")
-    @RequestMapping(value = "downProduct", method = RequestMethod.PUT)
-    public Result downProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids) {
-        Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DOWN);
-        if(!isSuccess(result)){
+    @RequestMapping(value = "downProduct", method = RequestMethod.POST)
+    public Result downProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids,
+   		 @RequestParam @ApiParam(required = true, value = "审核备注") String remark) {
+        //Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DOWN);
+    	Result result = productService.downOperatorById(Long.valueOf(ids), remark);
+    	if(!isSuccess(result)){
             return result;
         }
-
+    	Result<ProductInfoDTO> res = productService.selectProductById(Long.valueOf(ids));
+    	
+    	MessageInfoParam messageInfoParam = new MessageInfoParam();
+		MessageTempParam messageTempParam = new MessageTempParam();
+		messageTempParam.setAdName(res.getModel().getName());
+		messageTempParam.setAdTypeName("下架通知");
+		messageInfoParam.setRelateId(Long.valueOf(ids));
+		messageTempParam.setFailReason(remark);
+		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PRODUCT_FORCE_DOWN);
+		messageInfoParam.setMessageParam(messageTempParam); 
+		 
+		messageService.saveMessage(res.getModel().getMerchantUserNum(), messageInfoParam); 
+		
         //保存操作日志
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("status", ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal());

@@ -5,36 +5,37 @@ package com.lawu.eshop.operator.api.controller;
 
 import java.util.Date;
 
-import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.dto.MerchantInfoDTO;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.annotation.PageBody;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.InformDTO;
 import com.lawu.eshop.mall.dto.InformEnum;
 import com.lawu.eshop.mall.dto.InformStatusEnum;
 import com.lawu.eshop.mall.param.InformDownParam;
 import com.lawu.eshop.mall.param.InformEditParam;
 import com.lawu.eshop.mall.param.InformQueryParam;
-import com.lawu.eshop.operator.api.service.AdPlatformService;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.operator.api.service.AdService;
 import com.lawu.eshop.operator.api.service.InformService;
+import com.lawu.eshop.operator.api.service.MessageService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
 import com.lawu.eshop.operator.api.service.ProductService;
 import com.lawu.eshop.operator.api.service.UserService;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
+import com.lawu.eshop.product.dto.ProductInfoDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -61,8 +62,12 @@ public class InformController extends BaseController {
 	private AdService adService;
 	@Autowired
 	private ProductAuditService productAuditService;
+	
 	@Autowired
-	private AdPlatformService adPlatformService;// 广告
+	private MessageService messageService ;
+	
+	@Autowired
+	private ProductService productService;
 
 	@ApiOperation(value = "查询举报列表信息", notes = "查询举报列表信息,[]（李洪军）", httpMethod = "GET")
 	@RequiresAuthentication
@@ -91,16 +96,40 @@ public class InformController extends BaseController {
 			edit.setStatus(InformStatusEnum.INFORM_ALREADY_PROCESSED.getVal());
 		} else if (param.getStatus() == 2) {
 			edit.setStatus(InformStatusEnum.INFORM_NOT_HANDLED.getVal());
-		} 
+		}
+		String merchantNum="" , title ="";
+		MessageTypeEnum enumType=null;
+		
 		if (param.getInformType() == InformEnum.INFORM_TYPE_GOODS) {// 商品
-			productAuditService.updateProductStatus(param.getInformtItemId().toString(),
-					ProductStatusEnum.PRODUCT_STATUS_DOWN);
+			Result result = productService.downOperatorById(param.getInformtItemId(), param.getRemark());
+			Result<ProductInfoDTO> res = productService.selectProductById(param.getInformtItemId());
+			merchantNum=res.getModel().getMerchantUserNum();
+			enumType =MessageTypeEnum.MESSAGE_TYPE_PRODUCT_FORCE_DOWN;
+			title=res.getModel().getName();
 		} else if (param.getInformType() == InformEnum.INFORM_TYPE_MERCHANT) {// 商家
 
 		} else {// 广告
-			adService.operatorUpdateAdStatus(param.getInformtItemId(), AdStatusEnum.AD_STATUS_OUT);
+			Result rs = adService.downOperatorById(param.getInformtItemId(), param.getRemark());
+			Result<MerchantInfoDTO>  res = adService.selectMerchantNumByAdId(param.getInformtItemId());
+			merchantNum=res.getModel().getMerchantNum();
+			enumType =MessageTypeEnum.MESSAGE_TYPE_AD_FORCE_DOWN;
+			title= res.getModel().getTitle();
 		}
-		return informService.editInform(edit);
+		Result  result = informService.editInform(edit);
+		if(isSuccess(result)){ 
+			
+			MessageInfoParam messageInfoParam = new MessageInfoParam();
+			MessageTempParam messageTempParam = new MessageTempParam();
+			messageTempParam.setAdName(title);
+			messageTempParam.setAdTypeName("举报下架通知");
+			messageInfoParam.setRelateId(param.getInformtItemId());
+			messageTempParam.setFailReason(param.getRemark());
+			messageInfoParam.setTypeEnum(enumType);
+			messageInfoParam.setMessageParam(messageTempParam); 
+			 
+			messageService.saveMessage(merchantNum, messageInfoParam); 
+		}
+		return result;
 	}
 
 }

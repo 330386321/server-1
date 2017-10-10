@@ -41,6 +41,7 @@ import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.IsMyDateDTO;
+import com.lawu.eshop.ad.dto.MerchantInfoDTO;
 import com.lawu.eshop.ad.dto.OperatorAdDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
@@ -70,6 +71,7 @@ import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.GetRedPacketBO;
+import com.lawu.eshop.ad.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
@@ -1303,6 +1305,29 @@ public class AdController extends BaseController {
 	public Result delAllAdIndex() {
 		solrService.delAllSolrDocs(adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		return successGet();
+	}
+	
+	@RequestMapping(value = "selectMerchantNumByAdId", method = RequestMethod.GET)
+	public Result<MerchantInfoDTO> selectMerchantNumByAdId(@RequestParam Long id){
+		
+		MerchantInfoBO bo = adService.selectMerchantNumByAdId(id);
+		MerchantInfoDTO dto = new MerchantInfoDTO();
+		dto.setMerchantNum(bo.getMerchantNum());
+		dto.setTitle(bo.getTitle());
+		
+		return successGet(dto);
+	}
+	
+	/**
+	 * 运营平台强制下架广告
+	 * @param id
+	 * @param remark
+	 * @return
+	 */
+	@RequestMapping(value = "downOperatorById", method = RequestMethod.PUT)
+	public Result downOperatorById(@RequestParam Long id, @RequestParam String remark){
+		adService.downOperatorById(id, remark);
+		return successCreated();
 	}
 
 }

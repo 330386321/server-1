@@ -71,7 +71,9 @@ public enum MessageTypeEnum {
 	
 	MESSAGE_TYPE_AD_PRAISE_NOTICE((byte) 0x2E),//抢赞通知
 	
-	MESSAGE_TYPE_REPLIED_WORK_ORDER((byte) 0x2F);//工单已处理 47
+	MESSAGE_TYPE_REPLIED_WORK_ORDER((byte) 0x2F),//工单已处理 47
+	
+	MESSAGE_TYPE_PRODUCT_FORCE_DOWN((byte) 0x30);//商品强制下架48
 
     private Byte val;
     

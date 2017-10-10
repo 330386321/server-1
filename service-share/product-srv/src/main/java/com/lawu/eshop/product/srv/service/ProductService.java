@@ -163,5 +163,12 @@ public interface ProductService {
      * @data 2017/08/10
      */
     ProductRelateAdInfoBO selectProductRelateAdInfo(Long id);
+    
+    /**
+     * 运营平台强制下架商品
+     * @param id
+     * @param remark
+     */
+    void downOperatorById(Long id, String remark);
 
 }

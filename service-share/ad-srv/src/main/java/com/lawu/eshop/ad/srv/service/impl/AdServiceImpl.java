@@ -50,6 +50,7 @@ import com.lawu.eshop.ad.srv.bo.AdSaveInfoBO;
 import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
+import com.lawu.eshop.ad.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
@@ -1422,6 +1423,26 @@ public class AdServiceImpl implements AdService {
 			// 删除solr中的数据
 			solrService.delSolrDocsByIds(adIds, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
+	}
+
+	@Override
+	public MerchantInfoBO selectMerchantNumByAdId(Long id) {
+		AdDO ad =adDOMapper.selectByPrimaryKey(id);
+		MerchantInfoBO bo = new MerchantInfoBO();
+		bo.setMerchantNum(ad.getMerchantNum());
+		bo.setTitle(ad.getTitle());
+		return bo;
+	}
+
+	@Override
+	public void downOperatorById(Long id, String remark) {
+		AdDO record = new AdDO();
+		record.setId(id);
+		record.setRemark(remark);
+		record.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
+		record.setGmtModified(new Date());
+		adDOMapper.updateByPrimaryKeySelective(record);
+		solrService.delSolrDocsById(id, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 	}
 
 	

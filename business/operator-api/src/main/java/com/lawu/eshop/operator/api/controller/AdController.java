@@ -149,12 +149,13 @@ public class AdController extends BaseController {
     }
 
 
-    @ApiOperation(value = "广告操作下架", notes = "广告操作下架,[5001]（张荣成）", httpMethod = "PUT")
+    @ApiOperation(value = "广告操作下架", notes = "广告操作下架,[5001]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequiresPermissions("adAudit:soldOut")
-    @RequestMapping(value = "adDown/{id}", method = RequestMethod.PUT)
-    public Result adDown(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-        Result rs = adService.operatorUpdateAdStatus(id, AdStatusEnum.AD_STATUS_OUT);
+    @RequestMapping(value = "adDown/{id}", method = RequestMethod.POST)
+    public Result adDown(@PathVariable @ApiParam(required = true, value = "广告id") Long id,
+    		 @RequestParam @ApiParam(required = true, value = "审核备注") String remark) {
+        Result rs = adService.downOperatorById(id, remark);
         if(!isSuccess(rs)){
             return rs;
         }
@@ -168,6 +169,7 @@ public class AdController extends BaseController {
         messageTempParam.setAdName(adDTOResult.getModel().getTitle());
         messageTempParam.setAdTypeName(adDTOResult.getModel().getTypeEnum().getName());
         messageInfoParam.setRelateId(id);
+        messageTempParam.setFailReason(remark);
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_AD_FORCE_DOWN);
         messageInfoParam.setMessageParam(messageTempParam);
         messageService.saveMessage(merchantSNSDTOResult.getModel().getNum(), messageInfoParam);

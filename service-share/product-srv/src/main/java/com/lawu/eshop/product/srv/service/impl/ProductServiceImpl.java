@@ -786,4 +786,17 @@ public class ProductServiceImpl implements ProductService {
 		return bo;
 	}
 
+	@Override
+	public void downOperatorById(Long id, String remark) {
+		ProductDO product = new ProductDO();
+		product.setId(id);
+		product.setGmtDown(new Date());
+		product.setGmtModified(new Date());
+		product.setStatus(ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal());
+		product.setRemark(remark);
+		productDOMapper.updateByPrimaryKeySelective(product);
+		solrService.delSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+		
+	}
+
 }

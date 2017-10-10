@@ -382,5 +382,17 @@ public class ProductController extends BaseController {
         solrService.delAllSolrDocs(productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         return successGet();
     }
+    
+    /**
+	 * 运营平台强制下架广告
+	 * @param id
+	 * @param remark
+	 * @return
+	 */
+	@RequestMapping(value = "downOperatorById", method = RequestMethod.PUT)
+	public Result downOperatorById(@RequestParam Long id, @RequestParam String remark){
+		productService.downOperatorById(id, remark);
+		return successCreated();
+	}
 
 }

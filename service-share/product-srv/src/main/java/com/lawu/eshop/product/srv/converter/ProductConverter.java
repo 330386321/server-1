@@ -59,6 +59,7 @@ public class ProductConverter {
             productDTO.setTotalSalesVolume(productBO.getTotalSalesVolume());
             productDTO.setTotalFavorite(productBO.getTotalFavorite());
             productDTO.setMinPrice(productBO.getMinPrice());
+            productDTO.setRemark(productBO.getRemark());
             productDTOS.add(productDTO);
         }
         return productDTOS;
@@ -75,6 +76,7 @@ public class ProductConverter {
         productBO.setId(productDO.getId());
         productBO.setMerchantId(productDO.getMerchantId());
         productBO.setName(productDO.getName());
+        productBO.setRemark(productDO.getRemark());
         productBO.setFeatureImage(productDO.getFeatureImage());
         productBO.setGmtCreate(DateUtil.getDateFormat(productDO.getGmtCreate(), "yyyy-MM-dd"));
         productBO.setStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
