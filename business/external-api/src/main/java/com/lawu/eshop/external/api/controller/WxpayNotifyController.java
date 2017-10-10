@@ -140,7 +140,7 @@ public class WxpayNotifyController extends BaseController {
                         result = depositService.doHandleDepositNotify(param);
 
                     } else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-                        Result<ShoppingOrderMoneyDTO> order = payOrderService.selectOrderMoney(param.getBizIds());
+                        Result<ShoppingOrderMoneyDTO> order = payOrderService.orderMoneyForNotify(param.getBizIds());
                         if (order == null || order.getModel() == null) {
                             result = successCreated(ResultCode.FAIL, "找不到订单:" + param.getBizIds());
                         } else {
