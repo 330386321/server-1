@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -24,20 +23,19 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.param.ReportAdEarningsDetailParam;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.utils.DateUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = AdSrvApplicationTest.class)
@@ -103,7 +101,7 @@ public class ReportEarningsControllerTest {
          pointPoolDOMapper.insert(pointPoolDO);
     	 
          try {
-             RequestBuilder request = get("/reportEarnings/getReportEarnings/");
+             RequestBuilder request = get("/reportEarnings/getReportEarnings/").param("date", DateUtil.getDateFormat(new Date()));
              ResultActions perform= mvc.perform(request);
              MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
 

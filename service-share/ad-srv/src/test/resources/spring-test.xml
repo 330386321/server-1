@@ -33,6 +33,6 @@
         <property name="url" value="jdbc:h2:mem:bone;DB_CLOSE_DELAY=-1;MODE=MySQL"/>
     </bean>
     <jdbc:initialize-database data-source="dataSource" ignore-failures="DROPS">
-        <jdbc:script location="classpath:sql/ddl.sql"/>
+        <jdbc:script location="classpath:sql/ddl.sql" encoding="UTF-8"/>
     </jdbc:initialize-database>
 </beans>
