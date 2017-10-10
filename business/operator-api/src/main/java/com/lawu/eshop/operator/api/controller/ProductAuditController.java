@@ -1,5 +1,14 @@
 package com.lawu.eshop.operator.api.controller;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
@@ -18,14 +27,12 @@ import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.user.dto.MerchantViewDTO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import om.lawu.eshop.shiro.util.UserUtil;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan
@@ -76,9 +83,10 @@ public class ProductAuditController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequiresPermissions("productAudit:soldOut")
     @RequestMapping(value = "downProduct", method = RequestMethod.PUT)
-    public Result downProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids) {
-        Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DOWN);
-        if(!isSuccess(result)){
+    public Result downProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids,
+                              @RequestParam @ApiParam(required = true, value = "商家ID") Long merchantId) {
+        Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DOWN, merchantId);
+        if (!isSuccess(result)) {
             return result;
         }
 
@@ -100,9 +108,10 @@ public class ProductAuditController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequiresPermissions("productAudit:del")
     @RequestMapping(value = "deleteProduct", method = RequestMethod.PUT)
-    public Result deleteProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids) {
-        Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DEL);
-        if(!isSuccess(result)){
+    public Result deleteProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids,
+                                @RequestParam @ApiParam(required = true, value = "商家ID") Long merchantId) {
+        Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DEL, merchantId);
+        if (!isSuccess(result)) {
             return result;
         }
 
