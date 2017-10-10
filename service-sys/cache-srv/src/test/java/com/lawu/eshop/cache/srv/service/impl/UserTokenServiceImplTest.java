@@ -1,6 +1,7 @@
 package com.lawu.eshop.cache.srv.service.impl;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class UserTokenServiceImplTest {
     @Autowired
     private UserTokenService userTokenService;
 
+    @Ignore
     @Test
     public void setMemberTokenOneToOne() {
         String account = "12345678901";
