@@ -201,6 +201,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setIsPay(true);
         adDOMapper.insertSelective(ad);
         
         AdMerchantParam adMerchantParam=new AdMerchantParam();
@@ -241,6 +242,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+        ad.setIsPay(true);
         adDOMapper.insertSelective(ad);
         
         AdMerchantParam adMerchantParam=new AdMerchantParam();
@@ -281,6 +283,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setIsPay(true);
         adDOMapper.insertSelective(ad);
         
         AdMerchantParam adMerchantParam=new AdMerchantParam();
@@ -319,6 +322,7 @@ public class AdServiceImplTest {
 		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
+        ad.setIsPay(true);
         
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
         adDOMapper.insertSelective(ad);
@@ -360,6 +364,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setIsPay(true);
         adDOMapper.insertSelective(ad);
         
         AdMerchantParam adMerchantParam=new AdMerchantParam();
@@ -596,6 +601,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+        ad.setIsPay(true);
         Integer id=adDOMapper.insertSelective(ad);
         
         AdFindParam adPlatParam=new AdFindParam();
@@ -735,30 +741,30 @@ public class AdServiceImplTest {
     @Rollback
     @Test
     public void selectPraiseListByMember() {
-		AdSaveParam adSaveParam=new AdSaveParam();
-    	adSaveParam.setLatitude(BigDecimal.valueOf(22.547153));
-    	adSaveParam.setLongitude(BigDecimal.valueOf(113.960333));
-    	adSaveParam.setMerchantId(1002l);
-    	adSaveParam.setCount(10);
-    	adSaveParam.setUserNum("B856392484215848969");
-    	adSaveParam.setMediaUrl("ad_image/1494582624025648401.png");
-    	adSaveParam.setLogoUrl("store/1494582624025648402.png");
-    	adSaveParam.setMerchantStoreId(1001l);
-    	adSaveParam.setMerchantStoreName("E店商家");
-    	adSaveParam.setManageType(ManageTypeEnum.ENTITY);
-    	AdParam param=new AdParam();
-    	param.setAdCount(20);
-    	param.setBeginTime("2017-05-17 11:35:00");
-    	param.setContent("广告测试内容");
-    	param.setPoint(BigDecimal.valueOf(0.5));
-    	param.setPutWayEnum(PutWayEnum.PUT_WAY_AREAS);
-    	param.setRegionName("全国");
-    	param.setTitle("广告测试标题");
-    	param.setTotalPoint(BigDecimal.valueOf(100));
-    	param.setTypeEnum(AdTypeEnum.AD_TYPE_PRAISE);
-    	param.setRelateType(RelateTypeEnum.MERCHANT_STORE_TYPE);
-    	adSaveParam.setAdParam(param);
-    	adService.saveAd(adSaveParam);
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1003l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setBeginTime(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+        Integer id=adDOMapper.insertSelective(ad);
         
         AdPraiseParam adPraiseParam=new AdPraiseParam();
         adPraiseParam.setCurrentPage(1);
@@ -1037,20 +1043,8 @@ public class AdServiceImplTest {
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
         Integer id=adDOMapper.insertSelective(ad);
        
-        PointPoolDO pointPoolDO=new PointPoolDO();
-        pointPoolDO.setAdId(ad.getId());
-        pointPoolDO.setGmtCreate(new Date());
-        pointPoolDO.setGmtModified(new Date());
-        pointPoolDO.setMerchantId(1002l);
-        pointPoolDO.setOrdinal(0);
-        pointPoolDO.setPoint(BigDecimal.valueOf(5));
-        pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-        pointPoolDO.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
-        pointPoolDOMapper.insert(pointPoolDO);
-        
         BigDecimal  point= adService.getRedPacket(1002l, 1l, "aaa");
         Assert.assertNotNull(point);
-        Assert.assertTrue(point.compareTo(BigDecimal.valueOf(0))==1);
 
     }
 	

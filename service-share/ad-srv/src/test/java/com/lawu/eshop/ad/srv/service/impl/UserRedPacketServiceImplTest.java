@@ -169,7 +169,7 @@ public class UserRedPacketServiceImplTest {
 		redPack.setGmtModified(new Date());
 		redPack.setOrderNum("2017082115590000182751221");
 		redPack.setPayType(UserRedPacketPayTypeEnum.ALIPAY.getVal());
-		redPack.setStatus(RedPacketStatusEnum.RED_PACKET_SUCCESS.val);
+		redPack.setStatus(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
 		redPack.setTotalCount(1);
 		redPack.setTotalMoney(BigDecimal.valueOf(100));
 		redPack.setType(RedPacketPutWayEnum.PUT_WAY_LUCK.val);
@@ -177,18 +177,8 @@ public class UserRedPacketServiceImplTest {
 		redPack.setUserNum("M000001");
 		userRedPacketDOMapper.insert(redPack);
 		
-		UserTakedRedPacketDO userTaked = new UserTakedRedPacketDO();
-		userTaked.setGmtCreate(new Date());
-		userTaked.setGmtModified(new Date());
-		userTaked.setMoney(BigDecimal.valueOf(100));
-		userTaked.setOrdinal(0);
-		userTaked.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
-		userTaked.setType(redPack.getType());
-		userTaked.setUserRedPackId(redPack.getId());
-		userTakedRedPacketDOMapper.insert(userTaked);
-		
 		boolean flag = userRedPacketService.isExistsRedPacket(redPack.getId());
-		Assert.assertEquals(false, flag);
+		Assert.assertEquals(true, flag);
 	}
 
 	@Transactional

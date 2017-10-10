@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.ad.constants.RedPacketPutWayEnum;
 import com.lawu.eshop.ad.constants.RedPacketStatusEnum;
+import com.lawu.eshop.ad.constants.UserRedPacketEnum;
 import com.lawu.eshop.ad.constants.UserRedPacketPayTypeEnum;
 import com.lawu.eshop.ad.param.UserRedPacketSaveParam;
 import com.lawu.eshop.ad.param.UserRedPacketSelectNumParam;
@@ -264,9 +265,21 @@ public class UserRedPacketControllerTest {
 	@Rollback
 	@Test
 	public void getUserRedpacketMoney2() {
-		addUserRedPacket();
+		UserRedPacketDO redPack = new UserRedPacketDO();
+		redPack.setGmtCreate(new Date());
+		redPack.setGmtModified(new Date());
+		redPack.setOrderNum("2017082115590000182751221");
+		redPack.setPayType(UserRedPacketPayTypeEnum.ALIPAY.getVal());
+		redPack.setStatus(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
+		redPack.setTotalCount(1);
+		redPack.setTotalMoney(BigDecimal.valueOf(100));
+		redPack.setType(RedPacketPutWayEnum.PUT_WAY_LUCK.val);
+		redPack.setUserAccount("15000000000");
+		redPack.setUserNum("M000001");
+		userRedPacketDOMapper.insert(redPack);
+		
 		try {
-            RequestBuilder request = post("/userRedPacket/getUserRedpacketMoney").param("redPacketId", "1").param("userNum", "M10001");
+            RequestBuilder request = post("/userRedPacket/getUserRedpacketMoney").param("redPacketId", "1").param("userNum", "M000001");
             ResultActions perform= mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
 

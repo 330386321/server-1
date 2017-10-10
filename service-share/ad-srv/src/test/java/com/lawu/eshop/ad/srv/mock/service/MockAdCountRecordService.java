@@ -14,12 +14,12 @@ public class MockAdCountRecordService extends BaseController implements AdCountR
 	
 	@RequestMapping(value = "adCount/getAdCountRecord", method = RequestMethod.GET)
     public Result<Object> getAdCountRecord(@RequestParam("id") Long id) {
-		return successGet(Long.valueOf(0L));
+		return successGet(Long.valueOf(1L));
 	}
 	
 	@RequestMapping(value = "userRedPacketCount/getUserRedPacketCountRecord", method = RequestMethod.GET)
     public Result<Object> getUserRedPacketCountRecord(@RequestParam("id") Long id) {
-    	return successGet(Long.valueOf(0L));
+    	return successGet(Long.valueOf(1L));
 	 }
 	
 
