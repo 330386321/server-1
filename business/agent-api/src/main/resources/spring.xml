@@ -34,6 +34,10 @@
               <property name="cacheService" ref="redisCacheService" />
               <property name="singleTokenWithUser" value="${eshop.single.login}" />
        </bean>
-       <bean id="redisCacheService" class="com.lawu.eshop.agent.api.service.impl.RedisCacheServiceImpl" />
+
+       <bean id="redisCacheService" class="com.lawu.eshop.authorization.impl.RedisCacheServiceImpl">
+              <property name="userType" value="AGENT" />
+       </bean>
+
        <import resource="spring-event.xml" />
 </beans>

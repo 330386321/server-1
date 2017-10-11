@@ -38,7 +38,9 @@
               <property name="singleTokenWithUser" value="${eshop.single.login}" />
        </bean>
 
-       <bean id="redisCacheService" class="com.lawu.eshop.merchant.api.service.impl.RedisCacheServiceImpl" />
+       <bean id="redisCacheService" class="com.lawu.eshop.authorization.impl.RedisCacheServiceImpl">
+              <property name="userType" value="MERCHANT" />
+       </bean>
 
        <import resource="spring-event.xml" />
 </beans>
