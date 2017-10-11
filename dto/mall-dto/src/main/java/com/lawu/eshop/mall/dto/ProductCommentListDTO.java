@@ -1,10 +1,11 @@
 package com.lawu.eshop.mall.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author zhangyong
@@ -33,7 +34,7 @@ public class ProductCommentListDTO {
      * 评价时间
      */
     @ApiModelProperty(value = "评价时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date gmtCreate;
 
     /**

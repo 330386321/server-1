@@ -16,6 +16,7 @@ import com.lawu.eshop.compensating.transaction.FollowTransactionRecordService;
 import com.lawu.eshop.order.srv.domain.FollowTransactionRecordDO;
 import com.lawu.eshop.order.srv.domain.FollowTransactionRecordDOExample;
 import com.lawu.eshop.order.srv.mapper.FollowTransactionRecordDOMapper;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 /**
  * 
@@ -55,7 +56,11 @@ public class FollowTransactionRecordServiceImplTest {
     public void consumptionSuccessful() {
     	String topic = "order-srv";
     	Long transationId = 1L;
-    	followTransactionRecordService.consumptionSuccessful(topic, transationId);
+    	try {
+            followTransactionRecordService.consumptionSuccessful(topic, transationId);
+        } catch (MySQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+        }
     	
     	FollowTransactionRecordDOExample example = new FollowTransactionRecordDOExample();
     	example.createCriteria().andTopicEqualTo(topic).andTransationIdEqualTo(transationId);

@@ -3,6 +3,8 @@ package com.lawu.eshop.user.srv.service.impl;
 import com.lawu.eshop.compensating.transaction.FollowTransactionRecordService;
 import com.lawu.eshop.user.srv.domain.FollowTransactionRecordDO;
 import com.lawu.eshop.user.srv.mapper.FollowTransactionRecordDOMapper;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,7 +49,11 @@ public class FollowTransactionRecordServiceImplTest {
     @Rollback
     @Test
     public void consumptionSuccessful() {
-        followTransactionRecordService.consumptionSuccessful("test", 300L);
+        try {
+            followTransactionRecordService.consumptionSuccessful("test", 300L);
+        } catch (MySQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+        }
         List<FollowTransactionRecordDO> followTransactionRecordDOList = followTransactionRecordDOMapper.selectByExample(null);
         Assert.assertNotNull(followTransactionRecordDOList);
         Assert.assertEquals(1, followTransactionRecordDOList.size());

@@ -1,5 +1,7 @@
 package com.lawu.eshop.compensating.transaction;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 /**
  * 
  * @author Sunny
@@ -26,6 +28,6 @@ public interface FollowTransactionRecordService {
 	 * @author Sunny
 	 * @date 2017年6月1日
 	 */
-	void consumptionSuccessful(String topic, Long transationId);
+	void consumptionSuccessful(String topic, Long transationId) throws MySQLIntegrityConstraintViolationException;
 	
 }
