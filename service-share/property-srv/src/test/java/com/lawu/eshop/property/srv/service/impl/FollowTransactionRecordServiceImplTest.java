@@ -1,6 +1,8 @@
 package com.lawu.eshop.property.srv.service.impl;
 
 import com.lawu.eshop.compensating.transaction.FollowTransactionRecordService;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +35,11 @@ public class FollowTransactionRecordServiceImplTest {
     @Rollback
     @Test
     public void consumptionSuccessful(){
-        followTransactionRecordService.consumptionSuccessful("ad_srv",1L);
+        try {
+            followTransactionRecordService.consumptionSuccessful("ad_srv",1L);
+        } catch (MySQLIntegrityConstraintViolationException e) {
+            e.printStackTrace();
+        }
         Boolean bool = followTransactionRecordService.isExist("ad_srv",1L);
         Assert.assertEquals(true,bool);
     }

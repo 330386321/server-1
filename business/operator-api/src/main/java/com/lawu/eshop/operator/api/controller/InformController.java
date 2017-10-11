@@ -32,10 +32,10 @@ import com.lawu.eshop.operator.api.service.AdService;
 import com.lawu.eshop.operator.api.service.InformService;
 import com.lawu.eshop.operator.api.service.MessageService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
-import com.lawu.eshop.operator.api.service.ProductService;
 import com.lawu.eshop.operator.api.service.UserService;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
+import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -62,10 +62,10 @@ public class InformController extends BaseController {
 	private AdService adService;
 	@Autowired
 	private ProductAuditService productAuditService;
-	
+
 	@Autowired
 	private MessageService messageService ;
-	
+
 	@Autowired
 	private ProductService productService;
 
@@ -99,7 +99,7 @@ public class InformController extends BaseController {
 		}
 		String merchantNum="" , title ="";
 		MessageTypeEnum enumType=null;
-		
+
 		if (param.getInformType() == InformEnum.INFORM_TYPE_GOODS) {// 商品
 			Result result = productService.downOperatorById(param.getInformtItemId(), param.getRemark());
 			Result<ProductInfoDTO> res = productService.selectProductById(param.getInformtItemId());
@@ -116,8 +116,8 @@ public class InformController extends BaseController {
 			title= res.getModel().getTitle();
 		}
 		Result  result = informService.editInform(edit);
-		if(isSuccess(result)){ 
-			
+		if(isSuccess(result)){
+
 			MessageInfoParam messageInfoParam = new MessageInfoParam();
 			MessageTempParam messageTempParam = new MessageTempParam();
 			messageTempParam.setAdName(title);
@@ -125,9 +125,9 @@ public class InformController extends BaseController {
 			messageInfoParam.setRelateId(param.getInformtItemId());
 			messageTempParam.setFailReason(param.getRemark());
 			messageInfoParam.setTypeEnum(enumType);
-			messageInfoParam.setMessageParam(messageTempParam); 
-			 
-			messageService.saveMessage(merchantNum, messageInfoParam); 
+			messageInfoParam.setMessageParam(messageTempParam);
+
+			messageService.saveMessage(merchantNum, messageInfoParam);
 		}
 		return result;
 	}

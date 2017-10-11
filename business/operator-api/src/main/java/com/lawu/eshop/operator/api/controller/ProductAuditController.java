@@ -57,13 +57,13 @@ public class ProductAuditController extends BaseController {
 
     @Autowired
     private MerchantService merchantService;
-    
+
     @Autowired
     private ProductService productService;
-    
+
     @Autowired
     private MessageService messageService;
-    
+
 
     @ApiOperation(value = "商品审列表", notes = "查询所有门店上架中商品  [1002]（梅述全）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -104,7 +104,7 @@ public class ProductAuditController extends BaseController {
             return result;
         }
     	Result<ProductInfoDTO> res = productService.selectProductById(Long.valueOf(ids));
-    	
+
     	MessageInfoParam messageInfoParam = new MessageInfoParam();
 		MessageTempParam messageTempParam = new MessageTempParam();
 		messageTempParam.setAdName(res.getModel().getName());
@@ -112,10 +112,10 @@ public class ProductAuditController extends BaseController {
 		messageInfoParam.setRelateId(Long.valueOf(ids));
 		messageTempParam.setFailReason(remark);
 		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PRODUCT_FORCE_DOWN);
-		messageInfoParam.setMessageParam(messageTempParam); 
-		 
-		messageService.saveMessage(res.getModel().getMerchantUserNum(), messageInfoParam); 
-		
+		messageInfoParam.setMessageParam(messageTempParam);
+
+		messageService.saveMessage(res.getModel().getMerchantUserNum(), messageInfoParam);
+
         //保存操作日志
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("status", ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal());
@@ -134,9 +134,10 @@ public class ProductAuditController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequiresPermissions("productAudit:del")
     @RequestMapping(value = "deleteProduct", method = RequestMethod.PUT)
-    public Result deleteProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids) {
-        Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DEL);
-        if(!isSuccess(result)){
+    public Result deleteProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids,
+                                @RequestParam @ApiParam(required = true, value = "商家ID") Long merchantId) {
+        Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DEL, merchantId);
+        if (!isSuccess(result)) {
             return result;
         }
 

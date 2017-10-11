@@ -14,6 +14,7 @@ import com.lawu.eshop.compensating.transaction.TransactionFollowService;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.synchronization.lock.service.LockService;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 /**
  * 补偿性事务从逻辑服务抽象类
@@ -69,13 +70,19 @@ public abstract class AbstractTransactionFollowService<N extends Notification, R
     		// 只有事务全部执行成功，才会发送回复消息
             reply.setTransactionId(notification.getTransactionId());
             sendCallback(reply);
-    	} catch (Exception e) {
+    	} catch (MySQLIntegrityConstraintViolationException e) {
+    	    logger.error("事务消息重复消费", e);
+        } catch (Exception e) {
     		logger.error("事务执行异常", e);
     		// 抛出异常，回滚事务
     		throw e;
-    	}
-    	//事务执行完成释放锁
-		lockService.unLock(locakName.toString());
+    	} finally {
+    	  /*
+    	   * 事务执行完成释放锁
+    	   * 无论是否有异常都释放锁
+    	   */
+          lockService.unLock(locakName.toString());
+        }
     }
 
     @Override

@@ -323,14 +323,15 @@ public class AdController extends BaseController {
 		}
 
 		String fansQueryStr = "";
+		StringBuilder stringBuilder = new StringBuilder();
 		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
 			List<Long> merchantIds = param.getMerchantIds();
-            for (Long id : merchantIds) {
-                fansQueryStr += id + " OR ";
-            }
-            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
-            fansQueryStr = "putWay_i:2 AND -status_i:3 AND merchantId_l:(" + fansQueryStr + ")";
-        }
+			for (Long id : merchantIds) {
+				stringBuilder.append(id).append(" OR ");
+			}
+			fansQueryStr = stringBuilder.substring(0, stringBuilder.length() - 4);
+			fansQueryStr = "putWay_i:2 AND -status_i:3 AND merchantId_l:(" + fansQueryStr + ")";
+		}
 
 		int hitMax = 0;
 		int hitMin = 0;
@@ -496,12 +497,13 @@ public class AdController extends BaseController {
 		}
 
 		String fansQueryStr = "";
+		StringBuilder stringBuilder = new StringBuilder();
 		if (adSolrParam.getMemberId() != null && adSolrParam.getMemberId() > 0 && !adSolrParam.getMerchantIds().isEmpty()) {
             List<Long> merchantIds = adSolrParam.getMerchantIds();
             for (Long id : merchantIds) {
-                fansQueryStr += id + " OR ";
+				stringBuilder.append(id).append(" OR ");
             }
-            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+			fansQueryStr = stringBuilder.substring(0, stringBuilder.length() - 4);
             fansQueryStr = "putWay_i:2 AND -status_i:3 AND -type_i:3 AND merchantId_l:(" + fansQueryStr + ")";
             if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {
                 fansQueryStr += " AND title_s:*" + adSolrParam.getAdSolrParam().getTitle() + "*";
@@ -638,12 +640,13 @@ public class AdController extends BaseController {
 		}
 
 		String fansQueryStr = "";
+		StringBuilder stringBuilder = new StringBuilder();
 		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
 			List<Long> merchantIds = param.getMerchantIds();
             for (Long id : merchantIds) {
-                fansQueryStr += id + " OR ";
+				stringBuilder.append(id).append(" OR ");
             }
-            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+			fansQueryStr = stringBuilder.substring(0, stringBuilder.length() - 4);
             fansQueryStr = "putWay_i:2 AND status_i:2 AND merchantId_l:(" + fansQueryStr + ")";
             if (param.getTypeEnum().equals(AdTypeEnum.AD_TYPE_FLAT)) {
                 fansQueryStr += " AND type_i:1";
@@ -786,12 +789,13 @@ public class AdController extends BaseController {
 		}
 
 		String fansQueryStr = "";
+		StringBuilder stringBuilder = new StringBuilder();
 		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
 			List<Long> merchantIds = param.getMerchantIds();
             for (Long id : merchantIds) {
-                fansQueryStr += id + " OR ";
+				stringBuilder.append(id).append(" OR ");
             }
-            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+			fansQueryStr = stringBuilder.substring(0, stringBuilder.length() - 4);
             fansQueryStr = "putWay_i:2 AND type_i:3 AND merchantId_l:(" + fansQueryStr + ")";
             if (param.getStatusEnum().equals(AdStatusEnum.AD_STATUS_PUTING)) {
                 fansQueryStr += " AND status_i:2";
@@ -865,12 +869,13 @@ public class AdController extends BaseController {
 		}
 
 		String fansQueryStr = "";
+		StringBuilder stringBuilder = new StringBuilder();
 		if (param.getMemberId() != null && param.getMemberId() > 0 && !param.getMerchantIds().isEmpty()) {
 			List<Long> merchantIds = param.getMerchantIds();
             for (Long id : merchantIds) {
-                fansQueryStr += id + " OR ";
+				stringBuilder.append(id).append(" OR ");
             }
-            fansQueryStr = fansQueryStr.substring(0, fansQueryStr.length() - 3);
+			fansQueryStr = stringBuilder.substring(0, stringBuilder.length() - 4);
             fansQueryStr = "putWay_i:2 AND type_i:1 AND merchantId_l:(" + fansQueryStr + ")";
         }
 
