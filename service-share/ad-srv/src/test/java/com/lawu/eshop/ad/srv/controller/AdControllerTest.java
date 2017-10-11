@@ -1431,6 +1431,60 @@ public class AdControllerTest {
         }
     }
     
+    @Transactional
+    @Rollback
+    @Test
+    public void downOperatorById(){
+        RequestBuilder request = put("/ad/downOperatorById").param("id","1").param("remark", "aa");
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_CREATED, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void selectMerchantNumByAdId(){
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setHits(0);
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        adDOMapper.insertSelective(ad);
+        RequestBuilder request = get("/ad/selectMerchantNumByAdId").param("id",ad.getId().toString());
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+            Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+    
  /*   @Transactional
     @Rollback
     @Test

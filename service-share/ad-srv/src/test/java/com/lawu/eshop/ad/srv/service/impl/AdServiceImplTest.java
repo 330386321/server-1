@@ -41,6 +41,7 @@ import com.lawu.eshop.ad.srv.bo.AdEgainDetailBO;
 import com.lawu.eshop.ad.srv.bo.AdPraiseBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
+import com.lawu.eshop.ad.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
@@ -495,7 +496,7 @@ public class AdServiceImplTest {
 
     }
 	
-	//@Transactional
+	@Transactional
     @Rollback
     @Test
     public void auditVideoPass() {
@@ -2224,5 +2225,80 @@ public class AdServiceImplTest {
 		List<AdDO> list = adDOMapper.selectByExample(null);
 		Assert.assertNotNull(list);
 		Assert.assertTrue(list.get(0).getStatus() == AdStatusEnum.AD_STATUS_OUT.val);
+	}
+	
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void downOperatorById() {
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setHits(0);
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        Integer id=adDOMapper.insertSelective(ad);
+
+		adDOMapper.insertSelective(ad);
+		
+		adService.downOperatorById(ad.getId(),"aaa");
+		AdDOExample example = new AdDOExample();
+		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_OUT.val);
+		List<AdDO> list = adDOMapper.selectByExample(example);
+		Assert.assertNotNull(list);
+		Assert.assertTrue(list.get(0).getStatus() == AdStatusEnum.AD_STATUS_OUT.val);
+	}
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void selectMerchantNumByAdId() {
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setHits(0);
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        Integer id=adDOMapper.insertSelective(ad);
+
+		adDOMapper.insertSelective(ad);
+		
+		MerchantInfoBO bo = adService.selectMerchantNumByAdId(ad.getId());
+		Assert.assertNotNull(bo);
 	}
 }
