@@ -61,6 +61,12 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
     @Transactional
     public int doHandleMemberRedPacketNotify(NotifyCallBackParam param) {
 
+        boolean isPay = transactionDetailService.verifyOrderIsPaySuccess(param);
+        if (isPay) {
+            logger.info("重复回调(判断幂等)");
+            return ResultCode.PROCESSED_RETURN_SUCCESS;
+        }
+
         // 新增会员交易记录
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
         tdsParam.setTitle(MemberTransactionTypeEnum.USER_REDPACKET_CUT.getName());
