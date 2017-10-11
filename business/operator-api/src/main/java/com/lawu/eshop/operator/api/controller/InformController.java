@@ -32,10 +32,9 @@ import com.lawu.eshop.operator.api.service.AdService;
 import com.lawu.eshop.operator.api.service.InformService;
 import com.lawu.eshop.operator.api.service.MessageService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
+import com.lawu.eshop.operator.api.service.ProductService;
 import com.lawu.eshop.operator.api.service.UserService;
-import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
-import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
