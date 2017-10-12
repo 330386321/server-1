@@ -90,6 +90,15 @@ public class MemberApiConfig {
 	@Value(value="${download_url}")
 	private String downloadUrl;
 	
+	@Value(value="${core_pool_size}")
+	private Integer corePoolSize;
+	
+	@Value(value="${maximum_pool_size}")
+	private Integer maximumPoolSize;
+	
+	@Value(value="${keep_alive_time}")
+	private Integer keepAliveTime;
+	
 	
 	public String getDownloadUrl() {
 		return downloadUrl;
@@ -260,6 +269,19 @@ public class MemberApiConfig {
 		return shareRedPacketDefaultImagePath;
 	}
 
+	public Integer getCorePoolSize() {
+		return corePoolSize;
+	}
+
+	public Integer getMaximumPoolSize() {
+		return maximumPoolSize;
+	}
+
+	public Integer getKeepAliveTime() {
+		return keepAliveTime;
+	}
+
+	
 	
 	
 }

@@ -108,7 +108,7 @@ public class ProductAuditController extends BaseController {
     	MessageInfoParam messageInfoParam = new MessageInfoParam();
 		MessageTempParam messageTempParam = new MessageTempParam();
 		messageTempParam.setAdName(res.getModel().getName());
-		messageTempParam.setAdTypeName("下架通知");
+		messageTempParam.setAdTypeName(res.getModel().getName());
 		messageInfoParam.setRelateId(Long.valueOf(ids));
 		messageTempParam.setFailReason(remark);
 		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PRODUCT_FORCE_DOWN);
