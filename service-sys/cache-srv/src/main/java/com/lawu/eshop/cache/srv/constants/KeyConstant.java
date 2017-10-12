@@ -42,6 +42,11 @@ public class KeyConstant {
      * token-账号
      */
     public static final String REDIS_TOKEN_PREFIX = "AUTH_TOKEN_";
+
+    /**
+     * token-删除原因
+     */
+    public static final String REDIS_TOKEN_CLEAR_PREFIX = "AUTH_TOKEN_DEL_";
     
     /**
      * 广告ID

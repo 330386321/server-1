@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.lawu.eshop.cache.srv.controller.LoginTokenController;
 import com.lawu.eshop.cache.srv.service.LoginTokenService;
 import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.framework.web.ResultCode;
 
 /**
  * @author Leach
@@ -43,35 +44,36 @@ public class LoginTokenControllerTest extends EmbeddedRedis {
     }
 
     @Test
-    public void setMemberTokenOneToOne() throws Exception {
+    public void setTokenOneToOne() throws Exception {
 
-        int userType = 1;
+        Integer userLoginType = 1;
         String account = "11111111111";
         String token = "token11111111111";
 
         RequestBuilder request = put("/loginToken/setTokenOneToOne")
-                .param("userType", String.valueOf(userType))
+                .param("userLoginType", String.valueOf(userLoginType))
                 .param("account", account)
                 .param("token", token)
-                .param("expireSeconds", "3600");
+                .param("expireSeconds", "3600")
+                .param("tokenClearType", "1");
 
         ResultActions perform = mvc.perform(request);
 
         perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(ResultCode.SUCCESS))
                 .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
     public void setTokenOneToMany() throws Exception {
 
-        int userType = 1;
+        Integer userLoginType = 1;
         String account = "22222222222";
         String token = "token22222222222";
 
         RequestBuilder request = put("/loginToken/setTokenOneToMany")
-                .param("userType", String.valueOf(userType))
+                .param("userLoginType", String.valueOf(userLoginType))
                 .param("account", account)
                 .param("token", token)
                 .param("expireSeconds", "3600");
@@ -80,45 +82,88 @@ public class LoginTokenControllerTest extends EmbeddedRedis {
 
         perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(ResultCode.SUCCESS))
                 .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
     public void getAccount() throws Exception {
 
-        int userType = 1;
+        Integer userLoginType = 1;
         String account = "33333333333";
         String token = "token33333333333";
-        loginTokenService.setTokenOneToOne(userType, account, token, 3600);
+        Integer tokenClearType = 1;
+        loginTokenService.setTokenOneToOne(userLoginType, account, token, 3600, tokenClearType);
 
         RequestBuilder request = get("/loginToken/getAccount")
-                .param("userType", String.valueOf(userType))
+                .param("userLoginType", String.valueOf(userLoginType))
                 .param("token", token)
                 .param("flushExpireAfterOperation", Boolean.TRUE.toString())
                 .param("expireSeconds", "3600")
-                .param("singleTokenWithUser", Boolean.TRUE.toString());
+                .param("singleTokenWithUser", Boolean.TRUE.toString())
+                .param("tokenClearType", String.valueOf(tokenClearType));
 
         ResultActions perform = mvc.perform(request);
 
         perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(ResultCode.SUCCESS))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.model").value(account))
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void getTokenClearType() throws Exception {
+
+        Integer userLoginType = 1;
+        String account = "44444444444";
+        String token = "token44444444444";
+        Integer tokenClearType = 1;
+
+        loginTokenService.setTokenOneToOne(userLoginType, account, token, 3600, tokenClearType);
+
+        // 未删除前
+        RequestBuilder request = get("/loginToken/getTokenClearType")
+                .param("userLoginType", String.valueOf(userLoginType))
+                .param("token", token);
+
+        ResultActions perform = mvc.perform(request);
+
+        perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(ResultCode.SUCCESS))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.model").value(0))
+                .andDo(MockMvcResultHandlers.print());
+
+        // 删除后
+        loginTokenService.delRelationshipByAccount(userLoginType, account, 3600, tokenClearType);
+        RequestBuilder request1 = get("/loginToken/getTokenClearType")
+                .param("userLoginType", String.valueOf(userLoginType))
+                .param("token", token);
+
+        ResultActions perform1 = mvc.perform(request1);
+
+        perform1.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(ResultCode.SUCCESS))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.model").value(tokenClearType))
                 .andDo(MockMvcResultHandlers.print());
     }
 
     @Test
     public void delRelationshipByAccount() throws Exception {
 
-        int userType = 1;
-        String account = "44444444444";
-        String token = "token44444444444";
-        loginTokenService.setTokenOneToOne(userType, account, token, 3600);
+        Integer userLoginType = 1;
+        String account = "55555555555";
+        String token = "token55555555555";
+        Integer tokenClearType = 1;
+        loginTokenService.setTokenOneToOne(userLoginType, account, token, 3600, tokenClearType);
 
         RequestBuilder request = delete("/loginToken/delRelationshipByAccount")
-                .param("userType", String.valueOf(userType))
-                .param("account", account);
+                .param("userLoginType", String.valueOf(userLoginType))
+                .param("account", account)
+                .param("expireSeconds", "3600")
+                .param("tokenClearType", String.valueOf(tokenClearType));
 
         ResultActions perform = mvc.perform(request);
 
@@ -130,15 +175,18 @@ public class LoginTokenControllerTest extends EmbeddedRedis {
     @Test
     public void delRelationshipByToken() throws Exception {
 
-        int userType = 1;
-        String account = "55555555555";
-        String token = "token55555555555";
-        loginTokenService.setTokenOneToOne(userType, account, token, 3600);
+        Integer userLoginType = 1;
+        String account = "66666666666";
+        String token = "token-66666666666";
+        Integer tokenClearType = 1;
+        loginTokenService.setTokenOneToOne(userLoginType, account, token, 3600, tokenClearType);
 
         RequestBuilder request = delete("/loginToken/delRelationshipByToken")
-                .param("userType", String.valueOf(userType))
+                .param("userLoginType", String.valueOf(userLoginType))
                 .param("token", token)
-                .param("singleTokenWithUser", Boolean.TRUE.toString());
+                .param("singleTokenWithUser", Boolean.TRUE.toString())
+                .param("expireSeconds", "3600")
+                .param("tokenClearType", String.valueOf(tokenClearType));
 
         ResultActions perform = mvc.perform(request);
 

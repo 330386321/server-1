@@ -16,7 +16,7 @@ import org.springframework.context.annotation.ImportResource;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"com.lawu.eshop"})
 @ImportResource(locations = {"classpath:spring.xml"})
 @ComponentScan(basePackages={"com.lawu.eshop"})
 public class AgentApiApplication {

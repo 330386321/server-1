@@ -24,17 +24,17 @@ public class LoginTokenServiceImplTest extends EmbeddedRedis {
 
     @Test
     public void setTokenOneToOne() {
-        int userType = 1;
+        Integer userType = 1;
         String account = "11111111111";
         String token = "token11111111111";
-        loginTokenService.setTokenOneToOne(userType, account, token, 3600);
+        loginTokenService.setTokenOneToOne(userType, account, token, 3600, 1);
         String userAccount = loginTokenService.getAccount(userType, token, true, 3600, true);
         Assert.assertEquals(account, userAccount);
     }
 
     @Test
     public void setTokenOneToMany() {
-        int userType = 1;
+        Integer userType = 1;
         String account = "22222222222";
         String token = "token22222222222";
         loginTokenService.setTokenOneToMany(userType, account, token, 3600);
@@ -43,17 +43,47 @@ public class LoginTokenServiceImplTest extends EmbeddedRedis {
     }
 
     @Test
-    public void delRelationshipByAccount() {
+    public void getTokenClearType() {
 
-        int userType = 1;
+        // 记录tokenClearType
+        Integer userType = 1;
         String account = "33333333333";
         String token = "token33333333333";
-        loginTokenService.setTokenOneToOne(userType, account, token, 3600);
+        Integer tokenClearType = 1;
+        loginTokenService.setTokenOneToOne(userType, account, token, 3600, tokenClearType);
+
+        loginTokenService.delRelationshipByAccount(userType, account, 3600, tokenClearType);
+
+        Integer reason = loginTokenService.getTokenClearType(userType, token);
+        Assert.assertNotNull(reason);
+        Assert.assertEquals(tokenClearType.intValue(), reason.intValue());
+
+        // 不记录tokenClearType
+        Integer userType2 = 1;
+        String account2 = "44444444444";
+        String token2 = "token44444444444";
+        loginTokenService.setTokenOneToOne(userType2, account2, token2, 3600, null);
+
+        loginTokenService.delRelationshipByAccount(userType2, account2, 3600, null);
+
+        Integer reason2 = loginTokenService.getTokenClearType(userType2, token2);
+        Assert.assertNull(reason2);
+
+    }
+
+    @Test
+    public void delRelationshipByAccount() {
+
+        Integer userType = 1;
+        String account = "55555555555";
+        String token = "token55555555555";
+        Integer tokenClearType = 1;
+        loginTokenService.setTokenOneToOne(userType, account, token, 3600, tokenClearType);
 
         String userAccount = loginTokenService.getAccount(userType, token, true, 3600, true);
         Assert.assertEquals(account, userAccount);
 
-        loginTokenService.delRelationshipByAccount(userType, account);
+        loginTokenService.delRelationshipByAccount(userType, account, 3600, tokenClearType);
 
         String userAccount2 = loginTokenService.getAccount(userType, token, true, 3600, true);
         Assert.assertNull(userAccount2);
@@ -62,15 +92,16 @@ public class LoginTokenServiceImplTest extends EmbeddedRedis {
     @Test
     public void delRelationshipByToken() {
 
-        int userType = 1;
-        String account = "44444444444";
-        String token = "token44444444444";
-        loginTokenService.setTokenOneToOne(userType, account, token, 3600);
+        Integer userType = 1;
+        String account = "66666666666";
+        String token = "token66666666666";
+        Integer tokenClearType = 1;
+        loginTokenService.setTokenOneToOne(userType, account, token, 3600, tokenClearType);
 
         String userAccount = loginTokenService.getAccount(userType, token, true, 3600, true);
         Assert.assertEquals(account, userAccount);
 
-        loginTokenService.delRelationshipByToken(userType, token, true);
+        loginTokenService.delRelationshipByToken(userType, token, true, 3600, tokenClearType);
 
         String userAccount2 = loginTokenService.getAccount(userType, token, true, 3600, true);
         Assert.assertNull(userAccount2);

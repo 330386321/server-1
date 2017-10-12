@@ -20,34 +20,38 @@ public class LoginTokenServiceImpl implements LoginTokenService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    @Override
-    public void setTokenOneToOne(int userType, String account, String token, Integer expireSeconds) {
+    /*@Autowired
+    private RedisTemplate<String, Integer> redisTemplate;*/
 
-        String accountKey = formatAccountKey(userType, account);
+    @Override
+    public void setTokenOneToOne(Integer userLoginType, String account, String token, Integer expireSeconds, Integer tokenClearType) {
+
+        String accountKey = formatAccountKey(userLoginType, account);
 
         String oldToken = getValue(accountKey);
         if (oldToken != null) {
-            String oldTokenKey = formatTokenKey(userType, oldToken);
+            String oldTokenKey = formatTokenKey(userLoginType, oldToken);
             stringRedisTemplate.delete(oldTokenKey);
+            recordTokenClearType(userLoginType, token, expireSeconds, tokenClearType);
         }
         stringRedisTemplate.opsForValue().set(accountKey, token, expireSeconds, TimeUnit.SECONDS);
-        stringRedisTemplate.opsForValue().set(formatTokenKey(userType, token), account, expireSeconds, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set(formatTokenKey(userLoginType, token), account, expireSeconds, TimeUnit.SECONDS);
 
     }
 
     @Override
-    public void setTokenOneToMany(int userType, String account, String token, Integer expireSeconds) {
-        stringRedisTemplate.opsForValue().set(formatTokenKey(userType, token), account, expireSeconds, TimeUnit.SECONDS);
+    public void setTokenOneToMany(Integer userLoginType, String account, String token, Integer expireSeconds) {
+        stringRedisTemplate.opsForValue().set(formatTokenKey(userLoginType, token), account, expireSeconds, TimeUnit.SECONDS);
     }
 
     @Override
-    public String getAccount(int userType, String token, Boolean flushExpireAfterOperation, Integer expireSeconds, Boolean singleTokenWithUser) {
-        String tokenKey = formatTokenKey(userType, token);
+    public String getAccount(Integer userLoginType, String token, Boolean flushExpireAfterOperation, Integer expireSeconds, Boolean singleTokenWithUser) {
+        String tokenKey = formatTokenKey(userLoginType, token);
         String account = getValue(tokenKey);
         //根据设置，在每次有效操作后刷新过期时间
         if (account != null && flushExpireAfterOperation) {
             if (singleTokenWithUser) {
-                stringRedisTemplate.expire(formatAccountKey(userType, account), expireSeconds, TimeUnit.SECONDS);
+                stringRedisTemplate.expire(formatAccountKey(userLoginType, account), expireSeconds, TimeUnit.SECONDS);
 
             }
             stringRedisTemplate.expire(tokenKey, expireSeconds, TimeUnit.SECONDS);
@@ -57,23 +61,45 @@ public class LoginTokenServiceImpl implements LoginTokenService {
     }
 
     @Override
-    public void delRelationshipByAccount(int userType, String account) {
-        String accountKey = formatAccountKey(userType, account);
+    public Integer getTokenClearType(Integer userLoginType, String token) {
+        String value = stringRedisTemplate.opsForValue().get(formatTokenClearKey(userLoginType, token));
+        return value == null ? null : Integer.valueOf(value);
+    }
+
+    @Override
+    public void delRelationshipByAccount(Integer userLoginType, String account, Integer expireSeconds, Integer tokenClearType) {
+        String accountKey = formatAccountKey(userLoginType, account);
         String token = getValue(accountKey);
         if (token != null) {
-            stringRedisTemplate.delete(Arrays.asList(accountKey, formatTokenKey(userType, token)));
+            stringRedisTemplate.delete(Arrays.asList(accountKey, formatTokenKey(userLoginType, token)));
+            recordTokenClearType(userLoginType, token, expireSeconds, tokenClearType);
         }
     }
 
     @Override
-    public void delRelationshipByToken(int userType, String token, Boolean singleTokenWithUser) {
-        String tokenKey = formatTokenKey(userType, token);
+    public void delRelationshipByToken(Integer userLoginType, String token, Boolean singleTokenWithUser, Integer expireSeconds, Integer tokenClearType) {
+        String tokenKey = formatTokenKey(userLoginType, token);
 
         if (singleTokenWithUser) {
             String account = getValue(tokenKey);
-            stringRedisTemplate.delete(Arrays.asList(formatAccountKey(userType, account), tokenKey));
+            stringRedisTemplate.delete(Arrays.asList(formatAccountKey(userLoginType, account), tokenKey));
         } else {
             stringRedisTemplate.delete(tokenKey);
+        }
+        recordTokenClearType(userLoginType, token, expireSeconds, tokenClearType);
+    }
+
+    /**
+     * 记录token清除类型（即退出原因）
+     *
+     * @param userLoginType
+     * @param token
+     * @param expireSeconds
+     * @param tokenClearType
+     */
+    private void recordTokenClearType(Integer userLoginType, String token, Integer expireSeconds, Integer tokenClearType) {
+        if (tokenClearType != null) {
+            stringRedisTemplate.opsForValue().set(formatTokenClearKey(userLoginType, token), String.valueOf(tokenClearType), expireSeconds, TimeUnit.SECONDS);
         }
     }
 
@@ -107,6 +133,17 @@ public class LoginTokenServiceImpl implements LoginTokenService {
      */
     private String formatTokenKey(int type, String token) {
         return KeyConstant.REDIS_TOKEN_PREFIX.concat(String.valueOf(type) + "_").concat(token);
+    }
+
+    /**
+     * 拼接token删除类型 key
+     *
+     * @param type
+     * @param token
+     * @return
+     */
+    private String formatTokenClearKey(int type, String token) {
+        return KeyConstant.REDIS_TOKEN_CLEAR_PREFIX.concat(String.valueOf(type) + "_").concat(token);
     }
 
 }

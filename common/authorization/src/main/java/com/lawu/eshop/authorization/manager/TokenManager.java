@@ -14,8 +14,9 @@ public interface TokenManager {
     /**
      * 通过key删除关联关系
      * @param account
+     * @param tokenClearType
      */
-    void delRelationship(String account);
+    void delRelationship(String account, TokenClearType tokenClearType);
 
     /**
      * 通过token删除关联关系
@@ -38,4 +39,12 @@ public interface TokenManager {
      * @return
      */
     String getAccount(String token);
+
+    /**
+     * 如token存在，但鉴权失败时通过该接口获取失败原因
+     *
+     * @param token
+     * @return
+     */
+    TokenClearType getTokenClearType(String token);
 }

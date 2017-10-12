@@ -31,12 +31,12 @@
        <bean id="tokenManager" class="com.lawu.eshop.authorization.manager.impl.CacheTokenManager">
               <!--Token失效时间-->
               <property name="tokenExpireSeconds" value="86400" />
-              <property name="cacheService" ref="redisCacheService" />
+              <property name="tokenCacheService" ref="tokenCacheService" />
               <property name="singleTokenWithUser" value="${eshop.single.login}" />
        </bean>
 
-       <bean id="redisCacheService" class="com.lawu.eshop.authorization.impl.RedisCacheServiceImpl">
-              <property name="userType" value="AGENT" />
+       <bean id="tokenCacheService" class="com.lawu.eshop.authorization.impl.RedisTokenCacheServiceImpl">
+              <property name="userLoginType" value="AGENT" />
        </bean>
 
        <import resource="spring-event.xml" />

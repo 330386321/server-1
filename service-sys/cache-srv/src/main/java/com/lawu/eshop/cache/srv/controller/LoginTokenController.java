@@ -3,6 +3,7 @@ package com.lawu.eshop.cache.srv.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.cache.srv.service.LoginTokenService;
@@ -21,32 +22,39 @@ public class LoginTokenController extends BaseController {
     private LoginTokenService loginTokenService;
 
     @RequestMapping(value = "setTokenOneToOne", method = RequestMethod.PUT)
-    public Result setTokenOneToOne(int userType, String account, String token, Integer expireSeconds) {
-        loginTokenService.setTokenOneToOne(userType, account, token, expireSeconds);
+    public Result setTokenOneToOne(Integer userLoginType, String account, String token, Integer expireSeconds, @RequestParam(required = false) Integer tokenClearType) {
+        loginTokenService.setTokenOneToOne(userLoginType, account, token, expireSeconds, tokenClearType);
         return successCreated();
     }
 
     @RequestMapping(value = "setTokenOneToMany", method = RequestMethod.PUT)
-    public Result setTokenOneToMany(int userType, String account, String token, Integer expireSeconds) {
-        loginTokenService.setTokenOneToMany(userType, account, token, expireSeconds);
+    public Result setTokenOneToMany(Integer userLoginType, String account, String token, Integer expireSeconds) {
+        loginTokenService.setTokenOneToMany(userLoginType, account, token, expireSeconds);
         return successCreated();
     }
 
     @RequestMapping(value = "getAccount", method = RequestMethod.GET)
-    public Result<String> getAccount(int userType, String token, Boolean flushExpireAfterOperation, Integer expireSeconds, Boolean singleTokenWithUser) {
-        String account = loginTokenService.getAccount(userType, token, flushExpireAfterOperation, expireSeconds, singleTokenWithUser);
+    public Result<String> getAccount(Integer userLoginType, String token, Boolean flushExpireAfterOperation, Integer expireSeconds, Boolean singleTokenWithUser) {
+        String account = loginTokenService.getAccount(userLoginType, token, flushExpireAfterOperation, expireSeconds, singleTokenWithUser);
         return successGet(account);
     }
 
+    @RequestMapping(value = "getTokenClearType", method = RequestMethod.GET)
+    public Result<Integer> getTokenDelReason(Integer userLoginType, String token) {
+        Integer tokenClearType = loginTokenService.getTokenClearType(userLoginType, token);
+        tokenClearType = tokenClearType == null ? 0 : tokenClearType;
+        return successGet(tokenClearType);
+    }
+
     @RequestMapping(value = "delRelationshipByAccount", method = RequestMethod.DELETE)
-    public Result delRelationshipByAccount(int userType, String account) {
-        loginTokenService.delRelationshipByAccount(userType, account);
+    public Result delRelationshipByAccount(Integer userLoginType, String account, Integer expireSeconds, @RequestParam(required = false) Integer tokenClearType) {
+        loginTokenService.delRelationshipByAccount(userLoginType, account, expireSeconds, tokenClearType);
         return successDelete();
     }
 
     @RequestMapping(value = "delRelationshipByToken", method = RequestMethod.DELETE)
-    public Result delRelationshipByToken(int userType, String token, Boolean singleTokenWithUser) {
-        loginTokenService.delRelationshipByToken(userType, token, singleTokenWithUser);
+    public Result delRelationshipByToken(Integer userLoginType, String token, Boolean singleTokenWithUser, Integer expireSeconds, @RequestParam(required = false) Integer tokenClearType) {
+        loginTokenService.delRelationshipByToken(userLoginType, token, singleTokenWithUser, expireSeconds, tokenClearType);
         return successDelete();
     }
 

@@ -1,6 +1,7 @@
 package com.lawu.eshop.authorization.interceptor;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.authorization.manager.TokenClearType;
 import com.lawu.eshop.authorization.manager.TokenManager;
 import com.lawu.eshop.authorization.manager.impl.AbstractTokenManager;
 import io.jsonwebtoken.*;
@@ -106,6 +107,9 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
+
+        String unauthorizedErrorMsg = unauthorizedErrorMessage;
+
         // 从header中得到token
         String token = request.getHeader(httpHeaderName);
         if (token != null && token.length() > 0) {
@@ -135,6 +139,12 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
                         return true;
 
                     }
+                } else {
+                    // token失效原因
+                    TokenClearType tokenClearType = manager.getTokenClearType(token);
+                    if (tokenClearType != null) {
+                        unauthorizedErrorMsg = tokenClearType.getMessage();
+                    }
                 }
             }
         }
@@ -146,7 +156,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(response.getOutputStream()));
             writer.write("{\n" +
-                    "  \"msg\": \"" + unauthorizedErrorMessage + "\",\n" +
+                    "  \"msg\": \"" + unauthorizedErrorMsg + "\",\n" +
                     "  \"ret\": 401\n" +
                     "}");
             writer.close();
