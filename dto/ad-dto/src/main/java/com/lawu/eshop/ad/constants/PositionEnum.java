@@ -13,7 +13,8 @@ public enum PositionEnum {
 	    SHOPPING_HOT((byte) 0x09, "热门商品"),  //热门商品
 	    AD_POSITION_TWO((byte) 0x0A, "三个视频广告位") ,
 	    AD_POSITION_THREE((byte) 0x0B, "一个平面广告位") ,
-	    AD_POSITION_FOUR((byte) 0x0C, "五个平面广告位") ;
+	    AD_POSITION_FOUR((byte) 0x0C, "五个平面广告位") ,
+	    TYPE_ALL((byte) 0x0D,"所有");
 	    public Byte val;
 	    private String name;
 

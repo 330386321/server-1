@@ -202,8 +202,11 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 	public  AdPlatformVideoFlatBO selAdPlatformPositionAd(AdPlatformInternalParam param) {
 		// 组装查询参数
 		SelectAdEgainIdExample example = new SelectAdEgainIdExample();
-		example.setLatitude(new BigDecimal(param.getLatitude()));
-		example.setLongitude(new BigDecimal(param.getLongitude()));
+		
+		if(param.getLatitude()!=null && param.getLongitude()!=null){
+			example.setLatitude(new BigDecimal(param.getLatitude()));
+			example.setLongitude(new BigDecimal(param.getLongitude()));
+		}
 		example.setMerchantIds(param.getMerchantIds());
 		example.setAreas(param.getAreas());
 		

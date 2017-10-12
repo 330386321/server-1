@@ -17,11 +17,11 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.constants.AdPage;
-import com.lawu.eshop.ad.constants.AdPraiseConfig;
 import com.lawu.eshop.ad.constants.AdPraiseWords;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
@@ -63,11 +63,10 @@ import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.user.dto.AdQueryMemberInfoDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.utils.DistanceUtil;
 
 @Service
-public class AdExtendServiceImpl extends BaseController implements AdExtendService {
+public class AdExtendServiceImpl extends BaseController implements AdExtendService, InitializingBean {
 
 	@Autowired
 	private AdService adService;
@@ -84,7 +83,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	@Autowired
 	private MerchantProfileService merchantProfileService;
 
-	@Autowired
+	@Autowired(required = true)
 	private MemberApiConfig memberApiConfig;
 
 	@Autowired
@@ -97,9 +96,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	private AdLexiconService adLexiconService;
 
 	private BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>();
-
-	private ExecutorService service = new ThreadPoolExecutor(AdPraiseConfig.CORE_POOL_SIZE, AdPraiseConfig.MAXIMUM_POLL_SIZE, AdPraiseConfig.KEEP_ALIVE_TIME, TimeUnit.DAYS, queue);
-
+	
+	private ExecutorService service;
+	
 	private static Logger logger = LoggerFactory.getLogger(AdExtendServiceImpl.class);
 
 	@Override
@@ -649,5 +648,10 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		}
 		Result<Page<ChoicenessAdDTO>> result = adService.selectChoiceness(memberId, adChoicenessInternalParam);
 		return successGet(result);
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		service = new ThreadPoolExecutor(memberApiConfig.getCorePoolSize(), memberApiConfig.getMaximumPoolSize(), memberApiConfig.getKeepAliveTime(), TimeUnit.DAYS, queue);;
 	}
 }

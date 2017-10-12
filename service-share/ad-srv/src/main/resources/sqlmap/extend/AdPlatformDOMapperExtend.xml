@@ -29,7 +29,8 @@
 		a.video_img_url as video_img_url ,
 		a.merchant_store_name as name,
 		a.logo_url as logo_url,
-		a.media_url as media_url
+		case when (ap.media_url is null or ap.media_url = '' ) then a.media_url
+		else ap.media_url end media_url
 	FROM
 		ad_platform ap
 	LEFT JOIN ad a ON ap.ad_id = a.id
