@@ -3,6 +3,8 @@ package com.lawu.eshop.property.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.property.param.BalancePayDataParam;
+import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.TotalSalesQueryParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
@@ -93,4 +95,20 @@ public interface TransactionDetailService {
 	List<UserIncomeExpenditureBO> selectUserIncomeExpenditure(UserIncomeExpenditureQueryParam param);
 
     List<IncomeMsgBO> getIncomeMsgDataList(String begin, String end);
+
+	/**
+	 * 余额支付校验是否已处理
+	 * @param param
+	 * @return
+	 */
+	boolean verifyByUserNumAndTransactionTypeAndBizId(BalancePayDataParam param);
+	boolean verifyByUserNumAndTransactionTypeAndBizId(BalancePayValidateDataParam param);
+
+	/**
+	 * 余额支付购物订单校验是否已处理
+	 * @param param
+	 * @return
+	 */
+	boolean verifyOrderByUserNumAndTransactionType(BalancePayValidateDataParam param);
+	boolean verifyOrderByUserNumAndTransactionType(BalancePayDataParam param);
 }

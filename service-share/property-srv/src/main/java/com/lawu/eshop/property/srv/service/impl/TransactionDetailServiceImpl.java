@@ -2,12 +2,17 @@ package com.lawu.eshop.property.srv.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.param.BalancePayDataParam;
+import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
+import com.lawu.eshop.user.constants.UserCommonConstant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
@@ -281,7 +286,6 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		return bos;
 	}
 
-
 	/**
 	 * 查询平台销售金额 group by area
 	 *
@@ -308,4 +312,91 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		return boList;
 	}
 
+	@Override
+	public boolean verifyByUserNumAndTransactionTypeAndBizId(BalancePayDataParam param) {
+		TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
+		Criteria criteria = transactionDetailDOExample.createCriteria();
+		Byte transactionType = param.getMemberTransactionTypeEnum().getValue();
+		if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+			transactionType = param.getMerchantTransactionTypeEnum().getValue();
+		}
+		criteria.andUserNumEqualTo(param.getUserNum()).andTransactionTypeEqualTo(transactionType).andBizIdEqualTo(param.getBizIds());
+		int count = transactionDetailDOMapper.countByExample(transactionDetailDOExample);
+		if(count > 0){
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean verifyByUserNumAndTransactionTypeAndBizId(BalancePayValidateDataParam param) {
+		TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
+		Criteria criteria = transactionDetailDOExample.createCriteria();
+		Byte transactionType = param.getMemberTransactionTypeEnum().getValue();
+		if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+			transactionType = param.getMerchantTransactionTypeEnum().getValue();
+		}
+		criteria.andUserNumEqualTo(param.getUserNum()).andTransactionTypeEqualTo(transactionType).andBizIdEqualTo(param.getBizIds());
+		int count = transactionDetailDOMapper.countByExample(transactionDetailDOExample);
+		if(count > 0){
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean verifyOrderByUserNumAndTransactionType(BalancePayValidateDataParam param) {
+		TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
+		Criteria criteria = transactionDetailDOExample.createCriteria();
+		Byte transactionType = param.getMemberTransactionTypeEnum().getValue();
+		if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+			transactionType = param.getMerchantTransactionTypeEnum().getValue();
+		}
+		criteria.andUserNumEqualTo(param.getUserNum()).andTransactionTypeEqualTo(transactionType);
+		transactionDetailDOExample.setOrderByClause(" id desc ");
+		List<TransactionDetailDO> DOList = transactionDetailDOMapper.selectByExample(transactionDetailDOExample);
+		for(TransactionDetailDO tdo : DOList){
+			if(param.getBizIds().contains(",")){
+				if(tdo.getBizId().equals(param.getBizIds())){
+					return true;
+				}
+			} else{
+				String bizIds = tdo.getBizId();
+				String []arrayBizId = bizIds.split(",");
+				List<String> bizIdsList = Arrays.asList(arrayBizId);
+				if(bizIdsList.contains(param.getBizIds())){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean verifyOrderByUserNumAndTransactionType(BalancePayDataParam param) {
+		TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
+		Criteria criteria = transactionDetailDOExample.createCriteria();
+		Byte transactionType = param.getMemberTransactionTypeEnum().getValue();
+		if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+			transactionType = param.getMerchantTransactionTypeEnum().getValue();
+		}
+		criteria.andUserNumEqualTo(param.getUserNum()).andTransactionTypeEqualTo(transactionType);
+		transactionDetailDOExample.setOrderByClause(" id desc ");
+		List<TransactionDetailDO> DOList = transactionDetailDOMapper.selectByExample(transactionDetailDOExample);
+		for(TransactionDetailDO tdo : DOList){
+			if(param.getBizIds().contains(",")){
+				if(tdo.getBizId().equals(param.getBizIds())){
+					return true;
+				}
+			} else{
+				String bizIds = tdo.getBizId();
+				String []arrayBizId = bizIds.split(",");
+				List<String> bizIdsList = Arrays.asList(arrayBizId);
+				if(bizIdsList.contains(param.getBizIds())){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

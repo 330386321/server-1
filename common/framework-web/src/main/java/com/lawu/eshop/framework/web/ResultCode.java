@@ -375,7 +375,7 @@ public class ResultCode {
         ResultCode.messageMap.put(STORE_REGION_PATH_ERROR, "门店所属区域不正确（需要精确到区）");
         ResultCode.messageMap.put(NOTIFY_MONEY_ERROR, "回调金额与表中的金额不一致");
         ResultCode.messageMap.put(PROPERTYINFO_FREEZE_YES, "资金已冻结");
-        ResultCode.messageMap.put(PROCESSED_RETURN_SUCCESS, "重复处理，成功返回");
+        ResultCode.messageMap.put(PROCESSED_RETURN_SUCCESS, "重复处理");
         ResultCode.messageMap.put(PROPERTYINFO_FREEZE_EXCEPITON, "资金出现异常");
         ResultCode.messageMap.put(DEPOSIT_EXIST_UP_PRODUCT, "有未下架商品，完成后才可申请。");
         ResultCode.messageMap.put(BANK_ACCOUNT_LENTH_OUT_OF_RANGE, "银行卡长度有误。");

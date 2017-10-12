@@ -5,6 +5,8 @@ import java.util.Date;
 
 import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.srv.exception.BalanceNegativeException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,8 @@ import com.lawu.eshop.user.constants.UserCommonConstant;
 @Service
 public class BalancePayServiceImpl implements BalancePayService {
 
+    private static Logger logger = LoggerFactory.getLogger(BalancePayServiceImpl.class);
+
     @Autowired
     private PropertyInfoService propertyInfoService;
     @Autowired
@@ -64,6 +68,13 @@ public class BalancePayServiceImpl implements BalancePayService {
     @Override
     @Transactional
     public int balancePayProductOrder(BalancePayDataParam param) {
+
+        boolean repeat = transactionDetailService.verifyOrderByUserNumAndTransactionType(param);
+        if (repeat) {
+            logger.info("重复操作(判断幂等)-余额购物");
+            return ResultCode.PROCESSED_RETURN_SUCCESS;
+        }
+
         int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount(), false, "");
         if (retCode != ResultCode.SUCCESS) {
             return retCode;
@@ -96,6 +107,12 @@ public class BalancePayServiceImpl implements BalancePayService {
     @Override
     @Transactional
     public int balancePay(BalancePayDataParam param) {
+
+        boolean repeat = transactionDetailService.verifyByUserNumAndTransactionTypeAndBizId(param);
+        if (repeat) {
+            logger.info("重复操作(判断幂等)-余额买单");
+            return ResultCode.PROCESSED_RETURN_SUCCESS;
+        }
 
         int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount(), false, "");
         if (retCode != ResultCode.SUCCESS) {
@@ -147,15 +164,6 @@ public class BalancePayServiceImpl implements BalancePayService {
     @Override
     @Transactional
     public int balancePayPoint(BalancePayDataParam param) {
-        //校验余额
-        //根据系统参数获取充值比例
-        //减财产余额、加财产积分
-        //新增余额充值积分交易明细
-        //新增积分交易明细
-        int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount(), false, "");
-        if (retCode != ResultCode.SUCCESS) {
-            return retCode;
-        }
 
         //获取余额冲积分比例，设置充值积分
         String property_key = PropertyType.MEMBER_BALANCE_PAY_POINT_SCALE;
@@ -168,8 +176,23 @@ public class BalancePayServiceImpl implements BalancePayService {
         double dPayMoney = Double.parseDouble(param.getTotalAmount());
         double dPayScale = Double.parseDouble(payScale);
         double point = dPayMoney * dPayScale;
-
         String num = param.getOrderNum();
+
+        boolean repeat = transactionDetailService.verifyByUserNumAndTransactionTypeAndBizId(param);
+        if (repeat) {
+            logger.info("重复操作(判断幂等)-余额充值");
+            return ResultCode.PROCESSED_RETURN_SUCCESS;
+        }
+
+        //校验余额
+        //根据系统参数获取充值比例
+        //减财产余额、加财产积分
+        //新增余额充值积分交易明细
+        //新增积分交易明细
+        int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount(), false, "");
+        if (retCode != ResultCode.SUCCESS) {
+            return retCode;
+        }
 
         //新增交易明细
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
@@ -220,6 +243,13 @@ public class BalancePayServiceImpl implements BalancePayService {
     @Override
     @Transactional
     public int memberRedPacketPay(BalancePayDataParam param) {
+
+        boolean repeat = transactionDetailService.verifyByUserNumAndTransactionTypeAndBizId(param);
+        if (repeat) {
+            logger.info("重复操作(判断幂等)-余额发红包");
+            return ResultCode.PROCESSED_RETURN_SUCCESS;
+        }
+
         int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount(), false, "");
         if (retCode != ResultCode.SUCCESS) {
             return retCode;
@@ -255,6 +285,13 @@ public class BalancePayServiceImpl implements BalancePayService {
     @Override
     @Transactional
     public int balancePayProductOrderValidatePwd(BalancePayValidateDataParam param) {
+
+        boolean repeat = transactionDetailService.verifyOrderByUserNumAndTransactionType(param);
+        if (repeat) {
+            logger.info("重复操作(判断幂等)-余额购物");
+            return ResultCode.PROCESSED_RETURN_SUCCESS;
+        }
+
         int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount(), true, param.getPayPwd());
         if (retCode != ResultCode.SUCCESS) {
             return retCode;
@@ -287,6 +324,12 @@ public class BalancePayServiceImpl implements BalancePayService {
     @Override
     @Transactional
     public int balancePayValidatePwd(BalancePayValidateDataParam param) {
+
+        boolean repeat = transactionDetailService.verifyByUserNumAndTransactionTypeAndBizId(param);
+        if (repeat) {
+            logger.info("重复操作(判断幂等)-余额买单");
+            return ResultCode.PROCESSED_RETURN_SUCCESS;
+        }
 
         int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount(), true, param.getPayPwd());
         if (retCode != ResultCode.SUCCESS) {
@@ -338,15 +381,6 @@ public class BalancePayServiceImpl implements BalancePayService {
     @Override
     @Transactional
     public int balancePayPointValidatePwd(BalancePayValidateDataParam param) {
-        //校验余额
-        //根据系统参数获取充值比例
-        //减财产余额、加财产积分
-        //新增余额充值积分交易明细
-        //新增积分交易明细
-        int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount(), true, param.getPayPwd());
-        if (retCode != ResultCode.SUCCESS) {
-            return retCode;
-        }
 
         //获取余额冲积分比例，设置充值积分
         String property_key = PropertyType.MEMBER_BALANCE_PAY_POINT_SCALE;
@@ -359,8 +393,23 @@ public class BalancePayServiceImpl implements BalancePayService {
         double dPayMoney = Double.parseDouble(param.getTotalAmount());
         double dPayScale = Double.parseDouble(payScale);
         double point = dPayMoney * dPayScale;
-
         String num = param.getOrderNum();
+
+        boolean repeat = transactionDetailService.verifyByUserNumAndTransactionTypeAndBizId(param);
+        if (repeat) {
+            logger.info("重复操作(判断幂等)-余额充值");
+            return ResultCode.PROCESSED_RETURN_SUCCESS;
+        }
+
+        //校验余额
+        //根据系统参数获取充值比例
+        //减财产余额、加财产积分
+        //新增余额充值积分交易明细
+        //新增积分交易明细
+        int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount(), true, param.getPayPwd());
+        if (retCode != ResultCode.SUCCESS) {
+            return retCode;
+        }
 
         //新增交易明细
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
@@ -411,6 +460,13 @@ public class BalancePayServiceImpl implements BalancePayService {
     @Override
     @Transactional
     public int memberRedPacketPayValidatePwd(BalancePayValidateDataParam param) {
+
+        boolean repeat = transactionDetailService.verifyByUserNumAndTransactionTypeAndBizId(param);
+        if (repeat) {
+            logger.info("重复操作(判断幂等)-余额发红包");
+            return ResultCode.PROCESSED_RETURN_SUCCESS;
+        }
+
         int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount(), true, param.getPayPwd());
         if (retCode != ResultCode.SUCCESS) {
             return retCode;
