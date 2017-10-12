@@ -625,6 +625,16 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 	public void addMerchantStoreBuyNums(Long merchantId) {
 		merchantStoreDOMapperExtend.addMerchantStoreBuyNums(merchantId);
 	}
+	
+    @Override
+    @Transactional
+    public void updateMerchantStoreBuyNums(Long merchantId, Integer buyNums) {
+        MerchantStoreDO record = new MerchantStoreDO();
+        record.setBuyNumbers(buyNums);
+        MerchantStoreDOExample example = new MerchantStoreDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        merchantStoreDOMapper.updateByExampleSelective(record, example);
+    }
 
 	@Override
 	@Transactional

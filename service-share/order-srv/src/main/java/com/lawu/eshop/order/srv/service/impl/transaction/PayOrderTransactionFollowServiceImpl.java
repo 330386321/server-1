@@ -15,6 +15,7 @@ import com.lawu.eshop.mq.dto.user.FansInfo;
 import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
+import com.lawu.eshop.order.srv.domain.PayOrderDOExample;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 
 /**
@@ -49,6 +50,13 @@ public class PayOrderTransactionFollowServiceImpl extends AbstractTransactionFol
 		FansInfo fansInfo = new FansInfo();
 		fansInfo.setMemberId(oldOrder.getMemberId());
 		fansInfo.setMerchantId(oldOrder.getMerchantId());
+		
+		// 查询当前商家买单笔数
+		PayOrderDOExample example = new PayOrderDOExample();
+		example.createCriteria().andMerchantIdEqualTo(oldOrder.getMerchantId()).andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
+		int count = payOrderDOMapper.countByExample(example);
+		fansInfo.setPayOrderCount(count);
+		
 		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_BUY_NUMBERS, fansInfo);
 	}
 }

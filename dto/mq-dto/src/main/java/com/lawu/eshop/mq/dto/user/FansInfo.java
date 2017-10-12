@@ -8,11 +8,13 @@ import java.io.Serializable;
  */
 public class FansInfo implements Serializable {
 
-	private static final long serialVersionUID = -3621898811051179446L;
+    private static final long serialVersionUID = 1941585648096832084L;
 
-	private Long memberId;
+    private Long memberId;
 
     private Long merchantId;
+    
+    private Integer payOrderCount;
 
     public Long getMemberId() {
         return memberId;
@@ -29,4 +31,13 @@ public class FansInfo implements Serializable {
     public void setMerchantId(Long merchantId) {
         this.merchantId = merchantId;
     }
+
+    public Integer getPayOrderCount() {
+        return payOrderCount;
+    }
+
+    public void setPayOrderCount(Integer payOrderCount) {
+        this.payOrderCount = payOrderCount;
+    }
+    
 }
