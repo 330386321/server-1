@@ -2,6 +2,7 @@ package com.lawu.eshop.operator.api.controller;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PositionEnum;
+import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.dto.OperatorAdDTO;
@@ -64,9 +67,6 @@ public class AdPlatformController extends BaseController {
     
     @Autowired
     private MerchantStoreService merchantStoreService;
-
-    @Autowired
-    private OperatorApiConfig operatorApiConfig;
     
     @Autowired
     private AdService adService;
@@ -78,7 +78,13 @@ public class AdPlatformController extends BaseController {
     @RequestMapping(value = "selectList", method = RequestMethod.POST)
     @RequiresPermissions("adPlatForm:list")
     public Result<Page<AdPlatformOperatorDTO>> list(@RequestBody @ApiParam AdPlatformFindParam queryParams) {
-        Result<Page<AdPlatformOperatorDTO>> adPlatformDTOS = adPlatformService.selectList(queryParams);
+    	if (queryParams.getTypeEnum().val == TypeEnum.TYPE_ALL.val) {
+    		queryParams.setTypeEnum(null);
+        }
+    	if (queryParams.getPositionEnum().val == PositionEnum.TYPE_ALL.val) {
+    		queryParams.setPositionEnum(null);
+        }
+    	Result<Page<AdPlatformOperatorDTO>> adPlatformDTOS = adPlatformService.selectList(queryParams);
         if(!isSuccess(adPlatformDTOS)){
         	return successCreated(adPlatformDTOS.getRet());
    	    }
@@ -105,7 +111,7 @@ public class AdPlatformController extends BaseController {
   				}
   				adPlatformDTO.setRelateName(adRs.getModel().getTitle());
  				adPlatformDTO.setMerchantName(adRs.getModel().getName());
- 				if(adRs.getModel().getTypeEnum()!=AdTypeEnum.AD_TYPE_VIDEO){
+ 				if(adRs.getModel().getTypeEnum()!=AdTypeEnum.AD_TYPE_VIDEO && StringUtils.isEmpty(adPlatformDTO.getMediaUrl())){
  					adPlatformDTO.setMediaUrl(adRs.getModel().getMediaUrl());
  				}else{
  					adPlatformDTO.setMediaUrl(adRs.getModel().getVideoImgUrl());

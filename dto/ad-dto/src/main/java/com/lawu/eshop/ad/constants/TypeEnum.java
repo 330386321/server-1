@@ -2,10 +2,12 @@ package com.lawu.eshop.ad.constants;
 
 public enum TypeEnum {
 	
+	
 	TYPE_LINK((byte) 0x01,"链接"),      //链接
 	TYPE_PRODUCT((byte) 0x02, "商品"),     //商品
 	TYPE_STORE((byte) 0x03, "门店"),     //门店
-	TYPE_AD((byte) 0x04, "广告");
+	TYPE_AD((byte) 0x04, "广告"),
+	TYPE_ALL((byte) 0x05,"所有");
     public Byte val;
     private String name;
 
