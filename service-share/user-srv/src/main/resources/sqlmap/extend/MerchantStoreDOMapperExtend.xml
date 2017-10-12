@@ -11,6 +11,12 @@
         WHERE
 	merchant_id = #{merchantId}
     </update>
+    
+    <update id="updateMerchantStoreBuyNums">
+      UPDATE merchant_store
+      SET buy_numbers = #{buyNums}
+      WHERE merchant_id = #{merchantId} AND buy_numbers &lt; #{buyNums}
+    </update>
 
     <update id="addMerchantStoreCommentsCount" parameterType="java.lang.Long">
         UPDATE merchant_store
