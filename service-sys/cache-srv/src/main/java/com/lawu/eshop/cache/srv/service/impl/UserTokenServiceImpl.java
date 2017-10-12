@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
  * @author Leach
  * @date 2017/3/20
  */
+@Deprecated
 @Service
 public class UserTokenServiceImpl implements UserTokenService {
 

@@ -3,6 +3,7 @@ package com.lawu.eshop.member.api.event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.lawu.eshop.authorization.manager.TokenClearType;
 import com.lawu.eshop.authorization.manager.TokenManager;
 import com.lawu.eshop.framework.core.event.AsyncEventHandle;
 import com.lawu.eshop.framework.web.Result;
@@ -65,7 +66,7 @@ public class UserVisitEventHandle implements AsyncEventHandle<UserVisitEvent> {
             //删除个推id
             memberService.delUserGtPush(event.getUserId());
             //退出登录
-            tokenManager.delRelationship(dtoResult.getModel().getAccount());
+            tokenManager.delRelationship(dtoResult.getModel().getAccount(), TokenClearType.FREQUENT_OPT);
         }
     }
 }

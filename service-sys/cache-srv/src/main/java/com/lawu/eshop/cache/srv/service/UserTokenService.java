@@ -4,6 +4,7 @@ package com.lawu.eshop.cache.srv.service;
  * @author Leach
  * @date 2017/3/20
  */
+@Deprecated
 public interface UserTokenService {
 
     void setMemberTokenOneToOne(String account, String token, Integer expireSeconds);

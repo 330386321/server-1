@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Leach
  * @date 2017/3/20
  */
+@Deprecated
 @RestController
 @RequestMapping(value = "userToken/")
 public class UserTokenController {

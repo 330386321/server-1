@@ -20,7 +20,7 @@ import com.lawu.eshop.framework.web.filter.XssFilter;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"com.lawu.eshop"})
 @Configuration
 @ImportResource(locations={"classpath:spring.xml","classpath:shiro-context.xml"})
 @ComponentScan(basePackages={"com.lawu.eshop"})

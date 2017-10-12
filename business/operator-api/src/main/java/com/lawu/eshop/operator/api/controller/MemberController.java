@@ -6,15 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.authorization.manager.TokenCacheService;
+import com.lawu.eshop.authorization.manager.TokenClearType;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.type.UserType;
 import com.lawu.eshop.framework.web.BaseController;
@@ -32,7 +34,6 @@ import com.lawu.eshop.operator.api.service.MerchantFavoredService;
 import com.lawu.eshop.operator.api.service.MerchantService;
 import com.lawu.eshop.operator.api.service.MerchantStoreService;
 import com.lawu.eshop.operator.api.service.ProductService;
-import com.lawu.eshop.operator.api.service.TokenService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.dto.AccountDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
@@ -66,7 +67,12 @@ public class MemberController extends BaseController {
     private MerchantService merchantService;
 
     @Autowired
-    private TokenService tokenService;
+    @Qualifier("memberTokenCacheService")
+    private TokenCacheService memberTokenCacheService;
+
+    @Autowired
+    @Qualifier("merchantTokenCacheService")
+    private TokenCacheService merchantTokenCacheService;
 
     @Autowired
     private MerchantStoreService merchantStoreService;
@@ -128,7 +134,7 @@ public class MemberController extends BaseController {
             memberService.freezeAccount(param.getNum(), param.getIsFreeze(), StringUtils.isEmpty(param.getFreezeReason()) ? "解冻" : param.getFreezeReason());
             if (param.getIsFreeze()) {//冻结
                 memberService.delUserGtPush(param.getId());
-                tokenService.delMemberRelationshipByAccount(param.getAccount());//删除token
+                memberTokenCacheService.delRelationshipByAccount(param.getAccount(), null, TokenClearType.MANUAL_FREEZE);//删除token
             }
             return successCreated();
         }
@@ -144,7 +150,7 @@ public class MemberController extends BaseController {
             //未创建门店
             if (param.getIsFreeze()) {
                 merchantService.delMerchantGtPush(param.getId());
-                tokenService.delMerchantRelationshipByAccount(param.getAccount());//删除token
+                merchantTokenCacheService.delRelationshipByAccount(param.getAccount(), null, TokenClearType.MANUAL_FREEZE);//删除token
             }
             //下架并删除solr广告
             adService.soldOutAdByMerchantId(param.getId());
@@ -167,7 +173,7 @@ public class MemberController extends BaseController {
             adService.soldOutAdByMerchantId(param.getId());
 
             merchantService.delMerchantGtPush(param.getId());
-            tokenService.delMerchantRelationshipByAccount(param.getAccount());//删除token
+            merchantTokenCacheService.delRelationshipByAccount(param.getAccount(), null, TokenClearType.MANUAL_FREEZE);//删除token
         } else {
             //解冻
             // 添加solr门店信息-实体店铺
