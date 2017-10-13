@@ -95,7 +95,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	@Autowired
 	private AdLexiconService adLexiconService;
 
-	private BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>();
+	private BlockingQueue<Runnable> queue ;
 	
 	private ExecutorService service;
 	
@@ -652,6 +652,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		service = new ThreadPoolExecutor(memberApiConfig.getCorePoolSize(), memberApiConfig.getMaximumPoolSize(), memberApiConfig.getKeepAliveTime(), TimeUnit.DAYS, queue);;
+		queue = new LinkedBlockingQueue<Runnable>(memberApiConfig.getQueueCount());
+		service = new ThreadPoolExecutor(memberApiConfig.getCorePoolSize(), memberApiConfig.getMaximumPoolSize(), memberApiConfig.getKeepAliveTime(), TimeUnit.SECONDS, queue);;
 	}
 }

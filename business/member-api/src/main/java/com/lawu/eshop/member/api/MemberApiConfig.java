@@ -99,6 +99,9 @@ public class MemberApiConfig {
 	@Value(value="${keep_alive_time}")
 	private Integer keepAliveTime;
 	
+	@Value(value="${queue_count}")
+	private Integer queueCount;
+	
 	
 	public String getDownloadUrl() {
 		return downloadUrl;
@@ -279,6 +282,10 @@ public class MemberApiConfig {
 
 	public Integer getKeepAliveTime() {
 		return keepAliveTime;
+	}
+
+	public Integer getQueueCount() {
+		return queueCount;
 	}
 
 	
