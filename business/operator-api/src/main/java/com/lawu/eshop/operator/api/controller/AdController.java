@@ -166,8 +166,8 @@ public class AdController extends BaseController {
 
         MessageInfoParam messageInfoParam = new MessageInfoParam();
         MessageTempParam messageTempParam = new MessageTempParam();
-        messageTempParam.setAdName(adDTOResult.getModel().getTitle());
         messageTempParam.setAdTypeName(adDTOResult.getModel().getTypeEnum().getName());
+        messageTempParam.setAdName(adDTOResult.getModel().getTitle());
         messageInfoParam.setRelateId(id);
         messageTempParam.setFailReason(remark);
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_AD_FORCE_DOWN);

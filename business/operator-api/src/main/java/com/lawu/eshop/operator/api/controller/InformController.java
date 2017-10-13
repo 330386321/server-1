@@ -119,7 +119,6 @@ public class InformController extends BaseController {
 
 			MessageInfoParam messageInfoParam = new MessageInfoParam();
 			MessageTempParam messageTempParam = new MessageTempParam();
-			messageTempParam.setAdName(title);
 			messageTempParam.setAdTypeName(title);
 			messageInfoParam.setRelateId(param.getInformtItemId());
 			messageTempParam.setFailReason(param.getRemark());
