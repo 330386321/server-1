@@ -20,10 +20,8 @@ import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
-import com.lawu.eshop.ad.dto.OperatorAdDTO;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.ListAdParam;
-import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -96,15 +94,6 @@ public class AdController extends BaseController {
     @RequiresPermissions("adAudit:list")
     @RequestMapping(value = "listAd", method = RequestMethod.POST)
     public Result<Page<AdDTO>> listAd(@RequestBody @ApiParam ListAdParam listAdParam) {
-        if (listAdParam.getTypeEnum().getVal().byteValue() == AdTypeEnum.AD_TYPE_PACKET.getVal()) {
-            listAdParam.setTypeEnum(null);
-        }
-        if (listAdParam.getPutWayEnum().val.byteValue() == PutWayEnum.PUT_WAY_COMMON.val) {
-            listAdParam.setPutWayEnum(null);
-        }
-        if (listAdParam.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_PUTED.val) {
-            listAdParam.setStatusEnum(null);
-        }
         Result<Page<AdDTO>> result = adService.listAd(listAdParam);
         List<AdDTO> list = result.getModel().getRecords();
         if(list != null && !list.isEmpty()){
