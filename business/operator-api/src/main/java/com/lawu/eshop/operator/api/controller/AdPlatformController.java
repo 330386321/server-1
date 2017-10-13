@@ -111,8 +111,13 @@ public class AdPlatformController extends BaseController {
   				}
   				adPlatformDTO.setRelateName(adRs.getModel().getTitle());
  				adPlatformDTO.setMerchantName(adRs.getModel().getName());
- 				if(adRs.getModel().getTypeEnum()!=AdTypeEnum.AD_TYPE_VIDEO && StringUtils.isEmpty(adPlatformDTO.getMediaUrl())){
- 					adPlatformDTO.setMediaUrl(adRs.getModel().getMediaUrl());
+ 				if(adRs.getModel().getTypeEnum()!=AdTypeEnum.AD_TYPE_VIDEO){
+ 					if(!StringUtils.isEmpty(adPlatformDTO.getMediaUrl())){
+ 						adPlatformDTO.setMediaUrl(adPlatformDTO.getMediaUrl());
+ 					}else{
+ 						adPlatformDTO.setMediaUrl(adRs.getModel().getMediaUrl());
+ 					}
+ 					
  				}else{
  					adPlatformDTO.setMediaUrl(adRs.getModel().getVideoImgUrl());
  				}

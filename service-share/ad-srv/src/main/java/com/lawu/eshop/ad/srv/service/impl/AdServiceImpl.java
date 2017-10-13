@@ -951,6 +951,7 @@ public class AdServiceImpl implements AdService {
 		AdDOExample example = new AdDOExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_PUTED.val);
+		criteria.andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.getVal());
 		if (StringUtils.isNotEmpty(listAdParam.getSortName()) && StringUtils.isNotEmpty(listAdParam.getSortOrder())) {
 			example.setOrderByClause("gmt_create " + listAdParam.getSortOrder());
 		}

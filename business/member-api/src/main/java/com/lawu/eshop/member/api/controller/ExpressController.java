@@ -3,6 +3,7 @@ package com.lawu.eshop.member.api.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -82,15 +83,17 @@ public class ExpressController extends BaseController {
     	rtn.setShipperCode(expressInquiriesDTO.getShipperCode());
     	rtn.setState(expressInquiriesDTO.getState());
     	rtn.setTraces(expressInquiriesDTO.getTraces());
-    	if (inquiriesResult.getModel().getShipperCode().equals(expressQueryParam.getExpCode())) {
-    		rtn.setShipperCode(expressCompanyDTO.getCode());
-    		rtn.setShipperName(expressCompanyDTO.getName());
-    	} else {
-    		Result<ExpressCompanyDTO> codeResult = expressCompanyService.code(expressInquiriesDTO.getShipperCode());
-    		if (!isSuccess(codeResult)) {
-    			return successGet(codeResult);
-    		}
-    		rtn.setShipperName(codeResult.getModel().getName());
+    	if (StringUtils.isNotBlank(expressInquiriesDTO.getShipperCode())) {
+        	if (expressInquiriesDTO.getShipperCode().equals(expressQueryParam.getExpCode())) {
+        		rtn.setShipperCode(expressCompanyDTO.getCode());
+        		rtn.setShipperName(expressCompanyDTO.getName());
+        	} else {
+        		Result<ExpressCompanyDTO> codeResult = expressCompanyService.code(expressInquiriesDTO.getShipperCode());
+        		if (!isSuccess(codeResult)) {
+        			return successGet(codeResult);
+        		}
+        		rtn.setShipperName(codeResult.getModel().getName());
+        	}
     	}
 		return successGet(rtn);
 	}

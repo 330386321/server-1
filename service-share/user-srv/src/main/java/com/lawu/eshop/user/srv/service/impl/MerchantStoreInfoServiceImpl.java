@@ -629,11 +629,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
     @Override
     @Transactional
     public void updateMerchantStoreBuyNums(Long merchantId, Integer buyNums) {
-        MerchantStoreDO record = new MerchantStoreDO();
-        record.setBuyNumbers(buyNums);
-        MerchantStoreDOExample example = new MerchantStoreDOExample();
-        example.createCriteria().andMerchantIdEqualTo(merchantId);
-        merchantStoreDOMapper.updateByExampleSelective(record, example);
+        merchantStoreDOMapperExtend.updateMerchantStoreBuyNums(merchantId, buyNums);
     }
 
 	@Override

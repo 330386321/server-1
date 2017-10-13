@@ -1,12 +1,20 @@
 package com.lawu.eshop.user.srv.mapper.extend;
 
-import com.lawu.eshop.user.param.ListMerchantStoreParam;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.extend.*;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.lawu.eshop.user.param.ListMerchantStoreParam;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.extend.MerchantAdInfoView;
+import com.lawu.eshop.user.srv.domain.extend.MerchantPushView;
+import com.lawu.eshop.user.srv.domain.extend.NewMerchantStoreDOView;
+import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
+import com.lawu.eshop.user.srv.domain.extend.RecommendFoodDOview;
+import com.lawu.eshop.user.srv.domain.extend.ShoppingStoreInfoDOView;
+import com.lawu.eshop.user.srv.domain.extend.StoreDetailDOView;
+import com.lawu.eshop.user.srv.domain.extend.StoreSolrInfoDOView;
 
 /**
  * @author zhangyong
@@ -42,4 +50,6 @@ public interface MerchantStoreDOMapperExtend {
     List<RecommendFoodDOview> listRecommendFoodConsume(Map<String, Object> map);
 
     List<RecommendFoodDOview> listRecommendFoodComment(Map<String, Object> map);
+    
+    Integer updateMerchantStoreBuyNums(@Param("merchantId")Long merchantId, @Param("buyNums")Integer buyNums);
 }
