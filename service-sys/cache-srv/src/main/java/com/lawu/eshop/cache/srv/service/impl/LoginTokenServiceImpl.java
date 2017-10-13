@@ -32,7 +32,7 @@ public class LoginTokenServiceImpl implements LoginTokenService {
         if (oldToken != null) {
             String oldTokenKey = formatTokenKey(userLoginType, oldToken);
             stringRedisTemplate.delete(oldTokenKey);
-            recordTokenClearType(userLoginType, token, expireSeconds, tokenClearType);
+            recordTokenClearType(userLoginType, oldToken, expireSeconds, tokenClearType);
         }
         stringRedisTemplate.opsForValue().set(accountKey, token, expireSeconds, TimeUnit.SECONDS);
         stringRedisTemplate.opsForValue().set(formatTokenKey(userLoginType, token), account, expireSeconds, TimeUnit.SECONDS);
