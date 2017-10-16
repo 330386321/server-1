@@ -1,5 +1,8 @@
 package com.lawu.eshop.user.dto.param;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.lawu.eshop.framework.web.json.XssDecodeJsonSerializer;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -9,15 +12,19 @@ import io.swagger.annotations.ApiModelProperty;
 public class MerchantSizeLinkDTO {
 
     @ApiModelProperty(value = "官网链接")
+    @JsonSerialize(using = XssDecodeJsonSerializer.class)
     private String websiteUrl;
 
     @ApiModelProperty(value = "淘宝链接")
+    @JsonSerialize(using = XssDecodeJsonSerializer.class)
     private String taobaoUrl;
 
     @ApiModelProperty(value = "天猫链接")
+    @JsonSerialize(using = XssDecodeJsonSerializer.class)
     private String tmallUrl;
     
     @ApiModelProperty(value = "京东链接")
+    @JsonSerialize(using = XssDecodeJsonSerializer.class)
     private String jdUrl;
 
     public String getWebsiteUrl() {
