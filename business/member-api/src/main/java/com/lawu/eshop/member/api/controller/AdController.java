@@ -1,6 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,6 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.member.api.MemberApiConfig;
-import com.lawu.eshop.member.api.service.AdCountRecordService;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdLexiconService;
 import com.lawu.eshop.member.api.service.AdService;
@@ -68,7 +66,6 @@ import com.lawu.eshop.member.api.service.MerchantService;
 import com.lawu.eshop.member.api.service.PraiseDoHanlderMinusPointService;
 import com.lawu.eshop.member.api.service.PropertyInfoDataService;
 import com.lawu.eshop.member.api.service.VerifyCodeService;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
@@ -418,7 +415,7 @@ public class AdController extends BaseController {
 		long memberId = UserUtil.getCurrentUserId(getRequest());
 		PointDetailQueryData1Param query = new PointDetailQueryData1Param();
 		query.setBizId(id.toString());
-		query.setPointType(MemberTransactionTypeEnum.PRAISE_AD.getValue());
+		//query.setPointType(MemberTransactionTypeEnum.PRAISE_AD.getValue());
 		query.setUserNum(userNum);
 		Result<Integer> isDoResult = propertyInfoDataService.getPointDetailByUserNumAndPointTypeAndBizId(query);
 		if (!isSuccess(isDoResult)) {
@@ -431,7 +428,7 @@ public class AdController extends BaseController {
 		param.setUserNum(userNum);
 		param.setPoint("20");
 		param.setBizId(id.toString());
-		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PRAISE_AD);
+		//param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PRAISE_AD);
 		Result result = propertyInfoDataService.doHanlderMinusPoint(param);
 		
 		if(isSuccess(result)){

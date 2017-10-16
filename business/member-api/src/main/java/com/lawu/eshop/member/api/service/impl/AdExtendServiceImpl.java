@@ -58,7 +58,6 @@ import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.PropertyInfoDataService;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.user.dto.AdQueryMemberInfoDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
@@ -242,14 +241,16 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		}
 		PointDetailQueryData1Param param = new PointDetailQueryData1Param();
 		param.setBizId(id.toString());
-		param.setPointType(MemberTransactionTypeEnum.PRAISE_AD.getValue());
+		//param.setPointType(MemberTransactionTypeEnum.PRAISE_AD.getValue());
 		param.setUserNum(userNum);
 		Result<Integer> result = propertyInfoDataService.getPointDetailByUserNumAndPointTypeAndBizId(param);
 		if (isSuccess(result)) {
-			if (result.getModel() == 1)
+			if (result.getModel() == 1){
 				praise.setIsDoHanlderMinusPoint(true);
-			else
+			}
+			else{
 				praise.setIsDoHanlderMinusPoint(false);
+			}
 		}
 		praise.setClickPraiseAdTimes(memberApiConfig.getClickPraiseAdTimes());
 		praise.setPraiseProb(memberApiConfig.getClickPraiseProb());
@@ -266,7 +267,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	 * 公用方法广告过滤
 	 *
 	 * @param list
-	 * @param memberId
+	 * @param adMemberParam
 	 * @return
 	 */
 	public List<AdDTO> adFilterNoMemberId(AdMemberParam adMemberParam, List<AdDTO> list) {
@@ -357,8 +358,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 				// 获取商家粉丝，判断当前用户是否属于商家粉丝
 				if(memberId != 0) {
 					Result<Boolean> rs = fansMerchantService.isFansMerchant(adDTO.getMerchantId(), memberId);
-					if (rs.getModel())
+					if (rs.getModel()){
 						newList.add(adDTO);
+					}
 				}
 			} else {
 				if (adMemberParam.getLongitude() == null || adMemberParam.getLatitude() == null) {
