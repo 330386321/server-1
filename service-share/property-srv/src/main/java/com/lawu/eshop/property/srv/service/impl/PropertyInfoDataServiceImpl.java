@@ -6,11 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
-import com.lawu.eshop.property.srv.exception.BalanceNegativeException;
-import com.lawu.eshop.property.srv.exception.PointNegativeException;
-import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +23,13 @@ import com.lawu.eshop.property.srv.bo.CommissionUtilBO;
 import com.lawu.eshop.property.srv.domain.FansInviteDetailDO;
 import com.lawu.eshop.property.srv.domain.LoveDetailDO;
 import com.lawu.eshop.property.srv.domain.PointDetailDOExample;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
+import com.lawu.eshop.property.srv.exception.PointNegativeException;
 import com.lawu.eshop.property.srv.mapper.FansInviteDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.LoveDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.service.CommissionUtilService;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
@@ -291,7 +290,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	@Override
 	@Transactional
 	public Map<String, Integer> doHanlderMinusPointByFans(PropertyInfoDataParam param) {
-		Map<String, Integer> map = new HashMap<String, Integer>();
+		Map<String, Integer> map = new HashMap<>();
 		int retCode = propertyInfoService.validatePoint(param.getUserNum(), param.getPoint());
 		if (retCode != ResultCode.SUCCESS) {
 			map.put("retCode", retCode);
@@ -314,16 +313,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		}
 		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
 		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
-		pointDetailSaveDataParam.setBizId(param.getBizId());
 		pointDetailSaveDataParam.setRegionPath(param.getRegionPath());
-		pointDetailService.save(pointDetailSaveDataParam);
-
-		// 更新用户资产
-		BigDecimal point = new BigDecimal(param.getPoint());
-		int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "M", point);
-		if(ResultCode.ERROR_POINT_NEGATIVE == ret){
-			throw new PointNegativeException(ResultCode.get(ResultCode.ERROR_POINT_NEGATIVE));
-		}
 
 		// 插入邀请粉丝记录
 		if (param.getMerchantTransactionTypeEnum() != null && param.getMerchantTransactionTypeEnum()
@@ -338,10 +328,18 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			fansInviteDetailDO.setConsumePoint(new BigDecimal(param.getPoint()));
 			fansInviteDetailDO.setGmtCreate(new Date());
 			fansInviteDetailDOMapper.insertSelective(fansInviteDetailDO);
-			map.put("retCode", ResultCode.SUCCESS);
 			map.put("fans_invite_detail_id", fansInviteDetailDO.getId().intValue());
-			return map;
+			pointDetailSaveDataParam.setBizId(String.valueOf(fansInviteDetailDO.getId()));
 		}
+		pointDetailService.save(pointDetailSaveDataParam);
+
+		// 更新用户资产
+		BigDecimal point = new BigDecimal(param.getPoint());
+		int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "M", point);
+		if(ResultCode.ERROR_POINT_NEGATIVE == ret){
+			throw new PointNegativeException(ResultCode.get(ResultCode.ERROR_POINT_NEGATIVE));
+		}
+
 		map.put("retCode", ResultCode.SUCCESS);
 		return map;
 	}
