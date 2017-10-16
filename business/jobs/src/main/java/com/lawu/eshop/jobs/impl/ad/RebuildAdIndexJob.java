@@ -23,6 +23,7 @@ public class RebuildAdIndexJob implements SimpleJob {
     public void execute(ShardingContext shardingContext) {
         logger.debug("------{}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
 
+        adSrvService.delInvalidAdIndex();
         adSrvService.rebuildAdIndex();
 
         logger.debug("------{}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());

@@ -79,4 +79,13 @@ public interface AdSrvService {
 	@RequestMapping(method = RequestMethod.GET, value = "ad/rebuildAdIndex")
 	Result rebuildAdIndex();
 
+	/**
+	 * 删除无效的广告索引
+	 *
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "ad/delInvalidAdIndex")
+	Result delInvalidAdIndex();
+
 }
