@@ -9,7 +9,7 @@ package com.lawu.eshop.property.constants;
 public enum MemberTransactionTypeEnum {
 
 	RECHARGE((byte) 0x01, "余额充值"),
-	ADVERTISING((byte) 0x02, "看广告"),
+	ADVERTISING((byte) 0x02, "优选红包"),
 	RED_SWEEP((byte) 0x03, "红包"),
 	LOWER_INCOME((byte) 0x05, " 广告提成"),
 	PAY((byte) 0x06, "买单"),
@@ -20,7 +20,7 @@ public enum MemberTransactionTypeEnum {
 	REFUND_ORDERS((byte) 0x0B, "退款"),
 	SALES_COMMISSION((byte) 0x0C, "推荐E友收益"),
 	VOLUME_COMMISSION((byte) 0x0D, "推荐商家收益"),
-	PRAISE_AD((byte) 0x0E, "E咻消费"),//抢赞大于300积分的广告扣除20积分
+	//PRAISE_AD((byte) 0x0E, "E咻消费"),//抢赞大于300积分的广告扣除20积分
 	BACKAGE((byte) 0x0F, "平台充值"),//后台充值
 	AD_QZ((byte) 0x10, "E咻"),
 	USER_REDPACKET_ADD((byte)0x11,"用户红包退款"),
