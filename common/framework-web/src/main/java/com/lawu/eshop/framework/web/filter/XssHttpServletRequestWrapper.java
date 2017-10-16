@@ -83,10 +83,10 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 	                stringBuilder.append('＊');//全角星号
 	                break;
 	            case '+':
-	                stringBuilder.append('＋');//全角星号
+	                stringBuilder.append('＋');//全角加号
 	                break;
-	            case '＝':
-	                stringBuilder.append('＝');//全角星号
+	            case '=':
+	                stringBuilder.append('＝');//全角等号
 	                break;
 	            default:
 	                stringBuilder.append(c);
