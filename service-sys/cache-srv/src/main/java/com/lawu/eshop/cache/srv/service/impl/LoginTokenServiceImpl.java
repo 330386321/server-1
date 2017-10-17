@@ -125,7 +125,7 @@ public class LoginTokenServiceImpl implements LoginTokenService {
     }
 
     /**
-     * 拼接token key
+     * 拼接token keyLawu_1301
      *
      * @param type
      * @param token

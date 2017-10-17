@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.param.BalancePayValidateDataParam;
+import com.lawu.eshop.property.param.CheckRepeatOfPropertyOperationParam;
 import com.lawu.eshop.property.param.PropertyInfoDataQueryPointDetailParam;
 import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
+import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
+import com.lawu.eshop.user.constants.UserCommonConstant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -276,6 +280,22 @@ public class PointDetailServiceImpl implements PointDetailService {
 	public boolean getPointDetailByUserNumAndBizIdAndType(PropertyInfoDataQueryPointDetailParam param) {
 		PointDetailDOExample example = new PointDetailDOExample();
 		example.createCriteria().andUserNumEqualTo(param.getUserNum()).andBizIdEqualTo(param.getBizId()).andPointTypeEqualTo(param.getMerchantTransactionTypeEnum().getValue());
+		int count = pointDetailDOMapper.countByExample(example);
+		if(count > 0){
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean verifyRepeatByUserNumAndTransactionTypeAndBizId(CheckRepeatOfPropertyOperationParam param) {
+		PointDetailDOExample example = new PointDetailDOExample();
+		PointDetailDOExample.Criteria criteria = example.createCriteria();
+		Byte transactionType = param.getMemberTransactionTypeEnum().getValue();
+		if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+			transactionType = param.getMerchantTransactionTypeEnum().getValue();
+		}
+		criteria.andUserNumEqualTo(param.getUserNum()).andPointTypeEqualTo(transactionType).andBizIdEqualTo(param.getBizIds());
 		int count = pointDetailDOMapper.countByExample(example);
 		if(count > 0){
 			return true;

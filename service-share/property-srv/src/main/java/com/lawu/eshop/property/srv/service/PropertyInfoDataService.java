@@ -42,6 +42,7 @@ public interface PropertyInfoDataService {
 	 * @param param
 	 * @return
 	 */
+	@Deprecated
 	int doHanlderAddBalance(PropertyInfoDataParam param);
 	
 	/**
@@ -49,6 +50,7 @@ public interface PropertyInfoDataService {
 	 * @param param
 	 * @return
 	 */
+	@Deprecated
 	int doHanlderMinusBalance(PropertyInfoDataParam param);
 	
 	/**

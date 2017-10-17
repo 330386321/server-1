@@ -6,6 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lawu.eshop.property.param.BalancePayValidateDataParam;
+import com.lawu.eshop.property.param.CheckRepeatOfPropertyOperationParam;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
+import com.lawu.eshop.property.srv.exception.BalanceNegativeException;
+import com.lawu.eshop.property.srv.exception.PointNegativeException;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +57,8 @@ import com.lawu.eshop.utils.StringUtil;
 @Service
 public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 
+	private static Logger logger = LoggerFactory.getLogger(PropertyInfoDataServiceImpl.class);
+
 	@Autowired
 	private PointDetailService pointDetailService;
 	@Autowired
@@ -68,6 +79,20 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	@Override
 	@Transactional
 	public int doHanlderMinusPoint(PropertyInfoDataParam param) {
+
+		if(param.getBizId() != null && !"".equals(param.getBizId()) && !"0".equals(param.getBizId())){
+			CheckRepeatOfPropertyOperationParam validateParam = new CheckRepeatOfPropertyOperationParam();
+			validateParam.setUserNum(param.getUserNum());
+			validateParam.setMerchantTransactionTypeEnum(param.getMerchantTransactionTypeEnum());
+			validateParam.setMemberTransactionTypeEnum(param.getMemberTransactionTypeEnum());
+			validateParam.setBizIds(param.getBizId());
+			boolean repeat = pointDetailService.verifyRepeatByUserNumAndTransactionTypeAndBizId(validateParam);
+			if (repeat) {
+				logger.info("重复操作(判断幂等)-积分扣除业务");
+				return ResultCode.PROCESSED_RETURN_SUCCESS;
+			}
+		}
+
 		int retCode = propertyInfoService.validatePoint(param.getUserNum(), param.getPoint());
 		if (retCode != ResultCode.SUCCESS) {
 			return retCode;
@@ -121,6 +146,19 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	@Override
 	@Transactional
 	public int doHanlderAddPoint(PropertyInfoDataParam param) {
+
+		if(param.getBizId() != null && !"".equals(param.getBizId()) && !"0".equals(param.getBizId())){
+			CheckRepeatOfPropertyOperationParam validateParam = new CheckRepeatOfPropertyOperationParam();
+			validateParam.setUserNum(param.getUserNum());
+			validateParam.setMerchantTransactionTypeEnum(param.getMerchantTransactionTypeEnum());
+			validateParam.setMemberTransactionTypeEnum(param.getMemberTransactionTypeEnum());
+			validateParam.setBizIds(param.getBizId());
+			boolean repeat = pointDetailService.verifyRepeatByUserNumAndTransactionTypeAndBizId(validateParam);
+			if (repeat) {
+				logger.info("重复操作(判断幂等)-积分累加业务");
+				return ResultCode.PROCESSED_RETURN_SUCCESS;
+			}
+		}
 
 		// 插入积分明细
 		PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
@@ -290,7 +328,22 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	@Override
 	@Transactional
 	public Map<String, Integer> doHanlderMinusPointByFans(PropertyInfoDataParam param) {
-		Map<String, Integer> map = new HashMap<>();
+		Map<String, Integer> map = new HashMap<String, Integer>();
+
+		if(param.getBizId() != null && !"".equals(param.getBizId()) && !"0".equals(param.getBizId())){
+			CheckRepeatOfPropertyOperationParam validateParam = new CheckRepeatOfPropertyOperationParam();
+			validateParam.setUserNum(param.getUserNum());
+			validateParam.setMerchantTransactionTypeEnum(param.getMerchantTransactionTypeEnum());
+			validateParam.setMemberTransactionTypeEnum(param.getMemberTransactionTypeEnum());
+			validateParam.setBizIds(param.getBizId());
+			boolean repeat = pointDetailService.verifyRepeatByUserNumAndTransactionTypeAndBizId(validateParam);
+			if (repeat) {
+				logger.info("重复操作(判断幂等)-商家邀请粉丝");
+				map.put("retCode", ResultCode.PROCESSED_RETURN_SUCCESS);
+				return map;
+			}
+		}
+
 		int retCode = propertyInfoService.validatePoint(param.getUserNum(), param.getPoint());
 		if (retCode != ResultCode.SUCCESS) {
 			map.put("retCode", retCode);
