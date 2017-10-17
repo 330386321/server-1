@@ -1434,12 +1434,14 @@ public class AdServiceImpl implements AdService {
 	}
 
 	@Override
-	public void downOperatorById(Long id, String remark) {
+	@Transactional
+	public void downOperatorById(Long id, Integer auditorId, String remark) {
 		AdDO record = new AdDO();
 		record.setId(id);
+		record.setAuditorId(auditorId);
 		record.setRemark(remark);
 		record.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
-		record.setGmtModified(new Date());
+		record.setAuditTime(new Date());
 		adDOMapper.updateByPrimaryKeySelective(record);
 		solrService.delSolrDocsById(id, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 	}

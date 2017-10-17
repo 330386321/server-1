@@ -136,5 +136,5 @@ public interface AdService {
 	Result<MerchantInfoDTO> selectMerchantNumByAdId(@RequestParam("id") Long id);
 	
 	@RequestMapping(value = "ad/downOperatorById", method = RequestMethod.PUT)
-	Result downOperatorById(@RequestParam("id") Long id, @RequestParam("remark") String remark);
+	Result downOperatorById(@RequestParam("id") Long id, @RequestParam("auditorId") Integer auditorId, @RequestParam("remark") String remark);
 }

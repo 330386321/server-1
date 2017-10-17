@@ -2259,7 +2259,7 @@ public class AdServiceImplTest {
 
 		adDOMapper.insertSelective(ad);
 		
-		adService.downOperatorById(ad.getId(),"aaa");
+		adService.downOperatorById(ad.getId(),1,"aaa");
 		AdDOExample example = new AdDOExample();
 		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_OUT.val);
 		List<AdDO> list = adDOMapper.selectByExample(example);

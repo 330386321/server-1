@@ -1435,7 +1435,7 @@ public class AdControllerTest {
     @Rollback
     @Test
     public void downOperatorById(){
-        RequestBuilder request = put("/ad/downOperatorById").param("id","1").param("remark", "aa");
+        RequestBuilder request = put("/ad/downOperatorById").param("id","1").param("auditorId","1").param("remark", "aa");
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();

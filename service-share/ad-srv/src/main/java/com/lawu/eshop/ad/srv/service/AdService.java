@@ -359,7 +359,8 @@ public interface AdService {
 	/**
 	 * 运营平台强制下架广告
 	 * @param id
+	 * @param auditorId
 	 * @param remark
 	 */
-	void downOperatorById(Long id,String remark);
+	void downOperatorById(Long id, Integer auditorId, String remark);
 }

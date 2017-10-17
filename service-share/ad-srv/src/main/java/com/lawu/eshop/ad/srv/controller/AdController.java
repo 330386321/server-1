@@ -1326,12 +1326,13 @@ public class AdController extends BaseController {
 	/**
 	 * 运营平台强制下架广告
 	 * @param id
+	 * @param auditorId
 	 * @param remark
 	 * @return
 	 */
 	@RequestMapping(value = "downOperatorById", method = RequestMethod.PUT)
-	public Result downOperatorById(@RequestParam Long id, @RequestParam String remark){
-		adService.downOperatorById(id, remark);
+	public Result downOperatorById(@RequestParam Long id, @RequestParam Integer auditorId, @RequestParam String remark) {
+		adService.downOperatorById(id, auditorId, remark);
 		return successCreated();
 	}
 

@@ -34,6 +34,7 @@ import com.lawu.eshop.operator.api.service.MessageService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
 import com.lawu.eshop.operator.api.service.ProductService;
 import com.lawu.eshop.operator.api.service.UserService;
+import com.lawu.eshop.operator.dto.UserListDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 
 import io.swagger.annotations.Api;
@@ -84,6 +85,12 @@ public class InformController extends BaseController {
 	@RequiresPermissions("inform:edit")
 	@RequestMapping(value = "editInform", method = RequestMethod.POST)
 	public Result editInform(@ModelAttribute @ApiParam(value = "下架、不处理信息") InformDownParam param) {
+		Integer auditorId = 0;
+		Result<UserListDTO> userResult = userService.getUserByAccount(UserUtil.getCurrentUserAccount());
+		if(isSuccess(userResult)){
+			auditorId = userResult.getModel().getId();
+		}
+
 		InformEditParam edit = new InformEditParam();
 		edit.setId(param.getId());
 		edit.setAuditorId(userService.getUserByAccount(UserUtil.getCurrentUserAccount()).getModel().getId());
@@ -108,7 +115,7 @@ public class InformController extends BaseController {
 		} else if (param.getInformType() == InformEnum.INFORM_TYPE_MERCHANT) {// 商家
 
 		} else {// 广告
-			Result rs = adService.downOperatorById(param.getInformtItemId(), param.getRemark());
+			Result rs = adService.downOperatorById(param.getInformtItemId(), auditorId, param.getRemark());
 			Result<MerchantInfoDTO>  res = adService.selectMerchantNumByAdId(param.getInformtItemId());
 			merchantNum=res.getModel().getMerchantNum();
 			enumType =MessageTypeEnum.MESSAGE_TYPE_AD_FORCE_DOWN;
