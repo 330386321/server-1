@@ -291,9 +291,11 @@ public class PointDetailServiceImpl implements PointDetailService {
 	public boolean verifyRepeatByUserNumAndTransactionTypeAndBizId(CheckRepeatOfPropertyOperationParam param) {
 		PointDetailDOExample example = new PointDetailDOExample();
 		PointDetailDOExample.Criteria criteria = example.createCriteria();
-		Byte transactionType = param.getMemberTransactionTypeEnum().getValue();
+		Byte transactionType = param.getMerchantTransactionTypeEnum() == null ? param.getMemberTransactionTypeEnum().getValue() : param.getMerchantTransactionTypeEnum().getValue();
 		if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
 			transactionType = param.getMerchantTransactionTypeEnum().getValue();
+		} else if (param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+			transactionType = param.getMemberTransactionTypeEnum().getValue();
 		}
 		criteria.andUserNumEqualTo(param.getUserNum()).andPointTypeEqualTo(transactionType).andBizIdEqualTo(param.getBizIds());
 		int count = pointDetailDOMapper.countByExample(example);

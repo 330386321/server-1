@@ -27,12 +27,12 @@ public class PropertyInfoDataParam {
     @Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "point格式错误或小数位不超过2位")
     private String point;
 
-    //业务类型：根据业务需要传，如果是会员业务传memberTransactionTypeEnum
+    //业务类型：根据业务需要传，如果是会员业务传memberTransactionTypeEnum（用户业务时必传）
     private MemberTransactionTypeEnum memberTransactionTypeEnum;
-
-    //业务类型：根据业务需要传，如果是商家业务传merchantTransactionTypeEnum
+    //业务类型：根据业务需要传，如果是商家业务传merchantTransactionTypeEnum（商家业务时必传）
     private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
 
+    //业务ID，必传
     private String bizId;
 
     private String tempBizId;

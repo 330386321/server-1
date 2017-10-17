@@ -59,8 +59,7 @@ public class PropertyInfoDataController extends BaseController {
 	}
 	
 	/**
-	 * 减积分的业务：
-	 * 
+	 *
 	 * 商家邀请粉丝
 	 * 
 	 * @param param
@@ -69,11 +68,11 @@ public class PropertyInfoDataController extends BaseController {
 	@RequestMapping(value = "doHanlderMinusPointByFans", method = RequestMethod.POST)
 	public Result doHanlderMinusPointByFans(@RequestBody @Valid PropertyInfoDataParam param, BindingResult result) {
 		String message = validate(result);
-    	if (message != null) {
-    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
-    	}
-    	Map<String, Integer> map = propertyInfoDataService.doHanlderMinusPointByFans(param);
-		return successCreated(map.get("retCode"),map.get("fans_invite_detail_id"));
+		if (message != null) {
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+		}
+		Map<String, Integer> map = propertyInfoDataService.doHanlderMinusPointByFans(param);
+		return successCreated(map.get("retCode"), map.get("fans_invite_detail_id"));
 	}
 	
 	/**
@@ -89,10 +88,10 @@ public class PropertyInfoDataController extends BaseController {
 	@RequestMapping(value = "memberRedPacketAddPoint", method = RequestMethod.POST)
 	public Result memberRedPacketAddPoint(@RequestBody @Valid PropertyInfoDataParam param, BindingResult result) {
 		String message = validate(result);
-    	if (message != null) {
-    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
-    	}
-		
+		if (message != null) {
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+		}
+
 		int retCode = propertyInfoDataService.doHanlderAddPoint(param);
 		return successCreated(retCode);
 	}

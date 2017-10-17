@@ -6,11 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.param.CheckRepeatOfPropertyOperationParam;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
-import com.lawu.eshop.property.srv.exception.BalanceNegativeException;
 import com.lawu.eshop.property.srv.exception.PointNegativeException;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.slf4j.Logger;
@@ -32,13 +30,9 @@ import com.lawu.eshop.property.srv.bo.CommissionUtilBO;
 import com.lawu.eshop.property.srv.domain.FansInviteDetailDO;
 import com.lawu.eshop.property.srv.domain.LoveDetailDO;
 import com.lawu.eshop.property.srv.domain.PointDetailDOExample;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
-import com.lawu.eshop.property.srv.exception.PointNegativeException;
 import com.lawu.eshop.property.srv.mapper.FansInviteDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.LoveDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
-import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.service.CommissionUtilService;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
@@ -88,7 +82,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			validateParam.setBizIds(param.getBizId());
 			boolean repeat = pointDetailService.verifyRepeatByUserNumAndTransactionTypeAndBizId(validateParam);
 			if (repeat) {
-				logger.info("重复操作(判断幂等)-积分扣除业务");
+				logger.info("重复操作(判断幂等)-积分扣除业务");//商家发广告
 				return ResultCode.PROCESSED_RETURN_SUCCESS;
 			}
 		}
@@ -155,7 +149,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			validateParam.setBizIds(param.getBizId());
 			boolean repeat = pointDetailService.verifyRepeatByUserNumAndTransactionTypeAndBizId(validateParam);
 			if (repeat) {
-				logger.info("重复操作(判断幂等)-积分累加业务");
+				logger.info("重复操作(判断幂等)-积分累加业务");//广告下架&邀请过期
 				return ResultCode.PROCESSED_RETURN_SUCCESS;
 			}
 		}
@@ -328,7 +322,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	@Override
 	@Transactional
 	public Map<String, Integer> doHanlderMinusPointByFans(PropertyInfoDataParam param) {
-		Map<String, Integer> map = new HashMap<String, Integer>();
+		Map<String, Integer> map = new HashMap();
 
 		if(param.getBizId() != null && !"".equals(param.getBizId()) && !"0".equals(param.getBizId())){
 			CheckRepeatOfPropertyOperationParam validateParam = new CheckRepeatOfPropertyOperationParam();
@@ -367,6 +361,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
 		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
 		pointDetailSaveDataParam.setRegionPath(param.getRegionPath());
+		pointDetailSaveDataParam.setBizId(param.getBizId());
 
 		// 插入邀请粉丝记录
 		if (param.getMerchantTransactionTypeEnum() != null && param.getMerchantTransactionTypeEnum()

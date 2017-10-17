@@ -31,6 +31,7 @@ public class MerchantFansTransactionMainServiceImpl extends AbstractTransactionM
         MerchantFansNotification fansNotification = new MerchantFansNotification();
         fansNotification.setUserNum(fansInviteContentBO.getMerchantNum());
         fansNotification.setPoint(BigDecimal.valueOf(fansInviteContentBO.getRefuseNumber()));
+        fansNotification.setBizId(id);
         return fansNotification;
     }
 

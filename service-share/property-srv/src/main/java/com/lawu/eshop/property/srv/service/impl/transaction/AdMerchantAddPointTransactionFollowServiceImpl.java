@@ -28,7 +28,7 @@ public class AdMerchantAddPointTransactionFollowServiceImpl extends AbstractTran
 		PropertyInfoDataParam param = new PropertyInfoDataParam();
 		param.setPoint(notification.getPoint().toString());
 		param.setUserNum(notification.getUserNum());
-		// param.setTransactionTitleEnum(TransactionTitleEnum.ADD_AD);
+		param.setBizId(notification.getAdId() == null ? "" : "adDown_"+notification.getAdId().toString());
 		param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.AD_RETURN_POINT);
 		propertyInfoDataService.doHanlderAddPoint(param);
 	}

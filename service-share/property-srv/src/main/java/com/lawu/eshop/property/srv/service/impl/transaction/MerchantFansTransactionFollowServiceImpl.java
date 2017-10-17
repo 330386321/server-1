@@ -29,6 +29,7 @@ public class MerchantFansTransactionFollowServiceImpl extends AbstractTransactio
         param.setPoint(notification.getPoint().toString());
         param.setUserNum(notification.getUserNum());
         param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.AD_RETURN_POINT);
+        param.setBizId(notification.getBizId() == null ? "" : "inviteOverDue_"+notification.getBizId().toString());
         propertyInfoDataService.doHanlderAddPoint(param);
     }
 }

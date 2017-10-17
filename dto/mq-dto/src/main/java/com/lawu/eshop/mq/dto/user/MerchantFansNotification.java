@@ -16,6 +16,8 @@ public class MerchantFansNotification extends Notification {
 
     private BigDecimal point;
 
+    private Long bizId;
+
     public String getUserNum() {
         return userNum;
     }
@@ -30,5 +32,13 @@ public class MerchantFansNotification extends Notification {
 
     public void setPoint(BigDecimal point) {
         this.point = point;
+    }
+
+    public Long getBizId() {
+        return bizId;
+    }
+
+    public void setBizId(Long bizId) {
+        this.bizId = bizId;
     }
 }
