@@ -24,7 +24,8 @@
     	<module>pay-util</module>
         <module>eshop-shiro</module>
     	<module>synchronization-lock</module>
-  </modules>
+        <module>excel-util</module>
+    </modules>
 
     <distributionManagement>
         <repository>
