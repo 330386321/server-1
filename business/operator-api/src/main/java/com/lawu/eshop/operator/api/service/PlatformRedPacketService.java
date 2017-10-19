@@ -44,7 +44,7 @@ public interface PlatformRedPacketService {
 	 * @param query
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "platformRedPacket/queryRedPacket")
+	@RequestMapping(method = RequestMethod.POST, value = "platformRedPacket/queryRedPacket")
 	Result<Page<PlatformRedPacketDTO>> queryRedPacket(@RequestBody PlatformRedPacketQueryParam query);
 	
 	

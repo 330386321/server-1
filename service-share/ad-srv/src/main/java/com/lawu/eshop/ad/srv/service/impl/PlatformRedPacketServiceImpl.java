@@ -26,12 +26,21 @@ public class PlatformRedPacketServiceImpl implements PlatformRedPacketService {
 
 	@Override
 	public void saveRedPacket(PlatformRedPacketParam param) {
+		//设置红包时，将已经存在启用的设置为禁用
+		PlatformRedPacketDO updateDO = new PlatformRedPacketDO();
+		updateDO.setAuditorId(param.getAuditorId());
+		updateDO.setStatus(PlatformRedPacketStatusEnum.DISENABLE.val);
+		PlatformRedPacketDOExample example = new PlatformRedPacketDOExample();
+		example.createCriteria().andStatusEqualTo(PlatformRedPacketStatusEnum.ENABLE.val);
+		platformRedPacketDOMapper.updateByExampleSelective(updateDO, example);
 		
 		PlatformRedPacketDO record = new PlatformRedPacketDO();
 		record.setAuditorId(param.getAuditorId());
 		record.setGmtCreate(new Date());
 		record.setGmtModified(new Date());
 		record.setMoney(param.getMoney());
+		record.setSendCount(0);
+		record.setStatus(PlatformRedPacketStatusEnum.ENABLE.val);
 		platformRedPacketDOMapper.insert(record);
 		
 	}

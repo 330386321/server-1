@@ -2,7 +2,9 @@ package com.lawu.eshop.operator.api.controller;
 
 import java.math.BigDecimal;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.operator.api.service.PlatformRedPacketService;
 import com.lawu.eshop.operator.api.service.UserService;
 import com.lawu.eshop.operator.dto.UserListDTO;
@@ -46,6 +49,7 @@ public class PlatformRedPacketController extends BaseController{
 	
 	@ApiOperation(value = "红包设置", notes = "红包设置,[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@RequiresPermissions("redPacket:save")
     @RequestMapping(value = "saveRedPacket", method = RequestMethod.POST)
     public Result saveRedPacket(@RequestParam @ApiParam(required = true, value = "金额") BigDecimal money) {
 		Long auditorId = 0l;
@@ -62,6 +66,7 @@ public class PlatformRedPacketController extends BaseController{
 	
 	@ApiOperation(value = "禁用红包", notes = "禁用红包,[]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@RequiresPermissions("redPacket:edit")
     @RequestMapping(value = "setRedPacket/{id}", method = RequestMethod.PUT)
     public Result setRedPacket(@PathVariable @ApiParam(required = true, value = "id") Long id) {
 		Long auditorId = 0l;
@@ -74,8 +79,22 @@ public class PlatformRedPacketController extends BaseController{
 
 	@ApiOperation(value = "平台红包列表", notes = "平台红包列表,[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@PageBody
+	@RequiresPermissions("redPacket:list")
     @RequestMapping(value = "queryRedPacket", method = RequestMethod.GET)
-    public Result<Page<PlatformRedPacketDTO>> queryRedPacket(@RequestBody @ApiParam PlatformRedPacketQueryParam query) {
-		return platformRedPacketService.queryRedPacket(query);
+    public Result<Page<PlatformRedPacketDTO>> queryRedPacket(@ModelAttribute @ApiParam PlatformRedPacketQueryParam query) {
+		
+		Result<Page<PlatformRedPacketDTO>> result = platformRedPacketService.queryRedPacket(query);
+		if(!result.getModel().getRecords().isEmpty()){
+			for (PlatformRedPacketDTO dto : result.getModel().getRecords()) {
+				Result<UserListDTO> userListDTOResult = userService.findUserById(Integer.valueOf(dto.getAuditorId().toString()));
+		        if (isSuccess(userListDTOResult)) {
+		        	dto.setAuditorName(userListDTOResult.getModel().getName());
+		        }
+			}
+			
+		}
+		
+		return result;
     }
 }

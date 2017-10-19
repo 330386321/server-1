@@ -66,7 +66,7 @@ public class PlatformRedPacketController extends BaseController{
 	 * @param param
 	 * @return
 	 */
-	@RequestMapping(value = "queryRedPacket", method = RequestMethod.GET)
+	@RequestMapping(value = "queryRedPacket", method = RequestMethod.POST)
 	public Result<Page<PlatformRedPacketDTO>> queryRedPacket(@RequestBody PlatformRedPacketQueryParam query) {
 
 		Page<PlatformRedPacketBO> page = platformRedPacketService.queryRedPacket(query);

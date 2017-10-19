@@ -3,6 +3,7 @@ package com.lawu.eshop.ad.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.ad.constants.PlatformRedPacketStatusEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -25,9 +26,11 @@ public class PlatformRedPacketDTO {
 	private Long auditorId;
 
 	@ApiModelProperty(value = "禁用时间")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date gmtModified;
 
 	@ApiModelProperty(value = "启用时间")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date gmtCreate;
 	
 	@ApiModelProperty(value = "操作人名称")
@@ -88,5 +91,15 @@ public class PlatformRedPacketDTO {
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
 	}
+
+	public String getAuditorName() {
+		return auditorName;
+	}
+
+	public void setAuditorName(String auditorName) {
+		this.auditorName = auditorName;
+	}
+	
+	
 
 }
