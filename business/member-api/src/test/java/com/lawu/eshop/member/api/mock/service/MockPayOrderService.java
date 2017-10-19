@@ -7,6 +7,7 @@ import com.lawu.eshop.member.api.service.PayOrderService;
 import com.lawu.eshop.order.constants.EvaluationEnum;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.dto.MemberPayOrderInfoDTO;
+import com.lawu.eshop.order.dto.PayOrderBaseDTO;
 import com.lawu.eshop.order.dto.PayOrderDTO;
 import com.lawu.eshop.order.dto.PayOrderIdDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
@@ -71,4 +72,10 @@ public class MockPayOrderService extends BaseController implements PayOrderServi
 		dto.setEvaluationEnum(EvaluationEnum.EVALUATION_SUCCESS);
 		return successCreated(dto);
 	}
+
+	@Override
+	public PayOrderBaseDTO getPayOrderById(@RequestParam("id") String id) {
+		return null;
+	}
+
 }

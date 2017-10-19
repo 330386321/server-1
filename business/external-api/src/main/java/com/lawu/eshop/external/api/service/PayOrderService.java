@@ -1,6 +1,8 @@
 package com.lawu.eshop.external.api.service;
 
+import com.lawu.eshop.order.dto.PayOrderBaseDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,4 +51,20 @@ public interface PayOrderService {
 	 */
 	@RequestMapping(value = "shoppingOrder/orderMoneyForNotify", method = RequestMethod.GET)
 	Result<ShoppingOrderMoneyDTO> orderMoneyForNotify(@RequestParam("orderIds") String orderIds);
+
+	/**
+	 * 获取订单中第一个商品名称
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "shoppingOrder/getOrderItemProductName/{id}", method = RequestMethod.GET)
+	Result<String> getOrderItemProductName(@PathVariable("id") String id);
+
+	/**
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "payOrder/getPayOrderById", method = RequestMethod.GET)
+	PayOrderBaseDTO getPayOrderById(@RequestParam("id")String id);
 }

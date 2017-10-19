@@ -3,11 +3,14 @@ package com.lawu.eshop.member.api.controller;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
+import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.UserRedPacketService;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.order.dto.PayOrderBaseDTO;
 import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.param.BalancePayValidateParam;
+import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.PayOrderMerchantStoreInfoDTO;
 import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +81,8 @@ public class BalancePayController extends BaseController {
     private UserRedPacketService userRedPacketService;
     @Autowired
     private PropertySrvPropertyService propertySrvPropertyService;
+    @Autowired
+    private MemberService memberService;
 
     /**
      * 余额支付订单
@@ -113,7 +118,7 @@ public class BalancePayController extends BaseController {
         dparam.setTotalAmount(String.valueOf(orderMoney));
 
         Result<String> orderItemProductNameRet = shoppingOrderService.getOrderItemProductName(param.getBizIds().split(",")[0]);
-        dparam.setTitle(MemberTransactionTypeEnum.PAY_ORDERS.getName() + "-" + orderItemProductNameRet.getModel());
+        dparam.setTitle(orderItemProductNameRet.getModel());
 
         return balancePayService.orderPay(dparam);
     }
@@ -147,9 +152,11 @@ public class BalancePayController extends BaseController {
         VisitUserInfoDTO visitUserInfoDTO = merchantStoreService.findAccountAndRegionPathByNum(payOrderCallback.getBusinessUserNum());
         dparam.setRegionPath(visitUserInfoDTO.getRegionPath());
 
-        //TODO
-        dparam.setTitle(MemberTransactionTypeEnum.PAY.getName() + "-" + "");
-        dparam.setTitleMerchant(MemberTransactionTypeEnum.PAY.getName() + "-" + "");
+        PayOrderBaseDTO dto = payOrderService.getPayOrderById(param.getBizIds());
+        Result<MemberDTO> member = memberService.findMemberInfoById(dto.getMemberId());
+        PayOrderMerchantStoreInfoDTO merchantStore = merchantStoreService.getPayOrderDetailStoreInfo(dto.getMerchantId());
+        dparam.setTitle(merchantStore.getName());
+        dparam.setTitleMerchant(member.getModel().getName());
 
         Result result = balancePayService.billPay(dparam);
         if (ResultCode.SUCCESS != result.getRet()) {
@@ -279,7 +286,7 @@ public class BalancePayController extends BaseController {
         dparam.setTotalAmount(String.valueOf(orderMoney));
 
         Result<String> orderItemProductNameRet = shoppingOrderService.getOrderItemProductName(param.getBizIds().split(",")[0]);
-        dparam.setTitle(MemberTransactionTypeEnum.PAY_ORDERS.getName() + "-" + orderItemProductNameRet.getModel());
+        dparam.setTitle(orderItemProductNameRet.getModel());
 
         return balancePayService.orderPayValidatePwd(dparam);
     }
@@ -315,9 +322,11 @@ public class BalancePayController extends BaseController {
         VisitUserInfoDTO visitUserInfoDTO = merchantStoreService.findAccountAndRegionPathByNum(payOrderCallback.getBusinessUserNum());
         dparam.setRegionPath(visitUserInfoDTO.getRegionPath());
 
-        //TODO
-        dparam.setTitle(MemberTransactionTypeEnum.PAY.getName() + "-" + "");
-        dparam.setTitleMerchant(MemberTransactionTypeEnum.PAY.getName() + "-" + "");
+        PayOrderBaseDTO dto = payOrderService.getPayOrderById(param.getBizIds());
+        Result<MemberDTO> member = memberService.findMemberInfoById(dto.getMemberId());
+        PayOrderMerchantStoreInfoDTO merchantStore = merchantStoreService.getPayOrderDetailStoreInfo(dto.getMerchantId());
+        dparam.setTitle(merchantStore.getName());
+        dparam.setTitleMerchant(member.getModel().getName());
 
         Result result = balancePayService.billPayValidatePwd(dparam);
         if (ResultCode.SUCCESS != result.getRet()) {

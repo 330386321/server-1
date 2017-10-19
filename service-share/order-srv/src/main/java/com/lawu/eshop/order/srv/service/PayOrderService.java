@@ -11,6 +11,7 @@ import com.lawu.eshop.order.param.PayOrderDataParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
+import com.lawu.eshop.order.srv.bo.PayOrderBaseBO;
 import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 
 /**
@@ -88,4 +89,6 @@ public interface PayOrderService {
     List<PayOrderBO> getAutoCommentPayOrderList();
 
     List<ReportRiseRerouceDTO> fansSaleTransformPay(ReportDataParam dparam);
+
+    PayOrderBaseBO getPayOrderById(String id);
 }

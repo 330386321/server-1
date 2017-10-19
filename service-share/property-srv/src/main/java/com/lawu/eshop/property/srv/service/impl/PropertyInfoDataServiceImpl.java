@@ -288,25 +288,10 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount("");
+		tdsParam.setTitle(transactionDetailService.packageTitle(param.getMemberTransactionTypeEnum(),param.getMerchantTransactionTypeEnum(),param.getTitle()));
 		if (param.getMemberTransactionTypeEnum() != null) {
-			if(param.getTitle() == null || "".equals(param.getTitle())){
-				tdsParam.setTitle(param.getMemberTransactionTypeEnum().getName());
-			} else {
-				if(MemberTransactionTypeEnum.MERCHANT_RED_SWEEP.getValue().equals(param.getMemberTransactionTypeEnum().getValue())){
-					tdsParam.setTitle(param.getMemberTransactionTypeEnum().getName() + "-" + param.getTitle());
-				} else if (MemberTransactionTypeEnum.MEMBER_RED_SWEEP.getValue().equals(param.getMemberTransactionTypeEnum().getValue())){
-					tdsParam.setTitle(param.getMemberTransactionTypeEnum().getName() + "-来自" + param.getTitle());
-				} else{
-					tdsParam.setTitle(param.getTitle());
-				}
-			}
 			tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
 		} else if (param.getMerchantTransactionTypeEnum() != null) {
-			if(param.getTitle() == null || "".equals(param.getTitle())){
-				tdsParam.setTitle(param.getMerchantTransactionTypeEnum().getName());
-			} else {
-				tdsParam.setTitle(param.getTitle());
-			}
 			tdsParam.setTransactionType(param.getMerchantTransactionTypeEnum().getValue());
 		}
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());

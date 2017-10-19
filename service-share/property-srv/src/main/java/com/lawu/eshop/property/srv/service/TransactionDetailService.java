@@ -3,6 +3,8 @@ package com.lawu.eshop.property.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
@@ -111,4 +113,6 @@ public interface TransactionDetailService {
 	 */
 	boolean verifyOrderByUserNumAndTransactionType(BalancePayValidateDataParam param);
 	boolean verifyOrderByUserNumAndTransactionType(BalancePayDataParam param);
+
+	public String packageTitle(MemberTransactionTypeEnum memberTransactionTypeEnum, MerchantTransactionTypeEnum merchantTransactionTypeEnum, String title);
 }

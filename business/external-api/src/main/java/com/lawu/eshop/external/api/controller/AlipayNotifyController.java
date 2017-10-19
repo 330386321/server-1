@@ -11,6 +11,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.lawu.eshop.external.api.service.MemberService;
+import com.lawu.eshop.external.api.service.MerchantStoreService;
+import com.lawu.eshop.order.dto.PayOrderBaseDTO;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.PayOrderMerchantStoreInfoDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +89,10 @@ public class AlipayNotifyController extends BaseController {
 	private AdUserRedPacketService userRedPacketService;
 	@Autowired
 	private PropertyinfoUserRedPacketService propertyinfoUserRedPacketService;
+	@Autowired
+	private MemberService memberService;
+	@Autowired
+	private MerchantStoreService merchantStoreService;
 
 	/**
 	 * 支付宝异步回调接口
@@ -189,6 +199,9 @@ public class AlipayNotifyController extends BaseController {
 						Result<ShoppingOrderMoneyDTO> order = payOrderService.orderMoneyForNotify(param.getBizIds());
 						double money = order.getModel().getOrderTotalPrice().doubleValue();
 						if (StringUtil.doubleCompareTo(money, dTotalMoney) == 0) {
+							Result<String> orderItemProductNameRet = payOrderService.getOrderItemProductName(param.getBizIds().split(",")[0]);
+							param.setTitle(orderItemProductNameRet.getModel());
+
 							result = orderService.doHandleOrderPayNotify(param);
 						} else {
 							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
@@ -200,6 +213,13 @@ public class AlipayNotifyController extends BaseController {
 						isSendMsg = true;
 						if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), dTotalMoney) == 0) {
 							param.setRegionPath(extra[6]);
+
+							PayOrderBaseDTO dto = payOrderService.getPayOrderById(param.getBizIds());
+							Result<MemberDTO> member = memberService.findMemberInfoById(dto.getMemberId());
+							PayOrderMerchantStoreInfoDTO merchantStore = merchantStoreService.getPayOrderDetailStoreInfo(dto.getMerchantId());
+							param.setTitle(merchantStore.getName());
+							param.setTitleMerchant(member.getModel().getName());
+
 							result = orderService.doHandlePayOrderNotify(param);
 						} else {
 							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);

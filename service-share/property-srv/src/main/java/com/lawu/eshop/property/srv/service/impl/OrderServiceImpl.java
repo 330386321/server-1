@@ -104,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 新增会员交易记录
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-        tdsParam.setTitle(TransactionTitleEnum.ORDER_PAY.getVal());
+        tdsParam.setTitle(transactionDetailService.packageTitle(MemberTransactionTypeEnum.PAY_ORDERS,null,param.getTitle()));
         tdsParam.setUserNum(param.getUserNum());
         tdsParam.setTransactionAccount(param.getBuyerLogonId());
         tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY_ORDERS.getValue());
@@ -135,7 +135,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 新增会员交易明细
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-        tdsParam.setTitle(TransactionTitleEnum.PAY.getVal());
+        tdsParam.setTitle(transactionDetailService.packageTitle(MemberTransactionTypeEnum.PAY,null,param.getTitle()));
         tdsParam.setUserNum(param.getUserNum());
         tdsParam.setTransactionAccount(param.getBuyerLogonId());
         tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY.getValue());
@@ -149,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 新增商家交易明细
         TransactionDetailSaveDataParam tdsParam1 = new TransactionDetailSaveDataParam();
-        tdsParam1.setTitle(TransactionTitleEnum.PAY.getVal());
+        tdsParam1.setTitle(transactionDetailService.packageTitle(null,MerchantTransactionTypeEnum.PAY,param.getTitleMerchant()));
         tdsParam1.setUserNum(param.getSideUserNum());
         tdsParam1.setTransactionAccount(param.getBuyerLogonId());
         tdsParam1.setTransactionType(MerchantTransactionTypeEnum.PAY.getValue());

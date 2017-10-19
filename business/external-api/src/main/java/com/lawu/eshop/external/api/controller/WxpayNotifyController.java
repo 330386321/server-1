@@ -2,6 +2,8 @@ package com.lawu.eshop.external.api.controller;
 
 import com.lawu.eshop.external.api.ExternalApiConfig;
 import com.lawu.eshop.external.api.service.DepositService;
+import com.lawu.eshop.external.api.service.MemberService;
+import com.lawu.eshop.external.api.service.MerchantStoreService;
 import com.lawu.eshop.external.api.service.MessageService;
 import com.lawu.eshop.external.api.service.OrderService;
 import com.lawu.eshop.external.api.service.PayOrderService;
@@ -15,16 +17,20 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
+import com.lawu.eshop.order.dto.PayOrderBaseDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.pay.sdk.weixin.base.PayCommonUtil;
 import com.lawu.eshop.pay.sdk.weixin.base.XMLUtil;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.PayOrderMerchantStoreInfoDTO;
 import com.lawu.eshop.utils.StringUtil;
 
 import org.jdom.JDOMException;
@@ -76,10 +82,14 @@ public class WxpayNotifyController extends BaseController {
     private PayOrderService payOrderService;
     @Autowired
     private PropertySrvService propertyService;
-	@Autowired
-	private AdUserRedPacketService userRedPacketService;
-	@Autowired
-	private PropertyinfoUserRedPacketService propertyinfoUserRedPacketService;
+    @Autowired
+    private AdUserRedPacketService userRedPacketService;
+    @Autowired
+    private PropertyinfoUserRedPacketService propertyinfoUserRedPacketService;
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private MerchantStoreService merchantStoreService;
 
     /**
      * APP微信异步回调接口
@@ -146,6 +156,9 @@ public class WxpayNotifyController extends BaseController {
                         } else {
                             double money = order.getModel().getOrderTotalPrice().doubleValue();
                             if (StringUtil.doubleCompareTo(money, dmoney) == 0) {
+                                Result<String> orderItemProductNameRet = payOrderService.getOrderItemProductName(param.getBizIds().split(",")[0]);
+                                param.setTitle(orderItemProductNameRet.getModel());
+
                                 result = orderService.doHandleOrderPayNotify(param);
                             } else {
                                 result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
@@ -159,19 +172,26 @@ public class WxpayNotifyController extends BaseController {
                         isSendMsg = true;
                         if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), dmoney) == 0) {
                             param.setRegionPath(extra[6]);
+
+                            PayOrderBaseDTO dto = payOrderService.getPayOrderById(param.getBizIds());
+                            Result<MemberDTO> member = memberService.findMemberInfoById(dto.getMemberId());
+                            PayOrderMerchantStoreInfoDTO merchantStore = merchantStoreService.getPayOrderDetailStoreInfo(dto.getMerchantId());
+                            param.setTitle(merchantStore.getName());
+                            param.setTitleMerchant(member.getModel().getName());
+
                             result = orderService.doHandlePayOrderNotify(param);
                         } else {
                             result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
                             result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
                         }
-					}else if (ThirdPartyBizFlagEnum.MEMBER_RED_PACKET.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-						Result<ThirdPayCallBackQueryPayOrderDTO> moneyResult = userRedPacketService.selectUserRedPacketInfoForThrid(Long.valueOf(param.getBizIds()));
-						if (StringUtil.doubleCompareTo(moneyResult.getModel().getActualMoney(), dmoney) == 0) {
-							result = propertyinfoUserRedPacketService.doHandleMemberRedPacketNotify(param);
-						} else {
-							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
-							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
-						}
+                    } else if (ThirdPartyBizFlagEnum.MEMBER_RED_PACKET.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                        Result<ThirdPayCallBackQueryPayOrderDTO> moneyResult = userRedPacketService.selectUserRedPacketInfoForThrid(Long.valueOf(param.getBizIds()));
+                        if (StringUtil.doubleCompareTo(moneyResult.getModel().getActualMoney(), dmoney) == 0) {
+                            result = propertyinfoUserRedPacketService.doHandleMemberRedPacketNotify(param);
+                        } else {
+                            result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+                            result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+                        }
                     } else {
                         result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
                     }
@@ -211,19 +231,19 @@ public class WxpayNotifyController extends BaseController {
                     messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
                 } else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))
                         || ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-                	String property_key = PropertyType.MERCHANT_BALANCE_PAY_POINT_SCALE;
-                	if(ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-                		property_key = PropertyType.MEMBER_BALANCE_PAY_POINT_SCALE;
-                	}
-			        String scale = propertyService.getValue(property_key).getModel().toString();
-                	messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+                    String property_key = PropertyType.MERCHANT_BALANCE_PAY_POINT_SCALE;
+                    if (ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                        property_key = PropertyType.MEMBER_BALANCE_PAY_POINT_SCALE;
+                    }
+                    String scale = propertyService.getValue(property_key).getModel().toString();
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
                     messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
                     messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
-                    messageTempParam.setRechargePoint(new BigDecimal(dmoney*Double.valueOf(scale)));
-                } else if(ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT);
-					messageTempParam.setOrderAmount(new BigDecimal(df.format(dmoney)));
-				}
+                    messageTempParam.setRechargePoint(new BigDecimal(dmoney * Double.valueOf(scale)));
+                } else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT);
+                    messageTempParam.setOrderAmount(new BigDecimal(df.format(dmoney)));
+                }
                 if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
                     messageTempParam.setUserName("E店会员");
                 } else if (extra[1].startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {

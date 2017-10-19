@@ -15,7 +15,7 @@ public enum MemberTransactionTypeEnum {
 	PAY((byte) 0x06, "买单"),//
 	PAY_ORDERS((byte) 0x07, "购物"),//
 	RECHARGE_POINT((byte) 0x08, "充值积分"),//
-	WITHDRAW((byte) 0x09, "提现"),//
+	WITHDRAW((byte) 0x09, "提现成功"),//
 	WITHDRAW_BACK((byte) 0x0A, "提现失败"),//
 	REFUND_ORDERS((byte) 0x0B, "购物退款"),//
 	SALES_COMMISSION((byte) 0x0C, "推荐E友收益"),//

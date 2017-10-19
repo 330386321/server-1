@@ -3,6 +3,8 @@ package com.lawu.eshop.order.srv.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.order.dto.PayOrderBaseDTO;
+import com.lawu.eshop.order.srv.bo.PayOrderBaseBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -263,5 +265,19 @@ public class PayOrderController extends BaseController {
 	public Result<List<ReportRiseRerouceDTO>> fansSaleTransformPay(@RequestBody ReportDataParam dparam) {
 		List<ReportRiseRerouceDTO> reportRiseRerouceDTOList = payOrderService.fansSaleTransformPay(dparam);
 		return successCreated(reportRiseRerouceDTOList);
+	}
+
+	/**
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "getPayOrderById", method = RequestMethod.GET)
+	public PayOrderBaseDTO getPayOrderById(@RequestParam("id") String id) {
+		PayOrderBaseBO bo = payOrderService.getPayOrderById(id);
+		PayOrderBaseDTO dto = new PayOrderBaseDTO();
+		dto.setMemberId(bo.getMemberId());
+		dto.setMerchantId(bo.getMerchantId());
+		return dto;
 	}
 }

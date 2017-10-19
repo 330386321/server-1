@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
@@ -14,13 +13,11 @@ import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gexin.fastjson.JSONObject;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
@@ -399,4 +396,36 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		}
 		return false;
 	}
+
+	@Override
+	public String packageTitle(MemberTransactionTypeEnum memberTransactionTypeEnum,MerchantTransactionTypeEnum merchantTransactionTypeEnum,String title){
+		String titleRet = "";
+		if (memberTransactionTypeEnum != null) {
+			if(title == null || "".equals(title)){
+				titleRet = memberTransactionTypeEnum.getName();
+			} else {
+				if(MemberTransactionTypeEnum.MERCHANT_RED_SWEEP.getValue().equals(memberTransactionTypeEnum.getValue()) ||
+						MemberTransactionTypeEnum.PAY_ORDERS.getValue().equals(memberTransactionTypeEnum.getValue()) ||
+						MemberTransactionTypeEnum.PAY.getValue().equals(memberTransactionTypeEnum.getValue())){
+					titleRet = memberTransactionTypeEnum.getName() + "-" + title;
+				} else if (MemberTransactionTypeEnum.MEMBER_RED_SWEEP.getValue().equals(memberTransactionTypeEnum.getValue())){
+					titleRet = memberTransactionTypeEnum.getName() + "-来自" + title;
+				} else{
+					titleRet = title;
+				}
+			}
+		} else if (merchantTransactionTypeEnum != null) {
+			if(title == null || "".equals(title)){
+				titleRet = merchantTransactionTypeEnum.getName();
+			} else {
+				if(MerchantTransactionTypeEnum.PAY.getValue().equals(merchantTransactionTypeEnum.getValue())){
+					titleRet = merchantTransactionTypeEnum.getName() + "-" + title;
+				} else{
+					titleRet = title;
+				}
+			}
+		}
+		return titleRet;
+	}
+
 }

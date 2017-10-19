@@ -48,6 +48,9 @@ public class NotifyCallBackParam {
 
 	//用于代理商系统预期统计买单
 	private String regionPath;
+
+	private String title;//交易明细后标题
+	private String titleMerchant;
 	
 	public Long getMerchantId() {
 		return merchantId;
@@ -123,5 +126,21 @@ public class NotifyCallBackParam {
 
 	public void setRegionPath(String regionPath) {
 		this.regionPath = regionPath;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getTitleMerchant() {
+		return titleMerchant;
+	}
+
+	public void setTitleMerchant(String titleMerchant) {
+		this.titleMerchant = titleMerchant;
 	}
 }

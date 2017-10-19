@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.order.srv.bo.PayOrderBaseBO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -276,5 +277,14 @@ public class PayOrderServiceImpl implements PayOrderService {
 		param.setMerchantId(dparam.getMerchantId());
 		List<ReportFansSaleTransFormDO> reportFansSaleTransFormDOList = payOrderExtendDOMapper.selectByFansSaleTransformPay(param);
 		return PayOrderConverter.convertReportRiseRerouceDTOList(reportFansSaleTransFormDOList);
+	}
+
+	@Override
+	public PayOrderBaseBO getPayOrderById(String id) {
+		PayOrderDO pdo = payOrderDOMapper.selectByPrimaryKey(Long.parseLong(id));
+		PayOrderBaseBO bo = new PayOrderBaseBO();
+		bo.setMerchantId(pdo.getMemberId());
+		bo.setMerchantId(pdo.getMerchantId());
+		return bo;
 	}
 }
