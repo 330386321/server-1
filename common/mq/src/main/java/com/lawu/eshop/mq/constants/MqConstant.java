@@ -238,6 +238,11 @@ public class MqConstant {
 	 */
 	public static final String TAG_HANDLE_DEPOSIT_DOWN_PRODUCT = "tag_handle_deposit_down_product";
 
+	/**
+	 * 商家发广告异步回调后发笑锡修改广告记录
+	 */
+	public static final String TAG_HANDLE_AD = "tag_handle_ad";
+
 	/******************************************/
 	/******* user-srv模块tag **********/
 

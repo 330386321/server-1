@@ -73,6 +73,7 @@ public class AdConverter {
 		adBO.setViewCount(adDO.getViewcount());
 		adBO.setMerchantLatitude(adDO.getMerchantLatitude());
 		adBO.setMerchantLongitude(adDO.getMerchantLongitude());
+		adBO.setMerchantRegionPath(adDO.getMerchantRegionPath());
 		adBO.setAreas(adDO.getAreas());
 		adBO.setRadius(adDO.getRadius());
 		adBO.setContent(adDO.getContent());

@@ -8,7 +8,9 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import com.lawu.eshop.ad.dto.AdPayInfoDTO;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.merchant.api.service.AdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -61,6 +63,8 @@ public class WxPayController extends BaseController {
 	private PropertySrvPropertyService propertyService;
 	@Autowired
 	private RechargeService rechargeService;
+	@Autowired
+	private AdService adService;
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
@@ -93,6 +97,14 @@ public class WxPayController extends BaseController {
 				return successCreated(ResultCode.MONEY_IS_ZERO);
 			}
 			aparam.setTotalAmount(String.valueOf(money));
+		}else if(ThirdPartyBizFlagEnum.BUSINESS_ADD_AD.getVal().equals(param.getBizFlagEnum().getVal())) {
+			Result<AdPayInfoDTO> adRet = adService.selectAdPayInfoById(Long.parseLong(param.getBizIds()));
+			AdPayInfoDTO ad = adRet.getModel();
+			if (StringUtil.doubleCompareTo(ad.getTotalPoint().doubleValue(), 0) == 0) {
+				return successCreated(ResultCode.MONEY_IS_ZERO);
+			}
+			aparam.setTotalAmount(ad.getTotalPoint().toString());
+			aparam.setRegionPath(ad.getMerchantRegionPath());
 		}
 
 		return wxPayService.getPrepayInfo(aparam);

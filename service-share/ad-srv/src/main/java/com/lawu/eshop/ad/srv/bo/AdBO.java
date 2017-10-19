@@ -96,6 +96,8 @@ public class AdBO {
 	
 	private String videoTime;
 
+	private String merchantRegionPath;
+
 	public Boolean getIsPraise() {
 		return isPraise;
 	}
@@ -375,7 +377,12 @@ public class AdBO {
 	public void setVideoTime(String videoTime) {
 		this.videoTime = videoTime;
 	}
-	
-	
 
+	public String getMerchantRegionPath() {
+		return merchantRegionPath;
+	}
+
+	public void setMerchantRegionPath(String merchantRegionPath) {
+		this.merchantRegionPath = merchantRegionPath;
+	}
 }

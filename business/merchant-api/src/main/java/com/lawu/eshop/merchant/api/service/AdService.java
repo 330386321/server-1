@@ -2,6 +2,7 @@ package com.lawu.eshop.merchant.api.service;
 
 import java.util.List;
 
+import com.lawu.eshop.ad.dto.AdPayInfoDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -108,7 +109,12 @@ public interface AdService {
 	 */
 	@RequestMapping(value = "ad/isMyData/{id}", method = RequestMethod.GET)
 	Result<IsMyDateDTO> isMyData(@PathVariable("id") Long id,@RequestParam("merchantId") Long merchantId);
-	
-	
 
+	/**
+	 * 根据ID查询第三方支付时需要的参数
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "ad/selectAdPayInfoById/{id}", method = RequestMethod.GET)
+	Result<AdPayInfoDTO> selectAdPayInfoById(@PathVariable("id") Long id);
 }

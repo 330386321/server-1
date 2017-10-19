@@ -3,6 +3,7 @@ package com.lawu.eshop.merchant.api.mock.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.lawu.eshop.ad.dto.AdPayInfoDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -88,5 +89,10 @@ public class MockAdService extends BaseController implements AdService {
         IsMyDateDTO dto = new IsMyDateDTO();
         dto.setFlag(true);
         return successGet(dto);
+    }
+
+    @Override
+    public Result<AdPayInfoDTO> selectAdPayInfoById(@PathVariable("id") Long id) {
+        return null;
     }
 }

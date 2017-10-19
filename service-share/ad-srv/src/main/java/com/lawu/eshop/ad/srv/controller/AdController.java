@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.lawu.eshop.ad.dto.AdPayInfoDTO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocument;
@@ -1335,4 +1336,19 @@ public class AdController extends BaseController {
 		return successCreated();
 	}
 
+
+	/**
+	 * 根据ID查询第三方支付时需要的参数
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "selectAdPayInfoById/{id}", method = RequestMethod.GET)
+	public Result<AdPayInfoDTO> selectAdPayInfoById(@PathVariable Long id) {
+		AdBO bo = adService.get(id);
+		AdPayInfoDTO dto = new AdPayInfoDTO();
+		dto.setMerchantRegionPath(bo.getMerchantRegionPath());
+		dto.setTotalPoint(bo.getTotalPoint());
+		return successCreated(dto);
+	}
 }
