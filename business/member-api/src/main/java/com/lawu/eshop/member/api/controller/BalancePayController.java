@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.UserRedPacketService;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.param.BalancePayValidateParam;
 import com.lawu.eshop.user.dto.VisitUserInfoDTO;
@@ -71,13 +72,13 @@ public class BalancePayController extends BaseController {
     private MessageService messageService;
     @Autowired
     private PropertyInfoService propertyInfoService;
-	@Autowired
-	private MerchantStoreService merchantStoreService;
-	@Autowired
+    @Autowired
+    private MerchantStoreService merchantStoreService;
+    @Autowired
     private UserRedPacketService userRedPacketService;
-	@Autowired
-	private PropertySrvPropertyService propertySrvPropertyService;
-	
+    @Autowired
+    private PropertySrvPropertyService propertySrvPropertyService;
+
     /**
      * 余额支付订单
      *
@@ -96,7 +97,7 @@ public class BalancePayController extends BaseController {
         dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
         dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
             /*
-		 *  获取订单金额
+             *  获取订单金额
 		 *  考虑商品可能有减库存失败可能
 		 */
         Result<ShoppingOrderMoneyDTO> result = shoppingOrderService.selectOrderMoney(param.getBizIds());
@@ -110,6 +111,10 @@ public class BalancePayController extends BaseController {
         }
 
         dparam.setTotalAmount(String.valueOf(orderMoney));
+
+        //TODO
+        Result<String> orderItemProductNameRet = shoppingOrderService.getOrderItemProductName(param.getBizIds().split(",")[0]);
+        dparam.setTitle(MemberTransactionTypeEnum.PAY_ORDERS.getName() + "-" + orderItemProductNameRet.getModel());
 
         return balancePayService.orderPay(dparam);
     }
@@ -131,7 +136,7 @@ public class BalancePayController extends BaseController {
             return successCreated(ResultCode.PAY_ORDER_NULL);
         } else if (PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal().equals(payOrderCallback.getPayOrderStatusEnum().getVal())) {
             return successCreated(ResultCode.PAY_ORDER_IS_SUCCESS);
-        }else {
+        } else {
             if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), 0) == 0) {
                 return successCreated(ResultCode.MONEY_IS_ZERO);
             }
@@ -140,8 +145,12 @@ public class BalancePayController extends BaseController {
         dparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
         dparam.setOrderNum(payOrderCallback.getOrderNum());
 
-		VisitUserInfoDTO visitUserInfoDTO = merchantStoreService.findAccountAndRegionPathByNum(payOrderCallback.getBusinessUserNum());
-		dparam.setRegionPath(visitUserInfoDTO.getRegionPath());
+        VisitUserInfoDTO visitUserInfoDTO = merchantStoreService.findAccountAndRegionPathByNum(payOrderCallback.getBusinessUserNum());
+        dparam.setRegionPath(visitUserInfoDTO.getRegionPath());
+
+        //TODO
+        dparam.setTitle(MemberTransactionTypeEnum.PAY.getName() + "-" + "");
+        dparam.setTitleMerchant(MemberTransactionTypeEnum.PAY.getName() + "-" + "");
 
         Result result = balancePayService.billPay(dparam);
         if (ResultCode.SUCCESS != result.getRet()) {
@@ -247,7 +256,7 @@ public class BalancePayController extends BaseController {
     @ApiOperation(value = "商品订单余额支付", notes = "商品订单余额支付，校验支付密码（杨清华）", httpMethod = "POST")
     @RequestMapping(value = "orderPayValidatePwd", method = RequestMethod.POST)
     public Result orderPayValidatePwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                            @ModelAttribute @ApiParam BalancePayValidateParam param) {
+                                      @ModelAttribute @ApiParam BalancePayValidateParam param) {
         BalancePayValidateDataParam dparam = new BalancePayValidateDataParam();
         dparam.setBizIds(param.getBizIds());
         dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
@@ -270,6 +279,9 @@ public class BalancePayController extends BaseController {
 
         dparam.setTotalAmount(String.valueOf(orderMoney));
 
+        //TODO
+        dparam.setTitle(MemberTransactionTypeEnum.PAY_ORDERS.getName() + "-" + "");
+
         return balancePayService.orderPayValidatePwd(dparam);
     }
 
@@ -279,7 +291,7 @@ public class BalancePayController extends BaseController {
     @ApiOperation(value = "买单余额支付", notes = "买单余额支付,校验支付密码（杨清华）", httpMethod = "POST")
     @RequestMapping(value = "billPayValidatePwd", method = RequestMethod.POST)
     public Result billPayValidatePwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                          @ModelAttribute @ApiParam BalancePayValidateParam param) {
+                                     @ModelAttribute @ApiParam BalancePayValidateParam param) {
         BalancePayValidateDataParam dparam = new BalancePayValidateDataParam();
         dparam.setBizIds(param.getBizIds());
         dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
@@ -292,7 +304,7 @@ public class BalancePayController extends BaseController {
             return successCreated(ResultCode.PAY_ORDER_NULL);
         } else if (PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal().equals(payOrderCallback.getPayOrderStatusEnum().getVal())) {
             return successCreated(ResultCode.PAY_ORDER_IS_SUCCESS);
-        }else {
+        } else {
             if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), 0) == 0) {
                 return successCreated(ResultCode.MONEY_IS_ZERO);
             }
@@ -303,6 +315,10 @@ public class BalancePayController extends BaseController {
 
         VisitUserInfoDTO visitUserInfoDTO = merchantStoreService.findAccountAndRegionPathByNum(payOrderCallback.getBusinessUserNum());
         dparam.setRegionPath(visitUserInfoDTO.getRegionPath());
+
+        //TODO
+        dparam.setTitle(MemberTransactionTypeEnum.PAY.getName() + "-" + "");
+        dparam.setTitleMerchant(MemberTransactionTypeEnum.PAY.getName() + "-" + "");
 
         Result result = balancePayService.billPayValidatePwd(dparam);
         if (ResultCode.SUCCESS != result.getRet()) {
@@ -325,7 +341,7 @@ public class BalancePayController extends BaseController {
     @ApiOperation(value = "余额充值积分", notes = "余额充值积分,校验支付密码（杨清华）", httpMethod = "POST")
     @RequestMapping(value = "balancePayPointValidatePwd", method = RequestMethod.POST)
     public Result balancePayPointValidatePwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                  @ModelAttribute @ApiParam BalancePayValidateParam param) {
+                                             @ModelAttribute @ApiParam BalancePayValidateParam param) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         BalancePayValidateDataParam dparam = new BalancePayValidateDataParam();
         dparam.setBizIds(param.getBizIds());
@@ -378,7 +394,7 @@ public class BalancePayController extends BaseController {
     @ApiOperation(value = "用户发红包余额支付", notes = "用户发红包余额支付,[]（杨清华）", httpMethod = "POST")
     @RequestMapping(value = "memberRedPacketPayValidatePwd", method = RequestMethod.POST)
     public Result memberRedPacketPayValidatePwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                     @ModelAttribute @ApiParam BalancePayValidateParam param) {
+                                                @ModelAttribute @ApiParam BalancePayValidateParam param) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         BalancePayValidateDataParam dparam = new BalancePayValidateDataParam();
         dparam.setBizIds(param.getBizIds());

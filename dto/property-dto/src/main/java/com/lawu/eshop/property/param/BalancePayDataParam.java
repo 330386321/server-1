@@ -3,6 +3,7 @@ package com.lawu.eshop.property.param;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Pattern;
 
+import io.swagger.annotations.ApiParam;
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
@@ -42,6 +43,7 @@ public class BalancePayDataParam extends BalancePayParam{
 	private MemberTransactionTypeEnum memberTransactionTypeEnum;
 	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
 	private String title;
+	private String titleMerchant;//买单时用于显示商家测交易明细
 
 	//代理商区域统计，11/1101/110101
 	private String regionPath;
@@ -68,14 +70,6 @@ public class BalancePayDataParam extends BalancePayParam{
 
 	public void setMemberTransactionTypeEnum(MemberTransactionTypeEnum memberTransactionTypeEnum) {
 		this.memberTransactionTypeEnum = memberTransactionTypeEnum;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	public MerchantTransactionTypeEnum getMerchantTransactionTypeEnum() {
@@ -116,5 +110,21 @@ public class BalancePayDataParam extends BalancePayParam{
 
 	public void setRegionPath(String regionPath) {
 		this.regionPath = regionPath;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getTitleMerchant() {
+		return titleMerchant;
+	}
+
+	public void setTitleMerchant(String titleMerchant) {
+		this.titleMerchant = titleMerchant;
 	}
 }

@@ -82,15 +82,17 @@ public class ReportAdEarningsServiceImpl extends BaseController implements Repor
 					}
 					ReportAdEarningsPointParam reportAdEarningsPointParam = new ReportAdEarningsPointParam();
 					reportAdEarningsPointParam.setBizId(reportAdDTO.getId());
-					if (reportAdDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_FLAT
-							|| reportAdDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_VIDEO) {
-						reportAdEarningsPointParam.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADVERTISING);
+					if (reportAdDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_FLAT) {
+						reportAdEarningsPointParam.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.AD_PLANE);
 						reportAdEarningsPointParam.setLoveTypeEnum(LoveTypeEnum.AD_CLICK);
-					} else if (reportAdDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_PRAISE) {
+					} else if (reportAdDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_VIDEO) {
+						 reportAdEarningsPointParam.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.AD_VIDEO);
+						 reportAdEarningsPointParam.setLoveTypeEnum(LoveTypeEnum.AD_CLICK);
+					 }  else if (reportAdDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_PRAISE) {
 						reportAdEarningsPointParam.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.AD_QZ);
 						reportAdEarningsPointParam.setLoveTypeEnum(LoveTypeEnum.AD_QZ);
 					} else {
-						reportAdEarningsPointParam.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.RED_SWEEP);
+						reportAdEarningsPointParam.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADD_RED_SWEEP);
 						reportAdEarningsPointParam.setLoveTypeEnum(LoveTypeEnum.RED_PACKAGE);
 					}
 					Result<ReportAdEarningsPointDTO> ponitResult = propertySrvService.getReportAdEarningsPoint(reportAdEarningsPointParam);

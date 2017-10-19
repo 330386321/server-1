@@ -14,6 +14,7 @@ import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 
 /**
+ * 用户领取商家发的红包---从事务
  * @author zhangrc
  * @date 2017/4/12
  */
@@ -29,9 +30,10 @@ public class UserSweepRedTransactionFollowServiceImpl extends AbstractTransactio
 		PropertyInfoDataParam param = new PropertyInfoDataParam();
 		param.setPoint(notification.getPoint().toString());
 		param.setUserNum(notification.getUserNum());
-		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.RED_SWEEP);
+		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.MERCHANT_RED_SWEEP);
 		param.setLoveTypeEnum(LoveTypeEnum.RED_PACKAGE);
 		param.setTempBizId(notification.getAdId() == null ? "0" : notification.getAdId().toString());
+		param.setTitle(notification.getTitle());
 		propertyInfoDataService.doHanlderBalanceIncome(param);
 	}
 }

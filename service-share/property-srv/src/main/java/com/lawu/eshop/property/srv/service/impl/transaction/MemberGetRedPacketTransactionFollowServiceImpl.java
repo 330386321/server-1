@@ -14,7 +14,7 @@ import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 
 /**
- * 用户领取红包（用户发的红包）-从事务
+ * 用户领取个人红包（用户发的红包）-从事务
  * 给用户加余额
  *
  * @author yangqh
@@ -32,9 +32,10 @@ public class MemberGetRedPacketTransactionFollowServiceImpl extends AbstractTran
         PropertyInfoDataParam param = new PropertyInfoDataParam();
         param.setPoint(notification.getMoney().toString());
         param.setUserNum(notification.getUserNum());
-        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.RED_SWEEP);
+        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.MEMBER_RED_SWEEP);
         param.setLoveTypeEnum(LoveTypeEnum.RED_PACKAGE);
         param.setTempBizId("0");
+        param.setTitle(notification.getTitle());
         propertyInfoDataService.doHanlderBalanceIncome(param);
     }
 }

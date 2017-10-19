@@ -256,7 +256,9 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	public int doHanlderBalanceIncome(PropertyInfoDataParam param) {
 		BigDecimal clickMoney = new BigDecimal(param.getPoint());
 		CommissionUtilBO commissionBO;
-		if(MemberTransactionTypeEnum.ADVERTISING.getValue().equals(param.getMemberTransactionTypeEnum().getValue())){
+		if(MemberTransactionTypeEnum.ADVERTISING.getValue().equals(param.getMemberTransactionTypeEnum().getValue()) ||
+				MemberTransactionTypeEnum.AD_PLANE.getValue().equals(param.getMemberTransactionTypeEnum().getValue()) ||
+				MemberTransactionTypeEnum.AD_VIDEO.getValue().equals(param.getMemberTransactionTypeEnum().getValue())){
 			commissionBO = commissionUtilService.getClickAdMine(clickMoney);
 		}else{
 			commissionBO = commissionUtilService.getIncomeMoney(clickMoney);
@@ -287,10 +289,24 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount("");
 		if (param.getMemberTransactionTypeEnum() != null) {
-			tdsParam.setTitle(param.getMemberTransactionTypeEnum().getName());
+			if(param.getTitle() == null || "".equals(param.getTitle())){
+				tdsParam.setTitle(param.getMemberTransactionTypeEnum().getName());
+			} else {
+				if(MemberTransactionTypeEnum.MERCHANT_RED_SWEEP.getValue().equals(param.getMemberTransactionTypeEnum().getValue())){
+					tdsParam.setTitle(param.getMemberTransactionTypeEnum().getName() + "-" + param.getTitle());
+				} else if (MemberTransactionTypeEnum.MEMBER_RED_SWEEP.getValue().equals(param.getMemberTransactionTypeEnum().getValue())){
+					tdsParam.setTitle(param.getMemberTransactionTypeEnum().getName() + "-来自" + param.getTitle());
+				} else{
+					tdsParam.setTitle(param.getTitle());
+				}
+			}
 			tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
 		} else if (param.getMerchantTransactionTypeEnum() != null) {
-			tdsParam.setTitle(param.getMerchantTransactionTypeEnum().getName());
+			if(param.getTitle() == null || "".equals(param.getTitle())){
+				tdsParam.setTitle(param.getMerchantTransactionTypeEnum().getName());
+			} else {
+				tdsParam.setTitle(param.getTitle());
+			}
 			tdsParam.setTransactionType(param.getMerchantTransactionTypeEnum().getValue());
 		}
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());

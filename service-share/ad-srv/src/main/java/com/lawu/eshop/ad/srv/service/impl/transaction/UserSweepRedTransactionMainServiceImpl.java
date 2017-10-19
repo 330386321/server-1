@@ -1,5 +1,7 @@
 package com.lawu.eshop.ad.srv.service.impl.transaction;
 
+import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ public class UserSweepRedTransactionMainServiceImpl extends AbstractTransactionM
 
 	@Autowired
 	private PointPoolDOMapper pointPoolDOMapper;
+	@Autowired
+	private AdDOMapper adDOMapper;
 
     @Override
     public AdPointNotification selectNotification(Long id) {
@@ -30,6 +34,8 @@ public class UserSweepRedTransactionMainServiceImpl extends AbstractTransactionM
     	notification.setUserNum(pointPoolDO.getMemberNum());
     	notification.setPoint(pointPoolDO.getPoint());
     	notification.setAdId(pointPoolDO.getAdId());
+	    AdDO ad = adDOMapper.selectByPrimaryKey(pointPoolDO.getAdId());
+	    notification.setTitle(ad.getMerchantStoreName());
         return notification;
     }
 

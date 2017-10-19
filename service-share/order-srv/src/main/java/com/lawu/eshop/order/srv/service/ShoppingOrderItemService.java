@@ -72,4 +72,11 @@ public interface ShoppingOrderItemService {
 	 * @return
 	 */
 	ShoppingOrderItemExtendBO getByComment(Long id);
+
+	/**
+	 * 获取订单中第一个商品名称
+	 * @param id
+	 * @return
+	 */
+    String getOrderItemProductName(String id);
 }

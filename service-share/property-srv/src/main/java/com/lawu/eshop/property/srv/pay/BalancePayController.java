@@ -50,7 +50,6 @@ public class BalancePayController extends BaseController {
         }
 
         param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY_ORDERS);
-        param.setTitle(TransactionTitleEnum.ORDER_PAY.getVal());
         int retCode = ResultCode.FAIL;
         try {
             retCode = balancePayService.balancePayProductOrder(param);
@@ -77,7 +76,7 @@ public class BalancePayController extends BaseController {
 
         param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY);
         param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.PAY);
-        param.setTitle(TransactionTitleEnum.PAY.getVal());
+
         int retCode = ResultCode.FAIL;
         try {
             retCode = balancePayService.balancePay(param);
@@ -102,7 +101,7 @@ public class BalancePayController extends BaseController {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
         }
 
-        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.INTEGRAL_RECHARGE);
+        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.RECHARGE_POINT);
         param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INTEGRAL_RECHARGE);
         param.setTitle(TransactionTitleEnum.INTEGRAL_RECHARGE.getVal());
         int retCode = ResultCode.FAIL;
@@ -129,8 +128,8 @@ public class BalancePayController extends BaseController {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
         }
 
-        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.USER_REDPACKET_CUT);
-        param.setTitle(MemberTransactionTypeEnum.USER_REDPACKET_CUT.getName());
+        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADD_RED_SWEEP);
+        param.setTitle(MemberTransactionTypeEnum.ADD_RED_SWEEP.getName());
         int retCode = ResultCode.FAIL;
         try {
             retCode = balancePayService.memberRedPacketPay(param);
@@ -159,7 +158,6 @@ public class BalancePayController extends BaseController {
         }
 
         param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY_ORDERS);
-        param.setTitle(TransactionTitleEnum.ORDER_PAY.getVal());
         int retCode = ResultCode.FAIL;
         try {
             retCode = balancePayService.balancePayProductOrderValidatePwd(param);
@@ -186,7 +184,6 @@ public class BalancePayController extends BaseController {
 
         param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY);
         param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.PAY);
-        param.setTitle(TransactionTitleEnum.PAY.getVal());
         int retCode = ResultCode.FAIL;
         try {
             retCode = balancePayService.balancePayValidatePwd(param);
@@ -211,7 +208,7 @@ public class BalancePayController extends BaseController {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
         }
 
-        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.INTEGRAL_RECHARGE);
+        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.RECHARGE_POINT);
         param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INTEGRAL_RECHARGE);
         param.setTitle(TransactionTitleEnum.INTEGRAL_RECHARGE.getVal());
         int retCode = ResultCode.FAIL;
@@ -238,8 +235,8 @@ public class BalancePayController extends BaseController {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
         }
 
-        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.USER_REDPACKET_CUT);
-        param.setTitle(MemberTransactionTypeEnum.USER_REDPACKET_CUT.getName());
+        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADD_RED_SWEEP);
+        param.setTitle(MemberTransactionTypeEnum.ADD_RED_SWEEP.getName());
         int retCode = ResultCode.FAIL;
         try {
             retCode = balancePayService.memberRedPacketPayValidatePwd(param);

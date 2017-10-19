@@ -139,14 +139,14 @@ public class PointDetailServiceImpl implements PointDetailService {
 		List<Byte> transactionTypeList = new ArrayList<>();
 		if(param.getMemberTransactionType() == null && param.getMerchantTransactionType() == null){
 			transactionTypeList.add(MemberTransactionTypeEnum.BACKAGE.getValue());
-			transactionTypeList.add(MemberTransactionTypeEnum.INTEGRAL_RECHARGE.getValue());
+			transactionTypeList.add(MemberTransactionTypeEnum.RECHARGE_POINT.getValue());
 			transactionTypeList.add(MerchantTransactionTypeEnum.BACKAGE.getValue());
 			transactionTypeList.add(MerchantTransactionTypeEnum.INTEGRAL_RECHARGE.getValue());
 			criteria.andPointTypeIn(transactionTypeList);
 		}else{
 			if (param.getMemberTransactionType() != null) {
 				transactionTypeList.add(MemberTransactionTypeEnum.BACKAGE.getValue());
-				transactionTypeList.add(MemberTransactionTypeEnum.INTEGRAL_RECHARGE.getValue());
+				transactionTypeList.add(MemberTransactionTypeEnum.RECHARGE_POINT.getValue());
 				criteria.andPointTypeIn(transactionTypeList);
 			}
 			if(param.getMerchantTransactionType() != null){

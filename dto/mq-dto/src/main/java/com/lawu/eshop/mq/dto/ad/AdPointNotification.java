@@ -21,6 +21,10 @@ public class AdPointNotification extends Notification {
 	private Long adId;
 	
 	private String regionPath;
+
+	private Byte type;//广告类型，发平面广告和视频广告时用
+
+	private String title;//交易明细后标题
 	
 	public Long getAdId() {
 		return adId;
@@ -62,6 +66,19 @@ public class AdPointNotification extends Notification {
 		this.regionPath = regionPath;
 	}
 
-	
-	
+	public Byte getType() {
+		return type;
+	}
+
+	public void setType(Byte type) {
+		this.type = type;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 }

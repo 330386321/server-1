@@ -39,4 +39,5 @@ public class BalancePayValidateParam {
 	public void setPayPwd(String payPwd) {
 		this.payPwd = payPwd;
 	}
+
 }

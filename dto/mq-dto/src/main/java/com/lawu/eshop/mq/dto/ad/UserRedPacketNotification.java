@@ -23,6 +23,8 @@ public class UserRedPacketNotification extends Notification {
 
 	private BigDecimal money;
 
+	private String title;//发红包用户的姓名
+
 	/**
 	 * @return the id
 	 */
@@ -68,4 +70,11 @@ public class UserRedPacketNotification extends Notification {
 		this.money = money;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 }

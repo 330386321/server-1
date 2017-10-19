@@ -754,4 +754,15 @@ public class ShoppingOrderController extends BaseController {
 		List<ReportRiseRerouceDTO> reportRiseRerouceDTOList = shoppingOrderService.fansSaleTransform(dparam);
 		return successCreated(reportRiseRerouceDTOList);
 	}
+
+	/**
+	 * 获取订单中第一个商品名称
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "getOrderItemProductName", method = RequestMethod.GET)
+	public Result<String> getOrderItemProductName(@PathVariable("id") String id) {
+		String productName = shoppingOrderItemService.getOrderItemProductName(id);
+		return successCreated(productName);
+	}
 }

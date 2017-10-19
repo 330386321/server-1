@@ -140,7 +140,7 @@ public class RechargeServiceImpl implements RechargeService {
             tdsParam.setUserNum(param.getUserNum());
             tdsParam.setTransactionAccount(param.getBuyerLogonId());
             if (param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
-                tdsParam.setTransactionType(MemberTransactionTypeEnum.RECHARGE.getValue());
+                tdsParam.setTransactionType(MemberTransactionTypeEnum.RECHARGE_BALANCE.getValue());
             } else if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
                 tdsParam.setTransactionType(MerchantTransactionTypeEnum.RECHARGE.getValue());
             }
@@ -166,7 +166,7 @@ public class RechargeServiceImpl implements RechargeService {
             tdsParam.setUserNum(param.getUserNum());
             tdsParam.setTransactionAccount(param.getBuyerLogonId());
             if (param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
-                tdsParam.setTransactionType(MemberTransactionTypeEnum.RECHARGE.getValue());
+                tdsParam.setTransactionType(MemberTransactionTypeEnum.RECHARGE_BALANCE.getValue());
             } else if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
                 tdsParam.setTransactionType(MerchantTransactionTypeEnum.RECHARGE.getValue());
             }
@@ -184,7 +184,7 @@ public class RechargeServiceImpl implements RechargeService {
             pdsParam.setPointNum(param.getOutTradeNo());
             pdsParam.setUserNum(param.getUserNum());
             if (param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
-                pdsParam.setPointType(MemberTransactionTypeEnum.RECHARGE.getValue());
+                pdsParam.setPointType(MemberTransactionTypeEnum.RECHARGE_BALANCE.getValue());
             } else if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
                 pdsParam.setPointType(MerchantTransactionTypeEnum.RECHARGE.getValue());
             }

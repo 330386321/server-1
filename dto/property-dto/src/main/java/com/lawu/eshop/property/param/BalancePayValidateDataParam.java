@@ -41,6 +41,7 @@ public class BalancePayValidateDataParam extends BalancePayValidateParam{
 	private MemberTransactionTypeEnum memberTransactionTypeEnum;
 	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
 	private String title;
+	private String titleMerchant;//买单时用于显示商家测交易明细
 
 	//代理商区域统计，11/1101/110101
 	private String regionPath;
@@ -115,5 +116,13 @@ public class BalancePayValidateDataParam extends BalancePayValidateParam{
 
 	public void setRegionPath(String regionPath) {
 		this.regionPath = regionPath;
+	}
+
+	public String getTitleMerchant() {
+		return titleMerchant;
+	}
+
+	public void setTitleMerchant(String titleMerchant) {
+		this.titleMerchant = titleMerchant;
 	}
 }

@@ -206,4 +206,12 @@ public interface ShoppingOrderService {
 	 */
 	@RequestMapping(value = "orderPayment/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderPaymentDTO> orderPayment(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
+
+	/**
+	 * 获取订单中第一个商品名称
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "getOrderItemProductName/{id}", method = RequestMethod.GET)
+	Result<String> getOrderItemProductName(@PathVariable("id") String id);
 }

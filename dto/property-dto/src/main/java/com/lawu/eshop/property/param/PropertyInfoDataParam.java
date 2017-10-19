@@ -43,6 +43,12 @@ public class PropertyInfoDataParam {
     //爱心账户类型
     private LoveTypeEnum loveTypeEnum;
 
+    //交易明细列表显示的文案，为兼容title为空时取枚举类型name
+    private String title;
+
+
+
+
     //商家ID(邀请粉丝添加邀请记录参数)
     private Long merchantId;
 
@@ -160,5 +166,13 @@ public class PropertyInfoDataParam {
 
     public void setRegionPath(String regionPath) {
         this.regionPath = regionPath;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

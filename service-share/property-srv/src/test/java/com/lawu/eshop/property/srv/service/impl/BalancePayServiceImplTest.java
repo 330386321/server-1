@@ -61,7 +61,7 @@ public class BalancePayServiceImplTest {
         BalancePayDataParam param = new BalancePayDataParam();
         param.setUserNum("10001");
         param.setAccount("17512036361");
-        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.getEnum(MemberTransactionTypeEnum.INTEGRAL_RECHARGE.getValue()));
+        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.getEnum(MemberTransactionTypeEnum.RECHARGE_POINT.getValue()));
         param.setOrderNum("1236547890");
         param.setTitle(MerchantTransactionTypeEnum.INTEGRAL_RECHARGE.getName());
         param.setTotalAmount("100");
@@ -103,7 +103,7 @@ public class BalancePayServiceImplTest {
         param.setSideUserNum("10002");
         param.setAccount("17512036361");
         param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.getEnum(MerchantTransactionTypeEnum.INTEGRAL_RECHARGE.getValue()));
-        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.getEnum(MemberTransactionTypeEnum.INTEGRAL_RECHARGE.getValue()));
+        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.getEnum(MemberTransactionTypeEnum.RECHARGE_POINT.getValue()));
         param.setOrderNum("1236547890");
         param.setTitle(MerchantTransactionTypeEnum.INTEGRAL_RECHARGE.getName());
         param.setTotalAmount("100");
@@ -167,7 +167,7 @@ public class BalancePayServiceImplTest {
         BalancePayDataParam param = new BalancePayDataParam();
         param.setUserNum("10001");
         param.setAccount("17512036361");
-        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.getEnum(MemberTransactionTypeEnum.INTEGRAL_RECHARGE.getValue()));
+        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.getEnum(MemberTransactionTypeEnum.RECHARGE_POINT.getValue()));
         param.setOrderNum("1236547890");
         param.setTitle(MerchantTransactionTypeEnum.INTEGRAL_RECHARGE.getName());
         param.setTotalAmount("100");

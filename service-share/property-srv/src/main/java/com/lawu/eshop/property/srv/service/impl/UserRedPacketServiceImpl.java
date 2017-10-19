@@ -69,10 +69,10 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 
         // 新增会员交易记录
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-        tdsParam.setTitle(MemberTransactionTypeEnum.USER_REDPACKET_CUT.getName());
+        tdsParam.setTitle(MemberTransactionTypeEnum.ADD_RED_SWEEP.getName());
         tdsParam.setUserNum(param.getUserNum());
         tdsParam.setTransactionAccount(param.getBuyerLogonId());
-        tdsParam.setTransactionType(MemberTransactionTypeEnum.USER_REDPACKET_CUT.getValue());
+        tdsParam.setTransactionType(MemberTransactionTypeEnum.ADD_RED_SWEEP.getValue());
         tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
         tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
         tdsParam.setBizId(param.getBizIds());

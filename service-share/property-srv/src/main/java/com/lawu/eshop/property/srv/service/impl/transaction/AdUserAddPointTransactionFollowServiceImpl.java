@@ -14,6 +14,7 @@ import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 
 /**
+ * E咻 - 从事务
  * @author zhangrc
  * @date 2017/4/12
  */
@@ -32,6 +33,7 @@ public class AdUserAddPointTransactionFollowServiceImpl extends AbstractTransact
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.AD_QZ);
 		param.setLoveTypeEnum(LoveTypeEnum.AD_QZ);
 		param.setTempBizId(notification.getAdId() == null ? "0" : notification.getAdId().toString());
+		param.setTitle(notification.getTitle());
 		propertyInfoDataService.doHanlderBalanceIncome(param);
 	}
 }

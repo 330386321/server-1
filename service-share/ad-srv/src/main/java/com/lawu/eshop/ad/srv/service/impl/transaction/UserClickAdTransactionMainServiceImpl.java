@@ -38,6 +38,8 @@ public class UserClickAdTransactionMainServiceImpl extends AbstractTransactionMa
     	 notification.setPoint(memberAdRecordDO.getOriginalPoint());
     	 notification.setAdId(memberAdRecordDO.getAdId());
     	 notification.setRegionPath(ad.getMerchantRegionPath());
+    	 notification.setType(ad.getType());
+    	 notification.setTitle(ad.getTitle());
         return notification;
     }
 

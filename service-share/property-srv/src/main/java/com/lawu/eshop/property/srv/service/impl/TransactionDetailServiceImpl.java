@@ -207,14 +207,14 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		List<Byte> transactionTypeList = new ArrayList<>();
 		if(param.getMemberTransactionType() == null && param.getMerchantTransactionType() == null){
 			transactionTypeList.add(MemberTransactionTypeEnum.BACKAGE.getValue());
-			transactionTypeList.add(MemberTransactionTypeEnum.RECHARGE.getValue());
+			transactionTypeList.add(MemberTransactionTypeEnum.RECHARGE_BALANCE.getValue());
 			transactionTypeList.add(MerchantTransactionTypeEnum.BACKAGE.getValue());
 			transactionTypeList.add(MerchantTransactionTypeEnum.RECHARGE.getValue());
 			criteria.andTransactionTypeIn(transactionTypeList);
 		}else{
 			if (param.getMemberTransactionType() != null) {
 				transactionTypeList.add(MemberTransactionTypeEnum.BACKAGE.getValue());
-				transactionTypeList.add(MemberTransactionTypeEnum.RECHARGE.getValue());
+				transactionTypeList.add(MemberTransactionTypeEnum.RECHARGE_BALANCE.getValue());
 				criteria.andTransactionTypeIn(transactionTypeList);
 			}
 			if(param.getMerchantTransactionType() != null){
