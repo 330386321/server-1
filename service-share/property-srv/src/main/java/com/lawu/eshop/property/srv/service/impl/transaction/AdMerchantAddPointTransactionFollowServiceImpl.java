@@ -3,6 +3,7 @@ package com.lawu.eshop.property.srv.service.impl.transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
@@ -25,6 +26,14 @@ public class AdMerchantAddPointTransactionFollowServiceImpl extends AbstractTran
 
 	@Override
 	public void execute(AdPointNotification notification) {
+		
+		/*if(notification.getAdType()==AdTypeEnum.AD_TYPE_FLAT.getVal() || notification.getAdType()==AdTypeEnum.AD_TYPE_VIDEO.getVal()){
+			
+		}else if(notification.getAdType()==AdTypeEnum.AD_TYPE_PRAISE.getVal()){
+			
+		}else{
+			
+		}*/
 		PropertyInfoDataParam param = new PropertyInfoDataParam();
 		param.setPoint(notification.getPoint().toString());
 		param.setUserNum(notification.getUserNum());

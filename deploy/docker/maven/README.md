@@ -74,7 +74,7 @@ sudo docker rmi $(sudo docker images -f "dangling=true" -q)
 删除none镜像
 ======
 ```bash
-sudo docker rmi $(sudo docker inspect -f "{{.ID}}:{{.RepoTags}}" $(sudo docker images -q) | grep "\[\]" | cut -d ":" -f 2)
+[ $(sudo docker inspect -f "{{.ID}}:{{.RepoTags}}" $(sudo docker images -q) | grep "\[\]" | wc -l) -gt 0 ] && (sudo docker rmi $(sudo docker inspect -f "{{.ID}}:{{.RepoTags}}" $(sudo docker images -q) | grep "\[\]" | cut -d ":" -f 2))
 ```
 
 删除已经停止运行的容器
@@ -86,5 +86,5 @@ sudo docker rm $(sudo docker ps -a -q)
 清除无用的挂载目录
 ======
 ```bash
-sudo docker volume rm $(sudo docker volume ls -qf dangling=true)
+[ $(sudo docker volume ls -qf dangling=true | wc -l) -gt 0 ] && (sudo docker volume rm $(sudo docker volume ls -qf dangling=true))
 ```

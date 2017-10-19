@@ -13,6 +13,7 @@ import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdPointInternalParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.AdSetPayParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
@@ -359,7 +360,14 @@ public interface AdService {
 	/**
 	 * 运营平台强制下架广告
 	 * @param id
+	 * @param auditorId
 	 * @param remark
 	 */
-	void downOperatorById(Long id,String remark);
+	void downOperatorById(Long id, Integer auditorId, String remark);
+	
+	/**
+	 * 支付成功之后回调修改广告状态
+	 * @param param
+	 */
+	void updateAdIsPay(AdSetPayParam param);
 }

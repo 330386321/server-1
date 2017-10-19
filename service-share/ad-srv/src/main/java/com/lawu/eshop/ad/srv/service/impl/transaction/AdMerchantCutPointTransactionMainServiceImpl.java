@@ -30,12 +30,6 @@ public class AdMerchantCutPointTransactionMainServiceImpl extends AbstractTransa
 
 	@Autowired
 	private AdDOMapper adDOMapper;
-	
-	@Autowired
-	private SolrService solrService;
-	
-	@Autowired
-	private AdSrvConfig adSrvConfig;
 
     @Override
     public AdPointNotification selectNotification(Long adId) {
@@ -57,11 +51,7 @@ public class AdMerchantCutPointTransactionMainServiceImpl extends AbstractTransa
         	ad.setIsPay(true);
     		ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
     		
-    		//将抢赞添加到solr
-        	if(ad.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal()){
-        		SolrInputDocument document= AdConverter.convertSolrInputDocument(ad);
-    			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-        	}else if(ad.getType()==AdTypeEnum.AD_TYPE_VIDEO.getVal()){
+        	if(ad.getType()==AdTypeEnum.AD_TYPE_VIDEO.getVal()){
         		ad.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
         	}
         	adDOMapper.updateByPrimaryKeySelective(ad);

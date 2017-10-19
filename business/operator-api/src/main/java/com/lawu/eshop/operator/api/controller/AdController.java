@@ -144,7 +144,12 @@ public class AdController extends BaseController {
     @RequestMapping(value = "adDown/{id}", method = RequestMethod.POST)
     public Result adDown(@PathVariable @ApiParam(required = true, value = "广告id") Long id,
     		 @RequestParam @ApiParam(required = true, value = "审核备注") String remark) {
-        Result rs = adService.downOperatorById(id, remark);
+        Integer auditorId = 0;
+        Result<UserListDTO> userResult = userService.getUserByAccount(UserUtil.getCurrentUserAccount());
+        if(isSuccess(userResult)){
+            auditorId = userResult.getModel().getId();
+        }
+        Result rs = adService.downOperatorById(id, auditorId, remark);
         if(!isSuccess(rs)){
             return rs;
         }

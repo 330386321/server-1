@@ -56,6 +56,7 @@ import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdPointInternalParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.AdSetPayParam;
 import com.lawu.eshop.ad.param.AdSolrRealParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.param.ListAdParam;
@@ -1327,12 +1328,24 @@ public class AdController extends BaseController {
 	/**
 	 * 运营平台强制下架广告
 	 * @param id
+	 * @param auditorId
 	 * @param remark
 	 * @return
 	 */
 	@RequestMapping(value = "downOperatorById", method = RequestMethod.PUT)
-	public Result downOperatorById(@RequestParam Long id, @RequestParam String remark){
-		adService.downOperatorById(id, remark);
+	public Result downOperatorById(@RequestParam Long id, @RequestParam Integer auditorId, @RequestParam String remark) {
+		adService.downOperatorById(id, auditorId, remark);
+		return successCreated();
+	}
+	
+	/**
+	 * 支付成功修改广告状态
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "updateAdIsPay", method = RequestMethod.POST)
+	public Result updateAdIsPay(@RequestBody AdSetPayParam param) {
+		adService.updateAdIsPay(param);
 		return successCreated();
 	}
 

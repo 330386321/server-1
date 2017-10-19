@@ -1,11 +1,12 @@
 package com.lawu.eshop.ad.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.RelateTypeEnum;
+import com.lawu.eshop.framework.web.json.XssDecodeJsonSerializer;
 
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 
 
 public class AdEgainDTO {
@@ -44,15 +45,19 @@ public class AdEgainDTO {
 	private Boolean isFavorite;
 	
 	@ApiModelProperty(value = "官网链接")
+	@JsonSerialize(using = XssDecodeJsonSerializer.class)
 	private String websiteUrl;
 	 
 	@ApiModelProperty(value = "淘宝链接")
+	@JsonSerialize(using = XssDecodeJsonSerializer.class)
 	private String taobaoUrl;
 	
 	@ApiModelProperty(value = "天猫链接")
+	@JsonSerialize(using = XssDecodeJsonSerializer.class)
 	private String tmallUrl;
 	
 	@ApiModelProperty(value = "京东链接")
+	@JsonSerialize(using = XssDecodeJsonSerializer.class)
 	private String jdUrl;
 	
 	@ApiModelProperty(value = "ENTITY 实体  COMMON 普通")
