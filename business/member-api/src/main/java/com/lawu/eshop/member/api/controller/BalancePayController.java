@@ -112,7 +112,6 @@ public class BalancePayController extends BaseController {
 
         dparam.setTotalAmount(String.valueOf(orderMoney));
 
-        //TODO
         Result<String> orderItemProductNameRet = shoppingOrderService.getOrderItemProductName(param.getBizIds().split(",")[0]);
         dparam.setTitle(MemberTransactionTypeEnum.PAY_ORDERS.getName() + "-" + orderItemProductNameRet.getModel());
 
@@ -279,8 +278,8 @@ public class BalancePayController extends BaseController {
 
         dparam.setTotalAmount(String.valueOf(orderMoney));
 
-        //TODO
-        dparam.setTitle(MemberTransactionTypeEnum.PAY_ORDERS.getName() + "-" + "");
+        Result<String> orderItemProductNameRet = shoppingOrderService.getOrderItemProductName(param.getBizIds().split(",")[0]);
+        dparam.setTitle(MemberTransactionTypeEnum.PAY_ORDERS.getName() + "-" + orderItemProductNameRet.getModel());
 
         return balancePayService.orderPayValidatePwd(dparam);
     }

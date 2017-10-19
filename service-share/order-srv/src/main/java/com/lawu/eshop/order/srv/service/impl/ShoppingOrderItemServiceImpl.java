@@ -2,6 +2,7 @@ package com.lawu.eshop.order.srv.service.impl;
 
 import java.util.List;
 
+import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -210,5 +211,15 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		shoppingOrderItemExtendDOExampleCriteria.andIdEqualTo(id);
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemExtendDOList = shoppingOrderItemExtendDOMapper.selectByExample(shoppingOrderItemExtendDOExample);
 		return shoppingOrderItemExtendDOList.isEmpty() ? null : ShoppingOrderItemExtendConverter.convert(shoppingOrderItemExtendDOList.get(0));
+	}
+
+	@Override
+	public String getOrderItemProductName(String id) {
+		ShoppingOrderItemDOExample example = new ShoppingOrderItemDOExample();
+		example.createCriteria().andShoppingOrderIdEqualTo(Long.parseLong(id));
+		example.setOrderByClause(" id desc ");
+		List<ShoppingOrderItemDO> itmes = shoppingOrderItemDOMapper.selectByExample(example);
+		ShoppingOrderItemDO item = itmes.get(0);
+		return item.getProductName();
 	}
 }

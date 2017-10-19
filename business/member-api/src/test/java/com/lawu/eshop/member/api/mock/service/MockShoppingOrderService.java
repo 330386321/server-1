@@ -113,6 +113,11 @@ public class MockShoppingOrderService extends BaseController implements Shopping
 	}
 
 	@Override
+	public Result<String> getOrderItemProductName(@PathVariable("id") String id) {
+		return successCreated("name");
+	}
+
+	@Override
 	public Result<ShoppingOrderDetailDTO> detail(Long id, Long memberId) {
 		return successCreated();
 	}
