@@ -40,6 +40,7 @@ public class AdMerchantAddPointTransactionMainServiceImpl extends AbstractTransa
     	 notification.setAdId(id);
     	 notification.setAdType(ad.getType());
     	 notification.setPayType(ad.getPayType());
+    	 notification.setTradeNo(ad.getThirdNumber());
     	 if(ad.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal() || ad.getType()==AdTypeEnum.AD_TYPE_PACKET.getVal()){
     		PointPoolDOView view =  pointPoolDOMapperExtend.getTotlePoint(id);
     		BigDecimal subMoney=new BigDecimal(0);

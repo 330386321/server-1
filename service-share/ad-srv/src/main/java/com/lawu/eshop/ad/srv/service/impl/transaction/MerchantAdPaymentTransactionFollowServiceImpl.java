@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 商家发广告异步回调后修改广告记录-从事务
  */
-@Service("memberRedPacketPaymentTransactionFollowServiceImpl")
+@Service("merchantAdPaymentTransactionFollowServiceImpl")
 @CompensatingTransactionFollow(topic = MqConstant.TOPIC_PROPERTY_SRV, tags = MqConstant.TAG_HANDLE_AD)
 public class MerchantAdPaymentTransactionFollowServiceImpl extends AbstractTransactionFollowService<AdPaymentNotification, Reply> {
 

@@ -7,7 +7,6 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.srv.service.AdService;
-import com.lawu.eshop.property.srv.service.UserRedPacketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
