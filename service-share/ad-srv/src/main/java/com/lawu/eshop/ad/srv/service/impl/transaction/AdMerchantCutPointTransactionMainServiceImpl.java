@@ -30,12 +30,6 @@ public class AdMerchantCutPointTransactionMainServiceImpl extends AbstractTransa
 
 	@Autowired
 	private AdDOMapper adDOMapper;
-	
-	@Autowired
-	private SolrService solrService;
-	
-	@Autowired
-	private AdSrvConfig adSrvConfig;
 
     @Override
     public AdPointNotification selectNotification(Long adId) {
