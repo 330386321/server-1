@@ -114,6 +114,12 @@ public class PlatformRedPacketServiceImpl implements PlatformRedPacketService {
 			Integer row = takePlatformRedPacketDOMapper.insert(takePlatformRedPacketDO);
 			//发送消息
 			if(row > 0 && row !=null){
+				//更新发送红包个数
+				PlatformRedPacketDO platformRedPacketDO = new PlatformRedPacketDO();
+				platformRedPacketDO.setId(list.get(0).getId());
+				platformRedPacketDO.setSendCount(list.get(0).getSendCount()+1);
+				platformRedPacketDOMapper.updateByPrimaryKeySelective(platformRedPacketDO);
+				
 				getRedPacketBO.setGet(false);
 				getRedPacketBO.setMoney(list.get(0).getMoney());
 				

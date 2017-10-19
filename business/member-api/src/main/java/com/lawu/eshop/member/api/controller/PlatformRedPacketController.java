@@ -11,8 +11,11 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.PlatformRedPacketService;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,11 +40,26 @@ public class PlatformRedPacketController extends BaseController{
 	@Autowired
     private MemberService memberService;
 	
+
+    @Autowired
+    private  MerchantStoreService merchantStoreService;
+	
 	@ApiOperation(value = "领取平台红包", notes = "领取平台红包,[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getRedPacket", method = RequestMethod.POST)
-    public Result getRedPacket(@RequestParam @ApiParam(required = true, value = "账号") String account) {
+    public Result<GetPlatformRedPacketDTO> getRedPacket(@RequestParam @ApiParam(required = true, value = "账号") String account,@RequestParam @ApiParam(required = true, value = "商家id") Long merchantId) {
 		
+		Result<MerchantStoreDTO> resultStore = merchantStoreService.selectMerchantStoreByMId(merchantId);
+		
+		if(resultStore.getModel()!=null){
+			
+			if(resultStore.getModel().getManageType().val!=ManageTypeEnum.ENTITY.val){
+				GetPlatformRedPacketDTO dto = new GetPlatformRedPacketDTO();
+				dto.setEntity(false);
+				return successCreated(dto);
+			}
+			
+		}
 		Result<MemberDTO> accountResult = memberService.getMemberByAccount(account);
 		if(!isSuccess(accountResult)){
 			return successCreated(accountResult.getRet());
@@ -50,6 +68,7 @@ public class PlatformRedPacketController extends BaseController{
 		
 		if(accountResult.getModel()!=null){
 			 result = platformRedPacketService.getRedPacket(accountResult.getModel().getNum());
+			 result.getModel().setEntity(true);
 		}
 		
 		return result;
