@@ -4,7 +4,7 @@
 -----
 把 $(cnpm prefix -g)/bin 目录设置到 PATH 中
 ```bash
-sudo echo -e "export PATH=$(cnpm prefix -g)/bin:$PATH" >> ~/.bashrc && source ~/.bashrc
+echo -e "export PATH=$(cnpm prefix -g)/bin:$PATH" >> ~/.bashrc && source ~/.bashrc
 ```
 
 安装

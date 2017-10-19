@@ -4,7 +4,7 @@
 -----
 ```bash
 cd /usr/local/eshop/
-mkdir node
+sudo mkdir node
 cd node
 sudo wget http://cdn.npm.taobao.org/dist/node/v8.6.0/node-v8.6.0-linux-x64.tar.xz
 ```
