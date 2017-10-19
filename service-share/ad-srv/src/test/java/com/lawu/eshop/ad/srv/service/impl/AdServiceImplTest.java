@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.ad.constants.AdEgainTypeEnum;
+import com.lawu.eshop.ad.constants.AdPayTypeEnum;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -32,6 +33,7 @@ import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.AdSetPayParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
@@ -2300,5 +2302,50 @@ public class AdServiceImplTest {
 		
 		MerchantInfoBO bo = adService.selectMerchantNumByAdId(ad.getId());
 		Assert.assertNotNull(bo);
+	}
+	
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void updateAdIsPay() {
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setHits(0);
+        ad.setIsPay(false);
+        ad.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
+        Integer id=adDOMapper.insertSelective(ad);
+        
+        AdSetPayParam param = new AdSetPayParam();
+        param.setId(ad.getId());
+        param.setPayTypeEnum(AdPayTypeEnum.ALIPAY);
+		param.setThirdNumber("2017080711170000063644995");
+
+		adService.updateAdIsPay(param);
+		
+		AdDOExample example = new AdDOExample();
+		example.createCriteria().andIsPayEqualTo(true);
+		List<AdDO> adDOS = adDOMapper.selectByExample(example);
+		Assert.assertNotNull(adDOS);
+		Assert.assertTrue(adDOS.size() > 0);
 	}
 }

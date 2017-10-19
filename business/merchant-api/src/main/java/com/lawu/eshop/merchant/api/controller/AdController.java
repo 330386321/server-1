@@ -208,6 +208,22 @@ public class AdController extends BaseController {
 				if(adParam.getTotalPoint().compareTo(adParam.getPoint().multiply(BigDecimal.valueOf(adParam.getAdCount())))!=0){
 					return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
 				}
+				
+				//判断积分是否足够
+				Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
+		    	if (isSuccess(resultFreeze)){
+		    		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel().getStatus())){
+		    			return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
+		    		}
+		    	} else {
+		    		return successCreated(resultFreeze.getRet());
+		    	}
+		    	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
+		    	PropertyPointDTO propertyPointDTO=rs.getModel();
+		    	
+		    	if(adParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
+		    		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
+		    	}
 			}
 			if(adParam.getAdCount()>1000000){
 				return successCreated(ResultCode.AD_RED_PACKET_COUNT_ERROR);
@@ -215,21 +231,9 @@ public class AdController extends BaseController {
 			if(adParam.getTotalPoint().divide(new BigDecimal(adParam.getAdCount()), 4, RoundingMode.HALF_UP).compareTo(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT))==-1){
 				return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
 			}
+			
 		}
-    	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
-    	if (isSuccess(resultFreeze)){
-    		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel().getStatus())){
-    			return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
-    		}
-    	} else {
-    		return successCreated(resultFreeze.getRet());
-    	}
-    	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
-    	PropertyPointDTO propertyPointDTO=rs.getModel();
     	
-    	if(adParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
-    		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
-    	}
     	Integer count=0;
     	if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PRAISE){
     		
