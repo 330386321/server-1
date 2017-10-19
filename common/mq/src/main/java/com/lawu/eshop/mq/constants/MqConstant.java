@@ -51,6 +51,9 @@ public class MqConstant {
 	public static final String TAG_AD_USER_CLICK_POINT = "rp_user_cutPoint";
 
 	public static final String TAG_AD_USER_SWEEP_RED = "rp_user_sweep_red";
+	
+	//领取平台红包
+	public static final String TAG_AD_USER_TAKE_PLAT_RED = "tag_ad_user_take_plat_redpacket";
 
 	//用户红包注销退回
 	public static final String TAG_AD_USER_REDPACKET_CANNEL_REFUND_MONEY = "tag_ad_user_redpacket_cannel_refund_money";

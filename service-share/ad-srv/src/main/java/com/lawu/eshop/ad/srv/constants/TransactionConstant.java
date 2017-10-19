@@ -23,5 +23,10 @@ public class TransactionConstant {
     
    //用户领取商家红包
     public static final byte USER_SWEET_MONEY=0x07;
+    
+    //用户领取平台红包
+    public static final byte USER_TKAE_PLAT_MONEY=0x08;
+    
+    
    
 }

@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.ad.dto.GetPlatformRedPacketDTO;
 import com.lawu.eshop.ad.dto.PlatformRedPacketDTO;
 import com.lawu.eshop.ad.param.PlatformRedPacketParam;
 import com.lawu.eshop.ad.param.PlatformRedPacketQueryParam;
+import com.lawu.eshop.ad.srv.bo.GetPlatformRedPacketBO;
 import com.lawu.eshop.ad.srv.bo.PlatformRedPacketBO;
 import com.lawu.eshop.ad.srv.converter.PlatformRedPacketConverter;
 import com.lawu.eshop.ad.srv.service.PlatformRedPacketService;
@@ -79,5 +81,24 @@ public class PlatformRedPacketController extends BaseController{
 		return successGet(pageDto);
 
 	}
+	
+	/**
+	 * 领取平台红包
+	 * @param userNum
+	 * @return
+	 */
+	@RequestMapping(value = "getRedPacket", method = RequestMethod.GET)
+	public Result<GetPlatformRedPacketDTO> getRedPacket(@RequestParam String userNum) {
+
+		GetPlatformRedPacketBO bo = platformRedPacketService.getRedPacket(userNum);
+		GetPlatformRedPacketDTO dto = new GetPlatformRedPacketDTO();
+		dto.setGet(bo.isGet());
+		dto.setMoney(bo.getMoney());
+		
+		return successGet(dto);
+
+	}
+	
+	
 
 }

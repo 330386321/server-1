@@ -298,5 +298,7 @@ public class MemberController extends BaseController {
         Long memberId = UserUtil.getCurrentUserId(getRequest());
         return memberService.saveHeadImage(memberId, headImg);
     }
+    
+    
 
 }

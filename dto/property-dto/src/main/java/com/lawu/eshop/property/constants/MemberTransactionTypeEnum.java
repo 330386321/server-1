@@ -25,7 +25,8 @@ public enum MemberTransactionTypeEnum {
 	AD_QZ((byte) 0x10, "E咻"),
 	USER_REDPACKET_ADD((byte)0x11,"用户红包退款"),
 	USER_REDPACKET_CUT((byte)0x12,"扣除用户发红包金额"),
-	MEMBER_FANS((byte) 0x13, "成为粉丝");
+	MEMBER_FANS((byte) 0x13, "成为粉丝"),
+	PLAT_RED((byte) 0x14, "平台红包");
 	
 
 	private Byte value;
