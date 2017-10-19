@@ -28,7 +28,7 @@ public enum MemberTransactionTypeEnum {
 
 	MERCHANT_RED_SWEEP((byte) 0x14, "商家红包"),//
 	MEMBER_RED_SWEEP((byte) 0x15, "个人红包"),//
-	PLATFORM_RED_SWEEP((byte) 0x16, "平台红包"),
+	PLATFORM_RED_SWEEP((byte) 0x16, "平台红包"),//
 	AD_PLANE((byte) 0x17, "猜一猜"),//
 	AD_VIDEO((byte) 0x18, "看一看");//
 

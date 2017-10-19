@@ -30,7 +30,7 @@ public class UserTakePlatRedTransactionFollowServiceImpl extends AbstractTransac
 		PropertyInfoDataParam param = new PropertyInfoDataParam();
 		param.setPoint(notification.getMoney().toString());
 		param.setUserNum(notification.getUserNum());
-		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PLAT_RED);
+		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PLATFORM_RED_SWEEP);
 		param.setTempBizId(notification.getId() == null ? "0" : notification.getId().toString());
 		propertyInfoDataService.doHanlderBalanceIncome(param);
 	}
