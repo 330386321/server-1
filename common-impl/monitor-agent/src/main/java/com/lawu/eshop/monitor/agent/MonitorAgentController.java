@@ -17,8 +17,8 @@ public class MonitorAgentController extends BaseController {
 
 
     @RequestMapping(value = "check", method = RequestMethod.GET)
-    public Result check() {
-        return successGet();
+    public Result check(String rev) {
+        return successGet(rev);
     }
 
 }
