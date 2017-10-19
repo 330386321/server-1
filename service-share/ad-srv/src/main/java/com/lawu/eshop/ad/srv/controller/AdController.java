@@ -144,6 +144,7 @@ public class AdController extends BaseController {
 		AdSaveInfoDTO dto = new AdSaveInfoDTO();
 		dto.setAdCount(bo.getAdCount());
 		dto.setId(bo.getId());
+		dto.setAdOrderNum(bo.getAdOrderNum());
 		
 		return successCreated(dto);
 

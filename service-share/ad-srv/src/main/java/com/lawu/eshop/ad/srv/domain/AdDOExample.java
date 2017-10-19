@@ -2236,6 +2236,76 @@ public class AdDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andAdOrderNumIsNull() {
+            addCriterion("ad_order_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumIsNotNull() {
+            addCriterion("ad_order_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumEqualTo(String value) {
+            addCriterion("ad_order_num =", value, "adOrderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumNotEqualTo(String value) {
+            addCriterion("ad_order_num <>", value, "adOrderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumGreaterThan(String value) {
+            addCriterion("ad_order_num >", value, "adOrderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumGreaterThanOrEqualTo(String value) {
+            addCriterion("ad_order_num >=", value, "adOrderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumLessThan(String value) {
+            addCriterion("ad_order_num <", value, "adOrderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumLessThanOrEqualTo(String value) {
+            addCriterion("ad_order_num <=", value, "adOrderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumLike(String value) {
+            addCriterion("ad_order_num like", value, "adOrderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumNotLike(String value) {
+            addCriterion("ad_order_num not like", value, "adOrderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumIn(List<String> values) {
+            addCriterion("ad_order_num in", values, "adOrderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumNotIn(List<String> values) {
+            addCriterion("ad_order_num not in", values, "adOrderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumBetween(String value1, String value2) {
+            addCriterion("ad_order_num between", value1, value2, "adOrderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdOrderNumNotBetween(String value1, String value2) {
+            addCriterion("ad_order_num not between", value1, value2, "adOrderNum");
+            return (Criteria) this;
+        }
+
         public Criteria andThirdNumberIsNull() {
             addCriterion("third_number is null");
             return (Criteria) this;

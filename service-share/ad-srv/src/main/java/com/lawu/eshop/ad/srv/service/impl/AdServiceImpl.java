@@ -94,6 +94,7 @@ import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.synchronization.lock.constants.LockConstant.LockModule;
 import com.lawu.eshop.synchronization.lock.service.LockService;
 import com.lawu.eshop.utils.DateUtil;
+import com.lawu.eshop.utils.StringUtil;
 
 /**
  * E赚接口实现类
@@ -205,6 +206,8 @@ public class AdServiceImpl implements AdService {
 		}
 		if (adDO.getType() == AdTypeEnum.AD_TYPE_FLAT.getVal() || adDO.getType() == AdTypeEnum.AD_TYPE_VIDEO.getVal()) {
 			adDO.setPayType(AdPayTypeEnum.POINT.getVal());
+		}else{
+			adDO.setAdOrderNum(StringUtil.getRandomNum(""));
 		}
 		adDO.setTotalPoint(adParam.getTotalPoint());
 		adDO.setGmtCreate(new Date());
@@ -235,7 +238,7 @@ public class AdServiceImpl implements AdService {
         AdSaveInfoBO bo =new AdSaveInfoBO();
         bo.setId(adDO.getId());
         bo.setAdCount(adDO.getAdCount());
-        
+        bo.setAdOrderNum(adDO.getAdOrderNum());
         // 发送消息，通知其他模块处理事务 积分的处理 只包括平面和视频
 		if (adDO.getType() == AdTypeEnum.AD_TYPE_FLAT.getVal() || adDO.getType() == AdTypeEnum.AD_TYPE_VIDEO.getVal()) {
 			mctransactionMainAddService.sendNotice(adDO.getId());
@@ -957,6 +960,7 @@ public class AdServiceImpl implements AdService {
 	public Page<AdBO> listAllAd(ListAdParam listAdParam) {
 		AdDOExample example = new AdDOExample();
 		Criteria criteria = example.createCriteria();
+		criteria.andIsPayEqualTo(true);
 		if (StringUtils.isNotEmpty(listAdParam.getSortName()) && StringUtils.isNotEmpty(listAdParam.getSortOrder())) {
 			example.setOrderByClause("gmt_create " + listAdParam.getSortOrder());
 		}
@@ -1012,7 +1016,7 @@ public class AdServiceImpl implements AdService {
 		List<Byte> typeList = new ArrayList<>();
 		typeList.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
 		typeList.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
-		adDOExample.createCriteria().andStatusIn(statusList).andTypeIn(typeList);
+		adDOExample.createCriteria().andStatusIn(statusList).andTypeIn(typeList).andIsPayEqualTo(true);
 		RowBounds rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
 		List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
 		return AdConverter.convertBOS(adDOS);
@@ -1382,14 +1386,14 @@ public class AdServiceImpl implements AdService {
 			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
 			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
 
-			adDOExample.createCriteria().andTypeIn(typeList).andStatusIn(statusList);
+			adDOExample.createCriteria().andTypeIn(typeList).andStatusIn(statusList).andIsPayEqualTo(true);
 		}else{
 
 			List<Byte> statusList = new ArrayList<>();
 			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
 			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
 
-			adDOExample.createCriteria().andStatusIn(statusList).andTypeEqualTo(operatorAdParam.getAdEgainType().getVal());
+			adDOExample.createCriteria().andStatusIn(statusList).andTypeEqualTo(operatorAdParam.getAdEgainType().getVal()).andIsPayEqualTo(true);
 
 		}
 
