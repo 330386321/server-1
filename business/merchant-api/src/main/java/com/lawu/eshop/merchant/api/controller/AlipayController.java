@@ -139,6 +139,14 @@ public class AlipayController extends BaseController {
 			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizId());
 			double money = recharge.getActualMoney();
 			aparam.setTotalAmount(String.valueOf(money));
+		} else if(ThirdPartyBizFlagEnum.BUSINESS_ADD_AD.getVal().equals(param.getBizFlagEnum().getVal())) {
+			Result<AdPayInfoDTO> adRet = adService.selectAdPayInfoById(Long.parseLong(param.getBizId()));
+			AdPayInfoDTO ad = adRet.getModel();
+			if (StringUtil.doubleCompareTo(ad.getTotalPoint().doubleValue(), 0) == 0) {
+				return;
+			}
+			aparam.setTotalAmount(ad.getTotalPoint().toString());
+			aparam.setRegionPath(ad.getMerchantRegionPath());
 		}
 
 		Result result = alipayService.initPcPay(aparam);

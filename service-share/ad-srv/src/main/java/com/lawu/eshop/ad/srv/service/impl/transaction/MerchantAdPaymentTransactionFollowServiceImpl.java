@@ -1,6 +1,11 @@
 package com.lawu.eshop.ad.srv.service.impl.transaction;
 
+import javax.annotation.Resource;
+
+import com.lawu.eshop.ad.constants.AdPayTypeEnum;
+import com.lawu.eshop.ad.param.AdSetPayParam;
 import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
+import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.UserRedPacketService;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
@@ -20,18 +25,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class MerchantAdPaymentTransactionFollowServiceImpl extends AbstractTransactionFollowService<AdPaymentNotification, Reply> {
 
     @Autowired
-    private UserRedPacketService userRedPacketService;
+    private AdService adService;
 
     /**
-     * 接收资产模块支付购物订单时发送的消息
+     * 接收资产模块支付广告时发送的消息
      */
     @Transactional
     @Override
     public void execute(AdPaymentNotification notification) {
-        UserRedPacketUpdateParam param = new UserRedPacketUpdateParam();
-        param.setPayType(notification.getPaymentMethod());
-        //param.setRedId(Long.valueOf(notification.getRedPacketId()));
-        param.setThirdNum(notification.getThirdNumber());
-        userRedPacketService.updateUserPacketInfo(param);
+        AdSetPayParam param = new AdSetPayParam();
+        param.setId(Long.parseLong(notification.getAdId()));
+        param.setPayTypeEnum(AdPayTypeEnum.getEnum(notification.getPaymentMethod()));
+        param.setThirdNumber(notification.getThirdNumber());
+        adService.updateAdIsPay(param);
     }
 }

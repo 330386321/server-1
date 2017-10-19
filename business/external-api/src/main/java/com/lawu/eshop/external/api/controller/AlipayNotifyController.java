@@ -375,7 +375,16 @@ public class AlipayNotifyController extends BaseController {
 						param.setMerchantId(Long.valueOf(extra[4]));
 						result = depositService.doHandleDepositNotify(param);
 
-					} else {
+					} else if (ThirdPartyBizFlagEnum.BUSINESS_ADD_AD.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+						Result<AdPayInfoDTO> ad = adService.selectAdPayInfoById(Long.valueOf(param.getBizIds()));
+						if (StringUtil.doubleCompareTo(ad.getModel().getTotalPoint().doubleValue(), dTotalFee) == 0) {
+							param.setRegionPath(extra[4]);
+							result = propertyinfoAdService.doHandleMerchantAdNotify(param);
+						} else {
+							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+						}
+					}  else {
 						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
 					}
 				}

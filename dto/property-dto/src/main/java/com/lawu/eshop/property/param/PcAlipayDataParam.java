@@ -41,6 +41,9 @@ public class PcAlipayDataParam extends PcAlipayParam implements Serializable {
 
 	//商家缴纳保证金时需要回调发送消息改门店状态（事务）
 	private Long merchantId;
+
+	//代理商区域统计，11/1101/110101
+	private String regionPath;
 	
 	public Long getMerchantId() {
 		return merchantId;
@@ -81,4 +84,11 @@ public class PcAlipayDataParam extends PcAlipayParam implements Serializable {
 		this.subject = subject;
 	}
 
+	public String getRegionPath() {
+		return regionPath;
+	}
+
+	public void setRegionPath(String regionPath) {
+		this.regionPath = regionPath;
+	}
 }

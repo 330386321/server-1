@@ -134,6 +134,9 @@ public class AlipayController extends BaseController {
         } else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(param.getBizFlagEnum().getVal())) {
             paramMap.put("extra_common_param", param.getBizFlagEnum().getVal() + split + param.getUserNum() + split
                     + "商家充值积分P" + split + param.getBizId());
+        } else if (ThirdPartyBizFlagEnum.BUSINESS_ADD_AD.getVal().equals(param.getBizFlagEnum().getVal())) {
+            paramMap.put("extra_common_param", param.getBizFlagEnum().getVal() + split + param.getUserNum() + split
+                    + "发广告P" + split + param.getBizId() + split + param.getRegionPath());
         }
         paramMap.put("total_fee", param.getTotalAmount());
 

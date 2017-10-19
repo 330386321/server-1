@@ -1,11 +1,14 @@
 package com.lawu.eshop.external.api.controller;
 
+import com.lawu.eshop.ad.dto.AdPayInfoDTO;
 import com.lawu.eshop.external.api.ExternalApiConfig;
+import com.lawu.eshop.external.api.service.AdService;
 import com.lawu.eshop.external.api.service.DepositService;
 import com.lawu.eshop.external.api.service.MessageService;
 import com.lawu.eshop.external.api.service.OrderService;
 import com.lawu.eshop.external.api.service.PayOrderService;
 import com.lawu.eshop.external.api.service.PropertySrvService;
+import com.lawu.eshop.external.api.service.PropertyinfoAdService;
 import com.lawu.eshop.external.api.service.PropertyinfoUserRedPacketService;
 import com.lawu.eshop.external.api.service.RechargeService;
 import com.lawu.eshop.external.api.service.AdUserRedPacketService;
@@ -76,10 +79,14 @@ public class WxpayNotifyController extends BaseController {
     private PayOrderService payOrderService;
     @Autowired
     private PropertySrvService propertyService;
-	@Autowired
-	private AdUserRedPacketService userRedPacketService;
-	@Autowired
-	private PropertyinfoUserRedPacketService propertyinfoUserRedPacketService;
+    @Autowired
+    private AdUserRedPacketService userRedPacketService;
+    @Autowired
+    private PropertyinfoUserRedPacketService propertyinfoUserRedPacketService;
+    @Autowired
+    private AdService adService;
+    @Autowired
+    private PropertyinfoAdService propertyinfoAdService;
 
     /**
      * APP微信异步回调接口
@@ -164,14 +171,23 @@ public class WxpayNotifyController extends BaseController {
                             result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
                             result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
                         }
-					}else if (ThirdPartyBizFlagEnum.MEMBER_RED_PACKET.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-						Result<ThirdPayCallBackQueryPayOrderDTO> moneyResult = userRedPacketService.selectUserRedPacketInfoForThrid(Long.valueOf(param.getBizIds()));
-						if (StringUtil.doubleCompareTo(moneyResult.getModel().getActualMoney(), dmoney) == 0) {
-							result = propertyinfoUserRedPacketService.doHandleMemberRedPacketNotify(param);
-						} else {
-							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
-							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
-						}
+                    } else if (ThirdPartyBizFlagEnum.MEMBER_RED_PACKET.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                        Result<ThirdPayCallBackQueryPayOrderDTO> moneyResult = userRedPacketService.selectUserRedPacketInfoForThrid(Long.valueOf(param.getBizIds()));
+                        if (StringUtil.doubleCompareTo(moneyResult.getModel().getActualMoney(), dmoney) == 0) {
+                            result = propertyinfoUserRedPacketService.doHandleMemberRedPacketNotify(param);
+                        } else {
+                            result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+                            result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+                        }
+                    } else if (ThirdPartyBizFlagEnum.BUSINESS_ADD_AD.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                        Result<AdPayInfoDTO> ad = adService.selectAdPayInfoById(Long.valueOf(param.getBizIds()));
+                        if (StringUtil.doubleCompareTo(ad.getModel().getTotalPoint().doubleValue(), dmoney) == 0) {
+                            param.setRegionPath(extra[6]);
+                            result = propertyinfoAdService.doHandleMerchantAdNotify(param);
+                        } else {
+                            result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+                            result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+                        }
                     } else {
                         result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
                     }
@@ -211,19 +227,19 @@ public class WxpayNotifyController extends BaseController {
                     messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
                 } else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))
                         || ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-                	String property_key = PropertyType.MERCHANT_BALANCE_PAY_POINT_SCALE;
-                	if(ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-                		property_key = PropertyType.MEMBER_BALANCE_PAY_POINT_SCALE;
-                	}
-			        String scale = propertyService.getValue(property_key).getModel().toString();
-                	messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+                    String property_key = PropertyType.MERCHANT_BALANCE_PAY_POINT_SCALE;
+                    if (ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                        property_key = PropertyType.MEMBER_BALANCE_PAY_POINT_SCALE;
+                    }
+                    String scale = propertyService.getValue(property_key).getModel().toString();
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
                     messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
                     messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
-                    messageTempParam.setRechargePoint(new BigDecimal(dmoney*Double.valueOf(scale)));
-                } else if(ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
-					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT);
-					messageTempParam.setOrderAmount(new BigDecimal(df.format(dmoney)));
-				}
+                    messageTempParam.setRechargePoint(new BigDecimal(dmoney * Double.valueOf(scale)));
+                } else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT);
+                    messageTempParam.setOrderAmount(new BigDecimal(df.format(dmoney)));
+                }
                 if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
                     messageTempParam.setUserName("E店会员");
                 } else if (extra[1].startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
@@ -294,6 +310,15 @@ public class WxpayNotifyController extends BaseController {
                         param.setMerchantId(Long.valueOf(extra[5]));
                         result = depositService.doHandleDepositNotify(param);
 
+                    } else if (ThirdPartyBizFlagEnum.BUSINESS_ADD_AD.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
+                        Result<AdPayInfoDTO> ad = adService.selectAdPayInfoById(Long.valueOf(param.getBizIds()));
+                        if (StringUtil.doubleCompareTo(ad.getModel().getTotalPoint().doubleValue(), dmoney) == 0) {
+                            param.setRegionPath(extra[6]);
+                            result = propertyinfoAdService.doHandleMerchantAdNotify(param);
+                        } else {
+                            logger.error("商家发广告微信支付后回调金额校验不通过！");
+                            return;
+                        }
                     } else {
                         result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
                     }

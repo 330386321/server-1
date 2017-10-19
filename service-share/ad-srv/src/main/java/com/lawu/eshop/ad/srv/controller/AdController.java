@@ -1339,18 +1339,6 @@ public class AdController extends BaseController {
 	}
 	
 	/**
-	 * 支付成功修改广告状态
-	 * @param param
-	 * @return
-	 */
-	@RequestMapping(value = "updateAdIsPay", method = RequestMethod.POST)
-	public Result updateAdIsPay(@RequestBody AdSetPayParam param) {
-		adService.updateAdIsPay(param);
-		return successCreated();
-	}
-
-
-	/**
 	 * 根据ID查询第三方支付时需要的参数
 	 *
 	 * @param id
