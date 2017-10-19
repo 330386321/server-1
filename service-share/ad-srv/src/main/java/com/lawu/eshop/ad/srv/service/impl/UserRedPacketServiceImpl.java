@@ -109,7 +109,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		for (UserRedPacketDO userRed : listDO) {
 			UserRedPacketBO userBO = UserRedPacketConverter.convertBO(userRed);
 			Date overdueDate = DateUtil.getDayAfter(userBO.getGmtCreate());// 获取红包过期时间
-			if(overdueDate.getTime()<new Date().getTime()&& userRed.getStatus().equals(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val)){
+			if(overdueDate.getTime()<System.currentTimeMillis()&& userRed.getStatus().equals(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val)){
 				userBO.setUserRedPacketEnum(UserRedPacketEnum.USER_STATUS_OUT);
 				setRedpacketOverDue(userBO.getId());
 			}
@@ -133,6 +133,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		return userRedpacket.getStatus()== UserRedPacketEnum.USER_STATUS_EFFECTIVE.val? true : false;
 	}
 
+	@Override
 	public UserPacketRefundParam selectBackTotalMoney(Long userRedpacketId){
 		UserRedPacketDO userRedpacket = userRedPacketDOMapper.selectByPrimaryKey(userRedpacketId);
 		UserPacketRefundParam param =UserRedPacketConverter.convertReFund(userRedpacket);

@@ -12,11 +12,13 @@ import com.lawu.eshop.framework.web.Result;
 @Service
 public class MockAdCountRecordService extends BaseController implements AdCountRecordService {
 	
+	@Override
 	@RequestMapping(value = "adCount/getAdCountRecord", method = RequestMethod.GET)
     public Result<Object> getAdCountRecord(@RequestParam("id") Long id) {
 		return successGet(Long.valueOf(1L));
 	}
 	
+	@Override
 	@RequestMapping(value = "userRedPacketCount/getUserRedPacketCountRecord", method = RequestMethod.GET)
     public Result<Object> getUserRedPacketCountRecord(@RequestParam("id") Long id) {
     	return successGet(Long.valueOf(1L));

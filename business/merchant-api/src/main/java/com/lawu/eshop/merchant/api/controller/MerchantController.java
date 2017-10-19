@@ -37,6 +37,7 @@ import com.lawu.eshop.merchant.api.service.InviterService;
 import com.lawu.eshop.merchant.api.service.MemberProfileService;
 import com.lawu.eshop.merchant.api.service.MemberService;
 import com.lawu.eshop.merchant.api.service.MerchantService;
+import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.merchant.api.service.VerifyCodeService;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
@@ -48,6 +49,7 @@ import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MobileDTO;
 import com.lawu.eshop.user.dto.RongYunDTO;
 import com.lawu.eshop.user.dto.UserHeadImgDTO;
@@ -94,6 +96,7 @@ public class MerchantController extends BaseController {
 
     @Autowired
     private MemberService memberService;
+    
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "修改登录密码", notes = "根据商户ID修改登录密码。[1002|1009] (梅述全)", httpMethod = "PUT")

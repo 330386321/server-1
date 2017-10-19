@@ -32,7 +32,6 @@ public enum MemberTransactionTypeEnum {
 	AD_PLANE((byte) 0x17, "猜一猜"),//
 	AD_VIDEO((byte) 0x18, "看一看");//
 
-
 	private Byte value;
 
 	private String name;

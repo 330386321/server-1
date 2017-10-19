@@ -12,6 +12,7 @@ import com.lawu.eshop.framework.web.Result;
 @Service
 public class MockPraiseDoHanlderMinusPointService extends BaseController implements PraiseDoHanlderMinusPointService {
 	
+	@Override
 	@RequestMapping(value = "praiseDoHanlderMinusPoint/getAdPraiseIsDoPointRecord", method = RequestMethod.GET)
     public Result getAdPraiseIsDoPointRecord(@RequestParam("adIdAndMemberId") String adIdAndMemberId) {
 		return successGet(true);

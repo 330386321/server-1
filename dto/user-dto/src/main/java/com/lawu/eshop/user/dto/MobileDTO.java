@@ -14,7 +14,7 @@ public class MobileDTO {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	 
+
 	 
 
 }
