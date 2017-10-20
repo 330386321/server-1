@@ -2,6 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lawu.eshop.property.srv.mapper.extend.TransactionDetailExtendDOMapper" >
     
+    <sql id="Example_Where_Clause" >
+      <where >
+        <foreach collection="oredCriteria" item="criteria" separator="or" >
+          <if test="criteria.valid" >
+            <trim prefix="(" suffix=")" prefixOverrides="and" >
+              <foreach collection="criteria.criteria" item="criterion" >
+                <choose >
+                  <when test="criterion.noValue" >
+                    and ${criterion.condition}
+                  </when>
+                  <when test="criterion.singleValue" >
+                    and ${criterion.condition} #{criterion.value}
+                  </when>
+                  <when test="criterion.betweenValue" >
+                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                  </when>
+                  <when test="criterion.listValue" >
+                    and ${criterion.condition}
+                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                      #{listItem}
+                    </foreach>
+                  </when>
+                </choose>
+              </foreach>
+            </trim>
+          </if>
+        </foreach>
+      </where>
+    </sql>
+    
     <resultMap id="TotalSalesResultMap" type="com.lawu.eshop.property.srv.domain.extend.TotalSalesDO">
         <result column="amount" jdbcType="DECIMAL" property="amount" />
         <result column="transaction_type" jdbcType="TINYINT" property="transactionType" />
@@ -22,7 +52,12 @@
         <result column="amount" jdbcType="DECIMAL" property="amount" />
         <result column="direction" jdbcType="TINYINT" property="direction" />
     </resultMap>
-
+    
+    <resultMap id="MonthlyBillResultMap" type="com.lawu.eshop.property.srv.domain.extend.MonthlyBillDO">
+        <result column="amount" jdbcType="DECIMAL" property="amount" />
+        <result column="direction" jdbcType="TINYINT" property="direction" />
+    </resultMap>
+    
     <!-- 根据时间获取获取买单和订单的收入 -->
 	<select id="selectTotalSales"  resultMap="TotalSalesResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample">
 		SELECT sum(amount) as amount, transaction_type FROM transaction_detail 
@@ -109,4 +144,15 @@
 		AND #{end}
 		group by user_num,transaction_type
 	</select>
+    
+    <select id="selectMonthlyBill"  resultMap="MonthlyBillResultMap" parameterType="com.lawu.eshop.property.srv.domain.TransactionDetailDOExample">
+        SELECT
+            sum(amount) as amount, direction
+        FROM
+            transaction_detail
+        <if test="_parameter != null">
+          <include refid="Example_Where_Clause" />
+        </if>
+        GROUP BY direction
+    </select>
 </mapper>

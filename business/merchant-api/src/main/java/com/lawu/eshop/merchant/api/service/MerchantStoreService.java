@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreAdInfoDTO;
@@ -16,8 +17,6 @@ import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zhangyong
@@ -162,4 +161,14 @@ public interface MerchantStoreService {
      */
     @RequestMapping(value = "merchantStore/findAccountAndRegionPathByNum", method = RequestMethod.GET)
     VisitUserInfoDTO findAccountAndRegionPathByNum(@RequestParam("merchantNum") String merchantNum);
+    
+    /**
+     * 查询店铺类型
+     * @param merchantId
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    @RequestMapping(value = "merchantStore/getManageType", method = RequestMethod.GET)
+    Result<ManageTypeEnum> getManageType(@RequestParam("merchantId") Long merchantId);
 }

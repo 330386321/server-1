@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreAdInfoDTO;
@@ -105,5 +106,10 @@ public class MockMerchantStoreService extends BaseController implements Merchant
         dto.setAccount("11111111111111");
         dto.setRegionPath("1/11/111");
         return dto;
+    }
+
+    @Override
+    public Result<ManageTypeEnum> getManageType(Long merchantId) {
+        return successGet(ManageTypeEnum.COMMON);
     }
 }

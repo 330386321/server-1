@@ -1,17 +1,24 @@
-package com.lawu.eshop.user.constants;
+package com.lawu.eshop.property.constants;
 
 public enum ManageTypeEnum {
+	
+	COMMON((byte) 0x01, "普通"), ENTITY((byte) 0x02, "实体");
     
-	COMMON((byte) 0x01),     //普通
-	ENTITY((byte) 0x02);      //实体
-    public Byte val;
-
-    ManageTypeEnum(Byte val) {
+    private Byte val;
+    
+    private String label;
+    
+    ManageTypeEnum(Byte val, String label) {
         this.val = val;
+        this.label = label;
     }
-
+    
     public Byte getVal() {
         return val;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
     public static ManageTypeEnum getEnum(Byte val) {

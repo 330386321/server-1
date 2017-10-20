@@ -14,12 +14,16 @@ import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailMonthlyBillOfMemberForeignParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailMonthlyBillOfMerchantForeignParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailQueryForMemberForeignParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailQueryForMerchantForeignParam;
 import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
+import com.lawu.eshop.property.srv.bo.MonthlyBillBO;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
 import com.lawu.eshop.property.srv.bo.TotalSalesGroupByAreaBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 交易明细服务接口
@@ -45,6 +49,7 @@ public interface TransactionDetailService {
 	 * @param param 查询参数
 	 * @return 
 	 */
+	@Deprecated
 	Page<TransactionDetailBO> findPageByUserNumForMember(String userNum, TransactionDetailQueryForMemberParam param);
 	
 	/**
@@ -115,4 +120,48 @@ public interface TransactionDetailService {
 	boolean verifyOrderByUserNumAndTransactionType(BalancePayDataParam param);
 
 	public String packageTitle(MemberTransactionTypeEnum memberTransactionTypeEnum, MerchantTransactionTypeEnum merchantTransactionTypeEnum, String title);
+	
+    /**
+     * 根据会员编号和查询参数分页查询交易明细
+     * 
+     * @param userNum 会员编号
+     * @param param 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    Page<TransactionDetailBO> page(String userNum, TransactionDetailQueryForMemberForeignParam param);
+    
+    /**
+     * 根据会员编号和查询参数月结账单
+     * 
+     * @param userNum 会员编号
+     * @param param 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    MonthlyBillBO monthlyBill(String userNum, TransactionDetailMonthlyBillOfMemberForeignParam param);
+    
+    /**
+     * 根据会员编号和查询参数分页查询交易明细
+     * 
+     * @param userNum 会员编号
+     * @param param 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    Page<TransactionDetailBO> page(String userNum, TransactionDetailQueryForMerchantForeignParam param);
+    
+    /**
+     * 根据会员编号和查询参数月结账单
+     * 
+     * @param userNum 会员编号
+     * @param param 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    MonthlyBillBO monthlyBill(String userNum, TransactionDetailMonthlyBillOfMerchantForeignParam param);
 }

@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,14 +22,24 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.CashManageFrontService;
+import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.merchant.api.service.TransactionDetailService;
+import com.lawu.eshop.property.constants.ManageTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionCategoryEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.dto.MonthlyBillDTO;
+import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
+import com.lawu.eshop.property.dto.TransactionTypeDTO;
 import com.lawu.eshop.property.dto.WithdrawCashStatusDTO;
+import com.lawu.eshop.property.dto.foreign.TransactionDetailOfMerchantDTO;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailMonthlyBillOfMerchantForeignParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailQueryForMerchantForeignParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,6 +61,9 @@ public class TransactionDetailController extends BaseController {
     @Autowired
     private CashManageFrontService cashManageFrontService;
     
+    @Autowired
+    private MerchantStoreService merchantStoreService;
+    
     /**
      * 根据用户编号分页获取交易明细列表。
      * 
@@ -55,6 +71,7 @@ public class TransactionDetailController extends BaseController {
      * @param param 查询参数
      * @return
      */
+    @Deprecated
     @SuppressWarnings("unchecked")
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "获取交易明细列表", notes = "根据用户编号分页获取交易明细列表。[]（蒋鑫俊）", httpMethod = "GET")
@@ -111,5 +128,68 @@ public class TransactionDetailController extends BaseController {
     	return successGet(result);
     }
     
+    @SuppressWarnings("unchecked")
+    @ApiOperation(value = "获取用户的所有交易类型。", notes = "获取商家的所有交易类型。[]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "transactionType", method = RequestMethod.GET)
+    public Result<List<TransactionTypeDTO>> transactionType(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        Result<com.lawu.eshop.user.constants.ManageTypeEnum> result = merchantStoreService.getManageType(merchantId);
+        if (!isSuccess(result)) {
+            return successGet(result);
+        }
+        com.lawu.eshop.user.constants.ManageTypeEnum manageType = result.getModel();
+        List<TransactionTypeDTO> rtn = new ArrayList<>();
+        for (MerchantTransactionCategoryEnum item : MerchantTransactionCategoryEnum.values()) {
+            if (item.getType() != null) {
+                for (ManageTypeEnum manageTypeItem : item.getType()) {
+                    if (manageType == null || manageTypeItem.getVal().equals(manageType.getVal())) {
+                        TransactionTypeDTO transactionTypeDTO = new TransactionTypeDTO();
+                        transactionTypeDTO.setName(item.getName());
+                        transactionTypeDTO.setValue(item.name());
+                        rtn.add(transactionTypeDTO);
+                        break;
+                    }
+                }
+            }
+        }
+        return successGet(rtn);
+    }
     
+    @SuppressWarnings("unchecked")
+    @ApiOperation(value = "获取交易明细列表", notes = "分页获取交易明细列表。[1004]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "findPage", method = RequestMethod.GET)
+    public Result<Page<TransactionDetailOfMerchantDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") @Valid TransactionDetailQueryForMerchantForeignParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        Result<Page<TransactionDetailOfMerchantDTO>> result = transactionDetailService.page(userNum, param);
+        if (!isSuccess(result)) {
+            return successGet(result);
+        }
+        return successGet(result);
+    }
+    
+    @SuppressWarnings("unchecked")
+    @ApiOperation(value = "获取月结账单", notes = "获取月结账单。[1004]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "monthlyBill", method = RequestMethod.GET)
+    public Result<Page<TransactionDetailToMemberDTO>> monthlyBill(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") @Valid TransactionDetailMonthlyBillOfMerchantForeignParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        Result<MonthlyBillDTO> result = transactionDetailService.monthlyBill(userNum, param);
+        if (!isSuccess(result)) {
+            return successGet(result);
+        }
+        return successGet(result);
+    }
 }

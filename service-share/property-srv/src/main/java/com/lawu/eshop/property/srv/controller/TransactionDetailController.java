@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.property.dto.IncomeMsgDTO;
-import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
-import com.lawu.eshop.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,18 +16,29 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.dto.IncomeMsgDTO;
+import com.lawu.eshop.property.dto.MonthlyBillDTO;
 import com.lawu.eshop.property.dto.TotalSalesDTO;
 import com.lawu.eshop.property.dto.TotalSalesGroupByAreaDTO;
 import com.lawu.eshop.property.dto.TransactionDetailBackageDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
 import com.lawu.eshop.property.dto.UserIncomeExpenditureDatailDTO;
+import com.lawu.eshop.property.dto.foreign.TransactionDetailOfMemberDTO;
+import com.lawu.eshop.property.dto.foreign.TransactionDetailOfMerchantDTO;
 import com.lawu.eshop.property.param.TotalSalesQueryParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailMonthlyBillOfMemberForeignParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailMonthlyBillOfMerchantForeignParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailQueryForMemberForeignParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailQueryForMerchantForeignParam;
+import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
+import com.lawu.eshop.property.srv.bo.MonthlyBillBO;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
 import com.lawu.eshop.property.srv.bo.TotalSalesGroupByAreaBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
@@ -37,6 +47,7 @@ import com.lawu.eshop.property.srv.converter.TotalSalesConverter;
 import com.lawu.eshop.property.srv.converter.TransactionDetailConverter;
 import com.lawu.eshop.property.srv.converter.UserIncomeExpenditureConverter;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * @author Sunny
@@ -61,6 +72,7 @@ public class TransactionDetailController extends BaseController {
 	 *            查询参数
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping(value = "findPageByUserNumForMember/{userNum}", method = RequestMethod.POST)
 	public Result<Page<TransactionDetailToMemberDTO>> findPageByUserNumForMember(@PathVariable("userNum") String userNum, @RequestBody TransactionDetailQueryForMemberParam param) {
 		Page<TransactionDetailBO> transactionDetailBOPage = transactionDetailService.findPageByUserNumForMember(userNum, param);
@@ -182,5 +194,81 @@ public class TransactionDetailController extends BaseController {
 		}
 		return successCreated(dtos);
 	}
-
+	
+    /**
+     * 根据会员编号和查询参数分页查询交易明细
+     * 
+     * @param userNum 会员编号
+     * @param param 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    @RequestMapping(value = "page/member/{userNum}", method = RequestMethod.POST)
+    public Result<Page<TransactionDetailOfMemberDTO>> page(@PathVariable("userNum") String userNum, @Validated @RequestBody TransactionDetailQueryForMemberForeignParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        Page<TransactionDetailBO> transactionDetailBOPage = transactionDetailService.page(userNum, param);
+        return successCreated(TransactionDetailConverter.convertTransactionDetailOfMemberDTOPage(transactionDetailBOPage));
+    }
+    
+    /**
+     * 根据会员编号和查询参数月结账单
+     * 
+     * @param userNum 会员编号
+     * @param param 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    @RequestMapping(value = "monthlyBill/member/{userNum}", method = RequestMethod.POST)
+    public Result<MonthlyBillDTO> monthlyBill(@PathVariable("userNum") String userNum, @Validated @RequestBody TransactionDetailMonthlyBillOfMemberForeignParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        MonthlyBillBO monthlyBillBO = transactionDetailService.monthlyBill(userNum, param);
+        return successCreated(TransactionDetailConverter.convert(monthlyBillBO));
+    }
+    
+    /**
+     * 根据会员编号和查询参数分页查询交易明细
+     * 
+     * @param userNum 会员编号
+     * @param param 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    @RequestMapping(value = "page/merchant/{userNum}", method = RequestMethod.POST)
+    public Result<Page<TransactionDetailOfMerchantDTO>> page(@PathVariable("userNum") String userNum, @Validated @RequestBody TransactionDetailQueryForMerchantForeignParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        Page<TransactionDetailBO> transactionDetailBOPage = transactionDetailService.page(userNum, param);
+        return successCreated(TransactionDetailConverter.convertTransactionDetailOfMerchantDTOPage(transactionDetailBOPage));
+    }
+    
+    /**
+     * 根据会员编号和查询参数月结账单
+     * 
+     * @param userNum 会员编号
+     * @param param 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    @RequestMapping(value = "monthlyBill/merchant/{userNum}", method = RequestMethod.POST)
+    public Result<MonthlyBillDTO> monthlyBill(@PathVariable("userNum") String userNum, @Validated @RequestBody TransactionDetailMonthlyBillOfMerchantForeignParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        MonthlyBillBO monthlyBillBO = transactionDetailService.monthlyBill(userNum, param);
+        return successCreated(TransactionDetailConverter.convert(monthlyBillBO));
+    }
+    
 }

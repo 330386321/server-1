@@ -1,19 +1,25 @@
 package com.lawu.eshop.property.srv.converter;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.dto.MonthlyBillDTO;
 import com.lawu.eshop.property.dto.TransactionDetailBackageDTO;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
+import com.lawu.eshop.property.dto.foreign.TransactionDetailOfMemberDTO;
+import com.lawu.eshop.property.dto.foreign.TransactionDetailOfMerchantDTO;
+import com.lawu.eshop.property.srv.bo.MonthlyBillBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.lawu.eshop.property.srv.domain.extend.MonthlyBillDO;
 
 /**
  * 交易明细转换器
@@ -187,4 +193,99 @@ public class TransactionDetailConverter {
 		rtn.setRecords(transactionDetailBackageDTOS);
 		return rtn;
 	}
+
+    public static MonthlyBillBO convertMonthlyBillBO(List<MonthlyBillDO> monthlyBillDOList) {
+        MonthlyBillBO rtn = new MonthlyBillBO();
+        rtn.setTotalExpenditure(new BigDecimal(0));
+        rtn.setTotalIncome(new BigDecimal(0));
+        if (monthlyBillDOList == null || monthlyBillDOList.isEmpty()) {
+            return rtn;
+        }
+        for (MonthlyBillDO item : monthlyBillDOList) {
+            switch (ConsumptionTypeEnum.getEnum(item.getDirection())) {
+            case EXPENDITURE:
+                rtn.setTotalExpenditure(item.getAmount());
+                break;
+            case INCOME:
+                rtn.setTotalIncome(item.getAmount());
+                break;
+            default:
+                break;
+            }
+        }
+        return rtn;
+    }
+    
+    public static MonthlyBillDTO convert(MonthlyBillBO monthlyBillBO) {
+        MonthlyBillDTO rtn = new MonthlyBillDTO();
+        rtn.setTotalExpenditure(monthlyBillBO.getTotalExpenditure());
+        rtn.setTotalIncome(monthlyBillBO.getTotalIncome());
+        return rtn;
+    }
+    
+    public static TransactionDetailOfMemberDTO convertTransactionDetailOfMemberDTO(TransactionDetailBO transactionDetailBO) {
+        TransactionDetailOfMemberDTO rtn = null;
+        if (transactionDetailBO == null) {
+            return rtn;
+        }
+        rtn = new TransactionDetailOfMemberDTO();
+        rtn.setAmount(transactionDetailBO.getAmount());
+        rtn.setTitle(transactionDetailBO.getTitle());
+        rtn.setDirection(transactionDetailBO.getDirection());
+        rtn.setTransactionCategory(MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory());
+        rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
+        return rtn;
+    }
+
+    public static List<TransactionDetailOfMemberDTO> convertTransactionDetailOfMemberDTOS(List<TransactionDetailBO> transactionDetailBOS) {
+        List<TransactionDetailOfMemberDTO> rtn = new ArrayList<>();
+        if (transactionDetailBOS == null || transactionDetailBOS.isEmpty()) {
+            return rtn;
+        }
+        for (TransactionDetailBO transactionDetailBO : transactionDetailBOS) {
+            rtn.add(convertTransactionDetailOfMemberDTO(transactionDetailBO));
+        }
+        return rtn;
+    }
+    
+    public static Page<TransactionDetailOfMemberDTO> convertTransactionDetailOfMemberDTOPage(Page<TransactionDetailBO> transactionDetailBOPage) {
+        Page<TransactionDetailOfMemberDTO> rtn = new Page<>();
+        rtn.setCurrentPage(transactionDetailBOPage.getCurrentPage());
+        rtn.setTotalCount(transactionDetailBOPage.getTotalCount());
+        rtn.setRecords(convertTransactionDetailOfMemberDTOS(transactionDetailBOPage.getRecords()));
+        return rtn;
+    }
+    
+    public static TransactionDetailOfMerchantDTO convertTransactionDetailOfMerchantDTO(TransactionDetailBO transactionDetailBO) {
+        TransactionDetailOfMerchantDTO rtn = null;
+        if (transactionDetailBO == null) {
+            return rtn;
+        }
+        rtn = new TransactionDetailOfMerchantDTO();
+        rtn.setAmount(transactionDetailBO.getAmount());
+        rtn.setTitle(transactionDetailBO.getTitle());
+        rtn.setDirection(transactionDetailBO.getDirection());
+        rtn.setTransactionCategory(MerchantTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory());
+        rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
+        return rtn;
+    }
+
+    public static List<TransactionDetailOfMerchantDTO> convertTransactionDetailOfMerchantDTOS(List<TransactionDetailBO> transactionDetailBOS) {
+        List<TransactionDetailOfMerchantDTO> rtn = new ArrayList<>();
+        if (transactionDetailBOS == null || transactionDetailBOS.isEmpty()) {
+            return rtn;
+        }
+        for (TransactionDetailBO transactionDetailBO : transactionDetailBOS) {
+            rtn.add(convertTransactionDetailOfMerchantDTO(transactionDetailBO));
+        }
+        return rtn;
+    }
+    
+    public static Page<TransactionDetailOfMerchantDTO> convertTransactionDetailOfMerchantDTOPage(Page<TransactionDetailBO> transactionDetailBOPage) {
+        Page<TransactionDetailOfMerchantDTO> rtn = new Page<>();
+        rtn.setCurrentPage(transactionDetailBOPage.getCurrentPage());
+        rtn.setTotalCount(transactionDetailBOPage.getTotalCount());
+        rtn.setRecords(convertTransactionDetailOfMerchantDTOS(transactionDetailBOPage.getRecords()));
+        return rtn;
+    }
 }

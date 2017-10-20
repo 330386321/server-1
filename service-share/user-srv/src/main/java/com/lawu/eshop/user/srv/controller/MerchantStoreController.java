@@ -772,6 +772,5 @@ public class MerchantStoreController extends BaseController {
 		solrService.delAllSolrDocs(userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
 		return successGet();
 	}
-
+	
 }
-

@@ -22,16 +22,22 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.CashManageFrontService;
 import com.lawu.eshop.member.api.service.TransactionDetailService;
+import com.lawu.eshop.property.constants.MemberTransactionCategoryEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.dto.MonthlyBillDTO;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.dto.TransactionTypeDTO;
 import com.lawu.eshop.property.dto.WithdrawCashStatusDTO;
+import com.lawu.eshop.property.dto.foreign.TransactionDetailOfMemberDTO;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailMonthlyBillOfMemberForeignParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailQueryForMemberForeignParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -53,13 +59,7 @@ public class TransactionDetailController extends BaseController {
     @Autowired
     private CashManageFrontService cashManageFrontService;
     
-    /**
-     * 根据用户编号分页获取交易明细列表。
-     * 
-     * @param token 
-     * @param param 查询参数
-     * @return
-     */
+    @Deprecated
     @SuppressWarnings("unchecked")
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "获取交易明细列表", notes = "根据用户编号分页获取交易明细列表。[]（蒋鑫俊）", httpMethod = "GET")
@@ -116,12 +116,7 @@ public class TransactionDetailController extends BaseController {
     	return successGet(result);
     }
     
-    /**
-     * 获取用户的所有交易类型。
-     * 
-     * @param token 
-     * @return
-     */
+    @Deprecated
 	@Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "获取用户的所有交易类型。", notes = "获取用户的所有交易类型。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -137,5 +132,56 @@ public class TransactionDetailController extends BaseController {
     	}
     	
     	return successGet(list);
+    }
+	
+    @ApiOperation(value = "获取用户的所有交易类型。", notes = "获取用户的所有交易类型。[]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "transactionType", method = RequestMethod.GET)
+    public Result<List<TransactionTypeDTO>> transactionType(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        List<TransactionTypeDTO> list = new ArrayList<>();
+        for (MemberTransactionCategoryEnum item : MemberTransactionCategoryEnum.values()) {
+            TransactionTypeDTO transactionTypeDTO = new TransactionTypeDTO();
+            transactionTypeDTO.setName(item.getName());
+            transactionTypeDTO.setValue(item.name());
+            list.add(transactionTypeDTO);
+        }
+        return successGet(list);
+    }
+    
+    @SuppressWarnings("unchecked")
+    @ApiOperation(value = "获取交易明细列表", notes = "分页获取交易明细列表。[1004]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "findPage", method = RequestMethod.GET)
+    public Result<Page<TransactionDetailOfMemberDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") @Valid TransactionDetailQueryForMemberForeignParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        Result<Page<TransactionDetailOfMemberDTO>> result = transactionDetailService.page(userNum, param);
+        if (!isSuccess(result)) {
+            return successGet(result);
+        }
+        return successGet(result);
+    }
+    
+    @SuppressWarnings("unchecked")
+    @ApiOperation(value = "获取月结账单", notes = "获取月结账单。[1004]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "monthlyBill", method = RequestMethod.GET)
+    public Result<Page<TransactionDetailToMemberDTO>> monthlyBill(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") @Valid TransactionDetailMonthlyBillOfMemberForeignParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        Result<MonthlyBillDTO> result = transactionDetailService.monthlyBill(userNum, param);
+        if (!isSuccess(result)) {
+            return successGet(result);
+        }
+        return successGet(result);
     }
 }

@@ -6,12 +6,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.property.param.BalancePayDataParam;
-import com.lawu.eshop.property.param.BalancePayValidateDataParam;
-import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
-import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
-import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
-import com.lawu.eshop.user.constants.UserCommonConstant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.constants.MemberTransactionCategoryEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionCategoryEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.param.BalancePayDataParam;
+import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.TotalSalesQueryParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
@@ -29,6 +27,12 @@ import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailMonthlyBillOfMemberForeignParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailMonthlyBillOfMerchantForeignParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailQueryForMemberForeignParam;
+import com.lawu.eshop.property.param.foreign.TransactionDetailQueryForMerchantForeignParam;
+import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
+import com.lawu.eshop.property.srv.bo.MonthlyBillBO;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
 import com.lawu.eshop.property.srv.bo.TotalSalesGroupByAreaBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
@@ -41,6 +45,9 @@ import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample.Criteria;
+import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
+import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
+import com.lawu.eshop.property.srv.domain.extend.MonthlyBillDO;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesDO;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesGroupByAreaDO;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample;
@@ -50,6 +57,8 @@ import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.TransactionDetailExtendDOMapper;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
+import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
 
 /**
@@ -112,6 +121,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 	 * @param param 查询参数
 	 * @return 
 	 */
+	@Deprecated
 	@Override
 	public Page<TransactionDetailBO> findPageByUserNumForMember(String userNum, TransactionDetailQueryForMemberParam param) {
 		TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
@@ -428,4 +438,127 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		return titleRet;
 	}
 
+    /**
+     * 根据会员编号和查询参数分页查询交易明细
+     * 
+     * @param userNum 会员编号
+     * @param param 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    @Override
+    public Page<TransactionDetailBO> page(String userNum, TransactionDetailQueryForMemberForeignParam param) {
+        Page<TransactionDetailBO> rtn = new Page<>();
+        TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
+        Criteria criteria = transactionDetailDOExample.createCriteria();
+        criteria.andUserNumEqualTo(userNum);
+        if (!MemberTransactionCategoryEnum.ALL.equals(param.getTransactionCategory())) {
+            criteria.andTransactionTypeIn(MemberTransactionTypeEnum.getEnum(param.getTransactionCategory()));
+        }
+        if (param.getDate() != null) {
+            criteria.andGmtCreateBetween(DateUtil.getFirstSecondOfDay(DateUtil.getFirstDayOfMonth(param.getDate())), DateUtil.getLastSecondOfDay(DateUtil.getLastDayOfMonth(param.getDate())));
+        }
+        int count = transactionDetailDOMapper.countByExample(transactionDetailDOExample);
+        rtn.setCurrentPage(param.getCurrentPage());
+        rtn.setTotalCount(count);
+        // 如果返回的总记录为0，直接返回page
+        if (count <= 0 || param.getOffset() >= count) {
+            return rtn;
+        }
+        transactionDetailDOExample.setOrderByClause("gmt_create desc");
+        RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+        List<TransactionDetailDO> list = transactionDetailDOMapper.selectByExampleWithRowbounds(transactionDetailDOExample, rowBounds);
+        rtn.setRecords(TransactionDetailConverter.convertBOS(list));
+        return rtn;
+    }
+    
+    /**
+     * 根据会员编号和查询参数月结账单
+     * 
+     * @param userNum 会员编号
+     * @param param 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    @Override
+    public MonthlyBillBO monthlyBill(String userNum, TransactionDetailMonthlyBillOfMemberForeignParam param) {
+        TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
+        Criteria criteria = transactionDetailDOExample.createCriteria();
+        criteria.andUserNumEqualTo(userNum);
+        if (!MemberTransactionCategoryEnum.ALL.equals(param.getTransactionCategory())) {
+            criteria.andTransactionTypeIn(MemberTransactionTypeEnum.getEnum(param.getTransactionCategory()));
+        }
+        if (param.getDate() != null) {
+            criteria.andGmtCreateBetween(DateUtil.getFirstSecondOfDay(DateUtil.getFirstDayOfMonth(param.getDate())), DateUtil.getLastSecondOfDay(DateUtil.getLastDayOfMonth(param.getDate())));
+        }
+        List<MonthlyBillDO> monthlyBillDOList = transactionDetailExtendDOMapper.selectMonthlyBill(transactionDetailDOExample);
+        return TransactionDetailConverter.convertMonthlyBillBO(monthlyBillDOList);
+    }
+    
+    /**
+     * 根据会员编号和查询参数分页查询交易明细
+     * 
+     * @param userNum 会员编号
+     * @param param 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    @Override
+    public Page<TransactionDetailBO> page(String userNum, TransactionDetailQueryForMerchantForeignParam param) {
+        Page<TransactionDetailBO> rtn = new Page<>();
+        TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
+        Criteria criteria = transactionDetailDOExample.createCriteria();
+        criteria.andUserNumEqualTo(userNum);
+        if (!MerchantTransactionCategoryEnum.ALL.equals(param.getTransactionCategory())) {
+            List<Byte> merchantTransactionType = MerchantTransactionTypeEnum.getEnum(param.getTransactionCategory());
+            if (merchantTransactionType != null && !merchantTransactionType.isEmpty()) {
+                criteria.andTransactionTypeIn(merchantTransactionType);
+            }
+        }
+        if (param.getDate() != null) {
+            criteria.andGmtCreateBetween(DateUtil.getFirstSecondOfDay(DateUtil.getFirstDayOfMonth(param.getDate())), DateUtil.getLastSecondOfDay(DateUtil.getLastDayOfMonth(param.getDate())));
+        }
+        int count = transactionDetailDOMapper.countByExample(transactionDetailDOExample);
+        rtn.setCurrentPage(param.getCurrentPage());
+        rtn.setTotalCount(count);
+        // 如果返回的总记录为0，直接返回page
+        if (count <= 0 || param.getOffset() >= count) {
+            return rtn;
+        }
+        transactionDetailDOExample.setOrderByClause("gmt_create desc");
+        RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+        List<TransactionDetailDO> list = transactionDetailDOMapper.selectByExampleWithRowbounds(transactionDetailDOExample, rowBounds);
+        rtn.setRecords(TransactionDetailConverter.convertBOS(list));
+        return rtn;
+    }
+    
+    /**
+     * 根据会员编号和查询参数月结账单
+     * 
+     * @param userNum 会员编号
+     * @param param 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    @Override
+    public MonthlyBillBO monthlyBill(String userNum, TransactionDetailMonthlyBillOfMerchantForeignParam param) {
+        TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
+        Criteria criteria = transactionDetailDOExample.createCriteria();
+        criteria.andUserNumEqualTo(userNum);
+        if (!MerchantTransactionCategoryEnum.ALL.equals(param.getTransactionCategory())) {
+            List<Byte> merchantTransactionType = MerchantTransactionTypeEnum.getEnum(param.getTransactionCategory());
+            if (merchantTransactionType != null && !merchantTransactionType.isEmpty()) {
+                criteria.andTransactionTypeIn(merchantTransactionType);
+            }
+        }
+        if (param.getDate() != null) {
+            criteria.andGmtCreateBetween(DateUtil.getFirstSecondOfDay(DateUtil.getFirstDayOfMonth(param.getDate())), DateUtil.getLastSecondOfDay(DateUtil.getLastDayOfMonth(param.getDate())));
+        }
+        List<MonthlyBillDO> monthlyBillDOList = transactionDetailExtendDOMapper.selectMonthlyBill(transactionDetailDOExample);
+        return TransactionDetailConverter.convertMonthlyBillBO(monthlyBillDOList);
+    }
 }

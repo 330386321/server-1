@@ -2,8 +2,10 @@ package com.lawu.eshop.property.srv.mapper.extend;
 
 import java.util.List;
 
+import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
+import com.lawu.eshop.property.srv.domain.extend.MonthlyBillDO;
 import com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesDO;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesGroupByAreaDO;
@@ -39,7 +41,8 @@ public interface TransactionDetailExtendDOMapper {
 	ReportAdEarningsPointView  getReportAdEarningsLovePoint(ReportAdEarningsPointView view);
 	
 	ReportAdEarningsPointView getUserPointByBzId(ReportAdEarningsPointView view);
-/**
+	
+	/**
 	 * 根据时间获取获取买单和订单的收入group by area
 	 * 
 	 * @param param
@@ -52,4 +55,14 @@ public interface TransactionDetailExtendDOMapper {
 	ReportAdEarningsPointView getLovePointByBzId(ReportAdEarningsPointView view);
 
     List<IncomeMsgDOView> getIncomeMsgDataList(IncomeMsgExample example);
+    
+    /**
+     * 查询月结账单
+     * 
+     * @param example 查询参数
+     * @return
+     * @author jiangxinjun
+     * @date 2017年10月20日
+     */
+    List<MonthlyBillDO> selectMonthlyBill(TransactionDetailDOExample example);
 }
