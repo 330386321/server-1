@@ -3,6 +3,8 @@ package com.lawu.eshop.property.dto.foreign;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.lawu.eshop.framework.web.json.KeepDecimalJsonSerializer;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -23,6 +25,7 @@ public class TransactionDetailForeignDTO {
     /**
      * 金额
      */
+    @JsonSerialize(using = KeepDecimalJsonSerializer.class)
     @ApiModelProperty(value = "金额", required = true)
     private BigDecimal amount;
 

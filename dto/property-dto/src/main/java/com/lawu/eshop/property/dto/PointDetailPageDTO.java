@@ -2,7 +2,9 @@ package com.lawu.eshop.property.dto;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.json.KeepDecimalJsonSerializer;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -11,6 +13,7 @@ public class PointDetailPageDTO {
 	/**
 	 * 用户积分
 	 */
+    @JsonSerialize(using = KeepDecimalJsonSerializer.class)
 	@ApiModelProperty(value = "用户积分", required = true)
 	private BigDecimal point;
 	

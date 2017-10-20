@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.lawu.eshop.framework.web.json.KeepDecimalJsonSerializer;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -19,6 +21,7 @@ public class PointDetailDTO {
     /**
      * 积分
      */
+	@JsonSerialize(using = KeepDecimalJsonSerializer.class)
 	@ApiModelProperty(value = "积分", required = true)
     private BigDecimal point;
 	

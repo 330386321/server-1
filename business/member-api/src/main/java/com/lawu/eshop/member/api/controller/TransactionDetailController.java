@@ -172,7 +172,7 @@ public class TransactionDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "monthlyBill", method = RequestMethod.GET)
-    public Result<Page<TransactionDetailToMemberDTO>> monthlyBill(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") @Valid TransactionDetailMonthlyBillOfMemberForeignParam param, BindingResult bindingResult) {
+    public Result<MonthlyBillDTO> monthlyBill(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") @Valid TransactionDetailMonthlyBillOfMemberForeignParam param, BindingResult bindingResult) {
         String message = validate(bindingResult);
         if (message != null) {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY, message);

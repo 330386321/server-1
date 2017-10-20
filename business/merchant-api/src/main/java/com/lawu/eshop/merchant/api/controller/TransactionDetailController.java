@@ -32,7 +32,6 @@ import com.lawu.eshop.property.constants.ManageTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionCategoryEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.dto.MonthlyBillDTO;
-import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
 import com.lawu.eshop.property.dto.TransactionTypeDTO;
 import com.lawu.eshop.property.dto.WithdrawCashStatusDTO;
@@ -180,7 +179,7 @@ public class TransactionDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "monthlyBill", method = RequestMethod.GET)
-    public Result<Page<TransactionDetailToMemberDTO>> monthlyBill(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") @Valid TransactionDetailMonthlyBillOfMerchantForeignParam param, BindingResult bindingResult) {
+    public Result<MonthlyBillDTO> monthlyBill(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") @Valid TransactionDetailMonthlyBillOfMerchantForeignParam param, BindingResult bindingResult) {
         String message = validate(bindingResult);
         if (message != null) {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY, message);
