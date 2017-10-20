@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 public class GetPlatformRedPacketBO {
 	
+	private Long id;
+	
 	private BigDecimal money;
 	
 	private  boolean isGet;
@@ -22,6 +24,14 @@ public class GetPlatformRedPacketBO {
 
 	public void setGet(boolean isGet) {
 		this.isGet = isGet;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	

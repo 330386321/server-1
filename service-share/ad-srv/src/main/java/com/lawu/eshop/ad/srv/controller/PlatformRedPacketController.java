@@ -94,7 +94,7 @@ public class PlatformRedPacketController extends BaseController{
 		GetPlatformRedPacketDTO dto = new GetPlatformRedPacketDTO();
 		dto.setGet(bo.isGet());
 		dto.setMoney(bo.getMoney());
-		
+		dto.setId(bo.getId());
 		return successGet(dto);
 
 	}

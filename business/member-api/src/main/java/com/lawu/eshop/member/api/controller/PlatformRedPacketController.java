@@ -1,5 +1,7 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,8 +12,12 @@ import com.lawu.eshop.ad.dto.GetPlatformRedPacketDTO;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.member.api.service.MessageService;
 import com.lawu.eshop.member.api.service.PlatformRedPacketService;
 import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
@@ -39,10 +45,12 @@ public class PlatformRedPacketController extends BaseController{
 	
 	@Autowired
     private MemberService memberService;
-	
 
     @Autowired
     private  MerchantStoreService merchantStoreService;
+    
+    @Autowired
+    private MessageService  messageService;
 	
 	@ApiOperation(value = "领取平台红包", notes = "领取平台红包,[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -69,6 +77,18 @@ public class PlatformRedPacketController extends BaseController{
 		if(accountResult.getModel()!=null){
 			 result = platformRedPacketService.getRedPacket(accountResult.getModel().getNum());
 			 result.getModel().setEntity(true);
+			 //领取成功发送消息
+			 if(result.getModel().getMoney()!=null && result.getModel().getMoney().compareTo(BigDecimal.valueOf(0))==1){
+				 MessageInfoParam messageInfoParam = new MessageInfoParam();
+				 MessageTempParam messageTempParam = new MessageTempParam();
+				 messageTempParam.setEarningAmount(result.getModel().getMoney());
+				 messageInfoParam.setRelateId(result.getModel().getId());
+				 messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PLAT_RED_PACKET);
+				 messageInfoParam.setIsPush(false);
+				 messageInfoParam.setMessageParam(messageTempParam);
+					 
+				 messageService.saveMessage(accountResult.getModel().getNum(), messageInfoParam); 
+			 }
 		}
 		
 		return result;

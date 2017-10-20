@@ -119,7 +119,7 @@ public class PlatformRedPacketServiceImpl implements PlatformRedPacketService {
 				platformRedPacketDO.setId(list.get(0).getId());
 				platformRedPacketDO.setSendCount(list.get(0).getSendCount()+1);
 				platformRedPacketDOMapper.updateByPrimaryKeySelective(platformRedPacketDO);
-				
+				getRedPacketBO.setId(takePlatformRedPacketDO.getId());
 				getRedPacketBO.setGet(false);
 				getRedPacketBO.setMoney(list.get(0).getMoney());
 				

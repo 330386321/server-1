@@ -645,6 +645,66 @@ public class MessageDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsPushIsNull() {
+            addCriterion("is_push is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPushIsNotNull() {
+            addCriterion("is_push is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPushEqualTo(Boolean value) {
+            addCriterion("is_push =", value, "isPush");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPushNotEqualTo(Boolean value) {
+            addCriterion("is_push <>", value, "isPush");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPushGreaterThan(Boolean value) {
+            addCriterion("is_push >", value, "isPush");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPushGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_push >=", value, "isPush");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPushLessThan(Boolean value) {
+            addCriterion("is_push <", value, "isPush");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPushLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_push <=", value, "isPush");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPushIn(List<Boolean> values) {
+            addCriterion("is_push in", values, "isPush");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPushNotIn(List<Boolean> values) {
+            addCriterion("is_push not in", values, "isPush");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPushBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_push between", value1, value2, "isPush");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPushNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_push not between", value1, value2, "isPush");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtModifiedIsNull() {
             addCriterion("gmt_modified is null");
             return (Criteria) this;

@@ -69,7 +69,9 @@ public enum MessageTypeEnum {
 
     MESSAGE_TYPE_MONEY_UNFREEZE((byte) 0x2D),//资金解冻 45
 	
-	MESSAGE_TYPE_AD_PRAISE_NOTICE((byte) 0x2E);//抢赞通知 46
+	MESSAGE_TYPE_AD_PRAISE_NOTICE((byte) 0x2E),//抢赞通知 46
+	
+	MESSAGE_TYPE_PLAT_RED_PACKET((byte) 0x31);//领取平台红包49
 
     public Byte val;
 

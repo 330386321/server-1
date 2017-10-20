@@ -61,4 +61,12 @@ public interface MessageService {
     Page<MessageBO> getOperatorMessageList(MessageQueryParam param);
     
     MessageBO selectMessageId(Long id);
+    
+    /**
+     * 设置cid 并推送消息给用户
+     * @param userNum
+     * @param typeEnum
+     */
+    void pushMessageBySetCid(String userNum,MessageTypeEnum typeEnum);
+    
 }

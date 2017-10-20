@@ -100,10 +100,13 @@
         <table tableName="industry_type" domainObjectName="IndustryTypeDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        -->
-        
-        <table tableName="app_version" domainObjectName="AppVersionDO">
+         <table tableName="app_version" domainObjectName="AppVersionDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        -->
+        <table tableName="message" domainObjectName="MessageDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+       
     </context>
 </generatorConfiguration>

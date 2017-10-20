@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.service;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
 import com.lawu.eshop.mall.param.MessageInfoParam;
@@ -64,4 +65,13 @@ public interface MessageService {
      */
     @RequestMapping(value = "message/delMessageByIds",method = RequestMethod.DELETE)
     Result delMessageByIds(@RequestParam("ids") String ids, @RequestParam("userNum") String userNum);
+    
+    /**
+     * 推送消息
+     * @param userNum
+     * @param typeEnum
+     * @return
+     */
+    @RequestMapping(value = "message/pushMessageBySetCid", method = RequestMethod.POST)
+	Result pushMessageBySetCid(@RequestParam("userNum") String userNum,@ModelAttribute MessageTypeEnum typeEnum);
 }

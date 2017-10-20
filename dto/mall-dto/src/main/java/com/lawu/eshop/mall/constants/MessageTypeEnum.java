@@ -73,7 +73,9 @@ public enum MessageTypeEnum {
 	
 	MESSAGE_TYPE_REPLIED_WORK_ORDER((byte) 0x2F),//工单已处理 47
 	
-	MESSAGE_TYPE_PRODUCT_FORCE_DOWN((byte) 0x30);//商品强制下架48
+	MESSAGE_TYPE_PRODUCT_FORCE_DOWN((byte) 0x30),//商品强制下架48
+	
+	MESSAGE_TYPE_PLAT_RED_PACKET((byte) 0x31);//领取平台红包49
 
     private Byte val;
     
