@@ -99,6 +99,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         this.unauthorizedErrorCode = unauthorizedErrorCode;
     }
 
+    @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         // 如果不是映射到方法直接通过
@@ -113,6 +114,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         // 从header中得到token
         String token = request.getHeader(httpHeaderName);
         if (token != null && token.length() > 0) {
+            logger.debug("Access token: {}, from {}", token, request.getRequestURI());
             Jws<Claims> claimsJws = null;
             try {
 
