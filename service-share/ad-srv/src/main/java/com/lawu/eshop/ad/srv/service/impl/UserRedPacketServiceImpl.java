@@ -302,7 +302,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		}
 		return flag;
 	}
-	
+
 	/**
 	 * 红包过期定时任务
 	 */

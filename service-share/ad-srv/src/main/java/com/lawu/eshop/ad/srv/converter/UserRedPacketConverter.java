@@ -36,6 +36,7 @@ public class UserRedPacketConverter {
 		info.setUserAccount(param.getUserAccount());
 		info.setUserNum(param.getUserNum());
 		info.setOrderNum(param.getOrderNum());
+		info.setNickname(param.getNickname());
 		return info;
 	}
 

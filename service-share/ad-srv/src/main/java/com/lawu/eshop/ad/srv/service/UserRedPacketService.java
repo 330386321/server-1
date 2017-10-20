@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.lawu.eshop.ad.srv.service;
 
@@ -21,7 +21,7 @@ import com.lawu.eshop.framework.core.page.Page;
 public interface UserRedPacketService {
 
 	/**
-	 * 
+	 *
 	 * @param param
 	 * @return
 	 */
@@ -71,8 +71,8 @@ public interface UserRedPacketService {
 	boolean updateUserPacketInfo(UserRedPacketUpdateParam paran);
 
 	UserPacketRefundParam selectBackTotalMoney(Long userRedpacketId);
-	
+
 	void executeUserRedPacketData();
-	
+
 	boolean checkUserGetRedpacket(Long redPacketId, String userNum);
 }

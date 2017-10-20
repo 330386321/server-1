@@ -1,7 +1,9 @@
 package com.lawu.eshop.ad.srv.service.impl.transaction;
 
 import com.lawu.eshop.ad.srv.constants.TransactionConstant;
+import com.lawu.eshop.ad.srv.domain.UserRedPacketDO;
 import com.lawu.eshop.ad.srv.domain.UserTakedRedPacketDO;
+import com.lawu.eshop.ad.srv.mapper.UserRedPacketDOMapper;
 import com.lawu.eshop.ad.srv.mapper.UserTakedRedPacketDOMapper;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
@@ -23,6 +25,8 @@ public class MemberGetRedPacketTransactionMainServiceImpl extends AbstractTransa
 
     @Autowired
     private UserTakedRedPacketDOMapper userTakedRedPacketDOMapper;
+    @Autowired
+    private UserRedPacketDOMapper userRedPacketDOMapper;
 
     @Override
     public UserRedPacketNotification selectNotification(Long userTakedRedPacketId) {
@@ -32,6 +36,8 @@ public class MemberGetRedPacketTransactionMainServiceImpl extends AbstractTransa
         notification.setId(userTakedRedPacketDO.getUserRedPackId());
         notification.setMoney(userTakedRedPacketDO.getMoney());
         notification.setUserNum(userTakedRedPacketDO.getUserNum());
+        UserRedPacketDO urpd = userRedPacketDOMapper.selectByPrimaryKey(userTakedRedPacketDO.getUserRedPackId());
+        notification.setTitle(urpd.getNickname());
         return notification;
     }
 }

@@ -284,14 +284,15 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		editView.setUserNum(dparam.getUserNum());
 		if (PayTypeEnum.BALANCE.getVal().equals(dparam.getPayTypeEnum().getVal())) {
 			TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-			tdsParam.setTitle(TransactionTitleEnum.BACKAGE.getVal());
 			tdsParam.setUserNum(dparam.getUserNum());
 			if(dparam.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
-				tdsParam.setTransactionType(MemberTransactionTypeEnum.BACKAGE.getValue());
+				tdsParam.setTransactionType(MemberTransactionTypeEnum.RECHARGE_BALANCE.getValue());
+				tdsParam.setTitle(MemberTransactionTypeEnum.RECHARGE_BALANCE.getName());
 			}else if(dparam.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
-				tdsParam.setTransactionType(MerchantTransactionTypeEnum.BACKAGE.getValue());
+				tdsParam.setTransactionType(MerchantTransactionTypeEnum.RECHARGE.getValue());
+				tdsParam.setTitle(MerchantTransactionTypeEnum.RECHARGE.getName());
 			}
-			tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
+			tdsParam.setTransactionAccountType(TransactionPayTypeEnum.PLAT.getVal());
 			tdsParam.setAmount(new BigDecimal(dparam.getMoney()));
 			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 			transactionDetailService.save(tdsParam);

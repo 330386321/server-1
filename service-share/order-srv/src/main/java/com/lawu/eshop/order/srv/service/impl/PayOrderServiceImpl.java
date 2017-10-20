@@ -283,7 +283,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 	public PayOrderBaseBO getPayOrderById(String id) {
 		PayOrderDO pdo = payOrderDOMapper.selectByPrimaryKey(Long.parseLong(id));
 		PayOrderBaseBO bo = new PayOrderBaseBO();
-		bo.setMerchantId(pdo.getMemberId());
+		bo.setMemberId(pdo.getMemberId());
 		bo.setMerchantId(pdo.getMerchantId());
 		return bo;
 	}

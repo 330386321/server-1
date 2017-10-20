@@ -21,6 +21,7 @@ public class UserRedPacketSaveParam {
 	private String userNum;
 	private String userAccount;
 	private String orderNum;
+	private String nickname;
 	
 	/**
 	 * @return the redPacketPutWayEnum
@@ -90,4 +91,11 @@ public class UserRedPacketSaveParam {
 		this.orderNum = orderNum;
 	}
 
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 }

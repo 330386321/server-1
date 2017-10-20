@@ -14,7 +14,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import com.lawu.eshop.user.dto.RongYunDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -107,6 +107,8 @@ public class UserRedPacketController extends BaseController {
 		saveParam.setUserAccount(UserUtil.getCurrentAccount(request));
 		saveParam.setUserNum(UserUtil.getCurrentUserNum(request));
 		saveParam.setOrderNum(StringUtil.getRandomNum(""));
+		Result<RongYunDTO> member = memberService.getRongYunInfoByNum(UserUtil.getCurrentUserNum(request));
+		saveParam.setNickname(member.getModel().getNickName());
 		Result<UserRedPacketAddReturnDTO> result = userRedPacketService.addUserRedPacket(saveParam);
 		if(isSuccess(result)){
 			adCountRecordService.setUserRedPacketCountRecord(result.getModel().getId(), param.getTotalCount());

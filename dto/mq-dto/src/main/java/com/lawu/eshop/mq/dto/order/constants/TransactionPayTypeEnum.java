@@ -21,7 +21,12 @@ public enum TransactionPayTypeEnum {
 	/**
 	 * 微信
 	 */
-	WX((byte) 0x03);
+	WX((byte) 0x03),
+
+	/**
+	 * 平台充值
+	 */
+	PLAT((byte) 0x04);
 
 	private Byte val;
 

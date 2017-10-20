@@ -153,5 +153,5 @@ public class UserRedPacketController extends BaseController {
 		ThirdPayCallBackQueryPayOrderDTO result = userRedPacketService.selectUserRedPacketInfoForThrid(redPacketId);
 		return successGet(result); 
 	}
-	
+
 }
