@@ -370,4 +370,11 @@ public interface AdService {
 	 * @param param
 	 */
 	void updateAdIsPay(AdSetPayParam param);
+	
+	/**
+	 * 判断是否支付完成
+	 * @param id
+	 * @return
+	 */
+	Boolean isPay(Long id);
 }

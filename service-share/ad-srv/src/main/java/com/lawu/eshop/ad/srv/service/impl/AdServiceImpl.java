@@ -1478,5 +1478,11 @@ public class AdServiceImpl implements AdService {
 		
 	}
 
+	@Override
+	public Boolean isPay(Long id) {
+		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+		return adDO.getIsPay();
+	}
+
 	
 }

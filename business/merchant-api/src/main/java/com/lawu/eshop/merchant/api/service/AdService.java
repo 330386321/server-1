@@ -117,4 +117,12 @@ public interface AdService {
 	 */
 	@RequestMapping(value = "ad/selectAdPayInfoById/{id}", method = RequestMethod.GET)
 	Result<AdPayInfoDTO> selectAdPayInfoById(@PathVariable("id") Long id);
+	
+	/**
+	 * 判断广告是否支付成功
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "ad/isPay/{id}", method = RequestMethod.GET)
+	Result<Boolean> isPay(@PathVariable("id") Long id);
 }

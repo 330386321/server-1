@@ -1352,4 +1352,15 @@ public class AdController extends BaseController {
 		dto.setTotalPoint(bo.getTotalPoint());
 		return successCreated(dto);
 	}
+	
+	/**
+	 * 广告是否支付成功
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "isPay/{id}", method = RequestMethod.GET)
+	public Result<Boolean> isPay(@PathVariable Long id) {
+		Boolean flag = adService.isPay(id);
+		return successCreated(flag);
+	}
 }
