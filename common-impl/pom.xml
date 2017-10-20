@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>authorization-impl</module>
+        <module>monitor-agent</module>
     </modules>
 
 

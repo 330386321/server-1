@@ -5,7 +5,10 @@ import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdPayInfoDTO;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.merchant.api.service.AdService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +65,9 @@ public class AlipayController extends BaseController {
 	private PropertySrvPropertyService propertyService;
 	@Autowired
 	private RechargeService rechargeService;
+	@Autowired
+	private AdService adService;
+
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
@@ -94,6 +100,14 @@ public class AlipayController extends BaseController {
 				return successCreated(ResultCode.MONEY_IS_ZERO);
 			}
 			aparam.setTotalAmount(String.valueOf(money));
+		} else if(ThirdPartyBizFlagEnum.BUSINESS_ADD_AD.getVal().equals(param.getBizFlagEnum().getVal())) {
+			Result<AdPayInfoDTO> adRet = adService.selectAdPayInfoById(Long.parseLong(param.getBizIds()));
+			AdPayInfoDTO ad = adRet.getModel();
+			if (StringUtil.doubleCompareTo(ad.getTotalPoint().doubleValue(), 0) == 0) {
+				return successCreated(ResultCode.MONEY_IS_ZERO);
+			}
+			aparam.setTotalAmount(ad.getTotalPoint().toString());
+			aparam.setRegionPath(ad.getMerchantRegionPath());
 		}
 
 		return alipayService.getAppAlipayReqParams(aparam);
@@ -125,6 +139,14 @@ public class AlipayController extends BaseController {
 			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizId());
 			double money = recharge.getActualMoney();
 			aparam.setTotalAmount(String.valueOf(money));
+		} else if(ThirdPartyBizFlagEnum.BUSINESS_ADD_AD.getVal().equals(param.getBizFlagEnum().getVal())) {
+			Result<AdPayInfoDTO> adRet = adService.selectAdPayInfoById(Long.parseLong(param.getBizId()));
+			AdPayInfoDTO ad = adRet.getModel();
+			if (StringUtil.doubleCompareTo(ad.getTotalPoint().doubleValue(), 0) == 0) {
+				return;
+			}
+			aparam.setTotalAmount(ad.getTotalPoint().toString());
+			aparam.setRegionPath(ad.getMerchantRegionPath());
 		}
 
 		Result result = alipayService.initPcPay(aparam);

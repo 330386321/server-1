@@ -26,12 +26,13 @@ public enum MerchantTransactionTypeEnum {
 //	DEPOSIT_REFUND((byte)0x72,"保证金退款"),				//114-需求说不要
 	SALES_COMMISSION((byte) 0x73, "推荐E友收益", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECOMMEND_INCOME}),			//115--
 	VOLUME_COMMISSION((byte) 0x74, "推荐商家收益", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECOMMEND_INCOME}),			//116--
-	BACKAGE((byte) 0x75, "平台充值", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECHARGE});					//117
+	BACKAGE((byte) 0x75, "平台充值", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECHARGE}),					//117
+    AD_DOWN((byte) 0x76, "广告下架", null);					//118
 
 	private Byte value;
-	
+
 	private String name;
-	
+
 	private MerchantTransactionCategoryEnum[] category;
 
 	MerchantTransactionTypeEnum(Byte value, String name, MerchantTransactionCategoryEnum[] category) {
@@ -47,14 +48,14 @@ public enum MerchantTransactionTypeEnum {
 	public String getName() {
 		return name;
 	}
-	
+
 	public MerchantTransactionCategoryEnum[] getCategory() {
         return category;
     }
     public MerchantTransactionCategoryEnum getPriorityCategory() {
         return category[0];
     }
-	
+
 	/**
      * 根据交易种类获取相应的交易类型
      * @param category 交易种类
@@ -79,7 +80,7 @@ public enum MerchantTransactionTypeEnum {
         }
         return rtn;
     }
-	
+
     public static MerchantTransactionTypeEnum getEnum(Byte val) {
 		MerchantTransactionTypeEnum[] values = MerchantTransactionTypeEnum.values();
 		for (MerchantTransactionTypeEnum object : values) {

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.ad.constants.AdPayTypeEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.srv.constants.TransactionConstant;
 import com.lawu.eshop.ad.srv.domain.AdDO;
@@ -33,29 +34,40 @@ public class AdMerchantAddPointTransactionMainServiceImpl extends AbstractTransa
 	private PointPoolDOMapperExtend pointPoolDOMapperExtend;
 
     @Override
-    public AdPointNotification selectNotification(Long id) {
-    	 AdDO ad=adDOMapper.selectByPrimaryKey(id);
-    	 AdPointNotification notification=new AdPointNotification();
-    	 notification.setUserNum(ad.getMerchantNum());
-    	 notification.setAdId(id);
-    	 if(ad.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal() || ad.getType()==AdTypeEnum.AD_TYPE_PACKET.getVal()){
-    		PointPoolDOView view =  pointPoolDOMapperExtend.getTotlePoint(id);
-    		BigDecimal subMoney=new BigDecimal(0);
-    		//剩余积分
-    		if(view == null){
-    		    subMoney=ad.getTotalPoint().subtract(BigDecimal.valueOf(0));
-    		}else{
-    			subMoney=ad.getTotalPoint().subtract(view.getPoint());
-    		}
- 			notification.setPoint(subMoney); 
-    	 }else{
-    		 Integer hits=ad.getHits();
-        	 BigDecimal point=ad.getPoint();
-        	 if(hits==null) hits=0;
-        	 notification.setPoint(ad.getTotalPoint().subtract(point.multiply(new BigDecimal(hits)))); 
-    	 }
-        return notification;
-    }
-
+	public AdPointNotification selectNotification(Long id) {
+		AdDO ad = adDOMapper.selectByPrimaryKey(id);
+		AdPointNotification notification = new AdPointNotification();
+		notification.setUserNum(ad.getMerchantNum());
+		notification.setAdId(id);
+		notification.setAdType(ad.getType());
+		if (ad.getPayType() == null) {
+			notification.setPayType(AdPayTypeEnum.POINT.getVal());
+		} else {
+			notification.setPayType(ad.getPayType());
+		}
+		if (ad.getThirdNumber() == null) {
+			notification.setTradeNo("");
+		} else {
+			notification.setTradeNo(ad.getThirdNumber());
+		}
+		if (ad.getType() == AdTypeEnum.AD_TYPE_PRAISE.getVal() || ad.getType() == AdTypeEnum.AD_TYPE_PACKET.getVal()) {
+			PointPoolDOView view = pointPoolDOMapperExtend.getTotlePoint(id);
+			BigDecimal subMoney = new BigDecimal(0);
+			// 剩余积分
+			if (view == null) {
+				subMoney = ad.getTotalPoint().subtract(BigDecimal.valueOf(0));
+			} else {
+				subMoney = ad.getTotalPoint().subtract(view.getPoint());
+			}
+			notification.setPoint(subMoney);
+		} else {
+			Integer hits = ad.getHits();
+			BigDecimal point = ad.getPoint();
+			if (hits == null)
+				hits = 0;
+			notification.setPoint(ad.getTotalPoint().subtract(point.multiply(new BigDecimal(hits))));
+		}
+		return notification;
+	}
 
 }

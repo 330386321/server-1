@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.ad.constants.AdPayTypeEnum;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -36,6 +37,7 @@ import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdPointInternalParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.AdSetPayParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
@@ -92,6 +94,7 @@ import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.synchronization.lock.constants.LockConstant.LockModule;
 import com.lawu.eshop.synchronization.lock.service.LockService;
 import com.lawu.eshop.utils.DateUtil;
+import com.lawu.eshop.utils.StringUtil;
 
 /**
  * E赚接口实现类
@@ -201,6 +204,11 @@ public class AdServiceImpl implements AdService {
 		if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_PACKET){  //红包开始时间为创建时间
 			adDO.setBeginTime(new Date());
 		}
+		if (adDO.getType() == AdTypeEnum.AD_TYPE_FLAT.getVal() || adDO.getType() == AdTypeEnum.AD_TYPE_VIDEO.getVal()) {
+			adDO.setPayType(AdPayTypeEnum.POINT.getVal());
+		}else{
+			adDO.setAdOrderNum(StringUtil.getRandomNum(""));
+		}
 		adDO.setTotalPoint(adParam.getTotalPoint());
 		adDO.setGmtCreate(new Date());
 		adDO.setGmtModified(new Date());
@@ -225,14 +233,16 @@ public class AdServiceImpl implements AdService {
 		if(adParam.getFileTime()!=null){
 			adDO.setFileTime(adParam.getFileTime());
 		}
-		Integer i=adDOMapper.insert(adDO);
+		adDOMapper.insert(adDO);
 
         AdSaveInfoBO bo =new AdSaveInfoBO();
         bo.setId(adDO.getId());
         bo.setAdCount(adDO.getAdCount());
-        
-        // 发送消息，通知其他模块处理事务 积分的处理
-        mctransactionMainAddService.sendNotice(adDO.getId());
+        bo.setAdOrderNum(adDO.getAdOrderNum());
+        // 发送消息，通知其他模块处理事务 积分的处理 只包括平面和视频
+		if (adDO.getType() == AdTypeEnum.AD_TYPE_FLAT.getVal() || adDO.getType() == AdTypeEnum.AD_TYPE_VIDEO.getVal()) {
+			mctransactionMainAddService.sendNotice(adDO.getId());
+		}
 
 		return bo;
 	}
@@ -950,6 +960,7 @@ public class AdServiceImpl implements AdService {
 	public Page<AdBO> listAllAd(ListAdParam listAdParam) {
 		AdDOExample example = new AdDOExample();
 		Criteria criteria = example.createCriteria();
+		criteria.andIsPayEqualTo(true);
 		if (StringUtils.isNotEmpty(listAdParam.getSortName()) && StringUtils.isNotEmpty(listAdParam.getSortOrder())) {
 			example.setOrderByClause("gmt_create " + listAdParam.getSortOrder());
 		}
@@ -1005,7 +1016,7 @@ public class AdServiceImpl implements AdService {
 		List<Byte> typeList = new ArrayList<>();
 		typeList.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
 		typeList.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
-		adDOExample.createCriteria().andStatusIn(statusList).andTypeIn(typeList);
+		adDOExample.createCriteria().andStatusIn(statusList).andTypeIn(typeList).andIsPayEqualTo(true);
 		RowBounds rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
 		List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
 		return AdConverter.convertBOS(adDOS);
@@ -1375,14 +1386,14 @@ public class AdServiceImpl implements AdService {
 			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
 			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
 
-			adDOExample.createCriteria().andTypeIn(typeList).andStatusIn(statusList);
+			adDOExample.createCriteria().andTypeIn(typeList).andStatusIn(statusList).andIsPayEqualTo(true);
 		}else{
 
 			List<Byte> statusList = new ArrayList<>();
 			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
 			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
 
-			adDOExample.createCriteria().andStatusIn(statusList).andTypeEqualTo(operatorAdParam.getAdEgainType().getVal());
+			adDOExample.createCriteria().andStatusIn(statusList).andTypeEqualTo(operatorAdParam.getAdEgainType().getVal()).andIsPayEqualTo(true);
 
 		}
 
@@ -1444,6 +1455,33 @@ public class AdServiceImpl implements AdService {
 		record.setAuditTime(new Date());
 		adDOMapper.updateByPrimaryKeySelective(record);
 		solrService.delSolrDocsById(id, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+	}
+
+	@Override
+	public void updateAdIsPay(AdSetPayParam param) {
+		AdDO record = new AdDO();
+		record.setId(param.getId());
+		record.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+		record.setGmtModified(new Date());
+		record.setThirdNumber(param.getThirdNumber());
+		record.setPayType(param.getPayTypeEnum().getVal());
+		record.setIsPay(true);
+		adDOMapper.updateByPrimaryKeySelective(record);
+		
+		AdDO  ad=adDOMapper.selectByPrimaryKey(param.getId());
+		
+		//将抢赞添加到solr
+		if(ad.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal()){
+    		SolrInputDocument document= AdConverter.convertSolrInputDocument(ad);
+			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+    	}
+		
+	}
+
+	@Override
+	public Boolean isPay(Long id) {
+		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+		return adDO.getIsPay();
 	}
 
 	

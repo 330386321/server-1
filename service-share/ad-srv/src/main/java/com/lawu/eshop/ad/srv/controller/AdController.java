@@ -33,6 +33,7 @@ import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
 import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
+import com.lawu.eshop.ad.dto.AdPayInfoDTO;
 import com.lawu.eshop.ad.dto.AdPointDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSaveInfoDTO;
@@ -142,6 +143,7 @@ public class AdController extends BaseController {
 		AdSaveInfoDTO dto = new AdSaveInfoDTO();
 		dto.setAdCount(bo.getAdCount());
 		dto.setId(bo.getId());
+		dto.setAdOrderNum(bo.getAdOrderNum());
 		
 		return successCreated(dto);
 
@@ -1335,5 +1337,30 @@ public class AdController extends BaseController {
 		adService.downOperatorById(id, auditorId, remark);
 		return successCreated();
 	}
-
+	
+	/**
+	 * 根据ID查询第三方支付时需要的参数
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "selectAdPayInfoById/{id}", method = RequestMethod.GET)
+	public Result<AdPayInfoDTO> selectAdPayInfoById(@PathVariable Long id) {
+		AdBO bo = adService.get(id);
+		AdPayInfoDTO dto = new AdPayInfoDTO();
+		dto.setMerchantRegionPath(bo.getMerchantRegionPath());
+		dto.setTotalPoint(bo.getTotalPoint());
+		return successCreated(dto);
+	}
+	
+	/**
+	 * 广告是否支付成功
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "isPay/{id}", method = RequestMethod.GET)
+	public Result<Boolean> isPay(@PathVariable Long id) {
+		Boolean flag = adService.isPay(id);
+		return successCreated(flag);
+	}
 }

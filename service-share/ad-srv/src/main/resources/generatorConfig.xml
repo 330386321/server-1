@@ -114,7 +114,7 @@
 
           <table tableName="platform_red_packet" domainObjectName="PlatformRedPacketDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table> 
+        </table>
          <table tableName="take_platform_red_packet" domainObjectName="TakePlatformRedPacketDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table> -->

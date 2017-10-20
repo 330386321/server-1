@@ -25,7 +25,19 @@ public class AdPointNotification extends Notification {
 	private Byte type;//广告类型，发平面广告和视频广告时用
 
 	private String title;//交易明细后标题
-	
+
+	/**
+	 * 1 积分 2 支付宝 3 微信   积分只针对平面和视频
+	 */
+	private byte payType;
+
+	/**
+	 * 1 平面  2  视频  3 E咻  4 红包
+	 */
+	private byte adType;
+
+	private String tradeNo;
+
 	public Long getAdId() {
 		return adId;
 	}
@@ -80,5 +92,28 @@ public class AdPointNotification extends Notification {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	public byte getPayType() {
+		return payType;
+	}
+
+	public void setPayType(byte payType) {
+		this.payType = payType;
+	}
+
+	public byte getAdType() {
+		return adType;
+	}
+
+	public void setAdType(byte adType) {
+		this.adType = adType;
+	}
+
+	public String getTradeNo() {
+		return tradeNo;
+	}
+
+	public void setTradeNo(String tradeNo) {
+		this.tradeNo = tradeNo;
 	}
 }

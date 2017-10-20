@@ -52,4 +52,9 @@ public class TransactionConstant {
      * 退保证金财务审核成功后修改商品下架
      */
     public static final byte HANDLE_DESPOISIT_AUDIT_CANCEL_DOWN_PRODUCT = 0x09;
+
+    /**
+     * 商家发广告异步回调后发笑锡修改广告记录
+     */
+    public static final byte HANDLE_MERCHANT_AD = 0x0A;
 }

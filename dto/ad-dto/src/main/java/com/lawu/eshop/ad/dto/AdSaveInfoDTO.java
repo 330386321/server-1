@@ -5,6 +5,8 @@ public class AdSaveInfoDTO {
 	private Long id;
 	
 	private Integer adCount ;
+	
+	private String adOrderNum;
 
 	public Long getId() {
 		return id;
@@ -20,6 +22,14 @@ public class AdSaveInfoDTO {
 
 	public void setAdCount(Integer adCount) {
 		this.adCount = adCount;
+	}
+
+	public String getAdOrderNum() {
+		return adOrderNum;
+	}
+
+	public void setAdOrderNum(String adOrderNum) {
+		this.adOrderNum = adOrderNum;
 	}
 	
 	
