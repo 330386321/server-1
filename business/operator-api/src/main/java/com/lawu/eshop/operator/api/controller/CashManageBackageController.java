@@ -205,7 +205,7 @@ public class CashManageBackageController extends BaseController {
 			ExcelUtils.exportExcel(out, new ExcelExportRecordLoadCallback() {
 
 				private int currentPage = 1;
-				private int pageSize = 4;
+				private int pageSize = 1000;
 				private int totalCount = pageResult.getModel().getTotalCount();
 
 				@Override
