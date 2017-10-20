@@ -126,7 +126,8 @@ public class TransactionDetailController extends BaseController {
     	
     	return successGet(result);
     }
-    
+
+    @Audit(date = "2017-10-20", reviewer = "杨清华")
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "获取用户的所有交易类型。", notes = "获取商家的所有交易类型。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -155,7 +156,8 @@ public class TransactionDetailController extends BaseController {
         }
         return successGet(rtn);
     }
-    
+
+    @Audit(date = "2017-10-20", reviewer = "杨清华")
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "获取交易明细列表", notes = "分页获取交易明细列表。[1004]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -173,7 +175,8 @@ public class TransactionDetailController extends BaseController {
         }
         return successGet(result);
     }
-    
+
+    @Audit(date = "2017-10-20", reviewer = "杨清华")
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "获取月结账单", notes = "获取月结账单。[1004]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

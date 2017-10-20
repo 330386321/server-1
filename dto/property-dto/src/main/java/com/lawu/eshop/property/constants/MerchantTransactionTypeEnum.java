@@ -27,7 +27,8 @@ public enum MerchantTransactionTypeEnum {
 	SALES_COMMISSION((byte) 0x73, "推荐E友收益", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECOMMEND_INCOME}),			//115--
 	VOLUME_COMMISSION((byte) 0x74, "推荐商家收益", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECOMMEND_INCOME}),			//116--
 	BACKAGE((byte) 0x75, "平台充值", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECHARGE}),					//117
-    AD_DOWN((byte) 0x76, "广告下架", null);					//118
+      AD_DOWN((byte) 0x76, "红包未领取", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.REFUND_MONEY}),					//118
+	RED_PACKET((byte) 0x77, "红包", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RED_PACKET});
 
 	private Byte value;
 

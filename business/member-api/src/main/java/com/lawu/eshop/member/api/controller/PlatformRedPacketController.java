@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.controller;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,7 +52,8 @@ public class PlatformRedPacketController extends BaseController{
     
     @Autowired
     private MessageService  messageService;
-	
+
+	@Audit(date = "2017-10-20", reviewer = "杨清华")
 	@ApiOperation(value = "领取平台红包", notes = "领取平台红包,[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getRedPacket", method = RequestMethod.POST)

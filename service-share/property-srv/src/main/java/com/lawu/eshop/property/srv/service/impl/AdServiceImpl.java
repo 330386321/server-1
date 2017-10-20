@@ -60,10 +60,10 @@ public class AdServiceImpl implements AdService {
 
         // 新增商家交易记录
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-        tdsParam.setTitle(MemberTransactionTypeEnum.ADVERTISING.getName());
+        tdsParam.setTitle(MerchantTransactionTypeEnum.RED_PACKET.getName());
         tdsParam.setUserNum(param.getUserNum());
         tdsParam.setTransactionAccount(param.getBuyerLogonId());
-        tdsParam.setTransactionType(MemberTransactionTypeEnum.ADVERTISING.getValue());
+        tdsParam.setTransactionType(MerchantTransactionTypeEnum.RED_PACKET.getValue());
         tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
         tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
         tdsParam.setBizId(param.getBizIds());

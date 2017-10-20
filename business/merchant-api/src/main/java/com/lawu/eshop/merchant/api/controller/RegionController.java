@@ -40,7 +40,8 @@ public class RegionController extends BaseController {
         Result<List<RegionDTO>> listResult = regionService.getRegionList();
         return listResult;
     }
-    
+
+    @Audit(date = "2017-10-20", reviewer = "杨清华")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "地区列表", notes = "所有地区列表 [1004,1000](蒋鑫俊)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -49,7 +50,8 @@ public class RegionController extends BaseController {
         Result<List<RegionProvinceDTO>> listResult = regionService.group();
         return successGet(listResult);
     }
-    
+
+    @Audit(date = "2017-10-20", reviewer = "杨清华")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "地区列表", notes = "所有地区列表 [1004,1000](蒋鑫俊)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

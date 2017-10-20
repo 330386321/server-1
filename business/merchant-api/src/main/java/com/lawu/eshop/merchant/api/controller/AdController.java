@@ -671,7 +671,8 @@ public class AdController extends BaseController {
     	}
     	return successCreated();
 	}
-	
+
+	@Audit(date = "2017-10-20", reviewer = "杨清华")
     @ApiOperation(value = "广告是否支付成功", notes = "广告是否支付成功,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
