@@ -19,6 +19,11 @@ public class FreezeDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date gmtCreate;
 
+	private Long bizId;
+
+	@ApiModelProperty(value = "标题")
+	private String title;
+
 	public BigDecimal getMoney() {
 		return money;
 	}
@@ -41,5 +46,21 @@ public class FreezeDTO {
 
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
+	}
+
+	public Long getBizId() {
+		return bizId;
+	}
+
+	public void setBizId(Long bizId) {
+		this.bizId = bizId;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

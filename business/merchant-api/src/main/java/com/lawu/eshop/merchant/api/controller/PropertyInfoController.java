@@ -1,6 +1,9 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.merchant.api.service.ShoppingOrderService;
 import com.lawu.eshop.property.dto.FreezeDTO;
 import com.lawu.eshop.property.param.FreezeParam;
 import com.lawu.eshop.property.param.FreezeQueryParam;
@@ -42,6 +45,8 @@ public class PropertyInfoController extends BaseController {
 
     @Autowired
     private PropertyInfoService propertyInfoService;
+    @Autowired
+    private ShoppingOrderService shoppingOrderService;
 
     /**
      * 根据用户编号获取资产余额。
@@ -124,6 +129,13 @@ public class PropertyInfoController extends BaseController {
         param.setUserNum(userNum);
         param.setCurrentPage(freezeParam.getCurrentPage());
         param.setPageSize(freezeParam.getPageSize());
-        return successGet(propertyInfoService.getFreezeList(param));
+        Result<Page<FreezeDTO>> pageRet = propertyInfoService.getFreezeList(param);
+        Page<FreezeDTO> page = pageRet.getModel();
+        List<FreezeDTO> list =  page.getRecords();
+        for(FreezeDTO fdo : list){
+            Result<String> orderItemProductNameRet = shoppingOrderService.getOrderItemProductName(fdo.getBizId() == null ? "" : fdo.getBizId().toString());
+            fdo.setTitle("购物-"+orderItemProductNameRet.getModel());
+        }
+        return successGet(pageRet);
     }
 }

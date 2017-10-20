@@ -82,6 +82,7 @@ public class PropertyInfoConverter {
             bo.setOrderNum(fdo.getOrderNum());
             bo.setMoney(fdo.getMoney());
             bo.setGmtCreate(fdo.getGmtCreate());
+            bo.setBizId(fdo.getBizId());
             bos.add(bo);
         }
         return bos;
@@ -97,6 +98,7 @@ public class PropertyInfoConverter {
             dto.setOrderNum(bo.getOrderNum());
             dto.setMoney(bo.getMoney());
             dto.setGmtCreate(bo.getGmtCreate());
+            dto.setBizId(bo.getBizId());
             dtos.add(dto);
         }
         return dtos;

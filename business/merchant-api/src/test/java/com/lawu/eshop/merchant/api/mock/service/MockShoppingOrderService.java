@@ -71,4 +71,9 @@ public class MockShoppingOrderService extends BaseController implements Shopping
 	public Result<ShoppingOrderExpressInfoDTO> expressInfo(Long id, Long merchantId) {
 		return successGet();
 	}
+
+    @Override
+    public Result<String> getOrderItemProductName(@PathVariable("id") String id) {
+        return null;
+    }
 }

@@ -14,6 +14,8 @@ public class FreezeBO {
 
 	private Date gmtCreate;
 
+	private Long bizId;
+
 	public BigDecimal getMoney() {
 		return money;
 	}
@@ -36,5 +38,13 @@ public class FreezeBO {
 
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
+	}
+
+	public Long getBizId() {
+		return bizId;
+	}
+
+	public void setBizId(Long bizId) {
+		this.bizId = bizId;
 	}
 }

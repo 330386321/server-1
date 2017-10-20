@@ -140,4 +140,12 @@ public interface ShoppingOrderService {
 	 */
 	@RequestMapping(value = "expressInfo/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExpressInfoDTO> expressInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
+
+	/**
+	 * 获取订单中第一个商品名称
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "getOrderItemProductName/{id}", method = RequestMethod.GET)
+	Result<String> getOrderItemProductName(@PathVariable("id") String id);
 }
