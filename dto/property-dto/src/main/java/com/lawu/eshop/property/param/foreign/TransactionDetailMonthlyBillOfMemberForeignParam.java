@@ -22,13 +22,13 @@ import io.swagger.annotations.ApiModelProperty;
 public class TransactionDetailMonthlyBillOfMemberForeignParam {
 	
     @NotNull(message="交易分类不能为空")
-	@ApiModelProperty(value = "交易分类", required=true)
+	@ApiModelProperty(value = "交易分类", required = true)
 	private MemberTransactionCategoryEnum transactionCategory;
     
     @NotNull(message="交易时间不能为空")
     @JsonFormat(pattern="yyyy-MM")
     @DateTimeFormat(pattern="yyyy-MM")
-    @ApiModelProperty(value = "交易时间")
+    @ApiModelProperty(value = "交易时间", required = true)
     private Date date;
 	
     public MemberTransactionCategoryEnum getTransactionCategory() {
