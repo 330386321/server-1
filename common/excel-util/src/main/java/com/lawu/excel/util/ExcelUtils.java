@@ -194,7 +194,6 @@ public class ExcelUtils {
             case Cell.CELL_TYPE_ERROR:
                 break;
             default:
-                cell.setCellType(Cell.CELL_TYPE_STRING);
                 cellValue =cell.getStringCellValue();
                 break;
         }

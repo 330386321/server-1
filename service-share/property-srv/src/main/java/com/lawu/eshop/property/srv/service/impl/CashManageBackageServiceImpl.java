@@ -90,8 +90,9 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
                 criteria1.andAreaIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[2]));
             }
         }
-        example.clear();
+
         if (param.getContent() != null && !"".equals(param.getContent().trim())) {
+            example.clear();
             Criteria criteria2 = example.or();
             criteria2.andAccountEqualTo(param.getContent());
             criteria2.getAllCriteria().addAll(criteria1.getAllCriteria());
