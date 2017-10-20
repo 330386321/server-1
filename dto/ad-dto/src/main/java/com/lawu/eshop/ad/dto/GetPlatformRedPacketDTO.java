@@ -3,6 +3,8 @@ package com.lawu.eshop.ad.dto;
 import java.math.BigDecimal;
 
 public class GetPlatformRedPacketDTO {
+	
+	private Long id;
 
 	private boolean isGet;
 	
@@ -32,6 +34,14 @@ public class GetPlatformRedPacketDTO {
 
 	public void setEntity(boolean isEntity) {
 		this.isEntity = isEntity;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	

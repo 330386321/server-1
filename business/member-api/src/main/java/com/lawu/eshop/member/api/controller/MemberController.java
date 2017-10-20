@@ -23,11 +23,13 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.InviterService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantService;
+import com.lawu.eshop.member.api.service.MessageService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.VerifyCodeService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -74,6 +76,9 @@ public class MemberController extends BaseController {
 
     @Autowired
     private MerchantService merchantService;
+    
+    @Autowired
+    private  MessageService messageService ;
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息，成功返回 member [1000]（章勇）", httpMethod = "GET")
@@ -267,10 +272,16 @@ public class MemberController extends BaseController {
     @RequestMapping(value = "setGetuiCid",method = RequestMethod.PUT)
     public Result setGetuiCid(@RequestParam("cid") String cid, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
         Long id = UserUtil.getCurrentUserId(getRequest());
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
         if(id == null || id <= 0 ||  "".equals(cid)){
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        return memberService.setGtAndRongYunInfo(id,cid);
+        Result result = memberService.setGtAndRongYunInfo(id,cid);
+        if(isSuccess(result)){
+        	//推送平台红包消息给用户
+        	messageService.pushMessageBySetCid(userNum,MessageTypeEnum.MESSAGE_TYPE_PLAT_RED_PACKET);
+        }
+        return result;
     }
 
     @Audit(date = "2017-05-23", reviewer = "孙林青")

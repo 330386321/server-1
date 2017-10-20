@@ -3,6 +3,7 @@ package com.lawu.eshop.member.api.mock.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
 import com.lawu.eshop.mall.param.MessageInfoParam;
@@ -44,4 +45,10 @@ class MockMessageService extends BaseController implements MessageService {
     public Result delMessageByIds(@RequestParam("ids") String ids, @RequestParam("userNum") String userNum) {
         return null;
     }
+
+	@Override
+	public Result pushMessageBySetCid(@RequestParam("userNum") String userNum,@ModelAttribute MessageTypeEnum typeEnum) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -17,3 +17,4 @@ CREATE TABLE `take_platform_red_packet` (
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) COMMENT='领取平台红包记录表';
+

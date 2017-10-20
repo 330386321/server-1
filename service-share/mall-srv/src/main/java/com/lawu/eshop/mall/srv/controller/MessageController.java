@@ -184,5 +184,17 @@ public class MessageController extends BaseController {
     	MessageBO messageBO=messageService.selectMessageId(id);
         return successGet(MessageConverter.coverDTO(messageBO));
     }
+    
+    /**
+     * 设置cid推送消息
+     * @param userNum
+     * @param typeEnum
+     * @return
+     */
+    @RequestMapping(value = "pushMessageBySetCid", method = RequestMethod.POST)
+	public Result pushMessageBySetCid(@RequestParam String userNum,@RequestBody MessageTypeEnum typeEnum){
+    	messageService.pushMessageBySetCid(userNum, typeEnum);
+    	return successCreated();
+    }
 
 }

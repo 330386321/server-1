@@ -22,6 +22,8 @@ public class MessageInfoParam {
     private MessageTypeEnum typeEnum;
 
     private MessageTempParam messageParam;
+    
+    private Boolean isPush;
 
     public Long getRelateId() {
         return relateId;
@@ -46,5 +48,15 @@ public class MessageInfoParam {
     public void setMessageParam(MessageTempParam messageParam) {
         this.messageParam = messageParam;
     }
+
+	public Boolean getIsPush() {
+		return isPush;
+	}
+
+	public void setIsPush(Boolean isPush) {
+		this.isPush = isPush;
+	}
+    
+    
 
 }
