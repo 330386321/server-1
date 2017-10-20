@@ -11,7 +11,7 @@ public enum MemberTransactionTypeEnum {
 	RECHARGE_BALANCE((byte) 0x01, "充值余额"),//
 	ADVERTISING((byte) 0x02, "优选红包"),//--已废弃
 	RED_SWEEP((byte) 0x03, "红包"),//--已废弃
-	LOWER_INCOME((byte) 0x05, "推荐E友收益"),//
+	LOWER_INCOME((byte) 0x05, "广告提成"),//
 	PAY((byte) 0x06, "买单"),//
 	PAY_ORDERS((byte) 0x07, "购物"),//
 	RECHARGE_POINT((byte) 0x08, "充值积分"),//
@@ -24,7 +24,7 @@ public enum MemberTransactionTypeEnum {
 	AD_QZ((byte) 0x10, "咻一咻"),//
 	USER_REDPACKET_ADD((byte)0x11,"红包未领取"),//
 	ADD_RED_SWEEP((byte)0x12,"发红包"),//
-	MEMBER_FANS((byte) 0x13, "成为粉丝"),
+	MEMBER_FANS((byte) 0x13, "成为粉丝"),//--已废弃
 
 	MERCHANT_RED_SWEEP((byte) 0x14, "商家红包"),//
 	MEMBER_RED_SWEEP((byte) 0x15, "个人红包"),//

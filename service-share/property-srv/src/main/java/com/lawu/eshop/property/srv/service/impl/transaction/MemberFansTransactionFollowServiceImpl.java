@@ -37,7 +37,7 @@ public class MemberFansTransactionFollowServiceImpl extends AbstractTransactionF
         PropertyInfoDataParam param = new PropertyInfoDataParam();
         param.setPoint(point);
         param.setUserNum(notification.getUserNum());
-        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.MEMBER_FANS);
+        param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.MERCHANT_RED_SWEEP);
         param.setLoveTypeEnum(LoveTypeEnum.MEMBER_FANS);
         param.setTempBizId("0");
         propertyInfoDataService.doHanlderBalanceIncome(param);
