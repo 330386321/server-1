@@ -28,7 +28,7 @@ public class TransactionDetailMonthlyBillOfMerchantForeignParam {
     @NotNull(message="交易时间不能为空")
     @JsonFormat(pattern="yyyy-MM")
     @DateTimeFormat(pattern="yyyy-MM")
-    @ApiModelProperty(value = "交易时间")
+    @ApiModelProperty(value = "交易时间", required = true)
     private Date date;
 	
     public MerchantTransactionCategoryEnum getTransactionCategory() {
