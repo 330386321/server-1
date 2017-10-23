@@ -1,6 +1,7 @@
 package com.lawu.eshop.order.srv.mapper.extend;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -92,7 +93,7 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @param time 提醒买家发货时间
 	 * @return
 	 */
-    List<NotShippedDO> selectByNotShipped(Integer time);
+    List<NotShippedDO> selectByNotShipped(Date time);
     
 	/**
 	 * 根据查询条件查询订单id

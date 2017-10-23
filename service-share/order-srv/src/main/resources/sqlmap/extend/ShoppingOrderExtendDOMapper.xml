@@ -358,9 +358,9 @@
 	  </select>
 	  
 	  <!-- 根据商家编号分组查询待发货的数量 -->
-	  <select id="selectByNotShipped" parameterType="int" resultMap="NotShippedResultMap">
+	  <select id="selectByNotShipped" parameterType="java.util.Date" resultMap="NotShippedResultMap">
 		SELECT count(DISTINCT(so.id)) as count, merchant_num  FROM shopping_order so LEFT JOIN shopping_order_item soi on so.id = soi.shopping_order_id
-		WHERE so.order_status = 2 AND soi.order_status = 2 AND DATE_ADD(so.gmt_payment,INTERVAL #{time} DAY) &lt;= NOW()
+		WHERE so.order_status = 2 AND soi.order_status = 2 AND so.gmt_payment &lt;= #{date,jdbcType=TIMESTAMP}
 		GROUP BY merchant_num
 	  </select>
 	  
