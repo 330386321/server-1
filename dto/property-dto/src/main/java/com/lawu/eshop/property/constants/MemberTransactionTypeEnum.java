@@ -14,7 +14,7 @@ public enum MemberTransactionTypeEnum {
 	RECHARGE_BALANCE((byte) 0x01, "充值余额", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RECHARGE}),//
 	ADVERTISING((byte) 0x02, "优选红包", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.PREFERRED_RED_SWEEP}),//--已废弃
 	RED_SWEEP((byte) 0x03, "红包", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RED_SWEEP}),//--已废弃
-	LOWER_INCOME((byte) 0x05, "广告提成", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RECOMMEND_INCOME}),//
+	LOWER_INCOME((byte) 0x05, "推荐E友收益", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RECOMMEND_INCOME}),//
 	PAY((byte) 0x06, "买单", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.PAY}),//
 	PAY_ORDERS((byte) 0x07, "购物", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.SHOPPING}),//
 	RECHARGE_POINT((byte) 0x08, "充值积分", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RECHARGE}),//
@@ -22,7 +22,7 @@ public enum MemberTransactionTypeEnum {
 	WITHDRAW_BACK((byte) 0x0A, "提现失败", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.WITHDRAW, MemberTransactionCategoryEnum.REFUND_MONEY}),//
 	REFUND_ORDERS((byte) 0x0B, "购物退款", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.REFUND_MONEY}),//
 	SALES_COMMISSION((byte) 0x0C, "推荐E友收益", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RECOMMEND_INCOME}),//
-	VOLUME_COMMISSION((byte) 0x0D, "推荐商家收益", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RECOMMEND_INCOME}),//
+	VOLUME_COMMISSION((byte) 0x0D, "推荐E友收益", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RECOMMEND_INCOME}),//
 	BACKAGE((byte) 0x0F, "平台充值", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RECHARGE}),
 	AD_QZ((byte) 0x10, "咻一咻", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.PREFERRED_RED_SWEEP}),//
 	USER_REDPACKET_ADD((byte)0x11, "红包未领取", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.REFUND_MONEY}),//

@@ -13,7 +13,7 @@ public enum MerchantTransactionTypeEnum {
 	
 	PAY((byte)0x64, "买单收入", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.PAY_INCOME}),						//100--
 	ORDER((byte)0x65, "商品收入", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.PRODUCT_INCOME}),						//101--
-	LOWER_INCOME((byte)0x66, "广告提成", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECOMMEND_INCOME}),				//102--
+	LOWER_INCOME((byte)0x66, "推荐E友收益", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECOMMEND_INCOME}),				//102--
 	RECHARGE((byte)0x67, "充值余额", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECHARGE}),					//103--
 	INTEGRAL_RECHARGE((byte)0x69, "充值积分", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECHARGE}),				//105--
 	WITHDRAW((byte)0x6B,"提现成功", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.WITHDRAW}),					//107--
@@ -25,7 +25,7 @@ public enum MerchantTransactionTypeEnum {
 //	DEPOSIT((byte)0x71,"缴纳保证金"),					//113-需求说不要
 //	DEPOSIT_REFUND((byte)0x72,"保证金退款"),				//114-需求说不要
 	SALES_COMMISSION((byte) 0x73, "推荐E友收益", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECOMMEND_INCOME}),			//115--
-	VOLUME_COMMISSION((byte) 0x74, "推荐商家收益", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECOMMEND_INCOME}),			//116--
+	VOLUME_COMMISSION((byte) 0x74, "推荐E友收益", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECOMMEND_INCOME}),			//116--
 	BACKAGE((byte) 0x75, "平台充值", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECHARGE}),					//117
       AD_DOWN((byte) 0x76, "红包未领取", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.REFUND_MONEY}),					//118
 	RED_PACKET((byte) 0x77, "红包", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RED_PACKET});
