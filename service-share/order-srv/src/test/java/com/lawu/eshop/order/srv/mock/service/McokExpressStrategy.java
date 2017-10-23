@@ -24,7 +24,6 @@ public class McokExpressStrategy implements ExpressStrategy {
 		traceBO.setAcceptStation("等待快递员上门揽件");
 		traceBO.setAcceptTime("2017-08-30 11:44:00");
 		rtn.getTraces().add(traceBO);
-		
 		return rtn;
 	}
 
