@@ -294,7 +294,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 新增会员订单退款交易记录
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-        tdsParam.setTitle(TransactionTitleEnum.ORDER_PAY_REFUND.getVal());
+        tdsParam.setTitle(transactionDetailService.packageTitle(MemberTransactionTypeEnum.REFUND_ORDERS,null,param.getOrderItemProdcutName()));
         tdsParam.setUserNum(param.getSideUserNum());
         tdsParam.setTransactionType(MemberTransactionTypeEnum.REFUND_ORDERS.getValue());
         tdsParam.setTransactionAccount("");

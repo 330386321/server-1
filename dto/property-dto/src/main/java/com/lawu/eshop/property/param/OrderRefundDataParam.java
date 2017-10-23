@@ -57,6 +57,11 @@ public class OrderRefundDataParam extends OrderRefundParam {
 	@NotNull(message = "orderRefundStatusEnum不能为空")
 	private OrderRefundStatusEnum orderRefundStatusEnum;
 
+	/**
+	 * 退款时，资产模块用于记录交易记录标题
+	 */
+	private String orderItemProdcutName;
+
 	public String getUserNum() {
 		return userNum;
 	}
@@ -129,4 +134,11 @@ public class OrderRefundDataParam extends OrderRefundParam {
 		this.orderRefundStatusEnum = orderRefundStatusEnum;
 	}
 
+	public String getOrderItemProdcutName() {
+		return orderItemProdcutName;
+	}
+
+	public void setOrderItemProdcutName(String orderItemProdcutName) {
+		this.orderItemProdcutName = orderItemProdcutName;
+	}
 }

@@ -53,6 +53,9 @@ public class ShoppingRefundAgreeToRefundTransactionMainServiceImpl extends Abstr
     		if (shoppingOrderItemBO.getId().equals(shoppingOrderItemId)) {
     			refundMoney = shoppingOrderItemBO.getSalesPrice().multiply(new BigDecimal(shoppingOrderItemBO.getQuantity()));
     		}
+    		if(shoppingOrderItemBO.getId().equals(shoppingOrderItemId)){
+			rtn.setOrderItemProdcutName(shoppingOrderItemBO.getProductName());
+		}
     	}
     	
     	if (shoppingOrderExtendBO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS)) {
