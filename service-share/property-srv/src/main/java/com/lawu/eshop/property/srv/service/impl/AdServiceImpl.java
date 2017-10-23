@@ -124,8 +124,8 @@ public class AdServiceImpl implements AdService {
             rparam.setTotalMoney(transactionDetailDO.getAmount().toString());
 
             WxPayConfigParam wxPayConfigParam = new WxPayConfigParam();
-            wxPayConfigParam.setWxpayAppIdMember(propertySrvConfig.getWxpayAppIdMember());
-            wxPayConfigParam.setWxpayMchIdMember(propertySrvConfig.getWxpayMchIdMember());
+            wxPayConfigParam.setWxpayAppIdMember(propertySrvConfig.getWxpayAppIdBusiness());
+            wxPayConfigParam.setWxpayMchIdMember(propertySrvConfig.getWxpayMchIdBusiness());
             wxPayConfigParam.setWxpayKey(propertySrvConfig.getWxpayKey());
             wxPayConfigParam.setWxpayAppId(propertySrvConfig.getWxpayAppId());
             wxPayConfigParam.setWxpayMchId(propertySrvConfig.getWxpayMchId());
@@ -139,6 +139,7 @@ public class AdServiceImpl implements AdService {
         }
 
         if (!jsonResult.isSuccess()) {
+            logger.error(jsonResult.getMessage());
             throw new RuntimeException(jsonResult.getMessage());
         }
         return ResultCode.SUCCESS;

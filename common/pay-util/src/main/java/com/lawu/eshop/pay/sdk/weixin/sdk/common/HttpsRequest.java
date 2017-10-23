@@ -181,7 +181,7 @@ public class HttpsRequest implements IServiceRequest {
 					jsonResult.setData(refundResData);
 				}
 			}
-			logger.info(consoleMsg);
+			jsonResult.setMessage(consoleMsg);
 //			Util.log(consoleMsg);
 		} catch (ConnectionPoolTimeoutException e) {
 			logger.error("http get throw ConnectionPoolTimeoutException(wait time out)",e);
