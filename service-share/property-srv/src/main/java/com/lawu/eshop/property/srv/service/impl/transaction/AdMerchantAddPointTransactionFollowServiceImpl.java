@@ -55,7 +55,6 @@ public class AdMerchantAddPointTransactionFollowServiceImpl extends AbstractTran
 			try {
 				adService.doRefund(param);
 			} catch (Exception e) {
-				log.error(e.getMessage());
 				throw new RuntimeException(e);
 			}
 			

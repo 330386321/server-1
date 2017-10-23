@@ -159,6 +159,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
         }
 
         if (!jsonResult.isSuccess()) {
+            logger.error(jsonResult.getMessage());
             throw new RuntimeException(jsonResult.getMessage());
         }
         return ResultCode.SUCCESS;
