@@ -82,6 +82,12 @@ public class PropertySrvConfig {
     @Value(value = "${wxpay_app_id_business}")
     private String wxpayAppIdBusiness;
 
+    @Value(value = "${wxpay_cert_password_business_pc}")
+    private String wxpayCertPasswordBusinessPc;
+
+    @Value(value = "${wxpay_cert_password_business_app}")
+    private String wxpayCertPasswordBusinessApp;
+
     @Value(value = "${wxpay_cert_password_member}")
     private String wxpayCertPasswordMember;
 
@@ -96,6 +102,12 @@ public class PropertySrvConfig {
 
     @Value(value = "${wxpay_https_request_class_name}")
     private String wxpayHttpsRequestClassName;
+
+    @Value(value = "${wxpay_cert_local_path_business_pc}")
+    private String wxpayCertLocalPathBusinessPc;
+
+    @Value(value = "${wxpay_cert_local_path_business_app}")
+    private String wxpayCertLocalPathBusinessApp;
 
     @Value(value = "${wxpay_cert_local_path_member}")
     private String wxpayCertLocalPathMember;
@@ -236,5 +248,20 @@ public class PropertySrvConfig {
 	public String getAlipayGateway() {
 		return alipayGateway;
 	}
-    
+
+    public String getWxpayCertPasswordBusinessPc() {
+        return wxpayCertPasswordBusinessPc;
+    }
+
+    public String getWxpayCertPasswordBusinessApp() {
+        return wxpayCertPasswordBusinessApp;
+    }
+
+    public String getWxpayCertLocalPathBusinessPc() {
+        return wxpayCertLocalPathBusinessPc;
+    }
+
+    public String getWxpayCertLocalPathBusinessApp() {
+        return wxpayCertLocalPathBusinessApp;
+    }
 }
