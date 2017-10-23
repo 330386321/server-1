@@ -95,4 +95,9 @@ public class MockAdService extends BaseController implements AdService {
     public Result<AdPayInfoDTO> selectAdPayInfoById(@PathVariable("id") Long id) {
         return null;
     }
+
+	@Override
+	public Result<Boolean> isPay(@PathVariable("id") Long id) {
+		return null;
+	}
 }

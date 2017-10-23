@@ -671,5 +671,13 @@ public class AdController extends BaseController {
     	}
     	return successCreated();
 	}
+	
+    @ApiOperation(value = "广告是否支付成功", notes = "广告是否支付成功,[]（张荣成）", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "isPay/{id}", method = RequestMethod.GET)
+    public Result<Boolean> isPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+		return adService.isPay(id);
+    }
 
 }

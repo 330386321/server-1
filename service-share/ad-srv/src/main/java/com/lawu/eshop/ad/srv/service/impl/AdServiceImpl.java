@@ -1459,6 +1459,25 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public void updateAdIsPay(AdSetPayParam param) {
+		AdDO  ad=adDOMapper.selectByPrimaryKey(param.getId());
+		
+		//如果是红包，将之前商家发的红包进行下架，并将金额原路还回
+		if(ad.getType()==AdTypeEnum.AD_TYPE_PACKET.getVal()){
+			AdDO adDO = new AdDO();
+			adDO.setGmtModified(new Date());
+			adDO.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
+			AdDOExample example = new AdDOExample();
+			example.createCriteria().andMerchantIdEqualTo(ad.getMerchantId()).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.getVal()).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+			List<AdDO> list = adDOMapper.selectByExample(example);
+			AdDO adRecord = new AdDO();
+			if(!list.isEmpty()){
+				adRecord = list.get(0);
+			}
+			adDOMapper.updateByExampleSelective(adDO, example);
+			
+			matransactionMainAddService.sendNotice(adRecord.getId());
+		}
+		
 		AdDO record = new AdDO();
 		record.setId(param.getId());
 		record.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
@@ -1468,14 +1487,18 @@ public class AdServiceImpl implements AdService {
 		record.setIsPay(true);
 		adDOMapper.updateByPrimaryKeySelective(record);
 		
-		AdDO  ad=adDOMapper.selectByPrimaryKey(param.getId());
-		
 		//将抢赞添加到solr
 		if(ad.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal()){
     		SolrInputDocument document= AdConverter.convertSolrInputDocument(ad);
 			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
     	}
 		
+	}
+
+	@Override
+	public Boolean isPay(Long id) {
+		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+		return adDO.getIsPay();
 	}
 
 	

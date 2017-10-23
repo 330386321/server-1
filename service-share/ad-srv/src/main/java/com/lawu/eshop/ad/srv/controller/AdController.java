@@ -128,12 +128,6 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "saveAd", method = RequestMethod.POST)
 	public Result<AdSaveInfoDTO> saveAd(@RequestBody AdSaveParam adSaveParam) {
 
-		if (adSaveParam.getAdParam().getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PACKET.getVal()) {
-			RedPacketIsSendBO bo = adService.selectRPIsSend(adSaveParam.getMerchantId());
-			if (bo.isFlag()) {
-				adService.updateStatus(bo.getId());
-			}
-		}
 		AdSaveInfoBO bo = adService.saveAd(adSaveParam);
 
 		if (bo.getId() == null || bo.getId() < 0) {
@@ -1351,5 +1345,16 @@ public class AdController extends BaseController {
 		dto.setMerchantRegionPath(bo.getMerchantRegionPath());
 		dto.setTotalPoint(bo.getTotalPoint());
 		return successCreated(dto);
+	}
+	
+	/**
+	 * 广告是否支付成功
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "isPay/{id}", method = RequestMethod.GET)
+	public Result<Boolean> isPay(@PathVariable Long id) {
+		Boolean flag = adService.isPay(id);
+		return successCreated(flag);
 	}
 }
