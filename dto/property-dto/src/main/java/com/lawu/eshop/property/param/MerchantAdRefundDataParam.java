@@ -21,6 +21,11 @@ public class MerchantAdRefundDataParam {
 
 	private String tradeNo;
 
+	/**
+	 * 1-app、2-pc
+	 */
+	private int clientType;
+
 	public String getRefundMoney() {
 		return refundMoney;
 	}
@@ -60,5 +65,13 @@ public class MerchantAdRefundDataParam {
 
 	public void setUserNum(String userNum) {
 		this.userNum = userNum;
+	}
+
+	public int getClientType() {
+		return clientType;
+	}
+
+	public void setClientType(int clientType) {
+		this.clientType = clientType;
 	}
 }

@@ -52,6 +52,7 @@ public class AdMerchantAddPointTransactionFollowServiceImpl extends AbstractTran
 			param.setUserNum(notification.getUserNum());
 			param.setTradeNo(notification.getTradeNo());
 			param.setTransactionPayTypeEnum(TransactionPayTypeEnum.getEnum(notification.getPayType()));
+			param.setClientType(notification.getClientType());
 			try {
 				adService.doRefund(param);
 			} catch (Exception e) {

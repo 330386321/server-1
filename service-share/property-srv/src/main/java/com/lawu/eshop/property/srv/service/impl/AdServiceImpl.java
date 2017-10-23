@@ -129,8 +129,13 @@ public class AdServiceImpl implements AdService {
             wxPayConfigParam.setWxpayKey(propertySrvConfig.getWxpayKey());
             wxPayConfigParam.setWxpayAppId(propertySrvConfig.getWxpayAppId());
             wxPayConfigParam.setWxpayMchId(propertySrvConfig.getWxpayMchId());
-            wxPayConfigParam.setWxpayCertLocalPathMember(propertySrvConfig.getWxpayCertLocalPathMember());
-            wxPayConfigParam.setWxpayCertPasswordMember(propertySrvConfig.getWxpayCertPasswordMember());
+            if(param.getClientType() == 1){
+                wxPayConfigParam.setWxpayCertLocalPathMember(propertySrvConfig.getWxpayCertLocalPathBusinessApp());
+                wxPayConfigParam.setWxpayCertPasswordMember(propertySrvConfig.getWxpayCertPasswordBusinessApp());
+            }else {
+                wxPayConfigParam.setWxpayCertLocalPathMember(propertySrvConfig.getWxpayCertLocalPathBusinessPc());
+                wxPayConfigParam.setWxpayCertPasswordMember(propertySrvConfig.getWxpayCertPasswordBusinessPc());
+            }
             wxPayConfigParam.setWxpayCertBasePath(propertySrvConfig.getWxpayCertLocalPathMember());
             wxPayConfigParam.setWxpayRefundApi(propertySrvConfig.getWxpayRefundApi());
             wxPayConfigParam.setWxpayHttpsRequestClassName(propertySrvConfig.getWxpayHttpsRequestClassName());
