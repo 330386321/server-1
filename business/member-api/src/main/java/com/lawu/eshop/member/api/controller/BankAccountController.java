@@ -151,7 +151,8 @@ public class BankAccountController extends BaseController{
     	
 
     }
-	
+
+	@Audit(date = "2017-10-04", reviewer = "杨清华")
 	@SuppressWarnings("unchecked")
 	@Authorization
     @ApiOperation(value = "获取银行卡用户名称", notes = "获取银行卡用户名称（张荣成）", httpMethod = "GET")
