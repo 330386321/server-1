@@ -131,16 +131,17 @@ public class AdServiceImpl implements AdService {
                 wxPayConfigParam.setWxpayAppIdMember(propertySrvConfig.getWxpayAppIdBusiness());
                 wxPayConfigParam.setWxpayMchIdMember(propertySrvConfig.getWxpayMchIdBusiness());
                 wxPayConfigParam.setWxpayCertLocalPathMember(propertySrvConfig.getWxpayCertLocalPathBusinessApp());
+                wxPayConfigParam.setWxpayCertBasePath(propertySrvConfig.getWxpayCertLocalPathBusinessApp());
                 wxPayConfigParam.setWxpayCertPasswordMember(propertySrvConfig.getWxpayCertPasswordBusinessApp());
                 wxPayConfigParam.setWxpayKeyApp(propertySrvConfig.getWxpayKeyApp());
             }else {
                 wxPayConfigParam.setWxpayAppIdMember(propertySrvConfig.getWxpayAppId());
                 wxPayConfigParam.setWxpayMchIdMember(propertySrvConfig.getWxpayMchId());
                 wxPayConfigParam.setWxpayCertLocalPathMember(propertySrvConfig.getWxpayCertLocalPathBusinessPc());
+                wxPayConfigParam.setWxpayCertBasePath(propertySrvConfig.getWxpayCertLocalPathBusinessPc());
                 wxPayConfigParam.setWxpayCertPasswordMember(propertySrvConfig.getWxpayCertPasswordBusinessPc());
                 wxPayConfigParam.setWxpayKeyApp(propertySrvConfig.getWxpayKey());
             }
-            wxPayConfigParam.setWxpayCertBasePath(propertySrvConfig.getWxpayCertLocalPathMember());
             wxPayConfigParam.setWxpayRefundApi(propertySrvConfig.getWxpayRefundApi());
             wxPayConfigParam.setWxpayHttpsRequestClassName(propertySrvConfig.getWxpayHttpsRequestClassName());
             WxpayBusinessHandle.refund(rparam, jsonResult, wxPayConfigParam);
