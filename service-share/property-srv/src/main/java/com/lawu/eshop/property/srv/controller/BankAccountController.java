@@ -107,8 +107,8 @@ public class BankAccountController extends BaseController{
 	 * @param userNum
 	 * @return
 	 */
-	@RequestMapping(value = "selectAccount", method = RequestMethod.GET)
-    public Result<BankAccountNameDTO> selectAccount(@RequestParam String userNum) {
+	@RequestMapping(value = "selectBankName", method = RequestMethod.GET)
+    public Result<BankAccountNameDTO> selectBankName(@RequestParam String userNum) {
 		String name = bankAccountService.selectBankName(userNum);
 		BankAccountNameDTO dto = new BankAccountNameDTO();
 		dto.setAccountName(name);
