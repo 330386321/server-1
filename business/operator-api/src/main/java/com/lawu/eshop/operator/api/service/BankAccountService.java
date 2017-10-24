@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.BankAccountDTO;
 import com.lawu.eshop.property.dto.BankAccountOperatorDTO;
+import com.lawu.eshop.property.dto.BankDTO;
 import com.lawu.eshop.property.param.BankAccountOperatorParam;
 
 /**
@@ -56,6 +57,13 @@ public interface BankAccountService {
 	 */
 	@RequestMapping(value = "bankAccount/selectBankOperator", method = RequestMethod.GET)
     Result<List<BankAccountOperatorDTO>> selectBankOperator(@RequestParam("userNum") String userNum);
+	
+	/**
+	 * 银行卡数据
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "bank/findBank")
+    Result<List<BankDTO>> findBank();
 
 	
 }
