@@ -84,11 +84,11 @@ public class HttpsRequest implements IServiceRequest {
 
 		KeyStore keyStore = KeyStore.getInstance("PKCS12");
 		
-		Resource resource = new ClassPathResource(wxPayConfigParam.getWxpayCertBasePath());
-		//FileInputStream instream = new FileInputStream(new File("F:\\1\\workspace\\lawu-server\\server\\service-share\\property-srv\\src\\main\\resources\\apiclient_cert-business_pc.p12"));// 加载本地的证书进行https加密传输
+		//Resource resource = new ClassPathResource(wxPayConfigParam.getWxpayCertBasePath());
+		FileInputStream instream = new FileInputStream(new File("F:\\1\\workspace\\lawu-server\\server\\service-share\\property-srv\\src\\main\\resources\\apiclient_cert-business_app.p12"));// 加载本地的证书进行https加密传输
 		try {
-			keyStore.load(resource.getInputStream(), wxPayConfigParam.getWxpayCertPasswordMember().toCharArray());// 设置证书密码
-			//keyStore.load(instream, wxPayConfigParam.getWxpayCertPasswordMember().toCharArray());// 设置证书密码
+			//keyStore.load(resource.getInputStream(), wxPayConfigParam.getWxpayCertPasswordMember().toCharArray());// 设置证书密码
+			keyStore.load(instream, wxPayConfigParam.getWxpayCertPasswordMember().toCharArray());// 设置证书密码
 		} catch (CertificateException e) {
 			logger.error("",e);
 //			e.printStackTrace();
