@@ -445,8 +445,6 @@ public class ShoppingOrderControllerTest {
 	        Assert.assertEquals(expected.getWaybillNum(), actual.getWaybillNum());
 	        ExpressInquiriesDetailDTO actualExpressInquiriesDetailDTO = actual.getExpressInquiriesDetailDTO();
 	        Assert.assertNotNull(actualExpressInquiriesDetailDTO);
-	        Assert.assertNotNull(actualExpressInquiriesDetailDTO.getSuccess());
-	        Assert.assertNotNull(actualExpressInquiriesDetailDTO.getState());
     	}
     	
     	// 商家调用
@@ -466,8 +464,6 @@ public class ShoppingOrderControllerTest {
 	        Assert.assertEquals(expected.getWaybillNum(), actual.getWaybillNum());
 	        ExpressInquiriesDetailDTO actualExpressInquiriesDetailDTO = actual.getExpressInquiriesDetailDTO();
 	        Assert.assertNotNull(actualExpressInquiriesDetailDTO);
-	        Assert.assertNotNull(actualExpressInquiriesDetailDTO.getSuccess());
-	        Assert.assertNotNull(actualExpressInquiriesDetailDTO.getState());
         }
     }
 	

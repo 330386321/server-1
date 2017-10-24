@@ -63,8 +63,6 @@ public class ExpressControllerTest {
         ExpressInquiriesDetailDTO actual = JSONObject.parseObject(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), ExpressInquiriesDetailDTO.class);
         Assert.assertNotNull(actual);
         Assert.assertNotNull(actual.getState());
-        Assert.assertNotNull(actual.getSuccess());
-        Assert.assertEquals(expected.getExpCode(), actual.getShipperCode());
     }
     
     @Test

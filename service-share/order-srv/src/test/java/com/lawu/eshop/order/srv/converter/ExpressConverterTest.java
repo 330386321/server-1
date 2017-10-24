@@ -70,7 +70,7 @@ public class ExpressConverterTest {
 	
 	public static void assertExpressInquiriesDetailBO(ExpressInquiriesDetail expected, ExpressInquiriesDetailBO actual) {
 		Assert.assertNotNull(actual);
-		Assert.assertEquals(StateEnum.getEnum(expected.getState()), actual.getState());
+		Assert.assertEquals(StateEnum.getEnum(expected.getState()).getState(), actual.getState());
 		if (actual.getTraces() != null && !actual.getTraces().isEmpty()) {
 			for (int i = 0; i < actual.getTraces().size(); i++) {
 				assertTraceBO(expected.getTraces().get(i), actual.getTraces().get(i));

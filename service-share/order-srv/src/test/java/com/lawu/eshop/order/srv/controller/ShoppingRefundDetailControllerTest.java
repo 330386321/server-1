@@ -933,8 +933,6 @@ public class ShoppingRefundDetailControllerTest {
         Assert.assertEquals(shoppingRefundDetailDO.getWaybillNum(), actual.getWaybillNum());
         ExpressInquiriesDetailDTO expressInquiriesDetailDTO = actual.getExpressInquiriesDetailDTO();
         Assert.assertNotNull(expressInquiriesDetailDTO);
-        Assert.assertNotNull(expressInquiriesDetailDTO.getSuccess());
-        Assert.assertNotNull(expressInquiriesDetailDTO.getState());
     }
     
     @Transactional
