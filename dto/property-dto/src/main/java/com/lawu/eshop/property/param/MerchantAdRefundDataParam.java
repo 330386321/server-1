@@ -1,10 +1,6 @@
 package com.lawu.eshop.property.param;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * 商家 E咻 & 红包 下架后退款原路退
@@ -20,6 +16,11 @@ public class MerchantAdRefundDataParam {
 	private TransactionPayTypeEnum transactionPayTypeEnum;
 
 	private String tradeNo;
+
+	/**
+	 * 1-app、2-pc
+	 */
+	private Byte clientType;
 
 	public String getRefundMoney() {
 		return refundMoney;
@@ -60,5 +61,13 @@ public class MerchantAdRefundDataParam {
 
 	public void setUserNum(String userNum) {
 		this.userNum = userNum;
+	}
+
+	public Byte getClientType() {
+		return clientType;
+	}
+
+	public void setClientType(Byte clientType) {
+		this.clientType = clientType;
 	}
 }

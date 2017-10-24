@@ -1,5 +1,7 @@
 package com.lawu.eshop.property.param;
 
+import com.lawu.eshop.framework.core.type.UserType;
+
 import io.swagger.annotations.ApiParam;
 
 public class BankAccountParam {
@@ -15,6 +17,9 @@ public class BankAccountParam {
 	 
 	@ApiParam (name="subBranchName",required = true, value = "支行名称")
 	private String subBranchName;
+	
+	@ApiParam (name="userType", value = "用户类型")
+	private UserType userType;
 
 	public String getAccountName() {
 		return accountName;
@@ -47,8 +52,16 @@ public class BankAccountParam {
 	public void setSubBranchName(String subBranchName) {
 		this.subBranchName = subBranchName;
 	}
+
+	public UserType getUserType() {
+		return userType;
+	}
+
+	public void setUserType(UserType userType) {
+		this.userType = userType;
+	}
 	 
-	 
+	
 	 
 
 }

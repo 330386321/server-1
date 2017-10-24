@@ -233,6 +233,9 @@ public class AdServiceImpl implements AdService {
 		if(adParam.getFileTime()!=null){
 			adDO.setFileTime(adParam.getFileTime());
 		}
+		if(adSaveParam.getClentType()!=null){
+			adDO.setClientType(adSaveParam.getClentType().getVal());
+		}
 		adDOMapper.insert(adDO);
 
         AdSaveInfoBO bo =new AdSaveInfoBO();

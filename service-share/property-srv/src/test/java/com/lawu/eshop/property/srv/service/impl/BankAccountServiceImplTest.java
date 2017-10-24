@@ -136,7 +136,7 @@ public class BankAccountServiceImplTest {
         bankAccountParam.setSubBranchName("南山支行");
         bankAccountService.saveBankAccount("M10001",bankAccountParam);
 
-        Boolean bool = bankAccountService.selectByAccount("6217852000014838927","M10001");
+        Boolean bool = bankAccountService.selectByAccount("6217852000014838927",Byte.valueOf("1"),"M10001");
         Assert.assertTrue(bool);
     }
 
