@@ -124,4 +124,11 @@ public interface MerchantStoreService {
      */
     MerchantStoreAdInfoBO selectMerchantStoreAdInfo(Long merchantId);
 
+    /**
+     * 获取负责人名称
+     * @param merchantId
+     * @return
+     */
+	String getPrincipalName(Long merchantId);
+
 }

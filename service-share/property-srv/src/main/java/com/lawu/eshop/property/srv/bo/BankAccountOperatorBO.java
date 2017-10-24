@@ -1,6 +1,8 @@
 package com.lawu.eshop.property.srv.bo;
 
-public class BankAccountBO {
+import java.util.Date;
+
+public class BankAccountOperatorBO {
 	
 	private Long id;
 	
@@ -15,6 +17,13 @@ public class BankAccountBO {
 	private String iconUrl;
 	
 	private Integer bankId;
+	
+	private String remark;
+	
+	private Integer auditorId;
+	
+	private Date auditorTime;
+
 
 	public String getIconUrl() {
 		return iconUrl;
@@ -73,6 +82,32 @@ public class BankAccountBO {
 		this.bankId = bankId;
 	}
 
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Integer getAuditorId() {
+		return auditorId;
+	}
+
+	public void setAuditorId(Integer auditorId) {
+		this.auditorId = auditorId;
+	}
+
+	public Date getAuditorTime() {
+		return auditorTime;
+	}
+
+	public void setAuditorTime(Date auditorTime) {
+		this.auditorTime = auditorTime;
+	}
+
+	
+	
 	
 
 }

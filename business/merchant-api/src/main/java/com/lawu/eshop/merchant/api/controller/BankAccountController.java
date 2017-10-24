@@ -22,8 +22,10 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.BankAccountService;
 import com.lawu.eshop.merchant.api.service.CashManageFrontService;
+import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.BankAccountDTO;
+import com.lawu.eshop.property.dto.BankAccountNameDTO;
 import com.lawu.eshop.property.param.BankAccountParam;
 
 import io.swagger.annotations.Api;
@@ -49,6 +51,9 @@ public class BankAccountController extends BaseController{
 	
 	@Autowired
 	private CashManageFrontService cashManageFrontService;
+	
+	@Autowired
+	private MerchantStoreService merchantStoreService;
 	
 	/**
 	 * 
@@ -173,8 +178,14 @@ public class BankAccountController extends BaseController{
     @ApiOperation(value = "获取银行卡用户名称", notes = "获取银行卡用户名称（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @RequestMapping(value = "selectBankName", method = RequestMethod.GET)
-    public Result<BankAccountDTO> selectBankName(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+    public Result<BankAccountNameDTO> selectBankName(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-    	return successCreated(bankAccountService.selectBankName(userNum));
+    	Result<BankAccountNameDTO> result = bankAccountService.selectBankName(userNum);
+    	//初次绑定获取负责人姓名
+    	if(result.getModel().getAccountName() ==null){
+    		Result<String> nameRs = merchantStoreService.getPrincipalName(UserUtil.getCurrentUserId(getRequest()));
+    		result.getModel().setAccountName(nameRs.getModel());
+    	}
+    	return successGet(result);
     }
 }

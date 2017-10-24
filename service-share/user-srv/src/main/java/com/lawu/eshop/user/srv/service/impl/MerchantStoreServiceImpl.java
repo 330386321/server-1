@@ -324,4 +324,15 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 		return bo;
 	}
 
+	@Override
+	public String getPrincipalName(Long merchantId) {
+		MerchantStoreDOExample example = new MerchantStoreDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(example);
+        if(!list.isEmpty()){
+        	return list.get(0).getPrincipalName();
+        }
+		return null;
+	}
+
 }

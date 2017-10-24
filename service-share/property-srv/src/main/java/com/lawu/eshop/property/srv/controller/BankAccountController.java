@@ -15,8 +15,11 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.dto.BankAccountDTO;
 import com.lawu.eshop.property.dto.BankAccountNameDTO;
+import com.lawu.eshop.property.dto.BankAccountOperatorDTO;
+import com.lawu.eshop.property.param.BankAccountOperatorParam;
 import com.lawu.eshop.property.param.BankAccountParam;
 import com.lawu.eshop.property.srv.bo.BankAccountBO;
+import com.lawu.eshop.property.srv.bo.BankAccountOperatorBO;
 import com.lawu.eshop.property.srv.converter.BankAccountConverter;
 import com.lawu.eshop.property.srv.service.BankAccountService;
 
@@ -113,6 +116,38 @@ public class BankAccountController extends BaseController{
 		BankAccountNameDTO dto = new BankAccountNameDTO();
 		dto.setAccountName(name);
 		return  successCreated(dto);
+    }
+	
+	/**
+	 * 运营平台修改银行卡
+	 * @param id
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "updateBankOperator/{id}", method = RequestMethod.PUT)
+    public Result updateBankOperator(@PathVariable Long id,@RequestBody BankAccountOperatorParam param){
+		BankAccountBO bo = bankAccountService.selectAccount(id);
+		if(!bo.getAccountNumber().equals(param.getAccountNumber())){
+			Boolean  flag=bankAccountService.selectByAccount(param.getAccountNumber(),param.getUserType().val,param.getUserNum());
+			if(flag){
+				return successCreated(ResultCode.BANK_ACCOUNT_IS_EXIST);
+			}
+		}
+		bankAccountService.updateBankOperator(id, param);
+		
+		return  successCreated();
+	}
+	
+	
+	/**
+	 * 运营平台查询用户银行卡列表
+	 * @param userNum
+	 * @return
+	 */
+	@RequestMapping(value = "selectBankOperator", method = RequestMethod.GET)
+    public Result<List<BankAccountOperatorDTO>> selectBankOperator(@RequestParam String userNum) {
+		List<BankAccountOperatorBO> BOS = bankAccountService.selectBankOperator(userNum);
+		return  successAccepted(BankAccountConverter.convertOperatorDTOS(BOS));
     }
 
 }

@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.property.constants.BankStatusEnum;
+import com.lawu.eshop.property.param.BankAccountOperatorParam;
 import com.lawu.eshop.property.param.BankAccountParam;
 import com.lawu.eshop.property.srv.bo.BankAccountBO;
+import com.lawu.eshop.property.srv.bo.BankAccountOperatorBO;
 import com.lawu.eshop.property.srv.converter.BankAccountConverter;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
 import com.lawu.eshop.property.srv.domain.BankAccountDOExample;
@@ -143,5 +145,35 @@ public class BankAccountServiceImpl implements BankAccountService {
 		return null;
 	}
 
-
+	@Override
+	public void updateBankOperator(Long id, BankAccountOperatorParam param) {
+		BankAccountDO bankAccountDO=new BankAccountDO();
+		bankAccountDO.setId(id);
+		bankAccountDO.setAccountName(param.getAccountName());
+		bankAccountDO.setAccountNumber(param.getAccountNumber());
+		bankAccountDO.setBankId(param.getBankId());
+		bankAccountDO.setSubBranchName(param.getSubBranchName());
+		bankAccountDO.setGmtModified(new Date());
+		bankAccountDO.setAuditorId(param.getAuditorId());
+		bankAccountDO.setAuditTime(new Date());
+		bankAccountDO.setRemark(param.getRemark());
+		bankAccountDOMapper.updateByPrimaryKeySelective(bankAccountDO);
+		
+	}
+	
+	@Override
+	public List<BankAccountOperatorBO> selectBankOperator(String userNum) {
+		BankAccountDOExample example = new BankAccountDOExample();
+		example.createCriteria().andUserNumEqualTo(userNum).andStatusEqualTo(BankStatusEnum.YES.getVal());
+		List<BankAccountDO> list=bankAccountDOMapper.selectByExample(example);
+		
+		List<BankAccountOperatorBO> boList = BankAccountConverter.convertOperatorBOS(list);
+		
+		for (BankAccountOperatorBO bankAccountOperatorBO : boList) {
+			BankDO bankDO=bankDOMapper.selectByPrimaryKey(bankAccountOperatorBO.getBankId());
+			bankAccountOperatorBO.setBankName(bankDO.getName());
+		}
+		return list.isEmpty() ? null :BankAccountConverter.convertOperatorBOS(list);
+	}
+	
 }
