@@ -173,7 +173,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 			BankDO bankDO=bankDOMapper.selectByPrimaryKey(bankAccountOperatorBO.getBankId());
 			bankAccountOperatorBO.setBankName(bankDO.getName());
 		}
-		return list.isEmpty() ? null :BankAccountConverter.convertOperatorBOS(list);
+		return boList;
 	}
 	
 }

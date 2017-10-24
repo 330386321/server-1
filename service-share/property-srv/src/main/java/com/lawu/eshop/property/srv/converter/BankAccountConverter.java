@@ -125,6 +125,7 @@ public class BankAccountConverter {
               bankAccountBO.setAuditorId(bankAccountDO.getAuditorId());
               bankAccountBO.setRemark(bankAccountDO.getRemark());
               bankAccountBO.setAuditorTime(bankAccountDO.getAuditTime());
+              bankAccountBO.setBankId(bankAccountDO.getBankId());
         	  BOS.add(bankAccountBO);
 		}
 		return BOS;
@@ -147,6 +148,7 @@ public class BankAccountConverter {
 			bankAccountDTO.setAuditorId(bankAccountOperatorBO.getAuditorId());
 			bankAccountDTO.setRemark(bankAccountOperatorBO.getRemark());
 			bankAccountDTO.setAuditorTime(bankAccountOperatorBO.getAuditorTime());
+			bankAccountDTO.setBankName(bankAccountOperatorBO.getBankName());
 			dtos.add(bankAccountDTO);
 			
 		}
