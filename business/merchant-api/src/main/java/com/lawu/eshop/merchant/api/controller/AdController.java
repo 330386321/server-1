@@ -424,6 +424,15 @@ public class AdController extends BaseController {
                 adSave.setMerchantRegionPath(storeDTO.getRegionPath());
         	}
     	}
+    	String  platform = HeaderUtil.getRequestPlatform(getRequest());
+    	if(platform==""){
+			return successCreated(ResultCode.GET_HEADER_ERROR);
+		}
+		if(Byte.valueOf(platform)==MobileTypeEnum.Android.val || Byte.valueOf(platform)==MobileTypeEnum.IOS.val){
+			adSave.setClentType(ClientTypeEnum.MOBLIE);
+		}else{
+			adSave.setClentType(ClientTypeEnum.PC);
+		}
     	adSave.setCount(count);
     	adSave.setMediaUrl(adDTO.getMediaUrl());
     	adSave.setVideoImgUrl(adDTO.getVideoImgUrl());

@@ -1475,10 +1475,10 @@ public class AdServiceImpl implements AdService {
 			AdDO adRecord = new AdDO();
 			if(!list.isEmpty()){
 				adRecord = list.get(0);
+				adDOMapper.updateByExampleSelective(adDO, example);
+				matransactionMainAddService.sendNotice(adRecord.getId());
 			}
-			adDOMapper.updateByExampleSelective(adDO, example);
 			
-			matransactionMainAddService.sendNotice(adRecord.getId());
 		}
 		
 		AdDO record = new AdDO();

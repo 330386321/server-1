@@ -82,6 +82,9 @@ public class MerchantDetailDTO {
 
     @ApiModelProperty(name = "otherUrl", value = "其他照片")
     private List<String> otherUrl;
+    
+    @ApiModelProperty(name = "userNum", value = "商家编号")
+    private String userNum;
 
     public String getName() {
         return name;
@@ -266,4 +269,13 @@ public class MerchantDetailDTO {
     public void setOtherUrl(List<String> otherUrl) {
         this.otherUrl = otherUrl;
     }
+
+	public String getUserNum() {
+		return userNum;
+	}
+
+	public void setUserNum(String userNum) {
+		this.userNum = userNum;
+	}
+    
 }

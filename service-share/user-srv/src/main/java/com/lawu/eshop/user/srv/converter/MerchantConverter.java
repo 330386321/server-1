@@ -211,6 +211,7 @@ public class MerchantConverter {
         detailDTO.setLicenseUrl(detailBO.getLicenseUrl());
         detailDTO.setLogoUrl(detailBO.getLogoUrl());
         detailDTO.setOtherUrl(detailBO.getOtherUrl());
+        detailDTO.setUserNum(detailBO.getUserNum());
         return detailDTO;
     }
 
