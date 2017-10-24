@@ -114,7 +114,6 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         // 从header中得到token
         String token = request.getHeader(httpHeaderName);
         if (token != null && token.length() > 0) {
-            logger.debug("Access token: {}, from {}", token, request.getRequestURI());
             Jws<Claims> claimsJws = null;
             try {
 
