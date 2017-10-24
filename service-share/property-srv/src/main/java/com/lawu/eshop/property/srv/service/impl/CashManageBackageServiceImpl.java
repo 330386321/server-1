@@ -266,6 +266,14 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
             }
             paramList.add(view);
             withdrawCashDOMapperExtend.updateBatchWithdrawCashStatus(paramList);
+            
+            //修改银行卡为永久绑定
+            BankAccountDO record  = new BankAccountDO();
+    		record.setId(wcdo.getBusinessBankAccountId());
+    		record.setIsBindForever(true);
+    		record.setGmtModified(new Date());
+    		bankAccountDOMapper.updateByPrimaryKeySelective(record);
+            
         }
         if (!CashStatusEnum.FAILURE.getVal().equals(param.getCashOperEnum().getVal())) {
             return ResultCode.SUCCESS;

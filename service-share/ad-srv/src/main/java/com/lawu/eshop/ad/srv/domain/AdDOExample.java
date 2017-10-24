@@ -2496,6 +2496,66 @@ public class AdDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andClientTypeIsNull() {
+            addCriterion("client_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andClientTypeIsNotNull() {
+            addCriterion("client_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andClientTypeEqualTo(Byte value) {
+            addCriterion("client_type =", value, "clientType");
+            return (Criteria) this;
+        }
+
+        public Criteria andClientTypeNotEqualTo(Byte value) {
+            addCriterion("client_type <>", value, "clientType");
+            return (Criteria) this;
+        }
+
+        public Criteria andClientTypeGreaterThan(Byte value) {
+            addCriterion("client_type >", value, "clientType");
+            return (Criteria) this;
+        }
+
+        public Criteria andClientTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("client_type >=", value, "clientType");
+            return (Criteria) this;
+        }
+
+        public Criteria andClientTypeLessThan(Byte value) {
+            addCriterion("client_type <", value, "clientType");
+            return (Criteria) this;
+        }
+
+        public Criteria andClientTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("client_type <=", value, "clientType");
+            return (Criteria) this;
+        }
+
+        public Criteria andClientTypeIn(List<Byte> values) {
+            addCriterion("client_type in", values, "clientType");
+            return (Criteria) this;
+        }
+
+        public Criteria andClientTypeNotIn(List<Byte> values) {
+            addCriterion("client_type not in", values, "clientType");
+            return (Criteria) this;
+        }
+
+        public Criteria andClientTypeBetween(Byte value1, Byte value2) {
+            addCriterion("client_type between", value1, value2, "clientType");
+            return (Criteria) this;
+        }
+
+        public Criteria andClientTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("client_type not between", value1, value2, "clientType");
+            return (Criteria) this;
+        }
+
         public Criteria andAuditorIdIsNull() {
             addCriterion("auditor_id is null");
             return (Criteria) this;

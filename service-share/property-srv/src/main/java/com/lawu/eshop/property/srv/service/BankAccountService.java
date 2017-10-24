@@ -38,7 +38,7 @@ public interface BankAccountService {
 	 * @param account
 	 * @return
 	 */
-	Boolean selectByAccount(String account,String userNum);
+	Boolean selectByAccount(String account,Byte userType,String num);
 	
 	/**
 	 * 单个查询
@@ -54,6 +54,14 @@ public interface BankAccountService {
 	 * @return
 	 */
 	Integer updateBankAccount(Long id ,BankAccountParam bankAccountParam);
+	
+	/**
+	 * 查询当前用户银行卡用户名
+	 * @param num
+	 * @return
+	 */
+	String selectBankName(String num);
+	
 	
 
 }

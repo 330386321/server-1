@@ -40,6 +40,7 @@ public class AdMerchantAddPointTransactionMainServiceImpl extends AbstractTransa
 		notification.setUserNum(ad.getMerchantNum());
 		notification.setAdId(id);
 		notification.setAdType(ad.getType());
+		notification.setClentType(ad.getClientType());
 		if (ad.getPayType() == null) {
 			notification.setPayType(AdPayTypeEnum.POINT.getVal());
 		} else {

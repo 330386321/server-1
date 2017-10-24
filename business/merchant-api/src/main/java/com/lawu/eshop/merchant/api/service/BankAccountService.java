@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.BankAccountDTO;
+import com.lawu.eshop.property.dto.BankAccountNameDTO;
 import com.lawu.eshop.property.param.BankAccountParam;
 
 /**
@@ -64,4 +65,11 @@ public interface BankAccountService {
 	@RequestMapping(value = "bankAccount/updateBankAccount/{id}", method = RequestMethod.PUT)
     public Result updateBankAccount(@PathVariable("id") Long id,@RequestParam("userNum") String userNum,@RequestBody BankAccountParam bankAccountParam);
 
+	/**
+	 * 获取银行卡用户名称
+	 * @param userNum
+	 * @return
+	 */
+	@RequestMapping(value = "bankAccount/selectBankName", method = RequestMethod.GET)
+    Result<BankAccountNameDTO> selectBankName(@RequestParam("userNum") String userNum);
 }
