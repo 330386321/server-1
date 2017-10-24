@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class TransactionDetailQueryForMemberForeignParam extends AbstractPageParam {
 	
     @NotNull(message="交易分类不能为空")
-	@ApiModelProperty(value = "交易分类", required=true)
+	@ApiModelProperty(value = "交易分类(ALL-全部分类|RED_SWEEP-红包|RECOMMEND_INCOME-推荐E友收益|PREFERRED_RED_SWEEP-优选红包|WITHDRAW-提现|PAY-买单|REFUND_MONEY-退款|RECHARGE-充值|SHOPPING-购物)", required=true)
 	private MemberTransactionCategoryEnum transactionCategory;
     
     @JsonFormat(pattern="yyyy-MM")

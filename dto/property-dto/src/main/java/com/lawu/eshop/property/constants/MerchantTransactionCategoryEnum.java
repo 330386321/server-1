@@ -13,7 +13,7 @@ public enum MerchantTransactionCategoryEnum {
 	PRODUCT_INCOME((byte) 0x06, "商品收入", new ManageTypeEnum[]{ManageTypeEnum.COMMON}),
 	REFUND_MONEY((byte) 0x07, "退款", new ManageTypeEnum[]{ManageTypeEnum.COMMON, ManageTypeEnum.ENTITY}),
 	DUE_IN((byte) 0x08, "待收货款", new ManageTypeEnum[]{ManageTypeEnum.COMMON}),
-      RED_PACKET((byte) 0x09, "红包", new ManageTypeEnum[]{ManageTypeEnum.COMMON});
+    RED_PACKET((byte) 0x09, "红包", new ManageTypeEnum[]{ManageTypeEnum.COMMON});
 
     private Byte value;
 
