@@ -1,10 +1,6 @@
 package com.lawu.eshop.property.param;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * 商家 E咻 & 红包 下架后退款原路退

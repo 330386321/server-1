@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.BankAccountService;
 import com.lawu.eshop.property.dto.BankAccountDTO;
+import com.lawu.eshop.property.dto.BankAccountNameDTO;
 import com.lawu.eshop.property.param.BankAccountParam;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,4 +43,9 @@ public class MockBankAccountService extends BaseController implements BankAccoun
     public Result updateBankAccount(@PathVariable("id") Long id, @RequestParam("userNum") String userNum, @RequestBody BankAccountParam bankAccountParam) {
         return successCreated();
     }
+
+	@Override
+	public Result<BankAccountNameDTO> selectBankName(@RequestParam("userNum") String userNum) {
+		return null;
+	}
 }

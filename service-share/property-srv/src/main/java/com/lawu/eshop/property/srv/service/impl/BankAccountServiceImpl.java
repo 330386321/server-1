@@ -1,17 +1,20 @@
 package com.lawu.eshop.property.srv.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.property.constants.BankStatusEnum;
 import com.lawu.eshop.property.param.BankAccountParam;
 import com.lawu.eshop.property.srv.bo.BankAccountBO;
 import com.lawu.eshop.property.srv.converter.BankAccountConverter;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
 import com.lawu.eshop.property.srv.domain.BankAccountDOExample;
+import com.lawu.eshop.property.srv.domain.BankAccountDOExample.Criteria;
 import com.lawu.eshop.property.srv.domain.BankDO;
 import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
 import com.lawu.eshop.property.srv.mapper.BankDOMapper;
@@ -47,13 +50,16 @@ public class BankAccountServiceImpl implements BankAccountService {
 		String str=bankAccountParam.getAccountNumber().substring(bankAccountParam.getAccountNumber().length()-4, bankAccountParam.getAccountNumber().length());
 		String number=bankDO.getName()+"("+str+")";
 		bankAccountDO.setNote(number);
+		bankAccountDO.setGmtModified(new Date());
+		bankAccountDO.setGmtCreate(new Date());
+		bankAccountDO.setUserType(bankAccountParam.getUserType().val);
 		return bankAccountDOMapper.insert(bankAccountDO);
 	}
 
 	@Override
 	public List<BankAccountBO> selectMyBank(String userNum) {
 		BankAccountDOExample example = new BankAccountDOExample();
-		example.createCriteria().andUserNumEqualTo(userNum).andStatusEqualTo(new Byte("1"));
+		example.createCriteria().andUserNumEqualTo(userNum).andStatusEqualTo(BankStatusEnum.YES.getVal());
 		List<BankAccountDO> list=bankAccountDOMapper.selectByExample(example);
 		List<BankDO> bankDOS=new ArrayList<>();
 		for (BankAccountDO bankAccountDO : list) {
@@ -69,16 +75,33 @@ public class BankAccountServiceImpl implements BankAccountService {
 		BankAccountDOExample example = new BankAccountDOExample();
 		example.createCriteria().andIdEqualTo(id);
 		BankAccountDO bankAccount=new BankAccountDO();
-		bankAccount.setStatus(new Byte("0"));
+		bankAccount.setStatus(BankStatusEnum.NONE.getVal());
+		bankAccount.setGmtModified(new Date());
 		return bankAccountDOMapper.updateByExampleSelective(bankAccount, example);
 	}
 
 	@Override
-	public Boolean selectByAccount(String account,String userNum) {
+	public Boolean selectByAccount(String account,Byte userType,String num) {
 		BankAccountDOExample example = new BankAccountDOExample();
-		example.createCriteria().andAccountNumberEqualTo(account).andStatusEqualTo(new Byte("1")).andUserNumEqualTo(userNum);
+		Criteria  c1 = example.createCriteria();
+		Criteria  c2 = example.createCriteria();
+		c1.andAccountNumberEqualTo(account).andUserTypeEqualTo(userType).andStatusEqualTo(BankStatusEnum.YES.getVal());
+		c2.andAccountNumberEqualTo(account).andUserTypeEqualTo(userType).andIsBindForeverEqualTo(true);
+		example.or(c2);
 		List<BankAccountDO>  list=bankAccountDOMapper.selectByExample(example);
-		return list.isEmpty()?false:true;
+		for (BankAccountDO bankAccountDO : list) {
+			if(bankAccountDO.getStatus()==BankStatusEnum.YES.getVal()){
+				return true;
+			}else{
+				if(bankAccountDO.getUserNum().equals(num)){
+					return false;
+				}else{
+					return true;
+				}
+			}
+			
+		}
+		return false;
 	}
 
 	@Override
@@ -104,7 +127,21 @@ public class BankAccountServiceImpl implements BankAccountService {
 		bankAccountDO.setAccountNumber(bankAccountParam.getAccountNumber());
 		bankAccountDO.setBankId(bankAccountParam.getBankId());
 		bankAccountDO.setSubBranchName(bankAccountParam.getSubBranchName());
+		bankAccountDO.setGmtModified(new Date());
 		return bankAccountDOMapper.updateByPrimaryKeySelective(bankAccountDO);
 	}
+
+	@Override
+	public String selectBankName(String num) {
+		BankAccountDOExample example = new BankAccountDOExample();
+		example.createCriteria().andUserNumEqualTo(num);
+		example.setOrderByClause("gmt_create asc");
+		List<BankAccountDO>  list=bankAccountDOMapper.selectByExample(example);
+		if(!list.isEmpty()){
+			return list.get(0).getAccountName();
+		}
+		return null;
+	}
+
 
 }

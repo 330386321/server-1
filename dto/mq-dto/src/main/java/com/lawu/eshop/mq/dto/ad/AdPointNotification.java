@@ -33,11 +33,8 @@ public class AdPointNotification extends Notification {
 	private byte adType;
 
 	private String tradeNo;
-
-	/**
-	 * 1-app、2-pc
-	 */
-	private int clientType;
+	
+	private Byte clientType;
 	
 	public Long getAdId() {
 		return adId;
@@ -103,11 +100,13 @@ public class AdPointNotification extends Notification {
 		this.tradeNo = tradeNo;
 	}
 
-	public int getClientType() {
+
+	public byte getClientType() {
 		return clientType;
 	}
 
-	public void setClientType(int clientType) {
+	public void setClientType(byte clientType) {
 		this.clientType = clientType;
 	}
+	
 }
