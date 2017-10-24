@@ -14,7 +14,7 @@
     <modules>
         <module>authorization-impl</module>
         <module>monitor-agent</module>
-        <module>id-worker-client</module>
+        <module>id-worker-client-impl</module>
     </modules>
 
 

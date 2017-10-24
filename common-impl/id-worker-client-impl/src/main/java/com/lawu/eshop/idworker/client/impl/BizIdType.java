@@ -1,4 +1,4 @@
-package com.lawu.eshop.idworker.client;
+package com.lawu.eshop.idworker.client.impl;
 
 /**
  * 业务ID类型

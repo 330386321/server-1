@@ -14,7 +14,6 @@
 
     <modules>
         <module>cache-srv</module>
-        <module>id-worker</module>
     </modules>
 
     <dependencies>
