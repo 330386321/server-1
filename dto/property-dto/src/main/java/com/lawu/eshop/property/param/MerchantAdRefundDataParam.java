@@ -20,7 +20,7 @@ public class MerchantAdRefundDataParam {
 	/**
 	 * 1-app、2-pc
 	 */
-	private int clientType;
+	private Byte clientType;
 
 	public String getRefundMoney() {
 		return refundMoney;
@@ -63,11 +63,11 @@ public class MerchantAdRefundDataParam {
 		this.userNum = userNum;
 	}
 
-	public int getClientType() {
+	public Byte getClientType() {
 		return clientType;
 	}
 
-	public void setClientType(int clientType) {
+	public void setClientType(Byte clientType) {
 		this.clientType = clientType;
 	}
 }
