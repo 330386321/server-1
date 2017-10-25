@@ -2,13 +2,18 @@ package com.lawu.eshop.ad.dto;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.lawu.eshop.framework.web.json.KeepDecimalJsonSerializer;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class ClickAdPointDTO {
 	
+	@JsonSerialize(using=KeepDecimalJsonSerializer.class)
 	@ApiModelProperty(value = "今日累计积分")
 	private BigDecimal addPoint;
 	
+	@JsonSerialize(using=KeepDecimalJsonSerializer.class)
 	@ApiModelProperty(value = "广告积分")
 	private BigDecimal point;
 
