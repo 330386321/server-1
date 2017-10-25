@@ -113,7 +113,7 @@ public class UserRedPacketController extends BaseController {
 		boolean flag = userRedPacketService.isExistsRedPacket(redPacketId);
 		UserRedpacketMaxMoneyDTO dto =new UserRedpacketMaxMoneyDTO();
 		if(!flag){  //红包领取完了
-			dto.setGetAll(flag);
+			dto.setGetAll(!flag);
 			return successCreated(dto);
 		}
 		boolean userIsGet = userRedPacketService.checkUserGetRedpacket(redPacketId, userNum);
