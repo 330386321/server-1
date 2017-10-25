@@ -24,6 +24,9 @@ public class UserRedPacketReturnDTO {
 	@ApiModelProperty(value = "邀请人账号")
 	private String inviterAccount;
 	
+	@ApiModelProperty(value = "是否领完")
+	private Boolean isGetAll;
+	
 
 	public String getNickName() {
 		return nickName;
@@ -55,6 +58,14 @@ public class UserRedPacketReturnDTO {
 
 	public void setInviterAccount(String inviterAccount) {
 		this.inviterAccount = inviterAccount;
+	}
+
+	public Boolean getIsGetAll() {
+		return isGetAll;
+	}
+
+	public void setIsGetAll(Boolean isGetAll) {
+		this.isGetAll = isGetAll;
 	}
 
 	
