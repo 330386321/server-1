@@ -1,21 +1,9 @@
 package com.lawu.eshop.property.srv.pay;
 
-import com.alipay.api.AlipayApiException;
-import com.alipay.api.AlipayClient;
-import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.domain.AlipayTradeAppPayModel;
-import com.alipay.api.request.AlipayTradeAppPayRequest;
-import com.alipay.api.response.AlipayTradeAppPayResponse;
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.pay.sdk.alipay.util.AlipaySubmit;
-import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
-import com.lawu.eshop.property.constants.UserTypeEnum;
-import com.lawu.eshop.pay.sdk.alipay.AliPayConfigParam;
-import com.lawu.eshop.property.param.PcAlipayDataParam;
-import com.lawu.eshop.property.param.ThirdPayDataParam;
-import com.lawu.eshop.property.srv.PropertySrvConfig;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +14,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.*;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.pay.sdk.alipay.AliPayConfigParam;
+import com.lawu.eshop.pay.sdk.alipay.util.AlipaySubmit;
+import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
+import com.lawu.eshop.property.constants.UserTypeEnum;
+import com.lawu.eshop.property.param.PcAlipayDataParam;
+import com.lawu.eshop.property.param.ThirdPayDataParam;
+import com.lawu.eshop.property.srv.PropertySrvConfig;
 
 /**
  * <p>
@@ -80,7 +84,7 @@ public class AlipayController extends BaseController {
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
         AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
         model.setSubject(param.getSubject());
-        model.setOutTradeNo(param.getOutTradeNo());
+        model.setOutTradeNo(IdWorkerHelperImpl.generate(BizIdType.BUSINESS));
         model.setTotalAmount(param.getTotalAmount());
         model.setProductCode("QUICK_MSECURITY_PAY");
         model.setPassbackParams(passback_params);

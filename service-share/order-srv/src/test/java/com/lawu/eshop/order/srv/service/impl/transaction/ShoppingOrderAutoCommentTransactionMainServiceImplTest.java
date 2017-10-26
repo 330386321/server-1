@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
@@ -74,7 +76,7 @@ public class ShoppingOrderAutoCommentTransactionMainServiceImplTest {
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
     	shoppingOrderDO.setConsigneeMobile("123456");

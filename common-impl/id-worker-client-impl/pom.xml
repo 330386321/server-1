@@ -11,5 +11,12 @@
 
     <artifactId>id-worker-client-impl</artifactId>
 
-
+    <dependencies>
+        <!-- 公用组件库 -->
+        <dependency>
+            <groupId>com.lawu</groupId>
+            <artifactId>id-worker-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

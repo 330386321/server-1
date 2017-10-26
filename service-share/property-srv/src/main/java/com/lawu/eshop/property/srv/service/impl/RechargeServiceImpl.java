@@ -1,9 +1,30 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.*;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.PayTypeEnum;
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
+import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
+import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.AgentReportRechargeQueryParam;
@@ -32,17 +53,6 @@ import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
-import org.apache.ibatis.session.RowBounds;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class RechargeServiceImpl implements RechargeService {
@@ -77,7 +87,7 @@ public class RechargeServiceImpl implements RechargeService {
         recharge.setRechargeType(param.getPayTypeEnum().getVal());
         recharge.setChannel(param.getTransactionPayTypeEnum().getVal());
         recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
-        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setRechargeNumber(IdWorkerHelperImpl.generate(BizIdType.RECHARGE));
         recharge.setGmtCreate(new Date());
         //保存省市区用于代理商区域统计
         if(param.getRegionPath() != null && !"".equals(param.getRegionPath())){

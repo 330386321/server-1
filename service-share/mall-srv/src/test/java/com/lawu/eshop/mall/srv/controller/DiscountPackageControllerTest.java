@@ -37,6 +37,7 @@ import com.lawu.eshop.mall.param.DiscountPackageUpdateParam;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageContentSaveForeignParam;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageContentUpdateForeignParam;
 import com.lawu.eshop.mall.param.foreign.DiscountPackageQueryForeignParam;
+import com.lawu.eshop.mall.srv.MallSrvApplicationTest;
 import com.lawu.eshop.mall.srv.domain.DiscountPackageContentDO;
 import com.lawu.eshop.mall.srv.domain.DiscountPackageDO;
 import com.lawu.eshop.mall.srv.domain.DiscountPackageImageDO;
@@ -45,7 +46,6 @@ import com.lawu.eshop.mall.srv.mapper.DiscountPackageContentDOMapper;
 import com.lawu.eshop.mall.srv.mapper.DiscountPackageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.DiscountPackageImageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.DiscountPackagePurchaseNotesDOMapper;
-import com.lawu.eshop.mall.srv.service.MallSrvApplicationTest;
 
 /**
  * @author zhangyong

@@ -9,9 +9,10 @@ import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentMerchantParam;
 import com.lawu.eshop.mall.param.PayOrderAutoCommentParam;
+import com.lawu.eshop.mall.srv.MallSrvApplicationTest;
 import com.lawu.eshop.mall.srv.domain.CommentMerchantDO;
 import com.lawu.eshop.mall.srv.mapper.CommentMerchantDOMapper;
-import com.lawu.eshop.mall.srv.service.MallSrvApplicationTest;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

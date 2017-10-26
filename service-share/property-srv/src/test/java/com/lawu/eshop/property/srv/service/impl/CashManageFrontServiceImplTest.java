@@ -1,5 +1,19 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.CashStatusEnum;
@@ -10,26 +24,17 @@ import com.lawu.eshop.property.param.CashDataParam;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashDetailBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashQueryBO;
-import com.lawu.eshop.property.srv.domain.*;
+import com.lawu.eshop.property.srv.domain.BankAccountDO;
+import com.lawu.eshop.property.srv.domain.BankDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
+import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
 import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
 import com.lawu.eshop.property.srv.mapper.BankDOMapper;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.WithdrawCashDOMapper;
 import com.lawu.eshop.property.srv.service.CashManageFrontService;
 import com.lawu.eshop.utils.PwdUtil;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author yangqh
@@ -87,7 +92,6 @@ public class CashManageFrontServiceImplTest {
         param.setAccount("17512036361");
         param.setUserNum("10001");
         param.setAreaId(111);
-        param.setCashNumber("1111111111111111111");
         param.setCityId(11);
         param.setName("习大大");
         param.setProvinceId(1);
@@ -142,7 +146,6 @@ public class CashManageFrontServiceImplTest {
         param.setAccount("17512036361");
         param.setUserNum("10001");
         param.setAreaId(111);
-        param.setCashNumber("1111111111111111111");
         param.setCityId(11);
         param.setName("习大大");
         param.setProvinceId(1);

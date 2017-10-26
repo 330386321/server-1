@@ -5,7 +5,8 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.mall.constants.SuggestionClientType;
 import com.lawu.eshop.mall.param.SuggestionListParam;
 import com.lawu.eshop.mall.param.SuggestionParam;
-import com.lawu.eshop.mall.srv.service.MallSrvApplicationTest;
+import com.lawu.eshop.mall.srv.MallSrvApplicationTest;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

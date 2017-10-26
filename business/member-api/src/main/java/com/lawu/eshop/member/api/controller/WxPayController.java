@@ -1,6 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -28,6 +27,7 @@ import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.ThirdPayDataParam;
 import com.lawu.eshop.property.param.ThirdPayParam;
+import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
@@ -69,7 +69,6 @@ public class WxPayController extends BaseController {
                                 @ModelAttribute @ApiParam ThirdPayParam param) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         ThirdPayDataParam aparam = new ThirdPayDataParam();
-        aparam.setOutTradeNo(StringUtil.getRandomNum(""));
         aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
         aparam.setSubject(param.getThirdPayBodyEnum().getVal());
         aparam.setBizIds(param.getBizIds());

@@ -13,6 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.constants.ReportFansRiseRateEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
@@ -21,7 +23,6 @@ import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import com.lawu.eshop.order.srv.service.ReportPayService;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 
@@ -62,7 +63,7 @@ public class ReportPayServiceImplTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());

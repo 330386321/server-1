@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
@@ -74,7 +76,7 @@ public class ShoppingOrderCancelOrderTransactionMainServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");

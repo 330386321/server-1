@@ -1,16 +1,13 @@
 package com.lawu.eshop.utils;
 
-import com.alibaba.fastjson.JSONArray;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import com.alibaba.fastjson.JSONArray;
 
 public class StringUtil {
 
@@ -24,10 +21,10 @@ public class StringUtil {
      * @param prefix 业务前缀
      * @return
      */
-    public static String getRandomNum(String prefix) {
-        DateFormat df = new SimpleDateFormat("yyyyMMddHHmmssssss");
-        return prefix + df.format(new Date()) + getRandom(1, 7);
-    }
+//    public static String getRandomNum(String prefix) {
+//        DateFormat df = new SimpleDateFormat("yyyyMMddHHmmssssss");
+//        return prefix + df.format(new Date()) + getRandom(1, 7);
+//    }
 
     /**
      * 获取随机数
@@ -35,10 +32,10 @@ public class StringUtil {
      * @param suffix 业务后缀
      * @return
      */
-    public static String getRandomNumAppend(String suffix) {
-        DateFormat df = new SimpleDateFormat("yyMMddHHmmssssss");
-        return df.format(new Date()) + suffix;
-    }
+//    public static String getRandomNumAppend(String suffix) {
+//        DateFormat df = new SimpleDateFormat("yyMMddHHmmssssss");
+//        return df.format(new Date()) + suffix;
+//    }
 
     /**
      * 获取随机数
@@ -47,30 +44,30 @@ public class StringUtil {
      * @param length
      * @return
      */
-    public static String getRandom(int model, int length) {
-        String strBase;
-        switch (model) {
-            case 1:
-                strBase = "0123456789";
-                break;
-            case 2:
-                strBase = "abcdefghijklnmopqrstuvwxyzABCDEFGHIJKLNMOPQRSTUVWXYZ";
-                break;
-            case 3:
-                strBase = "0123456789abcdefghijklnmopqrstuvwxyzABCDEFGHIJKLNMOPQRSTUVWXYZ";
-                break;
-            default:
-                return "";
-        }
-        Random random = new Random();
-        StringBuilder str = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            int n = random.nextInt(strBase.length());
-            String oneString = strBase.substring(n, n + 1);
-            str.append(oneString);
-        }
-        return str.toString();
-    }
+//    public static String getRandom(int model, int length) {
+//        String strBase;
+//        switch (model) {
+//            case 1:
+//                strBase = "0123456789";
+//                break;
+//            case 2:
+//                strBase = "abcdefghijklnmopqrstuvwxyzABCDEFGHIJKLNMOPQRSTUVWXYZ";
+//                break;
+//            case 3:
+//                strBase = "0123456789abcdefghijklnmopqrstuvwxyzABCDEFGHIJKLNMOPQRSTUVWXYZ";
+//                break;
+//            default:
+//                return "";
+//        }
+//        Random random = new Random();
+//        StringBuilder str = new StringBuilder();
+//        for (int i = 0; i < length; i++) {
+//            int n = random.nextInt(strBase.length());
+//            String oneString = strBase.substring(n, n + 1);
+//            str.append(oneString);
+//        }
+//        return str.toString();
+//    }
 
     /**
      * 隐藏用户账号

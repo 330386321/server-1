@@ -1,9 +1,27 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.*;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.property.constants.PayTypeEnum;
+import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.AgentReportRechargeQueryParam;
@@ -15,26 +33,12 @@ import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
 import com.lawu.eshop.property.srv.bo.AreaRechargePointBO;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
 import com.lawu.eshop.property.srv.bo.RechargeReportBO;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.RechargeDO;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.RechargeDOMapper;
 import com.lawu.eshop.property.srv.service.RechargeService;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.StringUtil;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author yangqh
@@ -84,7 +88,7 @@ public class RechargeServiceImplTest {
         recharge.setRechargeType(PayTypeEnum.BALANCE.getVal());
         recharge.setChannel(TransactionPayTypeEnum.ALIPAY.getVal());
         recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
-        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setRechargeNumber(IdWorkerHelperImpl.generate(BizIdType.RECHARGE));
         recharge.setGmtCreate(new Date());
         rechargeDOMapper.insertSelective(recharge);
 
@@ -117,7 +121,7 @@ public class RechargeServiceImplTest {
         recharge.setRechargeType(PayTypeEnum.BALANCE.getVal());
         recharge.setChannel(TransactionPayTypeEnum.ALIPAY.getVal());
         recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
-        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setRechargeNumber(IdWorkerHelperImpl.generate(BizIdType.RECHARGE));
         recharge.setGmtCreate(new Date());
         rechargeDOMapper.insertSelective(recharge);
 
@@ -140,7 +144,7 @@ public class RechargeServiceImplTest {
         recharge.setRechargeType(PayTypeEnum.BALANCE.getVal());
         recharge.setChannel(TransactionPayTypeEnum.ALIPAY.getVal());
         recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
-        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setRechargeNumber(IdWorkerHelperImpl.generate(BizIdType.RECHARGE));
         recharge.setGmtCreate(new Date());
         rechargeDOMapper.insertSelective(recharge);
 
@@ -169,7 +173,7 @@ public class RechargeServiceImplTest {
         recharge.setRechargeType(PayTypeEnum.BALANCE.getVal());
         recharge.setChannel(TransactionPayTypeEnum.ALIPAY.getVal());
         recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
-        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setRechargeNumber(IdWorkerHelperImpl.generate(BizIdType.RECHARGE));
         recharge.setGmtCreate(new Date());
         rechargeDOMapper.insertSelective(recharge);
 
@@ -193,7 +197,7 @@ public class RechargeServiceImplTest {
         recharge.setRechargeType(PayTypeEnum.BALANCE.getVal());
         recharge.setChannel(TransactionPayTypeEnum.ALIPAY.getVal());
         recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
-        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setRechargeNumber(IdWorkerHelperImpl.generate(BizIdType.RECHARGE));
         recharge.setGmtCreate(new Date());
         recharge.setGmtModified(new Date());
         rechargeDOMapper.insertSelective(recharge);
@@ -221,7 +225,7 @@ public class RechargeServiceImplTest {
         recharge.setRechargeType(PayTypeEnum.BALANCE.getVal());
         recharge.setChannel(TransactionPayTypeEnum.ALIPAY.getVal());
         recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
-        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setRechargeNumber(IdWorkerHelperImpl.generate(BizIdType.RECHARGE));
         recharge.setGmtCreate(new Date());
         recharge.setGmtModified(new Date());
         rechargeDOMapper.insertSelective(recharge);
@@ -244,7 +248,7 @@ public class RechargeServiceImplTest {
         recharge.setRechargeType(PayTypeEnum.BALANCE.getVal());
         recharge.setChannel(TransactionPayTypeEnum.ALIPAY.getVal());
         recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
-        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setRechargeNumber(IdWorkerHelperImpl.generate(BizIdType.RECHARGE));
         recharge.setGmtCreate(new Date());
         recharge.setGmtModified(new Date());
         rechargeDOMapper.insertSelective(recharge);
@@ -272,7 +276,7 @@ public class RechargeServiceImplTest {
         recharge.setRechargeType(PayTypeEnum.POINT.getVal());
         recharge.setChannel(TransactionPayTypeEnum.ALIPAY.getVal());
         recharge.setStatus(ThirdPayStatusEnum.SUCCESS.getVal());
-        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setRechargeNumber(IdWorkerHelperImpl.generate(BizIdType.RECHARGE));
         recharge.setAreaId(1);
         recharge.setGmtCreate(new Date());
         recharge.setGmtModified(new Date());

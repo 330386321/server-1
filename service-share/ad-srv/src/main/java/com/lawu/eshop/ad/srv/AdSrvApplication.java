@@ -15,9 +15,9 @@ import org.springframework.context.annotation.ImportResource;
  * @date 2017/4/5
  */
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients({"com.lawu"})
 @SpringBootApplication
-@ComponentScan({"com.lawu.eshop"})
+@ComponentScan({"com.lawu"})
 @ImportResource(locations={"classpath:spring.xml"})
 public class AdSrvApplication {
 

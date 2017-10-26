@@ -20,7 +20,6 @@ public class UserRedPacketSaveParam {
 	private BigDecimal totalMoney;
 	private String userNum;
 	private String userAccount;
-	private String orderNum;
 	private String nickname;
 	
 	/**
@@ -82,13 +81,6 @@ public class UserRedPacketSaveParam {
 	 */
 	public void setUserAccount(String userAccount) {
 		this.userAccount = userAccount;
-	}
-
-	public String getOrderNum() {
-		return orderNum;
-	}
-	public void setOrderNum(String orderNum) {
-		this.orderNum = orderNum;
 	}
 
 	public String getNickname() {

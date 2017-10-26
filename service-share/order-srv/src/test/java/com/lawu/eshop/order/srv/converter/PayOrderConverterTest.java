@@ -8,6 +8,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
@@ -17,7 +19,6 @@ import com.lawu.eshop.order.dto.OperatorPayOrderListDTO;
 import com.lawu.eshop.order.dto.PayOrderDTO;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 
@@ -104,7 +105,7 @@ public class PayOrderConverterTest {
 		rtn.setMerchantId(1L);
 		rtn.setMerchantNum("B0001");
 		rtn.setNotFavoredAmount(new BigDecimal(1));
-		rtn.setOrderNum(StringUtil.getRandomNum(""));
+		rtn.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		rtn.setOrderStatus(false);
 		rtn.setPayType(TransactionPayTypeEnum.ALIPAY.getVal());
 		rtn.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
@@ -123,7 +124,7 @@ public class PayOrderConverterTest {
 		rtn.setId(1L);
 		rtn.setMemberId(1L);
 		rtn.setMerchantId(1L);
-		rtn.setOrderNum(StringUtil.getRandomNum(""));
+		rtn.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		rtn.setPayType(TransactionPayTypeEnum.ALIPAY.getVal());
 		rtn.setTotalAmount(new BigDecimal(2));
 		rtn.setEvaluation(true);

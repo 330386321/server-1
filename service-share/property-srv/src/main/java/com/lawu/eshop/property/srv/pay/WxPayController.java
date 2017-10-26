@@ -1,15 +1,13 @@
 package com.lawu.eshop.property.srv.pay;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.pay.sdk.weixin.base.HttpUtil;
-import com.lawu.eshop.pay.sdk.weixin.base.PayCommonUtil;
-import com.lawu.eshop.pay.sdk.weixin.base.RandomStringGenerator;
-import com.lawu.eshop.pay.sdk.weixin.base.XMLUtil;
-import com.lawu.eshop.property.constants.UserTypeEnum;
-import com.lawu.eshop.property.param.ThirdPayDataParam;
-import com.lawu.eshop.property.srv.PropertySrvConfig;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import javax.validation.Valid;
+
 import org.jdom.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +18,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.pay.sdk.weixin.base.HttpUtil;
+import com.lawu.eshop.pay.sdk.weixin.base.PayCommonUtil;
+import com.lawu.eshop.pay.sdk.weixin.base.RandomStringGenerator;
+import com.lawu.eshop.pay.sdk.weixin.base.XMLUtil;
+import com.lawu.eshop.property.constants.UserTypeEnum;
+import com.lawu.eshop.property.param.ThirdPayDataParam;
+import com.lawu.eshop.property.srv.PropertySrvConfig;
 
 /**
  * <p>
@@ -84,7 +88,7 @@ public class WxPayController extends BaseController {
         }
         packageParams.put("nonce_str", RandomStringGenerator.getRandomStringByLength(32));
         packageParams.put("body", param.getThirdPayBodyEnum().getVal());
-        packageParams.put("out_trade_no", param.getOutTradeNo());
+        packageParams.put("out_trade_no", IdWorkerHelperImpl.generate(BizIdType.BUSINESS));
         String totalFee = new BigDecimal(param.getTotalAmount()).multiply(new BigDecimal("100")).toString();
         if (totalFee.indexOf('.') > 0) {
             totalFee = totalFee.substring(0, totalFee.indexOf('.'));

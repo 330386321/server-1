@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
@@ -25,7 +27,6 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingRefundDetailExtendDO;
-import com.lawu.eshop.utils.RandomUtil;
 
 
 /**
@@ -199,7 +200,7 @@ public class ShoppingOrderItemExtendConverterTest {
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
     	shoppingOrderDO.setConsigneeMobile("123456");
@@ -275,7 +276,7 @@ public class ShoppingOrderItemExtendConverterTest {
     	shoppingOrderBO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING);
     	shoppingOrderBO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED);
     	shoppingOrderBO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderBO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderBO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderBO.setStatus(StatusEnum.VALID);
     	shoppingOrderBO.setConsigneeAddress("大冲商务中心1301");
     	shoppingOrderBO.setConsigneeMobile("123456");

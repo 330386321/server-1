@@ -15,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.EvaluationEnum;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
@@ -31,7 +33,6 @@ import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.domain.PayOrderDOExample;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import com.lawu.eshop.order.srv.service.PayOrderService;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 
@@ -65,7 +66,7 @@ public class PayOrderServiceImplTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
@@ -96,7 +97,7 @@ public class PayOrderServiceImplTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
@@ -133,7 +134,7 @@ public class PayOrderServiceImplTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
@@ -171,7 +172,7 @@ public class PayOrderServiceImplTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
@@ -209,7 +210,7 @@ public class PayOrderServiceImplTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
@@ -282,7 +283,7 @@ public class PayOrderServiceImplTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
@@ -314,7 +315,7 @@ public class PayOrderServiceImplTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
@@ -346,7 +347,7 @@ public class PayOrderServiceImplTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());

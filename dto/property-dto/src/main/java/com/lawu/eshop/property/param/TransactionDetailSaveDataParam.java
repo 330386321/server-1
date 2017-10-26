@@ -3,8 +3,6 @@ package com.lawu.eshop.property.param;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
-
 /**
  * 
  * <p>

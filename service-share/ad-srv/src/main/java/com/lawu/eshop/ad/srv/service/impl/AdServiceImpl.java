@@ -89,12 +89,13 @@ import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.mq.dto.ad.reply.AdPointReply;
 import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.synchronization.lock.constants.LockConstant.LockModule;
 import com.lawu.eshop.synchronization.lock.service.LockService;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * E赚接口实现类
@@ -207,7 +208,7 @@ public class AdServiceImpl implements AdService {
 		if (adDO.getType() == AdTypeEnum.AD_TYPE_FLAT.getVal() || adDO.getType() == AdTypeEnum.AD_TYPE_VIDEO.getVal()) {
 			adDO.setPayType(AdPayTypeEnum.POINT.getVal());
 		}else{
-			adDO.setAdOrderNum(StringUtil.getRandomNum(""));
+			adDO.setAdOrderNum(IdWorkerHelperImpl.generate(BizIdType.AD));
 		}
 		adDO.setTotalPoint(adParam.getTotalPoint());
 		adDO.setGmtCreate(new Date());

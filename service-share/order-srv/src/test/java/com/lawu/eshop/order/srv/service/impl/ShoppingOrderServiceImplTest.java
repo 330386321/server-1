@@ -19,6 +19,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.mq.dto.order.reply.ShoppingOrderCreateOrderReply;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
@@ -68,7 +70,6 @@ import com.lawu.eshop.order.srv.mapper.ShoppingRefundDetailDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingRefundProcessDOMapper;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * 
@@ -120,7 +121,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setMerchantNum("B0001");
     	expected.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDOMapper.insertSelective(expected);
@@ -174,7 +175,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setMerchantNum("B0001");
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
@@ -223,7 +224,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setMerchantNum("B0001");
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
@@ -280,7 +281,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -370,7 +371,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -466,7 +467,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setMerchantNum("B0001");
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
@@ -512,7 +513,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setMerchantNum("B0001");
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
@@ -561,7 +562,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setMerchantNum("B0001");
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
@@ -628,7 +629,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -667,7 +668,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -706,7 +707,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -745,7 +746,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -802,7 +803,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -873,7 +874,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -912,7 +913,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -951,7 +952,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -990,7 +991,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -1047,7 +1048,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -1149,7 +1150,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setMerchantNum("B0001");
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
@@ -1199,7 +1200,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setMerchantNum("B0001");
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
@@ -1247,7 +1248,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setMerchantNum("B0001");
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
@@ -1326,7 +1327,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setMerchantNum("B0001");
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
@@ -1405,7 +1406,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setMerchantNum("B0001");
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
@@ -1485,7 +1486,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -1536,7 +1537,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -1608,7 +1609,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -1693,7 +1694,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -1767,7 +1768,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -1884,7 +1885,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -1938,7 +1939,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -2009,7 +2010,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.PENDING.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -2075,7 +2076,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -2142,7 +2143,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -2224,7 +2225,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -2327,7 +2328,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -2429,7 +2430,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -2531,7 +2532,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
     	shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	shoppingOrderDO.setOrderTotalPrice(new BigDecimal(1));
-    	shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
     	shoppingOrderDO.setConsigneeAddress("大冲商务中心1301");
     	shoppingOrderDO.setConsigneeMobile("123456");

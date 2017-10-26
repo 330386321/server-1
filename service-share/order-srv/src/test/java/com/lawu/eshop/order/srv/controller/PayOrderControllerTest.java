@@ -33,6 +33,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.EvaluationEnum;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
@@ -53,7 +55,6 @@ import com.lawu.eshop.order.srv.OrderSrvApplicationTest;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.json.JCDateDeserializer;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 
@@ -141,7 +142,7 @@ public class PayOrderControllerTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
@@ -198,7 +199,7 @@ public class PayOrderControllerTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
@@ -234,7 +235,7 @@ public class PayOrderControllerTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setStatus(PayOrderStatusEnum.STATUS_UNPAY.getVal());
 		expected.setTotalAmount(new BigDecimal(2));
@@ -271,7 +272,7 @@ public class PayOrderControllerTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 		expected.setTotalAmount(new BigDecimal(2));
@@ -312,7 +313,7 @@ public class PayOrderControllerTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 		expected.setTotalAmount(new BigDecimal(2));
@@ -330,7 +331,7 @@ public class PayOrderControllerTest {
 		expected2.setMerchantId(1L);
 		expected2.setMerchantNum("B00001");
 		expected2.setNotFavoredAmount(new BigDecimal(1));
-		expected2.setOrderNum(StringUtil.getRandomNum(""));
+		expected2.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected2.setOrderStatus(true);
 		expected2.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 		expected2.setTotalAmount(new BigDecimal(2));
@@ -381,7 +382,7 @@ public class PayOrderControllerTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 		expected.setTotalAmount(new BigDecimal(2));
@@ -431,7 +432,7 @@ public class PayOrderControllerTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 		expected.setTotalAmount(new BigDecimal(2));
@@ -474,7 +475,7 @@ public class PayOrderControllerTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 		expected.setTotalAmount(new BigDecimal(2));
@@ -534,7 +535,7 @@ public class PayOrderControllerTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 		expected.setTotalAmount(new BigDecimal(2));

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ImportResource;
  * @author zhangyong
  * @date 2017/8/10.
  */
-@ComponentScan(value = {"com.lawu.eshop"}, excludeFilters = {@ComponentScan.Filter(value = {AgentSrvApplicationTest.class}, type = FilterType.ASSIGNABLE_TYPE)})
+@ComponentScan(value = {"com.lawu"}, excludeFilters = {@ComponentScan.Filter(value = {AgentSrvApplicationTest.class}, type = FilterType.ASSIGNABLE_TYPE)})
 @SpringBootApplication
 @ImportResource(locations = {"classpath:spring-test.xml"})
 public class AgentSrvApplicationTest {

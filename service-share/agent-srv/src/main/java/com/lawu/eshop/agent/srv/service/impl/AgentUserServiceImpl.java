@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lawu.eshop.agent.constants.AgentUserCommonConstant;
 import com.lawu.eshop.agent.constants.StatusEnum;
 import com.lawu.eshop.agent.param.AgentUserListParam;
 import com.lawu.eshop.agent.param.AgentUserParam;
@@ -21,8 +20,9 @@ import com.lawu.eshop.agent.srv.domain.AgentUserDOExample;
 import com.lawu.eshop.agent.srv.mapper.AgentUserDOMapper;
 import com.lawu.eshop.agent.srv.service.AgentUserService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * @author zhangyong
@@ -52,7 +52,7 @@ public class AgentUserServiceImpl implements AgentUserService {
     @Override
     @Transactional
     public void addAgentUser(AgentUserParam param) {
-        String userNum = RandomUtil.getTableNumRandomString(AgentUserCommonConstant.AGENT_NUM_TAG);
+        String userNum = IdWorkerHelperImpl.generate(BizIdType.AGENT);
         AgentUserDO agentUserDO = new AgentUserDO();
         agentUserDO.setMobile(param.getMobile());
         agentUserDO.setGmtCreate(new Date());

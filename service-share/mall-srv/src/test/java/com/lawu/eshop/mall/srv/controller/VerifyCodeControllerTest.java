@@ -2,9 +2,10 @@ package com.lawu.eshop.mall.srv.controller;
 
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
+import com.lawu.eshop.mall.srv.MallSrvApplicationTest;
 import com.lawu.eshop.mall.srv.domain.VerifyCodeDO;
 import com.lawu.eshop.mall.srv.mapper.VerifyCodeDOMapper;
-import com.lawu.eshop.mall.srv.service.MallSrvApplicationTest;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

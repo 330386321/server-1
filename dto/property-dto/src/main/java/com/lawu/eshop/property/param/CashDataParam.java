@@ -15,11 +15,6 @@ public class CashDataParam extends CashParam{
 	private Byte userType;
 
 	/**
-	 * 提现单号
-	 */
-	private String cashNumber;
-	
-	/**
 	 * 交易类型
 	 */
 	private Byte transactionType;
@@ -126,14 +121,6 @@ public class CashDataParam extends CashParam{
 
 	public void setUserType(Byte userType) {
 		this.userType = userType;
-	}
-
-	public String getCashNumber() {
-		return cashNumber;
-	}
-
-	public void setCashNumber(String cashNumber) {
-		this.cashNumber = cashNumber;
 	}
 
 	public Date getGmtCreate() {

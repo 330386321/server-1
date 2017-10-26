@@ -1,7 +1,27 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.*;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.property.constants.FreezeStatusEnum;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.PayTypeEnum;
+import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.srv.domain.PropertyDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
@@ -12,19 +32,6 @@ import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.RechargeDOMapper;
 import com.lawu.eshop.property.srv.service.BalancePayService;
 import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.StringUtil;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author yangqh
@@ -160,7 +167,7 @@ public class BalancePayServiceImplTest {
         recharge.setRechargeType(PayTypeEnum.POINT.getVal());
         recharge.setChannel(TransactionPayTypeEnum.BALANCE.getVal());
         recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
-        recharge.setRechargeNumber(StringUtil.getRandomNum(""));
+        recharge.setRechargeNumber(IdWorkerHelperImpl.generate(BizIdType.RECHARGE));
         recharge.setGmtCreate(new Date());
         rechargeDOMapper.insertSelective(recharge);
 

@@ -3,6 +3,8 @@ package com.lawu.eshop.property.srv.service.impl;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.property.constants.BusinessDepositOperEnum;
 import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
@@ -98,7 +100,7 @@ public class BusinessDepositServiceImplTest {
         bddo.setUserNum("B10001");
         bddo.setBusinessAccount("17512036361");
         bddo.setBusinessName("张三");
-        bddo.setDepositNumber(StringUtil.getRandomNum(""));
+        bddo.setDepositNumber(IdWorkerHelperImpl.generate(BizIdType.DEPOSIT));
         bddo.setAmount(new BigDecimal("1000"));
         bddo.setStatus(BusinessDepositStatusEnum.PAYING.getVal());
         bddo.setProvinceId(Long.valueOf("1"));

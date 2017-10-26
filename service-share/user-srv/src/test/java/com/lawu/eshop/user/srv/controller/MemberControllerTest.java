@@ -1,6 +1,8 @@
 package com.lawu.eshop.user.srv.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Date;
@@ -26,8 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.core.type.UserType;
 import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.user.constants.StatusEnum;
-import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MemberQuery;
@@ -41,7 +44,6 @@ import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * @author meishuquan
@@ -121,7 +123,7 @@ public class MemberControllerTest {
     @Test
     public void updateLoginPwd() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -145,7 +147,7 @@ public class MemberControllerTest {
     @Test
     public void resetLoginPwd() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -238,7 +240,7 @@ public class MemberControllerTest {
     @Test
     public void findCashUserInfo() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -324,7 +326,7 @@ public class MemberControllerTest {
     @Test
     public void findMessagePushList() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -351,7 +353,7 @@ public class MemberControllerTest {
     @Test
     public void findMessagePushByMobile() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -375,7 +377,7 @@ public class MemberControllerTest {
     @Test
     public void isRegister() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -459,7 +461,7 @@ public class MemberControllerTest {
     @Test
     public void getMemberByIds() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -483,7 +485,7 @@ public class MemberControllerTest {
     @Test
     public void findMemberMineInfo() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -527,7 +529,7 @@ public class MemberControllerTest {
     @Test
     public void findUserAccountAndRegionPathByNum() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -566,7 +568,7 @@ public class MemberControllerTest {
     @Test
     public void adQueryMemberInfo() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");

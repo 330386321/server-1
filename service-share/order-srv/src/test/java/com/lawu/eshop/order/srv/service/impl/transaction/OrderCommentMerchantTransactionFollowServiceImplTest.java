@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.TransactionFollowService;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.mq.dto.mall.CommentMerchantNotification;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
@@ -61,7 +63,7 @@ public class OrderCommentMerchantTransactionFollowServiceImplTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
