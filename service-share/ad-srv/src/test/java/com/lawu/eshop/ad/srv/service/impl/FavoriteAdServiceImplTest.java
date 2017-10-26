@@ -201,7 +201,7 @@ public class FavoriteAdServiceImplTest {
         favoriteAd.setMemberNum("M000001");
         favoriteAdDOMapper.insertSelective(favoriteAd);
 
-        int favoriteCount = favoriteAdService.getFavoriteCount(favoriteAd.getId());
+        int favoriteCount = favoriteAdService.getFavoriteCount(favoriteAd.getAdId());
         Assert.assertNotNull(favoriteCount);
         Assert.assertEquals(1, favoriteCount);
     }

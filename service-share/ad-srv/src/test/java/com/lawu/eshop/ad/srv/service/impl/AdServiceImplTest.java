@@ -20,6 +20,7 @@ import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.constants.ClientTypeEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.MemberAdRecordStatusEnum;
 import com.lawu.eshop.ad.constants.OrderTypeEnum;
@@ -104,6 +105,7 @@ public class AdServiceImplTest {
     	adSaveParam.setMerchantStoreName("E店商家");
     	adSaveParam.setManageType(ManageTypeEnum.ENTITY);
     	adSaveParam.setCount(100);
+    	adSaveParam.setClentType(ClientTypeEnum.MOBLIE);
     	AdParam param=new AdParam();
     	param.setAdCount(20);
     	param.setBeginTime("2017-05-17 11:35:00");
@@ -138,6 +140,7 @@ public class AdServiceImplTest {
     	adSaveParam.setMerchantStoreName("E店商家");
     	adSaveParam.setManageType(ManageTypeEnum.ENTITY);
     	adSaveParam.setCount(100);
+    	adSaveParam.setClentType(ClientTypeEnum.MOBLIE);
     	AdParam param=new AdParam();
     	param.setAdCount(20);
     	param.setPutWayEnum(PutWayEnum.PUT_WAY_COMMON);
@@ -166,6 +169,7 @@ public class AdServiceImplTest {
     	adSaveParam.setMerchantStoreName("E店商家");
     	adSaveParam.setManageType(ManageTypeEnum.ENTITY);
     	adSaveParam.setCount(100);
+    	adSaveParam.setClentType(ClientTypeEnum.MOBLIE);
     	AdParam param=new AdParam();
     	param.setAdCount(10);
     	param.setPutWayEnum(PutWayEnum.PUT_WAY_LUCK);
@@ -205,6 +209,7 @@ public class AdServiceImplTest {
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
         ad.setIsPay(true);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         adDOMapper.insertSelective(ad);
         
         AdMerchantParam adMerchantParam=new AdMerchantParam();
@@ -246,6 +251,7 @@ public class AdServiceImplTest {
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
         ad.setIsPay(true);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         adDOMapper.insertSelective(ad);
         
         AdMerchantParam adMerchantParam=new AdMerchantParam();
@@ -287,6 +293,7 @@ public class AdServiceImplTest {
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
         ad.setIsPay(true);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         adDOMapper.insertSelective(ad);
         
         AdMerchantParam adMerchantParam=new AdMerchantParam();
@@ -326,6 +333,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setIsPay(true);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
         adDOMapper.insertSelective(ad);
@@ -368,6 +376,7 @@ public class AdServiceImplTest {
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
         ad.setIsPay(true);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         adDOMapper.insertSelective(ad);
         
         AdMerchantParam adMerchantParam=new AdMerchantParam();
@@ -408,6 +417,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
        
@@ -444,6 +454,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
        
@@ -484,6 +495,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
        
@@ -524,6 +536,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
        
@@ -564,6 +577,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
        
@@ -605,6 +619,7 @@ public class AdServiceImplTest {
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
         ad.setIsPay(true);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
         AdFindParam adPlatParam=new AdFindParam();
@@ -646,6 +661,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
         AdMemberParam adMemberParam=new AdMemberParam();
@@ -685,6 +701,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
         AdMemberParam adMemberParam=new AdMemberParam();
@@ -724,6 +741,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
         FavoriteAdDO favoriteAdDO=new FavoriteAdDO();
@@ -767,6 +785,7 @@ public class AdServiceImplTest {
         ad.setGmtModified(new Date());
         ad.setBeginTime(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
         AdPraiseParam adPraiseParam=new AdPraiseParam();
@@ -807,6 +826,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
         AdPraiseParam adPraiseParam=new AdPraiseParam();
@@ -846,6 +866,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
         PointPoolDO pointPoolDO=new PointPoolDO();
@@ -891,6 +912,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
         AdClickPraiseInfoBO point= adService.clickPraise(0l, 0l, "aaa");
@@ -926,6 +948,7 @@ public class AdServiceImplTest {
         ad.setGmtModified(new Date());
         ad.setHits(0);
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
         
@@ -960,6 +983,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
         AdDO recode=new AdDO();
@@ -1273,6 +1297,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setIsPay(true);
         Integer id=adDOMapper.insertSelective(ad);
         
         ListAdParam listAdParam=new ListAdParam();
@@ -1389,6 +1414,7 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setIsPay(true);
         Integer id=adDOMapper.insertSelective(ad);
         
         ListAdParam listAdParam=new ListAdParam();
@@ -1611,6 +1637,8 @@ public class AdServiceImplTest {
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setIsPay(true);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
         
         adService.updatAdToPuted();
@@ -2148,6 +2176,7 @@ public class AdServiceImplTest {
         ad.setGmtModified(new Date());
         ad.setHits(0);
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+        ad.setIsPay(true);
         Integer id=adDOMapper.insertSelective(ad);
 
         OperatorAdParam operatorAdParam = new OperatorAdParam();
@@ -2184,6 +2213,7 @@ public class AdServiceImplTest {
         ad.setGmtModified(new Date());
         ad.setHits(0);
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+        ad.setIsPay(true);
         Integer id=adDOMapper.insertSelective(ad);
 
         OperatorAdParam operatorAdParam = new OperatorAdParam();
@@ -2219,6 +2249,8 @@ public class AdServiceImplTest {
         ad.setGmtModified(new Date());
         ad.setHits(0);
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        ad.setIsPay(true);
+        ad.setClientType(ClientTypeEnum.MOBLIE.getVal());
         Integer id=adDOMapper.insertSelective(ad);
 
 		adDOMapper.insertSelective(ad);
