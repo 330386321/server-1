@@ -1,9 +1,9 @@
 package com.lawu.eshop.ad.srv.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.math.BigDecimal;
 
@@ -29,7 +29,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.ad.param.PlatformRedPacketParam;
 import com.lawu.eshop.ad.param.PlatformRedPacketQueryParam;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
-import com.lawu.eshop.ad.srv.mapper.PlatformRedPacketDOMapper;
 import com.lawu.eshop.framework.web.HttpCode;
 
 /**
@@ -45,9 +44,6 @@ public class PlatformRedPacketControllerTest {
 
     @Autowired
     private PlatformRedPacketController platformRedPacketController;
-
-    @Autowired
-	private PlatformRedPacketDOMapper platformRedPacketDOMapper;
 
     @Before
     public void setUp() throws Exception {

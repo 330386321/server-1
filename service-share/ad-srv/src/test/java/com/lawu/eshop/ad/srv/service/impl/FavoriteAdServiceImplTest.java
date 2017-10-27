@@ -15,20 +15,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.FavoriteAdTypeEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.param.FavoriteAdParam;
-import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdPraiseWarnBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
-import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
-import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.utils.DateUtil;
 
 /**
@@ -44,9 +39,6 @@ public class FavoriteAdServiceImplTest {
 
     @Autowired
     private FavoriteAdDOMapper favoriteAdDOMapper;
-    
-    @Autowired
-    private AdService adService;
     
     @Autowired
     private AdDOMapper adDOMapper;
