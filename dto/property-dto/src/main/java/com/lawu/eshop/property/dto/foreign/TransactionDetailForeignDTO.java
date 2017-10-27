@@ -3,6 +3,7 @@ package com.lawu.eshop.property.dto.foreign;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.lawu.eshop.framework.web.json.KeepDecimalJsonSerializer;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
@@ -33,6 +34,7 @@ public class TransactionDetailForeignDTO {
      * 交易时间
      */
     @ApiModelProperty(value = "交易时间", required = true)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date transactionDate;
     
     /**
