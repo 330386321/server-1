@@ -18,13 +18,13 @@ public class McokExpressStrategy implements ExpressStrategy {
 	public ExpressInquiriesDetailBO inquiries(String expCode, String expNo) {
 		ExpressInquiriesDetailBO rtn = new ExpressInquiriesDetailBO();
 		rtn.setState(ExpressInquiriesDetailStateEnum.ON_THE_WAY);
-		rtn.setShipperCode("SF");
+		rtn.setShipperCode(expCode);
+		rtn.setLogisticCode(expNo);
 		rtn.setTraces(new ArrayList<>());
 		TraceBO traceBO = new TraceBO();
 		traceBO.setAcceptStation("等待快递员上门揽件");
 		traceBO.setAcceptTime("2017-08-30 11:44:00");
 		rtn.getTraces().add(traceBO);
-		
 		return rtn;
 	}
 

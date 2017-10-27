@@ -171,4 +171,13 @@ public interface MerchantStoreService {
      */
     @RequestMapping(value = "merchantStore/getManageType", method = RequestMethod.GET)
     Result<ManageTypeEnum> getManageType(@RequestParam("merchantId") Long merchantId);
+    
+    /**
+     * 根据商家ID查询门店名称
+     *
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchantStore/getPrincipalName/{merchantId}")
+    Result<String> getPrincipalName(@PathVariable("merchantId") Long merchantId);
 }

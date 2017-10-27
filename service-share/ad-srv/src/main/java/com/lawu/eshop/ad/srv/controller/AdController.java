@@ -128,19 +128,13 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "saveAd", method = RequestMethod.POST)
 	public Result<AdSaveInfoDTO> saveAd(@RequestBody AdSaveParam adSaveParam) {
 
-		if (adSaveParam.getAdParam().getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PACKET.getVal()) {
-			RedPacketIsSendBO bo = adService.selectRPIsSend(adSaveParam.getMerchantId());
-			if (bo.isFlag()) {
-				adService.updateStatus(bo.getId());
-			}
-		}
 		AdSaveInfoBO bo = adService.saveAd(adSaveParam);
 
 		if (bo.getId() == null || bo.getId() < 0) {
 			successCreated(ResultCode.SAVE_FAIL);
 		}
 		
-		AdSaveInfoDTO dto = new AdSaveInfoDTO();
+		AdSaveInfoDTO dto = new AdSaveInfoDTO();  
 		dto.setAdCount(bo.getAdCount());
 		dto.setId(bo.getId());
 		dto.setAdOrderNum(bo.getAdOrderNum());

@@ -42,6 +42,7 @@
     <result column="third_number" jdbcType="VARCHAR" property="thirdNumber" />
     <result column="is_pay" jdbcType="BIT" property="isPay" />
     <result column="pay_type" jdbcType="TINYINT" property="payType" />
+    <result column="client_type" jdbcType="TINYINT" property="clientType" />
     <result column="auditor_id" jdbcType="INTEGER" property="auditorId" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
@@ -124,7 +125,7 @@
     title, media_url, file_size, file_time, file_type, logo_url, video_img_url, content, 
     type, put_way, begin_time, end_time, areas, region_name, radius, point, total_point, 
     ad_count, hits, viewCount, status, ad_order_num, third_number, is_pay, pay_type, 
-    auditor_id, remark, audit_time, gmt_modified, gmt_create
+    client_type, auditor_id, remark, audit_time, gmt_modified, gmt_create
   </sql>
   <select id="selectByExample" parameterType="com.lawu.eshop.ad.srv.domain.AdDOExample" resultMap="BaseResultMap">
     <!--
@@ -191,9 +192,9 @@
       radius, point, total_point, 
       ad_count, hits, viewCount, 
       status, ad_order_num, third_number, 
-      is_pay, pay_type, auditor_id, 
-      remark, audit_time, gmt_modified, 
-      gmt_create)
+      is_pay, pay_type, client_type, 
+      auditor_id, remark, audit_time, 
+      gmt_modified, gmt_create)
     values (#{merchantId,jdbcType=BIGINT}, #{merchantNum,jdbcType=VARCHAR}, #{manageType,jdbcType=TINYINT}, 
       #{merchantStoreName,jdbcType=VARCHAR}, #{merchantStoreId,jdbcType=BIGINT}, #{relateId,jdbcType=BIGINT}, 
       #{relateType,jdbcType=TINYINT}, #{merchantLongitude,jdbcType=DECIMAL}, #{merchantLatitude,jdbcType=DECIMAL}, 
@@ -205,9 +206,9 @@
       #{radius,jdbcType=INTEGER}, #{point,jdbcType=DECIMAL}, #{totalPoint,jdbcType=DECIMAL}, 
       #{adCount,jdbcType=INTEGER}, #{hits,jdbcType=INTEGER}, #{viewcount,jdbcType=INTEGER}, 
       #{status,jdbcType=TINYINT}, #{adOrderNum,jdbcType=VARCHAR}, #{thirdNumber,jdbcType=VARCHAR}, 
-      #{isPay,jdbcType=BIT}, #{payType,jdbcType=TINYINT}, #{auditorId,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
-      #{gmtCreate,jdbcType=TIMESTAMP})
+      #{isPay,jdbcType=BIT}, #{payType,jdbcType=TINYINT}, #{clientType,jdbcType=TINYINT}, 
+      #{auditorId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.ad.srv.domain.AdDO">
     <!--
@@ -323,6 +324,9 @@
       </if>
       <if test="payType != null">
         pay_type,
+      </if>
+      <if test="clientType != null">
+        client_type,
       </if>
       <if test="auditorId != null">
         auditor_id,
@@ -445,6 +449,9 @@
       </if>
       <if test="payType != null">
         #{payType,jdbcType=TINYINT},
+      </if>
+      <if test="clientType != null">
+        #{clientType,jdbcType=TINYINT},
       </if>
       <if test="auditorId != null">
         #{auditorId,jdbcType=INTEGER},
@@ -588,6 +595,9 @@
       <if test="record.payType != null">
         pay_type = #{record.payType,jdbcType=TINYINT},
       </if>
+      <if test="record.clientType != null">
+        client_type = #{record.clientType,jdbcType=TINYINT},
+      </if>
       <if test="record.auditorId != null">
         auditor_id = #{record.auditorId,jdbcType=INTEGER},
       </if>
@@ -650,6 +660,7 @@
       third_number = #{record.thirdNumber,jdbcType=VARCHAR},
       is_pay = #{record.isPay,jdbcType=BIT},
       pay_type = #{record.payType,jdbcType=TINYINT},
+      client_type = #{record.clientType,jdbcType=TINYINT},
       auditor_id = #{record.auditorId,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
@@ -771,6 +782,9 @@
       <if test="payType != null">
         pay_type = #{payType,jdbcType=TINYINT},
       </if>
+      <if test="clientType != null">
+        client_type = #{clientType,jdbcType=TINYINT},
+      </if>
       <if test="auditorId != null">
         auditor_id = #{auditorId,jdbcType=INTEGER},
       </if>
@@ -830,6 +844,7 @@
       third_number = #{thirdNumber,jdbcType=VARCHAR},
       is_pay = #{isPay,jdbcType=BIT},
       pay_type = #{payType,jdbcType=TINYINT},
+      client_type = #{clientType,jdbcType=TINYINT},
       auditor_id = #{auditorId,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       audit_time = #{auditTime,jdbcType=TIMESTAMP},

@@ -612,6 +612,8 @@ public class MerchantServiceImpl implements MerchantService {
     @Override
     public MerchantDetailBO getMerchantDetailById(Long merchantId) {
         MerchantDetailBO detailBO = new MerchantDetailBO();
+        MerchantDO merchant = merchantDOMapper.selectByPrimaryKey(merchantId);
+        detailBO.setUserNum(merchant.getNum());
         MerchantStoreDOExample storeDOExample = new MerchantStoreDOExample();
         storeDOExample.createCriteria().andMerchantIdEqualTo(merchantId);
         List<MerchantStoreDO> storeDOS = merchantStoreDOMapper.selectByExample(storeDOExample);

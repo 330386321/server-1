@@ -52,9 +52,11 @@ CREATE TABLE `ad` (
   `hits` int(5) unsigned DEFAULT NULL COMMENT '已点击次数',
   `viewCount` int(5) unsigned DEFAULT '0' COMMENT '广告浏览次数',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态(0-删除|1-上架|2-投放中|3-投放结束|4-下架|5-审核中|审核不通过)',
+  `ad_order_num` varchar(30) DEFAULT NULL COMMENT '广告订单编号',
   `third_number` varchar(30) DEFAULT NULL COMMENT '第三方交易号',
   `is_pay` tinyint(1) DEFAULT NULL COMMENT '是否支付',
   `pay_type` tinyint(2) DEFAULT NULL COMMENT '支付类型',
+  `client_type` tinyint(2) DEFAULT NULL COMMENT '支付客户端类型',
   `auditor_id` int(11) DEFAULT '0' COMMENT '审核人员ID',
   `remark` varchar(200) DEFAULT NULL COMMENT '审核备注',
   `audit_time` datetime DEFAULT NULL COMMENT '审核时间',
@@ -214,6 +216,7 @@ CREATE TABLE `user_red_packet` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_num` varchar(19) NOT NULL COMMENT '用户num',
   `user_account` varchar(20) DEFAULT NULL COMMENT '用户账号',
+  `nickname` varchar(50) DEFAULT NULL COMMENT '昵称',
   `order_num` varchar(30) NOT NULL COMMENT '买单编号',
   `third_number` varchar(50) DEFAULT NULL COMMENT '第三方支付编号',
   `pay_type` tinyint(2) DEFAULT NULL COMMENT '支付类型',
@@ -242,3 +245,25 @@ CREATE TABLE `user_taked_red_packet` (
   `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 );
+
+DROP TABLE IF EXISTS `platform_red_packet`;
+CREATE TABLE `platform_red_packet` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `money` decimal(10,2) DEFAULT NULL COMMENT '金额',
+  `send_count` int(8) DEFAULT '0' COMMENT '发送红包总数',
+  `status` tinyint(2) DEFAULT '1' COMMENT '红包状态 0-禁用 1-启用',
+  `auditor_id` bigint(20) unsigned NOT NULL COMMENT '操作人',
+  `gmt_modified` datetime DEFAULT NULL COMMENT '更新时间',
+  `gmt_create` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ;
+
+DROP TABLE IF EXISTS `take_platform_red_packet`;
+CREATE TABLE `take_platform_red_packet` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_num` varchar(19) DEFAULT NULL COMMENT '会员编号',
+  `red_packet_id` bigint(20) unsigned NOT NULL COMMENT '红包ID',
+  `point` decimal(10,2) unsigned NOT NULL COMMENT '领取金额',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ;

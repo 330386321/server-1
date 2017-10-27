@@ -58,6 +58,11 @@ public class ShoppingRefundAgreeToRefundNotification extends Notification {
 	 */
 	private OrderRefundStatusEnum status;
 
+	/**
+	 * 退款时，资产模块用于记录交易记录标题
+	 */
+	private String orderItemProdcutName;
+
 	public Long getShoppingOrderId() {
 		return shoppingOrderId;
 	}
@@ -128,5 +133,13 @@ public class ShoppingRefundAgreeToRefundNotification extends Notification {
 
 	public void setStatus(OrderRefundStatusEnum status) {
 		this.status = status;
+	}
+
+	public String getOrderItemProdcutName() {
+		return orderItemProdcutName;
+	}
+
+	public void setOrderItemProdcutName(String orderItemProdcutName) {
+		this.orderItemProdcutName = orderItemProdcutName;
 	}
 }

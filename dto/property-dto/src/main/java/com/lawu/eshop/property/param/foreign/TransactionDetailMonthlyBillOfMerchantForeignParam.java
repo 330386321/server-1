@@ -22,13 +22,13 @@ import io.swagger.annotations.ApiModelProperty;
 public class TransactionDetailMonthlyBillOfMerchantForeignParam {
 	
     @NotNull(message="交易分类不能为空")
-	@ApiModelProperty(value = "交易分类", required=true)
+    @ApiModelProperty(value = "交易分类(ALL-全部分类|RECHARGE-充值|RECOMMEND_INCOME-推荐E友收益|WITHDRAW-提现|PAY_INCOME-买单收入|PRODUCT_INCOME-商品收入|REFUND_MONEY-退款|DUE_IN-待收货款|RED_PACKET-红包)", required=true)
 	private MerchantTransactionCategoryEnum transactionCategory;
     
     @NotNull(message="交易时间不能为空")
     @JsonFormat(pattern="yyyy-MM")
     @DateTimeFormat(pattern="yyyy-MM")
-    @ApiModelProperty(value = "交易时间")
+    @ApiModelProperty(value = "交易时间", required = true)
     private Date date;
 	
     public MerchantTransactionCategoryEnum getTransactionCategory() {

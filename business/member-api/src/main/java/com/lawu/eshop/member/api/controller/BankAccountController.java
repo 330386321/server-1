@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
+import com.lawu.eshop.framework.core.type.UserType;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -76,6 +77,7 @@ public class BankAccountController extends BaseController{
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
 		if(flag.getModel()!=null && (Boolean)flag.getModel()){
+			 bankAccountParam.setUserType(UserType.MEMBER);
 			 return bankAccountService.saveBankAccount(userNum, bankAccountParam);
 		}else{
 			 return successCreated(ResultCode.PAY_PWD_ERROR);
@@ -139,6 +141,7 @@ public class BankAccountController extends BaseController{
 		}else{
 			Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
 			if(flag.getModel()!=null && (Boolean)flag.getModel()){
+				 bankAccountParam.setUserType(UserType.MEMBER);
 				 bankAccountService.updateBankAccount(id,userNum, bankAccountParam);
 				 return successCreated(ResultCode.SUCCESS);
 			}else{
@@ -148,4 +151,16 @@ public class BankAccountController extends BaseController{
     	
 
     }
+
+	@Audit(date = "2017-10-04", reviewer = "杨清华")
+	@SuppressWarnings("unchecked")
+	@Authorization
+    @ApiOperation(value = "获取银行卡用户名称", notes = "获取银行卡用户名称（张荣成）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @RequestMapping(value = "selectBankName", method = RequestMethod.GET)
+    public Result<BankAccountDTO> selectBankName(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	return successCreated(bankAccountService.selectBankName(userNum));
+    }
+	
 }

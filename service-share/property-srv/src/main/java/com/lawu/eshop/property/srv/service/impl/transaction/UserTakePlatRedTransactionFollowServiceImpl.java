@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.service.impl.transaction;
 
+import com.lawu.eshop.property.constants.LoveTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class UserTakePlatRedTransactionFollowServiceImpl extends AbstractTransac
 		param.setPoint(notification.getMoney().toString());
 		param.setUserNum(notification.getUserNum());
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PLATFORM_RED_SWEEP);
+		param.setLoveTypeEnum(LoveTypeEnum.RED_PACKAGE);
 		param.setTempBizId(notification.getId() == null ? "0" : notification.getId().toString());
 		propertyInfoDataService.doHanlderBalanceIncome(param);
 	}

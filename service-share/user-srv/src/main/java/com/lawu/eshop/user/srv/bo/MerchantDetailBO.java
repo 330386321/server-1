@@ -58,6 +58,8 @@ public class MerchantDetailBO {
     private String logoUrl;
 
     private List<String> otherUrl;
+    
+    private String userNum;
 
     public String getName() {
         return name;
@@ -242,4 +244,13 @@ public class MerchantDetailBO {
     public void setOtherUrl(List<String> otherUrl) {
         this.otherUrl = otherUrl;
     }
+
+	public String getUserNum() {
+		return userNum;
+	}
+
+	public void setUserNum(String userNum) {
+		this.userNum = userNum;
+	}
+    
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
+import com.lawu.eshop.framework.core.type.UserType;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -21,8 +22,10 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.BankAccountService;
 import com.lawu.eshop.merchant.api.service.CashManageFrontService;
+import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.BankAccountDTO;
+import com.lawu.eshop.property.dto.BankAccountNameDTO;
 import com.lawu.eshop.property.param.BankAccountParam;
 
 import io.swagger.annotations.Api;
@@ -48,6 +51,9 @@ public class BankAccountController extends BaseController{
 	
 	@Autowired
 	private CashManageFrontService cashManageFrontService;
+	
+	@Autowired
+	private MerchantStoreService merchantStoreService;
 	
 	/**
 	 * 
@@ -87,6 +93,7 @@ public class BankAccountController extends BaseController{
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
 		if(flag.getModel()!=null && (Boolean)flag.getModel()){
+			 bankAccountParam.setUserType(UserType.MERCHANT);
 			 return bankAccountService.saveBankAccount(userNum, bankAccountParam);
 		}else{
 			 return successCreated(ResultCode.PAY_PWD_ERROR);
@@ -163,5 +170,22 @@ public class BankAccountController extends BaseController{
 			}
 		}
 
+    }
+
+	@Audit(date = "2017-10-04", reviewer = "杨清华")
+	@SuppressWarnings("unchecked")
+	@Authorization
+    @ApiOperation(value = "获取银行卡用户名称", notes = "获取银行卡用户名称（张荣成）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @RequestMapping(value = "selectBankName", method = RequestMethod.GET)
+    public Result<BankAccountNameDTO> selectBankName(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	Result<BankAccountNameDTO> result = bankAccountService.selectBankName(userNum);
+    	//初次绑定获取负责人姓名
+    	if(result.getModel().getAccountName() ==null){
+    		Result<String> nameRs = merchantStoreService.getPrincipalName(UserUtil.getCurrentUserId(getRequest()));
+    		result.getModel().setAccountName(nameRs.getModel());
+    	}
+    	return successGet(result);
     }
 }

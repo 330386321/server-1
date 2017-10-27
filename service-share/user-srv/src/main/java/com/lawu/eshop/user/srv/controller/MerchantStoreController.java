@@ -773,4 +773,10 @@ public class MerchantStoreController extends BaseController {
 		return successGet();
 	}
 	
+	@RequestMapping(value = "getPrincipalName/{merchantId}", method = RequestMethod.GET)
+	public Result<String> getPrincipalName(@PathVariable Long merchantId){
+		String principalName = merchantStoreService.getPrincipalName(merchantId);
+		 return successGet(principalName);
+	}
+	
 }

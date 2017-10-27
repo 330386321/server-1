@@ -112,4 +112,9 @@ public class MockMerchantStoreService extends BaseController implements Merchant
     public Result<ManageTypeEnum> getManageType(Long merchantId) {
         return successGet(ManageTypeEnum.COMMON);
     }
+
+	@Override
+	public Result<String> getPrincipalName(@PathVariable("merchantId") Long merchantId) {
+		return successGet();
+	}
 }

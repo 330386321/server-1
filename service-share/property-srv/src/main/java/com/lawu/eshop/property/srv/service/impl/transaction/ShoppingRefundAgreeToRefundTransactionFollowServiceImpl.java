@@ -40,6 +40,7 @@ public class ShoppingRefundAgreeToRefundTransactionFollowServiceImpl extends Abs
 	    param.setTradeNo(notification.getThirdNumber());
 	    param.setOrderRefundStatusEnum(OrderRefundStatusEnum.getEnum(notification.getStatus().getValue()));
 	    param.setTransactionPayTypeEnum(TransactionPayTypeEnum.getEnum(notification.getPaymentMethod().getVal()));
+		param.setOrderItemProdcutName(notification.getOrderItemProdcutName());
 		try {
 			orderService.doRefundScopeInside(param);
 		} catch (Exception e) {

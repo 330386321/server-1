@@ -1203,10 +1203,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Override
 	public void executeAutoRemindShipments() {
 		String automaticRemindShipments = propertyService.getByName(PropertyNameConstant.AUTOMATIC_REMIND_SHIPMENTS);
-
+		Date date = DateUtil.add(new Date(), Integer.valueOf(automaticRemindShipments) * -1, Calendar.DAY_OF_YEAR);
 		// 查找所有超时未发货的订单，提醒卖家发货
-		List<NotShippedDO> notShippedDOList = shoppingOrderDOExtendMapper.selectByNotShipped(Integer.valueOf(automaticRemindShipments));
-
+		List<NotShippedDO> notShippedDOList = shoppingOrderDOExtendMapper.selectByNotShipped(date);
 		for (NotShippedDO item : notShippedDOList) {
 			// 发送站内信和推送
 			ShoppingOrderRemindShipmentsNotification notification = new ShoppingOrderRemindShipmentsNotification();

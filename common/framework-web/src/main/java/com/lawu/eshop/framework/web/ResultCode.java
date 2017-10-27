@@ -371,7 +371,7 @@ public class ResultCode {
         ResultCode.messageMap.put(MONEY_IS_ZERO, "查询出金额为0");
         ResultCode.messageMap.put(PAY_ORDER_NULL, "买单记录为空");
         ResultCode.messageMap.put(PAY_ORDER_IS_SUCCESS, "重复买单");
-        ResultCode.messageMap.put(BANK_ACCOUNT_IS_EXIST, "已经绑定该银行卡");
+        ResultCode.messageMap.put(BANK_ACCOUNT_IS_EXIST, "该银行卡已被其他账号绑定");
         ResultCode.messageMap.put(STORE_REGION_PATH_ERROR, "门店所属区域不正确（需要精确到区）");
         ResultCode.messageMap.put(NOTIFY_MONEY_ERROR, "回调金额与表中的金额不一致");
         ResultCode.messageMap.put(PROPERTYINFO_FREEZE_YES, "资金已冻结");

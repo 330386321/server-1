@@ -279,7 +279,7 @@ public class UserRedPacketControllerTest {
 		userRedPacketDOMapper.insert(redPack);
 		
 		try {
-            RequestBuilder request = post("/userRedPacket/getUserRedpacketMoney").param("redPacketId", "1").param("userNum", "M000001");
+            RequestBuilder request = post("/userRedPacket/getUserRedpacketMoney").param("redPacketId", redPack.getId().toString()).param("userNum", "M000001");
             ResultActions perform= mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
 

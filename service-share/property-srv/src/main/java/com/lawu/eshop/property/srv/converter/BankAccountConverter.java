@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lawu.eshop.property.dto.BankAccountDTO;
+import com.lawu.eshop.property.dto.BankAccountOperatorDTO;
 import com.lawu.eshop.property.srv.bo.BankAccountBO;
+import com.lawu.eshop.property.srv.bo.BankAccountOperatorBO;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
 import com.lawu.eshop.property.srv.domain.BankDO;
 
@@ -106,6 +108,51 @@ public class BankAccountConverter {
 		}
         return DTOS;
     }
+
+	public static List<BankAccountOperatorBO> convertOperatorBOS(List<BankAccountDO> list) {
+		if (list == null) {
+            return null;
+        }
+        List<BankAccountOperatorBO> BOS=new ArrayList<BankAccountOperatorBO>();
+        
+        for (BankAccountDO bankAccountDO: list) {
+        	
+        	BankAccountOperatorBO bankAccountBO=new BankAccountOperatorBO();
+              bankAccountBO.setId(bankAccountDO.getId());
+              bankAccountBO.setAccountName(bankAccountDO.getAccountName());
+              bankAccountBO.setAccountNumber(bankAccountDO.getAccountNumber());
+              bankAccountBO.setSubBranchName(bankAccountDO.getSubBranchName());
+              bankAccountBO.setAuditorId(bankAccountDO.getAuditorId());
+              bankAccountBO.setRemark(bankAccountDO.getRemark());
+              bankAccountBO.setAuditorTime(bankAccountDO.getAuditTime());
+              bankAccountBO.setBankId(bankAccountDO.getBankId());
+        	  BOS.add(bankAccountBO);
+		}
+		return BOS;
+	}
 	
+	
+	public static List<BankAccountOperatorDTO> convertOperatorDTOS(List<BankAccountOperatorBO> list) {
+		if (list == null) {
+            return null;
+        }
+        List<BankAccountOperatorDTO> dtos=new ArrayList<BankAccountOperatorDTO>();
+        
+		for (BankAccountOperatorBO bankAccountOperatorBO : list) {
+
+			BankAccountOperatorDTO bankAccountDTO = new BankAccountOperatorDTO();
+			bankAccountDTO.setId(bankAccountOperatorBO.getId());
+			bankAccountDTO.setAccountName(bankAccountOperatorBO.getAccountName());
+			bankAccountDTO.setAccountNumber(bankAccountOperatorBO.getAccountNumber());
+			bankAccountDTO.setSubBranchName(bankAccountOperatorBO.getSubBranchName());
+			bankAccountDTO.setAuditorId(bankAccountOperatorBO.getAuditorId());
+			bankAccountDTO.setRemark(bankAccountOperatorBO.getRemark());
+			bankAccountDTO.setAuditorTime(bankAccountOperatorBO.getAuditorTime());
+			bankAccountDTO.setBankName(bankAccountOperatorBO.getBankName());
+			dtos.add(bankAccountDTO);
+			
+		}
+		return dtos;
+	}
 
 }

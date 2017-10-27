@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.ClientTypeEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
@@ -43,6 +44,8 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.framework.web.util.HeaderUtil;
+import com.lawu.eshop.mall.constants.MobileTypeEnum;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.AdCountCacheService;
 import com.lawu.eshop.merchant.api.service.AdService;
@@ -198,6 +201,7 @@ public class AdController extends BaseController {
     public Result saveAdvert(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	
     	if(adParam.getTypeEnum()!=AdTypeEnum.AD_TYPE_PACKET){
 			if(StringUtils.isEmpty(adParam.getBeginTime()) || adParam.getBeginTime()==""){
 				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
@@ -266,6 +270,16 @@ public class AdController extends BaseController {
     	if(!isSuccess(storeRs)){
     		 return successCreated(storeRs.getRet());
     	}
+    	String  platform = HeaderUtil.getRequestPlatform(getRequest());
+		
+		if(platform==""){
+			return successCreated(ResultCode.GET_HEADER_ERROR);
+		}
+		if(Byte.valueOf(platform)==MobileTypeEnum.Android.val || Byte.valueOf(platform)==MobileTypeEnum.IOS.val){
+			adSave.setClentType(ClientTypeEnum.MOBLIE);
+		}else{
+			adSave.setClentType(ClientTypeEnum.PC);
+		}
     	MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();
     	if(storeDTO!=null){
     		adSave.setLatitude(storeDTO.getLatitude());
@@ -410,6 +424,15 @@ public class AdController extends BaseController {
                 adSave.setMerchantRegionPath(storeDTO.getRegionPath());
         	}
     	}
+    	String  platform = HeaderUtil.getRequestPlatform(getRequest());
+    	if(platform==""){
+			return successCreated(ResultCode.GET_HEADER_ERROR);
+		}
+		if(Byte.valueOf(platform)==MobileTypeEnum.Android.val || Byte.valueOf(platform)==MobileTypeEnum.IOS.val){
+			adSave.setClentType(ClientTypeEnum.MOBLIE);
+		}else{
+			adSave.setClentType(ClientTypeEnum.PC);
+		}
     	adSave.setCount(count);
     	adSave.setMediaUrl(adDTO.getMediaUrl());
     	adSave.setVideoImgUrl(adDTO.getVideoImgUrl());

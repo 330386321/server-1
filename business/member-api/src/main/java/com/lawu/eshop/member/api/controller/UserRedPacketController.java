@@ -199,6 +199,8 @@ public class UserRedPacketController extends BaseController {
 		dto.setInviterAccount(user.getModel().getAccount());
 		dto.setHeadUrl(user.getModel().getHeadimg());
 		dto.setNickName(user.getModel().getNickname());
+		Result<IsExistsRedPacketDTO> get = userRedPacketService.isExistsRedPacket(redPacketId);
+		dto.setIsGetAll(get.getModel().getIsExistsRedPacket());
 		return successGet(dto);
 	}
 

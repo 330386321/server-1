@@ -12,6 +12,7 @@ import com.lawu.eshop.pay.handle.WxpayBusinessHandle;
 import com.lawu.eshop.pay.sdk.alipay.AliPayConfigParam;
 import com.lawu.eshop.pay.sdk.weixin.base.WxPayConfigParam;
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
+import com.lawu.eshop.property.constants.ClientTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
@@ -124,21 +125,30 @@ public class AdServiceImpl implements AdService {
             rparam.setTotalMoney(transactionDetailDO.getAmount().toString());
 
             WxPayConfigParam wxPayConfigParam = new WxPayConfigParam();
-            wxPayConfigParam.setWxpayAppIdMember(propertySrvConfig.getWxpayAppIdMember());
-            wxPayConfigParam.setWxpayMchIdMember(propertySrvConfig.getWxpayMchIdMember());
-            wxPayConfigParam.setWxpayKey(propertySrvConfig.getWxpayKey());
             wxPayConfigParam.setWxpayAppId(propertySrvConfig.getWxpayAppId());
             wxPayConfigParam.setWxpayMchId(propertySrvConfig.getWxpayMchId());
-            wxPayConfigParam.setWxpayCertLocalPathMember(propertySrvConfig.getWxpayCertLocalPathMember());
-            wxPayConfigParam.setWxpayCertPasswordMember(propertySrvConfig.getWxpayCertPasswordMember());
-            wxPayConfigParam.setWxpayCertBasePath(propertySrvConfig.getWxpayCertLocalPathMember());
+            if(ClientTypeEnum.MOBLIE.getVal().equals(param.getClientType())){
+                wxPayConfigParam.setWxpayAppIdMember(propertySrvConfig.getWxpayAppIdBusiness());
+                wxPayConfigParam.setWxpayMchIdMember(propertySrvConfig.getWxpayMchIdBusiness());
+                wxPayConfigParam.setWxpayCertLocalPathMember(propertySrvConfig.getWxpayCertLocalPathBusinessApp());
+                wxPayConfigParam.setWxpayCertBasePath(propertySrvConfig.getWxpayCertLocalPathBusinessApp());
+                wxPayConfigParam.setWxpayCertPasswordMember(propertySrvConfig.getWxpayCertPasswordBusinessApp());
+                wxPayConfigParam.setWxpayKeyApp(propertySrvConfig.getWxpayKeyApp());
+            }else {
+                wxPayConfigParam.setWxpayAppIdMember(propertySrvConfig.getWxpayAppId());
+                wxPayConfigParam.setWxpayMchIdMember(propertySrvConfig.getWxpayMchId());
+                wxPayConfigParam.setWxpayCertLocalPathMember(propertySrvConfig.getWxpayCertLocalPathBusinessPc());
+                wxPayConfigParam.setWxpayCertBasePath(propertySrvConfig.getWxpayCertLocalPathBusinessPc());
+                wxPayConfigParam.setWxpayCertPasswordMember(propertySrvConfig.getWxpayCertPasswordBusinessPc());
+                wxPayConfigParam.setWxpayKeyApp(propertySrvConfig.getWxpayKey());
+            }
             wxPayConfigParam.setWxpayRefundApi(propertySrvConfig.getWxpayRefundApi());
             wxPayConfigParam.setWxpayHttpsRequestClassName(propertySrvConfig.getWxpayHttpsRequestClassName());
-            wxPayConfigParam.setWxpayKeyApp(propertySrvConfig.getWxpayKeyApp());
             WxpayBusinessHandle.refund(rparam, jsonResult, wxPayConfigParam);
         }
 
         if (!jsonResult.isSuccess()) {
+            logger.error(jsonResult.getMessage());
             throw new RuntimeException(jsonResult.getMessage());
         }
         return ResultCode.SUCCESS;

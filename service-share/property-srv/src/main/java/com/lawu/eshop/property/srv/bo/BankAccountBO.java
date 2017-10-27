@@ -16,7 +16,6 @@ public class BankAccountBO {
 	
 	private Integer bankId;
 
-
 	public String getIconUrl() {
 		return iconUrl;
 	}
@@ -74,8 +73,6 @@ public class BankAccountBO {
 		this.bankId = bankId;
 	}
 
-	 
-	
 	
 
 }

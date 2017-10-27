@@ -1,5 +1,6 @@
-package utils.com.lawu.eshop.utils;
+package com.lawu.eshop.utils;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.gexin.fastjson.JSONObject;
@@ -19,6 +20,7 @@ public class GtPushTest {
     public static final String masterSecret = "K3DZu2v3a38FYryMK9H8c9";
     public static final String appId = "fuAAF6k2Lh85oNyVLuWNC1";
 	
+    @Ignore
 	@Test
     public void sendMessageToCid() {
 		JSONObject contents = new JSONObject();

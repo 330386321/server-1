@@ -2,6 +2,7 @@ package com.lawu.eshop.ad.param;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.ad.constants.ClientTypeEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 
 public class AdSaveParam {
@@ -64,6 +65,18 @@ public class AdSaveParam {
 	 * 商家地区
 	 */
 	private String merchantRegionPath;
+	
+	private  ClientTypeEnum clentType;
+	
+	
+
+	public ClientTypeEnum getClentType() {
+		return clentType;
+	}
+
+	public void setClentType(ClientTypeEnum clentType) {
+		this.clentType = clentType;
+	}
 
 	public AdParam getAdParam() {
 		return adParam;

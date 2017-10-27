@@ -232,7 +232,10 @@ public class TransactionDetailConverter {
         rtn.setAmount(transactionDetailBO.getAmount());
         rtn.setTitle(transactionDetailBO.getTitle());
         rtn.setDirection(transactionDetailBO.getDirection());
-        rtn.setTransactionCategory(MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory());
+        if(MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType())!=null){
+        	  rtn.setTransactionCategory(MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory());
+        }
+      
         rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
         return rtn;
     }

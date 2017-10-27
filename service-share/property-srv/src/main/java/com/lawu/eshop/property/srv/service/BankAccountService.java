@@ -2,8 +2,10 @@ package com.lawu.eshop.property.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.property.param.BankAccountOperatorParam;
 import com.lawu.eshop.property.param.BankAccountParam;
 import com.lawu.eshop.property.srv.bo.BankAccountBO;
+import com.lawu.eshop.property.srv.bo.BankAccountOperatorBO;
 
 /**
  * 银行卡管理接口
@@ -38,7 +40,7 @@ public interface BankAccountService {
 	 * @param account
 	 * @return
 	 */
-	Boolean selectByAccount(String account,String userNum);
+	Boolean selectByAccount(String account,Byte userType,String num);
 	
 	/**
 	 * 单个查询
@@ -54,6 +56,23 @@ public interface BankAccountService {
 	 * @return
 	 */
 	Integer updateBankAccount(Long id ,BankAccountParam bankAccountParam);
+	
+	/**
+	 * 查询当前用户银行卡用户名
+	 * @param num
+	 * @return
+	 */
+	String selectBankName(String num);
+
+	/**
+	 * 运营平台修改银行卡
+	 * @param id
+	 * @param param
+	 */
+	void updateBankOperator(Long id, BankAccountOperatorParam param);
+	
+	
+	List<BankAccountOperatorBO> selectBankOperator(String userNum);
 	
 
 }

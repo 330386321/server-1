@@ -1845,13 +1845,6 @@ public class ShoppingOrderServiceImplTest {
     	Assert.assertEquals(StatusEnum.INVALID.getValue(), actualShoppingRefundDetailDO.getStatus());
     }
     
-    /**
-     * TODO SQL语句中DATE_ADD不兼容
-     * 
-     * @author jiangxinjun
-     * @date 2017年7月13日
-     */
-    @Ignore
     @Transactional
     @Rollback
     @Test
@@ -1861,7 +1854,7 @@ public class ShoppingOrderServiceImplTest {
     	propertyDO.setGmtModified(new Date());
     	propertyDO.setName(PropertyNameConstant.AUTOMATIC_REMIND_SHIPMENTS);
     	propertyDO.setRemark("平台自动提醒买家发货");
-    	propertyDO.setValue("3");
+    	propertyDO.setValue("5");
     	propertyDOMapper.insert(propertyDO);
     	
     	// 初始化一条超过退款时间的订单
@@ -1871,7 +1864,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setFreightPrice(new BigDecimal(0));
     	expected.setGmtCreate(new Date());
     	expected.setGmtModified(new Date());
-    	expected.setGmtPayment(new Date());
+    	expected.setGmtPayment(DateUtil.add(new Date(), Integer.valueOf(propertyDO.getValue()) * -1, Calendar.DAY_OF_YEAR));
     	expected.setIsFans(true);
     	expected.setIsNeedsLogistics(true);
     	expected.setIsNoReasonReturn(false);
@@ -1894,6 +1887,25 @@ public class ShoppingOrderServiceImplTest {
     	expected.setSendTime(0);
     	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
     	shoppingOrderDOMapper.insertSelective(expected);
+    	
+    	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+        shoppingOrderItemDO.setGmtCreate(new Date());
+        shoppingOrderItemDO.setGmtModified(new Date());
+        shoppingOrderItemDO.setIsAllowRefund(true);
+        shoppingOrderItemDO.setIsEvaluation(false);
+        shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
+        shoppingOrderItemDO.setRefundStatus(null);
+        shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+        shoppingOrderItemDO.setProductId(1L);
+        shoppingOrderItemDO.setProductName("productName");
+        shoppingOrderItemDO.setProductModelId(1L);
+        shoppingOrderItemDO.setProductModelName("test");
+        shoppingOrderItemDO.setQuantity(1);
+        shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+        shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+        shoppingOrderItemDO.setSendTime(0);
+        shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+        shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	
     	shoppingOrderService.executeAutoRemindShipments();
     }

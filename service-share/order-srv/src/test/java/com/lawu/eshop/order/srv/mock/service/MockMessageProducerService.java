@@ -1,5 +1,6 @@
 package com.lawu.eshop.order.srv.mock.service;
 
+import org.junit.Assert;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,9 @@ public class MockMessageProducerService implements MessageProducerService {
 
 	@Override
 	public void sendMessage(String topic, String tags, Object message) {
+	    Assert.assertNotNull(topic);
+	    Assert.assertNotNull(tags);
+	    Assert.assertNotNull(message);
 	}
 
 }
