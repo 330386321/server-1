@@ -108,7 +108,7 @@ public class WxPayController extends BaseController {
 				return successCreated(ResultCode.MONEY_IS_ZERO);
 			}
 			aparam.setTotalAmount(ad.getTotalPoint().toString());
-			aparam.setRegionPath(ad.getMerchantRegionPath()==null?"":ad.getMerchantRegionPath());
+			aparam.setRegionPath(ad.getMerchantRegionPath());
 		}
 
 		return wxPayService.getPrepayInfo(aparam);
@@ -156,7 +156,7 @@ public class WxPayController extends BaseController {
 				return;
 			}
 			aparam.setTotalAmount(ad.getTotalPoint().toString());
-			aparam.setRegionPath(ad.getMerchantRegionPath()==null?"":ad.getMerchantRegionPath());
+			aparam.setRegionPath(ad.getMerchantRegionPath());
 		}
 		Result ret = wxPayService.getPrepayInfo(aparam);
 		HttpServletResponse response = getResponse();
