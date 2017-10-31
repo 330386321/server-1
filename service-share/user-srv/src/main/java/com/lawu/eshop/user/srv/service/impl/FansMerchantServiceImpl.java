@@ -162,33 +162,24 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     @Override
     @Transactional
     public void saveFansMerchant(Long merchantId, Long memberId, FansMerchantChannelEnum channelEnum) {
-    	FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
-		com.lawu.eshop.user.srv.domain.FansMerchantDOExample.Criteria cta = fansMerchantDOExample.createCriteria();
-		cta.andMemberIdEqualTo(memberId);
-		cta.andMerchantIdEqualTo(merchantId);
-		cta.andStatusEqualTo((byte)0);
-		List<FansMerchantDO> list = fansMerchantDOMapper.selectByExample(fansMerchantDOExample);
-		Long i = 0L;
-		if(list != null && !list.isEmpty()) {
-			i = list.get(0).getId();
-		}
-		FansMerchantDO fansMerchantDO = new FansMerchantDO();
-		if(i > 0) {
-			fansMerchantDO.setId(i);
-			fansMerchantDO.setStatus((byte)1);
-			fansMerchantDO.setChannel(channelEnum.getValue());
-			fansMerchantDO.setGmtCreate(new Date());
-			fansMerchantDOMapper.updateByPrimaryKeySelective(fansMerchantDO);
-		} else {
-			fansMerchantDO.setMemberId(memberId);
-	        fansMerchantDO.setMerchantId(merchantId);
-	        fansMerchantDO.setChannel(channelEnum.getValue());
-	        fansMerchantDO.setGmtCreate(new Date());
-	        fansMerchantDOMapper.insertSelective(fansMerchantDO);
-		}
+        FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
+        FansMerchantDOExample.Criteria criteria = fansMerchantDOExample.createCriteria();
+        criteria.andMemberIdEqualTo(memberId);
+        criteria.andMerchantIdEqualTo(merchantId);
+        criteria.andStatusEqualTo((byte) 1);
+        int result = fansMerchantDOMapper.countByExample(fansMerchantDOExample);
+        if (result > 0) {
+            return;
+        }
+
+        FansMerchantDO fansMerchantDO = new FansMerchantDO();
+        fansMerchantDO.setMemberId(memberId);
+        fansMerchantDO.setMerchantId(merchantId);
+        fansMerchantDO.setChannel(channelEnum.getValue());
+        fansMerchantDO.setGmtCreate(new Date());
+        fansMerchantDOMapper.insertSelective(fansMerchantDO);
     }
 
-    
     @Override
     @Transactional
     public void saveFansMerchantFromInvite(Long merchantId, Long memberId, Long messageId, Boolean dealWay) {
@@ -221,7 +212,6 @@ public class FansMerchantServiceImpl implements FansMerchantService {
                 transactionMainService.sendNotice(fansMerchantDO.getId());
             }
         } else {
-    		//fansMerchantDOMapper.deleteByPrimaryKey(i);
     		fansInviteResultDO.setStatus(FansInviteResultEnum.REFUSE.getValue());
     		fansInviteResultDOMapper.insert(fansInviteResultDO);
     	}
