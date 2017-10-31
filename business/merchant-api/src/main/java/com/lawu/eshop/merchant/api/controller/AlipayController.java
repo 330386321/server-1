@@ -107,7 +107,7 @@ public class AlipayController extends BaseController {
 				return successCreated(ResultCode.MONEY_IS_ZERO);
 			}
 			aparam.setTotalAmount(ad.getTotalPoint().toString());
-			aparam.setRegionPath(ad.getMerchantRegionPath());
+			aparam.setRegionPath(ad.getMerchantRegionPath()==null?"":ad.getMerchantRegionPath());
 		}
 
 		return alipayService.getAppAlipayReqParams(aparam);
@@ -146,7 +146,7 @@ public class AlipayController extends BaseController {
 				return;
 			}
 			aparam.setTotalAmount(ad.getTotalPoint().toString());
-			aparam.setRegionPath(ad.getMerchantRegionPath());
+			aparam.setRegionPath(ad.getMerchantRegionPath()==null?"":ad.getMerchantRegionPath());
 		}
 
 		Result result = alipayService.initPcPay(aparam);
