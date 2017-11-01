@@ -747,9 +747,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemUpdateDO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		// 根据订单状态是否需要退货
 		ShoppingRefundTypeEnum shoppingRefundTypeEnum = null;
+		// 根据订单状态是否需要退货
+		boolean isAllowRejection = true;
 		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue())) {
 			shoppingRefundTypeEnum = ShoppingRefundTypeEnum.REFUND;
+			isAllowRejection = false;
 		} else {
+		    isAllowRejection = true;
 			// 判断当前订单是否需要物流
 			if (shoppingOrderDO.getIsNeedsLogistics()) {
 				shoppingRefundTypeEnum = ShoppingRefundTypeEnum.RETURN_REFUND;
@@ -760,7 +764,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		/*
 		 * 如果卖家支持七天无理由退货，跳过商家确认这个阶段 后台判断的类型是否跟用户选择的一致
 		 */
-		if (shoppingOrderDO.getIsNoReasonReturn() && shoppingRefundTypeEnum.equals(param.getType())) {
+		if (shoppingOrderDO.getIsNoReasonReturn() && shoppingRefundTypeEnum.equals(param.getType()) && !isAllowRejection) {
 			// 订单是否需要物流
 			if (ShoppingRefundTypeEnum.REFUND.equals(shoppingRefundTypeEnum)) {
 				shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
