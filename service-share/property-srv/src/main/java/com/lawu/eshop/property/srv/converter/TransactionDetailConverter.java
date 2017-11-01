@@ -268,7 +268,7 @@ public class TransactionDetailConverter {
         rtn.setAmount(transactionDetailBO.getAmount());
         rtn.setTitle(transactionDetailBO.getTitle());
         rtn.setDirection(transactionDetailBO.getDirection());
-        rtn.setTransactionCategory(MerchantTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory());
+        rtn.setTransactionCategory(MerchantTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()) == null ? null : MerchantTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory());
         rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
         return rtn;
     }

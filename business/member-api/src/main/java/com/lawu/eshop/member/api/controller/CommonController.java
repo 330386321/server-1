@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.manager.TokenManager;
 import com.lawu.eshop.authorization.util.UserUtil;
@@ -50,6 +51,7 @@ public class CommonController extends BaseController {
     @Autowired
     private EventPublisher eventPublisher;
 
+    @AutoTesting
     @SuppressWarnings("unchecked")
 	@Audit(date = "2017-03-29", reviewer = "孙林青")
     @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[2000|2015|2019]（孙林青）", httpMethod = "POST")
@@ -91,6 +93,7 @@ public class CommonController extends BaseController {
         return successDelete();
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-19", reviewer = "孙林青")
     @ApiOperation(value = "获取配置信息", notes = "获取配置信息。（章勇）", httpMethod = "GET")
     @RequestMapping(value = "getConfig", method = RequestMethod.GET)
