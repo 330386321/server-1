@@ -764,10 +764,14 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		/*
 		 * 如果卖家支持七天无理由退货，跳过商家确认这个阶段 后台判断的类型是否跟用户选择的一致
 		 */
-		if (shoppingOrderDO.getIsNoReasonReturn() && shoppingRefundTypeEnum.equals(param.getType()) && !isAllowRejection) {
+		if (shoppingOrderDO.getIsNoReasonReturn() && shoppingRefundTypeEnum.equals(param.getType())) {
 			// 订单是否需要物流
 			if (ShoppingRefundTypeEnum.REFUND.equals(shoppingRefundTypeEnum)) {
-				shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
+			    if (!isAllowRejection) {
+			        shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
+			    } else {
+			        shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
+			    }
 			} else if (ShoppingRefundTypeEnum.RETURN_REFUND.equals(shoppingRefundTypeEnum)) {
 				shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
 			}
