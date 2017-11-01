@@ -1358,7 +1358,7 @@ public class ShoppingOrderControllerTest {
     	Assert.assertEquals(1, page.getTotalCount().intValue());
     	
     	ParserConfig mapping = new ParserConfig();
-    	mapping.putDeserializer(Date.class, new JCDateDeserializer());
+    	mapping.putDeserializer(Date.class, new JCDateDeserializer("yyyy-MM-dd HH:mm:ss"));
     	ShoppingOrderItemRefundForMerchantDTO actual = JSONObject.parseObject(page.getRecords().get(0).toJSONString(), ShoppingOrderItemRefundForMerchantDTO.class, mapping, JSON.DEFAULT_PARSER_FEATURE);
         Assert.assertNotNull(actual);
         Assert.assertEquals(shoppingOrderItemDO.getId(), actual.getId());

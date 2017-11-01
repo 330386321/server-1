@@ -1287,11 +1287,6 @@ public class ShoppingOrderItemExtendDOExample {
         }
         
         /***********************************Extend Method********************************************/
-        public Criteria andGmtModifiedAddDayLessThanOrEqualTo(int expr, Date value) {
-            addCriterion("DATE_ADD(soi.gmt_modified,INTERVAL " + expr + " DAY) <=", value, "gmtModified");
-            return (Criteria) this;
-        }
-        
         public Criteria andSRDTypeEqualTo(Byte value) {
             addCriterion("srd.type =", value, "type");
             return (Criteria) this;

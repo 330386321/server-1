@@ -1162,7 +1162,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		String automaticRemindNoPaymentOrderTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_REMIND_NO_PAYMENT_ORDER);
 
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
-		criteria.andGmtCreateDateAddDayLessThanOrEqualTo(Integer.valueOf(automaticRemindNoPaymentOrderTime), new Date());
+		criteria.andGmtCreateLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticRemindNoPaymentOrderTime) * -1, Calendar.DAY_OF_YEAR));
 
 		// 查找所有超时未付款的订单
 		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);

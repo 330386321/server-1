@@ -7,6 +7,9 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.lawu.eshop.idworker.client.impl.BizIdType;
 import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
@@ -36,6 +39,8 @@ import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
  * @author jiangxinjun
  * @date 2017年7月25日
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"/spring-test.xml"})
 public class ShoppingOrderConverterTest {
 
 	@Test

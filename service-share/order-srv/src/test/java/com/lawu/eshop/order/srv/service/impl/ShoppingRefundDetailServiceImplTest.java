@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -346,13 +345,6 @@ public class ShoppingRefundDetailServiceImplTest {
     	Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), shoppingRefundProcessDO.getRefundStatus());
     }
     
-    /**
-     * TODO SQL不兼容
-     * 
-     * @author jiangxinjun
-     * @date 2017年7月21日
-     */
-    @Ignore
     @Transactional
     @Rollback
     @Test
@@ -441,7 +433,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), shoppingOrderDO.getOrderStatus());
     	Assert.assertEquals(0D, shoppingOrderDO.getActualAmount().doubleValue(), 0D);
     	
-    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), actual.getRefundStatus());
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actual.getOrderStatus());
@@ -457,7 +449,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	ShoppingRefundProcessDO shoppingRefundProcessDO = shoppingRefundProcessDOMapper.selectByExample(shoppingRefundProcessDOExample).get(0);
     	Assert.assertNotNull(shoppingRefundProcessDO);
     	Assert.assertNotNull(shoppingRefundProcessDO.getGmtCreate());
-    	Assert.assertEquals(shoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getId());
+    	Assert.assertEquals(shoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getShoppingRefundDetailId());
     	Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), shoppingRefundProcessDO.getRefundStatus());
     }
     
@@ -593,13 +585,6 @@ public class ShoppingRefundDetailServiceImplTest {
     	Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), shoppingRefundProcessDO.getRefundStatus());
     }
     
-    /**
-     * TODO SQL不兼容
-     * 
-     * @author jiangxinjun
-     * @date 2017年7月21日
-     */
-    @Ignore
     @Transactional
     @Rollback
     @Test
@@ -683,7 +668,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	
     	shoppingRefundDetailService.executeAutoForToBeReturn();
     	
-    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertNull(actual.getRefundStatus());
     	Assert.assertEquals(expected.getOrderStatus(), actual.getOrderStatus());
@@ -694,13 +679,6 @@ public class ShoppingRefundDetailServiceImplTest {
     	Assert.assertEquals(StatusEnum.INVALID.getValue(), actualShoppingRefundDetailDO.getStatus());
     }
     
-    /**
-     * TODO SQL不兼容
-     * 
-     * @author jiangxinjun
-     * @date 2017年7月21日
-     */
-    @Ignore
     @Transactional
     @Rollback
     @Test
@@ -784,7 +762,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	
     	shoppingRefundDetailService.executeAutoRefundFailed();
     	
-    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertNull(actual.getRefundStatus());
     	Assert.assertEquals(expected.getOrderStatus(), actual.getOrderStatus());
@@ -795,13 +773,6 @@ public class ShoppingRefundDetailServiceImplTest {
     	Assert.assertEquals(StatusEnum.INVALID.getValue(), actualShoppingRefundDetailDO.getStatus());
     }
     
-    /**
-     * TODO SQL不兼容
-     * 
-     * @author jiangxinjun
-     * @date 2017年7月21日
-     */
-    @Ignore
     @Transactional
     @Rollback
     @Test
@@ -890,7 +861,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), shoppingOrderDO.getOrderStatus());
     	Assert.assertEquals(0D, shoppingOrderDO.getActualAmount().doubleValue(), 0D);
     	
-    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), actual.getRefundStatus());
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actual.getOrderStatus());
@@ -906,17 +877,10 @@ public class ShoppingRefundDetailServiceImplTest {
     	ShoppingRefundProcessDO shoppingRefundProcessDO = shoppingRefundProcessDOMapper.selectByExample(shoppingRefundProcessDOExample).get(0);
     	Assert.assertNotNull(shoppingRefundProcessDO);
     	Assert.assertNotNull(shoppingRefundProcessDO.getGmtCreate());
-    	Assert.assertEquals(shoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getId());
+    	Assert.assertEquals(shoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getShoppingRefundDetailId());
     	Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), shoppingRefundProcessDO.getRefundStatus());
     }
     
-    /**
-     * TODO SQL不兼容
-     * 
-     * @author jiangxinjun
-     * @date 2017年7月21日
-     */
-    @Ignore
     @Transactional
     @Rollback
     @Test
@@ -1005,7 +969,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), shoppingOrderDO.getOrderStatus());
     	Assert.assertEquals(0D, shoppingOrderDO.getActualAmount().doubleValue(), 0D);
     	
-    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
+    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), actual.getRefundStatus());
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actual.getOrderStatus());
@@ -1021,7 +985,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	ShoppingRefundProcessDO shoppingRefundProcessDO = shoppingRefundProcessDOMapper.selectByExample(shoppingRefundProcessDOExample).get(0);
     	Assert.assertNotNull(shoppingRefundProcessDO);
     	Assert.assertNotNull(shoppingRefundProcessDO.getGmtCreate());
-    	Assert.assertEquals(shoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getId());
+    	Assert.assertEquals(shoppingRefundDetailDO.getId(), shoppingRefundProcessDO.getShoppingRefundDetailId());
     	Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), shoppingRefundProcessDO.getRefundStatus());
     }
     
