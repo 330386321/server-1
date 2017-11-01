@@ -24,7 +24,7 @@ import com.lawu.eshop.framework.web.filter.XssFilter;
 @EnableFeignClients(basePackages = {"com.lawu.eshop"})
 @Configuration
 @ImportResource(locations = {"classpath:spring.xml"})
-@ComponentScan(basePackages = {"com.lawu.eshop"})
+@ComponentScan(basePackages = {"com.lawu.eshop","com.lawu.autotest.client"})
 public class MemberApiApplication {
 
     private static Logger logger = LoggerFactory.getLogger(MemberApiApplication.class);
