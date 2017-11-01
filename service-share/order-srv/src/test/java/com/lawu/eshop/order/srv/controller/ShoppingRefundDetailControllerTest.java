@@ -31,6 +31,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
@@ -61,7 +63,6 @@ import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingRefundDetailDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingRefundProcessDOMapper;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * 
@@ -129,7 +130,7 @@ public class ShoppingRefundDetailControllerTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -282,7 +283,7 @@ public class ShoppingRefundDetailControllerTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -382,7 +383,7 @@ public class ShoppingRefundDetailControllerTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -483,7 +484,7 @@ public class ShoppingRefundDetailControllerTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -586,7 +587,7 @@ public class ShoppingRefundDetailControllerTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -684,7 +685,7 @@ public class ShoppingRefundDetailControllerTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -776,7 +777,7 @@ public class ShoppingRefundDetailControllerTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -867,7 +868,7 @@ public class ShoppingRefundDetailControllerTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");
@@ -958,7 +959,7 @@ public class ShoppingRefundDetailControllerTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");

@@ -1,6 +1,9 @@
 package com.lawu.eshop.user.srv.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
@@ -28,7 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
@@ -51,7 +55,6 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.utils.DataTransUtil;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * @author meishuquan
@@ -780,7 +783,7 @@ public class MerchantStoreControllerTest {
     @Test
     public void getAdMerchantStoreByIds() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -932,7 +935,7 @@ public class MerchantStoreControllerTest {
     @Test
     public void getPayOrderMerchantInfo() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");

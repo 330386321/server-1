@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.property.constants.MemberTransactionCategoryEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionCategoryEnum;
@@ -59,7 +61,6 @@ import com.lawu.eshop.property.srv.mapper.extend.TransactionDetailExtendDOMapper
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 交易明细服务实现
@@ -174,7 +175,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 			transactionDetailDO.setAreaId(regions.length > 2 ? Integer.valueOf(regions[2]) : 0);
 		}
 		transactionDetailDO.setTitle(param.getTitle());
-		transactionDetailDO.setTransactionNum(StringUtil.getRandomNum(""));
+		transactionDetailDO.setTransactionNum(IdWorkerHelperImpl.generate(BizIdType.TRANSACTION));
 		transactionDetailDO.setUserNum(param.getUserNum());
 		transactionDetailDO.setTransactionType(param.getTransactionType());
 		transactionDetailDO.setTransactionAccount(param.getTransactionAccount());

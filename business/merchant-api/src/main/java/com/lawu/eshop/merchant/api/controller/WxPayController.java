@@ -8,9 +8,6 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import com.lawu.eshop.ad.dto.AdPayInfoDTO;
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.merchant.api.service.AdService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +18,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.ad.dto.AdPayInfoDTO;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.merchant.api.service.AdService;
 import com.lawu.eshop.merchant.api.service.PropertySrvPropertyService;
 import com.lawu.eshop.merchant.api.service.RechargeService;
 import com.lawu.eshop.merchant.api.service.WxPayService;
@@ -79,7 +79,6 @@ public class WxPayController extends BaseController {
 			@ModelAttribute @ApiParam ThirdPayParam param) {
 
 		ThirdPayDataParam aparam = new ThirdPayDataParam();
-		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
 		aparam.setSubject(param.getThirdPayBodyEnum().getVal());
 		aparam.setBizIds(param.getBizIds());
 		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
@@ -126,7 +125,6 @@ public class WxPayController extends BaseController {
 			throws IOException {
 		String userNum = UserUtil.getCurrentUserNumByToken(token);
 		ThirdPayDataParam aparam = new ThirdPayDataParam();
-		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
 		aparam.setSubject(thirdPayBodyEnum.getVal());
 		aparam.setBizIds(bizIds);
 		aparam.setThirdPayBodyEnum(thirdPayBodyEnum);

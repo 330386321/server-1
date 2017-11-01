@@ -13,8 +13,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
-import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
@@ -28,8 +29,6 @@ import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.service.FansMerchantService;
 import com.lawu.eshop.utils.DataTransUtil;
-import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * @author meishuquan
@@ -56,7 +55,7 @@ public class FansMerchantServiceImplTest {
     @Test
     public void listInviteFans() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd("123456");
         memberDO.setMobile("13666666666");
@@ -78,7 +77,7 @@ public class FansMerchantServiceImplTest {
     @Test
     public void pageListInviteFans() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd("123456");
         memberDO.setMobile("13666666666");
@@ -86,7 +85,7 @@ public class FansMerchantServiceImplTest {
         memberDO.setGmtCreate(new Date());
         memberDOMapper.insertSelective(memberDO);
 
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd("123456");
         memberDO.setMobile("13666666666");
@@ -112,7 +111,7 @@ public class FansMerchantServiceImplTest {
     @Test
     public void listFans() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd("123456");
         memberDO.setMobile("13666666666");

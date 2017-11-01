@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
@@ -26,7 +28,6 @@ import com.lawu.eshop.order.srv.domain.TransactionRecordDOExample;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.TransactionRecordDOMapper;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * 
@@ -75,7 +76,7 @@ public class ShoppingRefundAgreeToRefundTransactionMainServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");

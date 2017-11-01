@@ -28,9 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.mall.dto.DiscountPackagePurchaseNotesDTO;
+import com.lawu.eshop.mall.srv.MallSrvApplicationTest;
 import com.lawu.eshop.mall.srv.domain.DiscountPackagePurchaseNotesDO;
 import com.lawu.eshop.mall.srv.mapper.DiscountPackagePurchaseNotesDOMapper;
-import com.lawu.eshop.mall.srv.service.MallSrvApplicationTest;
 
 /**
  * @author zhangyong

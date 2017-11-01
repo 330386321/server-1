@@ -6,11 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.lawu.eshop.property.param.CheckRepeatOfPropertyOperationParam;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
-import com.lawu.eshop.property.srv.exception.PointNegativeException;
-import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
+import com.lawu.eshop.property.param.CheckRepeatOfPropertyOperationParam;
 import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
@@ -30,15 +28,18 @@ import com.lawu.eshop.property.srv.bo.CommissionUtilBO;
 import com.lawu.eshop.property.srv.domain.FansInviteDetailDO;
 import com.lawu.eshop.property.srv.domain.LoveDetailDO;
 import com.lawu.eshop.property.srv.domain.PointDetailDOExample;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
+import com.lawu.eshop.property.srv.exception.PointNegativeException;
 import com.lawu.eshop.property.srv.mapper.FansInviteDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.LoveDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.service.CommissionUtilService;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * <p>
@@ -91,7 +92,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		if (retCode != ResultCode.SUCCESS) {
 			return retCode;
 		}
-		String pointNum = StringUtil.getRandomNum("");
+		String pointNum = IdWorkerHelperImpl.generate(BizIdType.POINT);
 		// 插入积分明细
 		PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
 		pointDetailSaveDataParam.setPointNum(pointNum);
@@ -156,7 +157,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 
 		// 插入积分明细
 		PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
-		pointDetailSaveDataParam.setPointNum(StringUtil.getRandomNum(""));
+		pointDetailSaveDataParam.setPointNum(IdWorkerHelperImpl.generate(BizIdType.POINT));
 		pointDetailSaveDataParam.setUserNum(param.getUserNum());
 		if (param.getMemberTransactionTypeEnum() != null) {
 			pointDetailSaveDataParam.setTitle(param.getMemberTransactionTypeEnum().getName());
@@ -183,7 +184,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	@Transactional
 	public int doHanlderAddBalance(PropertyInfoDataParam param) {
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
+		tdsParam.setTransactionNum(IdWorkerHelperImpl.generate(BizIdType.TRANSACTION));
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount("");
 		if (param.getMemberTransactionTypeEnum() != null) {
@@ -215,7 +216,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			return retCode;
 		}
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
+		tdsParam.setTransactionNum(IdWorkerHelperImpl.generate(BizIdType.TRANSACTION));
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount("");
 		if (param.getMemberTransactionTypeEnum() != null) {
@@ -272,7 +273,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 
 		LoveDetailDO loveDetailDO = new LoveDetailDO();
 		loveDetailDO.setTitle(param.getLoveTypeEnum().getName());
-		loveDetailDO.setLoveNum(StringUtil.getRandomNum(""));
+		loveDetailDO.setLoveNum(IdWorkerHelperImpl.generate(BizIdType.LOVE));
 		loveDetailDO.setUserNum(param.getUserNum());
 		loveDetailDO.setLoveType(param.getLoveTypeEnum().getValue());
 		loveDetailDO.setAmount(actureLoveIn);
@@ -285,7 +286,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "L", "A", actureLoveIn);
 
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
+		tdsParam.setTransactionNum(IdWorkerHelperImpl.generate(BizIdType.TRANSACTION));
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount("");
 		tdsParam.setTitle(transactionDetailService.packageTitle(param.getMemberTransactionTypeEnum(),param.getMerchantTransactionTypeEnum(),param.getTitle()));
@@ -345,7 +346,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			map.put("retCode", retCode);
 			return map;
 		}
-		String pointNum = StringUtil.getRandomNum("");
+		String pointNum = IdWorkerHelperImpl.generate(BizIdType.POINT);
 		// 插入积分明细
 		PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
 		pointDetailSaveDataParam.setPointNum(pointNum);

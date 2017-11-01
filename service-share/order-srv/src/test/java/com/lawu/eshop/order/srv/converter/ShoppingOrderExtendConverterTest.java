@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
@@ -241,7 +243,7 @@ public class ShoppingOrderExtendConverterTest {
     	rtn.setMerchantNum("B0001");
     	rtn.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT);
     	rtn.setOrderTotalPrice(new BigDecimal(1));
-    	rtn.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	rtn.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	rtn.setStatus(StatusEnum.VALID);
     	rtn.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED);
     	

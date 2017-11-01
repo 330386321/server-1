@@ -1,21 +1,8 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
-import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.dto.CertifTypeEnum;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
-import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
-import com.lawu.eshop.user.param.ListStoreAuditParam;
-import com.lawu.eshop.user.param.MerchantAuditParam;
-import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
-import com.lawu.eshop.user.srv.domain.*;
-import com.lawu.eshop.user.srv.mapper.*;
-import com.lawu.eshop.user.srv.service.MerchantAuditService;
-import com.lawu.eshop.utils.DataTransUtil;
-import com.lawu.eshop.utils.RandomUtil;
-import net.sf.json.JSONObject;
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,8 +12,33 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
+import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
+import com.lawu.eshop.user.param.ListStoreAuditParam;
+import com.lawu.eshop.user.param.MerchantAuditParam;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
+import com.lawu.eshop.user.srv.service.MerchantAuditService;
+import com.lawu.eshop.utils.DataTransUtil;
+
+import net.sf.json.JSONObject;
 
 /**
  * @author meishuquan
@@ -63,7 +75,7 @@ public class MerchantAuditServiceImplTest {
     public void updateMerchantAudit() {
         //初始化商家
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -160,7 +172,7 @@ public class MerchantAuditServiceImplTest {
     public void getMerchantAuditInfo() {
         //初始化商家
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -217,7 +229,7 @@ public class MerchantAuditServiceImplTest {
     public void getMerchantAuditInfoByUncheck() {
         //初始化商家
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -274,7 +286,7 @@ public class MerchantAuditServiceImplTest {
     public void listAllStoreAudit() {
         //初始化商家
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -337,7 +349,7 @@ public class MerchantAuditServiceImplTest {
     public void getMerchantStoreAuditById() {
         //初始化商家
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -395,7 +407,7 @@ public class MerchantAuditServiceImplTest {
     public void getMerchantStoreAudit() {
         //初始化商家
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -452,7 +464,7 @@ public class MerchantAuditServiceImplTest {
     public void setAuditInfoShow() {
         //初始化商家
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");

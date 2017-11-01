@@ -5,14 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.property.param.BalancePayValidateDataParam;
-import com.lawu.eshop.property.param.CheckRepeatOfPropertyOperationParam;
-import com.lawu.eshop.property.param.PropertyInfoDataQueryPointDetailParam;
-import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
-import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
-import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
-import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
-import com.lawu.eshop.user.constants.UserCommonConstant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +13,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.param.CheckRepeatOfPropertyOperationParam;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
+import com.lawu.eshop.property.param.PropertyInfoDataQueryPointDetailParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.AreaPointConsumeBO;
+import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
 import com.lawu.eshop.property.srv.bo.PointConsumeReportBO;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.bo.ReportAdPointGroupByAreaBO;
@@ -38,13 +35,15 @@ import com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.domain.extend.AreaPointConsumeDOView;
+import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
+import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
 import com.lawu.eshop.property.srv.domain.extend.ReportAdPointGroupByAreaView;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PointDetailDOMapperExtend;
 import com.lawu.eshop.property.srv.service.PointDetailService;
+import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 积分明细服务实现
@@ -108,7 +107,7 @@ public class PointDetailServiceImpl implements PointDetailService {
 
 		PointDetailDO pointDetailDO = new PointDetailDO();
 		pointDetailDO.setTitle(param.getTitle());
-		pointDetailDO.setPointNum(StringUtil.getRandomNum(""));
+		pointDetailDO.setPointNum(IdWorkerHelperImpl.generate(BizIdType.POINT));
 		pointDetailDO.setUserNum(param.getUserNum());
 		pointDetailDO.setPointType(param.getPointType());
 		pointDetailDO.setPoint(param.getPoint());

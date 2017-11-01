@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.constants.UserStatusEnum;
@@ -69,7 +71,6 @@ import com.lawu.eshop.user.srv.rong.service.RongUserService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * 商户服务实现
@@ -173,7 +174,7 @@ public class MerchantServiceImpl implements MerchantService {
         }
 
         //插入商户信息
-        String userNum = RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG);
+        String userNum = IdWorkerHelperImpl.generate(BizIdType.MERCHANT);
         MerchantDO merchantDO = new MerchantDO();
         merchantDO.setNum(userNum);
         merchantDO.setAccount(registerRealParam.getAccount());

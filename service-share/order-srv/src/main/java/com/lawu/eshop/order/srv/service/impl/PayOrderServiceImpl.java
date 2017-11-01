@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.order.srv.bo.PayOrderBaseBO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
@@ -25,6 +26,7 @@ import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderReportDataParam;
 import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
+import com.lawu.eshop.order.srv.bo.PayOrderBaseBO;
 import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
 import com.lawu.eshop.order.srv.converter.PayOrderConverter;
@@ -38,7 +40,6 @@ import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.PayOrderExtendDOMapper;
 import com.lawu.eshop.order.srv.service.PayOrderService;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * @author zhangyong
@@ -69,8 +70,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 			payOrderDO.setNotFavoredAmount(BigDecimal.ZERO);
 		}
 		payOrderDO.setTotalAmount(BigDecimal.valueOf(param.getTotalAmount()));
-        String orderNum = StringUtil.getRandomNum("");
-        payOrderDO.setOrderNum(orderNum);
+        payOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
         payOrderDO.setGmtCreate(new Date());
         payOrderDO.setGmtModified(new Date());
 		payOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
@@ -81,7 +81,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 	    payOrderDO.setIsFans(param.getFans());
         payOrderDOMapper.insert(payOrderDO);
         PayOrderBO payOrderBO = new PayOrderBO();
-        payOrderBO.setOrderNum(orderNum);
+        payOrderBO.setOrderNum(payOrderDO.getOrderNum());
         payOrderBO.setId(payOrderDO.getId());
         return payOrderBO;
     }

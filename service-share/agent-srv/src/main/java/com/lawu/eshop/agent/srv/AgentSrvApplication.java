@@ -14,8 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @EnableDiscoveryClient
 @SpringBootApplication
-@EnableFeignClients
-@ComponentScan({"com.lawu.eshop"})
+@EnableFeignClients({"com.lawu"})
+@ComponentScan({"com.lawu"})
 public class AgentSrvApplication {
 
     private static Logger logger = LoggerFactory.getLogger(AgentSrvApplication.class);

@@ -31,9 +31,9 @@ import com.lawu.eshop.mall.constants.AppTypeEnum;
 import com.lawu.eshop.mall.constants.MobileTypeEnum;
 import com.lawu.eshop.mall.param.AppVersionOperatorParam;
 import com.lawu.eshop.mall.param.AppVersionParam;
+import com.lawu.eshop.mall.srv.MallSrvApplicationTest;
 import com.lawu.eshop.mall.srv.domain.AppVersionDO;
 import com.lawu.eshop.mall.srv.mapper.AppVersionDOMapper;
-import com.lawu.eshop.mall.srv.service.MallSrvApplicationTest;
 
 /**
  * app版本管理

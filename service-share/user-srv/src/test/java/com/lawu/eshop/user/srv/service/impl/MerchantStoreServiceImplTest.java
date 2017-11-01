@@ -1,25 +1,10 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.solr.service.SolrService;
-import com.lawu.eshop.user.constants.StatusEnum;
-import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.param.ListMerchantStoreParam;
-import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.param.StoreIndexParam;
-import com.lawu.eshop.user.param.StoreStatisticsParam;
-import com.lawu.eshop.user.srv.UserSrvConfig;
-import com.lawu.eshop.user.srv.bo.*;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
-import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
-import com.lawu.eshop.user.srv.service.MerchantStoreService;
-import com.lawu.eshop.utils.DataTransUtil;
-import com.lawu.eshop.utils.RandomUtil;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.solr.common.SolrDocument;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,10 +15,32 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.solr.service.SolrService;
+import com.lawu.eshop.user.constants.StatusEnum;
+import com.lawu.eshop.user.param.ListMerchantStoreParam;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.StoreIndexParam;
+import com.lawu.eshop.user.param.StoreStatisticsParam;
+import com.lawu.eshop.user.srv.UserSrvConfig;
+import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
+import com.lawu.eshop.user.srv.bo.NewMerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.RecommendFoodBO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
+import com.lawu.eshop.user.srv.service.MerchantStoreService;
+import com.lawu.eshop.utils.DataTransUtil;
 
 /**
  * @author meishuquan
@@ -283,7 +290,7 @@ public class MerchantStoreServiceImplTest {
     @Test
     public void getAdMerchantStoreByIds() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");

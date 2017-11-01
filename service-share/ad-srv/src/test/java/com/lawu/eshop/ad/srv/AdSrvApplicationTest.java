@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.ImportResource;
 
-@ComponentScan(value = {"com.lawu.eshop"}, excludeFilters = {@ComponentScan.Filter(value = {AdSrvApplication.class}, type = FilterType.ASSIGNABLE_TYPE)})
+@ComponentScan(value = {"com.lawu"}, excludeFilters = {@ComponentScan.Filter(value = {AdSrvApplication.class}, type = FilterType.ASSIGNABLE_TYPE)})
 @SpringBootApplication
 @ImportResource(locations={"classpath:spring-test.xml"})
 public class AdSrvApplicationTest {

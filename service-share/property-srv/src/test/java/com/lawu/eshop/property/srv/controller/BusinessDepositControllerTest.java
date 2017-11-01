@@ -1,16 +1,12 @@
 package com.lawu.eshop.property.srv.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.property.constants.BusinessDepositOperEnum;
-import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
-import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.param.*;
-import com.lawu.eshop.property.srv.PropertySrvApplicationTest;
-import com.lawu.eshop.property.srv.domain.BusinessDepositDO;
-import com.lawu.eshop.property.srv.mapper.BankDOMapper;
-import com.lawu.eshop.property.srv.mapper.BusinessDepositDOMapper;
-import com.lawu.eshop.utils.StringUtil;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,12 +25,22 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.property.constants.BusinessDepositOperEnum;
+import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.param.BusinessDepositOperDataParam;
+import com.lawu.eshop.property.param.BusinessDepositQueryDataParam;
+import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
+import com.lawu.eshop.property.param.BusinessRefundDepositDataParam;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.property.srv.PropertySrvApplicationTest;
+import com.lawu.eshop.property.srv.domain.BusinessDepositDO;
+import com.lawu.eshop.property.srv.mapper.BankDOMapper;
+import com.lawu.eshop.property.srv.mapper.BusinessDepositDOMapper;
 
 /**
  * @author yangqh
@@ -120,7 +126,7 @@ public class BusinessDepositControllerTest {
         bddo.setUserNum("B10001");
         bddo.setBusinessAccount("17512036361");
         bddo.setBusinessName("张三");
-        bddo.setDepositNumber(StringUtil.getRandomNum(""));
+        bddo.setDepositNumber(IdWorkerHelperImpl.generate(BizIdType.DEPOSIT));
         bddo.setAmount(new BigDecimal("1000"));
         bddo.setStatus(BusinessDepositStatusEnum.PAYING.getVal());
         bddo.setProvinceId(Long.valueOf("1"));
@@ -153,7 +159,7 @@ public class BusinessDepositControllerTest {
         bddo.setUserNum("B10001");
         bddo.setBusinessAccount("17512036361");
         bddo.setBusinessName("张三");
-        bddo.setDepositNumber(StringUtil.getRandomNum(""));
+        bddo.setDepositNumber(IdWorkerHelperImpl.generate(BizIdType.DEPOSIT));
         bddo.setAmount(new BigDecimal("1000"));
         bddo.setStatus(BusinessDepositStatusEnum.PAYING.getVal());
         bddo.setProvinceId(Long.valueOf("1"));
@@ -190,7 +196,7 @@ public class BusinessDepositControllerTest {
         bddo.setUserNum("B10001");
         bddo.setBusinessAccount("17512036361");
         bddo.setBusinessName("张三");
-        bddo.setDepositNumber(StringUtil.getRandomNum(""));
+        bddo.setDepositNumber(IdWorkerHelperImpl.generate(BizIdType.DEPOSIT));
         bddo.setAmount(new BigDecimal("1000"));
         bddo.setStatus(BusinessDepositStatusEnum.PAYING.getVal());
         bddo.setProvinceId(Long.valueOf("1"));
@@ -218,7 +224,7 @@ public class BusinessDepositControllerTest {
         bddo.setUserNum("B10001");
         bddo.setBusinessAccount("17512036361");
         bddo.setBusinessName("张三");
-        bddo.setDepositNumber(StringUtil.getRandomNum(""));
+        bddo.setDepositNumber(IdWorkerHelperImpl.generate(BizIdType.DEPOSIT));
         bddo.setAmount(new BigDecimal("1000"));
         bddo.setStatus(BusinessDepositStatusEnum.PAYING.getVal());
         bddo.setProvinceId(Long.valueOf("1"));

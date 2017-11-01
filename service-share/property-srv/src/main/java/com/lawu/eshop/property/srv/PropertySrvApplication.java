@@ -15,10 +15,10 @@ import org.springframework.context.annotation.ImportResource;
  * @date 2017/3/27
  */
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients({"com.lawu"})
 @SpringBootApplication
 @ImportResource(locations={"classpath:spring.xml"})
-@ComponentScan({"com.lawu.eshop"})
+@ComponentScan({"com.lawu"})
 public class PropertySrvApplication {
 
     private static Logger logger = LoggerFactory.getLogger(PropertySrvApplication.class);

@@ -1,24 +1,13 @@
 package com.lawu.eshop.user.srv.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
-import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.dto.CertifTypeEnum;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
-import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
-import com.lawu.eshop.user.param.ListStoreAuditParam;
-import com.lawu.eshop.user.param.MerchantAuditParam;
-import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.UserSrvApplicationTest;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
-import com.lawu.eshop.utils.DataTransUtil;
-import com.lawu.eshop.utils.RandomUtil;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,11 +26,25 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
+import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
+import com.lawu.eshop.user.param.ListStoreAuditParam;
+import com.lawu.eshop.user.param.MerchantAuditParam;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.UserSrvApplicationTest;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.utils.DataTransUtil;
 
 /**
  * @author meishuquan
@@ -77,7 +80,7 @@ public class MerchantAuditControllerTest {
     public void updateMerchantAudit() {
         //初始化商家
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -145,7 +148,7 @@ public class MerchantAuditControllerTest {
     public void getMerchantAuditInfo() {
         //初始化商家
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");

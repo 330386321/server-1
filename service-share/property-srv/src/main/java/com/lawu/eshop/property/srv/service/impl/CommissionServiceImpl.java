@@ -4,9 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
-import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.ad.param.CommissionJobParam;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
@@ -22,19 +21,21 @@ import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.domain.LoveDetailDO;
 import com.lawu.eshop.property.srv.domain.PointDetailDO;
 import com.lawu.eshop.property.srv.domain.PointDetailDOExample;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample.Criteria;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
 import com.lawu.eshop.property.srv.mapper.LoveDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.service.CommissionService;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.utils.StringUtil;
 
 @Service
 public class CommissionServiceImpl implements CommissionService {
@@ -61,7 +62,6 @@ public class CommissionServiceImpl implements CommissionService {
 	public int calculation(CommissionJobParam param) {
 		// 新增交易明细记录、加财产余额、计爱心账户、加财产爱心账户
 
-		String num = StringUtil.getRandomNum("");
 		if (param.isLast()) {
 
 			// 最后一级若为用户进余额，为商家进广告积分
@@ -102,7 +102,7 @@ public class CommissionServiceImpl implements CommissionService {
 
 				// 新增积分明细
 				PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
-				pointDetailSaveDataParam.setPointNum(num);
+				pointDetailSaveDataParam.setPointNum(IdWorkerHelperImpl.generate(BizIdType.POINT));
 				pointDetailSaveDataParam.setUserNum(param.getUserNum());
 				pointDetailSaveDataParam.setTitle(param.getTypeName());
 				pointDetailSaveDataParam.setPointType(param.getTypeVal());
@@ -134,7 +134,7 @@ public class CommissionServiceImpl implements CommissionService {
 				
 				// 新增积分明细
 				PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
-				pointDetailSaveDataParam.setPointNum(num);
+				pointDetailSaveDataParam.setPointNum(IdWorkerHelperImpl.generate(BizIdType.POINT));
 				pointDetailSaveDataParam.setUserNum(param.getUserNum());
 				pointDetailSaveDataParam.setTitle(param.getTypeName());
 				pointDetailSaveDataParam.setPointType(param.getTypeVal());
@@ -174,7 +174,7 @@ public class CommissionServiceImpl implements CommissionService {
 			// 计爱心账户
 			LoveDetailDO loveDetailDO = new LoveDetailDO();
 			loveDetailDO.setTitle(param.getLoveTypeName());
-			loveDetailDO.setLoveNum(num);
+			loveDetailDO.setLoveNum(IdWorkerHelperImpl.generate(BizIdType.LOVE));
 			loveDetailDO.setUserNum(param.getUserNum());
 			loveDetailDO.setLoveType(param.getLoveTypeVal());
 			loveDetailDO.setAmount(param.getActureLoveIn());
@@ -193,7 +193,7 @@ public class CommissionServiceImpl implements CommissionService {
 
 			// 新增点广告的余额交易明细
 			TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-			tdsParam.setTransactionNum(num);
+			tdsParam.setTransactionNum(IdWorkerHelperImpl.generate(BizIdType.TRANSACTION));
 			tdsParam.setUserNum(param.getUserNum());
 			tdsParam.setTitle(param.getTypeName());
 			tdsParam.setTransactionType(param.getTypeVal());

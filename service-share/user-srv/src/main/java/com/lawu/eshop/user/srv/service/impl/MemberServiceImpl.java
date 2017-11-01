@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
@@ -55,7 +57,6 @@ import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongUserService;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * 会员信息服务实现
@@ -214,7 +215,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
         //插入会员信息
-        String userNum = RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG);
+        String userNum = IdWorkerHelperImpl.generate(BizIdType.MEMBER);
         MemberDO memberDO = new MemberDO();
         memberDO.setNum(userNum);
         memberDO.setAccount(registerRealParam.getAccount());

@@ -37,7 +37,7 @@ import com.lawu.eshop.mall.dto.InformStatusEnum;
 import com.lawu.eshop.mall.param.InformEditParam;
 import com.lawu.eshop.mall.param.InformQueryParam;
 import com.lawu.eshop.mall.param.InformSaveParam;
-import com.lawu.eshop.mall.srv.service.MallSrvApplicationTest;
+import com.lawu.eshop.mall.srv.MallSrvApplicationTest;
 
 
 /**

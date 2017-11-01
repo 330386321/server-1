@@ -14,9 +14,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.StatusEnum;
-import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
@@ -49,7 +50,6 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import com.lawu.eshop.utils.DataTransUtil;
-import com.lawu.eshop.utils.RandomUtil;
 
 import net.sf.json.JSONObject;
 
@@ -333,7 +333,7 @@ public class MerchantStoreInfoServiceImplTest {
     @Test
     public void shoppingOrderFindUserInfo() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -397,7 +397,7 @@ public class MerchantStoreInfoServiceImplTest {
     @Test
     public void getStoreDetailById() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -703,7 +703,7 @@ public class MerchantStoreInfoServiceImplTest {
         MerchantDO merchantDO = new MerchantDO();
         merchantDO.setStatus(StatusEnum.VALID.getValue());
         merchantDO.setIsFreeze(false);
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -744,7 +744,7 @@ public class MerchantStoreInfoServiceImplTest {
     @Test
     public void getPayOrderMerchantInfo() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");

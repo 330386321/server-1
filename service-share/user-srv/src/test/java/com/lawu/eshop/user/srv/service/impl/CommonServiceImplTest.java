@@ -1,16 +1,9 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.dto.CommissionInvitersUserDTO;
-import com.lawu.eshop.user.param.EFriendQueryDataParam;
-import com.lawu.eshop.user.srv.bo.EFriendInviterBO;
-import com.lawu.eshop.user.srv.bo.InviterBO;
-import com.lawu.eshop.user.srv.domain.*;
-import com.lawu.eshop.user.srv.mapper.*;
-import com.lawu.eshop.user.srv.service.CommonService;
-import com.lawu.eshop.utils.DataTransUtil;
-import com.lawu.eshop.utils.RandomUtil;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,9 +13,26 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.user.dto.CommissionInvitersUserDTO;
+import com.lawu.eshop.user.param.EFriendQueryDataParam;
+import com.lawu.eshop.user.srv.bo.EFriendInviterBO;
+import com.lawu.eshop.user.srv.bo.InviterBO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDO;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.service.CommonService;
+import com.lawu.eshop.utils.DataTransUtil;
 
 /**
  * @author meishuquan
@@ -55,7 +65,7 @@ public class CommonServiceImplTest {
     @Test
     public void getInviterByAccount() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd("123456");
         memberDO.setMobile("13666666666");
@@ -64,7 +74,7 @@ public class CommonServiceImplTest {
         memberDOMapper.insertSelective(memberDO);
 
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");

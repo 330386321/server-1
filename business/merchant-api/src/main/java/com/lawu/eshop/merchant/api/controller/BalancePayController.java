@@ -3,9 +3,6 @@ package com.lawu.eshop.merchant.api.controller;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
-import com.lawu.eshop.property.param.BalancePayValidateDataParam;
-import com.lawu.eshop.property.param.BalancePayValidateParam;
-import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -33,7 +30,10 @@ import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayParam;
+import com.lawu.eshop.property.param.BalancePayValidateDataParam;
+import com.lawu.eshop.property.param.BalancePayValidateParam;
 import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

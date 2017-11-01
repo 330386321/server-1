@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.property.constants.FreezeBizTypeEnum;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
-import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +15,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.pay.ThirdPayRefundParam;
 import com.lawu.eshop.pay.handle.AlipayBusinessHandle;
 import com.lawu.eshop.pay.handle.WxpayBusinessHandle;
 import com.lawu.eshop.pay.sdk.alipay.AliPayConfigParam;
 import com.lawu.eshop.pay.sdk.weixin.base.WxPayConfigParam;
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
+import com.lawu.eshop.property.constants.FreezeBizTypeEnum;
 import com.lawu.eshop.property.constants.FreezeStatusEnum;
 import com.lawu.eshop.property.constants.FreezeTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
@@ -43,16 +42,18 @@ import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.PropertySrvConfig;
 import com.lawu.eshop.property.srv.domain.FreezeDO;
 import com.lawu.eshop.property.srv.domain.FreezeDOExample;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
 import com.lawu.eshop.property.srv.mapper.FreezeDOMapper;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.service.OrderService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
-import com.lawu.eshop.utils.StringUtil;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -302,7 +303,8 @@ public class OrderServiceImpl implements OrderService {
         tdsParam.setAmount(new BigDecimal(param.getRefundMoney()));
         tdsParam.setBizId(param.getOrderItemIds());
         tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
-        tdsParam.setBizNum(param.getTradeNo() == null ? "" : param.getTradeNo());
+        tdsParam.setThirdTransactionNum(param.getTradeNo() == null ? "" : param.getTradeNo());
+        tdsParam.setBizNum(IdWorkerHelperImpl.generate(BizIdType.REFUND));
         transactionDetailService.save(tdsParam);
 
         JsonResult jsonResult = new JsonResult();
@@ -317,7 +319,7 @@ public class OrderServiceImpl implements OrderService {
 
         } else {
             ThirdPayRefundParam rparam = new ThirdPayRefundParam();
-            rparam.setRefundId(StringUtil.getRandomNumAppend(param.getOrderItemIds().replaceAll(",", "")));
+            rparam.setRefundId(tdsParam.getBizNum());
             rparam.setRefundMoney(param.getRefundMoney());
             rparam.setTradeNo(param.getTradeNo());
             if (TransactionPayTypeEnum.ALIPAY.getVal().equals(param.getTransactionPayTypeEnum().getVal())) {

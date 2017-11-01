@@ -1,14 +1,12 @@
 package com.lawu.eshop.property.srv.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.property.constants.CashStatusEnum;
-import com.lawu.eshop.property.param.*;
-import com.lawu.eshop.property.srv.PropertySrvApplicationTest;
-import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
-import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
-import com.lawu.eshop.property.srv.mapper.BankDOMapper;
-import com.lawu.eshop.property.srv.mapper.WithdrawCashDOMapper;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,12 +25,16 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.property.constants.CashStatusEnum;
+import com.lawu.eshop.property.param.CashBillDataParam;
+import com.lawu.eshop.property.param.CashDataParam;
+import com.lawu.eshop.property.srv.PropertySrvApplicationTest;
+import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
+import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
+import com.lawu.eshop.property.srv.mapper.BankDOMapper;
+import com.lawu.eshop.property.srv.mapper.WithdrawCashDOMapper;
 
 /**
  * @author yangqh
@@ -77,7 +79,6 @@ public class CashManageFrontControllerTest {
         param.setAreaId(111);
         param.setCityId(11);
         param.setProvinceId(1);
-        param.setCashNumber("434343");
         param.setGmtCreate(new Date());
         param.setBusinessBankAccountId(1L);
 

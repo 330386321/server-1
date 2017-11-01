@@ -15,8 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.type.UserType;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.user.constants.StatusEnum;
-import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserTypeEnum;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MemberQuery;
@@ -40,7 +41,6 @@ import com.lawu.eshop.user.srv.mapper.UserLoginLogDOMapper;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * @author meishuquan
@@ -73,7 +73,7 @@ public class MemberServiceImplTest {
     @Test
     public void find() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -91,7 +91,7 @@ public class MemberServiceImplTest {
     @Test
     public void findMemberInfoById() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -109,7 +109,7 @@ public class MemberServiceImplTest {
     @Test
     public void updateMemberInfo() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -134,7 +134,7 @@ public class MemberServiceImplTest {
     @Test
     public void updateLoginPwd() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -153,7 +153,7 @@ public class MemberServiceImplTest {
     @Test
     public void getMemberByAccount() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -170,7 +170,7 @@ public class MemberServiceImplTest {
     @Test
     public void findMemberListByUser() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -179,7 +179,7 @@ public class MemberServiceImplTest {
         memberDOMapper.insertSelective(memberDO);
 
         MemberDO inviteMember = new MemberDO();
-        inviteMember.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        inviteMember.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         inviteMember.setAccount("13666666666");
         inviteMember.setPwd(PwdUtil.generate("123456"));
         inviteMember.setMobile("13666666666");
@@ -211,9 +211,9 @@ public class MemberServiceImplTest {
     @Test
     public void register() {
         //邀请人
-        String userNum = RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG);
+        String userNum = IdWorkerHelperImpl.generate(BizIdType.MERCHANT);
         //邀请人的推荐人
-        String mNum = RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG);
+        String mNum = IdWorkerHelperImpl.generate(BizIdType.MEMBER);
 
         //邀请人的推荐人和邀请人关系
         InviteRelationDO inviteRelationDO = new InviteRelationDO();
@@ -281,7 +281,7 @@ public class MemberServiceImplTest {
     @Test
     public void getMemberById() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -298,7 +298,7 @@ public class MemberServiceImplTest {
     @Test
     public void updateMemberHeadImg() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -317,7 +317,7 @@ public class MemberServiceImplTest {
     @Test
     public void findCashUserInfo() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -337,7 +337,7 @@ public class MemberServiceImplTest {
     @Test
     public void findMemberCount() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -347,7 +347,7 @@ public class MemberServiceImplTest {
         memberDO.setGmtCreate(new Date());
         memberDOMapper.insertSelective(memberDO);
 
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -369,7 +369,7 @@ public class MemberServiceImplTest {
     @Test
     public void setGtAndRongYunInfo() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -388,7 +388,7 @@ public class MemberServiceImplTest {
     @Test
     public void findMemberByNum() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -406,7 +406,7 @@ public class MemberServiceImplTest {
     @Test
     public void findMessagePushList() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -417,7 +417,7 @@ public class MemberServiceImplTest {
         memberDO.setGmtCreate(new Date());
         memberDOMapper.insertSelective(memberDO);
 
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -442,7 +442,7 @@ public class MemberServiceImplTest {
     @Test
     public void findMessagePushByMobile() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -459,7 +459,7 @@ public class MemberServiceImplTest {
     @Test
     public void isRegister() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -476,7 +476,7 @@ public class MemberServiceImplTest {
     @Test
     public void getMemberByNum() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -494,7 +494,7 @@ public class MemberServiceImplTest {
     @Test
     public void getRongYunInfoByNum() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -512,7 +512,7 @@ public class MemberServiceImplTest {
     @Test
     public void isExistsMobile() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -529,7 +529,7 @@ public class MemberServiceImplTest {
     @Test
     public void delUserGtPush() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -549,7 +549,7 @@ public class MemberServiceImplTest {
     @Test
     public void getMemberByIds() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -558,7 +558,7 @@ public class MemberServiceImplTest {
         memberDOMapper.insertSelective(memberDO);
 
         MemberDO memberDO1 = new MemberDO();
-        memberDO1.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO1.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO1.setAccount("13666666666");
         memberDO1.setPwd(PwdUtil.generate("123456"));
         memberDO1.setMobile("13666666666");
@@ -579,7 +579,7 @@ public class MemberServiceImplTest {
     @Test
     public void getMemberAccountById() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -597,7 +597,7 @@ public class MemberServiceImplTest {
     @Test
     public void getTotalCount() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -606,7 +606,7 @@ public class MemberServiceImplTest {
         memberDOMapper.insertSelective(memberDO);
 
         MemberDO memberDO1 = new MemberDO();
-        memberDO1.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO1.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO1.setAccount("13666666666");
         memberDO1.setPwd(PwdUtil.generate("123456"));
         memberDO1.setMobile("13666666666");

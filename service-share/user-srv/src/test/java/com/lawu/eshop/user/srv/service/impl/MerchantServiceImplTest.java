@@ -15,8 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.type.UserType;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.user.constants.StatusEnum;
-import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.param.AccountParam;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
@@ -46,7 +47,6 @@ import com.lawu.eshop.user.srv.mapper.UserLoginLogDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * @author meishuquan
@@ -85,7 +85,7 @@ public class MerchantServiceImplTest {
     @Test
     public void updateLoginPwd() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -104,7 +104,7 @@ public class MerchantServiceImplTest {
     @Test
     public void findMerchantInfo() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -122,7 +122,7 @@ public class MerchantServiceImplTest {
     @Test
     public void getMerchantByAccount() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -140,9 +140,9 @@ public class MerchantServiceImplTest {
     @Test
     public void register() {
         //邀请人
-        String userNum = RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG);
+        String userNum = IdWorkerHelperImpl.generate(BizIdType.MERCHANT);
         //邀请人的推荐人
-        String bNum = RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG);
+        String bNum = IdWorkerHelperImpl.generate(BizIdType.MERCHANT);
 
         //邀请人的推荐人和邀请人关系
         InviteRelationDO inviteRelationDO = new InviteRelationDO();
@@ -205,7 +205,7 @@ public class MerchantServiceImplTest {
     @Test
     public void getMerchantBOById() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -223,7 +223,7 @@ public class MerchantServiceImplTest {
     @Test
     public void getMerchantByInviter() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -269,7 +269,7 @@ public class MerchantServiceImplTest {
     @Test
     public void find() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd(PwdUtil.generate("123456"));
         merchantDO.setMobile("13888888888");
@@ -287,7 +287,7 @@ public class MerchantServiceImplTest {
     @Test
     public void setGtAndRongYunInfo() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd(PwdUtil.generate("123456"));
         merchantDO.setMobile("13888888888");
@@ -306,7 +306,7 @@ public class MerchantServiceImplTest {
     @Test
     public void findMemberByNum() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd(PwdUtil.generate("123456"));
         merchantDO.setMobile("13888888888");
@@ -324,7 +324,7 @@ public class MerchantServiceImplTest {
     @Test
     public void selectMerchantInfo() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -358,7 +358,7 @@ public class MerchantServiceImplTest {
     @Test
     public void findMessagePushList() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -393,7 +393,7 @@ public class MerchantServiceImplTest {
     @Test
     public void findMessagePushByMobile() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -414,7 +414,7 @@ public class MerchantServiceImplTest {
     @Test
     public void updateHeadImg() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -436,7 +436,7 @@ public class MerchantServiceImplTest {
     @Test
     public void getRongYunInfoByNum() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -480,7 +480,7 @@ public class MerchantServiceImplTest {
     @Test
     public void getMerchantById() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -500,7 +500,7 @@ public class MerchantServiceImplTest {
     @Test
     public void getMerchantByNum() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -520,7 +520,7 @@ public class MerchantServiceImplTest {
     @Test
     public void isRegister() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -539,7 +539,7 @@ public class MerchantServiceImplTest {
     @Test
     public void delMerchantGtPush() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -561,7 +561,7 @@ public class MerchantServiceImplTest {
     @Test
     public void getMerchantView() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -596,7 +596,7 @@ public class MerchantServiceImplTest {
     @Test
     public void getTotalCount() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");

@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.TransactionFollowService;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
@@ -25,7 +27,6 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.mapper.FollowTransactionRecordDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * 
@@ -73,7 +74,7 @@ public class ShoppingOrderPaymentTransactionFollowServiceImplTest {
     	expected.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
-    	expected.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	expected.setStatus(StatusEnum.VALID.getValue());
     	expected.setConsigneeAddress("大冲商务中心1301");
     	expected.setConsigneeMobile("123456");

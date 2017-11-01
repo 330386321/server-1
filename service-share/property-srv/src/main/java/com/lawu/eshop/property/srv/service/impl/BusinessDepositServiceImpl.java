@@ -5,6 +5,8 @@ import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.property.RefundDepositDoSuccessOrFailureNotification;
 import com.lawu.eshop.mq.dto.user.HandleDepostMessage;
@@ -82,7 +84,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
         bddo.setUserNum(param.getUserNum());
         bddo.setBusinessAccount(param.getBusinessAccount());
         bddo.setBusinessName(param.getBusinessName());
-        bddo.setDepositNumber(StringUtil.getRandomNum(""));
+        bddo.setDepositNumber(IdWorkerHelperImpl.generate(BizIdType.DEPOSIT));
         bddo.setAmount(new BigDecimal(param.getDeposit()));
         bddo.setStatus(BusinessDepositStatusEnum.PAYING.getVal());
         bddo.setProvinceId(Long.valueOf(param.getProvinceId()));

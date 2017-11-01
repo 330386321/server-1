@@ -1,9 +1,7 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,12 +12,11 @@ import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.CashManageFrontService;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.dto.WithdrawCashDetailDTO;
 import com.lawu.eshop.property.dto.WithdrawCashQueryDTO;
 import com.lawu.eshop.property.param.CashBillDataParam;
 import com.lawu.eshop.property.param.CashBillParam;
@@ -27,7 +24,6 @@ import com.lawu.eshop.property.param.CashDataParam;
 import com.lawu.eshop.property.param.CashParam;
 import com.lawu.eshop.user.constants.UserTypeEnum;
 import com.lawu.eshop.user.dto.CashUserInfoDTO;
-import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -68,7 +64,6 @@ public class CashManageFrontController extends BaseController {
 		dataParam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		dataParam.setTransactionType(MerchantTransactionTypeEnum.WITHDRAW.getValue());
 		dataParam.setUserType(UserTypeEnum.MERCHANT.val);
-		dataParam.setCashNumber(StringUtil.getRandomNum(""));
 		dataParam.setPayPwd(param.getPayPwd());
 		
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());

@@ -1,6 +1,20 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.user.constants.UserCommonConstant;
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.user.param.CollectionUserRegParam;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
@@ -14,19 +28,6 @@ import com.lawu.eshop.user.srv.mapper.extend.UserRegDOMapperExtend;
 import com.lawu.eshop.user.srv.service.UserRegService;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.RandomUtil;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * @author meishuquan
@@ -59,7 +60,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMemberRegDaily() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -81,7 +82,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMerchantRegDaily() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -103,7 +104,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMemberRegMonth() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -124,7 +125,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMerchantRegMonth() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -145,7 +146,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMemberRegArea() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -165,7 +166,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMerchantCommonRegArea() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -204,7 +205,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMerchantEntityRegArea() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -243,7 +244,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMemberRegDailyArea() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -267,7 +268,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMerchantEntityRegDailyArea() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -311,7 +312,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMerchantNormalRegDailyArea() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -355,7 +356,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMemberRegMonthArea() {
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MEMBER));
         memberDO.setAccount("13666666666");
         memberDO.setPwd(PwdUtil.generate("123456"));
         memberDO.setMobile("13666666666");
@@ -378,7 +379,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMerchantNormalRegMonthArea() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");
@@ -421,7 +422,7 @@ public class UserRegServiceImplTest {
     @Test
     public void collectionMerchantEntityRegMonthArea() {
         MerchantDO merchantDO = new MerchantDO();
-        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setNum(IdWorkerHelperImpl.generate(BizIdType.MERCHANT));
         merchantDO.setAccount("13888888888");
         merchantDO.setPwd("123456");
         merchantDO.setMobile("13888888888");

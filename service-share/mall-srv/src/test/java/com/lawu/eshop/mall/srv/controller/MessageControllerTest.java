@@ -6,9 +6,10 @@ import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.constants.UserTypeEnum;
 import com.lawu.eshop.mall.param.*;
+import com.lawu.eshop.mall.srv.MallSrvApplicationTest;
 import com.lawu.eshop.mall.srv.domain.MessageDO;
 import com.lawu.eshop.mall.srv.mapper.MessageDOMapper;
-import com.lawu.eshop.mall.srv.service.MallSrvApplicationTest;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

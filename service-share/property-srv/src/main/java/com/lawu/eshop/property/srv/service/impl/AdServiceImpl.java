@@ -3,9 +3,18 @@ package com.lawu.eshop.property.srv.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.pay.ThirdPayRefundParam;
 import com.lawu.eshop.pay.handle.AlipayBusinessHandle;
 import com.lawu.eshop.pay.handle.WxpayBusinessHandle;
@@ -13,7 +22,6 @@ import com.lawu.eshop.pay.sdk.alipay.AliPayConfigParam;
 import com.lawu.eshop.pay.sdk.weixin.base.WxPayConfigParam;
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
 import com.lawu.eshop.property.constants.ClientTypeEnum;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
@@ -26,13 +34,6 @@ import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
 import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.service.AdService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
-import com.lawu.eshop.utils.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AdServiceImpl implements AdService {
@@ -91,12 +92,13 @@ public class AdServiceImpl implements AdService {
         tdsParam.setAmount(new BigDecimal(param.getRefundMoney()));
         tdsParam.setBizId(param.getAdId());
         tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
-        tdsParam.setBizNum(param.getTradeNo() == null ? "" : param.getTradeNo());
+        tdsParam.setThirdTransactionNum(param.getTradeNo() == null ? "" : param.getTradeNo());
+        tdsParam.setBizNum(IdWorkerHelperImpl.generate(BizIdType.REFUND));
         transactionDetailService.save(tdsParam);
 
         JsonResult jsonResult = new JsonResult();
         ThirdPayRefundParam rparam = new ThirdPayRefundParam();
-        rparam.setRefundId(StringUtil.getRandomNumAppend(param.getAdId()));
+        rparam.setRefundId(tdsParam.getBizNum());
         rparam.setRefundMoney(param.getRefundMoney());
         rparam.setTradeNo(param.getTradeNo());
         if (TransactionPayTypeEnum.ALIPAY.getVal().equals(param.getTransactionPayTypeEnum().getVal())) {

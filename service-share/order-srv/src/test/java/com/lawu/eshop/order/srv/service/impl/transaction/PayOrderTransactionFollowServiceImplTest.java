@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.TransactionFollowService;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.mq.dto.order.PayOrderNotification;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
@@ -22,7 +24,6 @@ import com.lawu.eshop.order.srv.domain.FollowTransactionRecordDOExample;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.mapper.FollowTransactionRecordDOMapper;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 
@@ -61,7 +62,7 @@ public class PayOrderTransactionFollowServiceImplTest {
 		expected.setMerchantId(1L);
 		expected.setMerchantNum("B00001");
 		expected.setNotFavoredAmount(new BigDecimal(1));
-		expected.setOrderNum(StringUtil.getRandomNum(""));
+		expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
 		expected.setOrderStatus(true);
 		expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
 		expected.setStatus(PayOrderStatusEnum.STATUS_UNPAY.getVal());

@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.property.constants.CashChannelEnum;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
@@ -108,7 +110,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
         withdrawCashDO.setChannel(CashChannelEnum.ARTIFICIAL.getVal());
         withdrawCashDO.setStatus(CashStatusEnum.APPLY.getVal());
         withdrawCashDO.setBusinessBankAccountId(cash.getBusinessBankAccountId());
-        withdrawCashDO.setCashNumber(cash.getCashNumber());
+        withdrawCashDO.setCashNumber(IdWorkerHelperImpl.generate(BizIdType.CASH));
         withdrawCashDO.setGmtCreate(new Date());
         withdrawCashDO.setAccount(cash.getAccount());
         withdrawCashDO.setName(cash.getName());
@@ -121,7 +123,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
         // 新增交易明细
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
         tdsParam.setTitle(TransactionTitleEnum.CASH.getVal());
-        tdsParam.setTransactionNum(cash.getCashNumber());
+        tdsParam.setTransactionNum(IdWorkerHelperImpl.generate(BizIdType.CASH));
         tdsParam.setUserNum(cash.getUserNum());
         tdsParam.setTransactionType(cash.getTransactionType());
         tdsParam.setTransactionAccount(cash.getAccount());

@@ -16,11 +16,11 @@ import org.springframework.context.annotation.ImportResource;
  * @date 2017/3/10
  */
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients({"com.lawu"})
 @SpringBootApplication
 @ImportResource(locations={"classpath:spring.xml"})
 @ConfigurationProperties(locations = "classpath:bootstrap.properties")
-@ComponentScan({"com.lawu.eshop"})
+@ComponentScan({"com.lawu"})
 public class UserSrvApplication {
 
     private static Logger logger = LoggerFactory.getLogger(UserSrvApplication.class);

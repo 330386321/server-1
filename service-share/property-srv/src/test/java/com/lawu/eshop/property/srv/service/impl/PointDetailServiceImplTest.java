@@ -1,7 +1,22 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailReportParam;
@@ -13,19 +28,6 @@ import com.lawu.eshop.property.srv.domain.PointDetailDO;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.StringUtil;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author yangqh
@@ -64,7 +66,7 @@ public class PointDetailServiceImplTest {
     public void findPageByUserNum(){
         PointDetailDO pointDetailDO = new PointDetailDO();
         pointDetailDO.setTitle("看广告");
-        pointDetailDO.setPointNum(StringUtil.getRandomNum(""));
+        pointDetailDO.setPointNum(IdWorkerHelperImpl.generate(BizIdType.POINT));
         pointDetailDO.setUserNum("M10001");
         pointDetailDO.setPointType(new Byte("1"));
         pointDetailDO.setPoint(new BigDecimal("100"));
@@ -87,7 +89,7 @@ public class PointDetailServiceImplTest {
     public void getBackagePointPageList(){
         PointDetailDO pointDetailDO = new PointDetailDO();
         pointDetailDO.setTitle("看广告");
-        pointDetailDO.setPointNum(StringUtil.getRandomNum(""));
+        pointDetailDO.setPointNum(IdWorkerHelperImpl.generate(BizIdType.POINT));
         pointDetailDO.setUserNum("M10001");
         pointDetailDO.setPointType(MemberTransactionTypeEnum.BACKAGE.getValue());
         pointDetailDO.setPoint(new BigDecimal("100"));
@@ -119,7 +121,7 @@ public class PointDetailServiceImplTest {
     public void selectPointDetailListByDateAndDirection(){
         PointDetailDO pointDetailDO = new PointDetailDO();
         pointDetailDO.setTitle("看广告");
-        pointDetailDO.setPointNum(StringUtil.getRandomNum(""));
+        pointDetailDO.setPointNum(IdWorkerHelperImpl.generate(BizIdType.POINT));
         pointDetailDO.setUserNum("M10001");
         pointDetailDO.setPointType(MemberTransactionTypeEnum.BACKAGE.getValue());
         pointDetailDO.setPoint(new BigDecimal("100"));
@@ -142,7 +144,7 @@ public class PointDetailServiceImplTest {
     public void selectPointDetailListByDateAndDirectionAndPointType(){
         PointDetailDO pointDetailDO = new PointDetailDO();
         pointDetailDO.setTitle("看广告");
-        pointDetailDO.setPointNum(StringUtil.getRandomNum(""));
+        pointDetailDO.setPointNum(IdWorkerHelperImpl.generate(BizIdType.POINT));
         pointDetailDO.setUserNum("M10001");
         pointDetailDO.setPointType(MemberTransactionTypeEnum.BACKAGE.getValue());
         pointDetailDO.setPoint(new BigDecimal("100"));

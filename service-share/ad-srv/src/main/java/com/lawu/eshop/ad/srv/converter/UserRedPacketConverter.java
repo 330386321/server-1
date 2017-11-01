@@ -18,6 +18,8 @@ import com.lawu.eshop.ad.param.UserRedPacketUpdateParam;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketAddReturnBO;
 import com.lawu.eshop.ad.srv.bo.UserRedPacketBO;
 import com.lawu.eshop.ad.srv.domain.UserRedPacketDO;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.utils.DateUtil;
 
 /**
@@ -35,7 +37,7 @@ public class UserRedPacketConverter {
 		info.setType(param.getRedPacketPutWayEnum().val);
 		info.setUserAccount(param.getUserAccount());
 		info.setUserNum(param.getUserNum());
-		info.setOrderNum(param.getOrderNum());
+		info.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.USER_REDPACKET));
 		info.setNickname(param.getNickname());
 		return info;
 	}

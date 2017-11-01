@@ -1,19 +1,8 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import com.lawu.eshop.property.constants.LoveTypeEnum;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
-import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.param.ReportAdEarningsPointParam;
-import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
-import com.lawu.eshop.property.srv.bo.ReportAdEarningsPointBO;
-import com.lawu.eshop.property.srv.bo.ReportEarningsBO;
-import com.lawu.eshop.property.srv.domain.PointDetailDO;
-import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
-import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
-import com.lawu.eshop.property.srv.service.ReportAdEarningsPointService;
-import com.lawu.eshop.property.srv.service.TransactionDetailService;
-import com.lawu.eshop.utils.StringUtil;
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,8 +12,20 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.property.constants.LoveTypeEnum;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.param.ReportAdEarningsPointParam;
+import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.srv.bo.ReportAdEarningsPointBO;
+import com.lawu.eshop.property.srv.bo.ReportEarningsBO;
+import com.lawu.eshop.property.srv.domain.PointDetailDO;
+import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
+import com.lawu.eshop.property.srv.service.ReportAdEarningsPointService;
+import com.lawu.eshop.property.srv.service.TransactionDetailService;
 
 /**
  * @author yangqh
@@ -78,7 +79,7 @@ public class ReportAdEarningsPointServiceImplTest {
     public void getReportEarnings(){
         PointDetailDO pointDetailDO = new PointDetailDO();
         pointDetailDO.setTitle("看广告");
-        pointDetailDO.setPointNum(StringUtil.getRandomNum(""));
+        pointDetailDO.setPointNum(IdWorkerHelperImpl.generate(BizIdType.POINT));
         pointDetailDO.setUserNum("M10001");
         pointDetailDO.setPointType(new Byte("2"));
         pointDetailDO.setPoint(new BigDecimal("100"));

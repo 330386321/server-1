@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ImportResource;
  * @author lihj
  * @date 2017年7月12日
  */
-@ComponentScan(value = { "com.lawu.eshop" }, excludeFilters = {
+@ComponentScan(value = { "com.lawu" }, excludeFilters = {
 @ComponentScan.Filter(value = { ProductSrvApplication.class }, type = FilterType.ASSIGNABLE_TYPE) })
 @SpringBootApplication
 @ImportResource(locations = {"classpath:spring-test.xml"})

@@ -4,9 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.mall.constants.SearchWordTypeEnum;
 import com.lawu.eshop.mall.param.SearchWordParam;
+import com.lawu.eshop.mall.srv.MallSrvApplicationTest;
 import com.lawu.eshop.mall.srv.domain.SearchWordDO;
 import com.lawu.eshop.mall.srv.mapper.SearchWordDOMapper;
-import com.lawu.eshop.mall.srv.service.MallSrvApplicationTest;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

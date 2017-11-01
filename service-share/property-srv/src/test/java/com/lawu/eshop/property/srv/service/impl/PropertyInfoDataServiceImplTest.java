@@ -1,20 +1,8 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.FreezeStatusEnum;
-import com.lawu.eshop.property.constants.LoveTypeEnum;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.param.*;
-import com.lawu.eshop.property.srv.bo.CommissionUtilBO;
-import com.lawu.eshop.property.srv.domain.PointDetailDO;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
-import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
-import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
-import com.lawu.eshop.property.srv.service.CommissionUtilService;
-import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
-import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.StringUtil;
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +12,23 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.property.constants.FreezeStatusEnum;
+import com.lawu.eshop.property.constants.LoveTypeEnum;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.param.PointDetailQueryData1Param;
+import com.lawu.eshop.property.param.PropertyInfoDataParam;
+import com.lawu.eshop.property.srv.bo.CommissionUtilBO;
+import com.lawu.eshop.property.srv.domain.PointDetailDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
+import com.lawu.eshop.property.srv.service.CommissionUtilService;
+import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
+import com.lawu.eshop.utils.PwdUtil;
 
 /**
  * @author yangqh
@@ -186,7 +189,7 @@ public class PropertyInfoDataServiceImplTest {
     public void getPointDetailByUserNumAndPointTypeAndBizId(){
         PointDetailDO pointDetailDO = new PointDetailDO();
         pointDetailDO.setTitle("看广告");
-        pointDetailDO.setPointNum(StringUtil.getRandomNum(""));
+        pointDetailDO.setPointNum(IdWorkerHelperImpl.generate(BizIdType.POINT));
         pointDetailDO.setUserNum("M10001");
         pointDetailDO.setPointType(MemberTransactionTypeEnum.BACKAGE.getValue());
         pointDetailDO.setPoint(new BigDecimal("100"));

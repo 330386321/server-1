@@ -78,7 +78,6 @@ public class AlipayController extends BaseController {
 			@ModelAttribute @ApiParam ThirdPayParam param) {
 
 		ThirdPayDataParam aparam = new ThirdPayDataParam();
-		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
 		aparam.setSubject(param.getThirdPayBodyEnum().getVal());
 		aparam.setBizIds(param.getBizIds());
 		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
@@ -122,7 +121,6 @@ public class AlipayController extends BaseController {
 			@ModelAttribute @ApiParam PcAlipayParam param) throws IOException {
 		String userNum = UserUtil.getCurrentUserNumByToken(token);
 		PcAlipayDataParam aparam = new PcAlipayDataParam();
-		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
 		aparam.setSubject(param.getThirdPayBodyEnum().getVal());
 		aparam.setBizId(param.getBizId());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());

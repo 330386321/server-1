@@ -8,6 +8,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
@@ -28,7 +30,6 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * 
@@ -327,7 +328,7 @@ public class ShoppingOrderConverterTest {
     	rtn.setMerchantNum("B0001");
     	rtn.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
     	rtn.setOrderTotalPrice(new BigDecimal(1));
-    	rtn.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	rtn.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	rtn.setStatus(StatusEnum.VALID.getValue());
     	rtn.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	return rtn;
@@ -352,7 +353,7 @@ public class ShoppingOrderConverterTest {
     	rtn.setMerchantNum("B0001");
     	rtn.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT);
     	rtn.setOrderTotalPrice(new BigDecimal(1));
-    	rtn.setOrderNum(RandomUtil.getTableNumRandomString(""));
+    	rtn.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
     	rtn.setStatus(StatusEnum.VALID);
     	rtn.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED);
     	return rtn;

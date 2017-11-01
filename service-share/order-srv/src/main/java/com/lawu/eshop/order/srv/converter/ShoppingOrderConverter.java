@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
@@ -32,7 +34,6 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  *
@@ -99,7 +100,7 @@ public class ShoppingOrderConverter {
 		rtn.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
 		rtn.setActualAmount(param.getOrderTotalPrice());
 		
-		rtn.setOrderNum(RandomUtil.getTableNumRandomString(""));
+		rtn.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
 		rtn.setGmtCreate(new Date());
 		rtn.setGmtModified(new Date());
 

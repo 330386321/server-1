@@ -18,42 +18,45 @@ public class RandomUtil {
     private static final String STR_6 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String STR_7 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    private RandomUtil(){}
+    private RandomUtil() {
+    }
 
     /**
      * 生成随机字符串
      *
-     * @param type   产生随机数类型：1--数字，2--数字+小写字母，3--数字+大写字母，4--数字+字母，5--小写字母，6--大写字母，7--字母
-     * @param length 产生随机数长度
+     * @param type
+     *            产生随机数类型：1--数字，2--数字+小写字母，3--数字+大写字母，4--数字+字母，5--小写字母，6--大写字母，7--字母
+     * @param length
+     *            产生随机数长度
      * @return String
      * @date 2017/3/22
      */
     public static String getRandomString(int type, int length) {
         String str;
         switch (type) {
-            case 1:
-                str = STR_1;
-                break;
-            case 2:
-                str = STR_2;
-                break;
-            case 3:
-                str = STR_3;
-                break;
-            case 4:
-                str = STR_4;
-                break;
-            case 5:
-                str = STR_5;
-                break;
-            case 6:
-                str = STR_6;
-                break;
-            case 7:
-                str = STR_7;
-                break;
-            default:
-                return "";
+        case 1:
+            str = STR_1;
+            break;
+        case 2:
+            str = STR_2;
+            break;
+        case 3:
+            str = STR_3;
+            break;
+        case 4:
+            str = STR_4;
+            break;
+        case 5:
+            str = STR_5;
+            break;
+        case 6:
+            str = STR_6;
+            break;
+        case 7:
+            str = STR_7;
+            break;
+        default:
+            return "";
         }
         if (length <= 0) {
             return "";
@@ -68,37 +71,23 @@ public class RandomUtil {
     }
 
     /**
-     * 生成保存到数据库表num字段的随机字符串
-     *
-     * @param str 自定义的字符
-     * @return String
-     * @date 2017/3/22
-     */
-    public static String getTableNumRandomString(String str) {
-        if (str == null) {
-            return "";
-        }
-        return str + IdWorker.nextId();
-    }
-
-    /**
      * 构建文件上传文件名，系统统一文件名
      *
-     * @param prefix 后缀名
+     * @param prefix
+     *            后缀名
      * @return
      */
     public static final String buildFileName(String prefix) {
-        return String.valueOf(System.currentTimeMillis())
-                + RandomUtil.getRandomString(1, 6) + prefix;
+        return String.valueOf(System.currentTimeMillis()) + RandomUtil.getRandomString(1, 6) + prefix;
     }
-    
+
     /**
      * 广告投放单号
+     * 
      * @return
      */
     public static final String expandOrder() {
-        return String.valueOf(System.currentTimeMillis())
-                + RandomUtil.getRandomString(1, 6);
+        return String.valueOf(System.currentTimeMillis()) + RandomUtil.getRandomString(1, 6);
     }
 
 }

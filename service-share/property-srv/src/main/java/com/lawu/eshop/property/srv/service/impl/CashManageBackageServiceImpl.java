@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.property.constants.CashOperEnum;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
@@ -47,7 +49,6 @@ import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.StringUtil;
 
 @Service
 public class CashManageBackageServiceImpl implements CashManageBackageService {
@@ -288,7 +289,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
             // 新增交易明细
             TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
             tdsParam.setTitle(TransactionTitleEnum.CASH_FAIL_BACK.getVal());
-            tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
+            tdsParam.setTransactionNum(IdWorkerHelperImpl.generate(BizIdType.TRANSACTION));
             tdsParam.setUserNum(wcdo.getUserNum());
             if (wcdo.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
                 tdsParam.setTransactionType(MemberTransactionTypeEnum.WITHDRAW_BACK.getValue());
