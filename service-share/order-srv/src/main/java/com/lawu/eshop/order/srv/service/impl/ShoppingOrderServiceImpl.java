@@ -1082,7 +1082,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		String automaticEvaluation = propertyService.getByName(PropertyNameConstant.AUTOMATIC_EVALUATION);
 
 		// 如果交易时间超过automaticEvaluation的记录
-		shoppingOrderItemExtendDOExampleCriteria.andSOGmtTransactionDateAddDayLessThanOrEqualTo(Integer.valueOf(automaticEvaluation), new Date());
+		shoppingOrderItemExtendDOExampleCriteria.andSOGmtTransactionLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticEvaluation) * -1, Calendar.DAY_OF_YEAR));
 
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemExtendDOList = shoppingOrderItemExtendDOMapper.selectByExample(shoppingOrderItemExtendDOExample);
 
@@ -1230,7 +1230,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		String automaticReceiptTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_RECEIPT);
 
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
-		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(automaticReceiptTime), new Date());
+		criteria.andGmtTransportLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticReceiptTime) * -1, Calendar.DAY_OF_YEAR));
 
 		// 查找所有超时未收货的订单，自动收货
 		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);

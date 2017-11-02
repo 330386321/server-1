@@ -23,7 +23,6 @@ import com.lawu.eshop.order.dto.foreign.TraceDTO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * 

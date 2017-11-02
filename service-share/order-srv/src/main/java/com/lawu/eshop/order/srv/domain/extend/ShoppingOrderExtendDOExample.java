@@ -2618,11 +2618,6 @@ public class ShoppingOrderExtendDOExample {
             addCriterion("DATE_ADD(so.gmt_transaction,INTERVAL " + expr + " DAY) <=", value, "gmtTransaction");
             return (Criteria) this;
         }
-        
-        public Criteria andGmtTransportAddDayLessThanOrEqualTo(int expr, Date value) {
-            addCriterion("DATE_ADD(so.gmt_transport,INTERVAL " + expr + " DAY) <=", value, "gmtTransport");
-            return (Criteria) this;
-        }
     }
 
     /**

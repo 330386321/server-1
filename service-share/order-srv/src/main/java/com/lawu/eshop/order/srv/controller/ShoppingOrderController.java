@@ -762,7 +762,7 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "getOrderItemProductName/{id}", method = RequestMethod.GET)
 	public Result<String> getOrderItemProductName(@PathVariable("id") String id) {
-		String productName = shoppingOrderItemService.getOrderItemProductName(id);
-		return successCreated(productName);
+		String productName = shoppingOrderItemService.getOrderItemProductName(Long.parseLong(id));
+		return successGet(productName);
 	}
 }

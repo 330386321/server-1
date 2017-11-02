@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,17 @@ import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.EvaluationEnum;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
+import com.lawu.eshop.order.constants.ReportFansRiseRateEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.param.MerchantPayOrderListParam;
 import com.lawu.eshop.order.param.OperatorPayOrderParam;
 import com.lawu.eshop.order.param.PayOrderDataParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
+import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
+import com.lawu.eshop.order.srv.bo.PayOrderBaseBO;
 import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 import com.lawu.eshop.order.srv.converter.PayOrderConverterTest;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
@@ -364,6 +369,84 @@ public class PayOrderServiceImplTest {
 		Assert.assertEquals(CommissionStatusEnum.CALCULATED.getValue(), actual.getCommissionStatus());
 	}
 	
+	/**
+	 * TODO SQL不兼容
+	 * 
+	 * @author jiangxinjun
+	 * @date 2017年11月2日
+	 */
+	@Ignore
+    @Rollback
+    @Transactional
+    @Test
+	public void getAutoCommentPayOrderList() {
+	    payOrderService.getAutoCommentPayOrderList();
+	}
+	
+    @Rollback
+    @Transactional
+    @Test
+	public void fansSaleTransformPay() {
+        // 插入一条未计算提成的订单
+        PayOrderDO expected = new PayOrderDO();
+        expected.setActualAmount(new BigDecimal(1));
+        expected.setCommentTime(new Date());
+        expected.setFavoredAmount(new BigDecimal(1));
+        expected.setGmtCreate(new Date());
+        expected.setGmtModified(new Date());
+        expected.setIsEvaluation(true);
+        expected.setMemberId(1L);
+        expected.setMemberNum("M00001");
+        expected.setMerchantId(1L);
+        expected.setMerchantNum("B00001");
+        expected.setNotFavoredAmount(new BigDecimal(1));
+        expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
+        expected.setOrderStatus(true);
+        expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
+        expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
+        expected.setTotalAmount(new BigDecimal(2));
+        expected.setIsFans(false);
+        payOrderDOMapper.insert(expected);
+        
+        ReportDataParam dparam = new ReportDataParam();
+        dparam.setFlag(ReportFansRiseRateEnum.DAY);
+        dparam.setMerchantId(expected.getMerchantId());
+        List<ReportRiseRerouceDTO> actual = payOrderService.fansSaleTransformPay(dparam);
+        Assert.assertEquals(0, Integer.valueOf(actual.get(0).getValue()).intValue());
+        Assert.assertEquals(1, Integer.valueOf(actual.get(1).getValue()).intValue());
+	}
+	
+    @Rollback
+    @Transactional
+    @Test
+    public void getPayOrderById() {
+     // 插入一条未计算提成的订单
+        PayOrderDO expected = new PayOrderDO();
+        expected.setActualAmount(new BigDecimal(1));
+        expected.setCommentTime(new Date());
+        expected.setFavoredAmount(new BigDecimal(1));
+        expected.setGmtCreate(new Date());
+        expected.setGmtModified(new Date());
+        expected.setIsEvaluation(true);
+        expected.setMemberId(1L);
+        expected.setMemberNum("M00001");
+        expected.setMerchantId(1L);
+        expected.setMerchantNum("B00001");
+        expected.setNotFavoredAmount(new BigDecimal(1));
+        expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
+        expected.setOrderStatus(true);
+        expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
+        expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
+        expected.setTotalAmount(new BigDecimal(2));
+        expected.setIsFans(false);
+        payOrderDOMapper.insert(expected);
+        
+        PayOrderBaseBO actual = payOrderService.getPayOrderById(expected.getId().toString());
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(expected.getMemberId(), actual.getMemberId());
+        Assert.assertEquals(expected.getMerchantId(), actual.getMerchantId());
+    }
+    
 	public static void assertShoppingOrderCommissionDTO(PayOrderDO expected, ShoppingOrderCommissionDTO actual) {
 		Assert.assertNotNull(actual);
 		Assert.assertEquals(expected.getMemberNum(), actual.getMemberNum());

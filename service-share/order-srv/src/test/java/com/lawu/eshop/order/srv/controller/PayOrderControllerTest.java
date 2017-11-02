@@ -38,19 +38,23 @@ import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.EvaluationEnum;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
+import com.lawu.eshop.order.constants.ReportFansRiseRateEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.order.dto.MemberPayOrderInfoDTO;
 import com.lawu.eshop.order.dto.MerchantPayOrderListDTO;
 import com.lawu.eshop.order.dto.OperatorPayOrderListDTO;
 import com.lawu.eshop.order.dto.PayOrderAutoCommentDTO;
+import com.lawu.eshop.order.dto.PayOrderBaseDTO;
 import com.lawu.eshop.order.dto.PayOrderDTO;
 import com.lawu.eshop.order.dto.PayOrderIdDTO;
+import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.order.param.MerchantPayOrderListParam;
 import com.lawu.eshop.order.param.OperatorPayOrderParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
+import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.srv.OrderSrvApplicationTest;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.json.JCDateDeserializer;
@@ -559,5 +563,86 @@ public class PayOrderControllerTest {
 		Assert.assertEquals(expected.getId(), actual.getId());
 		Assert.assertEquals(expected.getMemberId(), actual.getMemberId());
 		Assert.assertEquals(expected.getMerchantId(), actual.getMerchantId());
+    }
+	
+    @Transactional
+    @Rollback
+    @Test
+    public void fansSaleTransformPay() throws Exception {
+        // 插入一条未计算提成的订单
+        PayOrderDO expected = new PayOrderDO();
+        expected.setActualAmount(new BigDecimal(1));
+        expected.setCommentTime(new Date());
+        expected.setFavoredAmount(new BigDecimal(1));
+        expected.setGmtCreate(new Date());
+        expected.setGmtModified(new Date());
+        expected.setIsEvaluation(true);
+        expected.setMemberId(1L);
+        expected.setMemberNum("M00001");
+        expected.setMerchantId(1L);
+        expected.setMerchantNum("B00001");
+        expected.setNotFavoredAmount(new BigDecimal(1));
+        expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
+        expected.setOrderStatus(true);
+        expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
+        expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
+        expected.setTotalAmount(new BigDecimal(2));
+        expected.setIsFans(false);
+        payOrderDOMapper.insert(expected);
+        
+        ReportDataParam param = new ReportDataParam();
+        param.setFlag(ReportFansRiseRateEnum.DAY);
+        param.setMerchantId(expected.getMerchantId());
+        String content = JSONObject.toJSONString(param);
+        
+        RequestBuilder request = MockMvcRequestBuilders.put("/payOrder/fansSaleTransformPay").contentType(MediaType.APPLICATION_JSON_UTF8).content(content);
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_CREATED))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.ret").value(1000))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        
+        List<ReportRiseRerouceDTO> actual = JSONObject.parseArray(JSONObject.parseObject(mvcResult.getResponse().getContentAsString()).getString("model"), ReportRiseRerouceDTO.class);
+        Assert.assertEquals(0, Integer.valueOf(actual.get(0).getValue()).intValue());
+        Assert.assertEquals(1, Integer.valueOf(actual.get(1).getValue()).intValue());
+    }
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void getPayOrderById() throws Exception {
+        // 插入一条未计算提成的订单
+        PayOrderDO expected = new PayOrderDO();
+        expected.setActualAmount(new BigDecimal(1));
+        expected.setCommentTime(new Date());
+        expected.setFavoredAmount(new BigDecimal(1));
+        expected.setGmtCreate(new Date());
+        expected.setGmtModified(new Date());
+        expected.setIsEvaluation(true);
+        expected.setMemberId(1L);
+        expected.setMemberNum("M00001");
+        expected.setMerchantId(1L);
+        expected.setMerchantNum("B00001");
+        expected.setNotFavoredAmount(new BigDecimal(1));
+        expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.PAY_ORDER));
+        expected.setOrderStatus(true);
+        expected.setPayType(TransactionPayTypeEnum.BALANCE.getVal());
+        expected.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
+        expected.setTotalAmount(new BigDecimal(2));
+        expected.setIsFans(false);
+        payOrderDOMapper.insert(expected);
+        
+        RequestBuilder request = MockMvcRequestBuilders.get("/payOrder/getPayOrderById").param("id", expected.getId().toString());
+        ResultActions perform = mvc.perform(request);
+        MvcResult mvcResult = perform.andExpect(MockMvcResultMatchers.status().is(HttpCode.SC_OK))
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(MockMvcResultHandlers.print())
+                .andReturn();
+        
+        PayOrderBaseDTO actual = JSONObject.parseObject(mvcResult.getResponse().getContentAsString(), PayOrderBaseDTO.class);
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(expected.getMemberId(), actual.getMemberId());
+        Assert.assertEquals(expected.getMerchantId(), actual.getMerchantId());
     }
 }

@@ -24,7 +24,6 @@ import com.lawu.eshop.order.srv.domain.FollowTransactionRecordDOExample;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.mapper.FollowTransactionRecordDOMapper;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 

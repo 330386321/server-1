@@ -1322,8 +1322,8 @@ public class ShoppingOrderItemExtendDOExample {
             return (ShoppingOrderItemExtendDOExample.Criteria) this;
         }
         
-        public Criteria andSOGmtTransactionDateAddDayLessThanOrEqualTo(int expr, Date value) {
-            addCriterion("DATE_ADD(so.gmt_transaction,INTERVAL " + expr + " DAY) <=", value, "gmtTransaction");
+        public Criteria andSOGmtTransactionLessThanOrEqualTo(Date value) {
+            addCriterion("so.gmt_transaction <=", value, "gmtTransaction");
             return (Criteria) this;
         }
         

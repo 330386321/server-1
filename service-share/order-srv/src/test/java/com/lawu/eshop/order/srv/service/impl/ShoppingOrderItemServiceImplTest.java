@@ -403,5 +403,81 @@ public class ShoppingOrderItemServiceImplTest {
 	    	ShoppingRefundDetailConverterTest.assertShoppingRefundDetailBO(shoppingRefundDetailDO, item.getShoppingRefundDetail());
     	}
     }
-   
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void getOrderItemProductName() {
+        /*
+         * 插入一条订单记录，其下有两条订单项记录
+         */
+        ShoppingOrderDO expected = new ShoppingOrderDO();
+        expected.setCommodityTotalPrice(new BigDecimal(1));
+        expected.setActualAmount(new BigDecimal(1));
+        expected.setFreightPrice(new BigDecimal(0));
+        expected.setGmtCreate(new Date());
+        expected.setGmtModified(new Date());
+        expected.setGmtTransport(new Date());
+        expected.setIsFans(true);
+        expected.setIsNeedsLogistics(true);
+        expected.setIsNoReasonReturn(true);
+        expected.setMemberId(1L);
+        expected.setMemberNum("M0001");
+        expected.setMerchantId(1L);
+        expected.setMerchantName("拉乌网络");
+        expected.setMerchantStoreId(1L);
+        expected.setMerchantNum("B0001");
+        expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+        expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+        expected.setOrderTotalPrice(new BigDecimal(1));
+        expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
+        expected.setStatus(StatusEnum.VALID.getValue());
+        expected.setConsigneeAddress("大冲商务中心1301");
+        expected.setConsigneeMobile("123456");
+        expected.setConsigneeName("Sunny");
+        expected.setIsDone(false);
+        expected.setShoppingCartIdsStr("1");
+        expected.setSendTime(0);
+        expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+        shoppingOrderDOMapper.insertSelective(expected);
+        
+        ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+        shoppingOrderItemDO.setGmtCreate(new Date());
+        shoppingOrderItemDO.setGmtModified(new Date());
+        shoppingOrderItemDO.setIsAllowRefund(true);
+        shoppingOrderItemDO.setIsEvaluation(false);
+        shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+        shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+        shoppingOrderItemDO.setProductId(1L);
+        shoppingOrderItemDO.setProductName("productName");
+        shoppingOrderItemDO.setProductModelId(1L);
+        shoppingOrderItemDO.setProductModelName("test");
+        shoppingOrderItemDO.setQuantity(1);
+        shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+        shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+        shoppingOrderItemDO.setSendTime(0);
+        shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+        shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+        
+        ShoppingOrderItemDO shoppingOrderItemDO2 = new ShoppingOrderItemDO();
+        shoppingOrderItemDO2.setGmtCreate(new Date());
+        shoppingOrderItemDO2.setGmtModified(new Date());
+        shoppingOrderItemDO2.setIsAllowRefund(true);
+        shoppingOrderItemDO2.setIsEvaluation(false);
+        shoppingOrderItemDO2.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+        shoppingOrderItemDO2.setProductFeatureImage("test.jpg");
+        shoppingOrderItemDO2.setProductId(1L);
+        shoppingOrderItemDO2.setProductName("productName2");
+        shoppingOrderItemDO2.setProductModelId(1L);
+        shoppingOrderItemDO2.setProductModelName("test");
+        shoppingOrderItemDO2.setQuantity(1);
+        shoppingOrderItemDO2.setRegularPrice(new BigDecimal(1));
+        shoppingOrderItemDO2.setSalesPrice(new BigDecimal(1));
+        shoppingOrderItemDO2.setSendTime(0);
+        shoppingOrderItemDO2.setShoppingOrderId(expected.getId());
+        shoppingOrderItemDOMapper.insert(shoppingOrderItemDO2);
+        
+        String actual = shoppingOrderItemService.getOrderItemProductName(expected.getId());
+        Assert.assertEquals(shoppingOrderItemDO.getProductName(), actual);
+    }
 }

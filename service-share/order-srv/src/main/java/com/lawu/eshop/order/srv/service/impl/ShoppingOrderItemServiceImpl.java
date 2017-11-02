@@ -2,7 +2,6 @@ package com.lawu.eshop.order.srv.service.impl;
 
 import java.util.List;
 
-import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemExtendConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
@@ -214,12 +214,11 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 	}
 
 	@Override
-	public String getOrderItemProductName(String id) {
+	public String getOrderItemProductName(Long id) {
 		ShoppingOrderItemDOExample example = new ShoppingOrderItemDOExample();
-		example.createCriteria().andShoppingOrderIdEqualTo(Long.parseLong(id));
-		example.setOrderByClause(" id desc ");
+		example.createCriteria().andShoppingOrderIdEqualTo(id);
+		example.setOrderByClause("id asc");
 		List<ShoppingOrderItemDO> itmes = shoppingOrderItemDOMapper.selectByExample(example);
-		ShoppingOrderItemDO item = itmes.get(0);
-		return item.getProductName();
+		return itmes.get(0).getProductName();
 	}
 }

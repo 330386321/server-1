@@ -78,5 +78,5 @@ public interface ShoppingOrderItemService {
 	 * @param id
 	 * @return
 	 */
-    String getOrderItemProductName(String id);
+    String getOrderItemProductName(Long id);
 }

@@ -27,7 +27,6 @@ import com.lawu.eshop.order.srv.domain.TransactionRecordDOExample;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.TransactionRecordDOMapper;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * 
