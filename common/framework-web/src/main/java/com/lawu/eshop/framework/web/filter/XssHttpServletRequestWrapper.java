@@ -102,7 +102,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 			logger.error("编码异常", e)
 		}
 		*/
-		rtn = rtn.replaceAll("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]", ""); //过滤emoji表情
+		//rtn = rtn.replaceAll("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]", ""); //过滤emoji表情
 		return rtn;
 	}
 }
