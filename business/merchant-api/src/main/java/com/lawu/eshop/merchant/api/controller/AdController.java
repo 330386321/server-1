@@ -206,34 +206,38 @@ public class AdController extends BaseController {
 			if(StringUtils.isEmpty(adParam.getBeginTime()) || adParam.getBeginTime()==""){
 				return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
 			}
-		}else{
-			if(adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_FLAT || adParam.getTypeEnum()==AdTypeEnum.AD_TYPE_VIDEO){
-				
-				if(adParam.getTotalPoint().compareTo(adParam.getPoint().multiply(BigDecimal.valueOf(adParam.getAdCount())))!=0){
+			if (adParam.getTypeEnum() == AdTypeEnum.AD_TYPE_FLAT || adParam.getTypeEnum() == AdTypeEnum.AD_TYPE_VIDEO) {
+
+				if (adParam.getTotalPoint()
+						.compareTo(adParam.getPoint().multiply(BigDecimal.valueOf(adParam.getAdCount()))) != 0) {
 					return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
 				}
-				
-				//判断积分是否足够
+
+				// 判断积分是否足够
 				Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
-		    	if (isSuccess(resultFreeze)){
-		    		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel().getStatus())){
-		    			return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
-		    		}
-		    	} else {
-		    		return successCreated(resultFreeze.getRet());
-		    	}
-		    	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
-		    	PropertyPointDTO propertyPointDTO=rs.getModel();
-		    	
-		    	if(adParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
-		    		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
-		    	}
+				if (isSuccess(resultFreeze)) {
+					if (PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel().getStatus())) {
+						return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
+					}
+				} else {
+					return successCreated(resultFreeze.getRet());
+				}
+				Result<PropertyPointDTO> rs = propertyInfoService.getPropertyPoint(userNum);
+				PropertyPointDTO propertyPointDTO = rs.getModel();
+
+				if (adParam.getTotalPoint().intValue() > propertyPointDTO.getPoint().intValue()) {
+					return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
+				}
 			}
+			
+		}else{
+			
 			if(adParam.getAdCount()>1000000){
 				return successCreated(ResultCode.AD_RED_PACKET_COUNT_ERROR);
 			}
-			if(adParam.getTotalPoint().divide(new BigDecimal(adParam.getAdCount()), 4, RoundingMode.HALF_UP).compareTo(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT))==-1){
-				return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
+			if(adParam.getTotalPoint().divide(new BigDecimal(adParam.getAdCount()), 2, RoundingMode.HALF_UP).compareTo(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT))==-1){
+				
+				return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR,"投放金额不能低于"+new BigDecimal(adParam.getAdCount()).multiply(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT)));
 			}
 			
 		}
@@ -258,7 +262,7 @@ public class AdController extends BaseController {
     		count = count>10?count:10;
     		
     		if(adParam.getTotalPoint().divide(new BigDecimal(count), 2, RoundingMode.HALF_UP).compareTo(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT))==-1){
-				return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR);
+    			return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR,"投放金额不能低于"+new BigDecimal(count).multiply(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT)));
 			}
     		adParam.setAdCount(count);
     		
@@ -292,7 +296,6 @@ public class AdController extends BaseController {
             adSave.setMerchantStoreName(StringUtils.isEmpty(storeDTO.getName()) ? "E店商家" : storeDTO.getName());
             adSave.setMerchantRegionPath(storeDTO.getRegionPath());
     	}
-    	adSave.setCount(count);
     	adSave.setMediaUrl(adParam.getMediaUrl());
     	adSave.setVideoImgUrl(adParam.getVideoImgUrl());
     	adSave.setMerchantId(merchantId);
@@ -375,22 +378,16 @@ public class AdController extends BaseController {
     	}
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-    	Result<PropertyPointDTO>  propertyPointRs=propertyInfoService.getPropertyPoint(userNum);
-    	PropertyPointDTO propertyPointDTO=propertyPointRs.getModel();
     	AdMerchantDetailDTO adDTO=rs.getModel();
-    	if(adDTO.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
-    		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
+    	if (adDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_FLAT || adDTO.getTypeEnum() == AdTypeEnum.AD_TYPE_VIDEO) {
+    		Result<PropertyPointDTO>  propertyPointRs=propertyInfoService.getPropertyPoint(userNum);
+        	PropertyPointDTO propertyPointDTO=propertyPointRs.getModel();
+        	
+        	if(adDTO.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
+        		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
+        	}
     	}
-    	Integer count=0;
-    	if(adDTO.getPutWayEnum().val==1){
-    		String areas=rs.getModel().getAreas();
-    		if(areas==null){
-    			areas=ALL_PLACE;
-    		}
-    		count=memberCountService.findMemberCount(areas);
-    	}else if(adDTO.getPutWayEnum().val==2){
-    		count=memberCountService.findFensCount(merchantId);
-    	}
+    	
     	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
     	AdSaveParam adSave=new AdSaveParam();
     	AdParam adParam=new AdParam();
@@ -433,7 +430,6 @@ public class AdController extends BaseController {
 		}else{
 			adSave.setClentType(ClientTypeEnum.PC);
 		}
-    	adSave.setCount(count);
     	adSave.setMediaUrl(adDTO.getMediaUrl());
     	adSave.setVideoImgUrl(adDTO.getVideoImgUrl());
     	adSave.setMerchantId(merchantId);
