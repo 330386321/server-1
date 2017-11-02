@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketAddReturnDTO;
 import com.lawu.eshop.ad.dto.UserRedPacketDTO;
@@ -182,6 +183,7 @@ public class UserRedPacketController extends BaseController {
 		}
 	}
 
+	@AutoTesting
 	@Audit(date = "2017-08-08", reviewer = "孙林青")
 	@ApiOperation(value = "获取红包中最大值", notes = "获取红包中最大值", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")

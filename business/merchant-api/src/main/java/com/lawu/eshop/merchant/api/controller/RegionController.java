@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -32,6 +33,7 @@ public class RegionController extends BaseController {
     @Autowired
     private RegionService regionService;
 
+    @AutoTesting
     @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "城市列表", notes = "城市列表 [1004,1000] 章勇", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -41,6 +43,7 @@ public class RegionController extends BaseController {
         return listResult;
     }
 
+    @AutoTesting
     @Audit(date = "2017-10-20", reviewer = "杨清华")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "地区列表", notes = "所有地区列表 [1004,1000](蒋鑫俊)", httpMethod = "GET")
@@ -51,6 +54,7 @@ public class RegionController extends BaseController {
         return successGet(listResult);
     }
 
+    @AutoTesting
     @Audit(date = "2017-10-20", reviewer = "杨清华")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "地区列表", notes = "所有地区列表 [1004,1000](蒋鑫俊)", httpMethod = "GET")

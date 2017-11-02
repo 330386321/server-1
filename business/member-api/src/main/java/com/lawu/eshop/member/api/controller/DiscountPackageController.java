@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -40,6 +41,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@AutoTesting
 	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询优惠套餐列表", notes = "根据商家id查询商家全部优惠套餐列表,不分页。[]（蒋鑫俊）", httpMethod = "GET")
@@ -58,6 +60,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@AutoTesting
 	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询优惠套餐详情", notes = "查询单个优惠套餐详情。[]（蒋鑫俊）", httpMethod = "GET")

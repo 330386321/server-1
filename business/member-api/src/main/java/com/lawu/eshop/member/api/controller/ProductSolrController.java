@@ -1,5 +1,18 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformProductDTO;
@@ -18,17 +31,11 @@ import com.lawu.eshop.product.dto.RecommendProductCategoryDTO;
 import com.lawu.eshop.product.dto.ShoppingProductDTO;
 import com.lawu.eshop.product.param.ProductSearchParam;
 import com.lawu.eshop.product.param.ProductSearchRealParam;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author meishuquan
@@ -51,6 +58,7 @@ public class ProductSolrController extends BaseController {
     @Autowired
     private ProductService productService;
 
+    @AutoTesting
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "根据商品类别查询商品信息", notes = "会员APP首页商品分类。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -64,6 +72,7 @@ public class ProductSolrController extends BaseController {
         return productSolrService.listProductByCategoryId(param);
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "商品详情为你推荐", notes = "商品详情为你推荐(同类别按销量排行)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -79,6 +88,7 @@ public class ProductSolrController extends BaseController {
         return productSolrService.listRecommendProduct(param);
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "会员APP商品搜索", notes = "会员APP商品搜索。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -92,6 +102,7 @@ public class ProductSolrController extends BaseController {
         return productSolrService.listProductByName(param);
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "搜索词关联词频查询", notes = "根据搜索词推荐关联词和频率查询。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -100,6 +111,7 @@ public class ProductSolrController extends BaseController {
         return productSolrService.listProductSearchWord(name);
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "要购物首页", notes = "要购物首页。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -282,6 +294,7 @@ public class ProductSolrController extends BaseController {
         return successGet(shoppingProductDTO);
     }
 
+    @AutoTesting
     @Audit(date = "2017-05-02", reviewer = "孙林青")
     @ApiOperation(value = "要购物首页猜你喜欢", notes = "要购物首页猜你喜欢。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -290,6 +303,7 @@ public class ProductSolrController extends BaseController {
         return productSolrService.listYouLikeProduct(productSearchParam);
     }
 
+    @AutoTesting
     @Audit(date = "2017-05-02", reviewer = "孙林青")
     @ApiOperation(value = "查询商品推荐类别", notes = "查询商品类别。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

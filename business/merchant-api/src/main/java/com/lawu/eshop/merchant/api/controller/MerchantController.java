@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
@@ -37,7 +38,6 @@ import com.lawu.eshop.merchant.api.service.InviterService;
 import com.lawu.eshop.merchant.api.service.MemberProfileService;
 import com.lawu.eshop.merchant.api.service.MemberService;
 import com.lawu.eshop.merchant.api.service.MerchantService;
-import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.merchant.api.service.VerifyCodeService;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
@@ -49,7 +49,6 @@ import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MobileDTO;
 import com.lawu.eshop.user.dto.RongYunDTO;
 import com.lawu.eshop.user.dto.UserHeadImgDTO;
@@ -344,6 +343,7 @@ public class MerchantController extends BaseController {
         }
     }
 
+    @AutoTesting
     @Audit(date = "2017-07-04", reviewer = "孙林青")
     @ApiOperation(value = "获取商家电话", notes = "获取商家电话。 (张荣成)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -353,6 +353,7 @@ public class MerchantController extends BaseController {
     	return result;
     }
 
+    @AutoTesting
     @Audit(date = "2017-05-23", reviewer = "孙林青")
     @ApiOperation(value = "查询融云需要信息", notes = "查询融云需要信息。 [1004|1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

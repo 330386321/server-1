@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -30,6 +31,7 @@ public class AppVersionController extends BaseController{
 	@Autowired
 	private MerchantApiConfig memberApiConfig;
 
+	@AutoTesting
 	@Audit(date = "2017-09-14", reviewer = "孙林青")
 	@ApiOperation(value = "app版本获取", notes = "app版本获取（张荣成）", httpMethod = "GET")
 	@RequestMapping(value = "getVersion", method = RequestMethod.GET)
