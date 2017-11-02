@@ -41,7 +41,7 @@ public class KuaiDi100Api {
 	 */
 	public String inquiries(String expCode, String expNo) throws Exception {
 		String param = "{\"com\":\"" + expCode + "\",\"num\":\"" + expNo + "\",\"from\":\"\",\"to\":\"\",\"resultv2\":\"1\"}";
-		String sign = MD5(param + config.getKey() + config.getCustomer());
+		String sign = md5(param + config.getKey() + config.getCustomer());
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("param", param);
 		params.put("sign", sign);
@@ -68,7 +68,7 @@ public class KuaiDi100Api {
      * @param charset 编码方式
      * @throws Exception
      */
-    private String MD5(String str) throws Exception {
+    private String md5(String str) throws Exception {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(str.getBytes(CHARSET));
         byte[] result = md.digest();

@@ -64,4 +64,5 @@ public class ExpressInquiriesDetailBO {
 		this.traces = traces;
 	}
 	
+	
 }

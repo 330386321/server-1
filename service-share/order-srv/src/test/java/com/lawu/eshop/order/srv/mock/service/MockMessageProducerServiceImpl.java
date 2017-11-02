@@ -13,7 +13,7 @@ import com.lawu.eshop.mq.message.MessageProducerService;
  */
 @Primary
 @Service
-public class MockMessageProducerService implements MessageProducerService {
+public class MockMessageProducerServiceImpl implements MessageProducerService {
 
 	@Override
 	public void sendMessage(String topic, String tags, Object message) {

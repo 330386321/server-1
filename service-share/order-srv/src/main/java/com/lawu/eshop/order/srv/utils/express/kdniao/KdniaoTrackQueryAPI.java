@@ -59,7 +59,7 @@ public class KdniaoTrackQueryAPI {
      * @param charset 编码方式
      * @throws Exception
      */
-    private String MD5(String str, String charset) throws Exception {
+    private String md5(String str, String charset) throws Exception {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(str.getBytes(charset));
         byte[] result = md.digest();
@@ -102,9 +102,9 @@ public class KdniaoTrackQueryAPI {
      */
     private String encrypt(String content, String keyValue, String charset) throws UnsupportedEncodingException, Exception {
         if (keyValue != null) {
-            return base64(MD5(content + keyValue, charset), charset);
+            return base64(md5(content + keyValue, charset), charset);
         }
-        return base64(MD5(content, charset), charset);
+        return base64(md5(content, charset), charset);
     }
 
     /**

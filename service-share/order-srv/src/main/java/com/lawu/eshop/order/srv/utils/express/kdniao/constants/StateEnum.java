@@ -10,12 +10,24 @@ import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
  */
 public enum StateEnum {
 
+    /**
+     * 无轨迹
+     */
 	NO_INFO("0", "无轨迹", ExpressInquiriesDetailStateEnum.NO_INFO),
 
+	/**
+	 * 在途中
+	 */
 	ON_THE_WAY("2", "在途中", ExpressInquiriesDetailStateEnum.ON_THE_WAY),
 
+	/**
+	 * 签收
+	 */
 	SIGN_IN("3", "签收", ExpressInquiriesDetailStateEnum.SIGN_IN),
 
+	/**
+	 * 问题件
+	 */
 	PROBLEM_PIECES("4", "问题件", ExpressInquiriesDetailStateEnum.PROBLEM_PIECES);
 
 	private String value;

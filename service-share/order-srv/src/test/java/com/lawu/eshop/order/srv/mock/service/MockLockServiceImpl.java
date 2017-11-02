@@ -11,7 +11,7 @@ import com.lawu.eshop.synchronization.lock.service.LockService;
  * @date 2017年7月12日
  */
 @Service
-public class MockLockService implements LockService {
+public class MockLockServiceImpl implements LockService {
 
 	@Override
 	public boolean tryLock(String lockKey) {

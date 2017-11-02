@@ -18,22 +18,17 @@ public class SerializableTest {
 	@Ignore
 	@Test
 	public void serTest() {
-		
-		ExpressInquiriesDetailDTO DTO = new ExpressInquiriesDetailDTO();
-		DTO.setReason("hahha");
-		
-		String json = JSONObject.toJSON(DTO).toString();
-		
-		json = JSONObject.toJSONString(DTO, SerializerFeature.WriteMapNullValue);
-		
+		ExpressInquiriesDetailDTO dto = new ExpressInquiriesDetailDTO();
+		dto.setReason("hahha");
+		String json = JSONObject.toJSON(dto).toString();
+		json = JSONObject.toJSONString(dto, SerializerFeature.WriteMapNullValue);
 		System.out.println(json);
-		
 		FileOutputStream fs = null;  
         ObjectOutputStream os =  null;  
         try {
         	fs =  new FileOutputStream("C:\\Users\\Administrator\\Desktop\\dto.ser");
         	os =  new ObjectOutputStream(fs);
-			os.writeObject(DTO);
+			os.writeObject(dto);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}  finally {
@@ -46,11 +41,11 @@ public class SerializableTest {
 		}
 		
         ObjectInputStream ois = null; 
-        ExpressInquiriesDetailDTO DTO1 = null;
+        ExpressInquiriesDetailDTO dto1 = null;
 		try {
 			ois = new ObjectInputStream(new FileInputStream("C:\\Users\\Administrator\\Desktop\\dto.ser"));
-			DTO1 = (ExpressInquiriesDetailDTO)ois.readObject();
-			json = JSONObject.toJSONString(DTO1, SerializerFeature.WriteMapNullValue);
+			dto1 = (ExpressInquiriesDetailDTO)ois.readObject();
+			json = JSONObject.toJSONString(dto1, SerializerFeature.WriteMapNullValue);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -8,10 +8,19 @@ package com.lawu.eshop.order.srv.utils.express.kuaidi100.constants;
  */
 public enum StatusEnum {
 
+    /**
+     * 物流单暂无结果
+     */
 	NO_INFO("0", "物流单暂无结果"),
 
+	/**
+	 * 查询成功
+	 */
 	SEARCH_SUCCESSFUL("1", "查询成功"),
 
+	/**
+	 * 接口出现异常
+	 */
 	INTERFACE_EXCEPTION("2", "接口出现异常");
 
 	private String value;

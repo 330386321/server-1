@@ -16,7 +16,7 @@ import com.lawu.idworker.client.service.IdWorkerService;
  */
 @Primary
 @Service
-public class MockIdWorkerService implements IdWorkerService {
+public class MockIdWorkerServiceImpl implements IdWorkerService {
     
     /**
      * 自动生成18位编号
@@ -24,10 +24,12 @@ public class MockIdWorkerService implements IdWorkerService {
      * @author jiangxinjun
      * @date 2017年10月24日
      */
+    @Override
     public String generate() {
         return RandomUtil.getRandomString(1, 18);
     }
     
+    @Override
     public List<String> batchGenerate() {
         List<String> rtn = new ArrayList<>();
         for (int i = 0; i < 100; i++) {

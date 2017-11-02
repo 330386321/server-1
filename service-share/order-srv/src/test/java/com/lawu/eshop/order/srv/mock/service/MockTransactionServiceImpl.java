@@ -16,7 +16,7 @@ import com.lawu.eshop.order.srv.service.TransactionService;
  * @date 2017年7月12日
  */
 @Service
-public class MockTransactionService extends BaseController implements TransactionService {
+public class MockTransactionServiceImpl extends BaseController implements TransactionService {
 	
 	private Map<String, Long> redis = new ConcurrentHashMap<>();
 	

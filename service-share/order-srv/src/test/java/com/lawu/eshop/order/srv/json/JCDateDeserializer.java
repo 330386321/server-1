@@ -10,7 +10,7 @@ import com.alibaba.fastjson.parser.deserializer.DateDeserializer;
 
 public class JCDateDeserializer extends DateDeserializer {
 	
-    public static final JCDateDeserializer instance = new JCDateDeserializer();
+    public static final JCDateDeserializer INSTANCE = new JCDateDeserializer();
     
     /**
      * 时间格式
@@ -25,6 +25,7 @@ public class JCDateDeserializer extends DateDeserializer {
     }
 
 	@SuppressWarnings("unchecked")
+	@Override
 	protected <T> T cast(DefaultJSONParser parser, Type clazz, Object fieldName, Object val){
         if (val == null) {
             return null;

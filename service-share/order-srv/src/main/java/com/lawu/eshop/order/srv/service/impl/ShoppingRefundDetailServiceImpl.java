@@ -1000,6 +1000,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	 * @date 2017年7月11日
 	 */
 	@Transactional
+	@Override
 	public void agreeToRefund(Long id) {
 		ShoppingRefundDetailAgreeToRefundForeignParam param = new ShoppingRefundDetailAgreeToRefundForeignParam();
 		param.setIsAgree(true);
