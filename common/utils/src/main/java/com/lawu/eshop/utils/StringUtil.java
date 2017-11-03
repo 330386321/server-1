@@ -15,7 +15,7 @@ public class StringUtil {
 
     private static Logger logger = LoggerFactory.getLogger(StringUtil.class);
     
-    private final static Pattern emoji = Pattern.compile("[\\ud83c\\udc00-\\ud83c\\udfff]|[\\ud83d\\udc00-\\ud83d\\udfff]|[\\u2600-\\u27ff]");
+    private final static Pattern emoji = Pattern.compile("\\ud83c[\\udc00-\\udfff]|\\ud83d[\\udc00-\\udfff]|\\ud83d[\\ude80-\\udeff]|[\\u2600-\\u27ff]");
     
     private StringUtil(){}
 
@@ -228,10 +228,10 @@ public class StringUtil {
         int endCharLength = 1;
         while (matcher.find()) {
             if (matcher.start() == 0) {
-                startCharLength = 2;
+                startCharLength = matcher.end() - matcher.start();
             }
             if (matcher.end() == length) {
-                endCharLength = 2;
+                endCharLength = matcher.end() - matcher.start();
             }
         }
         StringBuilder sb = new StringBuilder();
