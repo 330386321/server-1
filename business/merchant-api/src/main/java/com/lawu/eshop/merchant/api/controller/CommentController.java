@@ -37,6 +37,7 @@ import com.lawu.eshop.merchant.api.service.MemberService;
 import com.lawu.eshop.merchant.api.service.ProductService;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -140,7 +141,7 @@ public class CommentController extends BaseController {
             Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
             if(commentDTO.getAnonymous()){
                 commentListDTO.setHeadImg(merchantApiConfig.getDefaultHeadimg());
-                commentListDTO.setNickName(user.getModel().getNickname().substring(0,1)+"***"+user.getModel().getNickname().substring(user.getModel().getNickname().length()-1,user.getModel().getNickname().length()));
+                commentListDTO.setNickName(StringUtil.anonymous(user.getModel().getNickname()));
             }else{
                 commentListDTO.setHeadImg(user.getModel().getHeadimg());
                 commentListDTO.setNickName(user.getModel().getNickname());
@@ -231,7 +232,7 @@ public class CommentController extends BaseController {
             Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
             if(commentDTO.getAnonymous()){
                 commentProductDTO.setHeadImg(merchantApiConfig.getDefaultHeadimg());
-                commentProductDTO.setNickName(user.getModel().getNickname().substring(0,1)+"***"+user.getModel().getNickname().substring(user.getModel().getNickname().length()-1,user.getModel().getNickname().length()));
+                commentProductDTO.setNickName(StringUtil.anonymous(user.getModel().getNickname()));
             }else{
                 commentProductDTO.setHeadImg(user.getModel().getHeadimg());
                 commentProductDTO.setNickName(user.getModel().getNickname());
@@ -290,7 +291,7 @@ public class CommentController extends BaseController {
             Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
             if(commentDTO.getAnonymous()){
                 commentMerchantDTO.setHeadImg(merchantApiConfig.getDefaultHeadimg());
-                commentMerchantDTO.setNickName(user.getModel().getNickname().substring(0,1)+"***"+user.getModel().getNickname().substring(user.getModel().getNickname().length()-1,user.getModel().getNickname().length()));
+                commentMerchantDTO.setNickName(StringUtil.anonymous(user.getModel().getNickname()));
             }else{
                 commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
                 commentMerchantDTO.setNickName(user.getModel().getNickname());
