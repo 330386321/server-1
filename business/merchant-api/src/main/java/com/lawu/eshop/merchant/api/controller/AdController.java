@@ -265,7 +265,7 @@ public class AdController extends BaseController {
     			return successCreated(ResultCode.AD_RED_PACKET_POINT_ERROR,"投放金额不能低于"+new BigDecimal(count).multiply(new BigDecimal(UserRedpacketValue.MIN_USERREDPACKET_COUNT)));
 			}
     		adParam.setAdCount(count);
-    		
+    		 
     	}
     	
     	Result<MerchantStoreAdInfoDTO> storeRs=merchantStoreService.selectMerchantStoreAdInfo(merchantId);
