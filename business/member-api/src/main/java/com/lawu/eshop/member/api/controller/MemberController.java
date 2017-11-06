@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -98,7 +100,11 @@ public class MemberController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMemberInfo", method = RequestMethod.PUT)
     public Result updateMemberInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                   @ModelAttribute @ApiParam(required = true, value = "会员信息") UserParam memberParam) {
+                                   @ModelAttribute @ApiParam(required = true, value = "会员信息") @Validated UserParam memberParam, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
         long id = UserUtil.getCurrentUserId(getRequest());
         return memberService.updateMemberInfo(memberParam, id);
     }
