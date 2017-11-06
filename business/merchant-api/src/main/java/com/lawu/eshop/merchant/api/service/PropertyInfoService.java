@@ -1,8 +1,5 @@
 package com.lawu.eshop.merchant.api.service;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.property.dto.FreezeDTO;
-import com.lawu.eshop.property.param.FreezeQueryParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,12 +8,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.property.dto.FreezeDTO;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.property.param.FreezeQueryParam;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 
 /**
@@ -151,4 +151,15 @@ public interface PropertyInfoService {
      */
     @RequestMapping(value = "propertyInfo/getFreezeList", method = RequestMethod.POST)
     Result<Page<FreezeDTO>> getFreezeList(@RequestBody FreezeQueryParam param);
+
+    /**
+     * 校验积分账户
+     *
+     * @param userNum
+     * @param point
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "propertyInfo/validatePoint", method = RequestMethod.GET)
+    Result validatePoint(@RequestParam("userNum") String userNum, @RequestParam("point") String point);
 }

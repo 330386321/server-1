@@ -1,7 +1,5 @@
 package com.lawu.eshop.property.srv.service;
 
-import java.util.Map;
-
 import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 
@@ -28,7 +26,7 @@ public interface PropertyInfoDataService {
 	 * @param param
 	 * @return
 	 */
-	Map<String, Integer> doHanlderMinusPointByFans(PropertyInfoDataParam param);
+	Long doHanlderMinusPointByFans(PropertyInfoDataParam param);
 	
 	/**
 	 * 业务消费加积分

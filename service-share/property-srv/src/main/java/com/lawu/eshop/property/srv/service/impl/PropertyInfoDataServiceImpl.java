@@ -2,9 +2,7 @@ package com.lawu.eshop.property.srv.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +29,7 @@ import com.lawu.eshop.property.srv.domain.PointDetailDOExample;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.exception.PointNegativeException;
+import com.lawu.eshop.property.srv.exception.RepeatDealException;
 import com.lawu.eshop.property.srv.mapper.FansInviteDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.LoveDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
@@ -324,8 +323,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 
 	@Override
 	@Transactional
-	public Map<String, Integer> doHanlderMinusPointByFans(PropertyInfoDataParam param) {
-		Map<String, Integer> map = new HashMap();
+	public Long doHanlderMinusPointByFans(PropertyInfoDataParam param) {
 
 		if(param.getBizId() != null && !"".equals(param.getBizId()) && !"0".equals(param.getBizId())){
 			CheckRepeatOfPropertyOperationParam validateParam = new CheckRepeatOfPropertyOperationParam();
@@ -336,53 +334,34 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			boolean repeat = pointDetailService.verifyRepeatByUserNumAndTransactionTypeAndBizId(validateParam);
 			if (repeat) {
 				logger.info("重复操作(判断幂等)-商家邀请粉丝");
-				map.put("retCode", ResultCode.PROCESSED_RETURN_SUCCESS);
-				return map;
+				throw new RepeatDealException(ResultCode.get(ResultCode.PROCESSED_RETURN_SUCCESS));
 			}
 		}
 
-		int retCode = propertyInfoService.validatePoint(param.getUserNum(), param.getPoint());
-		if (retCode != ResultCode.SUCCESS) {
-			map.put("retCode", retCode);
-			return map;
-		}
 		String pointNum = IdWorkerHelperImpl.generate(BizIdType.POINT);
 		// 插入积分明细
 		PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
 		pointDetailSaveDataParam.setPointNum(pointNum);
 		pointDetailSaveDataParam.setUserNum(param.getUserNum());
-		if (param.getMemberTransactionTypeEnum() != null) {
-			pointDetailSaveDataParam.setTitle(param.getMemberTransactionTypeEnum().getName());
-			pointDetailSaveDataParam.setPointType(param.getMemberTransactionTypeEnum().getValue());
-		} else if (param.getMerchantTransactionTypeEnum() != null) {
-			pointDetailSaveDataParam.setTitle(param.getMerchantTransactionTypeEnum().getName());
-			pointDetailSaveDataParam.setPointType(param.getMerchantTransactionTypeEnum().getValue());
-		} else {
-			map.put("retCode", ResultCode.BIZ_TYPE_NULL);
-			return map;
-		}
+		pointDetailSaveDataParam.setTitle(param.getMerchantTransactionTypeEnum().getName());
+		pointDetailSaveDataParam.setPointType(param.getMerchantTransactionTypeEnum().getValue());
 		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
 		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
 		pointDetailSaveDataParam.setRegionPath(param.getRegionPath());
 		pointDetailSaveDataParam.setBizId(param.getBizId());
-
-		// 插入邀请粉丝记录
-		if (param.getMerchantTransactionTypeEnum() != null && param.getMerchantTransactionTypeEnum()
-				.getValue() == MerchantTransactionTypeEnum.INVITE_FANS.getValue()) {
-			FansInviteDetailDO fansInviteDetailDO = new FansInviteDetailDO();
-			fansInviteDetailDO.setMerchantId(param.getMerchantId());
-			fansInviteDetailDO.setPointNum(pointNum);
-			fansInviteDetailDO.setRegionName(param.getRegionName());
-			fansInviteDetailDO.setSex(param.getSex());
-			fansInviteDetailDO.setAge(param.getAge());
-			fansInviteDetailDO.setInviteFansCount(param.getInviteFansCount());
-			fansInviteDetailDO.setConsumePoint(new BigDecimal(param.getPoint()));
-			fansInviteDetailDO.setGmtCreate(new Date());
-			fansInviteDetailDOMapper.insertSelective(fansInviteDetailDO);
-			map.put("fans_invite_detail_id", fansInviteDetailDO.getId().intValue());
-			pointDetailSaveDataParam.setBizId(String.valueOf(fansInviteDetailDO.getId()));
-		}
 		pointDetailService.save(pointDetailSaveDataParam);
+
+		// 插入商家邀请记录
+		FansInviteDetailDO fansInviteDetailDO = new FansInviteDetailDO();
+		fansInviteDetailDO.setMerchantId(param.getMerchantId());
+		fansInviteDetailDO.setPointNum(pointNum);
+		fansInviteDetailDO.setRegionName(param.getRegionName());
+		fansInviteDetailDO.setSex(param.getSex());
+		fansInviteDetailDO.setAge(param.getAge());
+		fansInviteDetailDO.setInviteFansCount(param.getInviteFansCount());
+		fansInviteDetailDO.setConsumePoint(new BigDecimal(param.getPoint()));
+		fansInviteDetailDO.setGmtCreate(new Date());
+		fansInviteDetailDOMapper.insertSelective(fansInviteDetailDO);
 
 		// 更新用户资产
 		BigDecimal point = new BigDecimal(param.getPoint());
@@ -390,8 +369,6 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		if(ResultCode.ERROR_POINT_NEGATIVE == ret){
 			throw new PointNegativeException(ResultCode.get(ResultCode.ERROR_POINT_NEGATIVE));
 		}
-
-		map.put("retCode", ResultCode.SUCCESS);
-		return map;
+		return fansInviteDetailDO.getId();
 	}
 }

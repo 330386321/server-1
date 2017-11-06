@@ -2,7 +2,6 @@ package com.lawu.eshop.merchant.api.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
+import com.lawu.eshop.merchant.api.event.EventPublisher;
 import com.lawu.eshop.merchant.api.service.FansInviteContentService;
 import com.lawu.eshop.merchant.api.service.FansMerchantService;
 import com.lawu.eshop.merchant.api.service.MemberService;
@@ -77,6 +77,9 @@ public class FansMerchantController extends BaseController {
 	
 	@Autowired
 	private FansInviteContentService fansInviteContentService;
+
+	@Autowired
+	private EventPublisher eventPublisher;
 
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@ApiOperation(value = "查询粉丝会员", notes = "查询可邀请成为粉丝的会员。[1100] (梅述全)", httpMethod = "GET")
@@ -314,30 +317,22 @@ public class FansMerchantController extends BaseController {
 		listInviteFansWithContentParam.setStartAge(param.getStartAge());
 		listInviteFansWithContentParam.setUserSexEnum(param.getUserSexEnum());
 		Result<List<FansMerchantDTO>> fmtDTOlist = fansMerchantService.listInviteFansWithContent(merchantId, listInviteFansWithContentParam);
-		String ids = "";
-		String nums = "";
-		if(fmtDTOlist.getModel() == null || fmtDTOlist.getModel().isEmpty()) {
+		if (fmtDTOlist.getModel() == null || fmtDTOlist.getModel().isEmpty()) {
 			return successCreated(ResultCode.INVITE_FANS_NOT_EXIST);
 		}
-		for(FansMerchantDTO dto : fmtDTOlist.getModel()) {
-			ids += dto.getMemberId() + ",";
-			nums += dto.getNum() + ",";
+		StringBuilder sbId = new StringBuilder();
+		StringBuilder sbNum = new StringBuilder();
+		for (FansMerchantDTO dto : fmtDTOlist.getModel()) {
+			sbId.append(dto.getMemberId()).append(",");
+			sbNum.append(dto.getNum()).append(",");
 		}
-		ids = ids.substring(0, ids.length() - 1);
-		nums = nums.substring(0, nums.length() - 1);
+		String ids = sbId.substring(0, sbId.length() - 1);
+		String nums = sbNum.substring(0, sbNum.length() - 1);
 		int inviteFansCount = 0;
-		if(listInviteFansWithContentParam.getInviteCount() != null || listInviteFansWithContentParam.getInviteCount() == 0) {
+		if(listInviteFansWithContentParam.getInviteCount() != null && listInviteFansWithContentParam.getInviteCount() > 0) {
 			inviteFansCount = listInviteFansWithContentParam.getInviteCount();
 		} else {
 			inviteFansCount = fmtDTOlist.getModel().size();
-		}
-		Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
-		if (isSuccess(resultFreeze)) {
-			if (PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel().getStatus())) {
-				return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
-			}
-		} else {
-			return successCreated(resultFreeze.getRet());
 		}
 
 		Result<Boolean> pwdResult = propertyInfoService.varifyPayPwd(userNum, param.getPayPwd());
@@ -348,22 +343,13 @@ public class FansMerchantController extends BaseController {
 			return successCreated(ResultCode.PAY_PWD_ERROR);
 		}
 
-		// 邀请粉丝扣除积分、插入粉丝邀请记录
-		PropertyInfoDataParam propertyInfoDataParam = new PropertyInfoDataParam();
-		propertyInfoDataParam.setUserNum(userNum);
-		propertyInfoDataParam.setPoint(String.valueOf(inviteFansCount));
-		propertyInfoDataParam.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INVITE_FANS);
-		propertyInfoDataParam.setMerchantId(merchantId);
-		propertyInfoDataParam.setRegionName(StringUtils.isEmpty(param.getRegionName()) ? "全国" : param.getRegionName());
-		propertyInfoDataParam.setInviteFansCount(inviteFansCount);
-		propertyInfoDataParam.setSex(param.getUserSexEnum().val);
-		propertyInfoDataParam.setAge(param.getIsAgeLimit() ? param.getStartAge() + "-" + param.getEndAge() : "");
-		Result result = propertyInfoService.doHanlderMinusPointByFans(propertyInfoDataParam);
-		if (!isSuccess(result)) {
-			return result;
+		Result pointResult = propertyInfoService.validatePoint(userNum, String.valueOf(inviteFansCount));
+		if (!isSuccess(pointResult)) {
+			return pointResult;
 		}
+
 		FansInviteContentExtendParam fansInviteContentExtendParam = new FansInviteContentExtendParam();
-		fansInviteContentExtendParam.setFansInviteDetailId(Long.valueOf(result.getModel().toString()));
+		fansInviteContentExtendParam.setFansInviteDetailId(0L);
 		fansInviteContentExtendParam.setInviteContent(param.getInviteContent());
 		fansInviteContentExtendParam.setLogoUrl(param.getLogoUrl());
 		fansInviteContentExtendParam.setMerchantId(merchantId);
@@ -372,38 +358,34 @@ public class FansMerchantController extends BaseController {
 		fansInviteContentExtendParam.setMerchantStoreName(param.getMerchantStoreName());
 		fansInviteContentExtendParam.setUrl(param.getUrl());
 		fansInviteContentExtendParam.setIds(ids);
-		result = fansInviteContentService.saveFansInviteExtendContent(fansInviteContentExtendParam);
-		if (!isSuccess(result)) {
-			return result;
-		}
-		
-		// 给会员发送站内消息
-		MessageInfoParam messageInfoParam = new MessageInfoParam();
-		messageInfoParam.setRelateId(Long.valueOf(result.getModel().toString()));
-		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS);
-		MessageTempParam messageTempParam = new MessageTempParam();
-		messageTempParam.setMerchantName("E店商家");
-		messageTempParam.setMerchantName(param.getMerchantStoreName());
-		String[] numSplit = nums.split(",");
-		for (String num : numSplit) {
-			Result<UserDTO> userDTOResult = memberService.getMemberByNum(num);
-			messageTempParam.setUserName("E店会员");
-			if (isSuccess(userDTOResult) && StringUtils.isNotEmpty(userDTOResult.getModel().getNickname())) {
-				messageTempParam.setUserName(userDTOResult.getModel().getNickname());
-			}
-			messageInfoParam.setMessageParam(messageTempParam);
-			messageService.saveMessage(num, messageInfoParam);
-		}
+		//事务消息参数
+		fansInviteContentExtendParam.setRegionName(StringUtils.isEmpty(param.getRegionName()) ? "全国" : param.getRegionName());
+		fansInviteContentExtendParam.setInviteFansCount(inviteFansCount);
+		fansInviteContentExtendParam.setSex(param.getUserSexEnum().val);
+		fansInviteContentExtendParam.setAge(param.getIsAgeLimit() ? param.getStartAge() + "-" + param.getEndAge() : "");
+		Result result = fansInviteContentService.saveFansInviteExtendContent(fansInviteContentExtendParam);
+
 		// 给商家发送站内消息
 		Result<PropertyPointDTO> propertyPointDTOResult = propertyInfoService.getPropertyPoint(userNum);
-		messageInfoParam = new MessageInfoParam();
+		MessageInfoParam messageInfoParam = new MessageInfoParam();
 		messageInfoParam.setRelateId(merchantId);
 		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS_MERCHANT);
-		messageTempParam = new MessageTempParam();
+		MessageTempParam messageTempParam = new MessageTempParam();
 		messageTempParam.setExpendPoint(new BigDecimal(inviteFansCount));
 		messageTempParam.setPoint(propertyPointDTOResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
 		messageInfoParam.setMessageParam(messageTempParam);
 		messageService.saveMessage(userNum, messageInfoParam);
+
+		// 给会员发送站内消息
+		messageInfoParam = new MessageInfoParam();
+		messageInfoParam.setRelateId(Long.valueOf(result.getModel().toString()));
+		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS);
+		messageTempParam = new MessageTempParam();
+		messageTempParam.setMerchantName("E店商家");
+		if (StringUtils.isNotEmpty(param.getMerchantStoreName())) {
+			messageTempParam.setMerchantName(param.getMerchantStoreName());
+		}
+		eventPublisher.publishInviteFansSendMessageEvent(messageInfoParam, messageTempParam, nums);
 		return successCreated();
 	}
 }

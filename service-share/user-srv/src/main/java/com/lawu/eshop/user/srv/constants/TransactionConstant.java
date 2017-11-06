@@ -27,4 +27,9 @@ public class TransactionConstant {
      * 邀请粉丝退还积分
      */
     public static final byte MERCHANT_FANS = 0x04;
+
+    /**
+     * 邀请粉丝
+     */
+    public static final byte INVITE_FANS = 0x05;
 }

@@ -1,7 +1,5 @@
 package com.lawu.eshop.property.srv.controller;
 
-import java.util.Map;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,23 +54,6 @@ public class PropertyInfoDataController extends BaseController {
     	}
     	int retCode = propertyInfoDataService.doHanlderMinusPoint(param);
 		return successCreated(retCode);
-	}
-	
-	/**
-	 *
-	 * 商家邀请粉丝
-	 * 
-	 * @param param
-	 * @return
-	 */
-	@RequestMapping(value = "doHanlderMinusPointByFans", method = RequestMethod.POST)
-	public Result doHanlderMinusPointByFans(@RequestBody @Valid PropertyInfoDataParam param, BindingResult result) {
-		String message = validate(result);
-		if (message != null) {
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
-		}
-		Map<String, Integer> map = propertyInfoDataService.doHanlderMinusPointByFans(param);
-		return successCreated(map.get("retCode"), map.get("fans_invite_detail_id"));
 	}
 	
 	/**

@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.Map;
+
 import com.lawu.eshop.user.param.FansInviteContentExtendParam;
 import com.lawu.eshop.user.srv.bo.FansInviteContentBO;
 
@@ -19,4 +21,21 @@ public interface FansInviteContentService {
 	 * @author meishuquan
 	 */
 	void dealOverdueFansInvite();
+
+	/**
+	 * 获取邀请粉丝事务消息参数
+	 *
+	 * @return
+	 * @author meishuquan
+	 */
+	Map<String, Object> getInviteFansMap();
+
+	/**
+	 * 更新邀请粉丝内容表粉丝邀请记录id
+	 *
+	 * @param id
+	 * @param fansInviteDetailId
+	 * @author meishuquan
+	 */
+	void updateFansInviteDetailId(Long id, Long fansInviteDetailId);
 }

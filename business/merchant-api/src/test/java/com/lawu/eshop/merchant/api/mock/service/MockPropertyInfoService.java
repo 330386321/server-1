@@ -1,21 +1,27 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.merchant.api.service.PropertyInfoService;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
-import com.lawu.eshop.property.dto.*;
-import com.lawu.eshop.property.param.FreezeQueryParam;
-import com.lawu.eshop.property.param.PropertyInfoDataParam;
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
+import com.lawu.eshop.property.dto.FreezeDTO;
+import com.lawu.eshop.property.dto.PropertyBalanceDTO;
+import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
+import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
+import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
+import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.property.param.FreezeQueryParam;
+import com.lawu.eshop.property.param.PropertyInfoDataParam;
 
 /**
  * @author meishuquan
@@ -96,7 +102,12 @@ public class MockPropertyInfoService extends BaseController implements PropertyI
         return successCreated();
     }
 
-	@Override
+    @Override
+    public Result validatePoint(@RequestParam("userNum") String userNum, @RequestParam("point") String point) {
+        return null;
+    }
+
+    @Override
 	public Result doHanlderMinusPointByFans(PropertyInfoDataParam propertyInfoDataParam) {
 		return successCreated();
 	}

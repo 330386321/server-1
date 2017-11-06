@@ -13,37 +13,37 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class UserDTO {
 
-    @ApiModelProperty(name = "num",value = "编号")
+    @ApiModelProperty(name = "num", value = "编号")
     private String num;
 
-    @ApiModelProperty(name = "account",value = "账号")
+    @ApiModelProperty(name = "account", value = "账号")
     private String account;
 
-    @ApiModelProperty(name = "nickname",value = "昵称")
+    @ApiModelProperty(name = "nickname", value = "昵称")
     private String nickname;
 
-    @ApiModelProperty(name = "regionPath",value = "地区路径")
+    @ApiModelProperty(name = "regionPath", value = "地区路径")
     private String regionPath;
-    @ApiModelProperty(name = "regionName",value = "地区名称")
+    @ApiModelProperty(name = "regionName", value = "地区名称")
     private String regionName;
 
-    @ApiModelProperty(name = "birthday",value = "生日")
+    @ApiModelProperty(name = "birthday", value = "生日")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date birthday;
 
-    @ApiModelProperty(name = "headimg",value = "头像")
+    @ApiModelProperty(name = "headimg", value = "头像")
     private String headimg;
 
-    @ApiModelProperty(name = "userSex",value = "性别")
+    @ApiModelProperty(name = "userSex", value = "性别")
     private UserSexEnum userSex;
 
-    @ApiModelProperty(name = "level",value = "等级")
-    private int level;
+    @ApiModelProperty(name = "level", value = "等级")
+    private Integer level;
 
-    @ApiModelProperty(name = "level",value = "个推CID")
+    @ApiModelProperty(name = "level", value = "个推CID")
     private String gtCid;
 
-    @ApiModelProperty(name = "level",value = "融云token")
+    @ApiModelProperty(name = "level", value = "融云token")
     private String ryToken;
 
     private Boolean isFreeze;
@@ -104,11 +104,11 @@ public class UserDTO {
         this.headimg = headimg;
     }
 
-    public int getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 

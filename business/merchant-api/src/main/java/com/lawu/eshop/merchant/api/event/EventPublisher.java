@@ -11,6 +11,8 @@ import com.lawu.eshop.framework.core.type.UserType;
 import com.lawu.eshop.framework.web.interceptor.UserVisitEvent;
 import com.lawu.eshop.framework.web.interceptor.UserVisitEventPublish;
 import com.lawu.eshop.framework.web.interceptor.VisitConstants;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.user.param.UserLoginLogParam;
 import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.IpUtil;
@@ -49,5 +51,9 @@ public class EventPublisher implements UserVisitEventPublish {
     @Override
     public void publishUserVisitEvent(String userNum, Long userId) {
         applicationContext.publishEvent(new UserVisitEvent(this, userNum, UserType.MERCHANT, userId));
+    }
+
+    public void publishInviteFansSendMessageEvent(MessageInfoParam messageInfoParam, MessageTempParam messageTempParam, String nums) {
+        applicationContext.publishEvent(new InviteFansSendMessageEvent(this, messageInfoParam, messageTempParam, nums));
     }
 }

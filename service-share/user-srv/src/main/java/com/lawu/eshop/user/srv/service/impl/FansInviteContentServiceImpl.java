@@ -1,7 +1,9 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
+import com.lawu.eshop.mq.dto.user.reply.InviteFansReply;
 import com.lawu.eshop.user.param.FansInviteContentExtendParam;
 import com.lawu.eshop.user.param.UserFansParam;
 import com.lawu.eshop.user.srv.bo.FansInviteContentBO;
@@ -28,7 +31,8 @@ import com.lawu.eshop.user.srv.service.FansInviteContentService;
 @Service
 public class FansInviteContentServiceImpl implements FansInviteContentService{
 
-	
+	private static Map<String, Object> inviteFansMap = new HashMap<>();
+
 	@Autowired
 	private FansInviteContentDOMapper fansInviteContentDOMapper;
 	
@@ -46,7 +50,11 @@ public class FansInviteContentServiceImpl implements FansInviteContentService{
 
 	@Autowired
 	@Qualifier("merchantFansTransactionMainServiceImpl")
-	private TransactionMainService transactionMainService;
+	private TransactionMainService merchantFansTransactionMainServiceImpl;
+
+	@Autowired
+	@Qualifier("inviteFansTransactionMainServiceImpl")
+	private TransactionMainService<InviteFansReply> inviteFansTransactionMainServiceImpl;
 	
 	@Override
 	public FansInviteContentBO selectInviteContentById(Long id) {
@@ -77,7 +85,7 @@ public class FansInviteContentServiceImpl implements FansInviteContentService{
 			fansInviteContentDOMapper.updateByPrimaryKeySelective(inviteContentDO);
 
 			if (count > 0) {
-				transactionMainService.sendNotice(view.getId());
+				merchantFansTransactionMainServiceImpl.sendNotice(view.getId());
 			}
 		}
 	}
@@ -110,11 +118,11 @@ public class FansInviteContentServiceImpl implements FansInviteContentService{
 	@Transactional
 	@Override
 	public Long saveInviteContentExtendService(FansInviteContentExtendParam inviteContentParam) {
-		String[] id = inviteContentParam.getIds().split(",");
+		String[] idArr = inviteContentParam.getIds().split(",");
 		Date date = new Date();
-		for(int i = 0; i < id.length; i++) {
+		for(String id : idArr) {
 			FansMerchantDO fansMerchantDO = new FansMerchantDO();
-			fansMerchantDO.setMemberId(Long.valueOf(id[i].toString()));
+			fansMerchantDO.setMemberId(Long.valueOf(id));
 			fansMerchantDO.setMerchantId(inviteContentParam.getMerchantId());
 			fansMerchantDO.setChannel((byte)2);
 			fansMerchantDO.setGmtCreate(date);
@@ -125,6 +133,28 @@ public class FansInviteContentServiceImpl implements FansInviteContentService{
 		fansInviteContentDO.setGmtCreate(date);
 		fansInviteContentDO.setGmtModified(date);
 		fansInviteContentDOMapper.insertSelective(fansInviteContentDO);
-		return fansInviteContentDO.getId();
+		Long fansInviteContentDOId = fansInviteContentDO.getId();
+
+		inviteFansMap.put("regionName",inviteContentParam.getRegionName());
+		inviteFansMap.put("inviteFansCount",inviteContentParam.getInviteFansCount());
+		inviteFansMap.put("sex",inviteContentParam.getSex());
+		inviteFansMap.put("age",inviteContentParam.getAge());
+		inviteFansTransactionMainServiceImpl.sendNotice(fansInviteContentDOId);
+		return fansInviteContentDOId;
 	}
+
+	@Override
+	public Map<String, Object> getInviteFansMap() {
+		return inviteFansMap;
+	}
+
+	@Override
+	@Transactional
+	public void updateFansInviteDetailId(Long id, Long fansInviteDetailId) {
+		FansInviteContentDO fansInviteContentDO = new FansInviteContentDO();
+		fansInviteContentDO.setId(id);
+		fansInviteContentDO.setFansInviteDetailId(fansInviteDetailId);
+		fansInviteContentDOMapper.updateByPrimaryKeySelective(fansInviteContentDO);
+	}
+
 }

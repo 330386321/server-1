@@ -2,9 +2,6 @@ package com.lawu.eshop.property.srv.controller;
 
 import java.math.BigDecimal;
 
-import com.lawu.eshop.property.dto.FreezeDTO;
-import com.lawu.eshop.property.param.FreezeQueryParam;
-import com.lawu.eshop.property.srv.bo.FreezeBO;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +16,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
+import com.lawu.eshop.property.dto.FreezeDTO;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyInfoDTO;
 import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
@@ -26,7 +24,9 @@ import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
+import com.lawu.eshop.property.param.FreezeQueryParam;
 import com.lawu.eshop.property.param.PropertyInfoBackageParam;
+import com.lawu.eshop.property.srv.bo.FreezeBO;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointAndBalanceBO;
@@ -314,5 +314,19 @@ public class PropertyInfoController extends BaseController {
 		page.setTotalCount(freezeBOPage.getTotalCount());
 		page.setRecords(PropertyInfoConverter.freezeConvertDTO(freezeBOPage.getRecords()));
 		return successGet(page);
+	}
+
+	/**
+	 * 校验积分账户
+	 *
+	 * @param userNum
+	 * @param point
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "validatePoint", method = RequestMethod.GET)
+	public Result validatePoint(@RequestParam String userNum, @RequestParam String point) {
+		int retCode = propertyInfoService.validatePoint(userNum, point);
+		return successGet(retCode);
 	}
 }
