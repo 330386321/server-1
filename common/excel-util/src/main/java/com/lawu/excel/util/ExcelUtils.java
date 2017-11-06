@@ -52,7 +52,7 @@ public class ExcelUtils {
             throw new ExcelExportVerifyException("cellTitles、cellWidths、cellAlignTypes三者长度不一致");
         }
 
-        SXSSFWorkbook workbook = new SXSSFWorkbook(SXSSFWorkbook.DEFAULT_WINDOW_SIZE);
+        SXSSFWorkbook workbook = new SXSSFWorkbook(recordLoadCallback.getRowAccessWindowSize());
         SXSSFSheet sh = workbook.createSheet();
 
 
@@ -62,24 +62,22 @@ public class ExcelUtils {
         Map<Integer, XSSFCellStyle> cellStyles = new HashMap<>();
 
         // 创建单元格标题行（即第一行）
-        if (cellTitles != null) {
-            SXSSFRow titleRow = sh.createRow(rowNum);
-            for (int i = 0; i < cellTitles.length; i++) {
+        SXSSFRow titleRow = sh.createRow(rowNum);
+        for (int i = 0; i < cellTitles.length; i++) {
 
-                XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle();
-                cellStyle.setAlignment(cellAlignTypes[i].getAlignment());
+            XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle();
+            cellStyle.setAlignment(cellAlignTypes[i].getAlignment());
 
-                cellStyles.put(i, cellStyle);
+            cellStyles.put(i, cellStyle);
 
-                createCell(titleRow, i, cellTitles[i], cellStyle);
+            createCell(titleRow, i, cellTitles[i], cellStyle);
 
-                if(cellWidths[i] > 0) {
-                    sh.setColumnWidth(i, cellWidths[i] * 256);
-                }
-
+            if(cellWidths[i] > 0) {
+                sh.setColumnWidth(i, cellWidths[i] * 256);
             }
-            rowNum++;
+
         }
+        rowNum++;
 
         // 判断数据是否加载完成
         while (!recordLoadCallback.isFinished()) {
