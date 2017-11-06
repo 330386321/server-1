@@ -52,7 +52,7 @@ public class ExcelUtils {
             throw new ExcelExportVerifyException("cellTitles、cellWidths、cellAlignTypes三者长度不一致");
         }
 
-        SXSSFWorkbook workbook = new SXSSFWorkbook(recordLoadCallback.getRowAccessWindowSize());
+        SXSSFWorkbook workbook = new SXSSFWorkbook(SXSSFWorkbook.DEFAULT_WINDOW_SIZE);
         SXSSFSheet sh = workbook.createSheet();
 
 
