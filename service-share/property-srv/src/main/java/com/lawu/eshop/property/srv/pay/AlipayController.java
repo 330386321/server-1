@@ -127,7 +127,7 @@ public class AlipayController extends BaseController {
         paramMap.put("anti_phishing_key", "");
         paramMap.put("exter_invoke_ip", "");
 
-        paramMap.put("out_trade_no", param.getOutTradeNo());
+        paramMap.put("out_trade_no", IdWorkerHelperImpl.generate(BizIdType.BUSINESS));
         paramMap.put("subject", param.getSubject());
         if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.getVal().equals(param.getBizFlagEnum().getVal())) {
             paramMap.put("extra_common_param", param.getBizFlagEnum().getVal() + split + param.getUserNum() + split
