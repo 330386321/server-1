@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
 import com.lawu.eshop.ad.dto.AdPlatformVideoFlatDTO;
@@ -53,6 +54,7 @@ public class AdPlatformController extends BaseController {
      * @param positionEnum  
      * @return
      */
+	@AutoTesting
     @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "广告信息查询 (banner)", notes = "广告信息查询[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -62,7 +64,7 @@ public class AdPlatformController extends BaseController {
         return adPlatformService.selectByPosition(positionEnum);
     }
 
-
+	@AutoTesting
     @Audit(date = "2017-08-09", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "广告首页广告位 (广告首页4个广告位) ", notes = "广告首页广告位 (广告首页4个广告位)[]（张荣成）", httpMethod = "GET")

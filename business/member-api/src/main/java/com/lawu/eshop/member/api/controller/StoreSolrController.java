@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
@@ -72,6 +73,7 @@ public class StoreSolrController extends BaseController {
     @Autowired
     private RecommendStoreCacheService recommendStoreCacheService;
 
+    @AutoTesting
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "搜索门店/猜你喜欢/更多商家", notes = "搜索门店(名称搜索)/猜你喜欢(全部商家)/更多商家(同行业商家)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -90,6 +92,7 @@ public class StoreSolrController extends BaseController {
         return result;
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "搜索词关联词频查询", notes = "根据搜索词推荐关联词和频率查询。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -99,6 +102,7 @@ public class StoreSolrController extends BaseController {
         return storeSolrService.listStoreSearchWord(name, regionPath);
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-26", reviewer = "孙林青")
     @ApiOperation(value = "要买单人气推荐", notes = "要买单人气推荐。[1100]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -146,6 +150,7 @@ public class StoreSolrController extends BaseController {
         return successGet(storeSolrDTOS);
     }
 
+    @AutoTesting
     @Audit(date = "2017-08-01", reviewer = "孙林青")
     @ApiOperation(value = "新店推荐", notes = "新店推荐(前50)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -165,6 +170,7 @@ public class StoreSolrController extends BaseController {
         return successGet(storeDTOS);
     }
 
+    @AutoTesting
     @Audit(date = "2017-08-01", reviewer = "孙林青")
     @ApiOperation(value = "专属特惠", notes = "专属特惠(优惠系数升序)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -183,6 +189,7 @@ public class StoreSolrController extends BaseController {
         return result;
     }
 
+    @AutoTesting
     @Audit(date = "2017-08-01", reviewer = "孙林青")
     @ApiOperation(value = "优选美食", notes = "优选美食(人气最高和评分最高各5个)。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

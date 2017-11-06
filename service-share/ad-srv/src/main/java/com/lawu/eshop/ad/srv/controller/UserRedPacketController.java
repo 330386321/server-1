@@ -138,6 +138,9 @@ public class UserRedPacketController extends BaseController {
 	@RequestMapping(value = "getUserRedpacketMaxMoney", method = RequestMethod.POST)
 	public Result<UserRedpacketMaxMoneyDTO> getUserRedpacketMaxMoney(@RequestParam("redPacketId") Long redPacketId) {
 		UserRedpacketMaxMoney maxMoney =userRedPacketService.getUserRedpacketMaxMoney(redPacketId);
+		if (maxMoney == null) {
+			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+		}
 		UserRedpacketMaxMoneyDTO dto =new UserRedpacketMaxMoneyDTO();
 		dto.setMoney(maxMoney.getMaxMoney());
 		return successCreated(dto);

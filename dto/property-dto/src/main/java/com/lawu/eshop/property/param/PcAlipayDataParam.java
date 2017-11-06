@@ -32,9 +32,9 @@ public class PcAlipayDataParam extends PcAlipayParam implements Serializable {
 	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "totalAmount格式错误要求数字或小数位不超过2位")
 	private String totalAmount;
 
-	@ApiParam(name = "outTradeNo", required = true, value = "商户订单号")
-	@NotBlank(message = "outTradeNo不能为空")
-	private String outTradeNo;
+//	@ApiParam(name = "outTradeNo", required = true, value = "商户订单号")
+//	@NotBlank(message = "outTradeNo不能为空")
+//	private String outTradeNo;
 	
 	@NotBlank(message = "subject不能为空")
 	private String subject;
@@ -52,13 +52,13 @@ public class PcAlipayDataParam extends PcAlipayParam implements Serializable {
 		this.merchantId = merchantId;
 	}
 		
-	public String getOutTradeNo() {
-		return outTradeNo;
-	}
-
-	public void setOutTradeNo(String outTradeNo) {
-		this.outTradeNo = outTradeNo;
-	}
+//	public String getOutTradeNo() {
+//		return outTradeNo;
+//	}
+//
+//	public void setOutTradeNo(String outTradeNo) {
+//		this.outTradeNo = outTradeNo;
+//	}
 
 	public String getTotalAmount() {
 		return totalAmount;

@@ -747,9 +747,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemUpdateDO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		// 根据订单状态是否需要退货
 		ShoppingRefundTypeEnum shoppingRefundTypeEnum = null;
+		// 根据订单状态是否需要退货
+		boolean isAllowRejection = true;
 		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue())) {
 			shoppingRefundTypeEnum = ShoppingRefundTypeEnum.REFUND;
+			isAllowRejection = false;
 		} else {
+		    isAllowRejection = true;
 			// 判断当前订单是否需要物流
 			if (shoppingOrderDO.getIsNeedsLogistics()) {
 				shoppingRefundTypeEnum = ShoppingRefundTypeEnum.RETURN_REFUND;
@@ -763,7 +767,11 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		if (shoppingOrderDO.getIsNoReasonReturn() && shoppingRefundTypeEnum.equals(param.getType())) {
 			// 订单是否需要物流
 			if (ShoppingRefundTypeEnum.REFUND.equals(shoppingRefundTypeEnum)) {
-				shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
+			    if (!isAllowRejection) {
+			        shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
+			    } else {
+			        shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
+			    }
 			} else if (ShoppingRefundTypeEnum.RETURN_REFUND.equals(shoppingRefundTypeEnum)) {
 				shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
 			}

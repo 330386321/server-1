@@ -264,6 +264,9 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	@Override
 	public UserRedpacketMaxMoney getUserRedpacketMaxMoney(Long redPacketId) {
 		UserRedPacketDO  userRedPacketDO = userRedPacketDOMapper.selectByPrimaryKey(redPacketId);
+		if (userRedPacketDO == null) {
+			return null;
+		}
 		UserRedpacketMaxMoney userRedpacketMaxMoney = new UserRedpacketMaxMoney();
 		userRedpacketMaxMoney.setMaxMoney(userRedPacketDO.getTotalMoney().divide(BigDecimal.valueOf(userRedPacketDO.getTotalCount()),2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(PropertyType.ad_red_packet_default)));
 		return userRedpacketMaxMoney;

@@ -1,8 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import com.lawu.eshop.user.dto.*;
-import com.lawu.eshop.user.param.EFriendQueryDataParam;
-import com.lawu.eshop.user.param.EFriendQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -23,6 +21,14 @@ import com.lawu.eshop.member.api.service.InviterService;
 import com.lawu.eshop.member.api.service.MemberProfileService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantInviterService;
+import com.lawu.eshop.user.dto.EFriendInviterDTO;
+import com.lawu.eshop.user.dto.EfriendDTO;
+import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
+import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
+import com.lawu.eshop.user.dto.InviterDTO;
+import com.lawu.eshop.user.dto.MerchantInviterDTO;
+import com.lawu.eshop.user.param.EFriendQueryDataParam;
+import com.lawu.eshop.user.param.EFriendQueryParam;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 
@@ -122,6 +128,7 @@ public class InviterController extends BaseController {
         return page;
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。[1002] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

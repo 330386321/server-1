@@ -3,6 +3,8 @@ package com.lawu.eshop.utils;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +14,9 @@ import com.alibaba.fastjson.JSONArray;
 public class StringUtil {
 
     private static Logger logger = LoggerFactory.getLogger(StringUtil.class);
-
+    
+    private final static Pattern emoji = Pattern.compile("\\ud83c[\\udc00-\\udfff]|\\ud83d[\\udc00-\\udfff]|\\ud83d[\\ude80-\\udeff]|[\\u2600-\\u27ff]");
+    
     private StringUtil(){}
 
     /**
@@ -198,5 +202,44 @@ public class StringUtil {
             money = money.substring(0,money.indexOf("."));
         }
         return money;
+    }
+    
+    /**
+     * 对用户昵称进行统一处理
+     * 
+     * @param value
+     * @return
+     * @author jiangxinjun
+     * @date 2017年11月3日
+     */
+    public static String anonymous(String value) {
+        if (value == null) {
+            return null;
+        }
+        int length = value.length();
+        if (length == 0) {
+            return value;
+        }
+        Matcher matcher = emoji.matcher(value);
+        /* 
+         * 初始和结尾字符的长度，可能为表情，是两个字符
+         */
+        int startCharLength = 1;
+        int endCharLength = 1;
+        while (matcher.find()) {
+            if (matcher.start() == 0) {
+                startCharLength = matcher.end() - matcher.start();
+            }
+            if (matcher.end() == length) {
+                endCharLength = matcher.end() - matcher.start();
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        if (length > startCharLength) {
+            sb.append(value.substring(0, startCharLength)).append("***").append(value.substring(length - endCharLength, length));
+        } else {
+            sb.append(value);
+        }
+        return sb.toString();
     }
 }

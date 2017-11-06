@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
@@ -33,6 +34,7 @@ public class IndustryTypeController {
     @Autowired
     private IndustryTypeService industryTypeService;
 
+    @AutoTesting
     @Audit(date = "2017-05-16", reviewer = "孙林青")
     @ApiOperation(value = "查询行业(嵌套分组)", notes = "查询所有行业(嵌套分组)。 [1100] (章勇)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -41,6 +43,7 @@ public class IndustryTypeController {
         return industryTypeService.listIndustryType();
     }
 
+    @AutoTesting
     @Audit(date = "2017-05-16", reviewer = "孙林青")
     @ApiOperation(value = "查询父行业下的所有行业", notes = "查询父行业下的所有行业。 [1100] (章勇)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -49,6 +52,7 @@ public class IndustryTypeController {
         return industryTypeService.listIndustryTypeByParentId(parentId);
     }
 
+    @AutoTesting
     @Audit(date = "2017-05-17", reviewer = "孙林青")
     @ApiOperation(value = "查询所有行业（不区分级别）", notes = "查询所有行业（不区分级别）。 [1100] (章勇)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -57,6 +61,7 @@ public class IndustryTypeController {
         return industryTypeService.getAllIndustryList();
     }
 
+    @AutoTesting
     @Audit(date = "2017-08-18", reviewer = "李洪军")
     @ApiOperation(value = "根据行业类型查询行业列表", notes = "根据行业类型查询行业列表。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

@@ -2,7 +2,6 @@ package com.lawu.eshop.member.api.controller;
 
 import java.util.List;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -10,10 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.ProductCategoryService;
 import com.lawu.eshop.product.dto.ProductCategoryDTO;
 
@@ -54,6 +55,7 @@ public class ProductCategoryController extends BaseController {
 		return successCreated(dto);
 	}
 
+	@AutoTesting
 	@Audit(date = "2017-04-26", reviewer = "孙林青")
 	@ApiOperation(value = "根据父ID查询商品分类", notes = "根据父ID查询商品分类，(杨清华)", httpMethod = "GET")
 	@RequestMapping(value = "find/{parentId}", method = RequestMethod.GET)

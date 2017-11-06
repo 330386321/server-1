@@ -1,5 +1,16 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -8,20 +19,22 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.MemberProductCommentDTO;
 import com.lawu.eshop.member.api.MemberApiConfig;
-import com.lawu.eshop.member.api.service.*;
+import com.lawu.eshop.member.api.service.CommentMerchantService;
+import com.lawu.eshop.member.api.service.FansMerchantService;
+import com.lawu.eshop.member.api.service.FavoriteProductService;
+import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.member.api.service.ProductService;
+import com.lawu.eshop.member.api.service.ShoppingCartService;
 import com.lawu.eshop.product.dto.MemberProductCommentInfoDTO;
 import com.lawu.eshop.product.dto.MemberProductModelDTO;
 import com.lawu.eshop.product.dto.MemberProductStoreDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
@@ -53,6 +66,7 @@ public class ProductController extends BaseController {
 	@Autowired
 	private MemberApiConfig memberApiConfig;
 
+	@AutoTesting
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@ApiOperation(value = "查询商品详情", notes = "根据商品ID查询商品详情信息，[]，（杨清华）", httpMethod = "GET")
 	@RequestMapping(value = "{productId}", method = RequestMethod.GET)

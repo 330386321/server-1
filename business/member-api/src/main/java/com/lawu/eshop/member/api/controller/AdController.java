@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -136,6 +137,7 @@ public class AdController extends BaseController {
 	/**
 	 * @see
 	 */
+	@AutoTesting
 	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
 	@ApiOperation(value = "E赚列表(E赚平面和视频)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
@@ -146,6 +148,7 @@ public class AdController extends BaseController {
 		return adExtendService.selectListByMember(adEgainParam);
 	}
 
+	@AutoTesting
 	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
 	@ApiOperation(value = "会员查询广告列表(精选推荐)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
@@ -167,6 +170,7 @@ public class AdController extends BaseController {
 		//return adExtendService.selectChoiceness(param);
 	}
 
+	@AutoTesting
 	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
 	@ApiOperation(value = "会员查询广告列表(积分榜，人气榜)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
@@ -240,6 +244,7 @@ public class AdController extends BaseController {
         return successAccepted(adEgainDTO);
     }
 
+	@AutoTesting
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
 	@ApiOperation(value = "会员查询广告列表(E赞)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
 //	@Authorization
@@ -361,6 +366,7 @@ public class AdController extends BaseController {
 		return successGet(result);
 	}
 
+	@AutoTesting
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
 	@ApiOperation(value = "广告搜索", notes = "广告搜索,[]（张荣成）", httpMethod = "GET")
 //	@Authorization
@@ -439,6 +445,7 @@ public class AdController extends BaseController {
 
 	}
 
+	@AutoTesting
 	@Deprecated
 	@Audit(date = "2017-05-12", reviewer = "孙林青")
 	@ApiOperation(value = "E赚列表(E赚平面和视频)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
@@ -461,6 +468,7 @@ public class AdController extends BaseController {
 		//return adExtendService.selectEgainAd(adEgainParam);
 	}
 
+	@AutoTesting
 	@Audit(date = "2017-05-23", reviewer = "孙林青")
 	@ApiOperation(value = "获取领取红包之前的信息", notes = "红包信息,[5009]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -540,6 +548,7 @@ public class AdController extends BaseController {
 
 	}
 
+	@AutoTesting
 	@Audit(date = "2017-06-15", reviewer = "孙林青")
 	@ApiOperation(value = "红包是否领取完", notes = "红包是否领取完,[]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")

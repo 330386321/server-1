@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.autotest.client.AutoTesting;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
@@ -75,6 +76,7 @@ public class MerchantDetailController extends BaseController {
     @Autowired
     private RegionService regionService;
 
+    @AutoTesting
     @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "要买单门店详情", notes = "要买单门店详情(用户评价、更多商家查询其他接口)。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -123,6 +125,7 @@ public class MerchantDetailController extends BaseController {
         return successGet(storeDetailDTO);
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "商家相册", notes = "商家相册(店内环境照)。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -131,6 +134,7 @@ public class MerchantDetailController extends BaseController {
         return merchantStoreImageService.listMerchantStoreImageByType(merchantId, MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT);
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "要购物门店详情", notes = "要购物门店详情基本信息。[1002,2009]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -181,6 +185,7 @@ public class MerchantDetailController extends BaseController {
         return shoppingStoreDetailDTOResult;
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "要购物门店详情店铺首页", notes = "要购物门店详情店铺首页。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -189,6 +194,7 @@ public class MerchantDetailController extends BaseController {
         return shoppingProductService.listHotProduct(listShoppingProductParam);
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "要购物门店详情全部商品", notes = "要购物门店详情全部商品。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -197,6 +203,7 @@ public class MerchantDetailController extends BaseController {
         return shoppingProductService.listAllProduct(listShoppingProductParam);
     }
 
+    @AutoTesting
     @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "要购物门店详情最新上架", notes = "要购物门店详情最新上架。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
