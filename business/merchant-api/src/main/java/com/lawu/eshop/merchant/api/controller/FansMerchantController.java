@@ -368,7 +368,7 @@ public class FansMerchantController extends BaseController {
 		// 给商家发送站内消息
 		Result<PropertyPointDTO> propertyPointDTOResult = propertyInfoService.getPropertyPoint(userNum);
 		MessageInfoParam messageInfoParam = new MessageInfoParam();
-		messageInfoParam.setRelateId(merchantId);
+		messageInfoParam.setRelateId(Long.valueOf(result.getModel().toString()));
 		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS_MERCHANT);
 		MessageTempParam messageTempParam = new MessageTempParam();
 		messageTempParam.setExpendPoint(new BigDecimal(inviteFansCount));
