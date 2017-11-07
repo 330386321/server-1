@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.lawu.eshop.jobs.service.CommissionUtilService;
+import com.lawu.eshop.property.dto.AdCommissionResultDTO;
+import com.lawu.eshop.property.param.CommissionResultParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +41,10 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 	private PropertySrvService propertySrvService;
 	@Autowired
 	private OrderSrvService orderSrvService;
+	@Autowired
+	private CommissionUtilService commissionUtilService;
 
-	/**
-	 * // 查询订单相关用户商家的上级邀请关系 //
-	 * 计算提成：实际提成(算等级)=actualMoney*(实际提成(4‰)+提成幅度(0.0005)*等级)*0.997 // //
-	 * 第1级提成:actualMoney*(4‰+0.005*level)*0.997，进余额--每升级一个等级提成比例+0.0005 //
-	 * 第2级提成：actualMoney*(3‰+0.005*level)*0.997，进余额--每升级一个等级提成比例+0.0005 //
-	 * 第3级提成：actualMoney*(1‰+0.005*level)*0.997 ，若A为用户进余额，若A为商家进广告积分
-	 */
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void commission(List<ShoppingOrderCommissionDTO> orders,int flag, String msg) {
@@ -99,30 +98,23 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						}
 
 //						logger.info("[{}-memberInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,saleCommission,saleCommissionAddScope,level);
-						
-						BigDecimal actualCommission = saleCommission.add(saleCommissionAddScope.multiply(level.subtract(new BigDecimal("1"))));//没升一个级别+0.005
-						BigDecimal actureMoneyIn;
-						BigDecimal actureLoveIn = null;
-						if (i == 2) {
-							actureMoneyIn = actualMoney.multiply(actualCommission).setScale(6, BigDecimal.ROUND_HALF_UP);// 第三级进积分，无爱心账户
-						} else {
-							actureMoneyIn = actualMoney.multiply(actualCommission).multiply(actualCommissionScope).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额
-							actureLoveIn = actualMoney.multiply(actualCommission).multiply(loveAccountScale).setScale(6, BigDecimal.ROUND_HALF_UP);// 爱心账户
-						
-							//如果计算出爱心账户为0.000000时默认赋值0.000001
-							if(actureLoveIn.compareTo(BigDecimal.ZERO) == 0){
-								actureLoveIn = new BigDecimal("0.000001");
-							}
-						}
-						
-						//如果计算出实际提成为0.000000时默认赋值0.000001
-						if(actureMoneyIn.compareTo(BigDecimal.ZERO) == 0){
-							actureMoneyIn = new BigDecimal("0.000001");
-						}
-						
-						param.setActureMoneyIn(actureMoneyIn);
-						param.setActureLoveIn(actureLoveIn);
 
+						BigDecimal actualCommission = saleCommission.add(saleCommissionAddScope.multiply(level.subtract(new BigDecimal("1"))));//没升一个级别+0.005
+
+						CommissionResultParam commissionResultparam = new CommissionResultParam();
+						commissionResultparam.setBeforeMoney(actualMoney);
+						commissionResultparam.setCommission0(BigDecimal.valueOf(1));
+						commissionResultparam.setCurrentCommission(actualCommission);
+						commissionResultparam.setActualCommissionScope(actualCommissionScope);
+						commissionResultparam.setLoveAccountScale(loveAccountScale);
+						commissionResultparam.setDept(i);
+						Result<AdCommissionResultDTO> rntResult = commissionUtilService.getCommissionResult(commissionResultparam);
+						if(rntResult.getRet() != ResultCode.SUCCESS){
+							continue;
+						}
+						param.setActureMoneyIn(rntResult.getModel().getActureMoneyIn());
+						param.setActureLoveIn(rntResult.getModel().getActureLoveIn());
+						
 						if (memberInviters.get(i).getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
 							param.setTypeVal(MemberTransactionTypeEnum.SALES_COMMISSION.getValue());
 							param.setTypeName(MemberTransactionTypeEnum.SALES_COMMISSION.getName());
@@ -135,7 +127,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 
 //						logger.info("[{}-memberInviters],actualCommission={},actualCommissionScope={},loveAccountScale={}",msg,actualCommission,actualCommissionScope,loveAccountScale);
 //						logger.info("[{}-memberInviters],actualMoney={},actureMoneyIn={},actureLoveIn={}",msg,actualMoney,param.getActureMoneyIn(),param.getActureLoveIn());
-						
+
 						retCode1 = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode1) {
 							m++;
@@ -173,29 +165,21 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						}
 						
 //						logger.info("[{}-merchantInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,saleCommission,saleCommissionAddScope,level);
-						
+
 						BigDecimal actualCommission = saleCommission.add(saleCommissionAddScope.multiply(level.subtract(new BigDecimal("1"))));
-						BigDecimal actureMoneyIn;
-						BigDecimal actureLoveIn = null;
-						if (i == 2) {
-							actureMoneyIn = actualMoney.multiply(actualCommission).setScale(6, BigDecimal.ROUND_HALF_UP);// 第三级进积分，无爱心账户
-						} else {
-							actureMoneyIn = actualMoney.multiply(actualCommission).multiply(actualCommissionScope).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额
-							actureLoveIn = actualMoney.multiply(actualCommission).multiply(loveAccountScale).setScale(6, BigDecimal.ROUND_HALF_UP);// 爱心账户
-						
-							//如果计算出爱心账户为0.000000时默认赋值0.000001
-							if(actureLoveIn.compareTo(BigDecimal.ZERO) == 0){
-								actureLoveIn = new BigDecimal("0.000001");
-							}
+						CommissionResultParam commissionResultparam = new CommissionResultParam();
+						commissionResultparam.setBeforeMoney(actualMoney);
+						commissionResultparam.setCommission0(BigDecimal.valueOf(1));
+						commissionResultparam.setCurrentCommission(actualCommission);
+						commissionResultparam.setActualCommissionScope(actualCommissionScope);
+						commissionResultparam.setLoveAccountScale(loveAccountScale);
+						commissionResultparam.setDept(i);
+						Result<AdCommissionResultDTO> rntResult = commissionUtilService.getCommissionResult(commissionResultparam);
+						if(rntResult.getRet() != ResultCode.SUCCESS){
+							continue;
 						}
-						
-						//如果计算出实际提成为0.000000时默认赋值0.000001
-						if(actureMoneyIn.compareTo(BigDecimal.ZERO) == 0){
-							actureMoneyIn = new BigDecimal("0.000001");
-						}
-						
-						param.setActureMoneyIn(actureMoneyIn);
-						param.setActureLoveIn(actureLoveIn);
+						param.setActureMoneyIn(rntResult.getModel().getActureMoneyIn());
+						param.setActureLoveIn(rntResult.getModel().getActureLoveIn());
 
 						if (merchantInviters.get(i).getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
 							param.setTypeVal(MemberTransactionTypeEnum.VOLUME_COMMISSION.getValue());
