@@ -24,6 +24,7 @@ import com.lawu.eshop.merchant.api.service.BankAccountService;
 import com.lawu.eshop.merchant.api.service.CashManageFrontService;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.dto.BankAccountDTO;
 import com.lawu.eshop.property.dto.BankAccountNameDTO;
 import com.lawu.eshop.property.param.BankAccountParam;
@@ -163,6 +164,7 @@ public class BankAccountController extends BaseController{
 		}else{
 			Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
 			if(flag.getModel()!=null && (Boolean)flag.getModel()){
+				 bankAccountParam.setUserType(UserType.MERCHANT);
 				 bankAccountService.updateBankAccount(id,userNum, bankAccountParam);
 				 return successCreated(ResultCode.SUCCESS);
 			}else{

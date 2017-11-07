@@ -1,7 +1,7 @@
 package com.lawu.excel.util;
 
 
-import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 
 /**
  * Excel单元格内容对齐类型导出对齐类型
@@ -11,17 +11,17 @@ import org.apache.poi.ss.usermodel.CellStyle;
  */
 public enum CellAlignType {
 
-    LEFT(CellStyle.ALIGN_LEFT),
-    CENTER(CellStyle.ALIGN_CENTER),
-    RIGHT(CellStyle.ALIGN_RIGHT);
+    LEFT(HorizontalAlignment.LEFT),
+    CENTER(HorizontalAlignment.CENTER),
+    RIGHT(HorizontalAlignment.RIGHT);
 
-    private short alignment;
+    private HorizontalAlignment alignment;
 
-    CellAlignType(short alignment) {
+    CellAlignType(HorizontalAlignment alignment) {
         this.alignment = alignment;
     }
 
-    public short getAlignment() {
+    public HorizontalAlignment getAlignment() {
         return alignment;
     }
 }

@@ -1,10 +1,14 @@
 package com.lawu.eshop.user.param;
 
-import com.lawu.eshop.user.constants.UserSexEnum;
-import io.swagger.annotations.ApiParam;
+import java.util.Date;
+
+import javax.validation.constraints.Pattern;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import com.lawu.eshop.user.constants.UserSexEnum;
+
+import io.swagger.annotations.ApiParam;
 
 /**
  * @author
@@ -12,6 +16,7 @@ import java.util.Date;
  */
 public class UserParam {
 
+    @Pattern(message="用户昵称不合法", regexp="^(?!.*(?:[\\ud83c\\udc00-\\ud83c\\udfff]|[\\ud83d\\udc00-\\ud83d\\udfff]|[\\u2600-\\u27ff])).*$")
     @ApiParam(name = "nickname", value = "昵称")
     private String nickname;
 

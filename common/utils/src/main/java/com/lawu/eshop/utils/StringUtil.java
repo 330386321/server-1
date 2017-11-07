@@ -15,7 +15,7 @@ public class StringUtil {
 
     private static Logger logger = LoggerFactory.getLogger(StringUtil.class);
     
-    private final static Pattern emoji = Pattern.compile("\\ud83c[\\udc00-\\udfff]|\\ud83d[\\udc00-\\udfff]|\\ud83d[\\ude80-\\udeff]|[\\u2600-\\u27ff]");
+    private final static Pattern emoji = Pattern.compile("[\\ud83c\\udc00-\\ud83c\\udfff]|[\\ud83d\\udc00-\\ud83d\\udfff]|[\\u2600-\\u27ff]");
     
     private StringUtil(){}
 
