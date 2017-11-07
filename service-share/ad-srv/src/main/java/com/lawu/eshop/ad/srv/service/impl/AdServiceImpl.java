@@ -1482,14 +1482,12 @@ public class AdServiceImpl implements AdService {
 			
 		}
 		
-		AdDO record = new AdDO();
-		record.setId(param.getId());
-		record.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
-		record.setGmtModified(new Date());
-		record.setThirdNumber(param.getThirdNumber());
-		record.setPayType(param.getPayTypeEnum().getVal());
-		record.setIsPay(true);
-		adDOMapper.updateByPrimaryKeySelective(record);
+		ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+		ad.setGmtModified(new Date());
+		ad.setThirdNumber(param.getThirdNumber());
+		ad.setPayType(param.getPayTypeEnum().getVal());
+		ad.setIsPay(true);
+		adDOMapper.updateByPrimaryKeySelective(ad);
 		
 		//将抢赞添加到solr
 		if(ad.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal()){
