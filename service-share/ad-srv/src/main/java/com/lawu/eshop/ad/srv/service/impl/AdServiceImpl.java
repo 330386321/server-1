@@ -1487,7 +1487,7 @@ public class AdServiceImpl implements AdService {
 		ad.setThirdNumber(param.getThirdNumber());
 		ad.setPayType(param.getPayTypeEnum().getVal());
 		ad.setIsPay(true);
-		adDOMapper.updateByPrimaryKeySelective(ad);
+ 		adDOMapper.updateByPrimaryKeySelective(ad);
 		
 		//将抢赞添加到solr
 		if(ad.getType()==AdTypeEnum.AD_TYPE_PRAISE.getVal()){
