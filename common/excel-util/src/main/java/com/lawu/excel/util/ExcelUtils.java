@@ -11,11 +11,10 @@ import java.util.Map;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.streaming.SXSSFCell;
-import org.apache.poi.xssf.streaming.SXSSFRow;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
@@ -29,7 +28,7 @@ public class ExcelUtils {
     /**
      * Excel导出
      *
-     * @param out 输出流
+     * @param out                输出流
      * @param recordLoadCallback 数据加载回调
      * @throws IOException
      */
@@ -39,21 +38,21 @@ public class ExcelUtils {
         int[] cellWidths = recordLoadCallback.getCellWidths();
         CellAlignType[] cellAlignTypes = recordLoadCallback.getCellAlignTypes();
 
-        if(cellTitles == null) {
+        if (cellTitles == null) {
             throw new ExcelExportVerifyException("标题栏数组不能为空");
         }
-        if(cellWidths == null) {
+        if (cellWidths == null) {
             throw new ExcelExportVerifyException("单元格宽度数组不能为空");
         }
-        if(cellAlignTypes == null) {
+        if (cellAlignTypes == null) {
             throw new ExcelExportVerifyException("单元格内容对齐类型数组不能为空");
         }
-        if(cellTitles.length != cellWidths.length || cellTitles.length != cellAlignTypes.length) {
+        if (cellTitles.length != cellWidths.length || cellTitles.length != cellAlignTypes.length) {
             throw new ExcelExportVerifyException("cellTitles、cellWidths、cellAlignTypes三者长度不一致");
         }
 
-        SXSSFWorkbook workbook = new SXSSFWorkbook(recordLoadCallback.getRowAccessWindowSize());
-        SXSSFSheet sh = workbook.createSheet();
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sh = workbook.createSheet();
 
 
         int rowNum = 0;
@@ -62,24 +61,22 @@ public class ExcelUtils {
         Map<Integer, XSSFCellStyle> cellStyles = new HashMap<>();
 
         // 创建单元格标题行（即第一行）
-        if (cellTitles != null) {
-            SXSSFRow titleRow = sh.createRow(rowNum);
-            for (int i = 0; i < cellTitles.length; i++) {
+        XSSFRow titleRow = sh.createRow(rowNum);
+        for (int i = 0; i < cellTitles.length; i++) {
 
-                XSSFCellStyle cellStyle = (XSSFCellStyle) workbook.createCellStyle();
-                cellStyle.setAlignment(cellAlignTypes[i].getAlignment());
+            XSSFCellStyle cellStyle = workbook.createCellStyle();
+            cellStyle.setAlignment(cellAlignTypes[i].getAlignment());
 
-                cellStyles.put(i, cellStyle);
+            cellStyles.put(i, cellStyle);
 
-                createCell(titleRow, i, cellTitles[i], cellStyle);
+            createCell(titleRow, i, cellTitles[i], cellStyle);
 
-                if(cellWidths[i] > 0) {
-                    sh.setColumnWidth(i, cellWidths[i] * 256);
-                }
-
+            if (cellWidths[i] > 0) {
+                sh.setColumnWidth(i, cellWidths[i] * 256);
             }
-            rowNum++;
+
         }
+        rowNum++;
 
         // 判断数据是否加载完成
         while (!recordLoadCallback.isFinished()) {
@@ -88,7 +85,7 @@ public class ExcelUtils {
             for (int i = 0; i < records.size(); i++, rowNum++) {
 
                 // 创建数据行
-                SXSSFRow row = sh.createRow(rowNum);
+                XSSFRow row = sh.createRow(rowNum);
                 String[] cellValues = records.get(i);
                 // 填充单元格
                 for (int cellNum = 0; cellNum < cellTitles.length; cellNum++) {
@@ -104,7 +101,7 @@ public class ExcelUtils {
         } finally {
             try {
                 // dispose of temporary files backing this workbook on disk
-                workbook.dispose();
+                //workbook.dispose();
             } finally {
                 workbook.close();
             }
@@ -114,22 +111,18 @@ public class ExcelUtils {
     /**
      * 创建单元格
      *
-     * @param row 行实例
-     * @param cellNum 单元格序号
-     * @param value 单元格填充值
+     * @param row       行实例
+     * @param cellNum   单元格序号
+     * @param value     单元格填充值
      * @param cellStyle 单元格样式
      */
-    private static void createCell(SXSSFRow row, int cellNum, String value, XSSFCellStyle cellStyle) {
-        SXSSFCell cell = row.createCell(cellNum);
+    private static void createCell(XSSFRow row, int cellNum, String value, XSSFCellStyle cellStyle) {
+        XSSFCell cell = row.createCell(cellNum);
         cell.setCellValue(value);
 
-        if(cellStyle != null) {
+        if (cellStyle != null) {
             cell.setCellStyle(cellStyle);
         }
-    }
-
-    private static void createCell(SXSSFRow row, int cellNum, String value) {
-        createCell(row, cellNum, value, null);
     }
 
     /**
@@ -163,10 +156,10 @@ public class ExcelUtils {
 
                 ExcelImportRowResult rowResult = rowCallback.checkAndSave(row, cellValues);
 
-                if(rowResult.isBlockedErr()) {
+                if (rowResult.isBlockedErr()) {
                     throw new ExcelImportVerifyException(rowResult);
                 }
-                if(rowResult.isErr()) {
+                if (rowResult.isErr()) {
                     rowResultList.add(rowResult);
                 }
 
@@ -183,18 +176,18 @@ public class ExcelUtils {
      * @return
      */
     private static Object getCellValue(Cell cell) {
-        if(cell == null) {
+        if (cell == null) {
             return null;
         }
         Object cellValue = null;
         switch (cell.getCellType()) {
             case Cell.CELL_TYPE_BOOLEAN:
-                cellValue =cell.getBooleanCellValue();
+                cellValue = cell.getBooleanCellValue();
                 break;
             case Cell.CELL_TYPE_ERROR:
                 break;
             default:
-                cellValue =cell.getStringCellValue();
+                cellValue = cell.getStringCellValue();
                 break;
         }
         return cellValue;
