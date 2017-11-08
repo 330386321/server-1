@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -120,25 +121,29 @@ public class FansInviteContentServiceImpl implements FansInviteContentService{
 	public Long saveInviteContentExtendService(FansInviteContentExtendParam inviteContentParam) {
 		String[] idArr = inviteContentParam.getIds().split(",");
 		Date date = new Date();
-		for(String id : idArr) {
-			FansMerchantDO fansMerchantDO = new FansMerchantDO();
+		FansMerchantDO fansMerchantDO;
+		List<FansMerchantDO> fansMerchantDOS = new ArrayList<>();
+		for (String id : idArr) {
+			fansMerchantDO = new FansMerchantDO();
 			fansMerchantDO.setMemberId(Long.valueOf(id));
 			fansMerchantDO.setMerchantId(inviteContentParam.getMerchantId());
-			fansMerchantDO.setChannel((byte)2);
+			fansMerchantDO.setChannel((byte) 2);
+			fansMerchantDO.setStatus((byte) 0);
 			fansMerchantDO.setGmtCreate(date);
-			fansMerchantDO.setStatus((byte)0);
-			fansMerchantDOMapper.insert(fansMerchantDO);
+			fansMerchantDOS.add(fansMerchantDO);
 		}
+		fansMerchantDOMapperExtend.batchInsertFansMerchant(fansMerchantDOS);
+
 		FansInviteContentDO fansInviteContentDO = FansInviteContentConverter.converterFansInviteContentParam(inviteContentParam);
 		fansInviteContentDO.setGmtCreate(date);
 		fansInviteContentDO.setGmtModified(date);
 		fansInviteContentDOMapper.insertSelective(fansInviteContentDO);
 		Long fansInviteContentDOId = fansInviteContentDO.getId();
 
-		inviteFansMap.put("regionName",inviteContentParam.getRegionName());
-		inviteFansMap.put("inviteFansCount",inviteContentParam.getInviteFansCount());
-		inviteFansMap.put("sex",inviteContentParam.getSex());
-		inviteFansMap.put("age",inviteContentParam.getAge());
+		inviteFansMap.put("regionName", inviteContentParam.getRegionName());
+		inviteFansMap.put("inviteFansCount", inviteContentParam.getInviteFansCount());
+		inviteFansMap.put("sex", inviteContentParam.getSex());
+		inviteFansMap.put("age", inviteContentParam.getAge());
 		inviteFansTransactionMainServiceImpl.sendNotice(fansInviteContentDOId);
 		return fansInviteContentDOId;
 	}

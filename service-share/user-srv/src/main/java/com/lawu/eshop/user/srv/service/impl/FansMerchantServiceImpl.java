@@ -5,12 +5,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.gexin.fastjson.JSONObject;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.FansInviteResultEnum;
@@ -69,7 +69,6 @@ public class FansMerchantServiceImpl implements FansMerchantService {
 
     @Override
 	public List<FansMerchantBO> listInviteFansWithContent(Long merchantId, ListInviteFansWithContentParam param) {
-    	System.out.println(JSONObject.toJSONString(param));
     	ListInviteFansRealWithContentParam listInviteFansRealWithContentParam = new ListInviteFansRealWithContentParam();
     	listInviteFansRealWithContentParam.setMerchantId(merchantId);
     	listInviteFansRealWithContentParam.setRegionPath(param.getRegionPath());
@@ -79,14 +78,13 @@ public class FansMerchantServiceImpl implements FansMerchantService {
         listInviteFansRealWithContentParam.setEndAge(param.getEndAge());
         listInviteFansRealWithContentParam.setInviteCount(param.getInviteCount());
         listInviteFansRealWithContentParam.setInviteType((int)param.getInviteType());
-        if(param.getNums() != null) {
-	        String[] num = param.getNums().split(",");
-	        List<String> numList = Arrays.asList(num);
-	        listInviteFansRealWithContentParam.setNums(numList);
+        if (StringUtils.isNotEmpty(param.getNums())) {
+            String[] num = param.getNums().split(",");
+            List<String> numList = Arrays.asList(num);
+            listInviteFansRealWithContentParam.setNums(numList);
         }
         List<FansMerchantDOView> list = fansMerchantDOMapperExtend.listInviteFansWithContent(listInviteFansRealWithContentParam);
         return FansMerchantConverter.convertBO(list);
-		
 	}
     
     
