@@ -85,7 +85,6 @@
                     </resources>
                     <forceTags>true</forceTags>
                     <imageTags>
-                       <imageTag>${docker.image.version}</imageTag>
                        <imageTag>latest</imageTag>
                     </imageTags>
                 </configuration>
