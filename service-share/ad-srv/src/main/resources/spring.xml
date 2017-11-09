@@ -51,6 +51,8 @@
         <property name="pullBatchSize" value="35"/>
         <!-- 批量消费，一次消费多少条消息， 默认设置为1 -->
         <property name="consumeMessageBatchMaxSize" value="5"/>
+        <property name="consumeThreadMin" value="${mq.consume.thread.min}" />
+        <property name="consumeThreadMax" value="${mq.consume.thread.max}" />
         <property name="messageListenerConcurrently" ref="messageConsumerListener" />
 
     </bean>
