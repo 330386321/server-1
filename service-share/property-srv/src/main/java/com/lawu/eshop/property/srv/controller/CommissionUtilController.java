@@ -74,7 +74,7 @@ public class CommissionUtilController extends BaseController {
 	}
 
 	/**
-	 * 点击广告（平面、视频）提成计算结果
+	 * 提成计算结果
 	 * @param param
 	 * @return
 	 */
