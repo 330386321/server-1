@@ -1,7 +1,14 @@
 package com.lawu.eshop.jobs.service.impl;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.jobs.JobsConfig;
 import com.lawu.eshop.jobs.service.CommentMerchantService;
 import com.lawu.eshop.jobs.service.MerchantStoreService;
 import com.lawu.eshop.jobs.service.StoreStatisticsService;
@@ -11,11 +18,6 @@ import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -30,12 +32,15 @@ public class StoreStatisticsServiceImpl implements StoreStatisticsService {
     @Autowired
     private CommentMerchantService commentMerchantService;
 
+    @Autowired
+    private JobsConfig jobsConfig;
+
     @Override
     public void executeStoreStatistics() {
         ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
         listMerchantStoreParam.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
         listMerchantStoreParam.setManageType(ManageTypeEnum.ENTITY.val);
-        listMerchantStoreParam.setPageSize(1000);
+        listMerchantStoreParam.setPageSize(jobsConfig.getPageSize());
         int currentPage = 0;
 
         Result<List<MerchantStoreDTO>> result;
@@ -43,7 +48,7 @@ public class StoreStatisticsServiceImpl implements StoreStatisticsService {
             currentPage ++;
             listMerchantStoreParam.setCurrentPage(currentPage);
             result = merchantStoreService.listMerchantStore(listMerchantStoreParam);
-            if (result == null || result.getRet() != ResultCode.SUCCESS) {
+            if (result == null || result.getRet() != ResultCode.SUCCESS || result.getModel().isEmpty()) {
                 return;
             }
 
