@@ -323,8 +323,8 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 
 		int offset = 0;
 		int pageSize = 1000;
+        RowBounds rowBounds = new RowBounds(offset, pageSize);
 		while (true) {
-			RowBounds rowBounds = new RowBounds(offset, pageSize);
 			List<UserRedPacketDO> list = userRedPacketDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 			if (list.isEmpty()) {
 				return;
