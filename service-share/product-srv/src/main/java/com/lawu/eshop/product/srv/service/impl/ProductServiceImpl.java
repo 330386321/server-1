@@ -682,9 +682,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void rebuildProductIndex() {
+    public void rebuildProductIndex(Integer pageSize) {
         ListProductParam listProductParam = new ListProductParam();
-        listProductParam.setPageSize(1000);
+        listProductParam.setPageSize(pageSize);
         int currentPage = 0;
 
         while (true) {

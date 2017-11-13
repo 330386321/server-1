@@ -313,8 +313,8 @@ public class ProductController extends BaseController {
      */
     @SuppressWarnings("rawtypes")
 	@RequestMapping(value = "rebuildProductIndex", method = RequestMethod.GET)
-    public Result rebuildProductIndex() {
-        productService.rebuildProductIndex();
+    public Result rebuildProductIndex(@RequestParam Integer pageSize) {
+        productService.rebuildProductIndex(pageSize);
         return successGet();
     }
 

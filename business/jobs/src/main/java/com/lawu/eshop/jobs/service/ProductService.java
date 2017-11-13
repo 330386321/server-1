@@ -29,7 +29,7 @@ public interface ProductService {
      * @author meishuquan
      */
     @RequestMapping(method = RequestMethod.GET, value = "product/rebuildProductIndex")
-    Result rebuildProductIndex();
+    Result rebuildProductIndex(@RequestParam("pageSize") Integer pageSize);
 
     /**
      * 删除无效的商品索引

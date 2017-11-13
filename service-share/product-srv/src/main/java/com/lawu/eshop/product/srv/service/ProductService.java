@@ -137,7 +137,7 @@ public interface ProductService {
     /**
      * 重建商品索引
      */
-    void rebuildProductIndex();
+    void rebuildProductIndex(Integer pageSize);
 
     /**
      * 删除无效的商品索引
