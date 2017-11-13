@@ -1,19 +1,22 @@
 package com.lawu.eshop.jobs.service.impl;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.jobs.JobsConfig;
 import com.lawu.eshop.jobs.service.RongYunDownLoadService;
 import com.lawu.eshop.jobs.service.RongYunService;
 import com.lawu.eshop.user.dto.RongYunHistoryMessageDTO;
 import com.lawu.eshop.utils.DateUtil;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 import util.DownLoadUtil;
 
 /**
@@ -34,7 +37,7 @@ public class RongYunDownLoadServiceImpl implements RongYunDownLoadService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String dateFormat = sdf.format(date);
         String dateStr;
-        for (int i = 1; i < 24; i++) {
+        for (int i = 0; i < 24; i++) {
             if (i < 10) {
                 dateStr = dateFormat + "0" + i;
             } else {
