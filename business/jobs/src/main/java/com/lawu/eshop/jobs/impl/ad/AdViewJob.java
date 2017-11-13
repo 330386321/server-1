@@ -15,7 +15,7 @@ import com.dangdang.ddframe.job.api.simple.SimpleJob;
  */
 public class AdViewJob implements SimpleJob{
 
-	private static Logger logger = LoggerFactory.getLogger(ClickAdCommissionJob.class);
+	private static Logger logger = LoggerFactory.getLogger(AdViewJob.class);
 
     @Autowired
     private AdViewExtendService adViewExtendService;

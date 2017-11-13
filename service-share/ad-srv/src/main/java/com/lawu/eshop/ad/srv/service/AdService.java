@@ -48,7 +48,7 @@ public interface AdService {
      *
      * @param adSaveParam
      * @return
-     */
+     */ 
 	AdSaveInfoBO saveAd(AdSaveParam adSaveParam);
 
     /**
@@ -272,15 +272,6 @@ public interface AdService {
 	 */
 	Boolean isSendRedPacket(Long merchantId);
 
-	/**
-	 * 定时任务修改广告上架
-	 */
-	void updatAdToPutting();
-
-	/**
-	 * 定时任务修改结束
-	 */
-	void updatAdToPuted();
 	
 	/**
 	 * 商家端广告批量删除
@@ -350,10 +341,6 @@ public interface AdService {
 
     void soldOutAdByMerchantId(Long merchantId);
     
-    /**
-	 * 定时任务修改两个星期平面和视频结束
-	 */
-	void updatFlatAndVideoToPuted();
 	
 	MerchantInfoBO selectMerchantNumByAdId(Long id);
 	

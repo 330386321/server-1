@@ -24,7 +24,7 @@ public class AdViewServiceImpl extends BaseController implements AdViewExtendSer
 	
 	@Override
 	public void updateViewCount() {
-		Result<List<ViewDTO>> rs=adSrvService.getAllAd();
+		 Result<List<ViewDTO>> rs=adSrvService.getAllAd();
 		 List<ViewDTO> list=rs.getModel();
 		 if(!list.isEmpty()){
 			 for (ViewDTO dto : list) {
