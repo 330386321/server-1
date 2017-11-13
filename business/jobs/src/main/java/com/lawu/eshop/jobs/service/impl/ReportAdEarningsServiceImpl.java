@@ -99,14 +99,27 @@ public class ReportAdEarningsServiceImpl extends BaseController implements Repor
 					reportAdEarningsParam.setUserTotalPoint(ponitResult.getModel().getUserTotalPoint());
 					reportAdEarningsParam.setLoveTotalPoint(ponitResult.getModel().getLoveTotalPoint());
 
-					// 用户总收益+爱心账户收益>投放金额*60%时为异常数据
-					if (ponitResult.getModel().getUserTotalPoint()
-							.add(ponitResult.getModel().getLoveTotalPoint()).compareTo(
-									reportAdDTO.getTotalPoint().multiply(BigDecimal.valueOf(0.6))) == 1 &&
-									(reportAdDTO.getStatusEnum()==com.lawu.eshop.ad.constants.AdStatusEnum.AD_STATUS_PUTED || reportAdDTO.getStatusEnum()==com.lawu.eshop.ad.constants.AdStatusEnum.AD_STATUS_OUT)) {
-						reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.ANOMALY);
-					} else {
-						reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.NORMAL);
+					/* 
+					 * 1、平面和视频 用户总收益+爱心账户收益>投放金额*80%时为异常数据 
+					 * 2、红包和E咻 用户总收益+爱心账户收益>投放金额时为异常数据 
+					 */
+					if(reportAdDTO.getTypeEnum()==AdTypeEnum.AD_TYPE_FLAT ||reportAdDTO.getTypeEnum()==AdTypeEnum.AD_TYPE_VIDEO ){
+						if(ponitResult.getModel().getUserTotalPoint()
+								.add(ponitResult.getModel().getLoveTotalPoint()).compareTo(
+										reportAdDTO.getTotalPoint().multiply(BigDecimal.valueOf(0.8))) == 1 &&
+										(reportAdDTO.getStatusEnum()==com.lawu.eshop.ad.constants.AdStatusEnum.AD_STATUS_PUTED || reportAdDTO.getStatusEnum()==com.lawu.eshop.ad.constants.AdStatusEnum.AD_STATUS_OUT)){
+							reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.ANOMALY);
+						}else{
+							reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.NORMAL);
+						}
+					}else{
+						if(ponitResult.getModel().getUserTotalPoint()
+								.add(ponitResult.getModel().getLoveTotalPoint()).compareTo(
+										reportAdDTO.getTotalPoint()) == 1 && (reportAdDTO.getStatusEnum()==com.lawu.eshop.ad.constants.AdStatusEnum.AD_STATUS_PUTED || reportAdDTO.getStatusEnum()==com.lawu.eshop.ad.constants.AdStatusEnum.AD_STATUS_OUT)){
+							reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.ANOMALY);
+						}else{
+							reportAdEarningsParam.setReportAdEarningsStatusEnum(ReportAdEarningsStatusEnum.NORMAL);
+						}
 					}
 					reportAdEarningsService.saveReportAdEarnings(reportAdEarningsParam);
 				}

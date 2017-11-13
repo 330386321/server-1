@@ -77,6 +77,8 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
             if (!consumeResult.getModel().isEmpty()) {
                 for (RecommendFoodDTO foodDTO : consumeResult.getModel()) {
                     getDiscountInfo(foodDTO);
+                    String areaName = regionService.getAreaName(foodDTO.getRegionPath()).getModel();
+                    foodDTO.setAreaName(areaName);
                 }
                 String jsonStr = JSONArray.toJSONString(consumeResult.getModel());
                 recommendStoreCacheService.saveRecommendFoodConsume(regionDTO.getPath(), jsonStr);
@@ -88,6 +90,8 @@ public class RecommendStoreServiceImpl implements RecommendStoreService {
             if (!commentResult.getModel().isEmpty()) {
                 for (RecommendFoodDTO foodDTO : commentResult.getModel()) {
                     getDiscountInfo(foodDTO);
+                    String areaName = regionService.getAreaName(foodDTO.getRegionPath()).getModel();
+                    foodDTO.setAreaName(areaName);
                 }
                 String jsonStr = JSONArray.toJSONString(commentResult.getModel());
                 recommendStoreCacheService.saveRecommendFoodComment(regionDTO.getPath(), jsonStr);

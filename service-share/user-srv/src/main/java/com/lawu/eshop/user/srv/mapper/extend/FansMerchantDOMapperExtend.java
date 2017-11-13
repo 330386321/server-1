@@ -8,6 +8,7 @@ import com.lawu.eshop.user.param.ListFansRealParam;
 import com.lawu.eshop.user.param.ListInviteFansRealParam;
 import com.lawu.eshop.user.param.ListInviteFansRealWithContentParam;
 import com.lawu.eshop.user.param.UserFansParam;
+import com.lawu.eshop.user.srv.domain.FansMerchantDO;
 import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOReportView;
 import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOView;
 
@@ -66,5 +67,13 @@ public interface FansMerchantDOMapperExtend {
 	 * @author meishuquan
 	 */
 	void delOverdueFans(UserFansParam param);
+
+	/**
+	 * 批量新增粉丝记录
+	 *
+	 * @param fansMerchantDOS
+	 * @author meishuquan
+	 */
+	void batchInsertFansMerchant(List<FansMerchantDO> fansMerchantDOS);
 
 }

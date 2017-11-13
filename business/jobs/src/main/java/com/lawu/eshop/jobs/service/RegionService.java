@@ -1,13 +1,15 @@
 package com.lawu.eshop.jobs.service;
 
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.dto.RegionDTO;
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.dto.RegionDTO;
 
 /**
  * @author meishuquan
@@ -26,5 +28,14 @@ public interface RegionService {
 
     @RequestMapping(value = "region/getRegion/{id}", method = RequestMethod.GET)
     Result<RegionDTO> getRegion(@PathVariable("id") Integer id);
+
+    /**
+     * 根据区域路径查询区域名称
+     *
+     * @param regionPath
+     * @return
+     */
+    @RequestMapping(value = "region/getAreaName", method = RequestMethod.GET)
+    Result<String> getAreaName(@RequestParam("regionPath") String regionPath);
 
 }

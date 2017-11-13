@@ -200,4 +200,12 @@
 	<select id="delOverdueFans" parameterType="com.lawu.eshop.user.param.UserFansParam">
 		DELETE FROM fans_merchant WHERE merchant_id = #{merchantId} and status = 0 and channel = 2 and gmt_create &lt;= SUBDATE(#{gmtCreate},interval 24 hour);
 	</select>
+	
+	<insert id="batchInsertFansMerchant" parameterType="java.util.List">
+		insert into fans_merchant(merchant_id, member_id, status, channel, gmt_create)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(#{item.merchantId},#{item.memberId},#{item.status},#{item.channel},#{item.gmtCreate})
+		</foreach>
+	</insert>
 </mapper>

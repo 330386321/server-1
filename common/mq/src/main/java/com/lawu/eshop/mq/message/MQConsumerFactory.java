@@ -33,6 +33,10 @@ public class MQConsumerFactory {
 
     private int consumeMessageBatchMaxSize;
 
+    private int consumeThreadMin;
+
+    private int consumeThreadMax;
+
     private Map<String, String> topicsTags;
 
     private MessageListenerConcurrently messageListenerConcurrently;
@@ -50,6 +54,9 @@ public class MQConsumerFactory {
         consumer.setPullBatchSize(pullBatchSize);
         //监听器每次接受本地队列的消息是多少条，默认1个
         consumer.setConsumeMessageBatchMaxSize(consumeMessageBatchMaxSize);
+
+        consumer.setConsumeThreadMin(consumeThreadMin);
+        consumer.setConsumeThreadMax(consumeThreadMax);
         /**
          * 设置Consumer第一次启动是从队列头部开始消费还是队列尾部开始消费<br>
          * 如果非第一次启动，那么按照上次消费的位置继续消费
@@ -122,6 +129,14 @@ public class MQConsumerFactory {
 
     public void setConsumeMessageBatchMaxSize(int consumeMessageBatchMaxSize) {
         this.consumeMessageBatchMaxSize = consumeMessageBatchMaxSize;
+    }
+
+    public void setConsumeThreadMin(int consumeThreadMin) {
+        this.consumeThreadMin = consumeThreadMin;
+    }
+
+    public void setConsumeThreadMax(int consumeThreadMax) {
+        this.consumeThreadMax = consumeThreadMax;
     }
 
     public void setTopicsTags(Map<String, String> topicsTags) {
