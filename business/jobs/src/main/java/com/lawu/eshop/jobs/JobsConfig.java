@@ -16,7 +16,7 @@ public class JobsConfig {
     @Value(value = "${industry_type_id}")
     private Integer industryTypeId;
 
-    @Value(value = "${page.size}")
+    @Value(value = "${page_size}")
     private Integer pageSize;
 
     public String getDownLoadDir() {
