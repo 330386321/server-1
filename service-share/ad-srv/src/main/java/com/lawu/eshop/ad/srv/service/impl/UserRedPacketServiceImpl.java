@@ -311,7 +311,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	 */
 	@Override
 	@Transactional
-	public void executeUserRedPacketData() {
+	public void executeUserRedPacketData(Integer pageSize) {
 		Date date = DateUtil.getDayBefore(new Date());// 前一天的时间
 		UserRedPacketDOExample example = new UserRedPacketDOExample();
 		List<Byte> status = new ArrayList<>();
@@ -322,7 +322,6 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		cr.andStatusIn(status);
 
 		int offset = 0;
-		int pageSize = 1000;
         RowBounds rowBounds = new RowBounds(offset, pageSize);
 		while (true) {
 			List<UserRedPacketDO> list = userRedPacketDOMapper.selectByExampleWithRowbounds(example, rowBounds);

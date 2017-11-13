@@ -72,7 +72,7 @@ public interface UserRedPacketService {
 
 	UserPacketRefundParam selectBackTotalMoney(Long userRedpacketId);
 
-	void executeUserRedPacketData();
+	void executeUserRedPacketData(Integer pageSize);
 
 	boolean checkUserGetRedpacket(Long redPacketId, String userNum);
 }

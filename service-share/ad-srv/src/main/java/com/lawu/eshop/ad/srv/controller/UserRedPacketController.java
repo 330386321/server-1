@@ -96,8 +96,8 @@ public class UserRedPacketController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "executeUserRedPacketData", method = RequestMethod.POST)
-	public Result executeUserRedPacketData() {
-		userRedPacketService.executeUserRedPacketData();
+	public Result executeUserRedPacketData(@RequestParam Integer pageSize) {
+		userRedPacketService.executeUserRedPacketData(pageSize);
 		return successCreated();
 	}
 
