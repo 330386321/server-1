@@ -1720,8 +1720,11 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
     	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	
-    	shoppingOrderService.executeAutoPaymentsToMerchant();
-    	
+        List<ShoppingOrderDO> list2 = shoppingOrderService.selectAutoReleaseFrozenFundsOrder(1, 10);
+        Assert.assertNotNull(list2);
+        Assert.assertEquals(1, list2.size());
+        shoppingOrderService.executeAutoReleaseFrozenFundsOrder(list2.get(0));
+        
     	ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(true, actual.getIsDone());
@@ -2225,6 +2228,10 @@ public class ShoppingOrderServiceImplTest {
     	param.setReason("七天无理由退款");
     	param.setType(ShoppingRefundTypeEnum.REFUND);
     	shoppingOrderService.requestRefund(shoppingOrderItemDO.getId(), expected.getMemberId(), param);
+    	
+    	ShoppingOrderDO actualShoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
+    	Assert.assertNotNull(actualShoppingOrderDO);
+    	Assert.assertEquals(true, actualShoppingOrderDO.getIsRefundItems());
     	
     	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);

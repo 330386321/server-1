@@ -12,6 +12,7 @@ import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
 import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
+import com.lawu.eshop.order.srv.domain.extend.UpdateMerchantActualIncomeParam;
 
 /**
  * 关联查询订单和订单项表
@@ -56,14 +57,6 @@ public interface ShoppingOrderExtendDOMapper {
 	List<ShoppingOrderExtendDO> selectByExample(ShoppingOrderExtendDOExample example);
 	
 	/**
-	 * 
-	 * @param record
-	 * @return
-	 * @author Sunny
-	 */
-    int updateByPrimaryKeySelective(ShoppingOrderExtendDO record);
-    
-	/**
 	 * 查询交易数据
 	 * 
 	 * @param example 查询参数
@@ -102,4 +95,14 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @return
 	 */
 	List<Long> selectIdByExample(ShoppingOrderExtendDOExample example, RowBounds rowBounds);
+	
+	/**
+	 * 更新商家实际收入金额
+	 * 
+	 * @param param
+	 * @author jiangxinjun
+	 * @createDate 2017年11月13日
+	 * @updateDate 2017年11月13日
+	 */
+	void updateMerchantActualIncome(UpdateMerchantActualIncomeParam param);
 }

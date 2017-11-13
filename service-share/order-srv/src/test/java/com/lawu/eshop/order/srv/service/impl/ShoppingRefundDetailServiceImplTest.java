@@ -286,6 +286,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	expected.setShoppingCartIdsStr("1");
     	expected.setSendTime(0);
     	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setIsRefundItems(true);
     	shoppingOrderDOMapper.insertSelective(expected);
     	
     	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
@@ -324,6 +325,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	Assert.assertNotNull(shoppingOrderDO);
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), shoppingOrderDO.getOrderStatus());
     	Assert.assertEquals(0D, shoppingOrderDO.getActualAmount().doubleValue(), 0D);
+    	Assert.assertEquals(false, shoppingOrderDO.getIsRefundItems());
     	
     	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
@@ -1674,7 +1676,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	expected.setMerchantName("拉乌网络");
     	expected.setMerchantStoreId(1L);
     	expected.setMerchantNum("B0001");
-    	expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
     	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
@@ -1686,6 +1688,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	expected.setShoppingCartIdsStr("1");
     	expected.setSendTime(0);
     	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setIsRefundItems(true);
     	shoppingOrderDOMapper.insertSelective(expected);
     	
     	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
@@ -1721,6 +1724,10 @@ public class ShoppingRefundDetailServiceImplTest {
     	
     	shoppingRefundDetailService.revokeRefundRequest(shoppingRefundDetailDO.getId(), expected.getMemberId());
     	
+    	ShoppingOrderDO actualShoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
+    	Assert.assertNotNull(actualShoppingOrderDO);
+    	Assert.assertEquals(false, actualShoppingOrderDO.getIsRefundItems());
+    	
     	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertNull(actual.getRefundStatus());
@@ -1752,7 +1759,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	expected.setMerchantName("拉乌网络");
     	expected.setMerchantStoreId(1L);
     	expected.setMerchantNum("B0001");
-    	expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
+    	expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
     	expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
     	expected.setOrderTotalPrice(new BigDecimal(1));
     	expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
@@ -1764,6 +1771,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	expected.setShoppingCartIdsStr("1");
     	expected.setSendTime(0);
     	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setIsRefundItems(true);
     	shoppingOrderDOMapper.insertSelective(expected);
     	
     	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
@@ -1798,6 +1806,10 @@ public class ShoppingRefundDetailServiceImplTest {
     	shoppingRefundDetailDOMapper.insert(shoppingRefundDetailDO);
     	
     	shoppingRefundDetailService.revokeRefundRequest(shoppingRefundDetailDO.getId());
+    	
+        ShoppingOrderDO actualShoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
+        Assert.assertNotNull(actualShoppingOrderDO);
+        Assert.assertEquals(false, actualShoppingOrderDO.getIsRefundItems());
     	
     	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);

@@ -1856,6 +1856,66 @@ public class ShoppingOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsRefundItemsIsNull() {
+            addCriterion("is_refund_items is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRefundItemsIsNotNull() {
+            addCriterion("is_refund_items is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRefundItemsEqualTo(Boolean value) {
+            addCriterion("is_refund_items =", value, "isRefundItems");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRefundItemsNotEqualTo(Boolean value) {
+            addCriterion("is_refund_items <>", value, "isRefundItems");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRefundItemsGreaterThan(Boolean value) {
+            addCriterion("is_refund_items >", value, "isRefundItems");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRefundItemsGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_refund_items >=", value, "isRefundItems");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRefundItemsLessThan(Boolean value) {
+            addCriterion("is_refund_items <", value, "isRefundItems");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRefundItemsLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_refund_items <=", value, "isRefundItems");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRefundItemsIn(List<Boolean> values) {
+            addCriterion("is_refund_items in", values, "isRefundItems");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRefundItemsNotIn(List<Boolean> values) {
+            addCriterion("is_refund_items not in", values, "isRefundItems");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRefundItemsBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_refund_items between", value1, value2, "isRefundItems");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRefundItemsNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_refund_items not between", value1, value2, "isRefundItems");
+            return (Criteria) this;
+        }
+
         public Criteria andShoppingCartIdsStrIsNull() {
             addCriterion("shopping_cart_ids_str is null");
             return (Criteria) this;

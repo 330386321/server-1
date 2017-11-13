@@ -360,12 +360,6 @@ public interface ShoppingOrderService {
 	 */
 	List<ReportRiseRerouceDTO> fansSaleTransform(ReportDataParam param);
 
-	/**
-	 * 订单收货之后 如果超过退款申请时间，直接付款给商家
-	 * 
-	 * @author Sunny
-	 */
-	void executeAutoPaymentsToMerchant();
 	
 	/**
      * 分页查询查找符合自动取消的订单
@@ -397,4 +391,22 @@ public interface ShoppingOrderService {
 	 * @updateDate 2017年11月13日
 	 */
     void executeAutoCommentOrder(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO);
+    
+    /**
+     * 分页查询订单收货之后，超过退款申请时间的订单
+     * 
+     * @author jiangxinjun
+     * @createDate 2017年11月13日
+     * @updateDate 2017年11月13日
+     */
+    List<ShoppingOrderDO> selectAutoReleaseFrozenFundsOrder(int currentPage, int pageSize);
+    
+    /**
+     * 分页查询订单收货之后，超过退款申请时间的订单
+     * 
+     * @author jiangxinjun
+     * @createDate 2017年11月13日
+     * @updateDate 2017年11月13日
+     */
+    void executeAutoReleaseFrozenFundsOrder(ShoppingOrderDO shoppingOrderDO);
 }

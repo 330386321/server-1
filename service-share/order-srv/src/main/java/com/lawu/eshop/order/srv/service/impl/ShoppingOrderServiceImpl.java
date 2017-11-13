@@ -9,8 +9,6 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -98,8 +96,6 @@ import com.lawu.eshop.utils.DateUtil;
 
 @Service
 public class ShoppingOrderServiceImpl implements ShoppingOrderService {
-
-	private static Logger logger = LoggerFactory.getLogger(ShoppingOrderServiceImpl.class);
 
 	private String automaticCancelOrderTime;
 	
@@ -735,6 +731,10 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		if (shoppingOrderDO.getIsDone()) {
 			throw new OrderNotRefundException(ExceptionMessageConstant.THE_ORDER_EXCEEDS_THE_REFUND_TIME);
 		}
+		ShoppingOrderDO shoppingOrderUpdateDO = new ShoppingOrderDO();
+		shoppingOrderUpdateDO.setId(shoppingOrderDO.getId());
+		shoppingOrderUpdateDO.setIsRefundItems(true);
+		shoppingOrderDOMapper.updateByPrimaryKey(shoppingOrderUpdateDO);
 		// 更新购物订单项状态
 		ShoppingOrderItemDO shoppingOrderItemUpdateDO = new ShoppingOrderItemDO();
 		shoppingOrderItemUpdateDO.setId(shoppingOrderItemDO.getId());
@@ -1385,45 +1385,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	}
 
 	/**
-	 * 订单收货之后 如果超过退款申请时间，直接付款给商家 如果订单中正在退款的商品，跳过不处理 更新订单项不允许退款
-	 * 
-	 * @author Sunny
-	 */
-	@Override
-	public void executeAutoPaymentsToMerchant() {
-		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
-		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
-		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
-
-		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
-
-		// 查找订单以及订单项状态都为交易成功的订单
-		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
-		criteria.andIsDoneEqualTo(false);
-		criteria.andGmtTransactionLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(refundRequestTime) * -1, Calendar.DAY_OF_YEAR));
-		
-		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
-
-		logger.info("需要释放冻结资金的订单数量:{}", shoppingOrderDOList.size());
-
-		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
-			boolean isDone = true;
-			// 判断订单下的所有订单项是否有正在退款中的
-			for (ShoppingOrderItemDO shoppingOrderItemDO : item.getItems()) {
-				if (ShoppingOrderStatusEnum.REFUNDING.getValue().equals(shoppingOrderItemDO.getOrderStatus())) {
-					isDone = false;
-					break;
-				}
-			}
-
-			if (isDone) {
-				paymentsToMerchant(item);
-			}
-		}
-	}
-	
-	/**
 	 * 查找符合自动取消的订单
 	 * 
 	 * @author jiangxinjun
@@ -1442,7 +1403,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         criteria.andGmtCreateLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticRemindNoPaymentOrderTime) * -1, Calendar.DAY_OF_YEAR));
         
         // 分页参数
-        RowBounds rowBounds = new RowBounds(pageSize * (currentPage - 1), pageSize);
+        RowBounds rowBounds = new RowBounds(0, pageSize);
         
         // 查找所有超时未付款的订单
         return shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
@@ -1492,11 +1453,12 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         shoppingOrderItemExtendDOExampleCriteria.andSOGmtTransactionLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticEvaluation) * -1, Calendar.DAY_OF_YEAR));
 
         // 分页参数
-        RowBounds rowBounds = new RowBounds(pageSize * (currentPage - 1), pageSize);
+        RowBounds rowBounds = new RowBounds(0, pageSize);
         
         return shoppingOrderItemExtendDOMapper.selectByExampleWithRowbounds(shoppingOrderItemExtendDOExample, rowBounds);
     }
     
+    @Override
     @Transactional
     public void executeAutoCommentOrder(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
         // 更新为已评论
@@ -1509,31 +1471,47 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         shoppingOrderAutoCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
     }
     
+    @Override
+    public List<ShoppingOrderDO> selectAutoReleaseFrozenFundsOrder(int currentPage, int pageSize) {
+        ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
+        ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
+
+        String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
+
+        // 查找订单以及订单项状态都为交易成功的订单
+        criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+        criteria.andIsDoneEqualTo(false);
+        criteria.andGmtTransactionLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(refundRequestTime) * -1, Calendar.DAY_OF_YEAR));
+        criteria.andIsRefundItemsEqualTo(false);
+        
+        // 分页参数
+        RowBounds rowBounds = new RowBounds(0, pageSize);
+        
+        return shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
+    }
+    
+    @Transactional
+    @Override
+    public void executeAutoReleaseFrozenFundsOrder(ShoppingOrderDO shoppingOrderDO) {
+        // 更新订单状态为完成
+        ShoppingOrderDO update = new ShoppingOrderDO();
+        update.setSendTime(0);
+        update.setId(shoppingOrderDO.getId());
+        update.setIsDone(true);
+        update.setGmtDone(new Date());
+        update.setGmtModified(new Date());
+        shoppingOrderDOMapper.updateByPrimaryKeySelective(update);
+
+        // 发送提醒消息
+        ordersTradingIncomeNotice(shoppingOrderDO.getId(), shoppingOrderDO.getActualAmount(), shoppingOrderDO.getMerchantNum());
+
+        // 释放冻结资金
+        shoppingOrderPaymentsToMerchantTransactionMainServiceImpl.sendNotice(shoppingOrderDO.getId());
+    }
+    
 	/**************************************************************
 	 * PRIVATE METHOD
 	 **************************************************************/
-	/**
-	 * 更改订单状态为完成 释放冻结资金
-	 * 
-	 * @author Sunny
-	 */
-	@Transactional
-	public void paymentsToMerchant(ShoppingOrderExtendDO shoppingOrderExtendDO) {
-		// 更新订单状态为完成
-	    ShoppingOrderDO update = new ShoppingOrderDO();
-		update.setSendTime(0);
-		update.setId(shoppingOrderExtendDO.getId());
-		update.setIsDone(true);
-		update.setGmtDone(new Date());
-		update.setGmtModified(new Date());
-		shoppingOrderDOMapper.updateByPrimaryKeySelective(update);
-
-		// 发送提醒消息
-		ordersTradingIncomeNotice(shoppingOrderExtendDO.getId(), shoppingOrderExtendDO.getActualAmount(), shoppingOrderExtendDO.getMerchantNum());
-
-		// 释放冻结资金
-		shoppingOrderPaymentsToMerchantTransactionMainServiceImpl.sendNotice(shoppingOrderExtendDO.getId());
-	}
 
 	/**
 	 * 提醒商家新增订单交易收入

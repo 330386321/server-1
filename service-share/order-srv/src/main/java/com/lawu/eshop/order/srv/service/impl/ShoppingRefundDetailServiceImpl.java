@@ -40,9 +40,9 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO;
-import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
+import com.lawu.eshop.order.srv.domain.extend.UpdateMerchantActualIncomeParam;
 import com.lawu.eshop.order.srv.exception.CanNotAgreeToARefundException;
 import com.lawu.eshop.order.srv.exception.CanNotAgreeToApplyException;
 import com.lawu.eshop.order.srv.exception.CanNotApplyForPlatformInterventionException;
@@ -442,21 +442,11 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundProcessDO.setGmtCreate(new Date());
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
 		if (param.getIsAgree()) {
-			// 如果当前订单下的所有订单项都是交易关闭状态。关闭订单
-			ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
-			shoppingOrderItemDOExample.createCriteria().andShoppingOrderIdEqualTo(shoppingOrderItemDO.getShoppingOrderId()).andOrderStatusNotEqualTo(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
-			long count = shoppingOrderItemDOMapper.countByExample(shoppingOrderItemDOExample);
-			ShoppingOrderExtendDO shoppingOrderExtendDO = new ShoppingOrderExtendDO();
-			shoppingOrderExtendDO.setId(shoppingOrderItemDO.getShoppingOrderId());
-			shoppingOrderExtendDO.setGmtModified(new Date());
-			// 如果购物订单下的所有订单项都是关闭状态关闭购物订单
-			if (count <= 0) {
-				shoppingOrderExtendDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
-				// 更新交易时间
-				shoppingOrderExtendDO.setGmtTransaction(new Date());
-			}
 			// 更新实际支付给商家的金额
-			shoppingOrderExtendDO.setActualAmountSubtraction(shoppingOrderItemDO.getSalesPrice().multiply(new BigDecimal(shoppingOrderItemDO.getQuantity())));
+			UpdateMerchantActualIncomeParam updateMerchantActualIncomeParam = new UpdateMerchantActualIncomeParam();
+			updateMerchantActualIncomeParam.setId(shoppingOrderDO.getId());
+			updateMerchantActualIncomeParam.setRefundAmount(shoppingOrderItemDO.getSalesPrice().multiply(new BigDecimal(shoppingOrderItemDO.getQuantity())));
+			shoppingOrderExtendDOMapper.updateMerchantActualIncome(updateMerchantActualIncomeParam);
 			
 			// 发送MQ消息给property模块，退款给用户
 			shoppingRefundAgreeToRefundTransactionMainServiceImpl.sendNotice(shoppingOrderItemDO.getId());
@@ -464,8 +454,40 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			// 发送MQ消息给mall模块，删除商品订单评价
 			shoppingRefundAgreeToRefundDeleteCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemDO.getId());
 			
+	        // 如果当前订单下的所有订单项都是交易关闭状态。关闭订单
+            ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
+            shoppingOrderItemDOExample.createCriteria().andShoppingOrderIdEqualTo(shoppingOrderItemDO.getShoppingOrderId());
+            List<ShoppingOrderItemDO> shoppingOrderItemDOList = shoppingOrderItemDOMapper.selectByExample(shoppingOrderItemDOExample);
+            /*
+             * 是否有订单处于退款中
+             */
+            boolean is_any_order_for_refund = false;
+            /*
+             * 是否全部订单都是关闭的
+             */
+            boolean is_all_orders_are_closed = true;
+            for (ShoppingOrderItemDO item : shoppingOrderItemDOList) {
+                if (ShoppingOrderStatusEnum.REFUNDING.getValue().equals(item.getOrderStatus())) {
+                    is_any_order_for_refund = true;
+                }
+                if (!ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue().equals(item.getOrderStatus())) {
+                    is_all_orders_are_closed = false;
+                }
+            }
+            ShoppingOrderDO shoppingOrderUpdateDO = new ShoppingOrderDO();
+            shoppingOrderUpdateDO.setId(shoppingOrderDO.getId());
+            shoppingOrderUpdateDO.setGmtModified(new Date());
+            // 如果购物订单下的所有订单项都是关闭状态关闭购物订单
+            if (is_all_orders_are_closed) {
+                shoppingOrderUpdateDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+                // 更新交易时间
+                shoppingOrderUpdateDO.setGmtTransaction(new Date());
+            }
+            if (!is_any_order_for_refund) {
+                shoppingOrderUpdateDO.setIsRefundItems(false);
+            }
 			// 发送MQ消息之后再更新购物订单表，因为需要获取订单取消之前的订单状态
-			shoppingOrderExtendDOMapper.updateByPrimaryKeySelective(shoppingOrderExtendDO);
+			shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderUpdateDO);
 			
 			// 商家同意退款，提醒买家
 			ShoppingRefundToBeRefundRemindNotification notification = new ShoppingRefundToBeRefundRemindNotification();
@@ -590,7 +612,21 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingOrderItemDO.setSendTime(0);
 		shoppingOrderItemDO.setGmtModified(new Date());
 		shoppingOrderItemDOMapper.updateByPrimaryKey(shoppingOrderItemDO);
-
+		
+		/*
+		 *  查询是否还有处于退款中的订单项
+		 *  如果没有更新订单IsRefundItems为false
+		 */
+		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
+		shoppingOrderItemDOExample.createCriteria().andShoppingOrderIdEqualTo(shoppingOrderDO.getId()).andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+		Long count = shoppingOrderItemDOMapper.countByExample(shoppingOrderItemDOExample);
+		if (count == null || count <= 0) {
+		    ShoppingOrderDO shoppingOrderUpdateDO = new ShoppingOrderDO();
+		    shoppingOrderUpdateDO.setId(shoppingOrderDO.getId());
+		    shoppingOrderUpdateDO.setIsRefundItems(false);
+		    shoppingOrderDOMapper.updateByPrimaryKey(shoppingOrderUpdateDO);
+		}
+		
 		// 更新退款详情
 		// 设置订单的状态为无效
 		ShoppingRefundDetailDO shoppingRefundDetailUpdateDO = new ShoppingRefundDetailDO();
