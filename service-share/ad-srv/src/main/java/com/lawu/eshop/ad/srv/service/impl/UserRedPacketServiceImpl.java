@@ -314,34 +314,39 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 	public void executeUserRedPacketData() {
 		Date date = DateUtil.getDayBefore(new Date());// 前一天的时间
 		UserRedPacketDOExample example = new UserRedPacketDOExample();
-		List<Byte> status= new ArrayList<>();
+		List<Byte> status = new ArrayList<>();
 		status.add(UserRedPacketEnum.USER_STATUS_EFFECTIVE.val);
 		status.add(UserRedPacketEnum.USER_STATUS_OVER.val);
 		Criteria cr = example.createCriteria();
 		cr.andGmtCreateLessThan(date);
 		cr.andStatusIn(status);
-		List<UserRedPacketDO> list = userRedPacketDOMapper.selectByExample(example);
-		if (!list.isEmpty()) {
-			for (int i = 0; i < list.size(); i++) {
-				UserRedPacketDO userRed = list.get(i);
+
+		int offset = 0;
+		int pageSize = 1000;
+		while (true) {
+			RowBounds rowBounds = new RowBounds(offset, pageSize);
+			List<UserRedPacketDO> list = userRedPacketDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+			if (list.isEmpty()) {
+				return;
+			}
+
+			for (UserRedPacketDO userRed : list) {
 				BigDecimal totalBackMoney = new BigDecimal(0);
 				UserRedpacketMaxMoney view = userTakedRedpacketBOMapperExtend.getSumMoney(userRed.getId());
-				if(view==null){
+				if (view == null) {
 					totalBackMoney = userRed.getTotalMoney();
-				}else{
+				} else {
 					totalBackMoney = userRed.getTotalMoney().subtract(view.getMaxMoney());
 				}
-			
+
 				userRed.setGmtModified(new Date());
 				userRed.setStatus(UserRedPacketEnum.USER_STATUS_OUT.val);
 				userRed.setRefundMoney(totalBackMoney);
 				userRedPacketDOMapper.updateByPrimaryKeySelective(userRed);
-				
-				if(totalBackMoney.compareTo(BigDecimal.valueOf(0))==1){
-					
+
+				if (totalBackMoney.compareTo(BigDecimal.valueOf(0)) == 1) {
 					memberRedPacketRefundTransactionMainServiceImpl.sendNotice(userRed.getId());
 				}
-				
 			}
 		}
 	}
