@@ -101,6 +101,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 	private static Logger logger = LoggerFactory.getLogger(ShoppingOrderServiceImpl.class);
 
+	private String automaticCancelOrderTime;
+	
 	@Autowired
 	private ShoppingCartDOMapper shoppingCartDOMapper;
 
@@ -422,8 +424,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Override
 	public ShoppingOrderBO getShoppingOrder(Long id, Long memberId, Long merchantId) throws DataNotExistException, IllegalOperationException {
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
-		if (shoppingOrderDO == null || shoppingOrderDO.getStatus().equals(StatusEnum.INVALID)) {
+	    ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+		if (shoppingOrderDO == null || shoppingOrderDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
 			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
 		}
 		if (memberId != null && !shoppingOrderDO.getMemberId().equals(memberId)) {
@@ -435,19 +437,12 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		return ShoppingOrderConverter.convertShoppingOrderBO(shoppingOrderDO);
 	}
 
-	/**
-	 * 取消购物订单
-	 * 
-	 * @param id
-	 *            购物订单id
-	 * @return
-	 */
 	@Transactional
 	@Override
 	public void cancelOrder(Long memberId, Long id) throws DataNotExistException, IllegalOperationException, OrderNotCanceledException {
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+	    ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
 
-		if (shoppingOrderDO == null || shoppingOrderDO.getStatus().equals(StatusEnum.INVALID)) {
+		if (shoppingOrderDO == null || shoppingOrderDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
 			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
 		}
 
@@ -602,7 +597,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Transactional
 	@Override
 	public void tradingSuccess(Long id, Long memberId, boolean isAutomaticReceipt) {
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+	    ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
 		if (shoppingOrderDO == null) {
 			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
 		}
@@ -828,7 +823,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Transactional
 	@Override
 	public void fillLogisticsInformation(Long id, Long merchantId, ShoppingOrderLogisticsInformationParam param) throws DataNotExistException, IllegalOperationException, CanNotFillInShippingLogisticsException {
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+	    ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
 		if (shoppingOrderDO == null) {
 			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
 		}
@@ -879,7 +874,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		String[] orderIdsArray = orderIds.split(",");
 		BigDecimal total = new BigDecimal(0);
 		for (int i = 0; i < orderIdsArray.length; i++) {
-			ShoppingOrderDO orderDO = shoppingOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderIdsArray[i]));
+		    ShoppingOrderDO orderDO = shoppingOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderIdsArray[i]));
 			/*
 			 * 判断订单的状态是否是待支付 如果不是，说明扣除库存失败，提示买家库存不足
 			 */
@@ -909,7 +904,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		String[] orderIdsArray = orderIds.split(",");
 		BigDecimal total = new BigDecimal(0);
 		for (int i = 0; i < orderIdsArray.length; i++) {
-			ShoppingOrderDO orderDO = shoppingOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderIdsArray[i]));
+		    ShoppingOrderDO orderDO = shoppingOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderIdsArray[i]));
 			total = total.add(orderDO.getOrderTotalPrice());
 		}
 		ShoppingOrderMoneyBO rtn = new ShoppingOrderMoneyBO();
@@ -1006,7 +1001,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Transactional
 	@Override
 	public void minusInventorySuccess(Long id, ShoppingOrderCreateOrderReply reply) {
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+	    ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
 		
 		ShoppingOrderDO shoppingOrderDOUpdate = new ShoppingOrderDO();
 		shoppingOrderDOUpdate.setId(shoppingOrderDO.getId());
@@ -1067,8 +1062,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Transactional
 	@Override
 	public void updateInformation(Long id, ShoppingOrderUpdateInfomationParam param) {
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
-		if (shoppingOrderDO == null || shoppingOrderDO.getStatus().equals(StatusEnum.INVALID)) {
+	    ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+		if (shoppingOrderDO == null || shoppingOrderDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
 			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
 		}
 		shoppingOrderDO = ShoppingOrderConverter.convert(id, param);
@@ -1152,55 +1147,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		}
 		rtn = ShoppingOrderExtendConverter.convertShoppingOrderExtendDetailBO(shoppingOrderExtendDOList.get(0));
 		return rtn;
-	}
-
-	/**
-	 * 自动取消未付款的订单
-	 * 
-	 * @author Sunny
-	 */
-	@Override
-	public void executeAutoCancelOrder() {
-		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(false);
-		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
-
-		String automaticCancelOrderTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
-
-		String automaticRemindNoPaymentOrderTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_REMIND_NO_PAYMENT_ORDER);
-
-		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
-		criteria.andGmtCreateLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticRemindNoPaymentOrderTime) * -1, Calendar.DAY_OF_YEAR));
-
-		// 查找所有超时未付款的订单
-		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
-
-		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
-			// 首先判断是否已经发送过提醒消息，如果没有超过，再判断是否超过付款时间
-			if (item.getSendTime() <= 0) {
-				// 更新发送次数，但是不更新更新时间字段
-				int sendTime = item.getSendTime() == null ? 1 : item.getSendTime().intValue() + 1;
-				item.setSendTime(sendTime);
-				shoppingOrderDOMapper.updateByPrimaryKeySelective(item);
-
-				/*
-				 * 买家支付成功发送消息给商家提醒买家新增了一个订单
-				 */
-				// 组装要发送的消息
-				ShoppingOrderNoPaymentNotification shoppingOrderNoPaymentNotification = new ShoppingOrderNoPaymentNotification();
-				shoppingOrderNoPaymentNotification.setId(item.getId());
-				shoppingOrderNoPaymentNotification.setMemberNum(item.getMemberNum());
-				shoppingOrderNoPaymentNotification.setOrderNum(item.getOrderNum());
-				// 发送消MQ息
-				messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_ORDER_NO_PAYMENT_PUSH_TO_MEMBER, shoppingOrderNoPaymentNotification);
-				continue;
-			}
-
-			boolean isExceeds = DateUtil.isExceeds(item.getGmtCreate(), new Date(), Integer.valueOf(automaticCancelOrderTime), Calendar.DAY_OF_YEAR);
-			if (isExceeds) {
-				cancelOrder(null, item.getId());
-			}
-		}
 	}
 
 	/**
@@ -1501,7 +1447,61 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			}
 		}
 	}
+	
+	/**
+	 * 查找符合自动取消的订单
+	 * 
+	 * @author jiangxinjun
+	 * @date 2017年11月13日
+	 */
+    @Override
+    public List<ShoppingOrderDO> selectAutoCancelOrder(int currentPage, int pageSize) {
+        ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
+        ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
 
+        automaticCancelOrderTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
+
+        String automaticRemindNoPaymentOrderTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_REMIND_NO_PAYMENT_ORDER);
+
+        criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+        criteria.andGmtCreateLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticRemindNoPaymentOrderTime) * -1, Calendar.DAY_OF_YEAR));
+        
+        // 分页参数
+        RowBounds rowBounds = new RowBounds(pageSize * (currentPage - 1), pageSize);
+        
+        // 查找所有超时未付款的订单
+        return shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
+    }
+	
+    @Transactional
+    @Override
+    public void executeAutoCancelOrder(ShoppingOrderDO shoppingOrderDO) {
+        // 首先判断是否已经发送过提醒消息，如果没有超过，再判断是否超过付款时间
+        if (shoppingOrderDO.getSendTime() <= 0) {
+            // 更新发送次数，但是不更新更新时间字段
+            int sendTime = shoppingOrderDO.getSendTime() == null ? 1 : shoppingOrderDO.getSendTime().intValue() + 1;
+            shoppingOrderDO.setSendTime(sendTime);
+            shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+
+            /*
+             * 买家支付成功发送消息给商家提醒买家新增了一个订单
+             */
+            // 组装要发送的消息
+            ShoppingOrderNoPaymentNotification shoppingOrderNoPaymentNotification = new ShoppingOrderNoPaymentNotification();
+            shoppingOrderNoPaymentNotification.setId(shoppingOrderDO.getId());
+            shoppingOrderNoPaymentNotification.setMemberNum(shoppingOrderDO.getMemberNum());
+            shoppingOrderNoPaymentNotification.setOrderNum(shoppingOrderDO.getOrderNum());
+            // 发送消MQ息
+            messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_ORDER_NO_PAYMENT_PUSH_TO_MEMBER, shoppingOrderNoPaymentNotification);
+            return;
+        }
+
+        boolean isExceeds = DateUtil.isExceeds(shoppingOrderDO.getGmtCreate(), new Date(), Integer.valueOf(automaticCancelOrderTime), Calendar.DAY_OF_YEAR);
+        if (isExceeds) {
+            cancelOrder(null, shoppingOrderDO.getId());
+        }
+    }
+    
 	/**************************************************************
 	 * PRIVATE METHOD
 	 **************************************************************/
@@ -1530,7 +1530,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Transactional
 	public void paymentsToMerchant(ShoppingOrderExtendDO shoppingOrderExtendDO) {
 		// 更新订单状态为完成
-		ShoppingOrderDO update = new ShoppingOrderDO();
+	    ShoppingOrderDO update = new ShoppingOrderDO();
 		update.setSendTime(0);
 		update.setId(shoppingOrderExtendDO.getId());
 		update.setIsDone(true);

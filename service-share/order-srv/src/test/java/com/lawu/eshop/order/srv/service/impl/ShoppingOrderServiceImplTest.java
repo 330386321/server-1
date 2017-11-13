@@ -1630,7 +1630,11 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
     	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	
-    	shoppingOrderService.executeAutoCancelOrder();
+    	List<ShoppingOrderDO> list = shoppingOrderService.selectAutoCancelOrder(1, 10);
+    	Assert.assertNotNull(list);
+    	Assert.assertEquals(1, list.size());
+    	shoppingOrderService.executeAutoCancelOrder(list.get(0));
+    	
     	ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(1, actual.getSendTime().intValue());
@@ -1640,11 +1644,15 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderDOUpdate.setGmtCreate(DateUtil.add(new Date(), Integer.valueOf(cancelPropertyDO.getValue()) * -1, Calendar.DAY_OF_YEAR));
     	shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDOUpdate);
     	
-    	shoppingOrderService.executeAutoCancelOrder();
-    	actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
-    	Assert.assertNotNull(actual);
-    	Assert.assertNotNull(actual.getGmtTransaction());
-    	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actual.getOrderStatus());
+        List<ShoppingOrderDO> list2 = shoppingOrderService.selectAutoCancelOrder(1, 10);
+        Assert.assertNotNull(list2);
+        Assert.assertEquals(1, list2.size());
+        shoppingOrderService.executeAutoCancelOrder(list2.get(0));
+        
+        ShoppingOrderDO actual2 = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
+    	Assert.assertNotNull(actual2);
+    	Assert.assertNotNull(actual2.getGmtTransaction());
+    	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actual2.getOrderStatus());
     	
     	ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actualShoppingOrderItemDO.getOrderStatus());

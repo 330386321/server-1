@@ -21,6 +21,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderMoneyBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.exception.CanNotFillInShippingLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
@@ -287,11 +288,13 @@ public interface ShoppingOrderService {
 	ShoppingOrderExtendBO getByShoppingOrderItemId(Long shoppingOrderItemId);
 
 	/**
-	 * 自动取消为付款的订单
+	 * 自动取消未付款的订单
 	 * 
-	 * @author Sunny
+	 * @author jiangxinjun
+	 * @createDate 2017年11月13日
+	 * @updateDate 2017年11月13日
 	 */
-	void executeAutoCancelOrder();
+	void executeAutoCancelOrder(ShoppingOrderDO shoppingOrderDO);
 
 	/**
 	 * 自动提醒发货
@@ -369,5 +372,17 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	void executeAutoPaymentsToMerchant();
+	
+	/**
+     * 分页查询查找符合自动取消的订单
+     * 用户定时任务
+	 * 
+	 * @param currentPage
+	 * @param pageSize
+	 * @author jiangxinjun
+	 * @createDate 2017年11月13日
+	 * @updateDate 2017年11月13日
+	 */
+	List<ShoppingOrderDO> selectAutoCancelOrder(int currentPage, int pageSize);
 
 }
