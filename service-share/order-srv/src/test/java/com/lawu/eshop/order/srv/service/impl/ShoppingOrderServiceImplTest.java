@@ -62,6 +62,7 @@ import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDOExample;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.mapper.PropertyDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
@@ -2012,7 +2013,10 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
     	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	
-    	shoppingOrderService.executetAutoComment();
+    	List<ShoppingOrderItemExtendDO> list = shoppingOrderService.selectAutoCommentOrder(1, 10);
+    	Assert.assertNotNull(list);
+    	Assert.assertEquals(1, list.size());
+    	shoppingOrderService.executeAutoCommentOrder(list.get(0));
     	
     	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
     	Assert.assertNotNull(actual);

@@ -1071,31 +1071,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	}
 
 	/**
-	 * 自动评论超时未评论的订单项
-	 */
-	@Override
-	public void executetAutoComment() {
-		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
-		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
-		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
-		shoppingOrderItemExtendDOExampleCriteria.andIsEvaluationEqualTo(false);
-		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
-
-		// 查找配置表获取自动好评时间
-		String automaticEvaluation = propertyService.getByName(PropertyNameConstant.AUTOMATIC_EVALUATION);
-
-		// 如果交易时间超过automaticEvaluation的记录
-		shoppingOrderItemExtendDOExampleCriteria.andSOGmtTransactionLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticEvaluation) * -1, Calendar.DAY_OF_YEAR));
-
-		List<ShoppingOrderItemExtendDO> shoppingOrderItemExtendDOList = shoppingOrderItemExtendDOMapper.selectByExample(shoppingOrderItemExtendDOExample);
-
-		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemExtendDOList) {
-			// 将事务拆解成单个事务
-			commentShoppingOrder(shoppingOrderItemExtendDO.getId());
-		}
-	}
-
-	/**
 	 * 根据商家的id查询商家是否有进行中的订单
 	 * 
 	 * @param merchantId
@@ -1502,26 +1477,41 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         }
     }
     
+    @Override
+    public List<ShoppingOrderItemExtendDO> selectAutoCommentOrder(int currentPage, int pageSize) {
+        ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
+        shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
+        ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
+        shoppingOrderItemExtendDOExampleCriteria.andIsEvaluationEqualTo(false);
+        shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+
+        // 查找配置表获取自动好评时间
+        String automaticEvaluation = propertyService.getByName(PropertyNameConstant.AUTOMATIC_EVALUATION);
+
+        // 如果交易时间超过automaticEvaluation的记录
+        shoppingOrderItemExtendDOExampleCriteria.andSOGmtTransactionLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticEvaluation) * -1, Calendar.DAY_OF_YEAR));
+
+        // 分页参数
+        RowBounds rowBounds = new RowBounds(pageSize * (currentPage - 1), pageSize);
+        
+        return shoppingOrderItemExtendDOMapper.selectByExampleWithRowbounds(shoppingOrderItemExtendDOExample, rowBounds);
+    }
+    
+    @Transactional
+    public void executeAutoCommentOrder(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
+        // 更新为已评论
+        ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+        shoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
+        shoppingOrderItemDO.setIsEvaluation(true);
+        shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+
+        // 发送MQ消息，通知mall模块添加默认好评记录
+        shoppingOrderAutoCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
+    }
+    
 	/**************************************************************
 	 * PRIVATE METHOD
 	 **************************************************************/
-	/**
-	 * 评论商品订单
-	 * 
-	 * @author Sunny
-	 */
-	@Transactional
-	public void commentShoppingOrder(Long shoppingOrderItemId) {
-		// 更新为已评论
-		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-		shoppingOrderItemDO.setId(shoppingOrderItemId);
-		shoppingOrderItemDO.setIsEvaluation(true);
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
-
-		// 发送MQ消息，通知mall模块添加默认好评记录
-		shoppingOrderAutoCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemId);
-	}
-
 	/**
 	 * 更改订单状态为完成 释放冻结资金
 	 * 

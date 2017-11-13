@@ -22,6 +22,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderMoneyBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.exception.CanNotFillInShippingLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
@@ -259,13 +260,6 @@ public interface ShoppingOrderService {
 	void updateInformation(Long id, ShoppingOrderUpdateInfomationParam param);
 
 	/**
-	 * 检查数据库中超时评论的订单 执行自动评论
-	 * 
-	 * @author Sunny
-	 */
-	void executetAutoComment();
-
-	/**
 	 * 根据商家的id查询商家是否有进行中的订单
 	 * 
 	 * @param merchantId
@@ -375,7 +369,7 @@ public interface ShoppingOrderService {
 	
 	/**
      * 分页查询查找符合自动取消的订单
-     * 用户定时任务
+     * 用于定时任务
 	 * 
 	 * @param currentPage
 	 * @param pageSize
@@ -384,5 +378,23 @@ public interface ShoppingOrderService {
 	 * @updateDate 2017年11月13日
 	 */
 	List<ShoppingOrderDO> selectAutoCancelOrder(int currentPage, int pageSize);
-
+	
+   /**
+     * 分页查询符合自动评论订单
+     * 用于定时任务
+     * 
+     * @author jiangxinjun
+     * @createDate 2017年11月13日
+     * @updateDate 2017年11月13日
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoCommentOrder(int currentPage, int pageSize);
+	
+	/**
+	 * 自动评论订单
+	 * 
+	 * @author jiangxinjun
+	 * @createDate 2017年11月13日
+	 * @updateDate 2017年11月13日
+	 */
+    void executeAutoCommentOrder(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO);
 }
