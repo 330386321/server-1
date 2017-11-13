@@ -20,7 +20,7 @@ public interface FansInviteContentService {
 	 * @return
 	 * @author meishuquan
 	 */
-	void dealOverdueFansInvite();
+	void dealOverdueFansInvite(Integer pageSize);
 
 	/**
 	 * 获取邀请粉丝事务消息参数
