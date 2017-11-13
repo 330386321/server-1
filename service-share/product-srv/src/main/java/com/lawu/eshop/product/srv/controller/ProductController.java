@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +40,7 @@ import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.utils.BeanUtil;
+import com.lawu.eshop.utils.StringUtil;
 
 /**
  * @author Yangqh
@@ -278,7 +278,7 @@ public class ProductController extends BaseController {
     }
 
     /**
-     * 更新商品平均日销量，同时更新solr
+     * 更新商品平均日销量
      *
      * @param id
      * @param averageDailySales
@@ -292,6 +292,18 @@ public class ProductController extends BaseController {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         productService.updateAverageDailySalesById(id, averageDailySales);
+        return successCreated();
+    }
+
+    /**
+     * 更新商品平均日销量
+     *
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = "executeProductAverageDailySales", method = RequestMethod.PUT)
+    public Result executeProductAverageDailySales(@RequestParam Integer pageSize) {
+        productService.executeProductAverageDailySales(pageSize);
         return successCreated();
     }
 

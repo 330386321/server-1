@@ -60,6 +60,7 @@ import com.lawu.eshop.product.srv.mapper.extend.ProductModelDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.service.SolrService;
+import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
 
 @Service
@@ -640,15 +641,44 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public void updateAverageDailySalesById(Long id, BigDecimal averageDailySales) {
         ProductDO productDO = new ProductDO();
         productDO.setId(id);
         productDO.setAverageDailySales(averageDailySales);
         productDOMapper.updateByPrimaryKeySelective(productDO);
+    }
 
-        productDO = productDOMapper.selectByPrimaryKey(id);
-        SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
-        solrService.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+    @Override
+    @Transactional
+    public void executeProductAverageDailySales(Integer pageSize) {
+        ProductDOExample example = new ProductDOExample();
+        example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
+
+        int currentPage = 0;
+        List<ProductDO> productDOS;
+        RowBounds rowBounds;
+        while (true) {
+            currentPage++;
+            rowBounds = new RowBounds((currentPage - 1) * pageSize, pageSize);
+            productDOS = productDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+            if (productDOS == null || productDOS.isEmpty()) {
+                return;
+            }
+
+            for (ProductDO productDO : productDOS) {
+                int days = DateUtil.daysOfTwo(productDO.getGmtCreate());
+                int salesVolume = productDO.getTotalSalesVolume();
+                double averageDailySales = 0;
+                if (days > 0) {
+                    averageDailySales = (double) salesVolume / days;
+                }
+                ProductDO productDO1 = new ProductDO();
+                productDO1.setId(productDO.getId());
+                productDO1.setAverageDailySales(BigDecimal.valueOf(averageDailySales));
+                productDOMapper.updateByPrimaryKeySelective(productDO1);
+            }
+        }
     }
 
     @Override
