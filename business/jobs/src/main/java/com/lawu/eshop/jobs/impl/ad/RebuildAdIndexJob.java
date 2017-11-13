@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dangdang.ddframe.job.api.ShardingContext;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
+import com.lawu.eshop.jobs.JobsConfig;
 import com.lawu.eshop.jobs.service.AdSrvService;
 
 /**
@@ -19,12 +20,15 @@ public class RebuildAdIndexJob implements SimpleJob {
     @Autowired
     private AdSrvService adSrvService;
 
+    @Autowired
+    private JobsConfig jobsConfig;
+
     @Override
     public void execute(ShardingContext shardingContext) {
         logger.debug("------{}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
 
         adSrvService.delInvalidAdIndex();
-        adSrvService.rebuildAdIndex();
+        adSrvService.rebuildAdIndex(jobsConfig.getPageSize());
 
         logger.debug("------{}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
     }

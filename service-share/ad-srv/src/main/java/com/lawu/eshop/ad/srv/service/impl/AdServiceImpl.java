@@ -950,9 +950,9 @@ public class AdServiceImpl implements AdService {
 	}
 
 	@Override
-	public void rebuildAdIndex() {
+	public void rebuildAdIndex(Integer pageSize) {
 		ListAdParam listAdParam = new ListAdParam();
-		listAdParam.setPageSize(1000);
+		listAdParam.setPageSize(pageSize);
 		int currentPage = 0;
 
 		while (true) {
