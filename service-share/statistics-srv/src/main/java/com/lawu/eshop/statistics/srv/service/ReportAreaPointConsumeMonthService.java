@@ -10,4 +10,6 @@ public interface ReportAreaPointConsumeMonthService {
 	int saveReportAreaPointConsumeMonth(ReportAreaPointConsumeMonthParam param);
 	
 	List<ReportAreaPointConsumeMonthBO> selectReportAreaPointConsumeMonth(Integer cityId, String bdate, String edate);
+
+	void executeCollectReportAreaPointConsumeMonth(Integer pageSize);
 }
