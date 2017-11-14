@@ -95,8 +95,8 @@ public class FansInviteContentController extends BaseController {
 	 * @author meishuquan
 	 */
 	@RequestMapping(value = "dealOverdueFansInvite", method = RequestMethod.GET)
-	public Result dealOverdueFansInvite() {
-		fansInviteContentService.dealOverdueFansInvite();
+	public Result dealOverdueFansInvite(@RequestParam Integer pageSize) {
+		fansInviteContentService.dealOverdueFansInvite(pageSize);
 		return successGet();
 	}
 }

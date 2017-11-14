@@ -15,19 +15,19 @@ import com.lawu.jobsextend.AbstractTxPageJob;
  * @createDate 2017年4月17日
  * @updateDate 2017年11月14日
  */
-public class ShoppingOrderAutoCancelOrderJob extends AbstractTxPageJob<ShoppingOrderDO> {
+public class ShoppingOrderAutoRemindToBeCancelledOrderJob extends AbstractTxPageJob<ShoppingOrderDO> {
 
     @Autowired
     private ShoppingOrderService shoppingOrderService;
     
     @Override
     public List<ShoppingOrderDO> queryPage(int offset, int pageSize) {
-        return shoppingOrderService.selectAutoCancelOrder(offset, pageSize);
+        return shoppingOrderService.selectAutoRemindToBeCancelledOrder(offset, pageSize);
     }
 
     @Override
     public void executeSingle(ShoppingOrderDO entity) {
-        shoppingOrderService.cancelOrder(null, entity.getId());
+        shoppingOrderService.executeAutoRemindToBeCancelledOrder(entity);
     }
 
     @Override

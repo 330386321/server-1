@@ -66,4 +66,7 @@ public interface StatisticsSrvService {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "reportAreaPointConsumeMonth/saveReportAreaPointConsumeMonth", method = RequestMethod.POST)
 	Result saveReportAreaPointConsumeMonth(@RequestBody ReportAreaPointConsumeMonthParam param);
+
+	@RequestMapping(value = "reportAreaPointConsumeMonth/executeCollectReportAreaPointConsumeMonth", method = RequestMethod.GET)
+	Result executeCollectReportAreaPointConsumeMonth(@RequestParam("pageSize") Integer pageSize);
 }

@@ -349,7 +349,7 @@ public interface ShoppingOrderService {
     List<ReportRiseRerouceDTO> fansSaleTransform(ReportDataParam param);
 
     /**
-     * 分页查询查找符合自动取消的订单 用于定时任务
+     * 分页查询查找符合自动取消的未付款订单 用于定时任务
      * 
      * @param currentPage
      * @param pageSize
@@ -357,16 +357,27 @@ public interface ShoppingOrderService {
      * @createDate 2017年11月13日
      * @updateDate 2017年11月13日
      */
-    List<ShoppingOrderDO> selectAutoCancelOrder(int currentPage, int pageSize);
+    List<ShoppingOrderDO> selectAutoCancelOrder(int offset, int pageSize);
 
     /**
-     * 执行自动取消未付款的订单
+     * 分页查询查找符合自动提醒即将取消的未付款订单 用于定时任务
+     * 
+     * @param currentPage
+     * @param pageSize
+     * @author jiangxinjun
+     * @createDate 2017年11月13日
+     * @updateDate 2017年11月13日
+     */
+    List<ShoppingOrderDO> selectAutoRemindToBeCancelledOrder(int offset, int pageSize);
+
+    /**
+     * 执行自动提醒即将取消的未付款订单
      * 
      * @author jiangxinjun
      * @createDate 2017年11月13日
      * @updateDate 2017年11月13日
      */
-    void executeAutoCancelOrder(ShoppingOrderDO shoppingOrderDO);
+    void executeAutoRemindToBeCancelledOrder(ShoppingOrderDO shoppingOrderDO);
 
     /**
      * 分页查询符合自动评论订单 用于定时任务
@@ -375,7 +386,7 @@ public interface ShoppingOrderService {
      * @createDate 2017年11月13日
      * @updateDate 2017年11月13日
      */
-    List<ShoppingOrderItemExtendDO> selectAutoCommentOrder(int currentPage, int pageSize);
+    List<ShoppingOrderItemExtendDO> selectAutoCommentOrder(int offset, int pageSize);
 
     /**
      * 执行自动评论订单
@@ -393,7 +404,7 @@ public interface ShoppingOrderService {
      * @createDate 2017年11月13日
      * @updateDate 2017年11月13日
      */
-    List<ShoppingOrderDO> selectAutoReleaseFrozenFundsOrder(int currentPage, int pageSize);
+    List<ShoppingOrderDO> selectAutoReleaseFrozenFundsOrder(int offset, int pageSize);
 
     /**
      * 执行订单收货之后，超过退款申请时间的订单
