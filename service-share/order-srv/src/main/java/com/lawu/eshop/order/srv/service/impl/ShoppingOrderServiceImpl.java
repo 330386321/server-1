@@ -1145,42 +1145,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	}
 
 	/**
-	 * 自动收货
-	 * 
-	 * @author Sunny
-	 */
-	@Override
-	public void executeAutoReceipt() {
-		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
-		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
-		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
-
-		String automaticReceiptTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_RECEIPT);
-
-		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
-		criteria.andGmtTransportLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticReceiptTime) * -1, Calendar.DAY_OF_YEAR));
-
-		// 查找所有超时未收货的订单，自动收货
-		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
-
-		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
-			boolean isDone = true;
-			// 判断订单下的所有订单项是否有正在退款中的
-			for (ShoppingOrderItemDO shoppingOrderItemDO : item.getItems()) {
-				if (ShoppingOrderStatusEnum.REFUNDING.getValue().equals(shoppingOrderItemDO.getOrderStatus())) {
-					isDone = false;
-					break;
-				}
-			}
-
-			if (isDone) {
-				tradingSuccess(item.getId(), true);
-			}
-		}
-	}
-
-	/**
 	 * 查询各种订单状态的数量
 	 * 
 	 * @param memberId
@@ -1507,6 +1471,24 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
         // 释放冻结资金
         shoppingOrderPaymentsToMerchantTransactionMainServiceImpl.sendNotice(shoppingOrderDO.getId());
+    }
+    
+    @Override
+    public List<ShoppingOrderDO> selectAutoReceiptOrder(int currentPage, int pageSize) {
+        ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
+        ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
+
+        String automaticReceiptTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_RECEIPT);
+
+        criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+        criteria.andGmtTransportLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticReceiptTime) * -1, Calendar.DAY_OF_YEAR));
+        criteria.andIsRefundItemsEqualTo(false);
+        
+        // 分页参数
+        RowBounds rowBounds = new RowBounds(0, pageSize);
+        
+        // 查找所有超时未收货的订单，自动收货
+        return shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
     }
     
 	/**************************************************************

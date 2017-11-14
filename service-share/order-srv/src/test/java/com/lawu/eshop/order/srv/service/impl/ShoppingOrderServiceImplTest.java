@@ -1775,6 +1775,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setShoppingCartIdsStr("1,2");
     	expected.setSendTime(0);
     	expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+    	expected.setIsRefundItems(true);
     	shoppingOrderDOMapper.insertSelective(expected);
     	
     	ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
@@ -1865,7 +1866,12 @@ public class ShoppingOrderServiceImplTest {
         shoppingOrderItemDO2.setShoppingOrderId(expected2.getId());
         shoppingOrderItemDOMapper.insert(shoppingOrderItemDO2);
         
-    	shoppingOrderService.executeAutoReceipt();
+        List<ShoppingOrderDO> list = shoppingOrderService.selectAutoReceiptOrder(1, 10);
+        Assert.assertNotNull(list);
+        Assert.assertEquals(1, list.size());
+        for (ShoppingOrderDO item : list) {
+            shoppingOrderService.tradingSuccess(item.getId(), true);
+        }
     	
     	ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
         Assert.assertNotNull(actual);
