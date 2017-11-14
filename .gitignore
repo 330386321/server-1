@@ -9,12 +9,17 @@
 *.iml
 .idea
 
-# Eclipse project files
+# Eclipse project files #
 .settings
 .project
 .classpath
 target
 bin
+
+# STS #
+.apt_generated
+.factorypath
+.springBeans
 
 .DS_Store
 

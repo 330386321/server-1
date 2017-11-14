@@ -349,7 +349,7 @@ public interface ShoppingOrderService {
     List<ReportRiseRerouceDTO> fansSaleTransform(ReportDataParam param);
 
     /**
-     * 分页查询查找符合自动取消的订单 用于定时任务
+     * 分页查询查找符合自动取消的未付款订单 用于定时任务
      * 
      * @param currentPage
      * @param pageSize
@@ -360,13 +360,24 @@ public interface ShoppingOrderService {
     List<ShoppingOrderDO> selectAutoCancelOrder(int currentPage, int pageSize);
 
     /**
-     * 执行自动取消未付款的订单
+     * 分页查询查找符合自动提醒即将取消的未付款订单 用于定时任务
+     * 
+     * @param currentPage
+     * @param pageSize
+     * @author jiangxinjun
+     * @createDate 2017年11月13日
+     * @updateDate 2017年11月13日
+     */
+    List<ShoppingOrderDO> selectAutoRemindToBeCancelledOrder(int currentPage, int pageSize);
+
+    /**
+     * 执行自动提醒即将取消的未付款订单
      * 
      * @author jiangxinjun
      * @createDate 2017年11月13日
      * @updateDate 2017年11月13日
      */
-    void executeAutoCancelOrder(ShoppingOrderDO shoppingOrderDO);
+    void executeAutoRemindToBeCancelledOrder(ShoppingOrderDO shoppingOrderDO);
 
     /**
      * 分页查询符合自动评论订单 用于定时任务
