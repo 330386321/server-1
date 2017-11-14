@@ -98,39 +98,31 @@ public class PointDetailController extends BaseController {
      * @date 2017年6月30日 下午2:34:30
      */
     @RequestMapping(value = "selectPointDetailListByDateAndDirection", method = RequestMethod.POST)
-	public Result<List<PointConsumeReportDTO>> selectPointDetailListByDateAndDirection(@RequestBody @Valid PointDetailReportParam param, BindingResult result) {
+	public Result<PointConsumeReportDTO> selectPointDetailListByDateAndDirection(@RequestBody @Valid PointDetailReportParam param, BindingResult result) {
 		String message = validate(result);
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-    	List<PointConsumeReportDTO> dtos = new ArrayList<>();
-    	List<PointConsumeReportBO> rntList = pointDetailService.selectPointDetailListByDateAndDirection(param);
-		for(PointConsumeReportBO bo : rntList){
-			PointConsumeReportDTO dto = new PointConsumeReportDTO();
-			dto.setId(bo.getId());
-			dto.setPoint(bo.getPoint());
-			dto.setUserNum(bo.getUserNum());
-			dtos.add(dto);
-		}
-		return successCreated(dtos);
+    	PointConsumeReportBO bo = pointDetailService.selectPointDetailListByDateAndDirection(param);
+		PointConsumeReportDTO dto = new PointConsumeReportDTO();
+		dto.setMemberRechargeMoney(bo.getMemberRechargeMoney());
+		dto.setMerchantRechargeMoney(bo.getMerchantRechargeMoney());
+		dto.setSumRechargeMoney(bo.getSumRechargeMoney());
+		return successCreated(dto);
 	}
     
     @RequestMapping(value = "selectPointDetailListByDateAndDirectionAndPointType", method = RequestMethod.POST)
-	public Result<List<PointConsumeReportDTO>> selectPointDetailListByDateAndDirectionAndPointType(@RequestBody @Valid PointDetailReportParam param, BindingResult result) {
+	public Result<PointConsumeReportDTO> selectPointDetailListByDateAndDirectionAndPointType(@RequestBody @Valid PointDetailReportParam param, BindingResult result) {
 		String message = validate(result);
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-    	List<PointConsumeReportDTO> dtos = new ArrayList<>();
-    	List<PointConsumeReportBO> rntList = pointDetailService.selectPointDetailListByDateAndDirectionAndPointType(param);
-		for(PointConsumeReportBO bo : rntList){
-			PointConsumeReportDTO dto = new PointConsumeReportDTO();
-			dto.setId(bo.getId());
-			dto.setPoint(bo.getPoint());
-			dto.setUserNum(bo.getUserNum());
-			dtos.add(dto);
-		}
-		return successCreated(dtos);
+    	PointConsumeReportBO bo = pointDetailService.selectPointDetailListByDateAndDirectionAndPointType(param);
+		PointConsumeReportDTO dto = new PointConsumeReportDTO();
+		dto.setMemberRechargeMoney(bo.getMemberRechargeMoney());
+		dto.setMerchantRechargeMoney(bo.getMerchantRechargeMoney());
+		dto.setSumRechargeMoney(bo.getSumRechargeMoney());
+		return successCreated(dto);
 	}
     
     

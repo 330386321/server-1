@@ -293,7 +293,6 @@ public class RechargeServiceImpl implements RechargeService {
     @Override
     public RechargeReportBO selectWithdrawCashListByDateAndStatus(RechargeReportParam param) {
     	
-        
         String begin= param.getDate() + " 00:00:00";
         String end= param.getDate() + " 23:59:59";
         RechargeReportDOView  rechargeReportDOView = new RechargeReportDOView();
