@@ -32,6 +32,7 @@
     <result column="is_no_reason_return" jdbcType="BIT" property="isNoReasonReturn" />
     <result column="is_automatic_receipt" jdbcType="BIT" property="isAutomaticReceipt" />
     <result column="is_done" jdbcType="BIT" property="isDone" />
+    <result column="is_refund_items" jdbcType="BIT" property="isRefundItems" />
     <result column="shopping_cart_ids_str" jdbcType="VARCHAR" property="shoppingCartIdsStr" />
     <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
     <result column="payment_method" jdbcType="TINYINT" property="paymentMethod" />
@@ -124,10 +125,10 @@
     merchant_num, merchant_name, consignee_name, consignee_address, consignee_mobile, 
     remark, message, freight_price, commodity_total_price, order_total_price, actual_amount, 
     commission_status, order_status, status, send_time, is_fans, is_no_reason_return, 
-    is_automatic_receipt, is_done, shopping_cart_ids_str, order_num, payment_method, 
-    third_number, is_needs_logistics, waybill_num, express_company_id, express_company_code, 
-    express_company_name, gmt_commission, gmt_payment, gmt_transport, gmt_transaction, 
-    gmt_done, gmt_create, gmt_modified
+    is_automatic_receipt, is_done, is_refund_items, shopping_cart_ids_str, order_num, 
+    payment_method, third_number, is_needs_logistics, waybill_num, express_company_id, 
+    express_company_code, express_company_name, gmt_commission, gmt_payment, gmt_transport, 
+    gmt_transaction, gmt_done, gmt_create, gmt_modified
   </sql>
   <select id="selectByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample" resultMap="BaseResultMap">
     <!--
@@ -191,12 +192,13 @@
       order_total_price, actual_amount, commission_status, 
       order_status, status, send_time, 
       is_fans, is_no_reason_return, is_automatic_receipt, 
-      is_done, shopping_cart_ids_str, order_num, 
-      payment_method, third_number, is_needs_logistics, 
-      waybill_num, express_company_id, express_company_code, 
-      express_company_name, gmt_commission, gmt_payment, 
-      gmt_transport, gmt_transaction, gmt_done, 
-      gmt_create, gmt_modified)
+      is_done, is_refund_items, shopping_cart_ids_str, 
+      order_num, payment_method, third_number, 
+      is_needs_logistics, waybill_num, express_company_id, 
+      express_company_code, express_company_name, 
+      gmt_commission, gmt_payment, gmt_transport, 
+      gmt_transaction, gmt_done, gmt_create, 
+      gmt_modified)
     values (#{memberId,jdbcType=BIGINT}, #{memberNum,jdbcType=VARCHAR}, #{memberNickname,jdbcType=VARCHAR}, 
       #{merchantId,jdbcType=BIGINT}, #{merchantStoreId,jdbcType=BIGINT}, #{merchantStoreRegionPath,jdbcType=VARCHAR}, 
       #{merchantNum,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, #{consigneeName,jdbcType=VARCHAR}, 
@@ -205,12 +207,13 @@
       #{orderTotalPrice,jdbcType=DECIMAL}, #{actualAmount,jdbcType=DECIMAL}, #{commissionStatus,jdbcType=TINYINT}, 
       #{orderStatus,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{sendTime,jdbcType=INTEGER}, 
       #{isFans,jdbcType=BIT}, #{isNoReasonReturn,jdbcType=BIT}, #{isAutomaticReceipt,jdbcType=BIT}, 
-      #{isDone,jdbcType=BIT}, #{shoppingCartIdsStr,jdbcType=VARCHAR}, #{orderNum,jdbcType=VARCHAR}, 
-      #{paymentMethod,jdbcType=TINYINT}, #{thirdNumber,jdbcType=VARCHAR}, #{isNeedsLogistics,jdbcType=BIT}, 
-      #{waybillNum,jdbcType=VARCHAR}, #{expressCompanyId,jdbcType=INTEGER}, #{expressCompanyCode,jdbcType=VARCHAR}, 
-      #{expressCompanyName,jdbcType=VARCHAR}, #{gmtCommission,jdbcType=TIMESTAMP}, #{gmtPayment,jdbcType=TIMESTAMP}, 
-      #{gmtTransport,jdbcType=TIMESTAMP}, #{gmtTransaction,jdbcType=TIMESTAMP}, #{gmtDone,jdbcType=TIMESTAMP}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
+      #{isDone,jdbcType=BIT}, #{isRefundItems,jdbcType=BIT}, #{shoppingCartIdsStr,jdbcType=VARCHAR}, 
+      #{orderNum,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=TINYINT}, #{thirdNumber,jdbcType=VARCHAR}, 
+      #{isNeedsLogistics,jdbcType=BIT}, #{waybillNum,jdbcType=VARCHAR}, #{expressCompanyId,jdbcType=INTEGER}, 
+      #{expressCompanyCode,jdbcType=VARCHAR}, #{expressCompanyName,jdbcType=VARCHAR}, 
+      #{gmtCommission,jdbcType=TIMESTAMP}, #{gmtPayment,jdbcType=TIMESTAMP}, #{gmtTransport,jdbcType=TIMESTAMP}, 
+      #{gmtTransaction,jdbcType=TIMESTAMP}, #{gmtDone,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderDO">
     <!--
@@ -296,6 +299,9 @@
       </if>
       <if test="isDone != null">
         is_done,
+      </if>
+      <if test="isRefundItems != null">
+        is_refund_items,
       </if>
       <if test="shoppingCartIdsStr != null">
         shopping_cart_ids_str,
@@ -421,6 +427,9 @@
       </if>
       <if test="isDone != null">
         #{isDone,jdbcType=BIT},
+      </if>
+      <if test="isRefundItems != null">
+        #{isRefundItems,jdbcType=BIT},
       </if>
       <if test="shoppingCartIdsStr != null">
         #{shoppingCartIdsStr,jdbcType=VARCHAR},
@@ -567,6 +576,9 @@
       <if test="record.isDone != null">
         is_done = #{record.isDone,jdbcType=BIT},
       </if>
+      <if test="record.isRefundItems != null">
+        is_refund_items = #{record.isRefundItems,jdbcType=BIT},
+      </if>
       <if test="record.shoppingCartIdsStr != null">
         shopping_cart_ids_str = #{record.shoppingCartIdsStr,jdbcType=VARCHAR},
       </if>
@@ -652,6 +664,7 @@
       is_no_reason_return = #{record.isNoReasonReturn,jdbcType=BIT},
       is_automatic_receipt = #{record.isAutomaticReceipt,jdbcType=BIT},
       is_done = #{record.isDone,jdbcType=BIT},
+      is_refund_items = #{record.isRefundItems,jdbcType=BIT},
       shopping_cart_ids_str = #{record.shoppingCartIdsStr,jdbcType=VARCHAR},
       order_num = #{record.orderNum,jdbcType=VARCHAR},
       payment_method = #{record.paymentMethod,jdbcType=TINYINT},
@@ -754,6 +767,9 @@
       <if test="isDone != null">
         is_done = #{isDone,jdbcType=BIT},
       </if>
+      <if test="isRefundItems != null">
+        is_refund_items = #{isRefundItems,jdbcType=BIT},
+      </if>
       <if test="shoppingCartIdsStr != null">
         shopping_cart_ids_str = #{shoppingCartIdsStr,jdbcType=VARCHAR},
       </if>
@@ -836,6 +852,7 @@
       is_no_reason_return = #{isNoReasonReturn,jdbcType=BIT},
       is_automatic_receipt = #{isAutomaticReceipt,jdbcType=BIT},
       is_done = #{isDone,jdbcType=BIT},
+      is_refund_items = #{isRefundItems,jdbcType=BIT},
       shopping_cart_ids_str = #{shoppingCartIdsStr,jdbcType=VARCHAR},
       order_num = #{orderNum,jdbcType=VARCHAR},
       payment_method = #{paymentMethod,jdbcType=TINYINT},

@@ -207,120 +207,6 @@
 		</if>
 	</select>
 	
-	<update id="updateByPrimaryKeySelective" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO">
-	    update shopping_order so
-	    <set>
-	      <if test="memberId != null">
-	        so.member_id = #{memberId,jdbcType=BIGINT},
-	      </if>
-	      <if test="memberNum != null">
-	        so.member_num = #{memberNum,jdbcType=VARCHAR},
-	      </if>
-	      <if test="merchantId != null">
-	        so.merchant_id = #{merchantId,jdbcType=BIGINT},
-	      </if>
-	      <if test="merchantNum != null">
-	        so.merchant_num = #{merchantNum,jdbcType=VARCHAR},
-	      </if>
-	      <if test="merchantName != null">
-	        so.merchant_name = #{merchantName,jdbcType=VARCHAR},
-	      </if>
-	      <if test="consigneeName != null">
-	        so.consignee_name = #{consigneeName,jdbcType=VARCHAR},
-	      </if>
-	      <if test="consigneeAddress != null">
-	        so.consignee_address = #{consigneeAddress,jdbcType=VARCHAR},
-	      </if>
-	      <if test="consigneeMobile != null">
-	        so.consignee_mobile = #{consigneeMobile,jdbcType=VARCHAR},
-	      </if>
-	      <if test="remark != null">
-	        so.remark = #{remark,jdbcType=VARCHAR},
-	      </if>
-	      <if test="message != null">
-	        so.message = #{message,jdbcType=VARCHAR},
-	      </if>
-	      <if test="freightPrice != null">
-	        so.freight_price = #{freightPrice,jdbcType=DECIMAL},
-	      </if>
-	      <if test="commodityTotalPrice != null">
-	        so.commodity_total_price = #{commodityTotalPrice,jdbcType=DECIMAL},
-	      </if>
-	      <if test="orderTotalPrice != null">
-	        so.order_total_price = #{orderTotalPrice,jdbcType=DECIMAL},
-	      </if>
-	      <if test="actualAmount != null">
-	        so.actual_amount = #{actualAmount,jdbcType=DECIMAL},
-	      </if>
-	      <if test="commissionStatus != null">
-	        so.commission_status = #{commissionStatus,jdbcType=TINYINT},
-	      </if>
-	      <if test="orderStatus != null">
-	        so.order_status = #{orderStatus,jdbcType=TINYINT},
-	      </if>
-	      <if test="status != null">
-	        so.status = #{status,jdbcType=TINYINT},
-	      </if>
-	      <if test="sendTime != null">
-	        so.send_time = #{sendTime,jdbcType=INTEGER},
-	      </if>
-	      <if test="isNoReasonReturn != null">
-	        so.is_no_reason_return = #{isNoReasonReturn,jdbcType=BIT},
-	      </if>
-	      <if test="isAutomaticReceipt != null">
-	        so.is_automatic_receipt = #{isAutomaticReceipt,jdbcType=BIT},
-	      </if>
-	      <if test="shoppingCartIdsStr != null">
-	        so.shopping_cart_ids_str = #{shoppingCartIdsStr,jdbcType=VARCHAR},
-	      </if>
-	      <if test="orderNum != null">
-	        so.order_num = #{orderNum,jdbcType=VARCHAR},
-	      </if>
-	      <if test="paymentMethod != null">
-	        so.payment_method = #{paymentMethod,jdbcType=TINYINT},
-	      </if>
-	      <if test="thirdNumber != null">
-	        so.third_number = #{thirdNumber,jdbcType=VARCHAR},
-	      </if>
-	      <if test="waybillNum != null">
-	        so.waybill_num = #{waybillNum,jdbcType=VARCHAR},
-	      </if>
-	      <if test="expressCompanyId != null">
-	        so.express_company_id = #{expressCompanyId,jdbcType=INTEGER},
-	      </if>
-	      <if test="expressCompanyCode != null">
-	        so.express_company_code = #{expressCompanyCode,jdbcType=VARCHAR},
-	      </if>
-	      <if test="expressCompanyName != null">
-	        so.express_company_name = #{expressCompanyName,jdbcType=VARCHAR},
-	      </if>
-	      <if test="gmtCommission != null">
-	        so.gmt_commission = #{gmtCommission,jdbcType=TIMESTAMP},
-	      </if>
-	      <if test="gmtPayment != null">
-	        so.gmt_payment = #{gmtPayment,jdbcType=TIMESTAMP},
-	      </if>
-	      <if test="gmtTransport != null">
-	        so.gmt_transport = #{gmtTransport,jdbcType=TIMESTAMP},
-	      </if>
-	      <if test="gmtTransaction != null">
-	        so.gmt_transaction = #{gmtTransaction,jdbcType=TIMESTAMP},
-	      </if>
-	      <if test="gmtCreate != null">
-	        so.gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
-	      </if>
-	      <if test="gmtModified != null">
-	        so.gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-	      </if>
-	      
-	      <!-- Extend -->
-    	  <if test="actualAmountSubtraction != null">
-	        so.actual_amount = so.actual_amount - #{actualAmountSubtraction,jdbcType=DECIMAL},
-	      </if>
-	    </set>
-	    where id = #{id,jdbcType=BIGINT}
-	  </update>
-	  
 	  <!-- Report -->
 	  <select id="selectByTransactionData" parameterType="com.lawu.eshop.order.param.ShoppingOrderReportDataParam" resultMap="ReportResultMap">
 	  	<if test="flag == 1">
@@ -363,19 +249,24 @@
 		WHERE so.order_status = 2 AND soi.order_status = 2 AND so.gmt_payment &lt;= #{date,jdbcType=TIMESTAMP}
 		GROUP BY merchant_num
 	  </select>
-	  
-	  <!-- 根据查询条件查询订单id，优化性能  -->
-	  <select id="selectIdByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultType="java.lang.Long">
-	  	select DISTINCT so.id, so.gmt_payment, so.gmt_create
-		from shopping_order so
-		<if test="isIncludeShoppingOrderItem">
-			left join shopping_order_item soi on so.id = soi.shopping_order_id
-		</if>
-		<if test="_parameter != null">
-			<include refid="Example_Where_Clause" />
-		</if>
-		<if test="orderByClause != null">
-            order by ${orderByClause}
+
+    <!-- 根据查询条件查询订单id，优化性能 -->
+    <select id="selectIdByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultType="java.lang.Long">
+        select DISTINCT so.id, so.gmt_payment, so.gmt_create
+        from shopping_order so
+        <if test="isIncludeShoppingOrderItem">
+         left join shopping_order_item soi on so.id = soi.shopping_order_id
         </if>
-	  </select>
+        <if test="_parameter != null">
+         <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null">
+         order by ${orderByClause}
+        </if>
+    </select>
+    
+    <!-- 更新商家实际收入金额 -->
+    <select id="updateMerchantActualIncome" parameterType="com.lawu.eshop.order.srv.domain.extend.UpdateMerchantActualIncomeParam">
+        UPDATE shopping_order SET actual_amount = actual_amount - #{refundAmount,jdbcType=DECIMAL} WHERE id=#{id,jdbcType=BIGINT}
+    </select>
 </mapper>

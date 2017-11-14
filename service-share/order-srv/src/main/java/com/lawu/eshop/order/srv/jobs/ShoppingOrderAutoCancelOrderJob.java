@@ -1,32 +1,32 @@
 package com.lawu.eshop.order.srv.jobs;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dangdang.ddframe.job.api.ShardingContext;
-import com.dangdang.ddframe.job.api.simple.SimpleJob;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
+import com.lawu.jobsextend.AbstractTxPageJob;
 
 /**
- * 自动取消为付款的订单
+ * 自动取消未付款的订单定时任务
  * 
- * @author Sunny
- * @date 2017年4月17日
+ * @author jiangxinjun
+ * @createDate 2017年4月17日
+ * @updateDate 2017年11月13日
  */
-public class ShoppingOrderAutoCancelOrderJob implements SimpleJob {
-
-    private static Logger logger = LoggerFactory.getLogger(ShoppingOrderAutoCancelOrderJob.class);
+public class ShoppingOrderAutoCancelOrderJob extends AbstractTxPageJob<ShoppingOrderDO> {
 
     @Autowired
     private ShoppingOrderService shoppingOrderService;
     
     @Override
-    public void execute(ShardingContext shardingContext) {
-        logger.debug("------{}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
+    public List<ShoppingOrderDO> queryPage(int currentPage, int pageSize) {
+        return shoppingOrderService.selectAutoCancelOrder(currentPage, pageSize);
+    }
 
-        shoppingOrderService.executeAutoCancelOrder();
-        
-        logger.debug("------{}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
+    @Override
+    public void executeSingle(ShoppingOrderDO entity) {
+        shoppingOrderService.executeAutoCancelOrder(entity);
     }
 }

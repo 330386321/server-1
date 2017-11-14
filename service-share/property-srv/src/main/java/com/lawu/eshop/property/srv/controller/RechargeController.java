@@ -208,21 +208,17 @@ public class RechargeController extends BaseController {
      * @date 2017年6月29日 下午5:26:31
      */
     @RequestMapping(value = "selectWithdrawCashListByDateAndStatus", method = RequestMethod.POST)
-    public Result<List<RechargeReportDTO>> selectWithdrawCashListByDateAndStatus(@RequestBody @Valid RechargeReportParam param, BindingResult result) throws Exception {
+    public Result<RechargeReportDTO> selectWithdrawCashListByDateAndStatus(@RequestBody @Valid RechargeReportParam param, BindingResult result) throws Exception {
         String message = validate(result);
         if (message != null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
         }
-        List<RechargeReportDTO> dtos = new ArrayList<>();
-        List<RechargeReportBO> rntList = rechargeService.selectWithdrawCashListByDateAndStatus(param);
-        for (RechargeReportBO bo : rntList) {
-            RechargeReportDTO dto = new RechargeReportDTO();
-            dto.setId(bo.getId());
-            dto.setRechargeMoney(bo.getRechargeMoney());
-            dto.setUserNum(bo.getUserNum());
-            dtos.add(dto);
-        }
-        return successCreated(dtos);
+        RechargeReportBO bo = rechargeService.selectWithdrawCashListByDateAndStatus(param);
+        RechargeReportDTO dto = new RechargeReportDTO();
+        dto.setMemberRechargeMoney(bo.getMemberRechargeMoney());
+        dto.setMerchantRechargeMoney(bo.getMerchantRechargeMoney());
+        dto.setSumRechargeMoney(bo.getSumRechargeMoney());
+        return successCreated(dto);
     }
 
     /**

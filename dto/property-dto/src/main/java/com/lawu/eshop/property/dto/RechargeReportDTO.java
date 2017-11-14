@@ -6,37 +6,35 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class RechargeReportDTO {
 	
-	@ApiModelProperty(value = "主键", required = true)
-	private Long id;
+    private BigDecimal memberRechargeMoney;
 	
-	@ApiModelProperty(value = "充值金额", required = true)
-	private BigDecimal rechargeMoney;
+	private BigDecimal sumRechargeMoney;
 	
-	@ApiModelProperty(value = "用户编号")
-	private String userNum;
+	private BigDecimal merchantRechargeMoney;
 
-	public Long getId() {
-		return id;
+	public BigDecimal getMemberRechargeMoney() {
+		return memberRechargeMoney;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setMemberRechargeMoney(BigDecimal memberRechargeMoney) {
+		this.memberRechargeMoney = memberRechargeMoney;
 	}
 
-	public BigDecimal getRechargeMoney() {
-		return rechargeMoney;
+	public BigDecimal getSumRechargeMoney() {
+		return sumRechargeMoney;
 	}
 
-	public void setRechargeMoney(BigDecimal rechargeMoney) {
-		this.rechargeMoney = rechargeMoney;
+	public void setSumRechargeMoney(BigDecimal sumRechargeMoney) {
+		this.sumRechargeMoney = sumRechargeMoney;
 	}
 
-	public String getUserNum() {
-		return userNum;
+	public BigDecimal getMerchantRechargeMoney() {
+		return merchantRechargeMoney;
 	}
 
-	public void setUserNum(String userNum) {
-		this.userNum = userNum;
+	public void setMerchantRechargeMoney(BigDecimal merchantRechargeMoney) {
+		this.merchantRechargeMoney = merchantRechargeMoney;
 	}
+	
 
 }

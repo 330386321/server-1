@@ -134,6 +134,11 @@ public class ShoppingOrderBO {
 	 * 当前订单是否完成(0-未完成|1-已完成)
 	 */
 	private Boolean isDone;
+	
+    /**
+     * 是否有退款项(0-没有|1-有)
+     */
+    private Boolean isRefundItems;
 
 	/**
 	 * 对应的购物车相应的id(多个id用,分隔)
@@ -415,7 +420,15 @@ public class ShoppingOrderBO {
 		this.isDone = isDone;
 	}
 
-	public String getShoppingCartIdsStr() {
+	public Boolean getIsRefundItems() {
+        return isRefundItems;
+    }
+
+    public void setIsRefundItems(Boolean isRefundItems) {
+        this.isRefundItems = isRefundItems;
+    }
+
+    public String getShoppingCartIdsStr() {
 		return shoppingCartIdsStr;
 	}
 

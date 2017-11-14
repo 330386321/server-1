@@ -4,34 +4,37 @@ import java.math.BigDecimal;
 
 public class RechargeReportBO {
 	
-	private Long id;
 	
-	private BigDecimal rechargeMoney;
+	private BigDecimal memberRechargeMoney;
 	
-	private String userNum;
+	private BigDecimal sumRechargeMoney;
+	
+	private BigDecimal merchantRechargeMoney;
 
-	public Long getId() {
-		return id;
+	public BigDecimal getMemberRechargeMoney() {
+		return memberRechargeMoney;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setMemberRechargeMoney(BigDecimal memberRechargeMoney) {
+		this.memberRechargeMoney = memberRechargeMoney;
 	}
 
-	public BigDecimal getRechargeMoney() {
-		return rechargeMoney;
+	public BigDecimal getSumRechargeMoney() {
+		return sumRechargeMoney;
 	}
 
-	public void setRechargeMoney(BigDecimal rechargeMoney) {
-		this.rechargeMoney = rechargeMoney;
+	public void setSumRechargeMoney(BigDecimal sumRechargeMoney) {
+		this.sumRechargeMoney = sumRechargeMoney;
 	}
 
-	public String getUserNum() {
-		return userNum;
+	public BigDecimal getMerchantRechargeMoney() {
+		return merchantRechargeMoney;
 	}
 
-	public void setUserNum(String userNum) {
-		this.userNum = userNum;
+	public void setMerchantRechargeMoney(BigDecimal merchantRechargeMoney) {
+		this.merchantRechargeMoney = merchantRechargeMoney;
 	}
+	
+	
 
 }
