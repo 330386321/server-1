@@ -169,17 +169,18 @@ public class PointDetailController extends BaseController {
     }
 
 	@RequestMapping(value = "getIncomeMsgDataList", method = RequestMethod.GET)
-	public Result<List<IncomeMsgDTO>> getIncomeMsgDataList() {
+	public Result<List<IncomeMsgDTO>> getIncomeMsgDataList(@RequestParam("offset") int offset, @RequestParam("pageSize") int pageSize) {
 		String date = DateUtil.getDateFormat(DateUtil.getDayBefore(new Date()),"yyyy-MM-dd");
 		String begin = date + " 00:00:00";
 		String end = date + " 23:59:59";
-		List<IncomeMsgBO> userIncomeExpenditureBOList = pointDetailService.getIncomeMsgDataList(begin,end);
+		List<IncomeMsgBO> userIncomeExpenditureBOList = pointDetailService.getIncomeMsgDataList(begin,end,offset,pageSize);
 		List<IncomeMsgDTO> dtos = new ArrayList<>();
 		for(IncomeMsgBO bo : userIncomeExpenditureBOList){
 			IncomeMsgDTO dto = new IncomeMsgDTO();
 			dto.setUserNum(bo.getUserNum());
 			dto.setMoney(bo.getMoney());
 			dto.setType(bo.getType());
+			dto.setMsgType(2);
 			dtos.add(dto);
 		}
 		return successCreated(dtos);

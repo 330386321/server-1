@@ -10,6 +10,7 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(value= "property-srv")
 public interface PropertyTransactionDetailService {
@@ -21,6 +22,6 @@ public interface PropertyTransactionDetailService {
 	 * @date 2017年6月30日 下午2:29:46
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "transactionDetail/getIncomeMsgDataList")
-	Result<List<IncomeMsgDTO>> getIncomeMsgDataList();
+	Result<List<IncomeMsgDTO>> getIncomeMsgDataList(@RequestParam("offset") int offset, @RequestParam("pageSize") int pageSize);
 	
 }

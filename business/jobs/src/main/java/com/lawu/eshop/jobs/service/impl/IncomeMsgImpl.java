@@ -13,6 +13,7 @@ import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.dto.IncomeMsgDTO;
+import com.lawu.eshop.user.constants.UserTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,57 +25,48 @@ import org.springframework.stereotype.Service;
 public class IncomeMsgImpl implements IncomeMsgService {
 
     @Autowired
-    private PropertyTransactionDetailService propertyTransactionDetailService;
-    @Autowired
-    private PropertyPointDetailService propertyPointDetailService;
-    @Autowired
     private MessageService messageService;
 
     @Override
-    public void execute() {
+    public void execute(List<IncomeMsgDTO> list) {
 
-        //查询昨天+（推荐E友收益、推荐商家收益）数据
-        Result<List<IncomeMsgDTO>> transactionDetailListResult = propertyTransactionDetailService.getIncomeMsgDataList();
-        Result<List<IncomeMsgDTO>> pointDetailListResult = propertyPointDetailService.getIncomeMsgDataList();
-        for(IncomeMsgDTO dto : transactionDetailListResult.getModel()){
+        for(IncomeMsgDTO dto : list){
             MessageInfoParam messageInfoParam = new MessageInfoParam();
             messageInfoParam.setRelateId(0L);
             MessageTempParam messageTempParam = new MessageTempParam();
-            messageTempParam.setEarningAmount(dto.getMoney());
-            if(dto.getUserNum().startsWith("B")){
+            if(dto.getUserNum().startsWith(UserTypeEnum.MERCHANT.name())){
                 messageTempParam.setUserName("E店商家");
-
-            } else if(dto.getUserNum().startsWith("M")){
+            } else if(dto.getUserNum().startsWith(UserTypeEnum.MEMBER.name())){
                 messageTempParam.setUserName("E店用户");
             }
-            if(MerchantTransactionTypeEnum.SALES_COMMISSION.getValue().equals(dto.getType()) ||
-                    MemberTransactionTypeEnum.SALES_COMMISSION.getValue().equals(dto.getType())){
-                messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_MEMBER_BALANCE);
-            }
-            if(MerchantTransactionTypeEnum.VOLUME_COMMISSION.getValue().equals(dto.getType()) ||
-                    MemberTransactionTypeEnum.VOLUME_COMMISSION.getValue().equals(dto.getType())){
-                messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_MERCHANT_BALANCE);
-            }
-            messageInfoParam.setMessageParam(messageTempParam);
-            messageService.saveMessage(dto.getUserNum(), messageInfoParam);
-        }
-        for(IncomeMsgDTO dto : pointDetailListResult.getModel()){
-            MessageInfoParam messageInfoParam = new MessageInfoParam();
-            messageInfoParam.setRelateId(0L);
-            MessageTempParam messageTempParam = new MessageTempParam();
-            messageTempParam.setEarningPoint(dto.getMoney());
-            if(dto.getUserNum().startsWith("B")){
-                messageTempParam.setUserName("E店商家");
-            } else if(dto.getUserNum().startsWith("M")){
-                messageTempParam.setUserName("E店用户");
-            }
-            if(MerchantTransactionTypeEnum.SALES_COMMISSION.getValue().equals(dto.getType()) ||
-                    MemberTransactionTypeEnum.SALES_COMMISSION.getValue().equals(dto.getType())){
-                messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_MEMBER_POINT);
-            }
-            if(MerchantTransactionTypeEnum.VOLUME_COMMISSION.getValue().equals(dto.getType()) ||
-                    MemberTransactionTypeEnum.VOLUME_COMMISSION.getValue().equals(dto.getType())){
-                messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_MERCHANT_POINT);
+            if(dto.getMsgType() == 1){
+                messageTempParam.setEarningAmount(dto.getMoney());
+                if(MerchantTransactionTypeEnum.SALES_COMMISSION.getValue().equals(dto.getType()) ||
+                        MemberTransactionTypeEnum.SALES_COMMISSION.getValue().equals(dto.getType())){
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_MEMBER_BALANCE);
+                }
+                if(MerchantTransactionTypeEnum.LOWER_INCOME.getValue().equals(dto.getType()) ||
+                        MemberTransactionTypeEnum.LOWER_INCOME.getValue().equals(dto.getType())){
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_MEMBER_BALANCE);
+                }
+                if(MerchantTransactionTypeEnum.VOLUME_COMMISSION.getValue().equals(dto.getType()) ||
+                        MemberTransactionTypeEnum.VOLUME_COMMISSION.getValue().equals(dto.getType())){
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_MERCHANT_BALANCE);
+                }
+            } else if(dto.getMsgType() == 2){
+                messageTempParam.setEarningPoint(dto.getMoney());
+                if(MerchantTransactionTypeEnum.SALES_COMMISSION.getValue().equals(dto.getType()) ||
+                        MemberTransactionTypeEnum.SALES_COMMISSION.getValue().equals(dto.getType())){
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_MEMBER_POINT);
+                }
+                if(MerchantTransactionTypeEnum.LOWER_INCOME.getValue().equals(dto.getType()) ||
+                        MemberTransactionTypeEnum.LOWER_INCOME.getValue().equals(dto.getType())){
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_MEMBER_POINT);
+                }
+                if(MerchantTransactionTypeEnum.VOLUME_COMMISSION.getValue().equals(dto.getType()) ||
+                        MemberTransactionTypeEnum.VOLUME_COMMISSION.getValue().equals(dto.getType())){
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_MERCHANT_POINT);
+                }
             }
             messageInfoParam.setMessageParam(messageTempParam);
             messageService.saveMessage(dto.getUserNum(), messageInfoParam);
