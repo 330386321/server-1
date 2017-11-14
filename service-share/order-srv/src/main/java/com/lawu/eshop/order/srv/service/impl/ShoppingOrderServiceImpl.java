@@ -1347,7 +1347,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	}
 
     @Override
-    public List<ShoppingOrderDO> selectAutoCancelOrder(int currentPage, int pageSize) {
+    public List<ShoppingOrderDO> selectAutoCancelOrder(int offset, int pageSize) {
         ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
         ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
 
@@ -1357,14 +1357,14 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         criteria.andGmtCreateLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticCancelOrderTime) * -1, Calendar.DAY_OF_YEAR));
         
         // 分页参数
-        RowBounds rowBounds = new RowBounds(0, pageSize);
+        RowBounds rowBounds = new RowBounds(offset, pageSize);
         
         // 查找所有超时未付款的订单
         return shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
     }
 	
     @Override
-    public List<ShoppingOrderDO> selectAutoRemindToBeCancelledOrder(int currentPage, int pageSize) {
+    public List<ShoppingOrderDO> selectAutoRemindToBeCancelledOrder(int offset, int pageSize) {
         ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
         ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
 
@@ -1376,7 +1376,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         criteria.andSendTimeEqualTo(0);
         
         // 分页参数
-        RowBounds rowBounds = new RowBounds(0, pageSize);
+        RowBounds rowBounds = new RowBounds(offset, pageSize);
         
         // 查找所有超时未付款的订单
         return shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
@@ -1403,7 +1403,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
     }
     
     @Override
-    public List<ShoppingOrderItemExtendDO> selectAutoCommentOrder(int currentPage, int pageSize) {
+    public List<ShoppingOrderItemExtendDO> selectAutoCommentOrder(int offset, int pageSize) {
         ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
         shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
         ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
@@ -1417,7 +1417,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         shoppingOrderItemExtendDOExampleCriteria.andSOGmtTransactionLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticEvaluation) * -1, Calendar.DAY_OF_YEAR));
 
         // 分页参数
-        RowBounds rowBounds = new RowBounds(0, pageSize);
+        RowBounds rowBounds = new RowBounds(offset, pageSize);
         
         return shoppingOrderItemExtendDOMapper.selectByExampleWithRowbounds(shoppingOrderItemExtendDOExample, rowBounds);
     }
@@ -1436,7 +1436,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
     }
     
     @Override
-    public List<ShoppingOrderDO> selectAutoReleaseFrozenFundsOrder(int currentPage, int pageSize) {
+    public List<ShoppingOrderDO> selectAutoReleaseFrozenFundsOrder(int offset, int pageSize) {
         ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
         ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
 
@@ -1449,7 +1449,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         criteria.andIsRefundItemsEqualTo(false);
         
         // 分页参数
-        RowBounds rowBounds = new RowBounds(0, pageSize);
+        RowBounds rowBounds = new RowBounds(offset, pageSize);
         
         return shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
     }

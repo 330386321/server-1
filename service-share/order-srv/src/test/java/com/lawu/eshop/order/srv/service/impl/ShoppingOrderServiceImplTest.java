@@ -1623,7 +1623,7 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
     	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	
-    	List<ShoppingOrderDO> list = shoppingOrderService.selectAutoCancelOrder(1, 10);
+    	List<ShoppingOrderDO> list = shoppingOrderService.selectAutoCancelOrder(0, 10);
     	Assert.assertNotNull(list);
     	Assert.assertEquals(1, list.size());
     }
@@ -1687,7 +1687,7 @@ public class ShoppingOrderServiceImplTest {
         shoppingOrderItemDO.setShoppingOrderId(expected.getId());
         shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
         
-        List<ShoppingOrderDO> list = shoppingOrderService.selectAutoRemindToBeCancelledOrder(1, 10);
+        List<ShoppingOrderDO> list = shoppingOrderService.selectAutoRemindToBeCancelledOrder(0, 10);
         Assert.assertNotNull(list);
         Assert.assertEquals(1, list.size());
     }
@@ -1761,7 +1761,7 @@ public class ShoppingOrderServiceImplTest {
     @Transactional
     @Rollback
     @Test
-    public void executeAutoPaymentsToMerchant() {
+    public void selectAutoReleaseFrozenFundsOrder() {
     	PropertyDO propertyDO = new PropertyDO();
     	propertyDO.setGmtCreate(new Date());
     	propertyDO.setGmtModified(new Date());
@@ -1770,7 +1770,7 @@ public class ShoppingOrderServiceImplTest {
     	propertyDO.setValue("7");
     	propertyDOMapper.insert(propertyDO);
     	
-    	// 初始化一条超过退款时间的订单
+    	// 初始化一条超过收货时间的订单
     	ShoppingOrderDO expected  = new ShoppingOrderDO();
     	expected.setCommodityTotalPrice(new BigDecimal(1));
     	expected.setActualAmount(new BigDecimal(1));
@@ -1819,20 +1819,83 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
     	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	
-        List<ShoppingOrderDO> list2 = shoppingOrderService.selectAutoReleaseFrozenFundsOrder(1, 10);
-        Assert.assertNotNull(list2);
-        Assert.assertEquals(1, list2.size());
-        shoppingOrderService.executeAutoReleaseFrozenFundsOrder(list2.get(0));
-        
-    	ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
-    	Assert.assertNotNull(actual);
-    	Assert.assertEquals(true, actual.getIsDone());
+        List<ShoppingOrderDO> list = shoppingOrderService.selectAutoReleaseFrozenFundsOrder(0, 10);
+        Assert.assertNotNull(list);
+        Assert.assertEquals(1, list.size());
     }
     
     @Transactional
     @Rollback
     @Test
-    public void executeAutoReceipt() {
+    public void executeAutoReleaseFrozenFundsOrder() {
+        PropertyDO propertyDO = new PropertyDO();
+        propertyDO.setGmtCreate(new Date());
+        propertyDO.setGmtModified(new Date());
+        propertyDO.setName(PropertyNameConstant.REFUND_REQUEST_TIME);
+        propertyDO.setRemark("退款申请时间");
+        propertyDO.setValue("7");
+        propertyDOMapper.insert(propertyDO);
+        
+        // 初始化一条超过退款时间的订单
+        ShoppingOrderDO expected  = new ShoppingOrderDO();
+        expected.setCommodityTotalPrice(new BigDecimal(1));
+        expected.setActualAmount(new BigDecimal(1));
+        expected.setFreightPrice(new BigDecimal(0));
+        expected.setGmtCreate(new Date());
+        expected.setGmtModified(new Date());
+        expected.setGmtTransaction(DateUtil.add(new Date(), Integer.valueOf(propertyDO.getValue()) * -1, Calendar.DAY_OF_YEAR));
+        expected.setIsFans(true);
+        expected.setIsNeedsLogistics(true);
+        expected.setIsNoReasonReturn(true);
+        expected.setMemberId(1L);
+        expected.setMemberNum("M0001");
+        expected.setMerchantId(1L);
+        expected.setMerchantName("拉乌网络");
+        expected.setMerchantStoreId(1L);
+        expected.setMerchantNum("B0001");
+        expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+        expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+        expected.setOrderTotalPrice(new BigDecimal(1));
+        expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
+        expected.setStatus(StatusEnum.VALID.getValue());
+        expected.setConsigneeAddress("大冲商务中心1301");
+        expected.setConsigneeMobile("123456");
+        expected.setConsigneeName("Sunny");
+        expected.setIsDone(false);
+        expected.setShoppingCartIdsStr("1,2");
+        expected.setSendTime(0);
+        expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+        shoppingOrderDOMapper.insertSelective(expected);
+        
+        ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+        shoppingOrderItemDO.setGmtCreate(new Date());
+        shoppingOrderItemDO.setGmtModified(new Date());
+        shoppingOrderItemDO.setIsAllowRefund(true);
+        shoppingOrderItemDO.setIsEvaluation(false);
+        shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+        shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+        shoppingOrderItemDO.setProductId(1L);
+        shoppingOrderItemDO.setProductName("productName");
+        shoppingOrderItemDO.setProductModelId(1L);
+        shoppingOrderItemDO.setProductModelName("test");
+        shoppingOrderItemDO.setQuantity(1);
+        shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+        shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+        shoppingOrderItemDO.setSendTime(0);
+        shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+        shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+        
+        shoppingOrderService.executeAutoReleaseFrozenFundsOrder(expected);
+        
+        ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(true, actual.getIsDone());
+    }
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void selectAutoReceiptOrder() {
     	PropertyDO propertyDO = new PropertyDO();
     	propertyDO.setGmtCreate(new Date());
     	propertyDO.setGmtModified(new Date());
@@ -1968,11 +2031,152 @@ public class ShoppingOrderServiceImplTest {
         List<ShoppingOrderDO> list = shoppingOrderService.selectAutoReceiptOrder(1, 10);
         Assert.assertNotNull(list);
         Assert.assertEquals(1, list.size());
+    }
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void executeAutoReceipt() {
+        PropertyDO propertyDO = new PropertyDO();
+        propertyDO.setGmtCreate(new Date());
+        propertyDO.setGmtModified(new Date());
+        propertyDO.setName(PropertyNameConstant.AUTOMATIC_RECEIPT);
+        propertyDO.setRemark("平台自动收货时间");
+        propertyDO.setValue("14");
+        propertyDOMapper.insert(propertyDO);
+        
+        /*
+         *  初始化一条超过退款时间的订单
+         *  1.一条订单项记录正常
+         *  2.另一条订单项记录处于退款
+         */
+        ShoppingOrderDO expected  = new ShoppingOrderDO();
+        expected.setCommodityTotalPrice(new BigDecimal(1));
+        expected.setActualAmount(new BigDecimal(1));
+        expected.setFreightPrice(new BigDecimal(0));
+        expected.setGmtCreate(new Date());
+        expected.setGmtModified(new Date());
+        expected.setGmtTransport(DateUtil.add(new Date(), Integer.valueOf(propertyDO.getValue()) * -1, Calendar.DAY_OF_YEAR));
+        expected.setIsFans(true);
+        expected.setIsNeedsLogistics(true);
+        expected.setIsNoReasonReturn(false);
+        expected.setMemberId(1L);
+        expected.setMemberNum("M0001");
+        expected.setMerchantId(1L);
+        expected.setMerchantName("拉乌网络");
+        expected.setMerchantStoreId(1L);
+        expected.setMerchantNum("B0001");
+        expected.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+        expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+        expected.setOrderTotalPrice(new BigDecimal(1));
+        expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
+        expected.setStatus(StatusEnum.VALID.getValue());
+        expected.setConsigneeAddress("大冲商务中心1301");
+        expected.setConsigneeMobile("123456");
+        expected.setConsigneeName("Sunny");
+        expected.setIsDone(false);
+        expected.setShoppingCartIdsStr("1,2");
+        expected.setSendTime(0);
+        expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+        expected.setIsRefundItems(true);
+        shoppingOrderDOMapper.insertSelective(expected);
+        
+        ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+        shoppingOrderItemDO.setGmtCreate(new Date());
+        shoppingOrderItemDO.setGmtModified(new Date());
+        shoppingOrderItemDO.setIsAllowRefund(true);
+        shoppingOrderItemDO.setIsEvaluation(false);
+        shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+        shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+        shoppingOrderItemDO.setProductId(1L);
+        shoppingOrderItemDO.setProductName("productName");
+        shoppingOrderItemDO.setProductModelId(1L);
+        shoppingOrderItemDO.setProductModelName("test");
+        shoppingOrderItemDO.setQuantity(1);
+        shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+        shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+        shoppingOrderItemDO.setSendTime(0);
+        shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+        shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+        
+        ShoppingOrderItemDO refundShoppingOrderItemDO = new ShoppingOrderItemDO();
+        refundShoppingOrderItemDO.setGmtCreate(new Date());
+        refundShoppingOrderItemDO.setGmtModified(new Date());
+        refundShoppingOrderItemDO.setIsAllowRefund(true);
+        refundShoppingOrderItemDO.setIsEvaluation(false);
+        refundShoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
+        refundShoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
+        refundShoppingOrderItemDO.setProductFeatureImage("test.jpg");
+        refundShoppingOrderItemDO.setProductId(1L);
+        refundShoppingOrderItemDO.setProductName("productName");
+        refundShoppingOrderItemDO.setProductModelId(1L);
+        refundShoppingOrderItemDO.setProductModelName("test");
+        refundShoppingOrderItemDO.setQuantity(1);
+        refundShoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+        refundShoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+        refundShoppingOrderItemDO.setSendTime(0);
+        refundShoppingOrderItemDO.setShoppingOrderId(expected.getId());
+        shoppingOrderItemDOMapper.insert(refundShoppingOrderItemDO);
+        
+        /*
+         *  初始化一条超过退款时间的订单,订单项记录正常
+         */
+        ShoppingOrderDO expected2  = new ShoppingOrderDO();
+        expected2.setCommodityTotalPrice(new BigDecimal(1));
+        expected2.setActualAmount(new BigDecimal(1));
+        expected2.setFreightPrice(new BigDecimal(0));
+        expected2.setGmtCreate(new Date());
+        expected2.setGmtModified(new Date());
+        expected2.setGmtTransport(DateUtil.add(new Date(), Integer.valueOf(propertyDO.getValue()) * -1, Calendar.DAY_OF_YEAR));
+        expected2.setIsFans(true);
+        expected2.setIsNeedsLogistics(true);
+        expected2.setIsNoReasonReturn(false);
+        expected2.setMemberId(1L);
+        expected2.setMemberNum("M0001");
+        expected2.setMerchantId(1L);
+        expected2.setMerchantName("拉乌网络");
+        expected2.setMerchantStoreId(1L);
+        expected2.setMerchantNum("B0001");
+        expected2.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+        expected2.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+        expected2.setOrderTotalPrice(new BigDecimal(1));
+        expected2.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
+        expected2.setStatus(StatusEnum.VALID.getValue());
+        expected2.setConsigneeAddress("大冲商务中心1301");
+        expected2.setConsigneeMobile("123456");
+        expected2.setConsigneeName("Sunny");
+        expected2.setIsDone(false);
+        expected2.setShoppingCartIdsStr("1,2");
+        expected2.setSendTime(0);
+        expected2.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+        shoppingOrderDOMapper.insertSelective(expected2);
+        
+        ShoppingOrderItemDO shoppingOrderItemDO2 = new ShoppingOrderItemDO();
+        shoppingOrderItemDO2.setGmtCreate(new Date());
+        shoppingOrderItemDO2.setGmtModified(new Date());
+        shoppingOrderItemDO2.setIsAllowRefund(true);
+        shoppingOrderItemDO2.setIsEvaluation(false);
+        shoppingOrderItemDO2.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+        shoppingOrderItemDO2.setProductFeatureImage("test.jpg");
+        shoppingOrderItemDO2.setProductId(1L);
+        shoppingOrderItemDO2.setProductName("productName");
+        shoppingOrderItemDO2.setProductModelId(1L);
+        shoppingOrderItemDO2.setProductModelName("test");
+        shoppingOrderItemDO2.setQuantity(1);
+        shoppingOrderItemDO2.setRegularPrice(new BigDecimal(1));
+        shoppingOrderItemDO2.setSalesPrice(new BigDecimal(1));
+        shoppingOrderItemDO2.setSendTime(0);
+        shoppingOrderItemDO2.setShoppingOrderId(expected2.getId());
+        shoppingOrderItemDOMapper.insert(shoppingOrderItemDO2);
+        
+        List<ShoppingOrderDO> list = shoppingOrderService.selectAutoReceiptOrder(1, 10);
+        Assert.assertNotNull(list);
+        Assert.assertEquals(1, list.size());
         for (ShoppingOrderDO item : list) {
             shoppingOrderService.tradingSuccess(item.getId(), true);
         }
-    	
-    	ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
+        
+        ShoppingOrderDO actual = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
         Assert.assertNotNull(actual);
         Assert.assertEquals(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue(), actual.getOrderStatus());
         
@@ -1983,15 +2187,15 @@ public class ShoppingOrderServiceImplTest {
         ShoppingOrderItemDO actualRefundShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(refundShoppingOrderItemDO.getId());
         Assert.assertNotNull(actualRefundShoppingOrderItemDO);
         Assert.assertEquals(ShoppingOrderStatusEnum.REFUNDING.getValue(), actualRefundShoppingOrderItemDO.getOrderStatus());
-    	
-    	ShoppingOrderDO actual2 = shoppingOrderDOMapper.selectByPrimaryKey(expected2.getId());
-    	Assert.assertNotNull(actual2);
-    	Assert.assertEquals(true, actual2.getIsAutomaticReceipt());
-    	Assert.assertEquals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue(), actual2.getOrderStatus());
-    	
-    	ShoppingOrderItemDO actualShoppingOrderItemDO2 = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO2.getId());
-    	Assert.assertNotNull(actualShoppingOrderItemDO2);
-    	Assert.assertEquals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue(), actualShoppingOrderItemDO2.getOrderStatus());
+        
+        ShoppingOrderDO actual2 = shoppingOrderDOMapper.selectByPrimaryKey(expected2.getId());
+        Assert.assertNotNull(actual2);
+        Assert.assertEquals(true, actual2.getIsAutomaticReceipt());
+        Assert.assertEquals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue(), actual2.getOrderStatus());
+        
+        ShoppingOrderItemDO actualShoppingOrderItemDO2 = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO2.getId());
+        Assert.assertNotNull(actualShoppingOrderItemDO2);
+        Assert.assertEquals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue(), actualShoppingOrderItemDO2.getOrderStatus());
     }
     
     @Transactional
@@ -2062,7 +2266,7 @@ public class ShoppingOrderServiceImplTest {
     @Transactional
     @Rollback
     @Test
-    public void executetAutoComment() {
+    public void selectAutoCommentOrder() {
     	PropertyDO propertyDO = new PropertyDO();
     	propertyDO.setGmtCreate(new Date());
     	propertyDO.setGmtModified(new Date());
@@ -2121,14 +2325,80 @@ public class ShoppingOrderServiceImplTest {
     	shoppingOrderItemDO.setShoppingOrderId(expected.getId());
     	shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
     	
-    	List<ShoppingOrderItemExtendDO> list = shoppingOrderService.selectAutoCommentOrder(1, 10);
+    	List<ShoppingOrderItemExtendDO> list = shoppingOrderService.selectAutoCommentOrder(0, 10);
     	Assert.assertNotNull(list);
     	Assert.assertEquals(1, list.size());
-    	shoppingOrderService.executeAutoCommentOrder(list.get(0));
-    	
-    	ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
-    	Assert.assertNotNull(actual);
-    	Assert.assertEquals(true, actual.getIsEvaluation());
+    }
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void executeAutoCommentOrder() {
+        PropertyDO propertyDO = new PropertyDO();
+        propertyDO.setGmtCreate(new Date());
+        propertyDO.setGmtModified(new Date());
+        propertyDO.setName(PropertyNameConstant.AUTOMATIC_EVALUATION);
+        propertyDO.setRemark("平台自动评论时间");
+        propertyDO.setValue("7");
+        propertyDOMapper.insert(propertyDO);
+        
+        // 初始化一条超过退款时间的订单
+        ShoppingOrderDO expected  = new ShoppingOrderDO();
+        expected.setCommodityTotalPrice(new BigDecimal(1));
+        expected.setActualAmount(new BigDecimal(1));
+        expected.setFreightPrice(new BigDecimal(0));
+        expected.setGmtCreate(new Date());
+        expected.setGmtModified(new Date());
+        expected.setGmtPayment(new Date());
+        expected.setGmtTransaction(DateUtil.add(new Date(), Integer.valueOf(propertyDO.getValue()) * -1, Calendar.DAY_OF_YEAR));
+        expected.setIsFans(true);
+        expected.setIsNeedsLogistics(true);
+        expected.setIsNoReasonReturn(false);
+        expected.setMemberId(1L);
+        expected.setMemberNum("M0001");
+        expected.setMerchantId(1L);
+        expected.setMerchantName("拉乌网络");
+        expected.setMerchantStoreId(1L);
+        expected.setMerchantNum("B0001");
+        expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+        expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+        expected.setOrderTotalPrice(new BigDecimal(1));
+        expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
+        expected.setStatus(StatusEnum.VALID.getValue());
+        expected.setConsigneeAddress("大冲商务中心1301");
+        expected.setConsigneeMobile("123456");
+        expected.setConsigneeName("Sunny");
+        expected.setIsDone(false);
+        expected.setShoppingCartIdsStr("1,2");
+        expected.setSendTime(0);
+        expected.setPaymentMethod(TransactionPayTypeEnum.BALANCE.getVal());
+        shoppingOrderDOMapper.insertSelective(expected);
+        
+        ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+        shoppingOrderItemDO.setGmtCreate(new Date());
+        shoppingOrderItemDO.setGmtModified(new Date());
+        shoppingOrderItemDO.setIsAllowRefund(true);
+        shoppingOrderItemDO.setIsEvaluation(false);
+        shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+        shoppingOrderItemDO.setProductFeatureImage("test.jpg");
+        shoppingOrderItemDO.setProductId(1L);
+        shoppingOrderItemDO.setProductName("productName");
+        shoppingOrderItemDO.setProductModelId(1L);
+        shoppingOrderItemDO.setProductModelName("test");
+        shoppingOrderItemDO.setQuantity(1);
+        shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
+        shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
+        shoppingOrderItemDO.setSendTime(0);
+        shoppingOrderItemDO.setShoppingOrderId(expected.getId());
+        shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
+        
+        ShoppingOrderItemExtendDO shoppingOrderItemExtendDO = new ShoppingOrderItemExtendDO();
+        shoppingOrderItemExtendDO.setId(shoppingOrderItemDO.getId());
+        shoppingOrderService.executeAutoCommentOrder(shoppingOrderItemExtendDO);
+        
+        ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(true, actual.getIsEvaluation());
     }
     
     @Transactional

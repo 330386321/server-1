@@ -13,7 +13,7 @@ import com.lawu.jobsextend.AbstractTxPageJob;
  * 
  * @author jiangxinjun
  * @createDate 2017年4月15日
- * @updateDate 2017年11月13日
+ * @updateDate 2017年11月14日
  */
 public class ShoppingOrderAutoCommentOrderJob extends AbstractTxPageJob<ShoppingOrderItemExtendDO> {
 
@@ -21,12 +21,22 @@ public class ShoppingOrderAutoCommentOrderJob extends AbstractTxPageJob<Shopping
     private ShoppingOrderService shoppingOrderService;
     
     @Override
-    public List<ShoppingOrderItemExtendDO> queryPage(int currentPage, int pageSize) {
-        return shoppingOrderService.selectAutoCommentOrder(currentPage, pageSize);
+    public List<ShoppingOrderItemExtendDO> queryPage(int offset, int pageSize) {
+        return shoppingOrderService.selectAutoCommentOrder(offset, pageSize);
     }
 
     @Override
     public void executeSingle(ShoppingOrderItemExtendDO entity) {
         shoppingOrderService.executeAutoCommentOrder(entity);
+    }
+
+    @Override
+    public boolean isStatusData() {
+        return true;
+    }
+
+    @Override
+    public boolean continueWhenSinglePageFail() {
+        return true;
     }
 }

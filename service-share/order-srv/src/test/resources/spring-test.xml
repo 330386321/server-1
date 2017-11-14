@@ -99,5 +99,8 @@
     </bean>
     <bean id="shoppingOrderAutoCancelOrderJob" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoCancelOrderJob"/>
     <bean id="shoppingOrderAutoRemindToBeCancelledOrderJob" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoRemindToBeCancelledOrderJob"/>
+    <bean id="shoppingOrderAutoCommentOrderJob" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoCommentOrderJob"/>
+    <bean id="shoppingOrderAutoPaymentsToMerchantJob" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoPaymentsToMerchantJob"/>
+    <bean id="shoppingOrderAutoReceiptJob" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoReceiptJob"/>
     <aop:aspectj-autoproxy  proxy-target-class="true"/>
 </beans>

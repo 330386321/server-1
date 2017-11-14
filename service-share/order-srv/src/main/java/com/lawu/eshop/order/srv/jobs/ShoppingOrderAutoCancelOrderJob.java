@@ -13,7 +13,7 @@ import com.lawu.jobsextend.AbstractTxPageJob;
  * 
  * @author jiangxinjun
  * @createDate 2017年4月17日
- * @updateDate 2017年11月13日
+ * @updateDate 2017年11月14日
  */
 public class ShoppingOrderAutoCancelOrderJob extends AbstractTxPageJob<ShoppingOrderDO> {
 
@@ -21,12 +21,22 @@ public class ShoppingOrderAutoCancelOrderJob extends AbstractTxPageJob<ShoppingO
     private ShoppingOrderService shoppingOrderService;
     
     @Override
-    public List<ShoppingOrderDO> queryPage(int currentPage, int pageSize) {
-        return shoppingOrderService.selectAutoCancelOrder(currentPage, pageSize);
+    public List<ShoppingOrderDO> queryPage(int offset, int pageSize) {
+        return shoppingOrderService.selectAutoCancelOrder(offset, pageSize);
     }
 
     @Override
     public void executeSingle(ShoppingOrderDO entity) {
         shoppingOrderService.cancelOrder(null, entity.getId());
+    }
+
+    @Override
+    public boolean isStatusData() {
+        return true;
+    }
+
+    @Override
+    public boolean continueWhenSinglePageFail() {
+        return true;
     }
 }

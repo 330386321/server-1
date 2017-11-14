@@ -357,7 +357,7 @@ public interface ShoppingOrderService {
      * @createDate 2017年11月13日
      * @updateDate 2017年11月13日
      */
-    List<ShoppingOrderDO> selectAutoCancelOrder(int currentPage, int pageSize);
+    List<ShoppingOrderDO> selectAutoCancelOrder(int offset, int pageSize);
 
     /**
      * 分页查询查找符合自动提醒即将取消的未付款订单 用于定时任务
@@ -368,7 +368,7 @@ public interface ShoppingOrderService {
      * @createDate 2017年11月13日
      * @updateDate 2017年11月13日
      */
-    List<ShoppingOrderDO> selectAutoRemindToBeCancelledOrder(int currentPage, int pageSize);
+    List<ShoppingOrderDO> selectAutoRemindToBeCancelledOrder(int offset, int pageSize);
 
     /**
      * 执行自动提醒即将取消的未付款订单
@@ -386,7 +386,7 @@ public interface ShoppingOrderService {
      * @createDate 2017年11月13日
      * @updateDate 2017年11月13日
      */
-    List<ShoppingOrderItemExtendDO> selectAutoCommentOrder(int currentPage, int pageSize);
+    List<ShoppingOrderItemExtendDO> selectAutoCommentOrder(int offset, int pageSize);
 
     /**
      * 执行自动评论订单
@@ -404,7 +404,7 @@ public interface ShoppingOrderService {
      * @createDate 2017年11月13日
      * @updateDate 2017年11月13日
      */
-    List<ShoppingOrderDO> selectAutoReleaseFrozenFundsOrder(int currentPage, int pageSize);
+    List<ShoppingOrderDO> selectAutoReleaseFrozenFundsOrder(int offset, int pageSize);
 
     /**
      * 执行订单收货之后，超过退款申请时间的订单

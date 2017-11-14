@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 import com.lawu.jobsextend.AbstractTxPageJob;
 
@@ -17,19 +17,29 @@ import com.lawu.jobsextend.AbstractTxPageJob;
  * @createDate 2017年4月17日
  * @updateDate 2017年11月14日
  */
-public class ShoppingOrderAutoReceiptJob extends AbstractTxPageJob<ShoppingOrderItemExtendDO> {
+public class ShoppingOrderAutoReceiptJob extends AbstractTxPageJob<ShoppingOrderDO> {
 
     @Autowired
     private ShoppingOrderService shoppingOrderService;
     
     @Override
-    public List<ShoppingOrderItemExtendDO> queryPage(int currentPage, int pageSize) {
-        return shoppingOrderService.selectAutoCommentOrder(currentPage, pageSize);
+    public List<ShoppingOrderDO> queryPage(int offset, int pageSize) {
+        return shoppingOrderService.selectAutoReceiptOrder(offset, pageSize);
     }
 
     @Override
-    public void executeSingle(ShoppingOrderItemExtendDO entity) {
+    public void executeSingle(ShoppingOrderDO entity) {
         shoppingOrderService.tradingSuccess(entity.getId(), true);
+    }
+
+    @Override
+    public boolean isStatusData() {
+        return true;
+    }
+
+    @Override
+    public boolean continueWhenSinglePageFail() {
+        return true;
     }
     
 }
