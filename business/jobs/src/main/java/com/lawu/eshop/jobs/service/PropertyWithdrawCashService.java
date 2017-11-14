@@ -43,4 +43,12 @@ public interface PropertyWithdrawCashService {
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "cashBackage/selectAgentWithdrawCashList")
     Result<List<WithdrawCashReportDTO>> selectAgentWithdrawCashList(@RequestBody AgentWithdrawCashReportParam param);
+
+	/**
+	 * 获取某天某个地区提现成功的金额
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "cashBackage/selectAgentWithdrawCashTotal")
+	Result<WithdrawCashTotalReportDTO> selectAgentWithdrawCashTotal(@RequestBody AgentWithdrawCashReportParam param);
 }

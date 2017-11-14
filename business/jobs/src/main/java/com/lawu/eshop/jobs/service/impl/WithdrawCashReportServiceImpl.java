@@ -196,27 +196,19 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 		param.setStatus(CashStatusEnum.SUCCESS.getVal());
 		for (RegionDTO regionDTO : regionResult.getModel()) {
 			param.setCityId(regionDTO.getId());
-			Result<List<WithdrawCashReportDTO>> rntResult = propertyWithdrawCashService.selectAgentWithdrawCashList(param);
-			if(!rntResult.getModel().isEmpty()){
-				//存在提现记录
-				BigDecimal memberMoney = new BigDecimal("0");
-				BigDecimal merchantMoney = new BigDecimal("0");
-				for(WithdrawCashReportDTO dto : rntResult.getModel()){
-					if(dto.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
-						memberMoney = memberMoney.add(dto.getCashMoney());
-					}else if(dto.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
-						merchantMoney = merchantMoney.add(dto.getCashMoney());
-					}
-				}
-				AgentWithdrawCashParam reportWithdraw = new AgentWithdrawCashParam();
-				reportWithdraw.setGmtReport(DateUtil.formatDate(today, "yyyy-MM-dd"));
-				reportWithdraw.setMemberMoney(memberMoney);
-				reportWithdraw.setMerchantMoney(merchantMoney);
-				reportWithdraw.setTotalMoney(memberMoney.add(merchantMoney));
-				reportWithdraw.setCityId(regionDTO.getId());
-				reportWithdraw.setCityName(regionDTO.getName());
-				statisticsWithdrawCashService.saveAgentDaily(reportWithdraw);
-			}
+			Result<WithdrawCashTotalReportDTO> rntResult = propertyWithdrawCashService.selectAgentWithdrawCashTotal(param);
+			//存在提现记录
+			BigDecimal memberMoney = rntResult.getModel().getMemberCashMoney();
+			BigDecimal merchantMoney = rntResult.getModel().getMerchantCashMoney();
+
+			AgentWithdrawCashParam reportWithdraw = new AgentWithdrawCashParam();
+			reportWithdraw.setGmtReport(DateUtil.formatDate(today, "yyyy-MM-dd"));
+			reportWithdraw.setMemberMoney(memberMoney);
+			reportWithdraw.setMerchantMoney(merchantMoney);
+			reportWithdraw.setTotalMoney(memberMoney.add(merchantMoney));
+			reportWithdraw.setCityId(regionDTO.getId());
+			reportWithdraw.setCityName(regionDTO.getName());
+			statisticsWithdrawCashService.saveAgentDaily(reportWithdraw);
 		}
 	}
 

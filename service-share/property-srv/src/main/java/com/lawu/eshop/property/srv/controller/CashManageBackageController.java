@@ -210,5 +210,14 @@ public class CashManageBackageController extends BaseController {
 		}
 		return successCreated(list);
 	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "selectAgentWithdrawCashTotal")
+	public Result<WithdrawCashTotalReportDTO> selectAgentWithdrawCashTotal(@RequestBody AgentWithdrawCashReportParam param){
+		WithdrawCashTotalReportBO bo = cashManageBackageService.selectAgentWithdrawCashTotal(param);
+		WithdrawCashTotalReportDTO dto = new WithdrawCashTotalReportDTO();
+		dto.setMemberCashMoney(bo.getMemberCashMoney());
+		dto.setMerchantCashMoney(bo.getMerchantCashMoney());
+		return successCreated(dto);
+	}
 	
 }

@@ -73,4 +73,6 @@ public interface CashManageBackageService {
 
 
 	List<WithdrawCashReportBO> selectAgentWithdrawCashList(AgentWithdrawCashReportParam param);
+
+    WithdrawCashTotalReportBO selectAgentWithdrawCashTotal(AgentWithdrawCashReportParam param);
 }

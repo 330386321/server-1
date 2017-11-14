@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.lawu.eshop.property.constants.UserTypeEnum;
+import com.lawu.eshop.property.param.AgentWithdrawCashReportTotalParam;
 import com.lawu.eshop.property.param.WithdrawCashReportTotalParam;
 import com.lawu.eshop.property.srv.bo.WithdrawCashTotalReportBO;
 import com.lawu.eshop.property.srv.domain.extend.WithdrawCashTotalReportDOView;
@@ -381,6 +382,33 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
             wrbs.add(wrb);
         }
         return wrbs;
+    }
+
+    @Override
+    public WithdrawCashTotalReportBO selectAgentWithdrawCashTotal(AgentWithdrawCashReportParam param) {
+        String begin = param.getDate() + " 00:00:00";
+        String end = param.getDate() + " 23:59:59";
+        AgentWithdrawCashReportTotalParam query = new  AgentWithdrawCashReportTotalParam();
+        query.setBegin(begin);
+        query.setEnd(end);
+        query.setStatus(param.getStatus());
+        query.setCityId(param.getCityId());
+        List<WithdrawCashTotalReportDOView> viewList = withdrawCashDOMapperExtend.selectAgentWithdrawCashTotal(query);
+        BigDecimal memberMoney = new BigDecimal("0");
+        BigDecimal merchantMoney = new BigDecimal("0");
+        if(viewList != null && !viewList.isEmpty()){
+            for(WithdrawCashTotalReportDOView view : viewList){
+                if(view.getUserType() == 1){
+                    memberMoney = view.getCashMoney();
+                } else if(view.getUserType() == 2){
+                    merchantMoney = view.getCashMoney();
+                }
+            }
+        }
+        WithdrawCashTotalReportBO bo = new WithdrawCashTotalReportBO();
+        bo.setMemberCashMoney(memberMoney);
+        bo.setMerchantCashMoney(merchantMoney);
+        return bo;
     }
 
 }

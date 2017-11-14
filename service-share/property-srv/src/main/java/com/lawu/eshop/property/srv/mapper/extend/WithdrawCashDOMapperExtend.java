@@ -2,6 +2,7 @@ package com.lawu.eshop.property.srv.mapper.extend;
 
 import java.util.List;
 
+import com.lawu.eshop.property.param.AgentWithdrawCashReportTotalParam;
 import com.lawu.eshop.property.param.WithdrawCashReportParam;
 import com.lawu.eshop.property.param.WithdrawCashReportTotalParam;
 import com.lawu.eshop.property.srv.domain.extend.WithdrawCashDOView;
@@ -24,4 +25,6 @@ public interface WithdrawCashDOMapperExtend {
 	void updateBatchWithdrawCashStatus(List<WithdrawCashOperDOView> paramList);
 
     List<WithdrawCashTotalReportDOView> selectWithdrawCashTotalByDateAndStatus(WithdrawCashReportTotalParam query);
+
+    List<WithdrawCashTotalReportDOView> selectAgentWithdrawCashTotal(AgentWithdrawCashReportTotalParam query);
 }

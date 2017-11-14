@@ -60,4 +60,15 @@
 		GROUP BY
 			user_type
 	</select>
+
+	<select id="selectAgentWithdrawCashTotal"  resultMap="withdrawCashTotalResultMap" parameterType="com.lawu.eshop.property.param.AgentWithdrawCashReportTotalParam">
+		SELECT
+		user_type,sum(cash_money) cash_money
+		FROM
+		withdraw_cash
+		WHERE
+		`status` = ${status} and gmt_finish BETWEEN #{begin} and #{end} and city_id = ${cityId}
+		GROUP BY
+		user_type
+	</select>
 </mapper>
