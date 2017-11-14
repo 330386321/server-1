@@ -1463,7 +1463,7 @@ public class AdServiceImplTest {
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
         Integer id=adDOMapper.insertSelective(ad);
         
-        adService.rebuildAdIndex();
+        adService.rebuildAdIndex(1000);
         
         List<AdDO> list=adDOMapper.selectByExample(null);
         

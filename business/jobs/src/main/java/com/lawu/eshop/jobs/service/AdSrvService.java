@@ -77,7 +77,7 @@ public interface AdSrvService {
 	 * @author meishuquan
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "ad/rebuildAdIndex")
-	Result rebuildAdIndex();
+	Result rebuildAdIndex(@RequestParam("pageSize") Integer pageSize);
 
 	/**
 	 * 删除无效的广告索引

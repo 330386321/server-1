@@ -244,7 +244,7 @@ public interface AdService {
     /**
      * 重建平面视频广告索引
      */
-    void rebuildAdIndex();
+    void rebuildAdIndex(Integer pageSize);
 
     /**
      * 删除无效的平面视频广告索引

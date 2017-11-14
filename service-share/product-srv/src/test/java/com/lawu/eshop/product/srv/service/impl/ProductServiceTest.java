@@ -426,7 +426,7 @@ public class ProductServiceTest {
 		productService.eidtProduct(product);
 		EditProductDataParam product1 = initProduct("2");
 		productService.eidtProduct(product1);
-		productService.rebuildProductIndex();
+		productService.rebuildProductIndex(1000);
 	}
 
 	/**

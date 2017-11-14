@@ -66,27 +66,32 @@ public class FansInviteContentServiceImpl implements FansInviteContentService{
 
 	@Override
 	@Transactional
-	public void dealOverdueFansInvite() {
+	public void dealOverdueFansInvite(Integer pageSize) {
 		UserFansParam param = new UserFansParam();
 		param.setGmtCreate(new Date());
-		List<FansInviteContentDOView> viewList = fansInviteContentDOMapperExtend.listOverdueFansInvite(param);
-		if (viewList == null || viewList.isEmpty()) {
-			return;
-		}
-		FansInviteContentDO inviteContentDO = new FansInviteContentDO();
-		inviteContentDO.setIsOverdue(true);
-		inviteContentDO.setGmtModified(new Date());
-		for (FansInviteContentDOView view : viewList) {
-			param.setMerchantId(view.getMerchantId());
-			int count = fansMerchantDOMapperExtend.countOverdueFans(param);
-			fansMerchantDOMapperExtend.delOverdueFans(param);
+		param.setCurrentPage(1);
+		param.setPageSize(pageSize);
 
-			inviteContentDO.setId(view.getId());
-			inviteContentDO.setRefuseNumber(count);
-			fansInviteContentDOMapper.updateByPrimaryKeySelective(inviteContentDO);
+		while (true){
+			List<FansInviteContentDOView> viewList = fansInviteContentDOMapperExtend.listOverdueFansInvite(param);
+			if (viewList == null || viewList.isEmpty()) {
+				return;
+			}
+			FansInviteContentDO inviteContentDO = new FansInviteContentDO();
+			inviteContentDO.setIsOverdue(true);
+			inviteContentDO.setGmtModified(new Date());
+			for (FansInviteContentDOView view : viewList) {
+				param.setMerchantId(view.getMerchantId());
+				int count = fansMerchantDOMapperExtend.countOverdueFans(param);
+				fansMerchantDOMapperExtend.delOverdueFans(param);
 
-			if (count > 0) {
-				merchantFansTransactionMainServiceImpl.sendNotice(view.getId());
+				inviteContentDO.setId(view.getId());
+				inviteContentDO.setRefuseNumber(count);
+				fansInviteContentDOMapper.updateByPrimaryKeySelective(inviteContentDO);
+
+				if (count > 0) {
+					merchantFansTransactionMainServiceImpl.sendNotice(view.getId());
+				}
 			}
 		}
 	}
