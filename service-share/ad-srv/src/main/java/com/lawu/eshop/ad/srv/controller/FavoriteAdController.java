@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.ad.dto.FavoriteAdDOViewDTO;
 import com.lawu.eshop.ad.dto.FavoriteAdPraiseWarnDTO;
 import com.lawu.eshop.ad.param.FavoriteAdParam;
+import com.lawu.eshop.ad.param.PraiseWarnParam;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdPraiseWarnBO;
 import com.lawu.eshop.ad.srv.converter.FavoriteAdConverter;
@@ -102,9 +103,9 @@ public class FavoriteAdController extends BaseController{
 	 * 收藏的抢赞十分提示
 	 * @return
 	 */
-	@RequestMapping(value = "selectFavoriteAdPraise", method = RequestMethod.GET)
-    public Result<List<FavoriteAdPraiseWarnDTO>> selectFavoriteAdPraise() {
-		List<FavoriteAdPraiseWarnBO> list=favoriteAdService.selectFavoriteAdPraise();
+	@RequestMapping(value = "selectFavoriteAdPraise", method = RequestMethod.POST)
+    public Result<List<FavoriteAdPraiseWarnDTO>> selectFavoriteAdPraise(@RequestBody PraiseWarnParam param) {
+		List<FavoriteAdPraiseWarnBO> list=favoriteAdService.selectFavoriteAdPraise(param);
 		
 		List<FavoriteAdPraiseWarnDTO> dtoList=new ArrayList<>();
 		

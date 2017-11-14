@@ -28,6 +28,6 @@ public interface FavoriteAdDOMapperExtend {
 	 * 收藏的抢赞十分钟提醒
 	 * @return
 	 */
-	List<FavoriteAdPraiseWarnView> selectFavoriteAdPraise(FavoriteAdExtendDOView view);
+	List<FavoriteAdPraiseWarnView> selectFavoriteAdPraise(FavoriteAdExtendDOView view, RowBounds rowBounds);
     
 }
