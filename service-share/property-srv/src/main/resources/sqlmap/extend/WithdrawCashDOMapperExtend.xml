@@ -16,6 +16,11 @@
 		status = #{status,jdbcType=TINYINT}
 	</select>
 
+	<resultMap id="withdrawCashTotalResultMap" type="com.lawu.eshop.property.srv.domain.extend.WithdrawCashTotalReportDOView">
+		<result column="cash_money" jdbcType="DECIMAL" property="cashMoney" />
+		<result column="user_type" jdbcType="INTEGER" property="userType"/>
+	</resultMap>
+
 	<update id="updateBatchWithdrawCashStatus" parameterType="java.util.List">
 		<foreach collection="list" item="item" index="index" open=""
 			close="" separator=";">
@@ -45,4 +50,25 @@
 		</foreach>
 	</update>
 
+	<select id="selectWithdrawCashTotalByDateAndStatus"  resultMap="withdrawCashTotalResultMap" parameterType="com.lawu.eshop.property.param.WithdrawCashReportTotalParam">
+		SELECT
+			user_type,sum(cash_money) cash_money
+		FROM
+			withdraw_cash
+		WHERE
+			`status` = ${status} and gmt_finish BETWEEN #{begin} and #{end}
+		GROUP BY
+			user_type
+	</select>
+
+	<select id="selectAgentWithdrawCashTotal"  resultMap="withdrawCashTotalResultMap" parameterType="com.lawu.eshop.property.param.AgentWithdrawCashReportTotalParam">
+		SELECT
+		user_type,sum(cash_money) cash_money
+		FROM
+		withdraw_cash
+		WHERE
+		`status` = ${status} and gmt_finish BETWEEN #{begin} and #{end} and city_id = ${cityId}
+		GROUP BY
+		user_type
+	</select>
 </mapper>

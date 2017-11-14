@@ -24,7 +24,7 @@ public interface PropertyRechargeService {
 	 * @date 2017年6月29日 下午5:17:37
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "recharge/selectWithdrawCashListByDateAndStatus")
-	Result<List<RechargeReportDTO>> selectWithdrawCashListByDateAndStatus(@RequestBody RechargeReportParam param);
+	Result<RechargeReportDTO> selectWithdrawCashListByDateAndStatus(@RequestBody RechargeReportParam param);
 
 	/**
 	 * 代理商区域统计，获取某天第三方充值记录，分组查询

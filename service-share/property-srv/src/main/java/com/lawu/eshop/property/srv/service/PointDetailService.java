@@ -55,7 +55,7 @@ public interface PointDetailService {
      * @author yangqh
      * @date 2017年6月30日 下午2:34:48
      */
-    List<PointConsumeReportBO> selectPointDetailListByDateAndDirection(PointDetailReportParam param);
+    PointConsumeReportBO selectPointDetailListByDateAndDirection(PointDetailReportParam param);
 
     /**
      * @param param
@@ -63,7 +63,7 @@ public interface PointDetailService {
      * @author yangqh
      * @date 2017年6月30日 下午2:47:59
      */
-    List<PointConsumeReportBO> selectPointDetailListByDateAndDirectionAndPointType(PointDetailReportParam param);
+    PointConsumeReportBO selectPointDetailListByDateAndDirectionAndPointType(PointDetailReportParam param);
 
     /**
      * 获取区域分组统计出来的发广告积分明细数据

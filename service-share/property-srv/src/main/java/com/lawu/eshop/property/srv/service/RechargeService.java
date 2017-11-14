@@ -79,7 +79,7 @@ public interface RechargeService {
      * @author yangqh
      * @date 2017年6月29日 下午5:28:21
      */
-    List<RechargeReportBO> selectWithdrawCashListByDateAndStatus(RechargeReportParam param);
+    RechargeReportBO selectWithdrawCashListByDateAndStatus(RechargeReportParam param);
 
     /**
      * 根据充值ID查询充值状态

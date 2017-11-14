@@ -66,4 +66,14 @@ public class AdFlatAndVideoJob extends AbstractPageJob<AdDO>{
 
 	}
 
+	@Override
+	public boolean continueWhenSinglePageFail() {
+		return true;
+	}
+
+	@Override
+	public boolean isStatusData() {
+		return true;
+	}
+
 }

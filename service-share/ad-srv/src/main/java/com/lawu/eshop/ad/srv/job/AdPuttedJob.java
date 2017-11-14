@@ -68,4 +68,14 @@ public class AdPuttedJob extends AbstractPageJob<AdDO> {
             solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(),adSrvConfig.getIsCloudSolr());
 	    }
 	}
+	
+	@Override
+	public boolean continueWhenSinglePageFail() {
+		return true;
+	}
+
+	@Override
+	public boolean isStatusData() {
+		return true;
+	}
 }

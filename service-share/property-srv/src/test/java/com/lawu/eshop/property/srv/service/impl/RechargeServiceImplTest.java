@@ -206,8 +206,8 @@ public class RechargeServiceImplTest {
         param.setDate(DateUtil.getDateFormat(new Date(),"yyyy-MM-dd"));
         param.setRechargeType(PayTypeEnum.BALANCE.getVal());
         param.setStatus(ThirdPayStatusEnum.PAYING.getVal());
-        List<RechargeReportBO> rtnList = rechargeService.selectWithdrawCashListByDateAndStatus(param);
-        Assert.assertEquals(1,rtnList.size());
+        RechargeReportBO bo = rechargeService.selectWithdrawCashListByDateAndStatus(param);
+        Assert.assertNotNull(bo);
     }
 
     @Transactional

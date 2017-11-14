@@ -96,4 +96,23 @@
 		AND #{end}
 		group by user_num,point_type
 	</select>
+	
+	<!-- 积分查询统计 -->
+	<resultMap id="PointReportResultMap" type="com.lawu.eshop.property.srv.domain.extend.PointDOView">
+        <result column="user_type" property="userType" jdbcType="VARCHAR"/>
+        <result column="sum_recharge_money" property="sumRechargeMoney" jdbcType="DECIMAL"/>
+    </resultMap>
+	
+	<select id="selectPointDetailListByDateAndDirection"  resultMap="PointReportResultMap"  parameterType="com.lawu.eshop.property.srv.domain.extend.PointReportDOView">
+		SELECT
+			LEFT(p.user_num,1) as user_type,
+			sum(p.point) as sumRechargeMoney
+		FROM
+			point_detail p
+		WHERE
+			p.direction=${direction}
+		AND p.gmt_create BETWEEN #{bdate} and #{edate}
+		GROUP BY
+			LEFT(p.user_num,1)
+	</select>
 </mapper>

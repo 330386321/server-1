@@ -3,35 +3,35 @@ package com.lawu.eshop.property.srv.bo;
 import java.math.BigDecimal;
 
 public class PointConsumeReportBO {
-	
-	private Long id;
-	
-	private BigDecimal point;
-	
-	private String userNum;
 
-	public Long getId() {
-		return id;
+	private BigDecimal memberRechargeMoney;
+
+	private BigDecimal sumRechargeMoney;
+
+	private BigDecimal merchantRechargeMoney;
+
+	public BigDecimal getMemberRechargeMoney() {
+		return memberRechargeMoney;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setMemberRechargeMoney(BigDecimal memberRechargeMoney) {
+		this.memberRechargeMoney = memberRechargeMoney;
 	}
 
-	public BigDecimal getPoint() {
-		return point;
+	public BigDecimal getSumRechargeMoney() {
+		return sumRechargeMoney;
 	}
 
-	public void setPoint(BigDecimal point) {
-		this.point = point;
+	public void setSumRechargeMoney(BigDecimal sumRechargeMoney) {
+		this.sumRechargeMoney = sumRechargeMoney;
 	}
 
-	public String getUserNum() {
-		return userNum;
+	public BigDecimal getMerchantRechargeMoney() {
+		return merchantRechargeMoney;
 	}
 
-	public void setUserNum(String userNum) {
-		this.userNum = userNum;
+	public void setMerchantRechargeMoney(BigDecimal merchantRechargeMoney) {
+		this.merchantRechargeMoney = merchantRechargeMoney;
 	}
 
 }

@@ -8,7 +8,7 @@ public class WithdrawCashReportParam {
 	
 	@NotBlank(message = "date不能为空")
 	private String date;
-	
+
 	@NotNull(message = "status不能为空")
 	private Byte status;
 	public String getDate() {

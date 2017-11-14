@@ -47,38 +47,24 @@ public class PointConsumeReportServiceImpl implements PointConsumeReportService 
 				PointDetailReportParam param = new PointDetailReportParam();
 				param.setDate(today);
 				param.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
-				Result<List<PointConsumeReportDTO>> rntResult = propertyPointDetailService.selectPointDetailListByDateAndDirection(param);
+				Result<PointConsumeReportDTO> rntResult = propertyPointDetailService.selectPointDetailListByDateAndDirection(param);
 				
 				if(ResultCode.SUCCESS != rntResult.getRet()){
 					logger.error("积分消费报表统计定时采集数据异常：{}",rntResult.getMsg());
 					return;
 				}
 				
-				List<PointConsumeReportDTO> rntList = rntResult.getModel();
-				if(rntList.isEmpty()){
-					logger.info("积分消费报表统计(按日)定时采集数据srv返回空！");
-				}
+				PointConsumeReportDTO dto = rntResult.getModel();
 				
-				BigDecimal memberPoint = new BigDecimal("0");
-				BigDecimal merchantPoint = new BigDecimal("0");
-				for(PointConsumeReportDTO dto : rntList){
-					if(dto.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
-						memberPoint = memberPoint.add(dto.getPoint());
-					}else if(dto.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
-						merchantPoint = merchantPoint.add(dto.getPoint());
-					}
-				}
-				
+				BigDecimal memberPoint = dto.getMemberRechargeMoney();
+				BigDecimal merchantPoint = dto.getMerchantRechargeMoney();
+			
 				//查询当日退回的积分总额
 				param.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 				param.setPointType(MerchantTransactionTypeEnum.AD_RETURN_POINT.getValue());
-				Result<List<PointConsumeReportDTO>> rntPointBackResult = propertyPointDetailService.selectPointDetailListByDateAndDirectionAndPointType(param);
-				List<PointConsumeReportDTO> rntBackList = rntPointBackResult.getModel();
-				BigDecimal merchantBackPoint = new BigDecimal("0");
-				for(PointConsumeReportDTO dto : rntBackList){
-					merchantBackPoint = merchantBackPoint.add(dto.getPoint());
-				}
-				merchantPoint = merchantPoint.subtract(merchantBackPoint);//需要减去退回部分积分
+				Result<PointConsumeReportDTO> rntPointBackResult = propertyPointDetailService.selectPointDetailListByDateAndDirectionAndPointType(param);
+				PointConsumeReportDTO reportDTO = rntPointBackResult.getModel();
+				merchantPoint = merchantPoint.subtract(reportDTO.getMerchantRechargeMoney());//需要减去退回部分积分
 				if(merchantPoint.compareTo(BigDecimal.ZERO) == -1)
 					merchantPoint = new BigDecimal("0");
 				ReportKCommonParam reportWithdraw = new ReportKCommonParam();
@@ -86,7 +72,7 @@ public class PointConsumeReportServiceImpl implements PointConsumeReportService 
 				reportWithdraw.setGmtReport(DateUtil.formatDate(today, "yyyy-MM-dd"));
 				reportWithdraw.setMemberMoney(memberPoint);
 				reportWithdraw.setMerchantMoney(merchantPoint);
-				reportWithdraw.setTotalMoney(memberPoint.add(merchantPoint));
+				reportWithdraw.setTotalMoney(dto.getSumRechargeMoney());
 				Result result = statisticsPointConsumeService.saveDaily(reportWithdraw);
 				if(result.getRet() != ResultCode.SUCCESS){
 					logger.error("积分消费报表统计时采集数据保存report_point_consume_daily表异常！");
@@ -99,45 +85,26 @@ public class PointConsumeReportServiceImpl implements PointConsumeReportService 
 			PointDetailReportParam param = new PointDetailReportParam();
 			param.setDate(today);
 			param.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
-			Result<List<PointConsumeReportDTO>> rntResult = propertyPointDetailService.selectPointDetailListByDateAndDirection(param);
+			Result<PointConsumeReportDTO> rntResult = propertyPointDetailService.selectPointDetailListByDateAndDirection(param);
 			
-			if(ResultCode.SUCCESS != rntResult.getRet()){
-				logger.error("积分消费报表统计定时采集数据异常：{}",rntResult.getMsg());
-				return;
-			}
+			PointConsumeReportDTO dto = rntResult.getModel();
 			
-			List<PointConsumeReportDTO> rntList = rntResult.getModel();
-			if(rntList.isEmpty()){
-				logger.info("积分消费报表统计(按日)定时采集数据srv返回空！");
-			}
-			
-			BigDecimal memberPoint = new BigDecimal("0");
-			BigDecimal merchantPoint = new BigDecimal("0");
-			for(PointConsumeReportDTO dto : rntList){
-				if(dto.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
-					memberPoint = memberPoint.add(dto.getPoint());
-				}else if(dto.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
-					merchantPoint = merchantPoint.add(dto.getPoint());
-				}
-			}
+			BigDecimal memberPoint = dto.getMemberRechargeMoney();
+			BigDecimal merchantPoint = dto.getMerchantRechargeMoney();
 			
 			//查询当日退回的积分总额
 			param.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 			param.setPointType(MerchantTransactionTypeEnum.AD_RETURN_POINT.getValue());
-			Result<List<PointConsumeReportDTO>> rntPointBackResult = propertyPointDetailService.selectPointDetailListByDateAndDirectionAndPointType(param);
-			List<PointConsumeReportDTO> rntBackList = rntPointBackResult.getModel();
-			BigDecimal merchantBackPoint = new BigDecimal("0");
-			for(PointConsumeReportDTO dto : rntBackList){
-				merchantBackPoint = merchantBackPoint.add(dto.getPoint());
-			}
-			merchantPoint = merchantPoint.subtract(merchantBackPoint);//需要减去退回部分积分
+			Result<PointConsumeReportDTO> rntPointBackResult = propertyPointDetailService.selectPointDetailListByDateAndDirectionAndPointType(param);
+			PointConsumeReportDTO reportDTO = rntPointBackResult.getModel();
+			merchantPoint = merchantPoint.subtract(reportDTO.getMerchantRechargeMoney());//需要减去退回部分积分
 			
 			ReportKCommonParam reportWithdraw = new ReportKCommonParam();
 			reportWithdraw.setGmtCreate(new Date());
 			reportWithdraw.setGmtReport(DateUtil.formatDate(today, "yyyy-MM-dd"));
 			reportWithdraw.setMemberMoney(memberPoint);
 			reportWithdraw.setMerchantMoney(merchantPoint);
-			reportWithdraw.setTotalMoney(memberPoint.add(merchantPoint));
+			reportWithdraw.setTotalMoney(dto.getSumRechargeMoney());
 			Result result = statisticsPointConsumeService.saveDaily(reportWithdraw);
 			if(result.getRet() != ResultCode.SUCCESS){
 				logger.error("积分消费报表统计时采集数据保存report_point_consume_daily表异常！");

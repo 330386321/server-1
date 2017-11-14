@@ -21,7 +21,6 @@ import com.lawu.eshop.property.dto.RechargeReportDTO;
 import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.statistics.dto.RechargeBalanceDailyDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
-import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.DateUtil;
 
 @Service
@@ -48,34 +47,21 @@ public class RechargeBalanceReportServiceImpl implements RechargeBalanceReportSe
 				param.setDate(today);
 				param.setStatus(ThirdPayStatusEnum.SUCCESS.getVal());
 				param.setRechargeType(PayTypeEnum.BALANCE.getVal());
-				Result<List<RechargeReportDTO>> rntResult = propertyRechargeService.selectWithdrawCashListByDateAndStatus(param);
+				Result<RechargeReportDTO> rntResult = propertyRechargeService.selectWithdrawCashListByDateAndStatus(param);
 				
 				if(ResultCode.SUCCESS != rntResult.getRet()){
 					logger.error("充值余额报表统计定时采集数据异常：{}",rntResult.getMsg());
 					return;
 				}
 				
-				List<RechargeReportDTO> rntList = rntResult.getModel();
-				if(rntList.isEmpty()){
-					logger.info("充值余额报表统计(按日)定时采集数据srv返回空！");
-				}
-				
-				BigDecimal memberMoney = new BigDecimal("0");
-				BigDecimal merchantMoney = new BigDecimal("0");
-				for(RechargeReportDTO dto : rntList){
-					if(dto.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
-						memberMoney = memberMoney.add(dto.getRechargeMoney());
-					}else if(dto.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
-						merchantMoney = merchantMoney.add(dto.getRechargeMoney());
-					}
-				}
+				RechargeReportDTO dto = rntResult.getModel();
 				
 				ReportKCommonParam reportWithdraw = new ReportKCommonParam();
 				reportWithdraw.setGmtCreate(new Date());
 				reportWithdraw.setGmtReport(DateUtil.formatDate(today, "yyyy-MM-dd"));
-				reportWithdraw.setMemberMoney(memberMoney);
-				reportWithdraw.setMerchantMoney(merchantMoney);
-				reportWithdraw.setTotalMoney(memberMoney.add(merchantMoney));
+				reportWithdraw.setMemberMoney(dto.getMemberRechargeMoney());
+				reportWithdraw.setMerchantMoney(dto.getMerchantRechargeMoney());
+				reportWithdraw.setTotalMoney(dto.getSumRechargeMoney());
 				Result result = statisticsRechargeBalanceService.saveDaily(reportWithdraw);
 				if(result.getRet() != ResultCode.SUCCESS){
 					logger.error("充值余额报表统计时采集数据保存report_recharge_balance_daily表异常！");
@@ -89,34 +75,21 @@ public class RechargeBalanceReportServiceImpl implements RechargeBalanceReportSe
 			param.setDate(today);
 			param.setStatus(ThirdPayStatusEnum.SUCCESS.getVal());
 			param.setRechargeType(PayTypeEnum.BALANCE.getVal());
-			Result<List<RechargeReportDTO>> rntResult = propertyRechargeService.selectWithdrawCashListByDateAndStatus(param);
+			Result<RechargeReportDTO> rntResult = propertyRechargeService.selectWithdrawCashListByDateAndStatus(param);
 			
 			if(ResultCode.SUCCESS != rntResult.getRet()){
 				logger.error("充值余额报表统计定时采集数据异常：{}",rntResult.getMsg());
 				return;
 			}
 			
-			List<RechargeReportDTO> rntList = rntResult.getModel();
-			if(rntList.isEmpty()){
-				logger.info("充值余额报表统计(按日)定时采集数据srv返回空！");
-			}
-			
-			BigDecimal memberMoney = new BigDecimal("0");
-			BigDecimal merchantMoney = new BigDecimal("0");
-			for(RechargeReportDTO dto : rntList){
-				if(dto.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
-					memberMoney = memberMoney.add(dto.getRechargeMoney());
-				}else if(dto.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
-					merchantMoney = merchantMoney.add(dto.getRechargeMoney());
-				}
-			}
+			RechargeReportDTO dto = rntResult.getModel();
 			
 			ReportKCommonParam reportWithdraw = new ReportKCommonParam();
 			reportWithdraw.setGmtCreate(new Date());
 			reportWithdraw.setGmtReport(DateUtil.formatDate(today, "yyyy-MM-dd"));
-			reportWithdraw.setMemberMoney(memberMoney);
-			reportWithdraw.setMerchantMoney(merchantMoney);
-			reportWithdraw.setTotalMoney(memberMoney.add(merchantMoney));
+			reportWithdraw.setMemberMoney(dto.getMemberRechargeMoney());
+			reportWithdraw.setMerchantMoney(dto.getMerchantRechargeMoney());
+			reportWithdraw.setTotalMoney(dto.getSumRechargeMoney());
 			Result result = statisticsRechargeBalanceService.saveDaily(reportWithdraw);
 			if(result.getRet() != ResultCode.SUCCESS){
 				logger.error("充值余额报表统计时采集数据保存report_recharge_balance_daily表异常！");
