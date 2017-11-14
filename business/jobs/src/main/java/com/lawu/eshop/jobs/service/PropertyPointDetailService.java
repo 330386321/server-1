@@ -23,7 +23,7 @@ public interface PropertyPointDetailService {
 	 * @date 2017年6月30日 下午2:29:46
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "pointDetail/selectPointDetailListByDateAndDirection")
-	Result<List<PointConsumeReportDTO>> selectPointDetailListByDateAndDirection(@RequestBody PointDetailReportParam param);
+	Result<PointConsumeReportDTO> selectPointDetailListByDateAndDirection(@RequestBody PointDetailReportParam param);
 
 	/**
 	 * 
@@ -33,7 +33,7 @@ public interface PropertyPointDetailService {
 	 * @date 2017年6月30日 下午2:47:11
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "pointDetail/selectPointDetailListByDateAndDirectionAndPointType")
-	Result<List<PointConsumeReportDTO>> selectPointDetailListByDateAndDirectionAndPointType(@RequestBody PointDetailReportParam param);
+	Result<PointConsumeReportDTO> selectPointDetailListByDateAndDirectionAndPointType(@RequestBody PointDetailReportParam param);
 
 	/**
 	 * 查询昨天的收益记录（商家、用户）
