@@ -11,7 +11,7 @@ public interface MemberAdRecordService {
 	 * @return
 	 * @author yangqh
 	 */
-	List<MemberAdRecodeCommissionBO> getNoneCommissionAds();
+	List<MemberAdRecodeCommissionBO> getNoneCommissionAds(int offset, int pageSize);
 
 	/**
 	 * 修改用户点击广告记录表状态为已计算提成

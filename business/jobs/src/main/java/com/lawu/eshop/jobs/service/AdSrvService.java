@@ -32,7 +32,7 @@ public interface AdSrvService {
 	 * @author yangqh
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "commission/getNoneCommissionAds")
-	List<MemberAdRecodeCommissionDTO> getNoneCommissionAds();
+	List<MemberAdRecodeCommissionDTO> getNoneCommissionAds(@RequestParam("offset") int offset, @RequestParam("pageSize") int pageSize);
 
 	/**
 	 * 修改为已计算提成

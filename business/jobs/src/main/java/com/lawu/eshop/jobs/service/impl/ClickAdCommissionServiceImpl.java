@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.lawu.eshop.property.dto.AdCommissionResultDTO;
 import com.lawu.eshop.property.param.CommissionResultParam;
+import com.lawu.jobsextend.JobsExtendPageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 	private CommissionUtilImpl commissionUtilImpl;
 
 	@Override
-	public void executeAutoClickAdCommission() {
-
-		List<MemberAdRecodeCommissionDTO> ads = adService.getNoneCommissionAds();
+	public void executeAutoClickAdCommission(List<MemberAdRecodeCommissionDTO> ads) throws JobsExtendPageException {
 
 		// 获取提成比例
 		if (ads != null && !ads.isEmpty()) {
@@ -54,7 +53,8 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 			BigDecimal actualCommissionScope = property.get("acture_in_scale");// 实际提成比例=1-爱心账户(0.003)
 			BigDecimal adCommission0 = property.get("ad_commission_0");
 
-			for (MemberAdRecodeCommissionDTO dto : ads) {
+			for (int j = 0 ; j < ads.size() ; j++) {
+				MemberAdRecodeCommissionDTO dto = ads.get(j);
 				if(dto.getMemberNum() == null || "".equals(dto.getMemberNum())){
 					logger.error("查询未计算提成的点广告记录，返回用户编号为空！");
 					continue;
@@ -76,14 +76,11 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 						BigDecimal sale_commission = null;
 						if (i == 0) {
 							sale_commission = property.get("ad_commission_1");
-
 						} else if (i == 1) {
 							sale_commission = property.get("ad_commission_2");
-
 						} else if (i == 2) {
 							param.setLast(true);
 							sale_commission = property.get("ad_commission_3");
-
 						}
 
 						CommissionResultParam commissionResultparam = new CommissionResultParam();
@@ -107,12 +104,15 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 						param.setLoveTypeVal(LoveTypeEnum.AD_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.AD_COMMISSION.getName());
 						
-//						logger.info("点广告比例：ad_commission_0={},commission={},actualCommissionScope={},loveAccountScale={}",adCommission0,sale_commission,actualCommissionScope,loveAccountScale);
-//						logger.info("点广告：actureMoneyIn={},actureLoveIn={}",param.getActureMoneyIn(),param.getActureLoveIn());
-						
-						retCode = propertySrvService.calculation(param);
-						if (ResultCode.SUCCESS == retCode) {
-							m++;
+						logger.info("点广告比例：提成基础金额比例={},提成比例={},所得比例={},爱心比例={},所得：实际收益={},爱心账户={}",adCommission0,sale_commission,actualCommissionScope,loveAccountScale,param.getActureMoneyIn(),param.getActureLoveIn());
+
+						try {
+							retCode = propertySrvService.calculation(param);
+							if (ResultCode.SUCCESS == retCode) {
+								m++;
+							}
+						}catch (Exception e){
+							throw new JobsExtendPageException(e,j);
 						}
 					}
 					// 所有上线提成计算成功才算成功
@@ -132,7 +132,6 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 				} else {
 					logger.error("广告点击提成计算上级收益时返回错误,memberAdRecordId={},retCode={}", dto.getId(), retCode);
 				}
-
 			}
 		}
 
