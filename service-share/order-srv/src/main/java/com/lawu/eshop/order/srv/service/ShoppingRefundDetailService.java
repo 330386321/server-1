@@ -141,14 +141,6 @@ public interface ShoppingRefundDetailService {
 	void revokeRefundRequest(Long id, Long memberId);
 	
 	/**
-	 * 退款中 - 等待买家退货
-	 * 平台提醒买家操作，否则自动撤销退款申请
-	 * 
-	 * @author Sunny
-	 */
-	void executeAutoForToBeReturn();
-	
-	/**
 	 * 退款中 - 等待商家退款
 	 * 平台提醒商家操作，否则自动退款
 	 * 
@@ -276,5 +268,37 @@ public interface ShoppingRefundDetailService {
      * @createDate 2017年11月15日
      * @updateDate 2017年11月15日
      */
-    void executeAutoRevokeRefundFailed(ShoppingOrderItemDO shoppingOrderItemDO);
+    void executeAutoRevokeRefundRequest(ShoppingOrderItemDO shoppingOrderItemDO);
+    
+    /**
+     * 分页查询满足待退货状态，买家超时操作，满足自动提醒的退款记录
+     * 
+     * @param offset
+     * @param pageSize
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemDO> selectAutoRemindToBeReturn(int offset, int pageSize);
+    
+    /**
+     * 自动提醒待退货状态，买家超时操作
+     * 
+     * @param shoppingOrderItemDO
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    void executeAutoRemindToBeReturn(ShoppingOrderItemDO shoppingOrderItemDO);
+    
+    /**
+     * 分页查询满足待退货状态，买家超时操作，满足自动撤销的退款记录
+     * 
+     * @param offset
+     * @param pageSize
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemDO> selectAutoRevokeToBeReturn(int offset, int pageSize);
 }

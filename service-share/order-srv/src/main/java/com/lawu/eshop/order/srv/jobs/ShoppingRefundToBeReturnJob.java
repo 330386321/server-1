@@ -1,34 +1,44 @@
 package com.lawu.eshop.order.srv.jobs;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dangdang.ddframe.job.api.ShardingContext;
-import com.dangdang.ddframe.job.api.simple.SimpleJob;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.service.ShoppingRefundDetailService;
+import com.lawu.jobsextend.AbstractTxPageJob;
 
 /**
  * 退款中-等待买家退货
- * 平台提示买家操作
+ * 买家超时操作
  * 否则自动撤销退款申请
  * 
- * @author Sunny
- * @date 2017年4月17日
+ * @author jiangxinjun
+ * @createDate 2017年4月17日
+ * @createDate 2017年11月15日
  */
-public class ShoppingRefundToBeReturnJob implements SimpleJob {
-
-    private static Logger logger = LoggerFactory.getLogger(ShoppingRefundToBeReturnJob.class);
+public class ShoppingRefundToBeReturnJob extends AbstractTxPageJob<ShoppingOrderItemDO> {
 
     @Autowired
     private ShoppingRefundDetailService shoppingRefundDetailService;
     
     @Override
-    public void execute(ShardingContext shardingContext) {
-        logger.debug("------{}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
+    public List<ShoppingOrderItemDO> queryPage(int offset, int pageSize) {
+        return shoppingRefundDetailService.selectAutoRevokeToBeReturn(offset, pageSize);
+    }
 
-        shoppingRefundDetailService.executeAutoForToBeReturn();
-        
-        logger.debug("------{}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
+    @Override
+    public void executeSingle(ShoppingOrderItemDO entity) {
+        shoppingRefundDetailService.executeAutoRevokeRefundRequest(entity);
+    }
+
+    @Override
+    public boolean isStatusData() {
+        return true;
+    }
+
+    @Override
+    public boolean continueWhenSinglePageFail() {
+        return true;
     }
 }
