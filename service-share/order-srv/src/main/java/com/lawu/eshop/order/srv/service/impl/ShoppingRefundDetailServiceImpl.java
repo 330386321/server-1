@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -636,54 +637,6 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailUpdateDO);
 	}
 
-	/**
-	 * 买家申请退款，商家未操作处理
-	 * 退款类型-退款
-	 * 平台提醒商家，否则自动退款给买家
-	 * 
-	 * @author Sunny
-	 */
-	@Override
-	public void executeAutoToBeConfirmedForRefund() {
-		ShoppingOrderItemExtendDOExample example = new ShoppingOrderItemExtendDOExample();
-		
-		// 查询结果包括订单
-		example.setIsIncludeShoppingOrder(true);
-		// 查询结果包括退款详情
-		example.setIsIncludeShoppingRefundDetail(true);
-		
-		ShoppingOrderItemExtendDOExample.Criteria criteria = example.createCriteria();
-		
-		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
-		criteria.andRefundStatusEqualTo(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
-		// 找到其中有效的记录
-		criteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
-		criteria.andSRDTypeEqualTo(ShoppingRefundTypeEnum.REFUND.getValue());
-		
-		// 提醒时间
-		String remindTime = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_REFUND_REMIND_TIME);
-		// 超过提醒时间
-		criteria.andGmtModifiedLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(remindTime) * -1, Calendar.DAY_OF_YEAR));
-		
-		// 退款时间
-		String refundTime = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_REFUND_REFUND_TIME);
-		
-		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
-		
-		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
-			// 发送次数为0，发送站内信和推送
-			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
-				continue;
-			}
-			
-			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
-			// 如果商家未处理时间超过退款时间，平台自动退款
-			if (isExceeds) {
-				agreeToRefund(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId());
-			}
-		}
-	}
 	
 	/**
 	 * 买家申请退款，商家未操作处理
@@ -722,7 +675,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
 			// 发送次数为0，发送站内信和推送
 			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
+				refundRemind(shoppingOrderItemExtendDO);
 				continue;
 			}
 			
@@ -815,7 +768,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
 			// 发送次数为0，发送站内信和推送
 			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
+				refundRemind(shoppingOrderItemExtendDO);
 			}
 			
 			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
@@ -931,7 +884,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 					continue;
 				}
 				if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-					toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
+					refundRemind(shoppingOrderItemExtendDO);
 					continue;
 				}
 				
@@ -944,32 +897,141 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		}
 	}
 	
+    @Override
+    public List<ShoppingOrderItemExtendDO> selectAutoRemindToBeConfirmedForRefund(int offset, int pageSize) {
+        ShoppingOrderItemExtendDOExample example = new ShoppingOrderItemExtendDOExample();
+        // 查询结果包括订单
+        example.setIsIncludeShoppingOrder(true);
+        // 查询结果包括退款详情
+        example.setIsIncludeShoppingRefundDetail(true);
+        
+        ShoppingOrderItemExtendDOExample.Criteria criteria = example.createCriteria();
+        
+        criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+        criteria.andRefundStatusEqualTo(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
+        // 找到其中有效的记录
+        criteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
+        criteria.andSRDTypeEqualTo(ShoppingRefundTypeEnum.REFUND.getValue());
+        
+        // 提醒时间
+        String remindTime = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_REFUND_REMIND_TIME);
+        // 超过提醒时间
+        criteria.andGmtModifiedLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(remindTime) * -1, Calendar.DAY_OF_YEAR));
+        criteria.andSendTimeEqualTo(0);
+        
+        // 分页参数
+        RowBounds rowBounds = new RowBounds(offset, pageSize);
+        
+        return shoppingOrderItemExtendDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+    }
+    
+    /**
+     * 买家申请退款，商家未操作处理
+     * 退款类型-退款
+     * 平台提醒商家，否则自动退款给买家
+     * 
+     * @author Sunny
+     * @return 
+     */
+    @Override
+    public List<ShoppingOrderItemExtendDO> selectAutoRefundToBeConfirmedForRefund(int offset, int pageSize) {
+        ShoppingOrderItemExtendDOExample example = new ShoppingOrderItemExtendDOExample();
+        
+        // 查询结果包括退款详情
+        example.setIsIncludeShoppingRefundDetail(true);
+        
+        ShoppingOrderItemExtendDOExample.Criteria criteria = example.createCriteria();
+        
+        criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+        criteria.andRefundStatusEqualTo(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
+        // 找到其中有效的记录
+        criteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
+        criteria.andSRDTypeEqualTo(ShoppingRefundTypeEnum.REFUND.getValue());
+        
+        // 退款时间
+        String refundTime = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_REFUND_REFUND_TIME);
+        // 超过退款时间
+        criteria.andGmtModifiedLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(refundTime) * -1, Calendar.DAY_OF_YEAR));
+        criteria.andSendTimeGreaterThanOrEqualTo(1);
+        
+        // 分页参数
+        RowBounds rowBounds = new RowBounds(offset, pageSize);
+        
+        return shoppingOrderItemExtendDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+    }
+    
+	/**
+     * 买家申请退款，商家未操作处理
+     * 退款类型-退款
+     * 平台提醒商家，否则自动退款给买家
+     * 
+     * @author Sunny
+     */
+    @Override
+    public void executeAutoToBeConfirmedForRefund() {
+        ShoppingOrderItemExtendDOExample example = new ShoppingOrderItemExtendDOExample();
+        
+        // 查询结果包括订单
+        example.setIsIncludeShoppingOrder(true);
+        // 查询结果包括退款详情
+        example.setIsIncludeShoppingRefundDetail(true);
+        
+        ShoppingOrderItemExtendDOExample.Criteria criteria = example.createCriteria();
+        
+        criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+        criteria.andRefundStatusEqualTo(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
+        // 找到其中有效的记录
+        criteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
+        criteria.andSRDTypeEqualTo(ShoppingRefundTypeEnum.REFUND.getValue());
+        
+        // 提醒时间
+        String remindTime = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_REFUND_REMIND_TIME);
+        // 超过提醒时间
+        criteria.andGmtModifiedLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(remindTime) * -1, Calendar.DAY_OF_YEAR));
+        
+        // 退款时间
+        String refundTime = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_REFUND_REFUND_TIME);
+        
+        List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
+        
+        for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
+            // 发送次数为0，发送站内信和推送
+            if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
+                refundRemind(shoppingOrderItemExtendDO);
+                continue;
+            }
+            
+            boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
+            // 如果商家未处理时间超过退款时间，平台自动退款
+            if (isExceeds) {
+                agreeToRefund(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId());
+            }
+        }
+    }
+	
+    @Override
+    @Transactional
+    public void refundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
+        // 更新发送次数，但是不更新更新时间字段
+        ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+        shoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
+        int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
+        shoppingOrderItemDO.setSendTime(sendTime);
+        shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+        
+        // 用户申请退款，提醒商家处理
+        ShoppingRefundToBeConfirmedForRefundRemindNotification notification = new ShoppingRefundToBeConfirmedForRefundRemindNotification();
+        ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
+        notification.setShoppingOrderItemId(shoppingOrderItemExtendDO.getId());
+        notification.setMemberNum(shoppingOrderDO.getMemberNum());
+        notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
+        notification.setMemberNickname(shoppingOrderDO.getMemberNickname());
+        messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND, notification);
+    }
+    
 	/************************************************
 	 * Private Method
 	 * **********************************************/
-	@Transactional
-	public void toBeConfirmedForRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
-		try {
-			// 更新发送次数，但是不更新更新时间字段
-			ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-			shoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
-			int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
-			shoppingOrderItemDO.setSendTime(sendTime);
-			shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
-			
-			// 用户申请退款，提醒商家处理
-			ShoppingRefundToBeConfirmedForRefundRemindNotification notification = new ShoppingRefundToBeConfirmedForRefundRemindNotification();
-			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
-			notification.setShoppingOrderItemId(shoppingOrderItemExtendDO.getId());
-			notification.setMemberNum(shoppingOrderDO.getMemberNum());
-			notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
-			notification.setMemberNickname(shoppingOrderDO.getMemberNickname());
-			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND, notification);
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-		
-	}
 	
 	@Transactional
 	public void refundFailedRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {

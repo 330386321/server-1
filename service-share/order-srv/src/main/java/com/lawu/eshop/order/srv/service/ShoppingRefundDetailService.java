@@ -1,11 +1,14 @@
 package com.lawu.eshop.order.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 
 /**
  * 购物退货详情接口
@@ -138,15 +141,6 @@ public interface ShoppingRefundDetailService {
 	
 	/**
 	 * 买家申请退款，商家未操作处理
-	 * 退款类型-退款
-	 * 平台提醒商家，否则自动退款给买家
-	 * 
-	 * @author Sunny
-	 */
-	void executeAutoToBeConfirmedForRefund();
-	
-	/**
-	 * 买家申请退款，商家未操作处理
 	 * 退款类型-退货退款
 	 * 平台提醒商家，否则自动退款给买家
 	 * 
@@ -187,4 +181,47 @@ public interface ShoppingRefundDetailService {
 	 * @author Sunny
 	 */
 	void executeAutoForToBeRefund();
+	
+	/**
+	 * 提醒商家处理退款相关操作
+	 * 
+	 * @param shoppingOrderItemExtendDO
+	 * @author jiangxinjun
+	 * @createDate 2017年11月14日
+	 * @updateDate 2017年11月14日
+	 */
+    void refundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO);
+    
+    /**
+     * 分页查询符合待商家确认，商家超时未处理、退款类型-退款，满足自动提醒的退款记录
+     * 
+     * @param offset
+     * @param pageSize
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月14日
+     * @updateDate 2017年11月14日
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRemindToBeConfirmedForRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合待商家确认，商家超时未处理、退款类型-退款，满足自动退款的退款记录
+     * 
+     * @param offset
+     * @param pageSize
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRefundToBeConfirmedForRefund(int offset, int pageSize);
+    
+    /**
+     * 买家申请退款，商家未操作处理
+     * 退款类型-退款
+     * 平台提醒商家，否则自动退款给买家
+     * 
+     * @author Sunny
+     */
+    void executeAutoToBeConfirmedForRefund();
 }

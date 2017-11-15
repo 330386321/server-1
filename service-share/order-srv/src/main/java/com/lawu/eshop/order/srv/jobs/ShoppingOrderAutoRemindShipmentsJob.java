@@ -11,8 +11,9 @@ import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 /**
  * 自动提醒发货
  * 
- * @author Sunny
- * @date 2017年4月17日
+ * @author jiangxinjun
+ * @createDate 2017年4月17日
+ * @updateDate 2017年11月14日
  */
 public class ShoppingOrderAutoRemindShipmentsJob implements SimpleJob {
 

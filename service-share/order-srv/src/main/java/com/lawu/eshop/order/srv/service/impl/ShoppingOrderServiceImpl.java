@@ -1122,11 +1122,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		return rtn;
 	}
 
-	/**
-	 * 自动提醒发货
-	 * 
-	 * @author Sunny
-	 */
 	@Override
 	public void executeAutoRemindShipments() {
 		String automaticRemindShipments = propertyService.getByName(PropertyNameConstant.AUTOMATIC_REMIND_SHIPMENTS);
