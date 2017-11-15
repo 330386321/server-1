@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.PointConsumeReportDTO;
 import com.lawu.eshop.property.param.PointDetailReportParam;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(value= "property-srv")
 public interface PropertyPointDetailService {
@@ -40,5 +41,5 @@ public interface PropertyPointDetailService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "pointDetail/getIncomeMsgDataList")
-	Result<List<IncomeMsgDTO>> getIncomeMsgDataList();
+	Result<List<IncomeMsgDTO>> getIncomeMsgDataList(@RequestParam("offset") int offset, @RequestParam("pageSize") int pageSize);
 }

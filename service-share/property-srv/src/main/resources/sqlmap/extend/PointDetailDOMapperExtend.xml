@@ -94,7 +94,7 @@
 			point_type IN (12, 13, 115, 116)
 		AND gmt_create BETWEEN #{begin}
 		AND #{end}
-		group by user_num,point_type
+		group by user_num,point_type LIMIT ${offset},${pageSize}
 	</select>
 	
 	<!-- 积分查询统计 -->
