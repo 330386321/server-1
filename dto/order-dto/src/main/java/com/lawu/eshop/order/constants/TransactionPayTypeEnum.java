@@ -10,7 +10,9 @@ public enum TransactionPayTypeEnum {
 
 	ALIPAY((byte) 0x02), // 支付宝
 
-	WX((byte) 0x03);// 微信
+	WX((byte) 0x03),// 微信
+
+	PLAT((byte) 0x04); // 平台
 
 	private Byte val;
 
