@@ -17,12 +17,12 @@ import com.lawu.eshop.idworker.client.impl.BizIdType;
 import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.CheckRepeatOfPropertyOperationParam;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataQueryPointDetailParam;
+import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.AreaPointConsumeBO;
 import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
@@ -40,7 +40,6 @@ import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
 import com.lawu.eshop.property.srv.domain.extend.PointDOView;
 import com.lawu.eshop.property.srv.domain.extend.PointReportDOView;
-import com.lawu.eshop.property.srv.domain.extend.RechargeDOView;
 import com.lawu.eshop.property.srv.domain.extend.ReportAdPointGroupByAreaView;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
@@ -275,9 +274,9 @@ public class PointDetailServiceImpl implements PointDetailService {
 	}
 
 	@Override
-	public List<AreaPointConsumeBO> getAreaPointConsume(String bdate, String edate) {
-		List<AreaPointConsumeDOView> list = pointDetailDOMapperExtend.getAreaPointConsume(bdate, edate);
-		List<AreaPointConsumeBO> rtnList = new ArrayList<AreaPointConsumeBO>();
+	public List<AreaPointConsumeBO> getAreaPointConsume(ReportAgentAreaPointParam param) {
+		List<AreaPointConsumeDOView> list = pointDetailDOMapperExtend.getAreaPointConsume(param);
+		List<AreaPointConsumeBO> rtnList = new ArrayList<>();
 		if(list != null && !list.isEmpty()) {
 			for(AreaPointConsumeDOView view : list) {
 				AreaPointConsumeBO BO = new AreaPointConsumeBO();
@@ -293,14 +292,17 @@ public class PointDetailServiceImpl implements PointDetailService {
 	}
 
 	@Override
-	public List<AreaPointConsumeBO> getAreaPointRefund(String bdate, String edate) {
-		List<AreaPointConsumeDOView> list = pointDetailDOMapperExtend.getAreaPointRefund(bdate, edate);
-		List<AreaPointConsumeBO> rtnList = new ArrayList<AreaPointConsumeBO>();
+	public List<AreaPointConsumeBO> getAreaPointRefund(ReportAgentAreaPointParam param) {
+		List<AreaPointConsumeDOView> list = pointDetailDOMapperExtend.getAreaPointRefund(param);
+		List<AreaPointConsumeBO> rtnList = new ArrayList<>();
 		if(list != null && !list.isEmpty()) {
 			for(AreaPointConsumeDOView view : list) {
 				AreaPointConsumeBO BO = new AreaPointConsumeBO();
 				BO.setAreaId(view.getAreaId());
+				BO.setCityId(view.getCityId());
+				BO.setProvinceId(view.getProvinceId());
 				BO.setTotalPoint(view.getTotalPoint());
+				BO.setType(view.getType());
 				rtnList.add(BO);
 			}
 		}

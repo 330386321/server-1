@@ -29,6 +29,7 @@ import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
+import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
 import com.lawu.eshop.property.srv.bo.AreaRechargePointBO;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
@@ -38,7 +39,6 @@ import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.RechargeDOMapper;
 import com.lawu.eshop.property.srv.service.RechargeService;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * @author yangqh
@@ -282,9 +282,14 @@ public class RechargeServiceImplTest {
         recharge.setGmtModified(new Date());
         rechargeDOMapper.insertSelective(recharge);
 
-        String bdate = DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth(new Date()),"yyyy-MM-dd");
-        String edate = DateUtil.getDateFormat(DateUtil.getLastDayOfMonth(new Date()),"yyyy-MM-dd");
-        List<AreaRechargePointBO> rtnList = rechargeService.selectAreaRechargePoint(bdate+" 00:00:00",edate+" 23:59:59");
+        String bdate = DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth(new Date()), "yyyy-MM-dd");
+        String edate = DateUtil.getDateFormat(DateUtil.getLastDayOfMonth(new Date()), "yyyy-MM-dd");
+        ReportAgentAreaPointParam param = new ReportAgentAreaPointParam();
+        param.setOffset(0);
+        param.setPageSize(10);
+        param.setBeginDate(bdate);
+        param.setEndDate(edate);
+        List<AreaRechargePointBO> rtnList = rechargeService.selectAreaRechargePoint(param);
         Assert.assertEquals(1,rtnList.size());
     }
 }

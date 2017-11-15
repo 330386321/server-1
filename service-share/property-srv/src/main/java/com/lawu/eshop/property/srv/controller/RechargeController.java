@@ -34,6 +34,7 @@ import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
+import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
 import com.lawu.eshop.property.srv.bo.AreaRechargePointBO;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
@@ -256,14 +257,13 @@ public class RechargeController extends BaseController {
     }
     /**
      * 查询区域充值积分记录
-     * @param bdate
-     * @param edate
+     * @param param
      * @return
      */
-    @RequestMapping(value = "selectAreaRechargePoint", method = RequestMethod.GET)
-    public Result<List<AreaRechargePointDTO>> selectAreaRechargePoint(@RequestParam("bdate")String bdate, @RequestParam("edate")String edate) {
+    @RequestMapping(value = "selectAreaRechargePoint", method = RequestMethod.POST)
+    public Result<List<AreaRechargePointDTO>> selectAreaRechargePoint(@RequestBody ReportAgentAreaPointParam param) {
         List<AreaRechargePointDTO> dtos = new ArrayList<>();
-        List<AreaRechargePointBO> rntList = rechargeService.selectAreaRechargePoint(bdate, edate);
+        List<AreaRechargePointBO> rntList = rechargeService.selectAreaRechargePoint(param);
         if(rntList != null && !rntList.isEmpty()) {
         	for (AreaRechargePointBO bo : rntList) {
             	AreaRechargePointDTO dto = new AreaRechargePointDTO();
