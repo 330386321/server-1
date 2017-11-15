@@ -288,7 +288,9 @@ public interface ShoppingOrderService {
     /**
      * 自动提醒发货
      * 
-     * @author Sunny
+     * @author jiangxinjun
+     * @createDate 2017年11月14日
+     * @updateDate 2017年11月14日
      */
     void executeAutoRemindShipments();
 

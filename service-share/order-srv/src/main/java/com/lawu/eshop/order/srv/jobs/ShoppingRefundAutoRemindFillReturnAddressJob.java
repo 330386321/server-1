@@ -9,27 +9,27 @@ import com.lawu.eshop.order.srv.service.ShoppingRefundDetailService;
 import com.lawu.jobsextend.AbstractTxPageJob;
 
 /**
- * 退款中-待商家填写收货地址
+ * 退款中-待商家填写退货地址
  * 商家超时操作
- * 自动退款给买家
+ * 提醒商家操作
  * 
  * @author jiangxinjun
- * @createDate 2017年4月17日
+ * @createDate 2017年11月15日
  * @updateDate 2017年11月15日
  */
-public class ShoppingRefundFillReturnAddressJob extends AbstractTxPageJob<ShoppingOrderItemDO> {
+public class ShoppingRefundAutoRemindFillReturnAddressJob extends AbstractTxPageJob<ShoppingOrderItemDO> {
     
     @Autowired
     private ShoppingRefundDetailService shoppingRefundDetailService;
     
     @Override
     public List<ShoppingOrderItemDO> queryPage(int offset, int pageSize) {
-        return shoppingRefundDetailService.selectAutoRefundFillReturnAddress(offset, pageSize);
+        return shoppingRefundDetailService.selectAutoRemindFillReturnAddress(offset, pageSize);
     }
 
     @Override
     public void executeSingle(ShoppingOrderItemDO entity) {
-        shoppingRefundDetailService.executeAutoRefundFillReturnAddress(entity);
+        shoppingRefundDetailService.refundRemind(entity);
     }
 
     @Override
@@ -41,4 +41,5 @@ public class ShoppingRefundFillReturnAddressJob extends AbstractTxPageJob<Shoppi
     public boolean continueWhenSinglePageFail() {
         return true;
     }
+    
 }

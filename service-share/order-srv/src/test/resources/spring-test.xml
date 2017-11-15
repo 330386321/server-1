@@ -102,5 +102,13 @@
     <bean id="shoppingOrderAutoCommentOrderJob" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoCommentOrderJob"/>
     <bean id="shoppingOrderAutoPaymentsToMerchantJob" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoPaymentsToMerchantJob"/>
     <bean id="shoppingOrderAutoReceiptJob" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoReceiptJob"/>
+    <bean id="shoppingRefundAutoRemindToBeConfirmedForRefundJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoRemindToBeConfirmedForRefundJob"/>
+    <bean id="shoppingRefundAutoToBeConfirmedForRefundJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoToBeConfirmedForRefundJob"/>
+    <bean id="shoppingRefundAutoRemindToBeConfirmedForReturnRefundJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoRemindToBeConfirmedForReturnRefundJob"/>
+    <bean id="shoppingRefundAutoToBeConfirmedForReturnRefundJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoToBeConfirmedForReturnRefundJob"/>
+    <bean id="shoppingRefundFillReturnAddressJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundFillReturnAddressJob"/>
+    <bean id="shoppingRefundAutoRemindFillReturnAddressJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoRemindFillReturnAddressJob"/>
+    <bean id="shoppingRefundRefundFailedJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundRefundFailedJob"/>
+    <bean id="shoppingRefundAutoRemindRefundFailedJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoRemindRefundFailedJob"/>
     <aop:aspectj-autoproxy  proxy-target-class="true"/>
 </beans>

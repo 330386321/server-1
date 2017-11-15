@@ -12,25 +12,25 @@ import com.lawu.jobsextend.AbstractTxPageJob;
  * 退款中-待商家处理
  * 退款类型-退货退款
  * 商家处理超时定时任务
- * 如果商家还未操作自动退款给买家 
+ * 发送站内信和推送给商家
  * 
- * @author Sunny
- * @createDate 2017年4月17日
+ * @author jiangxinjun
  * @createDate 2017年11月15日
+ * @updateDate 2017年11月15日
  */
-public class ShoppingRefundAutoToBeConfirmedForReturnRefundJob extends AbstractTxPageJob<ShoppingOrderItemExtendDO> {
-    
+public class ShoppingRefundAutoRemindToBeConfirmedForReturnRefundJob extends AbstractTxPageJob<ShoppingOrderItemExtendDO> {
+
     @Autowired
     private ShoppingRefundDetailService shoppingRefundDetailService;
     
     @Override
     public List<ShoppingOrderItemExtendDO> queryPage(int offset, int pageSize) {
-        return shoppingRefundDetailService.selectAutoRefundToBeConfirmedForReturnRefund(offset, pageSize);
+        return shoppingRefundDetailService.selectAutoRemindToBeConfirmedForReturnRefund(offset, pageSize);
     }
 
     @Override
     public void executeSingle(ShoppingOrderItemExtendDO entity) {
-        shoppingRefundDetailService.agreeToRefund(entity.getShoppingRefundDetail().getId());;
+        shoppingRefundDetailService.refundRemind(entity);
     }
 
     @Override
@@ -42,4 +42,5 @@ public class ShoppingRefundAutoToBeConfirmedForReturnRefundJob extends AbstractT
     public boolean continueWhenSinglePageFail() {
         return true;
     }
+    
 }
