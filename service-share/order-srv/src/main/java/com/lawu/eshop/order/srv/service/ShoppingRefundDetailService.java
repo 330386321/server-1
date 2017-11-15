@@ -140,15 +140,6 @@ public interface ShoppingRefundDetailService {
 	void revokeRefundRequest(Long id, Long memberId);
 	
 	/**
-	 * 买家申请退款，商家未操作处理
-	 * 退款类型-退货退款
-	 * 平台提醒商家，否则自动退款给买家
-	 * 
-	 * @author Sunny
-	 */
-	void executeAutoToBeConfirmedForReturnRefund();
-	
-	/**
 	 * 退款中-退款失败
 	 * 商家拒绝退款
 	 * 平台提示买家操作，是否申请平台介入
@@ -217,11 +208,20 @@ public interface ShoppingRefundDetailService {
     List<ShoppingOrderItemExtendDO> selectAutoRefundToBeConfirmedForRefund(int offset, int pageSize);
     
     /**
-     * 买家申请退款，商家未操作处理
-     * 退款类型-退款
-     * 平台提醒商家，否则自动退款给买家
+     * 分页查询符合待商家确认，商家超时未处理、退款类型-退货退款，满足自动提醒的退款记录
      * 
-     * @author Sunny
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
      */
-    void executeAutoToBeConfirmedForRefund();
+    List<ShoppingOrderItemExtendDO> selectAutoRemindToBeConfirmedForReturnRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合待商家确认，商家超时未处理、退款类型-退货退款，满足自动退款的退款记录
+     * 
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRefundToBeConfirmedForReturnRefund(int offset, int pageSize);
 }

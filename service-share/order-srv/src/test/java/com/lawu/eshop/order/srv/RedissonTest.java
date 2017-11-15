@@ -11,6 +11,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -45,8 +46,8 @@ public class RedissonTest {
             return new Thread(r, "RedissonTest-Thread-" + counter);
         }
     });
-
-    @SuppressWarnings("unused")
+    
+    @Ignore
     @Test
     public void lock() throws Exception {
         long startTime = System.currentTimeMillis();

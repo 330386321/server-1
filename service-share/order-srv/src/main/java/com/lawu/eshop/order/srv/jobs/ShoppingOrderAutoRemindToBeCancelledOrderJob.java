@@ -12,7 +12,7 @@ import com.lawu.jobsextend.AbstractTxPageJob;
  * 自动取消未付款的订单定时任务
  * 
  * @author jiangxinjun
- * @createDate 2017年4月17日
+ * @createDate 2017年11月14日
  * @updateDate 2017年11月14日
  */
 public class ShoppingOrderAutoRemindToBeCancelledOrderJob extends AbstractTxPageJob<ShoppingOrderDO> {
