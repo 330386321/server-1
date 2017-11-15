@@ -346,7 +346,8 @@ public class RechargeServiceImpl implements RechargeService {
         recharge.setStatus(param.getStatus());
         recharge.setBeginDate(param.getDate() + " 00:00:00");
         recharge.setEndDate(param.getDate() + " 23:59:59");
-        List<ReportAreaRechargeDOExtend> rtnList = rechargeDOMapperExtend.selectAgentAreaReportRechargeListByDate(recharge);
+        RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+        List<ReportAreaRechargeDOExtend> rtnList = rechargeDOMapperExtend.selectAgentAreaReportRechargeListByDate(recharge,rowBounds);
         List<AgentReportRechargeQueryBO> bos = new ArrayList<>();
         for(ReportAreaRechargeDOExtend doExtend : rtnList){
             AgentReportRechargeQueryBO bo = new AgentReportRechargeQueryBO();
