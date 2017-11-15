@@ -141,16 +141,6 @@ public interface ShoppingRefundDetailService {
 	void revokeRefundRequest(Long id, Long memberId);
 	
 	/**
-	 * 退款中-退款失败
-	 * 商家拒绝退款
-	 * 平台提示买家操作，是否申请平台介入
-	 * 否则自动撤销退款申请
-	 * 
-	 * @author Sunny
-	 */
-	void executeAutoRefundFailed();
-	
-	/**
 	 * 退款中 - 等待买家退货
 	 * 平台提醒买家操作，否则自动撤销退款申请
 	 * 
@@ -175,6 +165,16 @@ public interface ShoppingRefundDetailService {
 	 * @updateDate 2017年11月14日
 	 */
     void refundRemind(ShoppingOrderItemDO shoppingOrderItemDO);
+    
+    /**
+     * 退款失败之后提醒操作
+     * 
+     * @param shoppingOrderItemDO
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    void refundFailedRemind(ShoppingOrderItemDO shoppingOrderItemDO);
     
     /**
      * 分页查询符合待商家确认，商家超时未处理、退款类型-退款，满足自动提醒的退款记录
@@ -251,4 +251,30 @@ public interface ShoppingRefundDetailService {
      * @updateDate 2017年11月15日
      */
     void executeAutoRefundFillReturnAddress(ShoppingOrderItemDO shoppingOrderItemDO);
+    
+    /**
+     * 分页查询符合退款失败，买家超时操作，满足自动提醒的退款记录
+     * @return 
+     * 
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemDO> selectAutoRemindRefundFailed(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合退款失败，买家超时操作，满足自动撤销的退款记录
+     * @return 
+     * 
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemDO> selectAutoRevokeRefundFailed(int offset, int pageSize);
+    
+    /**
+     * 自动撤销退款失败，买家超时操作的退款记录
+     * 
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    void executeAutoRevokeRefundFailed(ShoppingOrderItemDO shoppingOrderItemDO);
 }

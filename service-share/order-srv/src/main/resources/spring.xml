@@ -76,6 +76,7 @@
     <job:simple id="shoppingRefundAutoRemindToBeConfirmedForRefundJob" description="家申请退款，退款状态为待商家确认，商家超时操作，自动提醒买家" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoRemindToBeConfirmedForRefundJob" registry-center-ref="regCenter" cron="50 0/1 * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
     <job:simple id="shoppingRefundAutoRemindToBeConfirmedForReturnRefundJob" description="买家申请退款，退款状态为待商家确认，商家超时操作，提醒商家操作" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoRemindToBeConfirmedForReturnRefundJob" registry-center-ref="regCenter" cron="55 0/1 * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
     <job:simple id="shoppingRefundAutoRemindFillReturnAddressJob" description="商家填写退货地址，商家超时操作，自动提醒" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoRemindFillReturnAddressJob" registry-center-ref="regCenter" cron="0 0/1 * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+    <job:simple id="shoppingRefundAutoRemindRefundFailedJob" description="商家拒绝退款，买家超时操作，自动提醒买家操作" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoRemindRefundFailedJob" registry-center-ref="regCenter" cron="0 0/2 * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
     
 	<!-- Lock service -->
 	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />

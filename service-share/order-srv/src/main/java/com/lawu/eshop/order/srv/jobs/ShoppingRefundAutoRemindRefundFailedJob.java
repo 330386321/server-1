@@ -12,25 +12,25 @@ import com.lawu.jobsextend.AbstractTxPageJob;
  * 退款中-退款失败
  * 商家拒绝退款
  * 买家超时操作
- * 否则自动撤销退款申请
+ * 平台提示买家操作是否申请平台介入
  * 
- * @author Sunny
- * @createDate 2017年4月17日
- * @updateDate 2017年11月15日
+ * @author jiangxinjun
+ * @createDate 2017年11月15日
+ * @createDate 2017年11月15日
  */
-public class ShoppingRefundRefundFailedJob extends AbstractTxPageJob<ShoppingOrderItemDO> {
-    
+public class ShoppingRefundAutoRemindRefundFailedJob extends AbstractTxPageJob<ShoppingOrderItemDO> {
+
     @Autowired
     private ShoppingRefundDetailService shoppingRefundDetailService;
     
     @Override
     public List<ShoppingOrderItemDO> queryPage(int offset, int pageSize) {
-        return shoppingRefundDetailService.selectAutoRevokeRefundFailed(offset, pageSize);
+        return shoppingRefundDetailService.selectAutoRemindRefundFailed(offset, pageSize);
     }
 
     @Override
     public void executeSingle(ShoppingOrderItemDO entity) {
-        shoppingRefundDetailService.executeAutoRevokeRefundFailed(entity);
+        shoppingRefundDetailService.refundFailedRemind(entity);
     }
 
     @Override
@@ -42,4 +42,5 @@ public class ShoppingRefundRefundFailedJob extends AbstractTxPageJob<ShoppingOrd
     public boolean continueWhenSinglePageFail() {
         return true;
     }
+    
 }
