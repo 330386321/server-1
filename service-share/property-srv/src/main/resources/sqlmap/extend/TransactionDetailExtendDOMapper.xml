@@ -142,7 +142,7 @@
 			transaction_type IN (12, 13, 115, 116)
 		AND gmt_create BETWEEN #{begin}
 		AND #{end}
-		group by user_num,transaction_type
+		group by user_num,transaction_type LIMIT ${offset},${pageSize}
 	</select>
     
     <select id="selectMonthlyBill"  resultMap="MonthlyBillResultMap" parameterType="com.lawu.eshop.property.srv.domain.TransactionDetailDOExample">

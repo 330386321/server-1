@@ -92,7 +92,7 @@ public interface PointDetailService {
      */
     List<AreaPointConsumeBO> getAreaPointRefund(String bdate, String edate);
 
-    List<IncomeMsgBO> getIncomeMsgDataList(String begin, String end);
+    List<IncomeMsgBO> getIncomeMsgDataList(String begin, String end,int offset,int pageSize);
 
     /**
      * 根据用户编号、业务ID、类型查询记录

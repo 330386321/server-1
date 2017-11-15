@@ -101,7 +101,7 @@ public interface TransactionDetailService {
 	 */
 	List<UserIncomeExpenditureBO> selectUserIncomeExpenditure(UserIncomeExpenditureQueryParam param);
 
-    List<IncomeMsgBO> getIncomeMsgDataList(String begin, String end);
+    List<IncomeMsgBO> getIncomeMsgDataList(String begin, String end,int offset,int pageSize);
 
 	/**
 	 * 余额支付校验是否已处理

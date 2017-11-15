@@ -278,10 +278,12 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 	}
 
 	@Override
-	public List<IncomeMsgBO> getIncomeMsgDataList(String begin,String end) {
+	public List<IncomeMsgBO> getIncomeMsgDataList(String begin,String end,int offset,int pageSize) {
 		IncomeMsgExample example = new IncomeMsgExample();
 		example.setBegin(begin);
 		example.setEnd(end);
+		example.setOffset(offset);
+		example.setPageSize(pageSize);
 		List<IncomeMsgDOView> list = transactionDetailExtendDOMapper.getIncomeMsgDataList(example);
 		List<IncomeMsgBO> bos = new ArrayList<>();
 		for(IncomeMsgDOView view : list){

@@ -1,5 +1,9 @@
 package com.lawu.eshop.jobs.service;
 
+import java.util.List;
+
+import com.lawu.eshop.property.dto.IncomeMsgDTO;
+
 /**
  * 收益通知
  * 
@@ -8,5 +12,5 @@ package com.lawu.eshop.jobs.service;
  */
 public interface IncomeMsgService {
 
-	void execute();
+	void execute(List<IncomeMsgDTO> list);
 }

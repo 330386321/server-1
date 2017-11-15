@@ -900,8 +900,6 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
     @Override
     public List<ShoppingOrderItemExtendDO> selectAutoRemindToBeConfirmedForRefund(int offset, int pageSize) {
         ShoppingOrderItemExtendDOExample example = new ShoppingOrderItemExtendDOExample();
-        // 查询结果包括订单
-        example.setIsIncludeShoppingOrder(true);
         // 查询结果包括退款详情
         example.setIsIncludeShoppingRefundDetail(true);
         
