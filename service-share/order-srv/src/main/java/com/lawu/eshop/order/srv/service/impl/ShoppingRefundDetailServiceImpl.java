@@ -40,6 +40,7 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
+import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
@@ -687,49 +688,51 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		}
 	}
 	
-	/**
-	 * 退款中-商家填写退货地址
-	 * 平台提醒商家操作，否则自动退款
-	 * 
-	 * @author Sunny
-	 */
-	@Override
-	public void executeAutoForFillReturnAddress() {
-		ShoppingOrderItemExtendDOExample example = new ShoppingOrderItemExtendDOExample();
-		
-		// 查询结果包括退款详情
-		example.setIsIncludeShoppingRefundDetail(true);
-		
-		ShoppingOrderItemExtendDOExample.Criteria criteria = example.createCriteria();
-		
-		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
-		criteria.andRefundStatusEqualTo(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
-		
-		// 提醒时间
-		String remindTime = propertyService.getByName(PropertyNameConstant.FILL_RETURN_ADDRESS_REMIND_TIME);
-		// 超过提醒时间
-		criteria.andGmtModifiedLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(remindTime) * -1, Calendar.DAY_OF_YEAR));
-		
-		// 自动退款时间
-		String refundTime = propertyService.getByName(PropertyNameConstant.FILL_RETURN_ADDRESS_REFUND_TIME);
-		
-		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
-		
-		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
-			// 发送次数为0，发送站内信和推送
-			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-				refundRemind(shoppingOrderItemExtendDO);
-			}
-			
-			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
-			
-			// 如果商家未处理时间超过退款时间，平台自动退款
-			if (isExceeds) {
-				agreeToRefund(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId());
-			}
-		}
-	}
+    @Override
+    public List<ShoppingOrderItemDO> selectAutoRemindFillReturnAddress(int offset, int pageSize) {
+        ShoppingOrderItemDOExample example = new ShoppingOrderItemDOExample();
+        
+        ShoppingOrderItemDOExample.Criteria criteria = example.createCriteria();
+        
+        criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+        criteria.andRefundStatusEqualTo(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
+        
+        // 提醒时间
+        String remindTime = propertyService.getByName(PropertyNameConstant.FILL_RETURN_ADDRESS_REMIND_TIME);
+        // 超过提醒时间
+        criteria.andGmtModifiedLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(remindTime) * -1, Calendar.DAY_OF_YEAR));
+        criteria.andSendTimeEqualTo(0);
+        
+        return shoppingOrderItemDOMapper.selectByExample(example);
+    }
+    
+    @Override
+    public List<ShoppingOrderItemDO> selectAutoRefundFillReturnAddress(int offset, int pageSize) {
+        ShoppingOrderItemDOExample example = new ShoppingOrderItemDOExample();
+        
+        ShoppingOrderItemDOExample.Criteria criteria = example.createCriteria();
+        
+        criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+        criteria.andRefundStatusEqualTo(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
+        
+        // 自动退款时间
+        String refundTime = propertyService.getByName(PropertyNameConstant.FILL_RETURN_ADDRESS_REFUND_TIME);
+        // 超过提醒时间
+        criteria.andGmtModifiedLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(refundTime) * -1, Calendar.DAY_OF_YEAR));
+        criteria.andSendTimeGreaterThanOrEqualTo(1);
+        
+        return shoppingOrderItemDOMapper.selectByExample(example);
+    }
 	
+    @Transactional
+    @Override
+    public void executeAutoRefundFillReturnAddress(ShoppingOrderItemDO shoppingOrderItemDO) {
+        ShoppingRefundDetailDOExample example = new ShoppingRefundDetailDOExample();
+        example.createCriteria().andShoppingOrderItemIdEqualTo(shoppingOrderItemDO.getId()).andStatusEqualTo(StatusEnum.VALID.getValue());
+        ShoppingRefundDetailDO shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByExample(example).get(0);
+        agreeToRefund(shoppingRefundDetailDO.getId());
+    }
+    
 	@Override
 	public void executeAutoForToBeReturn() {
 		ShoppingOrderItemExtendDOExample example = new ShoppingOrderItemExtendDOExample();
@@ -965,18 +968,18 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
     
     @Override
     @Transactional
-    public void refundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
+    public void refundRemind(ShoppingOrderItemDO shoppingOrderItemDO) {
         // 更新发送次数，但是不更新更新时间字段
-        ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-        shoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
-        int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
-        shoppingOrderItemDO.setSendTime(sendTime);
-        shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+        ShoppingOrderItemDO shoppingOrderItemUpdateDO = new ShoppingOrderItemDO();
+        shoppingOrderItemUpdateDO.setId(shoppingOrderItemDO.getId());
+        int sendTime = shoppingOrderItemDO.getSendTime() == null ? 1 : shoppingOrderItemDO.getSendTime().intValue() + 1;
+        shoppingOrderItemUpdateDO.setSendTime(sendTime);
+        shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemUpdateDO);
         
         // 用户申请退款，提醒商家处理
         ShoppingRefundToBeConfirmedForRefundRemindNotification notification = new ShoppingRefundToBeConfirmedForRefundRemindNotification();
-        ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
-        notification.setShoppingOrderItemId(shoppingOrderItemExtendDO.getId());
+        ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
+        notification.setShoppingOrderItemId(shoppingOrderItemDO.getId());
         notification.setMemberNum(shoppingOrderDO.getMemberNum());
         notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
         notification.setMemberNickname(shoppingOrderDO.getMemberNickname());

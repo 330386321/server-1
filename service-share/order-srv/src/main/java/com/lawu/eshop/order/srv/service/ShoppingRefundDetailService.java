@@ -8,6 +8,7 @@ import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeig
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 
 /**
@@ -150,14 +151,6 @@ public interface ShoppingRefundDetailService {
 	void executeAutoRefundFailed();
 	
 	/**
-	 * 退款中-商家填写退货地址
-	 * 平台提醒商家操作，否则自动退款
-	 * 
-	 * @author Sunny
-	 */
-	void executeAutoForFillReturnAddress();
-	
-	/**
 	 * 退款中 - 等待买家退货
 	 * 平台提醒买家操作，否则自动撤销退款申请
 	 * 
@@ -176,12 +169,12 @@ public interface ShoppingRefundDetailService {
 	/**
 	 * 提醒商家处理退款相关操作
 	 * 
-	 * @param shoppingOrderItemExtendDO
+	 * @param shoppingOrderItemDO
 	 * @author jiangxinjun
 	 * @createDate 2017年11月14日
 	 * @updateDate 2017年11月14日
 	 */
-    void refundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO);
+    void refundRemind(ShoppingOrderItemDO shoppingOrderItemDO);
     
     /**
      * 分页查询符合待商家确认，商家超时未处理、退款类型-退款，满足自动提醒的退款记录
@@ -224,4 +217,38 @@ public interface ShoppingRefundDetailService {
      * @updateDate 2017年11月15日
      */
     List<ShoppingOrderItemExtendDO> selectAutoRefundToBeConfirmedForReturnRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合待填写退货地址，商家超时未处理，满足自动提醒的退款记录
+     * 
+     * @param offset
+     * @param pageSize
+     * @author jiangxinjun
+     * @return 
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemDO> selectAutoRemindFillReturnAddress(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合待填写退货地址，商家超时未处理，满足自动退款的退款记录
+     * 
+     * @param offset
+     * @param pageSize
+     * @author jiangxinjun
+     * @return 
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemDO> selectAutoRefundFillReturnAddress(int offset, int pageSize);
+    
+    /**
+     * 待填写退货地址，商家超时未处理，自动退款给买家
+     * 
+     * @param shoppingOrderItemDO
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    void executeAutoRefundFillReturnAddress(ShoppingOrderItemDO shoppingOrderItemDO);
 }
