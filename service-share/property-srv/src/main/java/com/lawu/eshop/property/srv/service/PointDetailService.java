@@ -3,12 +3,12 @@ package com.lawu.eshop.property.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.param.CheckRepeatOfPropertyOperationParam;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataQueryPointDetailParam;
+import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.AreaPointConsumeBO;
 import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
@@ -77,20 +77,18 @@ public interface PointDetailService {
     /**
      * 获取区域积分消费统计数据
      *
-     * @param bdate
-     * @param edate
+     * @param param
      * @return
      */
-    List<AreaPointConsumeBO> getAreaPointConsume(String bdate, String edate);
+    List<AreaPointConsumeBO> getAreaPointConsume(ReportAgentAreaPointParam param);
 
     /**
      * 获取区域积分退还统计数据
      *
-     * @param bdate
-     * @param edate
+     * @param param
      * @return
      */
-    List<AreaPointConsumeBO> getAreaPointRefund(String bdate, String edate);
+    List<AreaPointConsumeBO> getAreaPointRefund(ReportAgentAreaPointParam param);
 
     List<IncomeMsgBO> getIncomeMsgDataList(String begin, String end,int offset,int pageSize);
 

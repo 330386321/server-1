@@ -6,9 +6,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.lawu.eshop.property.dto.IncomeMsgDTO;
-import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
-import com.lawu.eshop.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +20,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.dto.AreaPointConsumeDTO;
+import com.lawu.eshop.property.dto.IncomeMsgDTO;
 import com.lawu.eshop.property.dto.PointConsumeReportDTO;
 import com.lawu.eshop.property.dto.PointDetailBackageDTO;
 import com.lawu.eshop.property.dto.PointDetailDTO;
@@ -30,13 +28,16 @@ import com.lawu.eshop.property.dto.ReportAdPointGroupByAreaDTO;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
+import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.AreaPointConsumeBO;
+import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
 import com.lawu.eshop.property.srv.bo.PointConsumeReportBO;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.bo.ReportAdPointGroupByAreaBO;
 import com.lawu.eshop.property.srv.converter.PointDetailConverter;
 import com.lawu.eshop.property.srv.service.PointDetailService;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * @author Sunny
@@ -139,10 +140,10 @@ public class PointDetailController extends BaseController {
 		return successCreated(rtnList);
 	}
     
-    @RequestMapping(value = "getAreaPointConsume", method = RequestMethod.GET)
-    public Result<List<AreaPointConsumeDTO>> getAreaPointConsume(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate) {
-    	List<AreaPointConsumeBO> list = pointDetailService.getAreaPointConsume(bdate, edate);
-    	List<AreaPointConsumeDTO> rtnList = new ArrayList<AreaPointConsumeDTO>();
+    @RequestMapping(value = "getAreaPointConsume", method = RequestMethod.POST)
+    public Result<List<AreaPointConsumeDTO>> getAreaPointConsume(@RequestBody ReportAgentAreaPointParam param) {
+    	List<AreaPointConsumeBO> list = pointDetailService.getAreaPointConsume(param);
+    	List<AreaPointConsumeDTO> rtnList = new ArrayList<>();
     	for(AreaPointConsumeBO BO : list) {
     		AreaPointConsumeDTO dto = new AreaPointConsumeDTO();
     		dto.setAreaId(BO.getAreaId());
@@ -155,14 +156,17 @@ public class PointDetailController extends BaseController {
 		return successCreated(rtnList);
     }
     
-    @RequestMapping(value = "getAreaPointRefund", method = RequestMethod.GET)
-    public Result<List<AreaPointConsumeDTO>> getAreaPointRefund(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate) {
-    	List<AreaPointConsumeBO> list = pointDetailService.getAreaPointRefund(bdate, edate);
-    	List<AreaPointConsumeDTO> rtnList = new ArrayList<AreaPointConsumeDTO>();
+    @RequestMapping(value = "getAreaPointRefund", method = RequestMethod.POST)
+    public Result<List<AreaPointConsumeDTO>> getAreaPointRefund(@RequestBody ReportAgentAreaPointParam param) {
+    	List<AreaPointConsumeBO> list = pointDetailService.getAreaPointRefund(param);
+    	List<AreaPointConsumeDTO> rtnList = new ArrayList<>();
     	for(AreaPointConsumeBO BO : list) {
     		AreaPointConsumeDTO dto = new AreaPointConsumeDTO();
     		dto.setAreaId(BO.getAreaId());
     		dto.setTotalPoint(BO.getTotalPoint());
+			dto.setCityId(BO.getCityId());
+			dto.setProvinceId(BO.getProvinceId());
+			dto.setType(BO.getType());
     		rtnList.add(dto);
     	}
 		return successCreated(rtnList);

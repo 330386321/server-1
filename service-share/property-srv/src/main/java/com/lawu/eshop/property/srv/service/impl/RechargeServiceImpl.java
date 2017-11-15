@@ -34,6 +34,7 @@ import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
+import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
 import com.lawu.eshop.property.srv.bo.AreaRechargePointBO;
@@ -364,9 +365,9 @@ public class RechargeServiceImpl implements RechargeService {
     }
 
 	@Override
-	public List<AreaRechargePointBO> selectAreaRechargePoint(String bdate, String edate) {
-		List<AreaRechargePointDOView> list = rechargeDOMapperExtend.selectAreaRechargePoint(bdate, edate);
-		List<AreaRechargePointBO> rtnList = new ArrayList<AreaRechargePointBO>();
+	public List<AreaRechargePointBO> selectAreaRechargePoint(ReportAgentAreaPointParam param) {
+		List<AreaRechargePointDOView> list = rechargeDOMapperExtend.selectAreaRechargePoint(param);
+		List<AreaRechargePointBO> rtnList = new ArrayList<>();
 		if(list != null && !list.isEmpty()) {
 			for(AreaRechargePointDOView view : list) {
 				AreaRechargePointBO BO = new AreaRechargePointBO();

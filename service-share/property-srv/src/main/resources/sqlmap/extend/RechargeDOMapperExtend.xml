@@ -40,11 +40,12 @@
   ) tt group by tt.province_id,tt.city_id,tt.area_id
   </select>
 
-	<select id="selectAreaRechargePoint"  resultType="com.lawu.eshop.property.srv.domain.extend.AreaRechargePointDOView" parameterType="java.lang.String">
+	<select id="selectAreaRechargePoint"  resultType="com.lawu.eshop.property.srv.domain.extend.AreaRechargePointDOView" parameterType="com.lawu.eshop.property.param.ReportAgentAreaPointParam">
 		select sum(money) totalMoney,area_id as areaId,city_id as cityId,province_id as provinceId,left(user_num,1) as type 
 			from recharge
-			where recharge_type = 2 and status = 2 and area_id is not null and gmt_modified BETWEEN #{bdate} and #{edate}
+			where recharge_type = 2 and status = 2 and area_id is not null and gmt_modified BETWEEN #{beginDate} and #{endDate}
 		group by area_id,city_id,province_id,left(user_num,1)
+		limit #{offset},#{pageSize}
 	</select>
 	
 	<resultMap id="RechargeReportResultMap" type="com.lawu.eshop.property.srv.domain.extend.RechargeDOView">

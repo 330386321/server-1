@@ -17,6 +17,7 @@ import com.lawu.eshop.property.dto.ReportAdPointGroupByAreaDTO;
 import com.lawu.eshop.property.dto.ReportEarningsDTO;
 import com.lawu.eshop.property.dto.TotalSalesGroupByAreaDTO;
 import com.lawu.eshop.property.param.ReportAdEarningsPointParam;
+import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.param.TotalSalesQueryParam;
 
 @FeignClient(value= "property-srv")
@@ -75,12 +76,12 @@ public interface PropertySrvService {
 	Result<List<TotalSalesGroupByAreaDTO>> selectTotalSalesGroupByArea(@RequestBody TotalSalesQueryParam param);
 	
 	
-	@RequestMapping(value = "pointDetail/getAreaPointConsume", method = RequestMethod.GET)
-    Result<List<AreaPointConsumeDTO>> getAreaPointConsume(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate);
+	@RequestMapping(value = "pointDetail/getAreaPointConsume", method = RequestMethod.POST)
+    Result<List<AreaPointConsumeDTO>> getAreaPointConsume(@RequestBody ReportAgentAreaPointParam param);
 	
-	@RequestMapping(value = "pointDetail/getAreaPointRefund", method = RequestMethod.GET)
-    Result<List<AreaPointConsumeDTO>> getAreaPointRefund(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate);
+	@RequestMapping(value = "pointDetail/getAreaPointRefund", method = RequestMethod.POST)
+    Result<List<AreaPointConsumeDTO>> getAreaPointRefund(@RequestBody ReportAgentAreaPointParam param);
 	
-	@RequestMapping(value = "recharge/selectAreaRechargePoint", method = RequestMethod.GET)
-    public Result<List<AreaRechargePointDTO>> selectAreaRechargePoint(@RequestParam("bdate")String bdate, @RequestParam("edate")String edate);
+	@RequestMapping(value = "recharge/selectAreaRechargePoint", method = RequestMethod.POST)
+    Result<List<AreaRechargePointDTO>> selectAreaRechargePoint(@RequestBody ReportAgentAreaPointParam param);
 }

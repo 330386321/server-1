@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.srv.domain.extend.AreaPointConsumeDOView;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
@@ -24,9 +25,9 @@ public interface PointDetailDOMapperExtend {
     
 	List<ReportAdPointGroupByAreaView> getReportAdPointGroupByArea(@Param("bdate") String bdate, @Param("edate")String edate);
 	
-	List<AreaPointConsumeDOView> getAreaPointConsume(@Param("bdate") String bdate, @Param("edate")String edate);
+	List<AreaPointConsumeDOView> getAreaPointConsume(ReportAgentAreaPointParam param);
 	
-	List<AreaPointConsumeDOView> getAreaPointRefund(@Param("bdate") String bdate, @Param("edate")String edate);
+	List<AreaPointConsumeDOView> getAreaPointRefund(ReportAgentAreaPointParam param);
 
     List<IncomeMsgDOView> getIncomeMsgDataList(IncomeMsgExample example);
 
