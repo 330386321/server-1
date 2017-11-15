@@ -2,6 +2,7 @@ package com.lawu.eshop.ad.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.ad.param.AdReportParam;
 import com.lawu.eshop.ad.srv.bo.ReportEarningsBO;
 
 /**
@@ -13,7 +14,7 @@ public interface ReportEarningsService {
 	
 	
 	
-	List<ReportEarningsBO>  getReportEarnings(String date);
+	List<ReportEarningsBO>  getReportEarnings(AdReportParam param);
 	
 	
 	List<ReportEarningsBO>  getReportMonthEarnings();

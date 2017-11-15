@@ -30,10 +30,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.FavoriteAdTypeEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.param.FavoriteAdParam;
+import com.lawu.eshop.ad.param.PraiseWarnParam;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDO;
@@ -215,8 +214,12 @@ public class FavoriteAdControllerTest {
     	 favoriteAdDO.setMemberNum("M000001");
     	 favoriteAdDOMapper.insert(favoriteAdDO);
          try {
-             RequestBuilder request = get("/favoriteAd/selectFavoriteAdPraise");
-             ResultActions perform= mvc.perform(request);
+			PraiseWarnParam param = new PraiseWarnParam();
+			param.setCurrentPage(1);
+			param.setPageSize(20);
+	    	String requestJson = JSONObject.toJSONString(param);
+			RequestBuilder request = get("/favoriteAd/selectFavoriteAdPraise").contentType(MediaType.APPLICATION_JSON).content(requestJson);
+			ResultActions perform = mvc.perform(request);
              MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
 
          } catch (Exception e) {

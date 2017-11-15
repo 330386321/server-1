@@ -1,11 +1,10 @@
 package com.lawu.eshop.property.srv.domain.extend;
 
 import java.math.BigDecimal;
-import java.util.List;
 
-public class ReportAdEarningsPointView {
+public class ReportAdPointView {
 	
-	private List<Long> bizIds;
+	private Long bizId;
 	
 	private byte pointType;
 	
@@ -16,12 +15,12 @@ public class ReportAdEarningsPointView {
 	private BigDecimal loveTotalPoint;
 	
 
-	public List<Long> getBizIds() {
-		return bizIds;
+	public Long getBizId() {
+		return bizId;
 	}
 
-	public void setBizIds(List<Long> bizIds) {
-		this.bizIds = bizIds;
+	public void setBizId(Long bizId) {
+		this.bizId = bizId;
 	}
 
 	public byte getPointType() {

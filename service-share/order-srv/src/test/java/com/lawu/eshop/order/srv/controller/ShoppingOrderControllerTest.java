@@ -1455,7 +1455,7 @@ public class ShoppingOrderControllerTest {
     	Assert.assertEquals(1, page.getTotalCount().intValue());
     	
     	ParserConfig mapping = new ParserConfig();
-    	mapping.putDeserializer(Date.class, new JCDateDeserializer());
+    	mapping.putDeserializer(Date.class, new JCDateDeserializer("yyyy-MM-dd"));
     	ShoppingOrderQueryToOperatorDTO actual = JSONObject.parseObject(page.getRecords().get(0).toJSONString(), ShoppingOrderQueryToOperatorDTO.class, mapping, JSON.DEFAULT_PARSER_FEATURE);
 		Assert.assertNotNull(actual);
 		Assert.assertEquals(expected.getId(), actual.getId());

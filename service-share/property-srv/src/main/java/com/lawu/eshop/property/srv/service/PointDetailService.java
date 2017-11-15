@@ -8,6 +8,7 @@ import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataQueryPointDetailParam;
+import com.lawu.eshop.property.param.ReportAdPointParam;
 import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.AreaPointConsumeBO;
@@ -68,11 +69,10 @@ public interface PointDetailService {
     /**
      * 获取区域分组统计出来的发广告积分明细数据
      *
-     * @param bdate
-     * @param edate
+     * @param param
      * @return
      */
-    List<ReportAdPointGroupByAreaBO> getReportAdPointGroupByArea(String bdate, String edate);
+    List<ReportAdPointGroupByAreaBO> getReportAdPointGroupByArea(ReportAdPointParam param);
 
     /**
      * 获取区域积分消费统计数据

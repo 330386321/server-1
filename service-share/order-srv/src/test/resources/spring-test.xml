@@ -110,5 +110,7 @@
     <bean id="shoppingRefundAutoRemindFillReturnAddressJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoRemindFillReturnAddressJob"/>
     <bean id="shoppingRefundRefundFailedJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundRefundFailedJob"/>
     <bean id="shoppingRefundAutoRemindRefundFailedJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoRemindRefundFailedJob"/>
+    <bean id="shoppingRefundAutoRemindToBeReturnJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoRemindToBeReturnJob"/>
+    <bean id="shoppingRefundToBeReturnJob" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundToBeReturnJob"/>
     <aop:aspectj-autoproxy  proxy-target-class="true"/>
 </beans>

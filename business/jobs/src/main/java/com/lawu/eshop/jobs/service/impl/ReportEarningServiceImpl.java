@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawu.eshop.ad.dto.ReportAdEarningsDTO;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -18,7 +17,6 @@ import com.lawu.eshop.jobs.service.AdSrvService;
 import com.lawu.eshop.jobs.service.PropertySrvService;
 import com.lawu.eshop.jobs.service.ReportEarningExtendService;
 import com.lawu.eshop.jobs.service.ReportEarningService;
-import com.lawu.eshop.property.dto.ReportEarningsDTO;
 import com.lawu.eshop.statistics.dto.ReportEarningsDailyDTO;
 import com.lawu.eshop.statistics.param.ReportEarningParam;
 import com.lawu.eshop.utils.DateUtil;
@@ -37,7 +35,7 @@ public class ReportEarningServiceImpl extends BaseController implements ReportEa
 	@Autowired
 	private PropertySrvService propertySrvService;
 
-	@Override
+	/*@Override
 	public void executeCollectDailyData() {
 		Date lastDay = reportEarningService.getDaily();
 		if (lastDay != null && !DateUtils.isSameDay(lastDay, DateUtil.getSomeDay(new Date(), -1))) {
@@ -90,7 +88,7 @@ public class ReportEarningServiceImpl extends BaseController implements ReportEa
 			}
 			reportEarningService.saveDaily(param);
 		}
-	}
+	}*/
 
 	@Override
 	public void executeCollectMonthData() {

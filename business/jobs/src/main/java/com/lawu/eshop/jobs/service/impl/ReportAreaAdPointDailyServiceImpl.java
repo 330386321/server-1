@@ -31,11 +31,11 @@ public class ReportAreaAdPointDailyServiceImpl extends BaseController implements
 	
 	@Override
 	public void executeCollectReportAreaAdPointDaily() {
-		Date date = DateUtil.getDayBefore(new Date());
+		/*Date date = DateUtil.getDayBefore(new Date());
 		String bdate = DateUtil.getDateFormat(date) + " 00:00:00";
 		String edate = DateUtil.getDateFormat(date) + " 23:59:59";
 		//获取昨天的发广告的区域统计
-		Result<List<ReportAdPointGroupByAreaDTO>>  result = propertySrvService.getReportAdPointGroupByArea(bdate, edate);
+		Result<List<ReportAdPointGroupByAreaDTO>>  result = propertySrvService.getReportAdPointGroupByArea(param);
 		if(result.getModel() != null && !result.getModel().isEmpty()) {
 			for(ReportAdPointGroupByAreaDTO dto : result.getModel()) {
 				if(dto.getAreaId() == null) {
@@ -63,7 +63,7 @@ public class ReportAreaAdPointDailyServiceImpl extends BaseController implements
 				statisticsSrvService.insertReportAreaAdPointDaily(reportAreaAdPointDailyParams);
 			}
 		}
-	
+	*/
 	}
 
 }

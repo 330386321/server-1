@@ -22,6 +22,7 @@ import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataQueryPointDetailParam;
+import com.lawu.eshop.property.param.ReportAdPointParam;
 import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.AreaPointConsumeBO;
@@ -261,8 +262,9 @@ public class PointDetailServiceImpl implements PointDetailService {
 	}
 
 	@Override
-	public List<ReportAdPointGroupByAreaBO> getReportAdPointGroupByArea(String bdate, String edate) {
-		List<ReportAdPointGroupByAreaView> list = pointDetailDOMapperExtend.getReportAdPointGroupByArea(bdate, edate);
+	public List<ReportAdPointGroupByAreaBO> getReportAdPointGroupByArea(ReportAdPointParam param) {
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		List<ReportAdPointGroupByAreaView> list = pointDetailDOMapperExtend.getReportAdPointGroupByArea(param.getBdate(), param.getEdate(),rowBounds);
 		List<ReportAdPointGroupByAreaBO> rntList = new ArrayList<ReportAdPointGroupByAreaBO>();
 		for(ReportAdPointGroupByAreaView r : list) {
 			ReportAdPointGroupByAreaBO BO = new ReportAdPointGroupByAreaBO();

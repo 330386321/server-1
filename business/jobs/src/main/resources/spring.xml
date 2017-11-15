@@ -9,7 +9,7 @@
 	<reg:zookeeper id="regCenter" server-lists="${zookeeper.servers}" namespace="jobs-job" />
 
 	<!-- 配置作业 -->	
-	<job:simple id="adViewJob" description="广告浏览次数" class="com.lawu.eshop.jobs.impl.ad.AdViewJob" registry-center-ref="regCenter" cron="0 0 0/1 * * ?"
+    <job:simple id="adViewJob" description="广告浏览次数" class="com.lawu.eshop.jobs.impl.ad.AdViewJob" registry-center-ref="regCenter" cron="0 0 0/1 * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 	<job:simple id="productOrderCommissionJob" description="商品订单提成" class="com.lawu.eshop.jobs.impl.order.ProductOrderCommissionJob" registry-center-ref="regCenter" cron="0 5 0 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
@@ -36,10 +36,10 @@
 	<job:simple id="userRegMonthJob" description="用户注册月统计" class="com.lawu.eshop.jobs.impl.user.UserRegMonthJob" registry-center-ref="regCenter" cron="0 5 2 1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="userRegAreaJob" description="用户注册区域统计" class="com.lawu.eshop.jobs.impl.user.UserRegAreaJob" registry-center-ref="regCenter" cron="0 55 1 1/1 * ?"
-				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" /> 
 	<job:simple id="rechargeBalanceDailyReportJob" description="充值余额日统计" class="com.lawu.eshop.jobs.impl.recharge.RechargeBalanceDailyReportJob" registry-center-ref="regCenter" cron="0 45 0 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
-	<job:simple id="rechargeBalanceMonthReportJob" description="充值余额月统计" class="com.lawu.eshop.jobs.impl.recharge.RechargeBalanceMonthReportJob" registry-center-ref="regCenter" cron="0 10 2 1 * ?"
+	 <job:simple id="rechargeBalanceMonthReportJob" description="充值余额月统计" class="com.lawu.eshop.jobs.impl.recharge.RechargeBalanceMonthReportJob" registry-center-ref="regCenter" cron="0 10 2 1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="pointConsumeDailyReportJob" description="积分消费日统计" class="com.lawu.eshop.jobs.impl.consume.PointConsumeDailyReportJob" registry-center-ref="regCenter" cron="0 50 0 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
@@ -47,13 +47,13 @@
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="reportAdEarningsJob" description="广告收益清单统计" class="com.lawu.eshop.jobs.impl.ad.ReportAdEarningsJob" registry-center-ref="regCenter" cron="0 55 0 1/1 * ?"
 	            sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
-	<job:simple id="reportSalesJob" description="平台总销量统计" class="com.lawu.eshop.jobs.impl.ReportSalesJob" registry-center-ref="regCenter" cron="0 0 1 1/1 * ?"
+	<job:simple id="reportSalesJob" description="平台总销量统计" class="com.lawu.eshop.jobs.impl.ReportSalesJob" registry-center-ref="regCenter" cron="0 0 1 1/1 * ?" 
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
-	<job:simple id="reportUserIncomeExpenditureJob" description="用户支出和收入统计" class="com.lawu.eshop.jobs.impl.ReportUserIncomeExpenditureJob" registry-center-ref="regCenter" cron="0 5 0 1 1/1 ? *"
+	<job:simple id="reportUserIncomeExpenditureJob" description="用户支出和收入统计" class="com.lawu.eshop.jobs.impl.ReportUserIncomeExpenditureJob" registry-center-ref="regCenter" cron="0 5 0 1 1/1 ? *" 
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="userVisitJob" description="活跃用户记录同步" class="com.lawu.eshop.jobs.impl.user.UserVisitJob" registry-center-ref="regCenter" cron="0 5 1 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
-
+	
 	<job:simple id="userActiveDailyJob" description="按时间每日活跃用户总数同步" class="com.lawu.eshop.jobs.impl.user.UserActiveDailyJob" registry-center-ref="regCenter" cron="0 10 1 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 
@@ -64,15 +64,15 @@
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 
 	<job:simple id="userActiveAreaMonthJob" description="按地区每月活跃用户总数同步" class="com.lawu.eshop.jobs.impl.user.UserActiveAreaMonthJob" registry-center-ref="regCenter" cron="0 25 2 1 * ?"
-				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
-
-	<job:simple id="reportEarningDailyReportJob" description="每日广告收益同步" class="com.lawu.eshop.jobs.impl.ad.ReportEarningDailyReportJob" registry-center-ref="regCenter" cron="0 20 1 1/1 * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" /> 
+		
+	<job:simple id="reportEarningDailyReportJob" description="每日广告收益同步" class="com.lawu.eshop.jobs.impl.ad.ReportEarningDailyReportJob" registry-center-ref="regCenter" job-parameter="1000" cron="0 20 1 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 
 	<job:simple id="reportEarningMonthReportJob" description="每月广告收益同步" class="com.lawu.eshop.jobs.impl.ad.ReportEarningMonthReportJob" registry-center-ref="regCenter" cron="0 30 2 1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 
-	<job:simple id="favoriteAdPraiseWarnJob" description="收藏的抢赞提醒" class="com.lawu.eshop.jobs.impl.ad.FavoriteAdPraiseWarnJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
+	<job:simple id="favoriteAdPraiseWarnJob" description="收藏的抢赞提醒" class="com.lawu.eshop.jobs.impl.ad.FavoriteAdPraiseWarnJob" job-parameter="1000" registry-center-ref="regCenter" cron="0/10 * * * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 
 	<job:simple id="recommendStoreJob" description="新增门店、优选美食" class="com.lawu.eshop.jobs.impl.store.RecommendStoreJob" registry-center-ref="regCenter" cron="0 0/30 * * * ?"
@@ -86,7 +86,7 @@
 
 
 	<!--############## 代理商定时任务               开始                ##############-->
-	<job:simple id="reportAreaAdPointDailyJob" description="区域发广告总额日统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaAdPointDailyJob" registry-center-ref="regCenter" cron="0 25 1 1/1 * ?"
+	<job:simple id="reportAreaAdPointDailyJob" description="区域发广告总额日统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaAdPointDailyJob" registry-center-ref="regCenter" job-parameter="1000" cron="0 25 1 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 
 	<job:simple id="reportAreaAdPointMonthJob" description="区域发广告总额月统计" class="com.lawu.eshop.jobs.impl.agent.ReportAreaAdPointMonthJob" registry-center-ref="regCenter" cron="0 35 2 1 * ?"

@@ -1,6 +1,7 @@
 package com.lawu.eshop.property.srv.service.impl;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import com.lawu.eshop.property.param.ReportAdEarningsPointParam;
 import com.lawu.eshop.property.srv.bo.ReportAdEarningsPointBO;
 import com.lawu.eshop.property.srv.bo.ReportEarningsBO;
 import com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView;
+import com.lawu.eshop.property.srv.domain.extend.ReportAdPointView;
 import com.lawu.eshop.property.srv.mapper.extend.TransactionDetailExtendDOMapper;
 import com.lawu.eshop.property.srv.service.ReportAdEarningsPointService;
 
@@ -20,7 +22,7 @@ public class ReportAdEarningsPointServiceImpl implements ReportAdEarningsPointSe
 
 	@Override
 	public ReportAdEarningsPointBO getReportAdEarningsPoint(ReportAdEarningsPointParam ReportAdEarningsPointParam) {
-		ReportAdEarningsPointView view=new ReportAdEarningsPointView();
+		ReportAdPointView view=new ReportAdPointView();
 		view.setBizId(ReportAdEarningsPointParam.getBizId());
 		view.setPointType(ReportAdEarningsPointParam.getMemberTransactionTypeEnum().getValue());
 		view.setLoveType(ReportAdEarningsPointParam.getLoveTypeEnum().getValue());
@@ -43,27 +45,29 @@ public class ReportAdEarningsPointServiceImpl implements ReportAdEarningsPointSe
 	}
 
 	@Override
-	public ReportEarningsBO getReportEarnings(Long bzId) {
-		ReportAdEarningsPointView view=new ReportAdEarningsPointView();
-		view.setBizId(bzId);
-		ReportAdEarningsPointView  userPoint=transactionDetailExtendDOMapper.getUserPointByBzId(view);
+	public ReportEarningsBO getReportEarnings(List<Long> bizIds) {
+		
+		List<ReportAdEarningsPointView>  userPoints=transactionDetailExtendDOMapper.getUserPointByBzId(bizIds);
 		 
-		ReportAdEarningsPointView  lovePoint=transactionDetailExtendDOMapper.getLovePointByBzId(view);
+		List<ReportAdEarningsPointView>  lovePoints=transactionDetailExtendDOMapper.getLovePointByBzId(bizIds);
+		
+		BigDecimal userPoint = new BigDecimal(0);
+		BigDecimal lovePoint = new BigDecimal(0);
+		
+		for (ReportAdEarningsPointView reportAdEarningsPointView : lovePoints) {
+			lovePoint=lovePoint.add(reportAdEarningsPointView.getLoveTotalPoint());
+		}
+		
+		for (ReportAdEarningsPointView reportAdEarningsPointView : userPoints) {
+			lovePoint=lovePoint.add(reportAdEarningsPointView.getUserTotalPoint());
+		}
 		 
-		 ReportEarningsBO bo=new ReportEarningsBO();
-		 if(userPoint==null){
-			 bo.setUserPoint(new BigDecimal("0"));
-		 }else{
-			 bo.setUserPoint(userPoint.getUserTotalPoint());
-		 }
-		 
-		 if(lovePoint==null){
-			 bo.setLovaPoint(new BigDecimal("0"));
-		 }else{
-			 bo.setLovaPoint(lovePoint.getLoveTotalPoint());
-		 }
-		 
-		 return bo;
+		ReportEarningsBO bo = new ReportEarningsBO();
+		bo.setUserPoint(userPoint);
+
+		bo.setLovaPoint(lovePoint);
+
+		return bo;
 	}
 
 }

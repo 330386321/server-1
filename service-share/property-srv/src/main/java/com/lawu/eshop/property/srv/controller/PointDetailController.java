@@ -28,6 +28,7 @@ import com.lawu.eshop.property.dto.ReportAdPointGroupByAreaDTO;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
+import com.lawu.eshop.property.param.ReportAdPointParam;
 import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.AreaPointConsumeBO;
@@ -127,9 +128,9 @@ public class PointDetailController extends BaseController {
 	}
     
     
-    @RequestMapping(value = "getReportAdPointGroupByArea", method = RequestMethod.GET)
-	public Result<List<ReportAdPointGroupByAreaDTO>> getReportAdPointGroupByArea(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate) {
-    	List<ReportAdPointGroupByAreaBO> list = pointDetailService.getReportAdPointGroupByArea(bdate, edate);
+    @RequestMapping(value = "getReportAdPointGroupByArea", method = RequestMethod.POST)
+	public Result<List<ReportAdPointGroupByAreaDTO>> getReportAdPointGroupByArea(@RequestBody ReportAdPointParam param) {
+    	List<ReportAdPointGroupByAreaBO> list = pointDetailService.getReportAdPointGroupByArea(param);
     	List<ReportAdPointGroupByAreaDTO> rtnList = new ArrayList<ReportAdPointGroupByAreaDTO>();
     	for(ReportAdPointGroupByAreaBO BO : list) {
     		ReportAdPointGroupByAreaDTO dto = new ReportAdPointGroupByAreaDTO();
@@ -142,51 +143,51 @@ public class PointDetailController extends BaseController {
     
     @RequestMapping(value = "getAreaPointConsume", method = RequestMethod.POST)
     public Result<List<AreaPointConsumeDTO>> getAreaPointConsume(@RequestBody ReportAgentAreaPointParam param) {
-    	List<AreaPointConsumeBO> list = pointDetailService.getAreaPointConsume(param);
-    	List<AreaPointConsumeDTO> rtnList = new ArrayList<>();
-    	for(AreaPointConsumeBO BO : list) {
-    		AreaPointConsumeDTO dto = new AreaPointConsumeDTO();
-    		dto.setAreaId(BO.getAreaId());
-    		dto.setTotalPoint(BO.getTotalPoint());
-    		dto.setCityId(BO.getCityId());
-    		dto.setProvinceId(BO.getProvinceId());
-    		dto.setType(BO.getType());
-    		rtnList.add(dto);
-    	}
-		return successCreated(rtnList);
+        List<AreaPointConsumeBO> list = pointDetailService.getAreaPointConsume(param);
+        List<AreaPointConsumeDTO> rtnList = new ArrayList<>();
+        for(AreaPointConsumeBO BO : list) {
+            AreaPointConsumeDTO dto = new AreaPointConsumeDTO();
+            dto.setAreaId(BO.getAreaId());
+            dto.setTotalPoint(BO.getTotalPoint());
+            dto.setCityId(BO.getCityId());
+            dto.setProvinceId(BO.getProvinceId());
+            dto.setType(BO.getType());
+            rtnList.add(dto);
+        }
+        return successCreated(rtnList);
     }
     
     @RequestMapping(value = "getAreaPointRefund", method = RequestMethod.POST)
     public Result<List<AreaPointConsumeDTO>> getAreaPointRefund(@RequestBody ReportAgentAreaPointParam param) {
-    	List<AreaPointConsumeBO> list = pointDetailService.getAreaPointRefund(param);
-    	List<AreaPointConsumeDTO> rtnList = new ArrayList<>();
-    	for(AreaPointConsumeBO BO : list) {
-    		AreaPointConsumeDTO dto = new AreaPointConsumeDTO();
-    		dto.setAreaId(BO.getAreaId());
-    		dto.setTotalPoint(BO.getTotalPoint());
-			dto.setCityId(BO.getCityId());
-			dto.setProvinceId(BO.getProvinceId());
-			dto.setType(BO.getType());
-    		rtnList.add(dto);
-    	}
-		return successCreated(rtnList);
+        List<AreaPointConsumeBO> list = pointDetailService.getAreaPointRefund(param);
+        List<AreaPointConsumeDTO> rtnList = new ArrayList<>();
+        for(AreaPointConsumeBO BO : list) {
+            AreaPointConsumeDTO dto = new AreaPointConsumeDTO();
+            dto.setAreaId(BO.getAreaId());
+            dto.setTotalPoint(BO.getTotalPoint());
+            dto.setCityId(BO.getCityId());
+            dto.setProvinceId(BO.getProvinceId());
+            dto.setType(BO.getType());
+            rtnList.add(dto);
+        }
+        return successCreated(rtnList);
     }
 
-	@RequestMapping(value = "getIncomeMsgDataList", method = RequestMethod.GET)
-	public Result<List<IncomeMsgDTO>> getIncomeMsgDataList(@RequestParam("offset") int offset, @RequestParam("pageSize") int pageSize) {
-		String date = DateUtil.getDateFormat(DateUtil.getDayBefore(new Date()),"yyyy-MM-dd");
-		String begin = date + " 00:00:00";
-		String end = date + " 23:59:59";
-		List<IncomeMsgBO> userIncomeExpenditureBOList = pointDetailService.getIncomeMsgDataList(begin,end,offset,pageSize);
-		List<IncomeMsgDTO> dtos = new ArrayList<>();
-		for(IncomeMsgBO bo : userIncomeExpenditureBOList){
-			IncomeMsgDTO dto = new IncomeMsgDTO();
-			dto.setUserNum(bo.getUserNum());
-			dto.setMoney(bo.getMoney());
-			dto.setType(bo.getType());
-			dto.setMsgType(2);
-			dtos.add(dto);
-		}
-		return successCreated(dtos);
-	}
+    @RequestMapping(value = "getIncomeMsgDataList", method = RequestMethod.GET)
+    public Result<List<IncomeMsgDTO>> getIncomeMsgDataList(@RequestParam("offset") int offset, @RequestParam("pageSize") int pageSize) {
+        String date = DateUtil.getDateFormat(DateUtil.getDayBefore(new Date()),"yyyy-MM-dd");
+        String begin = date + " 00:00:00";
+        String end = date + " 23:59:59";
+        List<IncomeMsgBO> userIncomeExpenditureBOList = pointDetailService.getIncomeMsgDataList(begin,end,offset,pageSize);
+        List<IncomeMsgDTO> dtos = new ArrayList<>();
+        for(IncomeMsgBO bo : userIncomeExpenditureBOList){
+            IncomeMsgDTO dto = new IncomeMsgDTO();
+            dto.setUserNum(bo.getUserNum());
+            dto.setMoney(bo.getMoney());
+            dto.setType(bo.getType());
+            dto.setMsgType(2);
+            dtos.add(dto);
+        }
+        return successCreated(dtos);
+    }
 }

@@ -3,6 +3,7 @@ package com.lawu.eshop.ad.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.ad.param.FavoriteAdParam;
+import com.lawu.eshop.ad.param.PraiseWarnParam;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdPraiseWarnBO;
 import com.lawu.eshop.framework.core.page.Page;
@@ -47,7 +48,7 @@ public interface FavoriteAdService {
 	/**
 	 * 收藏的广告抢赞十分钟提醒
 	 */
-	List<FavoriteAdPraiseWarnBO> selectFavoriteAdPraise();
+	List<FavoriteAdPraiseWarnBO> selectFavoriteAdPraise(PraiseWarnParam param);
 	
 	/**
 	 * 抢赞提示改为已发送
