@@ -3,6 +3,7 @@ package com.lawu.eshop.property.srv.mapper.extend;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
 import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.srv.domain.extend.AreaPointConsumeDOView;
@@ -23,7 +24,7 @@ public interface PointDetailDOMapperExtend {
 	
 	ReportAdEarningsPointView getLovePointByBzId(ReportAdEarningsPointView view);
     
-	List<ReportAdPointGroupByAreaView> getReportAdPointGroupByArea(@Param("bdate") String bdate, @Param("edate")String edate);
+	List<ReportAdPointGroupByAreaView> getReportAdPointGroupByArea(@Param("bdate") String bdate, @Param("edate")String edate,RowBounds rowBounds);
 	
 	List<AreaPointConsumeDOView> getAreaPointConsume(ReportAgentAreaPointParam param);
 	

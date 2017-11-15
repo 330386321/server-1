@@ -27,9 +27,9 @@ public class FavoriteAdPraiseWarnJob extends AbstractPageJob<FavoriteAdPraiseWar
     private MessageService messageService;
 
 	@Override
-	public List<FavoriteAdPraiseWarnDTO> queryPage(int currentPage, int pageSize) {
+	public List<FavoriteAdPraiseWarnDTO> queryPage(int offset, int pageSize) {
 		PraiseWarnParam param = new PraiseWarnParam();
-		param.setCurrentPage(currentPage);
+		param.setOffset(offset);
 		param.setPageSize(pageSize);
 		Result<List<FavoriteAdPraiseWarnDTO>>  result = favoriteAdService.selectFavoriteAdPraise(param);
 		 

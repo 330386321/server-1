@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +13,7 @@ import com.lawu.eshop.ad.dto.MemberAdRecodeCommissionDTO;
 import com.lawu.eshop.ad.dto.ReportAdDTO;
 import com.lawu.eshop.ad.dto.ReportAdEarningsDTO;
 import com.lawu.eshop.ad.dto.ViewDTO;
+import com.lawu.eshop.ad.param.AdReportParam;
 import com.lawu.eshop.framework.web.Result;
 
 /**
@@ -67,8 +69,8 @@ public interface AdSrvService {
 	public Result<List<ReportAdDTO>> selectReportAdEarnings();
 	
 	
-	@RequestMapping(value = "reportEarnings/getReportEarnings", method = RequestMethod.GET)
-    public Result<List<ReportAdEarningsDTO>> getReportEarnings(@RequestParam("date") String date);
+	@RequestMapping(value = "reportEarnings/getReportEarnings", method = RequestMethod.POST)
+    public Result<List<ReportAdEarningsDTO>> getReportEarnings(@RequestBody AdReportParam param);
 
 	/**
 	 * 重建广告索引

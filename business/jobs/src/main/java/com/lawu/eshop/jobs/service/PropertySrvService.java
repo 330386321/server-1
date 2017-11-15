@@ -18,6 +18,7 @@ import com.lawu.eshop.property.dto.ReportEarningsDTO;
 import com.lawu.eshop.property.dto.TotalSalesGroupByAreaDTO;
 import com.lawu.eshop.property.param.ReportAdEarningsPointParam;
 import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
+import com.lawu.eshop.property.param.ReportAdPointParam;
 import com.lawu.eshop.property.param.TotalSalesQueryParam;
 
 @FeignClient(value= "property-srv")
@@ -55,7 +56,7 @@ public interface PropertySrvService {
 	 * @return
 	 */
 	@RequestMapping(value = "reportAdEarningsPoint/getReportEarnings", method = RequestMethod.GET)
-	Result<ReportEarningsDTO> getReportEarnings(@RequestParam("bzId") Long bzId);
+	Result<ReportEarningsDTO> getReportEarnings(@RequestParam("bizIds") List<Long> bizIds);
 	
 	/**
 	 * 获取时间内的发广告的区域统计
@@ -63,8 +64,8 @@ public interface PropertySrvService {
 	 * @param edate
 	 * @return
 	 */
-	@RequestMapping(value = "pointDetail/getReportAdPointGroupByArea",method = RequestMethod.GET)
-	Result<List<ReportAdPointGroupByAreaDTO>> getReportAdPointGroupByArea(@RequestParam("bdate") String bdate, @RequestParam("edate") String edate);
+	@RequestMapping(value = "pointDetail/getReportAdPointGroupByArea",method = RequestMethod.POST)
+	Result<List<ReportAdPointGroupByAreaDTO>> getReportAdPointGroupByArea(@RequestBody ReportAdPointParam param);
 	
 	/**
 	 * 查询指定日期的平台销量(group by area)

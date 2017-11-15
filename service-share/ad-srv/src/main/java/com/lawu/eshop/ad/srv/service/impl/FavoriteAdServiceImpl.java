@@ -109,7 +109,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 		Calendar nowTime = Calendar.getInstance();
 		nowTime.add(Calendar.MINUTE, +10);
 		view.setWarnDate(DateUtil.getDateTimeFormat(nowTime.getTime()));
-		RowBounds rowBounds = new RowBounds(param.getCurrentPage(), param.getPageSize());
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		List<FavoriteAdPraiseWarnView> list=favoriteAdDOMapperExtend.selectFavoriteAdPraise(view,rowBounds);
 		List<FavoriteAdPraiseWarnBO> listBO = new ArrayList<>();
 		for (FavoriteAdPraiseWarnView favoriteAdPraiseWarnView : list) {

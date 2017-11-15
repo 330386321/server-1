@@ -39,6 +39,7 @@
 	    where
 	      	point_type in (2,3,5,16)
 	      	and biz_id=#{bizId,jdbcType=BIGINT}
+	      	
 	 </select>
 	 
 	 

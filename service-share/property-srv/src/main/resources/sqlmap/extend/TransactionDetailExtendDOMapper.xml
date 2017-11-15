@@ -78,7 +78,7 @@
 	    <result column="love_totle_point" jdbcType="DECIMAL" property="loveTotalPoint" />
 	</resultMap>
   
- 	<select id="getReportAdEarningsPoint"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
+ 	<select id="getReportAdEarningsPoint"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdPointView">
 	    select
 	    	sum(amount) as user_totle_point
 	    from transaction_detail
@@ -88,7 +88,7 @@
 	 </select>
 	 
 	 
-	 <select id="getReportAdEarningsLovePoint"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
+	 <select id="getReportAdEarningsLovePoint"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdPointView">
 	    select
 	    	sum(amount) as love_totle_point
 	    from love_detail
@@ -98,23 +98,33 @@
 	 </select>
 	 
 	 <!-- 用户广告总收益统计   包括点广告  红包    抢赞  -->
-	 <select id="getUserPointByBzId"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
+	 <select id="getUserPointByBzId"  resultMap="BaseResultMap" >
 	    select
+	    	biz_id,
 	    	sum(amount) as user_totle_point
 	    from transaction_detail
 	    where
-	      	transaction_type in (2,3,16)
-	      	and biz_id=#{bizId,jdbcType=BIGINT}
+	      	transaction_type in (16,20,23,24)
+	      	and biz_id in
+	      	<foreach collection="list" item="bizId" open="(" close=")" separator=",">
+	            #{bizId}
+	        </foreach>
+	        GROUP BY  biz_id
 	 </select>
 	 
 	 
-	 <select id="getLovePointByBzId"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
+	 <select id="getLovePointByBzId"  resultMap="BaseResultMap">
 	    select
+	   		biz_id,
 	    	sum(amount) as love_totle_point
 	    from love_detail
 	    where
 	      	love_type in (1,5,6)
-	      	and biz_id=#{bizId,jdbcType=BIGINT}
+	      	and biz_id in
+	      	<foreach collection="list" item="bizId" open="(" close=")" separator=",">
+	            #{bizId}
+	        </foreach>
+	        GROUP BY  biz_id
 	 </select>
 	  <!-- 根据时间获取获取买单和订单的收入group by areaId -->
 	<select id="selectTotalSalesGroupByArea"  resultMap="TotalSalesGroupByAreaResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample">

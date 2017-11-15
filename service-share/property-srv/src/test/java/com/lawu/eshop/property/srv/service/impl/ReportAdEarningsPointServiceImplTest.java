@@ -1,7 +1,9 @@
 package com.lawu.eshop.property.srv.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -89,7 +91,9 @@ public class ReportAdEarningsPointServiceImplTest {
         pointDetailDO.setGmtCreate(new Date());
         pointDetailDOMapper.insertSelective(pointDetailDO);
 
-        ReportEarningsBO bo = reportAdEarningsPointService.getReportEarnings(2L);
+        List<Long> list = new ArrayList<>();
+        list.add(2L);
+        ReportEarningsBO bo = reportAdEarningsPointService.getReportEarnings(list);
         Assert.assertNotNull(bo.getUserPoint());
     }
 }

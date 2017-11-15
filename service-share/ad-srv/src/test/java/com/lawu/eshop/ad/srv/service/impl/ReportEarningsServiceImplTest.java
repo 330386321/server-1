@@ -20,6 +20,7 @@ import com.lawu.eshop.ad.constants.MemberAdRecordStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.param.AdReportParam;
 import com.lawu.eshop.ad.srv.bo.ReportEarningsBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
@@ -93,8 +94,11 @@ public class ReportEarningsServiceImplTest {
         memberAdRecordDO.setPoint(BigDecimal.valueOf(0.4));
         memberAdRecordDO.setStatus(MemberAdRecordStatusEnum.NONE.getVal());
         memberAdRecordDOMapper.insert(memberAdRecordDO);
-       
-        List<ReportEarningsBO>  list = reportEarningsService.getReportEarnings(DateUtil.getDateFormat(ad.getGmtModified()));
+        AdReportParam param = new AdReportParam();
+		param.setToday(DateUtil.getDateFormat(new Date(2017-07-18)));
+		param.setCurrentPage(1);
+		param.setPageSize(20);
+        List<ReportEarningsBO>  list = reportEarningsService.getReportEarnings(param);
         Assert.assertNotNull(list);
         Assert.assertTrue(list.size() > 0);
 
@@ -136,8 +140,11 @@ public class ReportEarningsServiceImplTest {
         pointPoolDO.setMemberId(1l);
         pointPoolDO.setMemberNum("aaa");
         pointPoolDOMapper.insert(pointPoolDO);
-       
-        List<ReportEarningsBO>  list = reportEarningsService.getReportEarnings(DateUtil.getDateFormat(ad.getGmtModified()));
+        AdReportParam param = new AdReportParam();
+		param.setToday(DateUtil.getDateFormat(new Date(2017-07-18)));
+		param.setCurrentPage(1);
+		param.setPageSize(20);
+        List<ReportEarningsBO>  list = reportEarningsService.getReportEarnings(param);
         Assert.assertNotNull(list);
         Assert.assertTrue(list.size() > 0);
 

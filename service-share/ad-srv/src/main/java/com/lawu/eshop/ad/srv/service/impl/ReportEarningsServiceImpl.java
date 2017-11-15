@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.param.AdReportParam;
 import com.lawu.eshop.ad.srv.bo.ReportEarningsBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.AdDOExample;
@@ -37,19 +39,19 @@ public class ReportEarningsServiceImpl implements ReportEarningsService {
 	
 
 	@Override
-	public List<ReportEarningsBO> getReportEarnings(String date) {
+	public List<ReportEarningsBO> getReportEarnings(AdReportParam param) {
 		
 		AdDOExample adDOExample=new AdDOExample();
 		
-	    String dateNowStr = date.substring(0, 10);
+	    String dateNowStr = param.getToday().substring(0, 10);
 		
 		Date begin = DateUtil.formatDate(dateNowStr+" 00:00:00","yyyy-MM-dd HH:mm:ss");
 		Date end = DateUtil.formatDate(dateNowStr+" 23:59:59","yyyy-MM-dd HH:mm:ss");
-		
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		adDOExample.createCriteria().andStatusBetween(AdStatusEnum.AD_STATUS_PUTED.val, AdStatusEnum.AD_STATUS_OUT.val)
 					.andGmtModifiedBetween(begin, end);
 		
-		List<AdDO> list=adDOMapper.selectByExample(adDOExample);
+		List<AdDO> list=adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
 		
 		
 		List<ReportEarningsBO> listBO=new ArrayList<>();
