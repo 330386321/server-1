@@ -1205,7 +1205,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * @author Sunny
 	 */
 	@Override
-	public List<ShoppingOrderBO> commissionShoppingOrder() {
+	public List<ShoppingOrderBO> commissionShoppingOrder(int offset, int pageSize) {
 		/*
 		 * 查找未计算过提成的订单
 		 */
@@ -1218,7 +1218,11 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 订单已经完成，钱已经打给商家
 		shoppingOrderDOExampleCriteria.andIsDoneEqualTo(true);
 
-		List<ShoppingOrderDO> shoppingOrderDOList = shoppingOrderDOMapper.selectByExample(shoppingOrderDOExample);
+		shoppingOrderDOExample.setOrderByClause(" id asc ");
+
+		RowBounds rowBounds = new RowBounds(offset,pageSize);
+
+		List<ShoppingOrderDO> shoppingOrderDOList = shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample,rowBounds);
 
 		return ShoppingOrderConverter.convert(shoppingOrderDOList);
 	}

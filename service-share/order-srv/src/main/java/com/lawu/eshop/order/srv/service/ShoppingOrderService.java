@@ -310,7 +310,7 @@ public interface ShoppingOrderService {
      * @return
      * @author Sunny
      */
-    List<ShoppingOrderBO> commissionShoppingOrder();
+    List<ShoppingOrderBO> commissionShoppingOrder(int offset, int pageSize);
 
     /**
      * 根据订单id更新购物订单的提成状态和提成时间

@@ -61,7 +61,7 @@ public interface PayOrderService {
 	 * @throws Exception
 	 * @author yangqh
 	 */
-	List<ShoppingOrderCommissionDTO> selectNotCommissionOrder();
+	List<ShoppingOrderCommissionDTO> selectNotCommissionOrder(int offset, int pageSize);
 
 	/**
 	 * 修改为已计算提成

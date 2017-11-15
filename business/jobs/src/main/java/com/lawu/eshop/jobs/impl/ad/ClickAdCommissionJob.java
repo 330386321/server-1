@@ -5,14 +5,12 @@ import java.util.List;
 import com.lawu.eshop.ad.dto.MemberAdRecodeCommissionDTO;
 import com.lawu.eshop.jobs.service.AdSrvService;
 import com.lawu.eshop.jobs.service.ClickAdCommissionService;
+import com.lawu.jobsextend.AbstractPageJob;
 import com.lawu.jobsextend.AbstractWholePageJob;
 import com.lawu.jobsextend.JobsExtendPageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.dangdang.ddframe.job.api.ShardingContext;
-import com.dangdang.ddframe.job.api.simple.SimpleJob;
 
 /**
  * 
@@ -23,7 +21,7 @@ import com.dangdang.ddframe.job.api.simple.SimpleJob;
  * @date 2017年4月24日 下午3:31:10
  *
  */
-public class ClickAdCommissionJob extends AbstractWholePageJob<MemberAdRecodeCommissionDTO> {
+public class ClickAdCommissionJob extends AbstractPageJob<MemberAdRecodeCommissionDTO> {
 
     private static Logger logger = LoggerFactory.getLogger(ClickAdCommissionJob.class);
 
@@ -43,8 +41,8 @@ public class ClickAdCommissionJob extends AbstractWholePageJob<MemberAdRecodeCom
     }
 
     @Override
-    public void executePage(List<MemberAdRecodeCommissionDTO> list) throws JobsExtendPageException {
-        clickAdCommissionService.executeAutoClickAdCommission(list);
+    public void executeSingle(MemberAdRecodeCommissionDTO memberAdRecodeCommissionDTO) {
+        clickAdCommissionService.executeAutoClickAdCommission(memberAdRecodeCommissionDTO);
     }
 
     @Override

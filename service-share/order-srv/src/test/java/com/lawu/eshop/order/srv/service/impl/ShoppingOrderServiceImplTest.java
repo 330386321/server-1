@@ -197,7 +197,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setSendTime(0);
     	shoppingOrderDOMapper.insertSelective(expected);
     	
-    	List<ShoppingOrderBO> result = shoppingOrderService.commissionShoppingOrder();
+    	List<ShoppingOrderBO> result = shoppingOrderService.commissionShoppingOrder(0,10);
     	Assert.assertNotNull(result);
     	for (ShoppingOrderBO actual : result) {
     		ShoppingOrderConverterTest.assertShoppingOrderBO(expected, actual);
