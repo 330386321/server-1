@@ -78,17 +78,17 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
                 param.setTempBidId(order.getId());
                 BigDecimal actualMoney = order.getActualAmount();
 
-                BigDecimal level = new BigDecimal(inviters.get(i).getLevel());
                 BigDecimal saleCommission = property.get(PropertyType.sale_commission_1);
-                if (i == 0) {
+                if (inviters.get(i).getDept() == 1) {
                     saleCommission = property.get(PropertyType.sale_commission_1);
-                } else if (i == 1) {
+                } else if (inviters.get(i).getDept() == 2) {
                     saleCommission = property.get(PropertyType.sale_commission_2);
-                } else if (i == 2) {
+                } else if (inviters.get(i).getDept() == 3) {
                     param.setLast(true);
                     saleCommission = property.get(PropertyType.sale_commission_3);
                 }
 
+                BigDecimal level = new BigDecimal(inviters.get(i).getLevel());
                 BigDecimal actualCommission = saleCommission.add(saleCommissionAddScope.multiply(level.subtract(new BigDecimal("1"))));//没升一个级别+0.005
                 CommissionResultParam commissionResultparam = new CommissionResultParam();
                 commissionResultparam.setBeforeMoney(actualMoney);
@@ -123,7 +123,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
                     param.setLoveTypeName(LoveTypeEnum.VOLUME_COMMISSION.getName());
                 }
 
-                logger.info("[{}]订单ID={}，交易用户编号={}，交易商家编号={}，获得提成账号编号：{},等级={}，初始提成比例={},每上升一级幅度累加比例={},实际提成比例：{}，基础金额：{}，实际提成金额：{}，爱心账户金额：{}", msg, order.getId(), order.getMemberNum(), order.getMerchantNum(), userNum, level, saleCommission, saleCommissionAddScope, actualCommission,actualMoney,rntDTO.getActureMoneyIn(),rntDTO.getActureLoveIn());
+                logger.info("[{}]订单ID={}，交易用户编号={}，交易商家编号={}，获得提成账号编号：{}；基础金额(a)：{}，提成基础金额比例(b)=1，实际提成比例(c)：{}（初始提成比例(c1)={}, 等级(c2)={},每上升一级幅度累加比例(c3)={}）；所得：实际提成金额：{}，爱心账户金额：{}", msg, order.getId(), order.getMemberNum(), order.getMerchantNum(), userNum, actualMoney, actualCommission, saleCommission, level, saleCommissionAddScope, rntDTO.getActureMoneyIn(),rntDTO.getActureLoveIn());
 
                 try{
                     retCode = propertySrvService.calculation(param);

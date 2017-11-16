@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.dto.AdCommissionResultDTO;
 import com.lawu.eshop.property.param.CommissionResultParam;
 import org.slf4j.Logger;
@@ -45,9 +46,9 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 	public void executeAutoClickAdCommission(MemberAdRecodeCommissionDTO memberAdRecodeCommissionDTO) {
 
 		Map<String, BigDecimal> property = commonPropertyService.getAdCommissionPropertys();
-		BigDecimal loveAccountScale = property.get("love_account_scale");// 爱心账户比例
+		BigDecimal loveAccountScale = property.get(PropertyType.love_account_scale);// 爱心账户比例
 		BigDecimal actualCommissionScope = property.get("acture_in_scale");// 实际提成比例=1-爱心账户(0.003)
-		BigDecimal adCommission0 = property.get("ad_commission_0");
+		BigDecimal adCommission0 = property.get(PropertyType.ad_commission_0);
 
 		MemberAdRecodeCommissionDTO dto = memberAdRecodeCommissionDTO;
 		if(dto.getMemberNum() == null || "".equals(dto.getMemberNum())){
@@ -69,13 +70,13 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 				BigDecimal clickMoney = dto.getPoint();
 
 				BigDecimal sale_commission = null;
-				if (i == 0) {
-					sale_commission = property.get("ad_commission_1");
-				} else if (i == 1) {
-					sale_commission = property.get("ad_commission_2");
-				} else if (i == 2) {
+				if (inviters.get(i).getDept() == 1) {
+					sale_commission = property.get(PropertyType.ad_commission_1);
+				} else if (inviters.get(i).getDept() == 2) {
+					sale_commission = property.get(PropertyType.ad_commission_2);
+				} else if (inviters.get(i).getDept() == 3) {
 					param.setLast(true);
-					sale_commission = property.get("ad_commission_3");
+					sale_commission = property.get(PropertyType.ad_commission_3);
 				}
 
 				CommissionResultParam commissionResultparam = new CommissionResultParam();
@@ -99,7 +100,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 				param.setLoveTypeVal(LoveTypeEnum.AD_COMMISSION.getValue());
 				param.setLoveTypeName(LoveTypeEnum.AD_COMMISSION.getName());
 
-				logger.info("点广告比例：获得提成账号编号：{},memberAdRecordId={}，提成基础金额比例={},提成比例={},所得比例={},爱心账户比例={},所得：实际收益={},爱心账户={}",inviters.get(i).getUserNum(),dto.getId(), adCommission0,sale_commission,actualCommissionScope,loveAccountScale,param.getActureMoneyIn(),param.getActureLoveIn());
+				logger.info("点广告比例：获得提成账号编号：{},memberAdRecordId={}；基础金额(a)：{}，提成基础金额比例(b)={},提成比例(c)={},（所得比例(d)={}|爱心账户比例(e)={}）；所得：实际收益[a*b*c*d]={},爱心账户[[a*b*c*e]]={}",inviters.get(i).getUserNum(),dto.getId(), clickMoney, adCommission0,sale_commission,actualCommissionScope,loveAccountScale,param.getActureMoneyIn(),param.getActureLoveIn());
 
 				try {
 					retCode = propertySrvService.calculation(param);

@@ -139,6 +139,7 @@ public class CommonServiceImpl implements CommonService {
 				}
 			}
 			user.setUserNum(irdo.getUserNum());
+			user.setDept(irdo.getDepth().intValue());
 			if(invitedUserNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
 				user.setFlag(1);
 			} else if(invitedUserNum.startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){

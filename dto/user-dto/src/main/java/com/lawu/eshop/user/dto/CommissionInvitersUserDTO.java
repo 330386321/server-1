@@ -14,6 +14,7 @@ public class CommissionInvitersUserDTO {
 	private Integer level;//用户等级
 	private String userNum;//用户编号
 	private int flag;//1-推荐E友收益|2-推荐商家收益
+	private int dept;
 	public Integer getLevel() {
 		return level;
 	}
@@ -26,12 +27,16 @@ public class CommissionInvitersUserDTO {
 	public void setUserNum(String userNum) {
 		this.userNum = userNum;
 	}
-
 	public int getFlag() {
 		return flag;
 	}
-
 	public void setFlag(int flag) {
 		this.flag = flag;
+	}
+	public int getDept() {
+		return dept;
+	}
+	public void setDept(int dept) {
+		this.dept = dept;
 	}
 }
