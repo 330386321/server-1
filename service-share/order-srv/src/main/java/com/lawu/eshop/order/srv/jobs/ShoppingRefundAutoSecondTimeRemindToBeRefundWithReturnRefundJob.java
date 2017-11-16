@@ -9,26 +9,27 @@ import com.lawu.eshop.order.srv.service.ShoppingRefundDetailService;
 import com.lawu.jobsextend.AbstractTxPageJob;
 
 /**
- * 等待商家退款、类型为退款
- * 自动退款
+ * 等待商家退款、类型为退货退款
+ * 商家操作超时
+ * 平台第二次提示商家操作
  * 
  * @author jiangxinjun
  * @createDate 2017年11月15日
  * @updateDate 2017年11月15日
  */
-public class ShoppingRefundToBeRefundJob extends AbstractTxPageJob<ShoppingOrderItemExtendDO> {
+public class ShoppingRefundAutoSecondTimeRemindToBeRefundWithReturnRefundJob extends AbstractTxPageJob<ShoppingOrderItemExtendDO> {
 
     @Autowired
     private ShoppingRefundDetailService shoppingRefundDetailService;
     
     @Override
     public List<ShoppingOrderItemExtendDO> queryPage(int offset, int pageSize) {
-        return shoppingRefundDetailService.selectAutoRefundToBeRefundWithRefund(offset, pageSize);
+        return shoppingRefundDetailService.selectAutoSecondTimeRemindToBeRefundWithReturnRefund(offset, pageSize);
     }
 
     @Override
     public void executeSingle(ShoppingOrderItemExtendDO entity) {
-        shoppingRefundDetailService.executeAutoRefund(entity);
+        shoppingRefundDetailService.refundwithReturnRefundRemind(entity);
     }
 
     @Override

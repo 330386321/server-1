@@ -587,7 +587,7 @@ public class ShoppingRefundDetailServiceImplTest {
         shoppingRefundDetailDO.setStatus(StatusEnum.VALID.getValue());
         shoppingRefundDetailDOMapper.insert(shoppingRefundDetailDO);
         
-        shoppingRefundDetailService.executeAutoRefundFillReturnAddress(shoppingOrderItemDO);
+        shoppingRefundDetailService.executeAutoRefund(shoppingOrderItemDO);
         
         ShoppingOrderDO actualShoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
         Assert.assertNotNull(actualShoppingOrderDO);
@@ -631,7 +631,7 @@ public class ShoppingRefundDetailServiceImplTest {
     	refundedSecondRemindPropertyDO.setGmtModified(new Date());
     	refundedSecondRemindPropertyDO.setName(PropertyNameConstant.TO_BE_REFUNDED_REMIND_SECOND_TIME);
     	refundedSecondRemindPropertyDO.setRemark("等待商家退款超时(待退款状态),第二次提醒时间");
-    	refundedSecondRemindPropertyDO.setValue("10");
+    	refundedSecondRemindPropertyDO.setValue("13");
     	propertyDOMapper.insert(refundedSecondRemindPropertyDO);
     	
     	PropertyDO refundedRefundPropertyDO = new PropertyDO();
