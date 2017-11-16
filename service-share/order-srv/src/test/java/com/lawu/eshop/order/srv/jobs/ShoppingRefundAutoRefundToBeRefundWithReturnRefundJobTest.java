@@ -49,10 +49,10 @@ import com.lawu.eshop.utils.DateUtil;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"/spring-test.xml"})
-public class ShoppingRefundAutoToBeConfirmedForRefundJobTest {
+public class ShoppingRefundAutoRefundToBeRefundWithReturnRefundJobTest {
     
     @Autowired
-    private ShoppingRefundAutoToBeConfirmedForRefundJob shoppingRefundAutoToBeConfirmedForRefundJob;
+    private ShoppingRefundAutoRefundToBeRefundWithReturnRefundJob shoppingRefundAutoRefundToBeRefundWithReturnRefundJob;
     
     @Autowired
     private ShardingContext shardingContext;
@@ -76,13 +76,13 @@ public class ShoppingRefundAutoToBeConfirmedForRefundJobTest {
     @Rollback
     @Test
     public void execute() {
-        PropertyDO confirmedRefundPropertyDO = new PropertyDO();
-        confirmedRefundPropertyDO.setGmtCreate(new Date());
-        confirmedRefundPropertyDO.setGmtModified(new Date());
-        confirmedRefundPropertyDO.setName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_REFUND_REFUND_TIME);
-        confirmedRefundPropertyDO.setRemark("等待商家退款超时(待确认状态),平台自动退款退款");
-        confirmedRefundPropertyDO.setValue("3");
-        propertyDOMapper.insert(confirmedRefundPropertyDO);
+        PropertyDO refundedRefundPropertyDO = new PropertyDO();
+        refundedRefundPropertyDO.setGmtCreate(new Date());
+        refundedRefundPropertyDO.setGmtModified(new Date());
+        refundedRefundPropertyDO.setName(PropertyNameConstant.TO_BE_REFUNDED_REFUND_TIME);
+        refundedRefundPropertyDO.setRemark("等待商家退款超时(待退款状态),平台自动退款退款");
+        refundedRefundPropertyDO.setValue("14");
+        propertyDOMapper.insert(refundedRefundPropertyDO);
         
         ShoppingOrderDO expected = new ShoppingOrderDO();
         expected.setCommodityTotalPrice(new BigDecimal(1));
@@ -100,7 +100,7 @@ public class ShoppingRefundAutoToBeConfirmedForRefundJobTest {
         expected.setMerchantName("拉乌网络");
         expected.setMerchantStoreId(1L);
         expected.setMerchantNum("B0001");
-        expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
+        expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
         expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
         expected.setOrderTotalPrice(new BigDecimal(1));
         expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
@@ -116,7 +116,7 @@ public class ShoppingRefundAutoToBeConfirmedForRefundJobTest {
         
         ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
         shoppingOrderItemDO.setGmtCreate(new Date());
-        shoppingOrderItemDO.setGmtModified(DateUtil.add(new Date(), Integer.valueOf(confirmedRefundPropertyDO.getValue()) * -1, Calendar.DAY_OF_YEAR));
+        shoppingOrderItemDO.setGmtModified(DateUtil.add(new Date(), Integer.valueOf(refundedRefundPropertyDO.getValue()) * -1, Calendar.DAY_OF_YEAR));
         shoppingOrderItemDO.setIsAllowRefund(true);
         shoppingOrderItemDO.setIsEvaluation(false);
         shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
@@ -128,14 +128,14 @@ public class ShoppingRefundAutoToBeConfirmedForRefundJobTest {
         shoppingOrderItemDO.setQuantity(1);
         shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
         shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
-        // 已经发送两次提醒消息
-        shoppingOrderItemDO.setSendTime(1);
+        // 已经发送2次提醒消息
+        shoppingOrderItemDO.setSendTime(2);
         shoppingOrderItemDO.setShoppingOrderId(expected.getId());
-        shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
+        shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
         shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
         
         ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
-        shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.REFUND.getValue());
+        shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.RETURN_REFUND.getValue());
         shoppingRefundDetailDO.setAmount(shoppingOrderItemDO.getSalesPrice().multiply(new BigDecimal(shoppingOrderItemDO.getQuantity())));
         shoppingRefundDetailDO.setDescription("就是想退款");
         shoppingRefundDetailDO.setGmtModified(new Date());
@@ -145,18 +145,18 @@ public class ShoppingRefundAutoToBeConfirmedForRefundJobTest {
         shoppingRefundDetailDO.setStatus(StatusEnum.VALID.getValue());
         shoppingRefundDetailDOMapper.insert(shoppingRefundDetailDO);
         
-        shoppingRefundAutoToBeConfirmedForRefundJob.execute(shardingContext);
+        shoppingRefundAutoRefundToBeRefundWithReturnRefundJob.execute(shardingContext);
         
-        ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
-        Assert.assertNotNull(shoppingOrderDO);
-        Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), shoppingOrderDO.getOrderStatus());
-        Assert.assertEquals(0D, shoppingOrderDO.getActualAmount().doubleValue(), 0D);
+        ShoppingOrderDO actualShoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
+        Assert.assertNotNull(actualShoppingOrderDO);
+        Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actualShoppingOrderDO.getOrderStatus());
+        Assert.assertEquals(0D, actualShoppingOrderDO.getActualAmount().doubleValue(), 0D);
         
-        ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
-        Assert.assertNotNull(actual);
-        Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), actual.getRefundStatus());
-        Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actual.getOrderStatus());
-        Assert.assertEquals(0, actual.getSendTime().intValue());
+        ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
+        Assert.assertNotNull(actualShoppingOrderItemDO);
+        Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), actualShoppingOrderItemDO.getRefundStatus());
+        Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actualShoppingOrderItemDO.getOrderStatus());
+        Assert.assertEquals(0, actualShoppingOrderItemDO.getSendTime().intValue());
         
         ShoppingRefundDetailDO actualShoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getId());
         Assert.assertNotNull(actualShoppingRefundDetailDO);

@@ -49,10 +49,10 @@ import com.lawu.eshop.utils.DateUtil;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"/spring-test.xml"})
-public class ShoppingRefundAutoToBeConfirmedForRefundJobTest {
+public class ShoppingRefundToBeRefundJobTest {
     
     @Autowired
-    private ShoppingRefundAutoToBeConfirmedForRefundJob shoppingRefundAutoToBeConfirmedForRefundJob;
+    private ShoppingRefundToBeRefundJob shoppingRefundToBeRefundJob;
     
     @Autowired
     private ShardingContext shardingContext;
@@ -100,7 +100,7 @@ public class ShoppingRefundAutoToBeConfirmedForRefundJobTest {
         expected.setMerchantName("拉乌网络");
         expected.setMerchantStoreId(1L);
         expected.setMerchantNum("B0001");
-        expected.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
+        expected.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
         expected.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
         expected.setOrderTotalPrice(new BigDecimal(1));
         expected.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
@@ -128,10 +128,10 @@ public class ShoppingRefundAutoToBeConfirmedForRefundJobTest {
         shoppingOrderItemDO.setQuantity(1);
         shoppingOrderItemDO.setRegularPrice(new BigDecimal(1));
         shoppingOrderItemDO.setSalesPrice(new BigDecimal(1));
-        // 已经发送两次提醒消息
+        // 已经发送1次提醒消息
         shoppingOrderItemDO.setSendTime(1);
         shoppingOrderItemDO.setShoppingOrderId(expected.getId());
-        shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
+        shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
         shoppingOrderItemDOMapper.insert(shoppingOrderItemDO);
         
         ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
@@ -145,18 +145,18 @@ public class ShoppingRefundAutoToBeConfirmedForRefundJobTest {
         shoppingRefundDetailDO.setStatus(StatusEnum.VALID.getValue());
         shoppingRefundDetailDOMapper.insert(shoppingRefundDetailDO);
         
-        shoppingRefundAutoToBeConfirmedForRefundJob.execute(shardingContext);
+        shoppingRefundToBeRefundJob.execute(shardingContext);
         
-        ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
-        Assert.assertNotNull(shoppingOrderDO);
-        Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), shoppingOrderDO.getOrderStatus());
-        Assert.assertEquals(0D, shoppingOrderDO.getActualAmount().doubleValue(), 0D);
+        ShoppingOrderDO actualShoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(expected.getId());
+        Assert.assertNotNull(actualShoppingOrderDO);
+        Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actualShoppingOrderDO.getOrderStatus());
+        Assert.assertEquals(0D, actualShoppingOrderDO.getActualAmount().doubleValue(), 0D);
         
-        ShoppingOrderItemDO actual = shoppingOrderItemDOMapper.selectByPrimaryKey(expected.getId());
-        Assert.assertNotNull(actual);
-        Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), actual.getRefundStatus());
-        Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actual.getOrderStatus());
-        Assert.assertEquals(0, actual.getSendTime().intValue());
+        ShoppingOrderItemDO actualShoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
+        Assert.assertNotNull(actualShoppingOrderItemDO);
+        Assert.assertEquals(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue(), actualShoppingOrderItemDO.getRefundStatus());
+        Assert.assertEquals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue(), actualShoppingOrderItemDO.getOrderStatus());
+        Assert.assertEquals(0, actualShoppingOrderItemDO.getSendTime().intValue());
         
         ShoppingRefundDetailDO actualShoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getId());
         Assert.assertNotNull(actualShoppingRefundDetailDO);

@@ -4,32 +4,31 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.service.ShoppingRefundDetailService;
 import com.lawu.jobsextend.AbstractTxPageJob;
 
 /**
- * 退款中-待商家填写收货地址
- * 商家超时操作
- * 自动退款给买家
+ * 等待商家退款、类型为退款
+ * 平台提示商家操作
  * 
  * @author jiangxinjun
- * @createDate 2017年4月17日
+ * @createDate 2017年11月15日
  * @updateDate 2017年11月15日
  */
-public class ShoppingRefundFillReturnAddressJob extends AbstractTxPageJob<ShoppingOrderItemDO> {
-    
+public class ShoppingRefundAutoRemindToBeRefundWithRefundJob extends AbstractTxPageJob<ShoppingOrderItemExtendDO> {
+
     @Autowired
     private ShoppingRefundDetailService shoppingRefundDetailService;
     
     @Override
-    public List<ShoppingOrderItemDO> queryPage(int offset, int pageSize) {
-        return shoppingRefundDetailService.selectAutoRefundFillReturnAddress(offset, pageSize);
+    public List<ShoppingOrderItemExtendDO> queryPage(int offset, int pageSize) {
+        return shoppingRefundDetailService.selectAutoRemindToBeRefundWithRefund(offset, pageSize);
     }
 
     @Override
-    public void executeSingle(ShoppingOrderItemDO entity) {
-        shoppingRefundDetailService.executeAutoRefund(entity);
+    public void executeSingle(ShoppingOrderItemExtendDO entity) {
+        shoppingRefundDetailService.refundRemind(entity);
     }
 
     @Override

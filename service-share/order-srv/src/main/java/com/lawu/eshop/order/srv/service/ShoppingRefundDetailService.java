@@ -141,14 +141,6 @@ public interface ShoppingRefundDetailService {
 	void revokeRefundRequest(Long id, Long memberId);
 	
 	/**
-	 * 退款中 - 等待商家退款
-	 * 平台提醒商家操作，否则自动退款
-	 * 
-	 * @author Sunny
-	 */
-	void executeAutoForToBeRefund();
-	
-	/**
 	 * 提醒商家处理退款相关操作
 	 * 
 	 * @param shoppingOrderItemDO
@@ -242,7 +234,7 @@ public interface ShoppingRefundDetailService {
      * @createDate 2017年11月15日
      * @updateDate 2017年11月15日
      */
-    void executeAutoRefundFillReturnAddress(ShoppingOrderItemDO shoppingOrderItemDO);
+    void executeAutoRefund(ShoppingOrderItemDO shoppingOrderItemDO);
     
     /**
      * 分页查询符合退款失败，买家超时操作，满足自动提醒的退款记录
@@ -301,4 +293,73 @@ public interface ShoppingRefundDetailService {
      * @updateDate 2017年11月15日
      */
     List<ShoppingOrderItemDO> selectAutoRevokeToBeReturn(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合
+     * 待退款、类型为退款，满足自动提醒
+     * 退款记录
+     * 
+     * @author Sunny
+     * @return 
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRemindToBeRefundWithRefund(int offset, int pageSize);
+    
+    /**
+     * 自动提醒
+     * 待退款，用户已经寄回货物，但是商家未操作
+     * 
+     * @param shoppingOrderItemExtendDO
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    void refundwithReturnRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO);
+    
+    /**
+     * 分页查询符合
+     * 待退款、类型为退款，满足自动退款
+     * 退款记录
+     * 
+     * @author Sunny
+     * @return 
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRefundToBeRefundWithRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合
+     * 待退款、类型为退货退款，满足自动第一次提醒
+     * 退款记录
+     * 
+     * @author Sunny
+     * @return 
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoFirstTimeRemindToBeRefundWithReturnRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合
+     * 待退款、类型为退货退款，满足自动第二次提醒
+     * 退款记录
+     * 
+     * @author Sunny
+     * @return 
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoSecondTimeRemindToBeRefundWithReturnRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合
+     * 待退款、类型为退货退款，满足自动退款
+     * 退款记录
+     * 
+     * @author Sunny
+     * @return 
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRefundToBeRefundWithReturnRefund(int offset, int pageSize);
+    
+    /**
+     * 退款中 - 等待商家退款
+     * 平台提醒商家操作，否则自动退款
+     * 
+     * @author Sunny
+     */
+    void executeAutoForToBeRefund();
 }
