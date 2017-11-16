@@ -3,6 +3,8 @@ package com.lawu.eshop.property.srv.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.property.dto.PropertyDTO;
+import com.lawu.eshop.property.srv.bo.PropertyBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,5 +63,17 @@ public class PropertyController extends BaseController {
     	List<String> values = propertyService.getValues(name);
         return values;
     }
-    
+
+    @RequestMapping(value = "getAll", method = RequestMethod.GET)
+    public Result<List<PropertyDTO>> getAll() {
+        List<PropertyBO> bos = propertyService.getAll();
+        List<PropertyDTO> dtos = new ArrayList<>();
+        for(PropertyBO bo : bos){
+            PropertyDTO dto = new PropertyDTO();
+            dto.setName(bo.getName());
+            dto.setValue(bo.getValue());
+            dtos.add(dto);
+        }
+        return successGet(dtos);
+    }
 }

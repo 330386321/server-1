@@ -57,7 +57,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 		// 查询用户上3级推荐
 		List<CommissionInvitersUserDTO> inviters = userCommonService.selectHigherLevelInviters(dto.getMemberNum(), 3, false);
 
-		int retCode = ResultCode.FAIL;
+		int retCode = ResultCode.SUCCESS;
 		if (inviters != null && !inviters.isEmpty()) {
 			int m = 0;
 			for (int i = 0; i < inviters.size(); i++) {
@@ -99,7 +99,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 				param.setLoveTypeVal(LoveTypeEnum.AD_COMMISSION.getValue());
 				param.setLoveTypeName(LoveTypeEnum.AD_COMMISSION.getName());
 
-				logger.info("点广告比例：提成基础金额比例={},提成比例={},所得比例={},爱心比例={},所得：实际收益={},爱心账户={}",adCommission0,sale_commission,actualCommissionScope,loveAccountScale,param.getActureMoneyIn(),param.getActureLoveIn());
+				logger.info("点广告比例：获得提成账号编号：{},memberAdRecordId={}，提成基础金额比例={},提成比例={},所得比例={},爱心账户比例={},所得：实际收益={},爱心账户={}",inviters.get(i).getUserNum(),dto.getId(), adCommission0,sale_commission,actualCommissionScope,loveAccountScale,param.getActureMoneyIn(),param.getActureLoveIn());
 
 				try {
 					retCode = propertySrvService.calculation(param);
@@ -111,11 +111,9 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 				}
 			}
 			// 所有上线提成计算成功才算成功
-			if (m == inviters.size()) {
-				retCode = ResultCode.SUCCESS;
+			if (m != inviters.size()) {
+				throw new RuntimeException();
 			}
-		} else {
-			retCode = ResultCode.SUCCESS;
 		}
 
 		// 修改用户点击广告记录状态为已计算提成
@@ -125,8 +123,6 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 				logger.error("广告点击提成修改用户点击记录状态时返回错误,memberAdRecordId={},retCode={}", dto.getId(), retCode);
 				throw new RuntimeException();
 			}
-		} else {
-			logger.error("广告点击提成计算上级收益时返回错误,memberAdRecordId={},retCode={}", dto.getId(), retCode);
 		}
 
 	}

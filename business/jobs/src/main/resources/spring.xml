@@ -15,8 +15,8 @@
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="payOrderCommissionJob" description="买单提成" class="com.lawu.eshop.jobs.impl.payorder.PayOrderCommissionJob" registry-center-ref="regCenter" cron="0 15 0 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"  />
-	<job:simple id="clickAdCommissionJob" description="点击广告提成" class="com.lawu.eshop.jobs.impl.ad.ClickAdCommissionJob" registry-center-ref="regCenter" cron="0 30 0 1/1 * ?"
-				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+	<job:simple id="clickAdCommissionJob" description="点击广告提成" class="com.lawu.eshop.jobs.impl.ad.ClickAdCommissionJob" registry-center-ref="regCenter" cron="0 49 11 * * ?"
+				sharding-total-count="1" overwrite="true" disabled="false" />
 	<job:simple id="incomeMsgJob" description="提成收益推送通知" class="com.lawu.eshop.jobs.impl.IncomeMsgJob" registry-center-ref="regCenter" cron="0 0 3 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 	<job:simple id="storeStatisticsJob" description="门店人均消费、平均得分、好评率统计" class="com.lawu.eshop.jobs.impl.store.StoreStatisticsJob" registry-center-ref="regCenter" cron="0 0 0 1/1 * ?"
