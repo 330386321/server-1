@@ -49,11 +49,7 @@
 	            sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="reportSalesJob" description="平台总销量统计" class="com.lawu.eshop.jobs.impl.ReportSalesJob" registry-center-ref="regCenter" cron="0 0 1 1/1 * ?" 
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
-    <!-- 
 	<job:simple id="reportUserIncomeExpenditureJob" description="用户支出和收入统计" class="com.lawu.eshop.jobs.impl.ReportUserIncomeExpenditureJob" registry-center-ref="regCenter" cron="0 5 0 1 1/1 ? *" sharding-total-count="1" overwrite="true" job-parameter="100" disabled="${dangdang.ddframe.job.disabled}" />
-    -->
-    <job:simple id="reportUserIncomeExpenditureJob" description="用户支出和收入统计" class="com.lawu.eshop.jobs.impl.ReportUserIncomeExpenditureJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" job-parameter="100" disabled="false" />
-    
 	<job:simple id="userVisitJob" description="活跃用户记录同步" class="com.lawu.eshop.jobs.impl.user.UserVisitJob" registry-center-ref="regCenter" cron="0 5 1 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	
