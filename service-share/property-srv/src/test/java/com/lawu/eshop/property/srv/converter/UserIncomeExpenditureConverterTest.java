@@ -1,21 +1,19 @@
 package com.lawu.eshop.property.srv.converter;
 
-import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
-import com.lawu.eshop.property.dto.UserIncomeExpenditureDTO;
-import com.lawu.eshop.property.dto.UserIncomeExpenditureDatailDTO;
-import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
-import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
-import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureDO;
-import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureExample;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
+import com.lawu.eshop.property.dto.UserIncomeExpenditureDTO;
+import com.lawu.eshop.property.dto.UserIncomeExpenditureDatailDTO;
+import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
+import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureDO;
 
 /**
  * @author yangqh
@@ -23,15 +21,6 @@ import java.util.List;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 public class UserIncomeExpenditureConverterTest {
-
-    @Test
-    public void convert(){
-        UserIncomeExpenditureQueryParam param = new UserIncomeExpenditureQueryParam();
-        param.setDate(new Date());
-
-        UserIncomeExpenditureExample bo = UserIncomeExpenditureConverter.convert(param);
-        Assert.assertNotNull(bo);
-    }
 
     @Test
     public void convert1(){

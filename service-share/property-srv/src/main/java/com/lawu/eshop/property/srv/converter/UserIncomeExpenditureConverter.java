@@ -9,11 +9,8 @@ import java.util.Map;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 import com.lawu.eshop.property.dto.UserIncomeExpenditureDTO;
 import com.lawu.eshop.property.dto.UserIncomeExpenditureDatailDTO;
-import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
 import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
 import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureDO;
-import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureExample;
-import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 平台总销量转换
@@ -31,23 +28,6 @@ public class UserIncomeExpenditureConverter {
 		throw new IllegalAccessError("Utility class");
 	}
 
-	/**
-	 * UserIncomeExpenditureQueryParam转UserIncomeExpenditureExample
-	 * 
-	 * @param param
-	 * @return
-	 */
-	public static UserIncomeExpenditureExample convert(UserIncomeExpenditureQueryParam param) {
-		UserIncomeExpenditureExample rtn = null;
-		if (param == null) {
-			return rtn;
-		}
-		rtn = new UserIncomeExpenditureExample();
-		rtn.setStart(DateUtil.getFirstDayOfMonth(param.getDate()));
-		rtn.setEnd(DateUtil.getLastDayOfMonth(param.getDate()));
-		return rtn;
-	}
-	
 	/**
 	 * UserIncomeExpenditureDO转UserIncomeExpenditureBO
 	 * 

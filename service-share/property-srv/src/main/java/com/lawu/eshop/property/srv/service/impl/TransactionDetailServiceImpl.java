@@ -265,14 +265,18 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 	}
 	
 	/**
-	 * 查询平台销售金额
+	 * 查询用户收入支出
 	 *
 	 * @param param
 	 * @return
 	 */
 	@Override
 	public List<UserIncomeExpenditureBO> selectUserIncomeExpenditure(UserIncomeExpenditureQueryParam param) {
-		UserIncomeExpenditureExample example = UserIncomeExpenditureConverter.convert(param);
+        UserIncomeExpenditureExample example = new UserIncomeExpenditureExample();
+        example.setStart(DateUtil.getFirstDayOfMonth(param.getDate()));
+        example.setEnd(DateUtil.getLastDayOfMonth(param.getDate()));
+        example.setOffset(param.getOffset());
+        example.setPageSize(param.getPageSize());
 		List<UserIncomeExpenditureDO> userIncomeExpenditureDOList = transactionDetailExtendDOMapper.selectUserIncomeExpenditure(example);
 		return UserIncomeExpenditureConverter.convertUserIncomeExpenditureBOList(userIncomeExpenditureDOList);
 	}
