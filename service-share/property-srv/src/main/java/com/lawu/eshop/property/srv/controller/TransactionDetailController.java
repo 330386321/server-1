@@ -173,7 +173,11 @@ public class TransactionDetailController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "userIncomeExpenditure", method = RequestMethod.PUT)
-	public Result<UserIncomeExpenditureDatailDTO> selectUserIncomeExpenditure(@RequestBody UserIncomeExpenditureQueryParam param) {
+	public Result<UserIncomeExpenditureDatailDTO> selectUserIncomeExpenditure(@RequestBody @Validated UserIncomeExpenditureQueryParam param, BindingResult bindingResult) {
+	    String message = validate(bindingResult);
+	    if (message != null) {
+	        successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+	    }
 		List<UserIncomeExpenditureBO> userIncomeExpenditureBOList = transactionDetailService.selectUserIncomeExpenditure(param);
 		UserIncomeExpenditureDatailDTO rtn = UserIncomeExpenditureConverter.convertUserIncomeExpenditureDatailDTO(userIncomeExpenditureBOList);
 		return successCreated(rtn);

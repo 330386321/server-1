@@ -1,18 +1,16 @@
 package com.lawu.eshop.property.srv.domain.extend;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 平台总销量查询DO
+ * 用户收入支出查询DO
  * 
- * @author Sunny
- * @date 2017年7月3日
+ * @author jiangxinjun
+ * @createDate 2017年7月3日
+ * @updateDate 2017年11月16日
  */
-public class UserIncomeExpenditureExample implements Serializable {
+public class UserIncomeExpenditureExample {
    
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * 开始时间
 	 */
@@ -22,6 +20,16 @@ public class UserIncomeExpenditureExample implements Serializable {
 	 * 结束时间
 	 */
 	private Date end;
+	
+	/**
+     * 偏移量
+     */
+    private Integer offset;
+    
+    /**
+     * 每页大小
+     */
+    private Integer pageSize;
 	
 	public Date getStart() {
 		return start;
@@ -38,5 +46,21 @@ public class UserIncomeExpenditureExample implements Serializable {
 	public void setEnd(Date end) {
 		this.end = end;
 	}
+
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
 
 }

@@ -69,8 +69,9 @@
 	<!-- 用户收入统计 -->
     <select id="selectUserIncomeExpenditure"  resultMap="UserIncomeExpenditureResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureExample">
 		SELECT user_num, sum(amount) AS amount, direction FROM transaction_detail 
-		WHERE AND gmt_create BETWEEN #{start} and #{end}
+		WHERE gmt_create BETWEEN #{start} and #{end}
 		GROUP BY user_num, direction
+        LIMIT #{offset},#{pageSize}
     </select>
     
     <resultMap id="BaseResultMap" type="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
