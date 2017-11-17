@@ -156,15 +156,16 @@ public class PayOrderServiceImpl implements PayOrderService {
 	 * 查询未计算提成的买单
 	 * 
 	 * @return
-	 * @throws Exception
 	 * @author yangqh
 	 */
 	@Override
-	public List<ShoppingOrderCommissionDTO> selectNotCommissionOrder() {
+	public List<ShoppingOrderCommissionDTO> selectNotCommissionOrder(int offset, int pageSize) {
 		PayOrderDOExample example = new PayOrderDOExample();
 		example.createCriteria().andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal())
 				.andCommissionStatusEqualTo(CommissionStatusEnum.NOT_COUNTED.getValue());
-		List<PayOrderDO> dos = payOrderDOMapper.selectByExample(example);
+		example.setOrderByClause(" id asc ");
+		RowBounds rowBounds = new RowBounds(offset,pageSize);
+		List<PayOrderDO> dos = payOrderDOMapper.selectByExampleWithRowbounds(example,rowBounds);
 		List<ShoppingOrderCommissionDTO> dtos = new ArrayList<ShoppingOrderCommissionDTO>();
 		for(PayOrderDO orderDO : dos){
 			ShoppingOrderCommissionDTO dto = new ShoppingOrderCommissionDTO();

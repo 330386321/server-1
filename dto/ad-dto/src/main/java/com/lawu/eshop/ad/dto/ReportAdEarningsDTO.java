@@ -9,7 +9,6 @@ public class ReportAdEarningsDTO {
 	
 	private BigDecimal adPoint;
 	
-
 	public Long getId() {
 		return id;
 	}
@@ -25,6 +24,7 @@ public class ReportAdEarningsDTO {
 	public void setAdPoint(BigDecimal adPoint) {
 		this.adPoint = adPoint;
 	}
+
 	
 	
 

@@ -2,11 +2,13 @@ package com.lawu.eshop.user.param;
 
 import java.util.Date;
 
+import com.lawu.eshop.framework.core.page.AbstractPageParam;
+
 /**
  * @author meishuquan
  * @date 2017/9/22.
  */
-public class UserFansParam {
+public class UserFansParam extends AbstractPageParam{
 
     private Long merchantId;
 

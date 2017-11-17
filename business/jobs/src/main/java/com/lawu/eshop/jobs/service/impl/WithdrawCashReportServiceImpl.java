@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.dto.WithdrawCashTotalReportDTO;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,28 +54,16 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 				WithdrawCashReportParam param = new WithdrawCashReportParam();
 				param.setDate(today);
 				param.setStatus(CashStatusEnum.SUCCESS.getVal());
-				Result<List<WithdrawCashReportDTO>> rntResult = propertyWithdrawCashService.selectWithdrawCashListByDateAndStatus(param);
+				Result<WithdrawCashTotalReportDTO> rntResult = propertyWithdrawCashService.selectWithdrawCashTotalByDateAndStatus(param);
 				
 				if(ResultCode.SUCCESS != rntResult.getRet()){
 					logger.error("提现报表统计定时采集数据异常：{}",rntResult.getMsg());
 					return;
 				}
-				
-				List<WithdrawCashReportDTO> rntList = rntResult.getModel();
-				if(rntList.isEmpty()){
-					logger.info("提现报表统计(按日)定时采集数据srv返回空！");
-				}
-				
-				BigDecimal memberMoney = new BigDecimal("0");
-				BigDecimal merchantMoney = new BigDecimal("0");
-				for(WithdrawCashReportDTO dto : rntList){
-					if(dto.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
-						memberMoney = memberMoney.add(dto.getCashMoney());
-					}else if(dto.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
-						merchantMoney = merchantMoney.add(dto.getCashMoney());
-					}
-				}
-				
+
+				BigDecimal memberMoney = rntResult.getModel().getMemberCashMoney();
+				BigDecimal merchantMoney = rntResult.getModel().getMerchantCashMoney();
+
 				ReportKCommonParam reportWithdraw = new ReportKCommonParam();
 				reportWithdraw.setGmtCreate(new Date());
 				reportWithdraw.setGmtReport(DateUtil.formatDate(today, "yyyy-MM-dd"));
@@ -93,27 +82,15 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 			WithdrawCashReportParam param = new WithdrawCashReportParam();
 			param.setDate(today);
 			param.setStatus(CashStatusEnum.SUCCESS.getVal());
-			Result<List<WithdrawCashReportDTO>> rntResult = propertyWithdrawCashService.selectWithdrawCashListByDateAndStatus(param);
+			Result<WithdrawCashTotalReportDTO> rntResult = propertyWithdrawCashService.selectWithdrawCashTotalByDateAndStatus(param);
 			
 			if(ResultCode.SUCCESS != rntResult.getRet()){
 				logger.error("提现报表统计定时采集数据异常：{}",rntResult.getMsg());
 				return;
 			}
-			
-			List<WithdrawCashReportDTO> rntList = rntResult.getModel();
-			if(rntList.isEmpty()){
-				logger.info("提现报表统计(按日)定时采集数据srv返回空！");
-			}
-			
-			BigDecimal memberMoney = new BigDecimal("0");
-			BigDecimal merchantMoney = new BigDecimal("0");
-			for(WithdrawCashReportDTO dto : rntList){
-				if(dto.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
-					memberMoney = memberMoney.add(dto.getCashMoney());
-				}else if(dto.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
-					merchantMoney = merchantMoney.add(dto.getCashMoney());
-				}
-			}
+
+			BigDecimal memberMoney = rntResult.getModel().getMemberCashMoney();
+			BigDecimal merchantMoney = rntResult.getModel().getMerchantCashMoney();
 			
 			ReportKCommonParam reportWithdraw = new ReportKCommonParam();
 			reportWithdraw.setGmtCreate(new Date());
@@ -219,27 +196,19 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 		param.setStatus(CashStatusEnum.SUCCESS.getVal());
 		for (RegionDTO regionDTO : regionResult.getModel()) {
 			param.setCityId(regionDTO.getId());
-			Result<List<WithdrawCashReportDTO>> rntResult = propertyWithdrawCashService.selectAgentWithdrawCashList(param);
-			if(!rntResult.getModel().isEmpty()){
-				//存在提现记录
-				BigDecimal memberMoney = new BigDecimal("0");
-				BigDecimal merchantMoney = new BigDecimal("0");
-				for(WithdrawCashReportDTO dto : rntResult.getModel()){
-					if(dto.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
-						memberMoney = memberMoney.add(dto.getCashMoney());
-					}else if(dto.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
-						merchantMoney = merchantMoney.add(dto.getCashMoney());
-					}
-				}
-				AgentWithdrawCashParam reportWithdraw = new AgentWithdrawCashParam();
-				reportWithdraw.setGmtReport(DateUtil.formatDate(today, "yyyy-MM-dd"));
-				reportWithdraw.setMemberMoney(memberMoney);
-				reportWithdraw.setMerchantMoney(merchantMoney);
-				reportWithdraw.setTotalMoney(memberMoney.add(merchantMoney));
-				reportWithdraw.setCityId(regionDTO.getId());
-				reportWithdraw.setCityName(regionDTO.getName());
-				statisticsWithdrawCashService.saveAgentDaily(reportWithdraw);
-			}
+			Result<WithdrawCashTotalReportDTO> rntResult = propertyWithdrawCashService.selectAgentWithdrawCashTotal(param);
+			//存在提现记录
+			BigDecimal memberMoney = rntResult.getModel().getMemberCashMoney();
+			BigDecimal merchantMoney = rntResult.getModel().getMerchantCashMoney();
+
+			AgentWithdrawCashParam reportWithdraw = new AgentWithdrawCashParam();
+			reportWithdraw.setGmtReport(DateUtil.formatDate(today, "yyyy-MM-dd"));
+			reportWithdraw.setMemberMoney(memberMoney);
+			reportWithdraw.setMerchantMoney(merchantMoney);
+			reportWithdraw.setTotalMoney(memberMoney.add(merchantMoney));
+			reportWithdraw.setCityId(regionDTO.getId());
+			reportWithdraw.setCityName(regionDTO.getName());
+			statisticsWithdrawCashService.saveAgentDaily(reportWithdraw);
 		}
 	}
 

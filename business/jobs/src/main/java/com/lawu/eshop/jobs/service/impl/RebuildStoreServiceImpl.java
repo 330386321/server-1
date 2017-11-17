@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.jobs.JobsConfig;
 import com.lawu.eshop.jobs.service.DiscountPackageService;
 import com.lawu.eshop.jobs.service.MerchantFavoredService;
 import com.lawu.eshop.jobs.service.MerchantStoreService;
@@ -41,12 +42,15 @@ public class RebuildStoreServiceImpl implements RebuildStoreService {
     @Autowired
     private DiscountPackageService discountPackageService;
 
+    @Autowired
+    private JobsConfig jobsConfig;
+
     @Override
     public void rebuildStoreService() {
         ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
         listMerchantStoreParam.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
         listMerchantStoreParam.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT.val);
-        listMerchantStoreParam.setPageSize(1000);
+        listMerchantStoreParam.setPageSize(jobsConfig.getPageSize());
         int currentPage = 0;
 
         while (true) {

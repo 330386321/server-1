@@ -153,8 +153,8 @@ public class PayOrderController extends BaseController {
 	 * @author yangqh
 	 */
 	@RequestMapping(value = "selectNotCommissionOrder", method = RequestMethod.GET)
-	public Result<List<ShoppingOrderCommissionDTO>> selectNotCommissionOrder() {
-		List<ShoppingOrderCommissionDTO> dtos = payOrderService.selectNotCommissionOrder();
+	public Result<List<ShoppingOrderCommissionDTO>> selectNotCommissionOrder(@RequestParam("offset") int offset, @RequestParam("pageSize") int pageSize) {
+		List<ShoppingOrderCommissionDTO> dtos = payOrderService.selectNotCommissionOrder(offset, pageSize);
 		return successCreated(dtos);
 	}
 

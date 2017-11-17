@@ -3,12 +3,13 @@ package com.lawu.eshop.property.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.param.CheckRepeatOfPropertyOperationParam;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataQueryPointDetailParam;
+import com.lawu.eshop.property.param.ReportAdPointParam;
+import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.AreaPointConsumeBO;
 import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
@@ -55,7 +56,7 @@ public interface PointDetailService {
      * @author yangqh
      * @date 2017年6月30日 下午2:34:48
      */
-    List<PointConsumeReportBO> selectPointDetailListByDateAndDirection(PointDetailReportParam param);
+    PointConsumeReportBO selectPointDetailListByDateAndDirection(PointDetailReportParam param);
 
     /**
      * @param param
@@ -63,36 +64,33 @@ public interface PointDetailService {
      * @author yangqh
      * @date 2017年6月30日 下午2:47:59
      */
-    List<PointConsumeReportBO> selectPointDetailListByDateAndDirectionAndPointType(PointDetailReportParam param);
+    PointConsumeReportBO selectPointDetailListByDateAndDirectionAndPointType(PointDetailReportParam param);
 
     /**
      * 获取区域分组统计出来的发广告积分明细数据
      *
-     * @param bdate
-     * @param edate
+     * @param param
      * @return
      */
-    List<ReportAdPointGroupByAreaBO> getReportAdPointGroupByArea(String bdate, String edate);
+    List<ReportAdPointGroupByAreaBO> getReportAdPointGroupByArea(ReportAdPointParam param);
 
     /**
      * 获取区域积分消费统计数据
      *
-     * @param bdate
-     * @param edate
+     * @param param
      * @return
      */
-    List<AreaPointConsumeBO> getAreaPointConsume(String bdate, String edate);
+    List<AreaPointConsumeBO> getAreaPointConsume(ReportAgentAreaPointParam param);
 
     /**
      * 获取区域积分退还统计数据
      *
-     * @param bdate
-     * @param edate
+     * @param param
      * @return
      */
-    List<AreaPointConsumeBO> getAreaPointRefund(String bdate, String edate);
+    List<AreaPointConsumeBO> getAreaPointRefund(ReportAgentAreaPointParam param);
 
-    List<IncomeMsgBO> getIncomeMsgDataList(String begin, String end);
+    List<IncomeMsgBO> getIncomeMsgDataList(String begin, String end,int offset,int pageSize);
 
     /**
      * 根据用户编号、业务ID、类型查询记录

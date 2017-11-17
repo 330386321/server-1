@@ -35,7 +35,7 @@ public interface ProductService {
      * @param productStatus
      * @return
      */
-    int updateProductStatus(String ids, ProductStatusEnum productStatus,Long merchantId);
+    int updateProductStatus(String ids, ProductStatusEnum productStatus, Long merchantId);
 
     /**
      * 用户端商品详情，根据商品ID获取商品信息
@@ -128,9 +128,16 @@ public interface ProductService {
     void updateAverageDailySalesById(Long id, BigDecimal averageDailySales);
 
     /**
+     * 更新商品平均日销量
+     *
+     * @param pageSize
+     */
+    void executeProductAverageDailySales(Integer pageSize);
+
+    /**
      * 重建商品索引
      */
-    void rebuildProductIndex();
+    void rebuildProductIndex(Integer pageSize);
 
     /**
      * 删除无效的商品索引
@@ -154,18 +161,20 @@ public interface ProductService {
     List<ProductBO> listProductByIds(List<Long> ids);
 
     void soldOutProductByMerchantId(Long merchantId);
-    
+
     /**
      * 根据商品id查询商品名称和图片
+     *
      * @param id
      * @return
      * @author zhangrc
      * @data 2017/08/10
      */
     ProductRelateAdInfoBO selectProductRelateAdInfo(Long id);
-    
+
     /**
      * 运营平台强制下架商品
+     *
      * @param id
      * @param remark
      */

@@ -55,7 +55,7 @@ public class MemberAdRecordServiceImplTest {
         memberAdRecordDO.setStatus(MemberAdRecordStatusEnum.NONE.getVal());
         memberAdRecordDOMapper.insert(memberAdRecordDO);
         
-        List<MemberAdRecodeCommissionBO>  list= memberAdRecordService.getNoneCommissionAds();
+        List<MemberAdRecodeCommissionBO>  list= memberAdRecordService.getNoneCommissionAds(0,10);
         Assert.assertNotNull(list);
         Assert.assertTrue(list.size() == 1);
     }

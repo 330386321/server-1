@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +24,12 @@ public class MemberAdRecordServiceImpl implements MemberAdRecordService {
 	private MemberAdRecordDOMapper memberAdRecordDOMapper;
 
 	@Override
-	public List<MemberAdRecodeCommissionBO> getNoneCommissionAds() {
+	public List<MemberAdRecodeCommissionBO> getNoneCommissionAds(int offset, int pageSize) {
 		MemberAdRecordDOExample example = new MemberAdRecordDOExample();
 		example.createCriteria().andStatusEqualTo(MemberAdRecordStatusEnum.NONE.getVal());
-		List<MemberAdRecordDO> dos = memberAdRecordDOMapper.selectByExample(example);
+		example.setOrderByClause(" id asc ");
+		RowBounds rowBounds = new RowBounds(offset,pageSize);
+		List<MemberAdRecordDO> dos = memberAdRecordDOMapper.selectByExampleWithRowbounds(example,rowBounds);
 		List<MemberAdRecodeCommissionBO> bos = new ArrayList<MemberAdRecodeCommissionBO>();
 		for(MemberAdRecordDO mdo : dos){
 			MemberAdRecodeCommissionBO bo = new MemberAdRecodeCommissionBO();

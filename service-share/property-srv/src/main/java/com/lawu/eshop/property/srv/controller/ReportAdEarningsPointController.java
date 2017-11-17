@@ -1,5 +1,7 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,9 +39,9 @@ public class ReportAdEarningsPointController extends BaseController{
 	
 	
 	@RequestMapping(value = "getReportEarnings", method = RequestMethod.GET)
-	public Result<ReportEarningsDTO> getReportEarnings(@RequestParam Long bzId) {
+	public Result<ReportEarningsDTO> getReportEarnings(@RequestParam("bizIds") List<Long> bizIds) {
 		 
-		ReportEarningsBO bo=reportAdEarningsPointService.getReportEarnings(bzId);
+		ReportEarningsBO bo=reportAdEarningsPointService.getReportEarnings(bizIds);
 		ReportEarningsDTO dto=new ReportEarningsDTO();
 		dto.setUserPoint(bo.getUserPoint());
 		dto.setLovaPoint(bo.getLovaPoint());

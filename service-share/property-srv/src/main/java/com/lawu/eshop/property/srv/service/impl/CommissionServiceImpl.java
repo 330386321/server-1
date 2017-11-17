@@ -66,40 +66,19 @@ public class CommissionServiceImpl implements CommissionService {
 
 			// 最后一级若为用户进余额，为商家进广告积分
 			if (param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
-				
-				// 先查询该上级是否已经算过提成
-				TransactionDetailDOExample example = new TransactionDetailDOExample();
-				Criteria criteria = example.createCriteria();
+
+				// 先判断该上级是否已算过提成
+				PointDetailDOExample example = new PointDetailDOExample();
+				com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria criteria = example.createCriteria();
 				criteria.andBizIdEqualTo(param.getBizId().toString()).andUserNumEqualTo(param.getUserNum())
-						.andTransactionTypeEqualTo(param.getTypeVal());
-				List<TransactionDetailDO> dos = transactionDetailDOMapper.selectByExample(example);
+						.andPointTypeEqualTo(param.getTypeVal());
+				List<PointDetailDO> dos = pointDetailDOMapper.selectByExample(example);
 				logger.info("isLast dos={},size={}",dos,dos.size());
 				if (!dos.isEmpty()) {
 					logger.info("isLast已计算过提成，重复计算，直接返回！");
 					return ResultCode.SUCCESS;
 				}
 				
-				// 新增点广告的余额交易明细
-//				TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-//				tdsParam.setTransactionNum(num);
-//				tdsParam.setUserNum(param.getUserNum());
-//				tdsParam.setTitle(param.getTypeName());
-//				tdsParam.setTransactionType(param.getTypeVal());
-//				tdsParam.setTransactionAccount("");
-//				tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
-//				tdsParam.setAmount(param.getActureMoneyIn());
-//				tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
-//				tdsParam.setBizId(param.getBizId().toString());
-//				transactionDetailService.save(tdsParam);
-
-				// 加用户（会员或商家）财产余额
-//				PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
-//				infoDoView.setUserNum(param.getUserNum());
-//				infoDoView.setBalance(param.getActureMoneyIn());
-//				infoDoView.setGmtModified(new Date());
-//				propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
-
-
 				// 新增积分明细
 				PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
 				pointDetailSaveDataParam.setPointNum(IdWorkerHelperImpl.generate(BizIdType.POINT));

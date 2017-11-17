@@ -22,6 +22,8 @@ import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataQueryPointDetailParam;
+import com.lawu.eshop.property.param.ReportAdPointParam;
+import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.AreaPointConsumeBO;
 import com.lawu.eshop.property.srv.bo.IncomeMsgBO;
@@ -37,13 +39,14 @@ import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.domain.extend.AreaPointConsumeDOView;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
+import com.lawu.eshop.property.srv.domain.extend.PointDOView;
+import com.lawu.eshop.property.srv.domain.extend.PointReportDOView;
 import com.lawu.eshop.property.srv.domain.extend.ReportAdPointGroupByAreaView;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PointDetailDOMapperExtend;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 积分明细服务实现
@@ -176,45 +179,92 @@ public class PointDetailServiceImpl implements PointDetailService {
 		return page;
     }
 
+    /**
+     * 修改积分统计
+     * @author zhangrc 
+     * @date 2017/11/14
+     */
 	@Override
-	public List<PointConsumeReportBO> selectPointDetailListByDateAndDirection(PointDetailReportParam param) {
-		PointDetailDOExample example = new PointDetailDOExample();
-		Date begin = DateUtil.formatDate(param.getDate()+" 00:00:00","yyyy-MM-dd HH:mm:ss");
-		Date end = DateUtil.formatDate(param.getDate()+" 23:59:59","yyyy-MM-dd HH:mm:ss");
-		example.createCriteria().andDirectionEqualTo(param.getDirection()).andGmtCreateBetween(begin, end);
-		List<PointDetailDO> rntList = pointDetailDOMapper.selectByExample(example);
-		List<PointConsumeReportBO> bos = new ArrayList<>();
-		for(PointDetailDO pdo : rntList){
-			PointConsumeReportBO bo = new PointConsumeReportBO();
-			bo.setId(pdo.getId());
-			bo.setPoint(pdo.getPoint());
-			bo.setUserNum(pdo.getUserNum());
-			bos.add(bo);
-		}
-		return bos;
+	public PointConsumeReportBO selectPointDetailListByDateAndDirection(PointDetailReportParam param) {
+
+		String begin= param.getDate() + " 00:00:00";
+        String end= param.getDate() + " 23:59:59";
+        PointReportDOView  pointReportDOView = new PointReportDOView();
+        pointReportDOView.setBdate(begin);
+        pointReportDOView.setEdate(end);
+        pointReportDOView.setDirection(param.getDirection());
+        List<PointDOView> rntList = pointDetailDOMapperExtend.selectPointDetailListByDateAndDirection(pointReportDOView);
+        BigDecimal memberRechargeMoney = new BigDecimal(0);
+        BigDecimal merchantRechargeMoney = new BigDecimal(0);
+        PointConsumeReportBO bo = new PointConsumeReportBO();
+        if(rntList.isEmpty()){
+        	bo.setMemberRechargeMoney(memberRechargeMoney);
+        	bo.setMerchantRechargeMoney(merchantRechargeMoney);
+        }
+        for (PointDOView rdo : rntList) {
+            if(rdo.getUserType().equals(UserCommonConstant.MEMBER_NUM_TAG)){
+            	bo.setMemberRechargeMoney(rdo.getSumRechargeMoney());
+            	if(rdo.getSumRechargeMoney()==null){
+            		bo.setMemberRechargeMoney(BigDecimal.valueOf(0));
+                }
+            	memberRechargeMoney=rdo.getSumRechargeMoney();
+            	
+            }else{
+            	bo.setMerchantRechargeMoney(rdo.getSumRechargeMoney());
+            	if(rdo.getSumRechargeMoney()==null){
+            		bo.setMemberRechargeMoney(BigDecimal.valueOf(0));
+                }
+            	merchantRechargeMoney=rdo.getSumRechargeMoney();
+            } 
+            
+        }
+        bo.setSumRechargeMoney(merchantRechargeMoney.add(memberRechargeMoney));
+        
+		return bo;
 	}
 
 	@Override
-	public List<PointConsumeReportBO> selectPointDetailListByDateAndDirectionAndPointType(PointDetailReportParam param) {
-		PointDetailDOExample example = new PointDetailDOExample();
-		Date begin = DateUtil.formatDate(param.getDate()+" 00:00:00","yyyy-MM-dd HH:mm:ss");
-		Date end = DateUtil.formatDate(param.getDate()+" 23:59:59","yyyy-MM-dd HH:mm:ss");
-		example.createCriteria().andDirectionEqualTo(param.getDirection()).andPointTypeEqualTo(param.getPointType()).andGmtCreateBetween(begin, end);
-		List<PointDetailDO> rntList = pointDetailDOMapper.selectByExample(example);
-		List<PointConsumeReportBO> bos = new ArrayList<>();
-		for(PointDetailDO pdo : rntList){
-			PointConsumeReportBO bo = new PointConsumeReportBO();
-			bo.setId(pdo.getId());
-			bo.setPoint(pdo.getPoint());
-			bo.setUserNum(pdo.getUserNum());
-			bos.add(bo);
-		}
-		return bos;
+	public PointConsumeReportBO selectPointDetailListByDateAndDirectionAndPointType(PointDetailReportParam param) {
+		String begin= param.getDate() + " 00:00:00";
+        String end= param.getDate() + " 23:59:59";
+        PointReportDOView  pointReportDOView = new PointReportDOView();
+        pointReportDOView.setBdate(begin);
+        pointReportDOView.setEdate(end);
+        pointReportDOView.setDirection(param.getDirection());
+        pointReportDOView.setPointType(param.getPointType());
+        List<PointDOView> rntList = pointDetailDOMapperExtend.selectPointDetailListByDateAndDirection(pointReportDOView);
+        BigDecimal memberRechargeMoney = new BigDecimal(0);
+        BigDecimal merchantRechargeMoney = new BigDecimal(0);
+        PointConsumeReportBO bo = new PointConsumeReportBO();
+        if(rntList.isEmpty()){
+        	bo.setMemberRechargeMoney(memberRechargeMoney);
+        	bo.setMerchantRechargeMoney(merchantRechargeMoney);
+        }
+        for (PointDOView rdo : rntList) {
+        	if(rdo.getUserType().equals(UserCommonConstant.MEMBER_NUM_TAG)){
+            	bo.setMemberRechargeMoney(rdo.getSumRechargeMoney());
+            	if(rdo.getSumRechargeMoney()==null){
+            		bo.setMemberRechargeMoney(BigDecimal.valueOf(0));
+                }
+            	memberRechargeMoney=rdo.getSumRechargeMoney();
+            	
+            }else{
+            	bo.setMerchantRechargeMoney(rdo.getSumRechargeMoney());
+            	if(rdo.getSumRechargeMoney()==null){
+            		bo.setMemberRechargeMoney(BigDecimal.valueOf(0));
+                }
+            	merchantRechargeMoney=rdo.getSumRechargeMoney();
+            }
+            
+        }
+        bo.setSumRechargeMoney(merchantRechargeMoney.add(memberRechargeMoney));
+		return bo;
 	}
 
 	@Override
-	public List<ReportAdPointGroupByAreaBO> getReportAdPointGroupByArea(String bdate, String edate) {
-		List<ReportAdPointGroupByAreaView> list = pointDetailDOMapperExtend.getReportAdPointGroupByArea(bdate, edate);
+	public List<ReportAdPointGroupByAreaBO> getReportAdPointGroupByArea(ReportAdPointParam param) {
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		List<ReportAdPointGroupByAreaView> list = pointDetailDOMapperExtend.getReportAdPointGroupByArea(param.getBdate(), param.getEdate(),rowBounds);
 		List<ReportAdPointGroupByAreaBO> rntList = new ArrayList<ReportAdPointGroupByAreaBO>();
 		for(ReportAdPointGroupByAreaView r : list) {
 			ReportAdPointGroupByAreaBO BO = new ReportAdPointGroupByAreaBO();
@@ -226,9 +276,9 @@ public class PointDetailServiceImpl implements PointDetailService {
 	}
 
 	@Override
-	public List<AreaPointConsumeBO> getAreaPointConsume(String bdate, String edate) {
-		List<AreaPointConsumeDOView> list = pointDetailDOMapperExtend.getAreaPointConsume(bdate, edate);
-		List<AreaPointConsumeBO> rtnList = new ArrayList<AreaPointConsumeBO>();
+	public List<AreaPointConsumeBO> getAreaPointConsume(ReportAgentAreaPointParam param) {
+		List<AreaPointConsumeDOView> list = pointDetailDOMapperExtend.getAreaPointConsume(param);
+		List<AreaPointConsumeBO> rtnList = new ArrayList<>();
 		if(list != null && !list.isEmpty()) {
 			for(AreaPointConsumeDOView view : list) {
 				AreaPointConsumeBO BO = new AreaPointConsumeBO();
@@ -244,14 +294,17 @@ public class PointDetailServiceImpl implements PointDetailService {
 	}
 
 	@Override
-	public List<AreaPointConsumeBO> getAreaPointRefund(String bdate, String edate) {
-		List<AreaPointConsumeDOView> list = pointDetailDOMapperExtend.getAreaPointRefund(bdate, edate);
-		List<AreaPointConsumeBO> rtnList = new ArrayList<AreaPointConsumeBO>();
+	public List<AreaPointConsumeBO> getAreaPointRefund(ReportAgentAreaPointParam param) {
+		List<AreaPointConsumeDOView> list = pointDetailDOMapperExtend.getAreaPointRefund(param);
+		List<AreaPointConsumeBO> rtnList = new ArrayList<>();
 		if(list != null && !list.isEmpty()) {
 			for(AreaPointConsumeDOView view : list) {
 				AreaPointConsumeBO BO = new AreaPointConsumeBO();
 				BO.setAreaId(view.getAreaId());
+				BO.setCityId(view.getCityId());
+				BO.setProvinceId(view.getProvinceId());
 				BO.setTotalPoint(view.getTotalPoint());
+				BO.setType(view.getType());
 				rtnList.add(BO);
 			}
 		}
@@ -259,10 +312,12 @@ public class PointDetailServiceImpl implements PointDetailService {
 	}
 
 	@Override
-	public List<IncomeMsgBO> getIncomeMsgDataList(String begin,String end) {
+	public List<IncomeMsgBO> getIncomeMsgDataList(String begin,String end,int offset,int pageSize) {
 		IncomeMsgExample example = new IncomeMsgExample();
 		example.setBegin(begin);
 		example.setEnd(end);
+		example.setOffset(offset);
+		example.setPageSize(pageSize);
 		List<IncomeMsgDOView> list = pointDetailDOMapperExtend.getIncomeMsgDataList(example);
 		List<IncomeMsgBO> bos = new ArrayList<>();
 		for(IncomeMsgDOView view : list){

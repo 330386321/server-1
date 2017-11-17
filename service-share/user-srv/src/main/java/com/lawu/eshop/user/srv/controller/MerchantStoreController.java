@@ -481,7 +481,7 @@ public class MerchantStoreController extends BaseController {
 	}
 
 	/**
-	 * 更新门店统计数据，同时更新solr
+	 * 更新门店统计数据
 	 *
 	 * @param id
 	 * @param param

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.param.FavoriteAdParam;
+import com.lawu.eshop.ad.param.PraiseWarnParam;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdPraiseWarnBO;
 import com.lawu.eshop.ad.srv.converter.FavoriteAdConverter;
@@ -103,12 +104,13 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 	}
 
 	@Override
-	public List<FavoriteAdPraiseWarnBO> selectFavoriteAdPraise() {
+	public List<FavoriteAdPraiseWarnBO> selectFavoriteAdPraise(PraiseWarnParam param) {
 		FavoriteAdExtendDOView view = new FavoriteAdExtendDOView();
 		Calendar nowTime = Calendar.getInstance();
 		nowTime.add(Calendar.MINUTE, +10);
 		view.setWarnDate(DateUtil.getDateTimeFormat(nowTime.getTime()));
-		List<FavoriteAdPraiseWarnView> list=favoriteAdDOMapperExtend.selectFavoriteAdPraise(view);
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		List<FavoriteAdPraiseWarnView> list=favoriteAdDOMapperExtend.selectFavoriteAdPraise(view,rowBounds);
 		List<FavoriteAdPraiseWarnBO> listBO = new ArrayList<>();
 		for (FavoriteAdPraiseWarnView favoriteAdPraiseWarnView : list) {
 			FavoriteAdPraiseWarnBO bo = new FavoriteAdPraiseWarnBO();

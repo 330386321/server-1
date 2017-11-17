@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.lawu.eshop.property.dto.WithdrawCashTotalReportDTO;
+import com.lawu.eshop.property.srv.bo.WithdrawCashTotalReportBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -180,6 +182,19 @@ public class CashManageBackageController extends BaseController {
 		return successCreated(dtos);
 	}
 
+	@RequestMapping(value = "selectWithdrawCashTotalByDateAndStatus", method = RequestMethod.POST)
+	public Result<WithdrawCashTotalReportDTO> selectWithdrawCashTotalByDateAndStatus(@RequestBody @Valid WithdrawCashReportParam param, BindingResult result) {
+		String message = validate(result);
+		if (message != null) {
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+		}
+		WithdrawCashTotalReportBO bo = cashManageBackageService.selectWithdrawCashTotalByDateAndStatus(param);
+		WithdrawCashTotalReportDTO dto = new WithdrawCashTotalReportDTO();
+		dto.setMemberCashMoney(bo.getMemberCashMoney());
+		dto.setMerchantCashMoney(bo.getMerchantCashMoney());
+		return successCreated(dto);
+	}
+
 	@RequestMapping(method = RequestMethod.POST, value = "selectAgentWithdrawCashList")
 	public Result<List<WithdrawCashReportDTO>> selectAgentWithdrawCashList(@RequestBody AgentWithdrawCashReportParam param){
 		List<WithdrawCashReportDTO> list = new ArrayList<>();
@@ -194,6 +209,15 @@ public class CashManageBackageController extends BaseController {
 			list.add(cash);
 		}
 		return successCreated(list);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "selectAgentWithdrawCashTotal")
+	public Result<WithdrawCashTotalReportDTO> selectAgentWithdrawCashTotal(@RequestBody AgentWithdrawCashReportParam param){
+		WithdrawCashTotalReportBO bo = cashManageBackageService.selectAgentWithdrawCashTotal(param);
+		WithdrawCashTotalReportDTO dto = new WithdrawCashTotalReportDTO();
+		dto.setMemberCashMoney(bo.getMemberCashMoney());
+		dto.setMerchantCashMoney(bo.getMerchantCashMoney());
+		return successCreated(dto);
 	}
 	
 }

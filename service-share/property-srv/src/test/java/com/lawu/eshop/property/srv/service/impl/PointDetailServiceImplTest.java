@@ -134,8 +134,8 @@ public class PointDetailServiceImplTest {
         PointDetailReportParam param = new PointDetailReportParam();
         param.setDirection(new Byte("1"));
         param.setDate(DateUtil.getDateFormat(new Date(),"yyyy-MM-dd"));
-        List<PointConsumeReportBO> rntList = pointDetailService.selectPointDetailListByDateAndDirection(param);
-        Assert.assertEquals(1,rntList.size());
+        PointConsumeReportBO bo = pointDetailService.selectPointDetailListByDateAndDirection(param);
+        Assert.assertNotNull(bo);
     }
 
     @Transactional
@@ -158,7 +158,7 @@ public class PointDetailServiceImplTest {
         param.setDirection(new Byte("1"));
         param.setDate(DateUtil.getDateFormat(new Date(),"yyyy-MM-dd"));
         param.setPointType(MemberTransactionTypeEnum.BACKAGE.getValue());
-        List<PointConsumeReportBO> rntList = pointDetailService.selectPointDetailListByDateAndDirectionAndPointType(param);
-        Assert.assertEquals(1,rntList.size());
+        PointConsumeReportBO bo = pointDetailService.selectPointDetailListByDateAndDirectionAndPointType(param);
+        Assert.assertNotNull(bo);
     }
 }

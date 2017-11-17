@@ -1,11 +1,15 @@
 package com.lawu.eshop.order.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 
 /**
  * 购物退货详情接口
@@ -137,54 +141,225 @@ public interface ShoppingRefundDetailService {
 	void revokeRefundRequest(Long id, Long memberId);
 	
 	/**
-	 * 买家申请退款，商家未操作处理
-	 * 退款类型-退款
-	 * 平台提醒商家，否则自动退款给买家
+	 * 提醒商家处理退款相关操作
 	 * 
-	 * @author Sunny
+	 * @param shoppingOrderItemDO
+	 * @author jiangxinjun
+	 * @createDate 2017年11月14日
+	 * @updateDate 2017年11月14日
 	 */
-	void executeAutoToBeConfirmedForRefund();
-	
-	/**
-	 * 买家申请退款，商家未操作处理
-	 * 退款类型-退货退款
-	 * 平台提醒商家，否则自动退款给买家
-	 * 
-	 * @author Sunny
-	 */
-	void executeAutoToBeConfirmedForReturnRefund();
-	
-	/**
-	 * 退款中-退款失败
-	 * 商家拒绝退款
-	 * 平台提示买家操作，是否申请平台介入
-	 * 否则自动撤销退款申请
-	 * 
-	 * @author Sunny
-	 */
-	void executeAutoRefundFailed();
-	
-	/**
-	 * 退款中-商家填写退货地址
-	 * 平台提醒商家操作，否则自动退款
-	 * 
-	 * @author Sunny
-	 */
-	void executeAutoForFillReturnAddress();
-	
-	/**
-	 * 退款中 - 等待买家退货
-	 * 平台提醒买家操作，否则自动撤销退款申请
-	 * 
-	 * @author Sunny
-	 */
-	void executeAutoForToBeReturn();
-	
-	/**
-	 * 退款中 - 等待商家退款
-	 * 平台提醒商家操作，否则自动退款
-	 * 
-	 * @author Sunny
-	 */
-	void executeAutoForToBeRefund();
+    void refundRemind(ShoppingOrderItemDO shoppingOrderItemDO);
+    
+    /**
+     * 退款失败之后提醒操作
+     * 
+     * @param shoppingOrderItemDO
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    void refundFailedRemind(ShoppingOrderItemDO shoppingOrderItemDO);
+    
+    /**
+     * 分页查询符合待商家确认，商家超时未处理、退款类型-退款，满足自动提醒的退款记录
+     * 
+     * @param offset
+     * @param pageSize
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月14日
+     * @updateDate 2017年11月14日
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRemindToBeConfirmedForRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合待商家确认，商家超时未处理、退款类型-退款，满足自动退款的退款记录
+     * 
+     * @param offset
+     * @param pageSize
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRefundToBeConfirmedForRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合待商家确认，商家超时未处理、退款类型-退货退款，满足自动提醒的退款记录
+     * 
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRemindToBeConfirmedForReturnRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合待商家确认，商家超时未处理、退款类型-退货退款，满足自动退款的退款记录
+     * 
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRefundToBeConfirmedForReturnRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合待填写退货地址，商家超时未处理，满足自动提醒的退款记录
+     * 
+     * @param offset
+     * @param pageSize
+     * @author jiangxinjun
+     * @return 
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemDO> selectAutoRemindFillReturnAddress(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合待填写退货地址，商家超时未处理，满足自动退款的退款记录
+     * 
+     * @param offset
+     * @param pageSize
+     * @author jiangxinjun
+     * @return 
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemDO> selectAutoRefundFillReturnAddress(int offset, int pageSize);
+    
+    /**
+     * 待填写退货地址，商家超时未处理，自动退款给买家
+     * 
+     * @param shoppingOrderItemDO
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    void executeAutoRefund(ShoppingOrderItemDO shoppingOrderItemDO);
+    
+    /**
+     * 分页查询符合退款失败，买家超时操作，满足自动提醒的退款记录
+     * @return 
+     * 
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemDO> selectAutoRemindRefundFailed(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合退款失败，买家超时操作，满足自动撤销的退款记录
+     * @return 
+     * 
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemDO> selectAutoRevokeRefundFailed(int offset, int pageSize);
+    
+    /**
+     * 自动撤销退款失败，买家超时操作的退款记录
+     * 
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    void executeAutoRevokeRefundRequest(ShoppingOrderItemDO shoppingOrderItemDO);
+    
+    /**
+     * 分页查询满足待退货状态，买家超时操作，满足自动提醒的退款记录
+     * 
+     * @param offset
+     * @param pageSize
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemDO> selectAutoRemindToBeReturn(int offset, int pageSize);
+    
+    /**
+     * 自动提醒待退货状态，买家超时操作
+     * 
+     * @param shoppingOrderItemDO
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    void executeAutoRemindToBeReturn(ShoppingOrderItemDO shoppingOrderItemDO);
+    
+    /**
+     * 分页查询满足待退货状态，买家超时操作，满足自动撤销的退款记录
+     * 
+     * @param offset
+     * @param pageSize
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    List<ShoppingOrderItemDO> selectAutoRevokeToBeReturn(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合
+     * 待退款、类型为退款，满足自动提醒
+     * 退款记录
+     * 
+     * @author Sunny
+     * @return 
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRemindToBeRefundWithRefund(int offset, int pageSize);
+    
+    /**
+     * 自动提醒
+     * 待退款，用户已经寄回货物，但是商家未操作
+     * 
+     * @param shoppingOrderItemExtendDO
+     * @author jiangxinjun
+     * @createDate 2017年11月15日
+     * @updateDate 2017年11月15日
+     */
+    void refundwithReturnRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO);
+    
+    /**
+     * 分页查询符合
+     * 待退款、类型为退款，满足自动退款
+     * 退款记录
+     * 
+     * @author Sunny
+     * @return 
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRefundToBeRefundWithRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合
+     * 待退款、类型为退货退款，满足自动第一次提醒
+     * 退款记录
+     * 
+     * @author Sunny
+     * @return 
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoFirstTimeRemindToBeRefundWithReturnRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合
+     * 待退款、类型为退货退款，满足自动第二次提醒
+     * 退款记录
+     * 
+     * @author Sunny
+     * @return 
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoSecondTimeRemindToBeRefundWithReturnRefund(int offset, int pageSize);
+    
+    /**
+     * 分页查询符合
+     * 待退款、类型为退货退款，满足自动退款
+     * 退款记录
+     * 
+     * @author Sunny
+     * @return 
+     */
+    List<ShoppingOrderItemExtendDO> selectAutoRefundToBeRefundWithReturnRefund(int offset, int pageSize);
+    
+    /**
+     * 退款中 - 等待商家退款
+     * 平台提醒商家操作，否则自动退款
+     * 
+     * @author Sunny
+     */
+    void executeAutoForToBeRefund();
 }

@@ -1,27 +1,84 @@
 package com.lawu.eshop.jobs.impl.agent;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dangdang.ddframe.job.api.ShardingContext;
-import com.dangdang.ddframe.job.api.simple.SimpleJob;
-import com.lawu.eshop.jobs.impl.ad.ReportEarningDailyReportJob;
-import com.lawu.eshop.jobs.service.ReportAreaAdPointDailyService;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.jobs.service.PropertySrvService;
+import com.lawu.eshop.jobs.service.RegionService;
+import com.lawu.eshop.jobs.service.StatisticsSrvService;
+import com.lawu.eshop.mall.dto.RegionDTO;
+import com.lawu.eshop.property.dto.ReportAdPointGroupByAreaDTO;
+import com.lawu.eshop.property.param.ReportAdPointParam;
+import com.lawu.eshop.statistics.dto.ReportAreaAdPointDailyDTO;
+import com.lawu.eshop.statistics.param.ReportAreaAdPointDailyParams;
+import com.lawu.eshop.utils.DateUtil;
+import com.lawu.jobsextend.AbstractPageJob;
 
-public class ReportAreaAdPointDailyJob implements SimpleJob {
+public class ReportAreaAdPointDailyJob extends AbstractPageJob<ReportAdPointGroupByAreaDTO> {
 	
-	private static Logger logger = LoggerFactory.getLogger(ReportEarningDailyReportJob.class);
+	@Autowired
+	private PropertySrvService propertySrvService;
+	
+	@Autowired
+	private StatisticsSrvService statisticsSrvService;
+	
+	@Autowired
+	private RegionService regionService;
 
-    @Autowired
-    private ReportAreaAdPointDailyService reportAreaAdPointDailyService;
-    
-    @Override
-	public void execute(ShardingContext shardingContext) {
-		logger.debug("------{hhhhhhhhhhhh}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
+	@Override
+	public List<ReportAdPointGroupByAreaDTO> queryPage(int offset, int pageSize) {
+		Date date = DateUtil.getDayBefore(new Date());
+		String bdate = DateUtil.getDateFormat(date) + " 00:00:00";
+		String edate = DateUtil.getDateFormat(date) + " 23:59:59";
+		//获取昨天的发广告的区域统计
+		ReportAdPointParam param = new ReportAdPointParam();
+		param.setBdate(bdate);
+		param.setEdate(edate);
+		param.setOffset(offset);
+		param.setPageSize(pageSize);
+		Result<List<ReportAdPointGroupByAreaDTO>>  result = propertySrvService.getReportAdPointGroupByArea(param);
+		
+		return result.getModel();
+	}
 
-		reportAreaAdPointDailyService.executeCollectReportAreaAdPointDaily();
-		System.out.println("开始啦");
-		logger.debug("------{hhhhhhhhhhh}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
+	@Override
+	public void executeSingle(ReportAdPointGroupByAreaDTO dto) {
+		if(dto.getAreaId() != null) {
+			//查询当天当区域是否有统计信息,有则把统计信息删除重新统计
+			Date date = DateUtil.getDayBefore(new Date());
+			Result<List<ReportAreaAdPointDailyDTO>> dtoResult = statisticsSrvService.selectReportAreaAdPointDaily(dto.getAreaId(), DateUtil.getDateFormat(date));
+			if(dtoResult.getModel() != null && !dtoResult.getModel().isEmpty()) {
+				statisticsSrvService.deleteReportAreaAdPointDaily(dtoResult.getModel().get(0).getId());
+			}
+			ReportAreaAdPointDailyParams reportAreaAdPointDailyParams = new ReportAreaAdPointDailyParams();
+			reportAreaAdPointDailyParams.setAreaId(dto.getAreaId());
+			Result<RegionDTO> regionResult = regionService.getRegion(dto.getAreaId());
+			String regionPath = regionResult.getModel().getPath();
+			if(regionPath.length() > 0) {
+				String[] ids = regionPath.split("/");
+				if(ids.length == 3) {
+					reportAreaAdPointDailyParams.setProvinceId(Integer.valueOf(ids[0].toString()));
+					reportAreaAdPointDailyParams.setCityId(Integer.valueOf(ids[1].toString()));
+				}
+			}
+			reportAreaAdPointDailyParams.setReportTotalPoint(dto.getTotalPoint());
+			reportAreaAdPointDailyParams.setGmtCreate(new Date());
+			reportAreaAdPointDailyParams.setGmtReport(date);
+			statisticsSrvService.insertReportAreaAdPointDaily(reportAreaAdPointDailyParams);
+		}
+		
+	}
+
+	@Override
+	public boolean continueWhenSinglePageFail() {
+		return false;
+	}
+
+	@Override
+	public boolean isStatusData() {
+		return false;
 	}
 }

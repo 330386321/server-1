@@ -120,6 +120,7 @@ CREATE TABLE `shopping_order` (
   `is_no_reason_return` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否支持无理由退货,0否 1是',
   `is_automatic_receipt` tinyint(1) unsigned DEFAULT NULL COMMENT '是否自动收货(0-否|1-是)',
   `is_done` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '当前订单是否完成(0-未完成|1-已完成)',
+  `is_refund_items` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否有退款项(0-没有|1-有)',
   `shopping_cart_ids_str` varchar(50) DEFAULT NULL COMMENT '对应的购物车相应的id(多个id用,分隔)',
   `order_num` varchar(20) NOT NULL COMMENT '订单编号',
   `payment_method` tinyint(2) unsigned DEFAULT NULL COMMENT '支付方式(1-余额 2-支付宝 3-微信)',

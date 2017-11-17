@@ -39,6 +39,7 @@
 	    where
 	      	point_type in (2,3,5,16)
 	      	and biz_id=#{bizId,jdbcType=BIGINT}
+	      	
 	 </select>
 	 
 	 
@@ -59,22 +60,24 @@
 	      	point_type=110 and (gmt_create &gt;= #{bdate} and gmt_create &lt;= #{edate}) group by area_id
 	 </select>
 	 
-	 <select id="getAreaPointConsume"  resultType="com.lawu.eshop.property.srv.domain.extend.AreaPointConsumeDOView" parameterType="java.lang.String">
+	 <select id="getAreaPointConsume"  resultType="com.lawu.eshop.property.srv.domain.extend.AreaPointConsumeDOView" parameterType="com.lawu.eshop.property.param.ReportAgentAreaPointParam">
 	    select
 	    	sum(point) as totalPoint,area_id as areaId,city_id as cityId,province_id as provinceId,left(user_num,1) as type
 	    from point_detail
 	    where
-	      	point_type in(109,110,111,14) and area_id is not null and (gmt_create &gt;= #{bdate} and gmt_create &lt;= #{edate}) 
+	      	point_type in(109,110,111,14) and area_id is not null and (gmt_create &gt;= #{beginDate} and gmt_create &lt;= #{endDate})
 	      	group by area_id,city_id,province_id,left(user_num,1)
+	    limit #{offset},#{pageSize}
 	 </select>
 	 
-	 <select id="getAreaPointRefund"  resultType="com.lawu.eshop.property.srv.domain.extend.AreaPointConsumeDOView" parameterType="java.lang.String">
+	 <select id="getAreaPointRefund"  resultType="com.lawu.eshop.property.srv.domain.extend.AreaPointConsumeDOView" parameterType="com.lawu.eshop.property.param.ReportAgentAreaPointParam">
 	    select
-	    	sum(point) as totalPoint,area_id as areaId
+	    	sum(point) as totalPoint,area_id as areaId,city_id as cityId,province_id as provinceId,left(user_num,1) as type
 	    from point_detail
 	    where
-	      	point_type = 112 and area_id is not null  and (gmt_create &gt;= #{bdate} and gmt_create &lt;= #{edate}) 
-	      	group by area_id
+	      	point_type = 112 and area_id is not null  and (gmt_create &gt;= #{beginDate} and gmt_create &lt;= #{endDate})
+	      	group by area_id,city_id,province_id,left(user_num,1)
+	    limit #{offset},#{pageSize}
 	 </select>
 
 	<resultMap id="IncomeMsgResultMap" type="com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView">
@@ -94,6 +97,25 @@
 			point_type IN (12, 13, 115, 116)
 		AND gmt_create BETWEEN #{begin}
 		AND #{end}
-		group by user_num,point_type
+		group by user_num,point_type LIMIT ${offset},${pageSize}
+	</select>
+	
+	<!-- 积分查询统计 -->
+	<resultMap id="PointReportResultMap" type="com.lawu.eshop.property.srv.domain.extend.PointDOView">
+        <result column="user_type" property="userType" jdbcType="VARCHAR"/>
+        <result column="sum_recharge_money" property="sumRechargeMoney" jdbcType="DECIMAL"/>
+    </resultMap>
+	
+	<select id="selectPointDetailListByDateAndDirection"  resultMap="PointReportResultMap"  parameterType="com.lawu.eshop.property.srv.domain.extend.PointReportDOView">
+		SELECT
+			LEFT(p.user_num,1) as user_type,
+			sum(p.point) as sumRechargeMoney
+		FROM
+			point_detail p
+		WHERE
+			p.direction=${direction}
+		AND p.gmt_create BETWEEN #{bdate} and #{edate}
+		GROUP BY
+			LEFT(p.user_num,1)
 	</select>
 </mapper>

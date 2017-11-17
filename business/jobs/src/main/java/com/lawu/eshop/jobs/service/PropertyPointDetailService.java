@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.PointConsumeReportDTO;
 import com.lawu.eshop.property.param.PointDetailReportParam;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(value= "property-srv")
 public interface PropertyPointDetailService {
@@ -23,7 +24,7 @@ public interface PropertyPointDetailService {
 	 * @date 2017年6月30日 下午2:29:46
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "pointDetail/selectPointDetailListByDateAndDirection")
-	Result<List<PointConsumeReportDTO>> selectPointDetailListByDateAndDirection(@RequestBody PointDetailReportParam param);
+	Result<PointConsumeReportDTO> selectPointDetailListByDateAndDirection(@RequestBody PointDetailReportParam param);
 
 	/**
 	 * 
@@ -33,12 +34,12 @@ public interface PropertyPointDetailService {
 	 * @date 2017年6月30日 下午2:47:11
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "pointDetail/selectPointDetailListByDateAndDirectionAndPointType")
-	Result<List<PointConsumeReportDTO>> selectPointDetailListByDateAndDirectionAndPointType(@RequestBody PointDetailReportParam param);
+	Result<PointConsumeReportDTO> selectPointDetailListByDateAndDirectionAndPointType(@RequestBody PointDetailReportParam param);
 
 	/**
 	 * 查询昨天的收益记录（商家、用户）
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "pointDetail/getIncomeMsgDataList")
-	Result<List<IncomeMsgDTO>> getIncomeMsgDataList();
+	Result<List<IncomeMsgDTO>> getIncomeMsgDataList(@RequestParam("offset") int offset, @RequestParam("pageSize") int pageSize);
 }

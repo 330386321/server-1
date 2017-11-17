@@ -295,7 +295,7 @@ public class PayOrderServiceImplTest {
 		expected.setTotalAmount(new BigDecimal(2));
 		payOrderDOMapper.insert(expected);
 		
-		List<ShoppingOrderCommissionDTO> actual =  payOrderService.selectNotCommissionOrder();
+		List<ShoppingOrderCommissionDTO> actual =  payOrderService.selectNotCommissionOrder(0,10);
 		Assert.assertNotNull(actual);
 		Assert.assertEquals(1, actual.size());
 		for (ShoppingOrderCommissionDTO item : actual) {

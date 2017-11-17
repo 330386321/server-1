@@ -41,12 +41,16 @@ public class ClickAdCommissionController extends BaseController{
 	 * @author yangqh
 	 */
 	@RequestMapping(value = "getNoneCommissionAds", method = RequestMethod.GET)
-    public List<MemberAdRecodeCommissionDTO> getNoneCommissionAds() throws Exception {
-		List<MemberAdRecodeCommissionBO> bos = memberAdRecordService.getNoneCommissionAds();
+    public List<MemberAdRecodeCommissionDTO> getNoneCommissionAds(@RequestParam("offset") int offset, @RequestParam("pageSize") int pageSize ) {
+		List<MemberAdRecodeCommissionBO> bos = memberAdRecordService.getNoneCommissionAds(offset,pageSize);
 		List<MemberAdRecodeCommissionDTO> dtos = new ArrayList<MemberAdRecodeCommissionDTO>();
 		for(MemberAdRecodeCommissionBO bo : bos){
 			MemberAdRecodeCommissionDTO dto = new MemberAdRecodeCommissionDTO();
-			BeanUtil.copyProperties(bo, dto);
+			dto.setStatus(bo.getStatus());
+			dto.setAdId(bo.getId());
+			dto.setId(bo.getId());
+			dto.setMemberNum(bo.getMemberNum());
+			dto.setPoint(bo.getPoint());
 			dtos.add(dto);
 		}
 		return dtos;

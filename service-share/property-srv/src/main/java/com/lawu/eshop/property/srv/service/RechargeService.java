@@ -12,6 +12,7 @@ import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
+import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
 import com.lawu.eshop.property.srv.bo.AreaRechargePointBO;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
@@ -79,7 +80,7 @@ public interface RechargeService {
      * @author yangqh
      * @date 2017年6月29日 下午5:28:21
      */
-    List<RechargeReportBO> selectWithdrawCashListByDateAndStatus(RechargeReportParam param);
+    RechargeReportBO selectWithdrawCashListByDateAndStatus(RechargeReportParam param);
 
     /**
      * 根据充值ID查询充值状态
@@ -98,9 +99,8 @@ public interface RechargeService {
     
     /**
      * 查询区域充值积分的记录
-     * @param bdate
-     * @param edate
+     * @param param
      * @return
      */
-    List<AreaRechargePointBO> selectAreaRechargePoint(String bdate, String edate);
+    List<AreaRechargePointBO> selectAreaRechargePoint(ReportAgentAreaPointParam param);
 }

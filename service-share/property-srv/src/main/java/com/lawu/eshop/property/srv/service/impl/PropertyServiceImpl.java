@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.srv.bo.PropertyBO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +108,20 @@ public class PropertyServiceImpl implements PropertyService {
 			values.add(pdo.getValue());
 		}
 		return values;
+	}
+
+	@Override
+	public List<PropertyBO> getAll() {
+		PropertyDOExample example = new PropertyDOExample();
+		List<PropertyDO> list = propertyDOMapper.selectByExample(example);
+		List<PropertyBO> bos = new ArrayList<>();
+		for(PropertyDO pdo : list){
+			PropertyBO bo = new PropertyBO();
+			bo.setName(pdo.getName());
+			bo.setValue(pdo.getValue());
+			bos.add(bo);
+		}
+		return bos;
 	}
 
 }

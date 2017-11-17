@@ -17,6 +17,7 @@ import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.param.PraiseWarnParam;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdPraiseWarnBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDO;
@@ -155,8 +156,10 @@ public class FavoriteAdServiceImplTest {
         faDO.setMemberId(1l);
         faDO.setMemberNum("M000001");
     	favoriteAdDOMapper.insert(faDO);
-
-    	List<FavoriteAdPraiseWarnBO>  list = favoriteAdService.selectFavoriteAdPraise();
+    	PraiseWarnParam param = new PraiseWarnParam();
+    	param.setCurrentPage(1);
+    	param.setPageSize(20);
+    	List<FavoriteAdPraiseWarnBO>  list = favoriteAdService.selectFavoriteAdPraise( param);
         Assert.assertNotNull(list);
         Assert.assertTrue(list.size()>0);
     }

@@ -75,7 +75,6 @@ import com.lawu.eshop.ad.srv.bo.GetRedPacketBO;
 import com.lawu.eshop.ad.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
-import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
@@ -1097,8 +1096,8 @@ public class AdController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "rebuildAdIndex", method = RequestMethod.GET)
-	public Result rebuildAdIndex() {
-		adService.rebuildAdIndex();
+	public Result rebuildAdIndex(@RequestParam Integer pageSize) {
+		adService.rebuildAdIndex(pageSize);
 		return successCreated();
 	}
 

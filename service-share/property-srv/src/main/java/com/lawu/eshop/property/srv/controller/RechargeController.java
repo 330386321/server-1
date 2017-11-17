@@ -34,6 +34,7 @@ import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
+import com.lawu.eshop.property.param.ReportAgentAreaPointParam;
 import com.lawu.eshop.property.srv.bo.AgentReportRechargeQueryBO;
 import com.lawu.eshop.property.srv.bo.AreaRechargePointBO;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
@@ -208,21 +209,17 @@ public class RechargeController extends BaseController {
      * @date 2017年6月29日 下午5:26:31
      */
     @RequestMapping(value = "selectWithdrawCashListByDateAndStatus", method = RequestMethod.POST)
-    public Result<List<RechargeReportDTO>> selectWithdrawCashListByDateAndStatus(@RequestBody @Valid RechargeReportParam param, BindingResult result) throws Exception {
+    public Result<RechargeReportDTO> selectWithdrawCashListByDateAndStatus(@RequestBody @Valid RechargeReportParam param, BindingResult result) throws Exception {
         String message = validate(result);
         if (message != null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
         }
-        List<RechargeReportDTO> dtos = new ArrayList<>();
-        List<RechargeReportBO> rntList = rechargeService.selectWithdrawCashListByDateAndStatus(param);
-        for (RechargeReportBO bo : rntList) {
-            RechargeReportDTO dto = new RechargeReportDTO();
-            dto.setId(bo.getId());
-            dto.setRechargeMoney(bo.getRechargeMoney());
-            dto.setUserNum(bo.getUserNum());
-            dtos.add(dto);
-        }
-        return successCreated(dtos);
+        RechargeReportBO bo = rechargeService.selectWithdrawCashListByDateAndStatus(param);
+        RechargeReportDTO dto = new RechargeReportDTO();
+        dto.setMemberRechargeMoney(bo.getMemberRechargeMoney());
+        dto.setMerchantRechargeMoney(bo.getMerchantRechargeMoney());
+        dto.setSumRechargeMoney(bo.getSumRechargeMoney());
+        return successCreated(dto);
     }
 
     /**
@@ -260,14 +257,13 @@ public class RechargeController extends BaseController {
     }
     /**
      * 查询区域充值积分记录
-     * @param bdate
-     * @param edate
+     * @param param
      * @return
      */
-    @RequestMapping(value = "selectAreaRechargePoint", method = RequestMethod.GET)
-    public Result<List<AreaRechargePointDTO>> selectAreaRechargePoint(@RequestParam("bdate")String bdate, @RequestParam("edate")String edate) {
+    @RequestMapping(value = "selectAreaRechargePoint", method = RequestMethod.POST)
+    public Result<List<AreaRechargePointDTO>> selectAreaRechargePoint(@RequestBody ReportAgentAreaPointParam param) {
         List<AreaRechargePointDTO> dtos = new ArrayList<>();
-        List<AreaRechargePointBO> rntList = rechargeService.selectAreaRechargePoint(bdate, edate);
+        List<AreaRechargePointBO> rntList = rechargeService.selectAreaRechargePoint(param);
         if(rntList != null && !rntList.isEmpty()) {
         	for (AreaRechargePointBO bo : rntList) {
             	AreaRechargePointDTO dto = new AreaRechargePointDTO();

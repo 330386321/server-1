@@ -3,7 +3,9 @@ package com.lawu.eshop.statistics.srv.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,9 @@ import com.lawu.eshop.statistics.srv.bo.ReportAreaPointConsumeMonthBO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaPointConsumeMonthDO;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaPointConsumeMonthDOExample;
 import com.lawu.eshop.statistics.srv.domain.ReportAreaPointConsumeMonthDOExample.Criteria;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportAreaPointConsumeDailyInMonthDOView;
 import com.lawu.eshop.statistics.srv.mapper.ReportAreaPointConsumeMonthDOMapper;
+import com.lawu.eshop.statistics.srv.mapper.extend.ReportAreaPointConsumeMonthDOMapperExtend;
 import com.lawu.eshop.statistics.srv.service.ReportAreaPointConsumeMonthService;
 import com.lawu.eshop.utils.DateUtil;
 @Service
@@ -21,6 +25,9 @@ public class ReportAreaPointConsumeMonthServiceImpl implements ReportAreaPointCo
 
 	@Autowired
 	private ReportAreaPointConsumeMonthDOMapper reportAreaPointConsumeMonthDOMapper;
+
+	@Autowired
+	private ReportAreaPointConsumeMonthDOMapperExtend reportAreaPointConsumeMonthDOMapperExtend;
 	
 	@Override
 	public int saveReportAreaPointConsumeMonth(ReportAreaPointConsumeMonthParam param) {
@@ -71,6 +78,39 @@ public class ReportAreaPointConsumeMonthServiceImpl implements ReportAreaPointCo
 			}
 		}
 		return rtnList;
+	}
+
+	@Override
+	public void executeCollectReportAreaPointConsumeMonth(Integer pageSize) {
+		Date firstDayOfLastMonth = DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(new Date()));
+		Date lastDayOfLastMonth = DateUtil.getLastDayOfMonth(DateUtil.getMonthBefore(new Date()));
+		int currentPage = 0;
+		Map<String, Object> map = new HashMap<>();
+		map.put("bdate", DateUtil.getDateFormat(firstDayOfLastMonth));
+		map.put("edate", DateUtil.getDateFormat(lastDayOfLastMonth));
+		map.put("pageSize", pageSize);
+
+		while (true) {
+			currentPage++;
+			map.put("offset", (currentPage - 1) * pageSize);
+			List<ReportAreaPointConsumeDailyInMonthDOView> viewList = reportAreaPointConsumeMonthDOMapperExtend.executeCollectReportAreaPointConsumeMonth(map);
+			if (viewList == null || viewList.isEmpty()) {
+				return;
+			}
+
+			for (ReportAreaPointConsumeDailyInMonthDOView view : viewList) {
+				ReportAreaPointConsumeMonthParam param = new ReportAreaPointConsumeMonthParam();
+				param.setAreaId(view.getAreaId());
+				param.setCityId(view.getCityId());
+				param.setProvinceId(view.getProvinceId());
+				param.setGmtReport(firstDayOfLastMonth);
+				param.setMemberPoint(view.getMemberPoint());
+				param.setMemberRechargePoint(view.getMemberRechargePoint());
+				param.setMerchantPoint(view.getMerchantPoint());
+				param.setMerchantRechargePoint(view.getMerchantRechargePoint());
+				saveReportAreaPointConsumeMonth(param);
+			}
+		}
 	}
 
 }

@@ -70,4 +70,10 @@ public class ReportAreaPointConsumeMonthController extends BaseController{
 		}
 		return successGet(dto);
 	}
+
+	@RequestMapping(value = "executeCollectReportAreaPointConsumeMonth", method = RequestMethod.GET)
+	public Result executeCollectReportAreaPointConsumeMonth(@RequestParam("pageSize") Integer pageSize) {
+		reportAreaPointConsumeMonthService.executeCollectReportAreaPointConsumeMonth(pageSize);
+		return successGet();
+	}
 }

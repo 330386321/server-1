@@ -31,7 +31,7 @@ public interface OrderSrvService {
 	 * @author yangqh
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "shoppingOrder/commissionShoppingOrder")
-	Result<List<ShoppingOrderCommissionDTO>> commissionShoppingOrder();
+	Result<List<ShoppingOrderCommissionDTO>> commissionShoppingOrder(@RequestParam("offset") int offset, @RequestParam("pageSize") int pageSize);
 
 	/**
 	 * 批量修改是否计算过提成状态
@@ -48,7 +48,7 @@ public interface OrderSrvService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "payOrder/selectNotCommissionOrder")
-	Result<List<ShoppingOrderCommissionDTO>> selectNotCommissionOrder();
+	Result<List<ShoppingOrderCommissionDTO>> selectNotCommissionOrder(@RequestParam("offset") int offset, @RequestParam("pageSize") int pageSize);
 	
 	/**
 	 * 修改买单是否提成状态

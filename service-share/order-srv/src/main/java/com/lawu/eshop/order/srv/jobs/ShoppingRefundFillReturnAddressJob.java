@@ -1,35 +1,44 @@
 package com.lawu.eshop.order.srv.jobs;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dangdang.ddframe.job.api.ShardingContext;
-import com.dangdang.ddframe.job.api.simple.SimpleJob;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.service.ShoppingRefundDetailService;
+import com.lawu.jobsextend.AbstractTxPageJob;
 
 /**
- * 退款中-退款失败
- * 商家拒绝退款
- * 平台提示买家操作是否申请平台介入
- * 否则自动撤销退款申请
+ * 退款中-待商家填写收货地址
+ * 商家超时操作
+ * 自动退款给买家
  * 
- * @author Sunny
- * @date 2017年4月17日
+ * @author jiangxinjun
+ * @createDate 2017年4月17日
+ * @updateDate 2017年11月15日
  */
-public class ShoppingRefundFillReturnAddressJob implements SimpleJob {
-
-    private static Logger logger = LoggerFactory.getLogger(ShoppingRefundFillReturnAddressJob.class);
-
+public class ShoppingRefundFillReturnAddressJob extends AbstractTxPageJob<ShoppingOrderItemDO> {
+    
     @Autowired
     private ShoppingRefundDetailService shoppingRefundDetailService;
     
     @Override
-    public void execute(ShardingContext shardingContext) {
-        logger.debug("------{}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
+    public List<ShoppingOrderItemDO> queryPage(int offset, int pageSize) {
+        return shoppingRefundDetailService.selectAutoRefundFillReturnAddress(offset, pageSize);
+    }
 
-        shoppingRefundDetailService.executeAutoForFillReturnAddress();
-        
-        logger.debug("------{}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
+    @Override
+    public void executeSingle(ShoppingOrderItemDO entity) {
+        shoppingRefundDetailService.executeAutoRefund(entity);
+    }
+
+    @Override
+    public boolean isStatusData() {
+        return true;
+    }
+
+    @Override
+    public boolean continueWhenSinglePageFail() {
+        return true;
     }
 }

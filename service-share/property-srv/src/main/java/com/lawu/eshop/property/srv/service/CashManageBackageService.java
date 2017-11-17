@@ -12,6 +12,7 @@ import com.lawu.eshop.property.param.WithdrawCashReportParam;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQuerySumBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashReportBO;
+import com.lawu.eshop.property.srv.bo.WithdrawCashTotalReportBO;
 
 /**
  * 
@@ -61,6 +62,17 @@ public interface CashManageBackageService {
 	 */
 	List<WithdrawCashReportBO> selectWithdrawCashListByDateAndStatus(WithdrawCashReportParam param);
 
+	/**
+	 * 查询某天平台用户商家提现成功的总金额
+	 * @param param
+	 * @return
+	 * @author yangqh
+	 * @date 2017年11月14日
+	 */
+	WithdrawCashTotalReportBO selectWithdrawCashTotalByDateAndStatus(WithdrawCashReportParam param);
+
 
 	List<WithdrawCashReportBO> selectAgentWithdrawCashList(AgentWithdrawCashReportParam param);
+
+    WithdrawCashTotalReportBO selectAgentWithdrawCashTotal(AgentWithdrawCashReportParam param);
 }

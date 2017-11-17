@@ -45,17 +45,19 @@ public class PropertyType {
 	public final static String ad_commission_2 = "ad_commission_2";
 	public final static String ad_commission_3 = "ad_commission_3";
 	public final static String ad_commission_0_default = "0.5";
-	public final static String ad_commission_1_default = "0.16";
-	public final static String ad_commission_2_default = "0.03";
+	public final static String ad_commission_1_default = "0.03";
+	public final static String ad_commission_2_default = "0.02";
 	public final static String ad_commission_3_default = "0.01";
 	// 爱心账户比例
 	public final static String love_account_scale = "love_account_scale";
 	public final static String love_account_scale_default = "0.003";
 	
 	//销售和营业额提成比例
+	public final static String sale_commission_0 = "sale_commission_0";
 	public final static String sale_commission_1 = "sale_commission_1";
 	public final static String sale_commission_2 = "sale_commission_2";
 	public final static String sale_commission_3 = "sale_commission_3";
+	public final static String sale_commission_0_default = "1";
 	public final static String sale_commission_1_default = "0.004";
 	public final static String sale_commission_2_default = "0.003";
 	public final static String sale_commission_3_default = "0.001";

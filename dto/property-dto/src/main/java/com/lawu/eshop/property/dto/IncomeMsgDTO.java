@@ -12,6 +12,8 @@ public class IncomeMsgDTO {
 
 	private Byte type;//类型
 
+	private int msgType;//1-余额|2-积分
+
 	public String getUserNum() {
 		return userNum;
 	}
@@ -34,5 +36,13 @@ public class IncomeMsgDTO {
 
 	public void setType(Byte type) {
 		this.type = type;
+	}
+
+	public int getMsgType() {
+		return msgType;
+	}
+
+	public void setMsgType(int msgType) {
+		this.msgType = msgType;
 	}
 }

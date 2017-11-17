@@ -704,83 +704,6 @@ public class AdServiceImpl implements AdService {
 
 	}
 
-	/**
-	 * 定时器改变状态
-	 */
-
-	@Override
-	public void updatAdToPutting() {
-		AdDOExample example = new AdDOExample();
-		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val).andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.getVal());
-		List<AdDO> listADD = adDOMapper.selectByExample(example);
-		if (!listADD.isEmpty()) {
-			Collection<SolrInputDocument> documents = new ArrayList<>();
-			for (AdDO adDO : listADD) {
-				Date date = new Date();
-				if (adDO.getBeginTime().getTime() <= date.getTime()) {
-					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
-					adDO.setGmtModified(date);
-					adDOMapper.updateByPrimaryKey(adDO);
-					SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-					documents.add(document);
-				}
-			}
-			solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-		}
-	}
-
-	@Override
-	public void updatAdToPuted() {
-		
-		AdDOExample example = new AdDOExample();
-		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.getVal());
-		List<AdDO> listADD = adDOMapper.selectByExample(example);
-		if (!listADD.isEmpty()){
-            Collection<SolrInputDocument> documents = new ArrayList<>();
-			for (AdDO adDO : listADD) {
-				Calendar nowTime = Calendar.getInstance();
-				nowTime.add(Calendar.MINUTE, -20);
-				if ((nowTime.getTime().getTime() - adDO.getBeginTime().getTime()) > 0) {
-					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
-					adDO.setGmtModified(new Date());
-					adDOMapper.updateByPrimaryKey(adDO);
-					// 将没有领完的积分退还给用户
-					matransactionMainAddService.sendNotice(adDO.getId());
-                    SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-                    documents.add(document);
-			    }
-		    }
-            solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-		}
-	}
-	
-	@Override
-	public void updatFlatAndVideoToPuted() {
-		
-		AdDOExample example = new AdDOExample();
-		List<Byte> bytes = new ArrayList<>();
-		bytes.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
-		bytes.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
-		Calendar calendar = Calendar.getInstance(); 
-		calendar.setTime(new Date());
-		calendar.add(Calendar.DAY_OF_MONTH, -14); // 设置为14天前
-		Date before14days = calendar.getTime(); 
-		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeIn(bytes).andBeginTimeLessThan(before14days);
-		List<AdDO> list = adDOMapper.selectByExample(example);
-        Collection<SolrInputDocument> documents = new ArrayList<>();
-        for (AdDO adDO : list) {
-            if (adDO.getHits()  >= adDO.getAdCount()) {
-				adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); // 投放结束
-				adDO.setGmtModified(new Date());
-				adDOMapper.updateByPrimaryKey(adDO);
-                SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-                documents.add(document);
-			}
-
-		}
-        solrService.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-	}
-
 	@Override
 	public Page<AdBO> selectChoiceness(AdMemberParam adMemberParam) {
 		List<AdDO> DOS = adDOMapperExtend.selectChoiceness();
@@ -1027,9 +950,9 @@ public class AdServiceImpl implements AdService {
 	}
 
 	@Override
-	public void rebuildAdIndex() {
+	public void rebuildAdIndex(Integer pageSize) {
 		ListAdParam listAdParam = new ListAdParam();
-		listAdParam.setPageSize(1000);
+		listAdParam.setPageSize(pageSize);
 		int currentPage = 0;
 
 		while (true) {

@@ -7,6 +7,7 @@ import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
 import com.lawu.eshop.property.srv.domain.extend.MonthlyBillDO;
 import com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView;
+import com.lawu.eshop.property.srv.domain.extend.ReportAdPointView;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesDO;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesGroupByAreaDO;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample;
@@ -36,11 +37,11 @@ public interface TransactionDetailExtendDOMapper {
 	List<UserIncomeExpenditureDO> selectUserIncomeExpenditure(UserIncomeExpenditureExample example);
 	
 	
-	ReportAdEarningsPointView  getReportAdEarningsPoint(ReportAdEarningsPointView view);
+	ReportAdEarningsPointView  getReportAdEarningsPoint(ReportAdPointView view);
 	
-	ReportAdEarningsPointView  getReportAdEarningsLovePoint(ReportAdEarningsPointView view);
+   ReportAdEarningsPointView  getReportAdEarningsLovePoint(ReportAdPointView view);
 	
-	ReportAdEarningsPointView getUserPointByBzId(ReportAdEarningsPointView view);
+   List<ReportAdEarningsPointView> getUserPointByBzId(List<Long> bizIds);
 	
 	/**
 	 * 根据时间获取获取买单和订单的收入group by area
@@ -52,7 +53,7 @@ public interface TransactionDetailExtendDOMapper {
 	 */
 	List<TotalSalesGroupByAreaDO> selectTotalSalesGroupByArea(TotalSalesQueryExample example);
 	
-	ReportAdEarningsPointView getLovePointByBzId(ReportAdEarningsPointView view);
+	 List<ReportAdEarningsPointView> getLovePointByBzId(List<Long> bizIds);
 
     List<IncomeMsgDOView> getIncomeMsgDataList(IncomeMsgExample example);
     

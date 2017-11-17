@@ -14,6 +14,10 @@ public class AgentReportRechargeQueryParam {
 
 	@NotNull(message = "channel不能为空")
 	private Byte channel;
+	
+	private int offset;
+	
+	private int pageSize;
 
 	public String getDate() {
 		return date;
@@ -35,4 +39,21 @@ public class AgentReportRechargeQueryParam {
 	public void setChannel(Byte channel) {
 		this.channel = channel;
 	}
+
+	public int getOffset() {
+		return offset;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+	
 }
