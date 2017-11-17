@@ -42,7 +42,7 @@ public class ClickAdCommissionJob extends AbstractPageJob<MemberAdRecodeCommissi
 
     @Override
     public void executeSingle(MemberAdRecodeCommissionDTO memberAdRecodeCommissionDTO) {
-        clickAdCommissionService.executeAutoClickAdCommission(memberAdRecodeCommissionDTO);
+        clickAdCommissionService.executeAutoClickAdCommission(memberAdRecodeCommissionDTO,false);
     }
 
     @Override

@@ -15,6 +15,6 @@ public interface SaleAndVolumeCommissionService {
 	 * @param msg
 	 *            log信息
 	 */
-	void commission(ShoppingOrderCommissionDTO shoppingOrderCommissionDTO,int flag, String msg);
+	void commission(ShoppingOrderCommissionDTO shoppingOrderCommissionDTO,int flag, String msg,boolean isTest);
 
 }

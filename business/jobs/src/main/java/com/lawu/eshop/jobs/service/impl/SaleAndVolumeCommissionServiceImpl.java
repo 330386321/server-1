@@ -45,12 +45,13 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
     private CommissionUtilImpl commissionUtilImpl;
 
     @Override
-    public void commission(ShoppingOrderCommissionDTO shoppingOrderCommissionDTO, int flag, String msg) {
+    public void commission(ShoppingOrderCommissionDTO shoppingOrderCommissionDTO, int flag, String msg,boolean isTest) {
 
         Map<String, BigDecimal> property = commonPropertyService.getSaleCommissionPropertys();
         BigDecimal saleCommissionAddScope = property.get(PropertyType.sale_commission_add_scope);// 每上升一个级别提成的幅度
         BigDecimal loveAccountScale = property.get(PropertyType.love_account_scale);// 爱心账户比例
         BigDecimal actualCommissionScope = property.get("acture_in_scale");// 实际提成比例=1-爱心账户(0.003)
+        BigDecimal saleCommission0 = property.get(PropertyType.sale_commission_0);
 
         ShoppingOrderCommissionDTO order = shoppingOrderCommissionDTO;
 
@@ -66,6 +67,12 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
         List<CommissionInvitersUserDTO> inviters = new ArrayList<>();
         inviters.addAll(memberInviters);
         inviters.addAll(merchantInviters);
+
+        if(isTest){
+            logger.info("交易提成说明：等级比例（上1级{}，上2级{}，上3级{}），上升幅度：{}，爱心账户：{}，基础比例{}", property.get(PropertyType.sale_commission_1),property.get(PropertyType.sale_commission_2),property.get(PropertyType.sale_commission_3),saleCommissionAddScope,property.get(PropertyType.love_account_scale),property.get(PropertyType.sale_commission_0));
+            logger.info("交易金额：{}",order.getActualAmount());
+            logger.info("提成公式：交易金额*基础比例*(等级比例+(上升幅度*(当前level-1)))*(1-爱心账户)=实际提成");
+        }
 
         int retCode = ResultCode.SUCCESS;
         if (inviters != null && !inviters.isEmpty()) {
@@ -92,11 +99,11 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
                 BigDecimal actualCommission = saleCommission.add(saleCommissionAddScope.multiply(level.subtract(new BigDecimal("1"))));//没升一个级别+0.005
                 CommissionResultParam commissionResultparam = new CommissionResultParam();
                 commissionResultparam.setBeforeMoney(actualMoney);
-                commissionResultparam.setCommission0(BigDecimal.valueOf(1));
+                commissionResultparam.setCommission0(saleCommission0);
                 commissionResultparam.setCurrentCommission(actualCommission);
                 commissionResultparam.setActualCommissionScope(actualCommissionScope);
                 commissionResultparam.setLoveAccountScale(loveAccountScale);
-                commissionResultparam.setDept(i);
+                commissionResultparam.setDept(inviters.get(i).getDept());
                 AdCommissionResultDTO rntDTO = commissionUtilImpl.getCommissionResult(commissionResultparam);
                 param.setActureMoneyIn(rntDTO.getActureMoneyIn());
                 param.setActureLoveIn(rntDTO.getActureLoveIn());
@@ -123,7 +130,12 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
                     param.setLoveTypeName(LoveTypeEnum.VOLUME_COMMISSION.getName());
                 }
 
-                logger.info("[{}]订单ID={}，交易用户编号={}，交易商家编号={}，获得提成账号编号：{}；基础金额(a)：{}，提成基础金额比例(b)=1，实际提成比例(c)：{}（初始提成比例(c1)={}, 等级(c2)={},每上升一级幅度累加比例(c3)={}）；所得：实际提成金额：{}，爱心账户金额：{}", msg, order.getId(), order.getMemberNum(), order.getMerchantNum(), userNum, actualMoney, actualCommission, saleCommission, level, saleCommissionAddScope, rntDTO.getActureMoneyIn(),rntDTO.getActureLoveIn());
+                if(!isTest){
+                    logger.info("[{}]（订单ID={}，交易用户编号={}，交易商家编号={}，获得提成账号编号：{}）；基础金额(a)：{}，参与提成金额比例(b){}，实际提成比例(c)：{}（初始提成比例(c1)={}, 等级(c2)={},每上升一级幅度累加比例(c3)={}）；所得（实际提成金额：{}，爱心账户金额：{}）", msg, order.getId(), order.getMemberNum(), order.getMerchantNum(), userNum, actualMoney,saleCommission0, actualCommission, saleCommission, level, saleCommissionAddScope, rntDTO.getActureMoneyIn(),rntDTO.getActureLoveIn());
+                } else{
+                    logger.info("上{}级:{}，等级:{}，实际提成比例:{}，提成{}，爱心账户{}",inviters.get(i).getDept(),inviters.get(i).getUserNum(),level,actualCommission,rntDTO.getActureMoneyIn(),rntDTO.getActureLoveIn());
+                }
+
 
                 try{
                     retCode = propertySrvService.calculation(param);

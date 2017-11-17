@@ -43,7 +43,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 	private CommissionUtilImpl commissionUtilImpl;
 
 	@Override
-	public void executeAutoClickAdCommission(MemberAdRecodeCommissionDTO memberAdRecodeCommissionDTO) {
+	public void executeAutoClickAdCommission(MemberAdRecodeCommissionDTO memberAdRecodeCommissionDTO,boolean isTest) {
 
 		Map<String, BigDecimal> property = commonPropertyService.getAdCommissionPropertys();
 		BigDecimal loveAccountScale = property.get(PropertyType.love_account_scale);// 爱心账户比例
@@ -57,6 +57,12 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 		}
 		// 查询用户上3级推荐
 		List<CommissionInvitersUserDTO> inviters = userCommonService.selectHigherLevelInviters(dto.getMemberNum(), 3, false);
+
+		if(isTest){
+			logger.info("广告提成说明：等级比例（上1级{}，上2级{}，上3级{}），爱心账户比例：{}，基础比例{}",property.get(PropertyType.ad_commission_1),property.get(PropertyType.ad_commission_2),property.get(PropertyType.ad_commission_3),property.get(PropertyType.love_account_scale), property.get(PropertyType.ad_commission_0));
+			logger.info("点击广告金额：{}",dto.getPoint());
+			logger.info("提成公式：点击广告金额*基础比例*上级提成*(1-爱心账户)=实际提成");
+		}
 
 		int retCode = ResultCode.SUCCESS;
 		if (inviters != null && !inviters.isEmpty()) {
@@ -85,7 +91,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 				commissionResultparam.setCurrentCommission(sale_commission);
 				commissionResultparam.setActualCommissionScope(actualCommissionScope);
 				commissionResultparam.setLoveAccountScale(loveAccountScale);
-				commissionResultparam.setDept(i);
+				commissionResultparam.setDept(inviters.get(i).getDept());
 				AdCommissionResultDTO rntDTO = commissionUtilImpl.getCommissionResult(commissionResultparam);
 				param.setActureMoneyIn(rntDTO.getActureMoneyIn());
 				param.setActureLoveIn(rntDTO.getActureLoveIn());
@@ -100,7 +106,12 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 				param.setLoveTypeVal(LoveTypeEnum.AD_COMMISSION.getValue());
 				param.setLoveTypeName(LoveTypeEnum.AD_COMMISSION.getName());
 
-				logger.info("点广告比例：获得提成账号编号：{},memberAdRecordId={}；基础金额(a)：{}，提成基础金额比例(b)={},提成比例(c)={},（所得比例(d)={}|爱心账户比例(e)={}）；所得：实际收益[a*b*c*d]={},爱心账户[[a*b*c*e]]={}",inviters.get(i).getUserNum(),dto.getId(), clickMoney, adCommission0,sale_commission,actualCommissionScope,loveAccountScale,param.getActureMoneyIn(),param.getActureLoveIn());
+				if(!isTest){
+					logger.info("点广告比例（获得提成账号编号：{},memberAdRecordId={}）；基础金额(a)：{}，参与提成金额比例(b)={},提成比例(c)={}（所得比例(d)={}|爱心账户比例(e)={}）；所得（实际实际[a*b*c*d]={},爱心账户[[a*b*c*e]]={}）",inviters.get(i).getUserNum(),dto.getId(), clickMoney, adCommission0,sale_commission,actualCommissionScope,loveAccountScale,param.getActureMoneyIn(),param.getActureLoveIn());
+				} else {
+					logger.info("上{}级:{}，实际提成{}，爱心账户{}",inviters.get(i).getDept(),inviters.get(i).getUserNum(),rntDTO.getActureMoneyIn(),rntDTO.getActureLoveIn());
+				}
+
 
 				try {
 					retCode = propertySrvService.calculation(param);

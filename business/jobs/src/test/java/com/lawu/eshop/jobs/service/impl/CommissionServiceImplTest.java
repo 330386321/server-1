@@ -6,8 +6,11 @@ import com.lawu.eshop.ad.dto.MemberAdRecodeCommissionDTO;
 import com.lawu.eshop.jobs.service.ClickAdCommissionService;
 import com.lawu.eshop.jobs.service.SaleAndVolumeCommissionService;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
+import com.lawu.eshop.property.constants.PropertyType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -15,6 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"/spring-test.xml" })
 public class CommissionServiceImplTest {
+
+	private static Logger logger = LoggerFactory.getLogger(CommissionServiceImplTest.class);
 
 	@Autowired
 	private ClickAdCommissionService clickAdCommissionService;
@@ -27,7 +32,8 @@ public class CommissionServiceImplTest {
 		memberAdRecodeCommissionDTO.setMemberNum("M00000001");
 		memberAdRecodeCommissionDTO.setAdId(1L);
 		memberAdRecodeCommissionDTO.setId(1L);
-		clickAdCommissionService.executeAutoClickAdCommission(memberAdRecodeCommissionDTO);
+		memberAdRecodeCommissionDTO.setPoint(new BigDecimal(1));
+		clickAdCommissionService.executeAutoClickAdCommission(memberAdRecodeCommissionDTO,true);
 	}
 
 	@Test
@@ -37,7 +43,7 @@ public class CommissionServiceImplTest {
 		shoppingOrderCommissionDTO.setActualAmount(new BigDecimal(10));
 		shoppingOrderCommissionDTO.setMemberNum("M0000001");
 		shoppingOrderCommissionDTO.setMerchantNum("B0000001");
-		saleAndVolumeCommissionService.commission(shoppingOrderCommissionDTO,1,"买单提成");
+		saleAndVolumeCommissionService.commission(shoppingOrderCommissionDTO,1,"买单提成",true);
 	}
 
 	@Test
@@ -47,6 +53,6 @@ public class CommissionServiceImplTest {
 		shoppingOrderCommissionDTO.setActualAmount(new BigDecimal(10));
 		shoppingOrderCommissionDTO.setMemberNum("M0000001");
 		shoppingOrderCommissionDTO.setMerchantNum("B0000001");
-		saleAndVolumeCommissionService.commission(shoppingOrderCommissionDTO,2,"购物提成");
+		saleAndVolumeCommissionService.commission(shoppingOrderCommissionDTO,2,"购物提成",true);
 	}
 }

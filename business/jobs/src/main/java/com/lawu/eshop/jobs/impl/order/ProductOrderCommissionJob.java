@@ -42,7 +42,7 @@ public class ProductOrderCommissionJob extends AbstractPageJob<ShoppingOrderComm
 
 	@Override
 	public void executeSingle(ShoppingOrderCommissionDTO shoppingOrderCommissionDTO) {
-		saleAndVolumeCommissionService.commission(shoppingOrderCommissionDTO,2, "购物提成");
+		saleAndVolumeCommissionService.commission(shoppingOrderCommissionDTO,2, "购物提成",false);
 	}
 
 	@Override

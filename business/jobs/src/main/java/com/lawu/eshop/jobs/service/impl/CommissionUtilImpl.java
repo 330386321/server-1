@@ -16,7 +16,7 @@ public class CommissionUtilImpl {
 
         BigDecimal actureMoneyIn;
         BigDecimal actureLoveIn = null;
-        if (param.getDept().intValue() == 2) {
+        if (param.getDept().intValue() == 3) {
             actureMoneyIn = param.getBeforeMoney().multiply(param.getCommission0()).multiply(param.getCurrentCommission()).setScale(6, BigDecimal.ROUND_HALF_UP);// 第三级进积分，无爱心账户
         } else {
             actureMoneyIn = param.getBeforeMoney().multiply(param.getCommission0()).multiply(param.getCurrentCommission()).multiply(param.getActualCommissionScope()).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额

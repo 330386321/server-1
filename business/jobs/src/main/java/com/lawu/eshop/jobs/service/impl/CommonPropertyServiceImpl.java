@@ -112,7 +112,9 @@ public class CommonPropertyServiceImpl implements CommonPropertyService {
 		Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();
 		Result<List<PropertyDTO>> result = propertyService.getAll();
 		for(PropertyDTO dto : result.getModel()){
-			if(PropertyType.sale_commission_1.equals(dto.getName())){
+			if(PropertyType.sale_commission_0.equals(dto.getName())){
+				map.put(PropertyType.sale_commission_0, new BigDecimal(dto.getValue().toString())); // 基础比例
+			} else if(PropertyType.sale_commission_1.equals(dto.getName())){
 				map.put(PropertyType.sale_commission_1, new BigDecimal(dto.getValue().toString())); // 上1级提成比例
 			} else if(PropertyType.sale_commission_2.equals(dto.getName())){
 				map.put(PropertyType.sale_commission_2, new BigDecimal(dto.getValue().toString())); // 上2级提成比例

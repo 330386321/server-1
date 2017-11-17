@@ -111,6 +111,10 @@ public class MockPropertySrvServiceImpl implements PropertySrvService {
 		dto8.setName(PropertyType.sale_commission_add_scope);
 		dto8.setValue(PropertyType.sale_commission_add_scope_default);
 		list.add(dto8);
+		PropertyDTO dto9 = new PropertyDTO();
+		dto9.setName(PropertyType.sale_commission_0);
+		dto9.setValue(PropertyType.sale_commission_0_default);
+		list.add(dto9);
 		Result<List<PropertyDTO>> result = new Result<>();
 		result.setModel(list);
 		return result;

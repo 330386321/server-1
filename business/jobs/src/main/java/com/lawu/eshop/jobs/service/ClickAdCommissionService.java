@@ -5,6 +5,6 @@ import com.lawu.eshop.ad.dto.MemberAdRecodeCommissionDTO;
 public interface ClickAdCommissionService {
 
 
-	void executeAutoClickAdCommission(MemberAdRecodeCommissionDTO memberAdRecodeCommissionDTO);
+	void executeAutoClickAdCommission(MemberAdRecodeCommissionDTO memberAdRecodeCommissionDTO,boolean isTest);
 
 }
