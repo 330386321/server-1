@@ -1,5 +1,6 @@
 package com.lawu.eshop.jobs.impl.ad;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +20,7 @@ import com.lawu.eshop.property.dto.ReportEarningsDTO;
 import com.lawu.eshop.statistics.param.ReportEarningParam;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.jobsextend.AbstractPageResultJob;
+import com.lawu.jobsextend.PageCircuitStrategy;
 
 
 public class ReportEarningDailyReportJob extends AbstractPageResultJob<ReportAdEarningsDTO,AdReportDTO> {
@@ -37,7 +39,7 @@ public class ReportEarningDailyReportJob extends AbstractPageResultJob<ReportAdE
 	public AdReportDTO executePage(List<ReportAdEarningsDTO> list) {
 		BigDecimal adTotlePoint = new BigDecimal("0");
 		BigDecimal userTotlePoint = new BigDecimal("0");
-		BigDecimal loveTotlePoint = new BigDecimal("0");
+		BigDecimal loveTotlePoint = new BigDecimal("0"); 
 		
 		List<Long> bizIds = new ArrayList<>();
 		for (ReportAdEarningsDTO reportEarningsDTO : list) {
@@ -82,36 +84,71 @@ public class ReportEarningDailyReportJob extends AbstractPageResultJob<ReportAdE
 
 	@Override
 	public List<ReportAdEarningsDTO> queryPage(int offset, int pageSize) {
-		Date lastDay = reportEarningService.getDaily();
-		List<ReportAdEarningsDTO> list = new ArrayList<>();
-		if (lastDay != null && !DateUtils.isSameDay(lastDay, DateUtil.getSomeDay(new Date(), -1))) {
-			int betweenDay = DateUtil.daysOfTwo(lastDay);
-			/*for (int i = 1; i < betweenDay; i++) {
-				String today = DateUtil.getDateFormat(DateUtil.getSomeDay(lastDay, i), "yyyy-MM-dd");
-				AdReportParam param = new AdReportParam();
-				param.setToday(today);
-				param.setCurrentPage(currentPage);
-				param.setPageSize(pageSize);
-				Result<List<ReportAdEarningsDTO>> adPointResult = adSrvService.getReportEarnings(param);
-				list = adPointResult.getModel();
-				executePage(list);
-			}*/
-		} else {
-			String today = DateUtil.getDateFormat(DateUtil.getDayBefore(new Date()), "yyyy-MM-dd");
-			AdReportParam param = new AdReportParam();
-			param.setToday(today);
-			param.setOffset(offset);
-			param.setPageSize(pageSize);
-			Result<List<ReportAdEarningsDTO>> adPointResult = adSrvService.getReportEarnings(param);
-			list = adPointResult.getModel();
+		String today ;
+		today = (String)getPageCircuitStrategy().currentParam();
+		if(today.equals("")){
+			today = DateUtil.getDateFormat(DateUtil.getDayBefore(new Date()), "yyyy-MM-dd");
 		}
+		AdReportParam param = new AdReportParam();
+		param.setToday(today);
+		param.setOffset(offset);
+		param.setPageSize(pageSize);
+		Result<List<ReportAdEarningsDTO>> adPointResult = adSrvService.getReportEarnings(param);
+		List<ReportAdEarningsDTO> list = adPointResult.getModel();
 		return list;
 	}
-
+ 
 	@Override
 	public boolean isStatusData() {
 		return false;
 	}
 
-	
+	@Override
+	public PageCircuitStrategy initPageCircuitStrategy() {
+		
+		return new ExamplePageCircuitStrategy();
+	}
+
+	class ExamplePageCircuitStrategy implements PageCircuitStrategy<String> {
+	    private int circuitTimes=1;
+		private int currentIndex=0;
+		
+		List<String> list = new ArrayList<>();
+		
+		public ExamplePageCircuitStrategy() {
+			Date lastDay = reportEarningService.getDaily();
+			int betweenDay=1;
+			if (lastDay != null && !DateUtils.isSameDay(lastDay, DateUtil.getSomeDay(new Date(), -1))) {
+				betweenDay = DateUtil.daysOfTwo(lastDay);
+				for (int i = 0; i < betweenDay; i++) {
+					String today = DateUtil.getDateFormat(DateUtil.getSomeDay(lastDay, i), "yyyy-MM-dd");
+					list.add(today);
+				}
+			} 
+			// 初始化
+			this.circuitTimes=betweenDay;
+			
+		}
+
+		@Override
+		public String currentParam() {
+			String today="";
+			if(!list.isEmpty()){
+				today=list.get(currentIndex);
+			}
+			return today;
+		}
+
+		@Override
+		public boolean hasNext() {
+			
+			return currentIndex < circuitTimes;
+		}
+
+		@Override
+		public void next() {
+			currentIndex++;
+		}
+	}
+
 }
