@@ -4,21 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.jobs.service.AgentReportAreaRechargeService;
-import com.lawu.eshop.jobs.service.PropertyRechargeService;
-import com.lawu.eshop.jobs.service.StatisticsReportAreaRechargeService;
-import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
-import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.dto.ReportAreaRechargeDailyDTO;
-import com.lawu.eshop.property.param.AgentReportRechargeQueryParam;
-import com.lawu.eshop.statistics.param.AgentReportRechargeSaveParam;
-import com.lawu.eshop.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.jobs.service.AgentReportAreaRechargeService;
+import com.lawu.eshop.jobs.service.StatisticsReportAreaRechargeService;
+import com.lawu.eshop.statistics.param.AgentReportRechargeSaveParam;
+import com.lawu.eshop.utils.DateUtil;
 
 @Service
 public class AgentReportAreaRechargeServiceImpl implements AgentReportAreaRechargeService {

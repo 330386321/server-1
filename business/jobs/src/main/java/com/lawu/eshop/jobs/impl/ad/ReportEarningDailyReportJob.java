@@ -100,7 +100,7 @@ public class ReportEarningDailyReportJob extends AbstractPageResultJob<ReportAdE
  
 	@Override
 	public boolean isStatusData() {
-		return false;
+		return false; 
 	}
 
 	@Override
