@@ -246,7 +246,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
             //受理操作时计算手续费
             if (CashStatusEnum.ACCEPT.getVal().equals(param.getCashOperEnum().getVal())) {
                 WithdrawCashDOExample example = new WithdrawCashDOExample();
-                example.createCriteria().andUserNumEqualTo(wcdo.getUserNum()).andStatusEqualTo(CashStatusEnum.SUCCESS.getVal()).andGmtCreateGreaterThanOrEqualTo(DateUtil.formatDate(DateUtil.getDateFormat(new Date(), "yyyy-MM") + "-01 00:00:00", "yyyy-MM-dd HH:mm:ss"));
+                example.createCriteria().andUserNumEqualTo(wcdo.getUserNum()).andStatusGreaterThanOrEqualTo(CashStatusEnum.ACCEPT.getVal()).andGmtCreateGreaterThanOrEqualTo(DateUtil.formatDate(DateUtil.getDateFormat(new Date(), "yyyy-MM") + "-01 00:00:00", "yyyy-MM-dd HH:mm:ss"));
                 int count = withdrawCashDOMapper.countByExample(example);
                 double dCashMoney = wcdo.getCashMoney().doubleValue();
                 double money = 0;
@@ -274,12 +274,16 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
             paramList.add(view);
             withdrawCashDOMapperExtend.updateBatchWithdrawCashStatus(paramList);
             
-            //修改银行卡为永久绑定
-            BankAccountDO record  = new BankAccountDO();
-    		record.setId(wcdo.getBusinessBankAccountId());
-    		record.setIsBindForever(true);
-    		record.setGmtModified(new Date());
-    		bankAccountDOMapper.updateByPrimaryKeySelective(record);
+            if (CashStatusEnum.SUCCESS.getVal().equals(param.getCashOperEnum().getVal())) {
+            	 //修改银行卡为永久绑定
+                BankAccountDO record  = new BankAccountDO();
+        		record.setId(wcdo.getBusinessBankAccountId());
+        		record.setIsBindForever(true);
+        		record.setGmtModified(new Date());
+        		bankAccountDOMapper.updateByPrimaryKeySelective(record);
+                return ResultCode.SUCCESS;
+            }
+
             
         }
         if (!CashStatusEnum.FAILURE.getVal().equals(param.getCashOperEnum().getVal())) {

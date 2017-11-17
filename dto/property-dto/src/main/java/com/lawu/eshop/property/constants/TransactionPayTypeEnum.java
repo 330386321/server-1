@@ -12,7 +12,8 @@ package com.lawu.eshop.property.constants;
 public enum TransactionPayTypeEnum {
 	BALANCE((byte) 0x01,"余额"), // 余额
 	ALIPAY((byte) 0x02,"支付宝"), // 支付宝
-	WX((byte) 0x03,"微信");// 微信
+	WX((byte) 0x03,"微信"),// 微信
+	PLAT((byte) 0x04,"平台");//平台
 	private Byte val;
 	private String name;
 
