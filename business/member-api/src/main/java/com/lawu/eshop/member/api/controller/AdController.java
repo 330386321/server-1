@@ -149,7 +149,6 @@ public class AdController extends BaseController {
 	}
 
 	@AutoTesting
-	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
 	@ApiOperation(value = "会员查询广告列表(精选推荐)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
 	//@Authorization
@@ -171,7 +170,6 @@ public class AdController extends BaseController {
 	}
 
 	@AutoTesting
-	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
 	@ApiOperation(value = "会员查询广告列表(积分榜，人气榜)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
 //	@Authorization
@@ -355,6 +353,7 @@ public class AdController extends BaseController {
 		
 	}
 
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
 	@Authorization
@@ -446,7 +445,6 @@ public class AdController extends BaseController {
 	}
 
 	@AutoTesting
-	@Deprecated
 	@Audit(date = "2017-05-12", reviewer = "孙林青")
 	@ApiOperation(value = "E赚列表(E赚平面和视频)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
 //	@Authorization
@@ -557,6 +555,7 @@ public class AdController extends BaseController {
 		return adService.isExistsRedPacket(merchantId);
 	}
 	
+	@Deprecated
 	@Audit(date = "2017-08-18", reviewer = "李洪军")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询E赚列表", notes = "分页查询E赚列表(平面和视频)[]（蒋鑫俊）", httpMethod = "GET")
@@ -569,6 +568,7 @@ public class AdController extends BaseController {
 	}
 	
 	@Audit(date = "2017-08-18", reviewer = "李洪军")
+	@Deprecated
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询积分排行榜广告列表", notes = "查询积分排行榜广告列表(积分榜，人气榜),[]（蒋鑫俊）", httpMethod = "GET")
 	@Authorization
@@ -579,6 +579,7 @@ public class AdController extends BaseController {
 		return successGet(result);
 	}
 	
+	@Deprecated
 	@Audit(date = "2017-08-18", reviewer = "李洪军")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询精选推荐广告列表", notes = "分页查询精选推荐广告列表,[]（蒋鑫俊）", httpMethod = "GET")
