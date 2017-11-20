@@ -28,6 +28,8 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <docker.image.prefix>registry.eshop.com/eshop</docker.image.prefix>
+        <docker.image.server-id>harbor</docker.image.server-id>
+        <docker.image.registry-url>https://registry.eshop.com</docker.image.registry-url>
         <docker.base.image>registry.eshop.com/java:8-alpine</docker.base.image>
 
         <springfox.swagger>2.7.0</springfox.swagger>
