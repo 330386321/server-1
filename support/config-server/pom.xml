@@ -78,8 +78,6 @@
                             <include>${project.build.finalName}.jar</include>
                         </resource>
                     </resources>
-                    <serverId>${docker.image.server-id}</serverId>
-                    <registryUrl>${docker.image.registry-url}</registryUrl>
                 </configuration>
             </plugin>
         </plugins>
