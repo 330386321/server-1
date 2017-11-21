@@ -124,6 +124,10 @@
                     <configuration>
                         <serverId>${docker.image.server-id}</serverId>
                         <registryUrl>${docker.image.registry-url}</registryUrl>
+                        <forceTags>true</forceTags>
+                        <imageTags>
+                           <imageTag>latest</imageTag>
+                        </imageTags>
                     </configuration>
                 </plugin>
             </plugins>
