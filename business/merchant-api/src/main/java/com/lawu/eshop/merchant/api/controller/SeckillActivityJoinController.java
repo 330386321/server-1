@@ -8,12 +8,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.SeckillActivityJoinService;
 import com.lawu.eshop.product.dto.SeckillActivityJoinDTO;
+import com.lawu.eshop.product.dto.SeckillActivityManagerDTO;
 import com.lawu.eshop.product.param.SeckillActivityJoinParam;
+import com.lawu.eshop.product.param.SeckillActivityManageParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +32,7 @@ import io.swagger.annotations.ApiParam;
 @Api(tags = "seckillActivityJoin")
 @RestController
 @RequestMapping(value = "seckillActivityJoin/")
-public class SeckillActivityJoinController {
+public class SeckillActivityJoinController extends BaseController {
 	
 	@Autowired
 	private SeckillActivityJoinService seckillActivityJoinService;
@@ -39,6 +43,20 @@ public class SeckillActivityJoinController {
 	public Result<Page<SeckillActivityJoinDTO>>  queryPage(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam SeckillActivityJoinParam param) {
 		return seckillActivityJoinService.queryPage(param);
+	}
+	
+	
+	@ApiOperation(value = "分页查询活动管理", notes = "活动管理，[]。(张荣成)", httpMethod = "GET")
+	@Authorization
+	@RequestMapping(value = "queryManagePage", method = RequestMethod.GET)
+	public Result<Page<SeckillActivityManagerDTO>>  queryManagePage(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@ModelAttribute @ApiParam SeckillActivityJoinParam param) {
+		SeckillActivityManageParam manageParam = new SeckillActivityManageParam();
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		manageParam.setMerchantId(merchantId);
+		manageParam.setCurrentPage(param.getCurrentPage());
+		manageParam.setPageSize(param.getPageSize());
+		return seckillActivityJoinService.queryManagePage(manageParam);
 	}
 
 }

@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.dto.SeckillActivityJoinDTO;
+import com.lawu.eshop.product.dto.SeckillActivityManagerDTO;
 import com.lawu.eshop.product.param.SeckillActivityJoinParam;
+import com.lawu.eshop.product.param.SeckillActivityManageParam;
 
 
 /**
@@ -26,4 +28,12 @@ public interface SeckillActivityJoinService {
 	 */
 	@RequestMapping(value = "seckillActivityJoin/queryPage", method = RequestMethod.POST)
 	Result<Page<SeckillActivityJoinDTO>> queryPage(@RequestBody SeckillActivityJoinParam param);
+	
+	/**
+	 * 专场管理列表
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "seckillActivityJoin/queryManagePage", method = RequestMethod.POST)
+	Result<Page<SeckillActivityManagerDTO>> queryManagePage(@RequestBody SeckillActivityManageParam param);
 }

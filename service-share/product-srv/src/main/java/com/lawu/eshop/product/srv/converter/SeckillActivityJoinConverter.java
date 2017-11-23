@@ -3,10 +3,13 @@ package com.lawu.eshop.product.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.product.constant.ActivityStatusEnum;
 import com.lawu.eshop.product.dto.SeckillActivityJoinDTO;
-import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
+import com.lawu.eshop.product.dto.SeckillActivityManagerDTO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityJoinBO;
+import com.lawu.eshop.product.srv.bo.SeckillActivityManageBO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
+import com.lawu.eshop.product.srv.domain.extend.SeckillActivityDOView;
 
 /**
  * 参加活动转换类、
@@ -55,6 +58,47 @@ public class SeckillActivityJoinConverter {
 		
 		return joinList;
 		
+	}
+
+	public static List<SeckillActivityManageBO> seckillActivityJoinManageBOConverter(List<SeckillActivityDOView> list) {
+		List<SeckillActivityManageBO>  joinList = new ArrayList<>();
+		if(list.isEmpty()){
+			return joinList;
+		}
+		
+		for (SeckillActivityDOView seckillActivityDOView : list) {
+			SeckillActivityManageBO seckillActivityManageBO = new SeckillActivityManageBO();
+			seckillActivityManageBO.setId(seckillActivityDOView.getId());
+			seckillActivityManageBO.setName(seckillActivityDOView.getName());
+			seckillActivityManageBO.setPicture(seckillActivityDOView.getPicture());
+			seckillActivityManageBO.setSellingPrice(seckillActivityDOView.getSellingPrice());
+			seckillActivityManageBO.setStartDate(seckillActivityDOView.getStartDate());
+			seckillActivityManageBO.setActivityStatusEnum(ActivityStatusEnum.getEnum(seckillActivityDOView.getActivityStatus()));
+			joinList.add(seckillActivityManageBO);
+		}
+		
+		return joinList;
+	}
+	
+	
+	public static List<SeckillActivityManagerDTO> seckillActivityJoinManageDTOConverter(List<SeckillActivityManageBO> list) {
+		List<SeckillActivityManagerDTO>  joinList = new ArrayList<>();
+		if(list.isEmpty()){
+			return joinList;
+		}
+		
+		for (SeckillActivityManageBO seckillActivityManageBO : list) {
+			SeckillActivityManagerDTO seckillActivityManagerDTO = new SeckillActivityManagerDTO();
+			seckillActivityManagerDTO.setId(seckillActivityManageBO.getId());
+			seckillActivityManagerDTO.setName(seckillActivityManageBO.getName());
+			seckillActivityManagerDTO.setPicture(seckillActivityManageBO.getPicture());
+			seckillActivityManagerDTO.setSellingPrice(seckillActivityManageBO.getSellingPrice());
+			seckillActivityManagerDTO.setStartDate(seckillActivityManageBO.getStartDate());
+			seckillActivityManagerDTO.setActivityStatusEnum(seckillActivityManageBO.getActivityStatusEnum());
+			joinList.add(seckillActivityManagerDTO);
+		}
+		
+		return joinList;
 	}
 	
 
