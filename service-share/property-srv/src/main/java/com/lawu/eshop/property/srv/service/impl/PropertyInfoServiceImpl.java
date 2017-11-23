@@ -341,7 +341,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		}else if(param.getUserType() != null){
 			if(param.getUserType().getVal() == UserTypeEnum.MEMBER.getVal()){
 				criteria.andUserNumLike(UserCommonConstant.MEMBER_NUM_TAG + "%");
-			}else if(param.getUserType().getVal() == UserTypeEnum.MEMCHANT.getVal()){
+			}else if(param.getUserType().getVal() == UserTypeEnum.MERCHANT.getVal()){
 				criteria.andUserNumLike(UserCommonConstant.MERCHANT_NUM_TAG + "%");
 			}
 		}

@@ -72,7 +72,7 @@ public class AlipayController extends BaseController {
         if (param.getUserTypeEnum().getVal().equals(UserTypeEnum.MEMBER.getVal())) {
             appId = propertySrvConfig.getAlipayAppIdMember();
             public_key = propertySrvConfig.getAlipayEdianMemberPublicKey();
-        } else if (param.getUserTypeEnum().getVal().equals(UserTypeEnum.MEMCHANT.getVal())) {
+        } else if (param.getUserTypeEnum().getVal().equals(UserTypeEnum.MERCHANT.getVal())) {
             appId = propertySrvConfig.getAlipayAppIdBusiness();
             public_key = propertySrvConfig.getAlipayEdianBusinessPublicKey();
         }

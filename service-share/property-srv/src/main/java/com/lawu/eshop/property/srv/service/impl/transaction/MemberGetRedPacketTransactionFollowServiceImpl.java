@@ -36,6 +36,7 @@ public class MemberGetRedPacketTransactionFollowServiceImpl extends AbstractTran
         param.setLoveTypeEnum(LoveTypeEnum.RED_PACKAGE);
         param.setTempBizId("0");
         param.setTitle(notification.getTitle());
+        param.setTransactionDesc(MemberTransactionTypeEnum.MEMBER_RED_SWEEP.getDescPrefix()+notification.getTitle());
         propertyInfoDataService.doHanlderBalanceIncome(param);
     }
 }

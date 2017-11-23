@@ -17,6 +17,8 @@ public class CommissionJobParam {
 	private String loveTypeName;//爱心账户类型描述
 	
 	private Long tempBidId;
+
+	private String transactionDesc;
 	
 	public BigDecimal getActureMoneyIn() {
 		return actureMoneyIn;
@@ -78,5 +80,12 @@ public class CommissionJobParam {
 	public void setTempBidId(Long tempBidId) {
 		this.tempBidId = tempBidId;
 	}
-	
+
+	public String getTransactionDesc() {
+		return transactionDesc;
+	}
+
+	public void setTransactionDesc(String transactionDesc) {
+		this.transactionDesc = transactionDesc;
+	}
 }

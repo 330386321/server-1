@@ -1,5 +1,6 @@
 package com.lawu.eshop.order.srv.service.impl.transaction;
 
+import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,25 +26,30 @@ public class ShoppingOrderPaymentsToMerchantTransactionMainServiceImpl extends A
 	
 	@Autowired
 	private ShoppingOrderService shoppingOrderService;
+
+	@Autowired
+	private ShoppingOrderItemService shoppingOrderItemService;
 	
 	/**
 	 * 组装其他模块发送的数组
 	 */
-    @Override
-    public ShoppingOrderPaymentsToMerchantNotification selectNotification(Long shoppingOrderId) {
-    	ShoppingOrderPaymentsToMerchantNotification rtn = new ShoppingOrderPaymentsToMerchantNotification();
-    	
-    	ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(shoppingOrderId);
-    	
-    	if (shoppingOrderBO == null || shoppingOrderBO.getId() <= 0) {
-    		return rtn;
-    	}
-    	
-    	rtn.setMerchantNum(shoppingOrderBO.getMerchantNum());
-    	rtn.setMerchantStoreRegionPath(shoppingOrderBO.getMerchantStoreRegionPath());
-    	rtn.setShoppingOrderId(shoppingOrderId);
-    	rtn.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderBO.getPaymentMethod().getVal()));
-    	
-        return rtn;
-    }
+	@Override
+	public ShoppingOrderPaymentsToMerchantNotification selectNotification(Long shoppingOrderId) {
+		ShoppingOrderPaymentsToMerchantNotification rtn = new ShoppingOrderPaymentsToMerchantNotification();
+
+		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(shoppingOrderId);
+
+		if (shoppingOrderBO == null || shoppingOrderBO.getId() <= 0) {
+			return rtn;
+		}
+
+		rtn.setMerchantNum(shoppingOrderBO.getMerchantNum());
+		rtn.setMerchantStoreRegionPath(shoppingOrderBO.getMerchantStoreRegionPath());
+		rtn.setShoppingOrderId(shoppingOrderId);
+		rtn.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderBO.getPaymentMethod().getVal()));
+
+		String productName = shoppingOrderItemService.getOrderItemProductName(shoppingOrderId);
+		rtn.setOrderItemProductName(productName);
+		return rtn;
+	}
 }

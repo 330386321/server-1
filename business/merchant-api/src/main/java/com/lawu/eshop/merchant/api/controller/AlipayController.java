@@ -83,7 +83,7 @@ public class AlipayController extends BaseController {
 		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
-		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT);
+		aparam.setUserTypeEnum(UserTypeEnum.MERCHANT);
 		aparam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
 
 		// 查询支付金额

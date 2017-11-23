@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class OrderReleaseFreezeParam {
 
-	// 商家编号,多个已英文逗号分隔-顺序与orderIds、accounts、payWays一致
+	// 商家编号
 	@NotBlank(message = "userNums不能为空")
 	private String userNums;
 
@@ -34,6 +34,8 @@ public class OrderReleaseFreezeParam {
 
 	//商家门店省/市/区ID,多个以英文逗号分隔
 	private String regionPaths;
+
+	private String orderItemProductName;
 
 	public String getUserNums() {
 		return userNums;
@@ -73,5 +75,13 @@ public class OrderReleaseFreezeParam {
 
 	public void setRegionPaths(String regionPaths) {
 		this.regionPaths = regionPaths;
+	}
+
+	public String getOrderItemProductName() {
+		return orderItemProductName;
+	}
+
+	public void setOrderItemProductName(String orderItemProductName) {
+		this.orderItemProductName = orderItemProductName;
 	}
 }

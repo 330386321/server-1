@@ -34,6 +34,7 @@ public class UserTakePlatRedTransactionFollowServiceImpl extends AbstractTransac
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PLATFORM_RED_SWEEP);
 		param.setLoveTypeEnum(LoveTypeEnum.RED_PACKAGE);
 		param.setTempBizId(notification.getId() == null ? "0" : notification.getId().toString());
+		param.setTransactionDesc(MemberTransactionTypeEnum.PLATFORM_RED_SWEEP.getDescPrefix());
 		propertyInfoDataService.doHanlderBalanceIncome(param);
 	}
 }

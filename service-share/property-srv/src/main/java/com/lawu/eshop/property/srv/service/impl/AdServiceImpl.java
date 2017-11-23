@@ -73,6 +73,7 @@ public class AdServiceImpl implements AdService {
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(param.getOutTradeNo());
         tdsParam.setRegionPath(param.getRegionPath());
+        tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.RED_PACKET.getDescPrefix());
         transactionDetailService.save(tdsParam);
 
         merchantAdPaymentTransactionMainServiceImpl.sendNotice(tdsParam.getId());
@@ -94,6 +95,7 @@ public class AdServiceImpl implements AdService {
         tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
         tdsParam.setThirdTransactionNum(param.getTradeNo() == null ? "" : param.getTradeNo());
         tdsParam.setBizNum(IdWorkerHelperImpl.generate(BizIdType.REFUND));
+        tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.AD_DOWN.getDescPrefix());
         transactionDetailService.save(tdsParam);
 
         JsonResult jsonResult = new JsonResult();

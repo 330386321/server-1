@@ -77,6 +77,8 @@ public class TransactionDetailSaveDataParam implements Serializable {
 	//省市区ID
 	private String regionPath;
 
+	private String transactionDesc;
+
 	public String getTitle() {
 		return title;
 	}
@@ -195,5 +197,13 @@ public class TransactionDetailSaveDataParam implements Serializable {
 
 	public void setRegionPath(String regionPath) {
 		this.regionPath = regionPath;
+	}
+
+	public String getTransactionDesc() {
+		return transactionDesc;
+	}
+
+	public void setTransactionDesc(String transactionDesc) {
+		this.transactionDesc = transactionDesc;
 	}
 }

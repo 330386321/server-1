@@ -15,28 +15,30 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class OrderSysJobParam {
 
-	// 商家编号,多个已英文逗号分隔-顺序与orderIds、accounts、payWays一致
+	// 商家编号
 	@NotBlank(message = "userNums不能为空")
 	private String userNums;
 
-	// 商品订单ID,多个已英文逗号分隔
+	// 商品订单ID
 	@NotBlank(message = "orderIds不能为空")
 	private String orderIds;
 
-	// 商家账号,多个已英文逗号分隔
+	// 商家账号
 	@NotBlank(message = "accounts不能为空")
 	private String accounts;
 	
-	//订单支付方式,多个已英文逗号分隔
+	//订单支付方式
 	@NotNull(message="payWays不能为空")
 	private Byte[] payWays;
 	
-	// 订单实际支付金额,多个已英文逗号分隔
+	// 订单实际支付金额
 	@NotBlank(message = "orderActualMoney不能为空")
 	private String orderActualMoney;
 
-	//商家门店省/市/区ID,多个以英文逗号分隔
+	//商家门店省/市/区ID
 	private String regionPaths;
+
+	private String orderItemProductName;
 
 	public String getUserNums() {
 		return userNums;
@@ -84,5 +86,13 @@ public class OrderSysJobParam {
 
 	public void setRegionPaths(String regionPaths) {
 		this.regionPaths = regionPaths;
+	}
+
+	public String getOrderItemProductName() {
+		return orderItemProductName;
+	}
+
+	public void setOrderItemProductName(String orderItemProductName) {
+		this.orderItemProductName = orderItemProductName;
 	}
 }

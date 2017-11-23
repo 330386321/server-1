@@ -31,6 +31,8 @@ public class ShoppingOrderPaymentsToMerchantNotification extends Notification {
      * 支付方式
      */
     private TransactionPayTypeEnum paymentMethod;
+
+    private String orderItemProductName;
     
 	public Long getShoppingOrderId() {
 		return shoppingOrderId;
@@ -63,5 +65,12 @@ public class ShoppingOrderPaymentsToMerchantNotification extends Notification {
 	public void setPaymentMethod(TransactionPayTypeEnum paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
-	
+
+	public String getOrderItemProductName() {
+		return orderItemProductName;
+	}
+
+	public void setOrderItemProductName(String orderItemProductName) {
+		this.orderItemProductName = orderItemProductName;
+	}
 }

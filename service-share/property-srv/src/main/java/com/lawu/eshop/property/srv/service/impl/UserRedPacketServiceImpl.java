@@ -80,6 +80,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
         tdsParam.setThirdTransactionNum(param.getTradeNo());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(param.getOutTradeNo());
+        tdsParam.setTransactionDesc(MemberTransactionTypeEnum.ADD_RED_SWEEP.getDescPrefix());
         transactionDetailService.save(tdsParam);
 
         memberRedPacketPaymentTransactionMainServiceImpl.sendNotice(tdsParam.getId());
@@ -102,6 +103,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
         tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
         tdsParam.setThirdTransactionNum(param.getTradeNo() == null ? "" : param.getTradeNo());
         tdsParam.setBizNum(IdWorkerHelperImpl.generate(BizIdType.REFUND));
+        tdsParam.setTransactionDesc(MemberTransactionTypeEnum.USER_REDPACKET_ADD.getDescPrefix());
         transactionDetailService.save(tdsParam);
 
         JsonResult jsonResult = new JsonResult();

@@ -112,9 +112,11 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
                     if (userNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
                         param.setTypeVal(MemberTransactionTypeEnum.SALES_COMMISSION.getValue());
                         param.setTypeName(MemberTransactionTypeEnum.SALES_COMMISSION.getName());
+                        param.setTransactionDesc(MemberTransactionTypeEnum.SALES_COMMISSION.getDescPrefix());
                     } else if (userNum.startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
                         param.setTypeVal(MerchantTransactionTypeEnum.SALES_COMMISSION.getValue());
                         param.setTypeName(MerchantTransactionTypeEnum.SALES_COMMISSION.getName());
+                        param.setTransactionDesc(MerchantTransactionTypeEnum.SALES_COMMISSION.getDescPrefix());
                     }
                     param.setLoveTypeVal(LoveTypeEnum.SALES_COMMISSION.getValue());
                     param.setLoveTypeName(LoveTypeEnum.SALES_COMMISSION.getName());
@@ -122,9 +124,11 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
                     if (userNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
                         param.setTypeVal(MemberTransactionTypeEnum.VOLUME_COMMISSION.getValue());
                         param.setTypeName(MemberTransactionTypeEnum.VOLUME_COMMISSION.getName());
+                        param.setTransactionDesc(MemberTransactionTypeEnum.VOLUME_COMMISSION.getDescPrefix());
                     } else if (userNum.startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
                         param.setTypeVal(MerchantTransactionTypeEnum.VOLUME_COMMISSION.getValue());
                         param.setTypeName(MerchantTransactionTypeEnum.VOLUME_COMMISSION.getName());
+                        param.setTransactionDesc(MerchantTransactionTypeEnum.VOLUME_COMMISSION.getDescPrefix());
                     }
                     param.setLoveTypeVal(LoveTypeEnum.VOLUME_COMMISSION.getValue());
                     param.setLoveTypeName(LoveTypeEnum.VOLUME_COMMISSION.getName());

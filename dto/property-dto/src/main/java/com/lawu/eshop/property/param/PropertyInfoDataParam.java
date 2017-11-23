@@ -46,7 +46,8 @@ public class PropertyInfoDataParam {
     //交易明细列表显示的文案，为兼容title为空时取枚举类型name
     private String title;
 
-
+    //交易说明
+    private String transactionDesc;
 
 
     //商家ID(邀请粉丝添加邀请记录参数)
@@ -174,5 +175,13 @@ public class PropertyInfoDataParam {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getTransactionDesc() {
+        return transactionDesc;
+    }
+
+    public void setTransactionDesc(String transactionDesc) {
+        this.transactionDesc = transactionDesc;
     }
 }

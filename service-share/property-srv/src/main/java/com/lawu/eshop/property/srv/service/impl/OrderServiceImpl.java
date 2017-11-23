@@ -116,6 +116,7 @@ public class OrderServiceImpl implements OrderService {
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(param.getOutTradeNo());
         tdsParam.setRegionPath(param.getRegionPath());
+        tdsParam.setTransactionDesc(MemberTransactionTypeEnum.PAY_ORDERS.getDescPrefix()+param.getTitle());
         transactionDetailService.save(tdsParam);
 
         //更新订单状态 发送MQ消息更新订单状态
@@ -146,6 +147,7 @@ public class OrderServiceImpl implements OrderService {
         tdsParam.setBizId(param.getBizIds());
         tdsParam.setThirdTransactionNum(param.getTradeNo());
         tdsParam.setBizNum(param.getOutTradeNo());
+        tdsParam.setTransactionDesc(MemberTransactionTypeEnum.PAY.getDescPrefix()+param.getTitle());
         transactionDetailService.save(tdsParam);
 
         // 新增商家交易明细
@@ -161,6 +163,7 @@ public class OrderServiceImpl implements OrderService {
         tdsParam1.setDirection(PropertyInfoDirectionEnum.IN.getVal());
         tdsParam.setBizNum(param.getOutTradeNo());
         tdsParam1.setRegionPath(param.getRegionPath());
+        tdsParam1.setTransactionDesc(MerchantTransactionTypeEnum.PAY.getDescPrefix()+param.getTitleMerchant());
         transactionDetailService.save(tdsParam1);
 
         // 加商家财产余额
@@ -305,6 +308,7 @@ public class OrderServiceImpl implements OrderService {
         tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
         tdsParam.setThirdTransactionNum(param.getTradeNo() == null ? "" : param.getTradeNo());
         tdsParam.setBizNum(IdWorkerHelperImpl.generate(BizIdType.REFUND));
+        tdsParam.setTransactionDesc(MemberTransactionTypeEnum.REFUND_ORDERS.getDescPrefix());
         transactionDetailService.save(tdsParam);
 
         JsonResult jsonResult = new JsonResult();
@@ -380,6 +384,7 @@ public class OrderServiceImpl implements OrderService {
         String[] userNums = param.getUserNums().split(",");
         String[] orderIds = param.getOrderIds().split(",");
         String[] regionPaths = param.getRegionPaths().split(",");
+        String[] productNames = param.getOrderItemProductName().split(",");
         Byte[] payWays = param.getPayWays();
         FreezeDOExample example = new FreezeDOExample();
         List<String> finishOrderIds = new ArrayList<String>();//成功处理的订单ID
@@ -403,6 +408,7 @@ public class OrderServiceImpl implements OrderService {
                 tdsParam.setBizId(orderIds[i]);
                 tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
                 tdsParam.setRegionPath(regionPaths[i]);
+                tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.ORDER.getDescPrefix()+productNames[i]);
                 transactionDetailService.save(tdsParam);
 
                 // 释放冻结资金
@@ -433,6 +439,7 @@ public class OrderServiceImpl implements OrderService {
         String[] userNums = param.getUserNums().split(",");
         String[] orderIds = param.getOrderIds().split(",");
         String[] regionPaths = param.getRegionPaths().split(",");
+        String[] productNames = param.getOrderItemProductName().split(",");
         Byte[] payWays = param.getPayWays();
         String[] orderActualMoneys = param.getOrderActualMoney().split(",");
         for (int i = 0; i < userNums.length; i++) {
@@ -446,6 +453,7 @@ public class OrderServiceImpl implements OrderService {
             tdsParam.setBizId(orderIds[i]);
             tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
             tdsParam.setRegionPath(regionPaths[i]);
+            tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.ORDER.getDescPrefix()+productNames[i]);
             transactionDetailService.save(tdsParam);
 
             // 加商家财产余额

@@ -78,7 +78,7 @@ public class BackagePropertyinfoController extends BaseController {
 			if (member.getRet() == ResultCode.SUCCESS) {
 				userNum = member.getModel().getNum();
 			}
-		} else if (UserTypeEnum.MEMCHANT.getVal().equals(param.getUserType().getVal())) {
+		} else if (UserTypeEnum.MERCHANT.getVal().equals(param.getUserType().getVal())) {
 			Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
 			if (merchant.getRet() == ResultCode.SUCCESS) {
 				userNum = merchant.getModel().getNum();
@@ -108,7 +108,7 @@ public class BackagePropertyinfoController extends BaseController {
 					}
 				}
 				realParam.setMemberTransactionType(MemberTransactionTypeEnum.BACKAGE);
-			} else if (UserTypeEnum.MEMCHANT.getVal().equals(param.getUserType().getVal())) {
+			} else if (UserTypeEnum.MERCHANT.getVal().equals(param.getUserType().getVal())) {
 				if(StringUtils.isNotEmpty(param.getAccount())){
 					Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
 					if (merchant.getRet() == ResultCode.SUCCESS) {
@@ -163,7 +163,7 @@ public class BackagePropertyinfoController extends BaseController {
 					}
 				}
 				realParam.setMemberTransactionType(MemberTransactionTypeEnum.BACKAGE);
-			} else if (UserTypeEnum.MEMCHANT.getVal().equals(param.getUserType().getVal())) {
+			} else if (UserTypeEnum.MERCHANT.getVal().equals(param.getUserType().getVal())) {
 				if(StringUtils.isNotEmpty(param.getAccount())){
 					Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
 					if (merchant.getRet() == ResultCode.SUCCESS) {
@@ -223,7 +223,7 @@ public class BackagePropertyinfoController extends BaseController {
 				return member;
 			}
 			dparam.setUserNum(member.getModel().getNum());
-		} else if (UserTypeEnum.MEMCHANT.getVal().equals(param.getUserTypeEnum().getVal())) {
+		} else if (UserTypeEnum.MERCHANT.getVal().equals(param.getUserTypeEnum().getVal())) {
 			Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
 			if (merchant.getRet() != ResultCode.SUCCESS) {
 				return merchant;
@@ -253,7 +253,7 @@ public class BackagePropertyinfoController extends BaseController {
 				return member;
 			}
 			dparam.setUserNum(member.getModel().getNum());
-		} else if (UserTypeEnum.MEMCHANT.getVal().equals(param.getUserTypeEnum().getVal())) {
+		} else if (UserTypeEnum.MERCHANT.getVal().equals(param.getUserTypeEnum().getVal())) {
 			Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
 			if (merchant.getRet() != ResultCode.SUCCESS) {
 				return merchant;
@@ -280,7 +280,7 @@ public class BackagePropertyinfoController extends BaseController {
 						userNum = member.getModel().getNum();
 					}
 				}
-			} else if (UserTypeEnum.MEMCHANT.getVal().equals(param.getUserType().getVal())) {
+			} else if (UserTypeEnum.MERCHANT.getVal().equals(param.getUserType().getVal())) {
 				if(StringUtils.isNotEmpty(param.getAccount())){
 					Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
 					if (merchant.getRet() == ResultCode.SUCCESS) {

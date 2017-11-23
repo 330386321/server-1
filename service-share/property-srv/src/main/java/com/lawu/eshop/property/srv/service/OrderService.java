@@ -60,10 +60,10 @@ public interface OrderService {
 	int doRefundScopeInside(OrderRefundDataParam param) throws Exception;
 
 	/**
+	 * 单个操作
 	 * 定时任务调用 确认收货后7天，订单冻结金额自动加入商家余额账户 :新增商家订单付款交易记录，释放冻结资金，加商家财产余额
-	 * 
+	 *
 	 * @param param
-	 * @param result
 	 * @return
 	 */
 	int comfirmReleaseFreeze(OrderReleaseFreezeParam param);

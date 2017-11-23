@@ -23,16 +23,17 @@ public class ShoppingOrderPaymentsToMerchantTransactionFollowServiceImpl extends
 	    
 	@Autowired
 	private OrderService orderService;
-	
+
 	@Transactional
-    @Override
-    public void execute(ShoppingOrderPaymentsToMerchantNotification notification) {
-	    // 组装请求参数
-	    OrderReleaseFreezeParam param = new OrderReleaseFreezeParam();
-    	param.setOrderIds(notification.getShoppingOrderId().toString());
-    	param.setUserNums(notification.getMerchantNum());
-    	param.setRegionPaths(notification.getMerchantStoreRegionPath());
-    	param.setPayWays(new Byte[]{notification.getPaymentMethod().getVal()});
-    	orderService.comfirmReleaseFreeze(param);
-    }
+	@Override
+	public void execute(ShoppingOrderPaymentsToMerchantNotification notification) {
+		// 组装请求参数
+		OrderReleaseFreezeParam param = new OrderReleaseFreezeParam();
+		param.setOrderIds(notification.getShoppingOrderId().toString());
+		param.setUserNums(notification.getMerchantNum());
+		param.setRegionPaths(notification.getMerchantStoreRegionPath());
+		param.setPayWays(new Byte[]{notification.getPaymentMethod().getVal()});
+		param.setOrderItemProductName(notification.getOrderItemProductName());
+		orderService.comfirmReleaseFreeze(param);
+	}
 }

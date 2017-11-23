@@ -3,6 +3,7 @@ package com.lawu.eshop.property.srv.service.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.srv.exception.BalanceNegativeException;
 import org.slf4j.Logger;
@@ -267,6 +268,7 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam.setBizId(param.getBizIds());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(param.getOrderNum());
+        tdsParam.setTransactionDesc(MemberTransactionTypeEnum.ADD_RED_SWEEP.getDescPrefix());
         transactionDetailService.save(tdsParam);
 
         //减财产余额
@@ -484,6 +486,7 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam.setBizId(param.getBizIds());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(param.getOrderNum());
+        tdsParam.setTransactionDesc(MemberTransactionTypeEnum.ADD_RED_SWEEP.getDescPrefix());
         transactionDetailService.save(tdsParam);
 
         //减财产余额

@@ -155,8 +155,10 @@ public class RechargeServiceImpl implements RechargeService {
             tdsParam.setTransactionAccount(param.getBuyerLogonId());
             if (param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
                 tdsParam.setTransactionType(MemberTransactionTypeEnum.RECHARGE_BALANCE.getValue());
+                tdsParam.setTransactionDesc(MemberTransactionTypeEnum.RECHARGE_BALANCE.getDescPrefix());
             } else if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
                 tdsParam.setTransactionType(MerchantTransactionTypeEnum.RECHARGE.getValue());
+                tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.RECHARGE.getDescPrefix());
             }
             tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
             tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
@@ -181,8 +183,10 @@ public class RechargeServiceImpl implements RechargeService {
             tdsParam.setTransactionAccount(param.getBuyerLogonId());
             if (param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
                 tdsParam.setTransactionType(MemberTransactionTypeEnum.RECHARGE_BALANCE.getValue());
+                tdsParam.setTransactionDesc(MemberTransactionTypeEnum.RECHARGE_BALANCE.getDescPrefix());
             } else if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
                 tdsParam.setTransactionType(MerchantTransactionTypeEnum.RECHARGE.getValue());
+                tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.RECHARGE.getDescPrefix());
             }
             tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
             tdsParam.setAmount(new BigDecimal(param.getTotalFee()));

@@ -76,7 +76,7 @@ public class WxPayController extends BaseController {
         if (UserTypeEnum.MEMBER.getVal() == param.getUserTypeEnum().getVal()) {
             packageParams.put("appid", propertySrvConfig.getWxpayAppIdMember());
             packageParams.put("mch_id", propertySrvConfig.getWxpayMchIdMember());
-        } else if (UserTypeEnum.MEMCHANT.getVal() == param.getUserTypeEnum().getVal()) {
+        } else if (UserTypeEnum.MERCHANT.getVal() == param.getUserTypeEnum().getVal()) {
             packageParams.put("appid", propertySrvConfig.getWxpayAppIdBusiness());
             packageParams.put("mch_id", propertySrvConfig.getWxpayMchIdBusiness());
         } else if (UserTypeEnum.MEMCHANT_PC.getVal() == param.getUserTypeEnum().getVal()) {
@@ -133,7 +133,7 @@ public class WxPayController extends BaseController {
                     if (UserTypeEnum.MEMBER.getVal() == param.getUserTypeEnum().getVal()) {
                         packageParams.put("appid", propertySrvConfig.getWxpayAppIdMember());
                         packageParams.put("partnerid", propertySrvConfig.getWxpayMchIdMember());
-                    } else if (UserTypeEnum.MEMCHANT.getVal() == param.getUserTypeEnum().getVal()) {
+                    } else if (UserTypeEnum.MERCHANT.getVal() == param.getUserTypeEnum().getVal()) {
                         packageParams.put("appid", propertySrvConfig.getWxpayAppIdBusiness());
                         packageParams.put("partnerid", propertySrvConfig.getWxpayMchIdBusiness());
                     }

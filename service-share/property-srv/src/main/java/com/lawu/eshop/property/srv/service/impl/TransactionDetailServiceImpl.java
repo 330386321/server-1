@@ -187,6 +187,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		transactionDetailDO.setRemark(param.getRemark());
 		transactionDetailDO.setGmtCreate(new Date());
 		transactionDetailDO.setBizNum(param.getBizNum() == null ? "" : param.getBizNum());
+		transactionDetailDO.setTransactionDesc(param.getTransactionDesc() == null ? "" : param.getTransactionDesc());
 		transactionDetailDOMapper.insertSelective(transactionDetailDO);
 		param.setId(transactionDetailDO.getId());
 		return ResultCode.SUCCESS;

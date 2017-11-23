@@ -99,9 +99,11 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 				if(inviters.get(i).getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
 					param.setTypeVal(MemberTransactionTypeEnum.LOWER_INCOME.getValue());
 					param.setTypeName(MemberTransactionTypeEnum.LOWER_INCOME.getName());
+					param.setTransactionDesc(MemberTransactionTypeEnum.LOWER_INCOME.getDescPrefix());
 				}else if(inviters.get(i).getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
 					param.setTypeVal(MerchantTransactionTypeEnum.LOWER_INCOME.getValue());
 					param.setTypeName(MerchantTransactionTypeEnum.LOWER_INCOME.getName());
+					param.setTransactionDesc(MerchantTransactionTypeEnum.LOWER_INCOME.getDescPrefix());
 				}
 				param.setLoveTypeVal(LoveTypeEnum.AD_COMMISSION.getValue());
 				param.setLoveTypeName(LoveTypeEnum.AD_COMMISSION.getName());

@@ -11,13 +11,15 @@ package com.lawu.eshop.property.constants;
  */
 public enum UserTypeEnum {
 
-    MEMBER((byte) 0x01),      //用户
-    MEMCHANT((byte) 0x02),     //商家
-    MEMCHANT_PC((byte) 0x03);	//商家PC
+    MEMBER((byte) 0x01, "M"),      //用户
+    MERCHANT((byte) 0x02, "B"),     //商家
+    MEMCHANT_PC((byte) 0x03,"");	//商家PC
     private Byte val;
+    private String name;
 
-    UserTypeEnum(Byte val) {
+    UserTypeEnum(Byte val,String name) {
         this.val = val;
+        this.name = name;
     }
 
     public static UserTypeEnum getEnum(Byte val) {
@@ -33,5 +35,8 @@ public enum UserTypeEnum {
 	public Byte getVal() {
 		return val;
 	}
-    
+
+    public String getName() {
+        return name;
+    }
 }

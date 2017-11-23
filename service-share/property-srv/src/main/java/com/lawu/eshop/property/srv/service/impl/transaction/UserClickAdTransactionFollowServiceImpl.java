@@ -37,8 +37,10 @@ public class UserClickAdTransactionFollowServiceImpl extends AbstractTransaction
 		param.setUserNum(notification.getUserNum());
 		if(notification.getType().equals(AdTypeEnum.AD_TYPE_FLAT.getVal())){
 			param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.AD_PLANE);
+			param.setTransactionDesc(MemberTransactionTypeEnum.AD_PLANE.getDescPrefix()+notification.getTitle());
 		} else if(notification.getType().equals(AdTypeEnum.AD_TYPE_VIDEO.getVal())){
 			param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.AD_VIDEO);
+			param.setTransactionDesc(MemberTransactionTypeEnum.AD_VIDEO.getDescPrefix()+notification.getTitle());
 		} else {
 			logger.error("用户点看一看&猜一猜加余额从事务，缺少传参广告type。");
 			return;

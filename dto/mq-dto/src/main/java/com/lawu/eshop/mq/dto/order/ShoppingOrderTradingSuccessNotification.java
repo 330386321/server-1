@@ -46,6 +46,8 @@ public class ShoppingOrderTradingSuccessNotification extends Notification {
 	 * 订单号（资金冻结表新增订单号字段）
 	 */
 	private String orderNum;
+
+	private String orderItemProductName;
     
 	public Long getShoppingOrderId() {
 		return shoppingOrderId;
@@ -101,5 +103,13 @@ public class ShoppingOrderTradingSuccessNotification extends Notification {
 
 	public void setOrderNum(String orderNum) {
 		this.orderNum = orderNum;
+	}
+
+	public String getOrderItemProductName() {
+		return orderItemProductName;
+	}
+
+	public void setOrderItemProductName(String orderItemProductName) {
+		this.orderItemProductName = orderItemProductName;
 	}
 }

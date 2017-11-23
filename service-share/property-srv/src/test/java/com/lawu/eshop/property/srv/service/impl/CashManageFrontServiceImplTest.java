@@ -97,7 +97,7 @@ public class CashManageFrontServiceImplTest {
         param.setProvinceId(1);
         param.setRegionFullName("北京市/县辖/东城区");
         param.setTransactionType(MerchantTransactionTypeEnum.WITHDRAW.getValue());
-        param.setUserType(UserTypeEnum.MEMCHANT.getVal());
+        param.setUserType(UserTypeEnum.MERCHANT.getVal());
         param.setBusinessBankAccountId(bankAccountDO.getId());
         param.setCashMoney("10");
         param.setPayPwd("123456");
@@ -151,7 +151,7 @@ public class CashManageFrontServiceImplTest {
         param.setProvinceId(1);
         param.setRegionFullName("北京市/县辖/东城区");
         param.setTransactionType(MerchantTransactionTypeEnum.WITHDRAW.getValue());
-        param.setUserType(UserTypeEnum.MEMCHANT.getVal());
+        param.setUserType(UserTypeEnum.MERCHANT.getVal());
         param.setBusinessBankAccountId(bankAccountDO.getId());
         param.setCashMoney("10");
         param.setPayPwd("123456");

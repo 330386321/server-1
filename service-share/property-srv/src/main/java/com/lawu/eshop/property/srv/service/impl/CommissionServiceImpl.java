@@ -182,6 +182,7 @@ public class CommissionServiceImpl implements CommissionService {
 			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 			tdsParam.setBizId(param.getBizId().toString());
 			tdsParam.setPreviousAmount((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getBalance());
+			tdsParam.setTransactionDesc(param.getTransactionDesc());
 			transactionDetailService.save(tdsParam);
 
 			// 加用户（会员或商家）财产余额

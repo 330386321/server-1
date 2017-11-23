@@ -256,8 +256,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	public int doHanlderBalanceIncome(PropertyInfoDataParam param) {
 		BigDecimal clickMoney = new BigDecimal(param.getPoint());
 		CommissionUtilBO commissionBO;
-		if(MemberTransactionTypeEnum.ADVERTISING.getValue().equals(param.getMemberTransactionTypeEnum().getValue()) ||
-				MemberTransactionTypeEnum.AD_PLANE.getValue().equals(param.getMemberTransactionTypeEnum().getValue()) ||
+		if(MemberTransactionTypeEnum.AD_PLANE.getValue().equals(param.getMemberTransactionTypeEnum().getValue()) ||
 				MemberTransactionTypeEnum.AD_VIDEO.getValue().equals(param.getMemberTransactionTypeEnum().getValue())){
 			commissionBO = commissionUtilService.getClickAdMine(clickMoney);
 		}else{
@@ -301,6 +300,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 		tdsParam.setPreviousAmount((propertyInfoList == null || propertyInfoList.isEmpty()) ? new BigDecimal(0) : propertyInfoList.get(0).getBalance());
 		tdsParam.setRegionPath(param.getRegionPath());
+		tdsParam.setTransactionDesc(param.getTransactionDesc());
 		transactionDetailService.save(tdsParam);
 		
 		// 更新用户资产余额
