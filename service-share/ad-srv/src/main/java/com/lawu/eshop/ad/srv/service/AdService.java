@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.param.AdChoicenessInternalParam;
 import com.lawu.eshop.ad.param.AdEgainInternalParam;
@@ -16,6 +17,7 @@ import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.AdSetPayParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
+import com.lawu.eshop.ad.param.PointGetDetailParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdClickPraiseInfoBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
@@ -29,6 +31,7 @@ import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
+import com.lawu.eshop.ad.srv.bo.PointGetDetailBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
@@ -364,4 +367,11 @@ public interface AdService {
 	 * @return
 	 */
 	Boolean isPay(Long id);
+	
+	/**
+	 * 商家广告详情领取列表
+	 * @param param
+	 * @return
+	 */
+	Page<PointGetDetailBO> getDetailPage(PointGetDetailParam param);
 }

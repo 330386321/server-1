@@ -37,6 +37,7 @@ import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.AdSetPayParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
+import com.lawu.eshop.ad.param.PointGetDetailParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdClickPraiseInfoBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
@@ -46,6 +47,7 @@ import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
+import com.lawu.eshop.ad.srv.bo.PointGetDetailBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
@@ -61,7 +63,6 @@ import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 广告测试
@@ -2275,5 +2276,59 @@ public class AdServiceImplTest {
 		List<AdDO> adDOS = adDOMapper.selectByExample(example);
 		Assert.assertNotNull(adDOS);
 		Assert.assertTrue(adDOS.size() > 0);
+	}
+	
+	@Transactional
+	@Rollback
+	@Test
+	public void getDetailPage() {
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setHits(0);
+        ad.setIsPay(false);
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+        Integer id=adDOMapper.insertSelective(ad);
+        
+        MemberAdRecordDO memberAdRecordDO=new MemberAdRecordDO();
+        memberAdRecordDO.setAdId(ad.getId());
+        memberAdRecordDO.setClickDate(new Date());
+        memberAdRecordDO.setGmtCommission(new Date());
+        memberAdRecordDO.setGmtCreate(new Date());
+        memberAdRecordDO.setMemberId(1l);
+        memberAdRecordDO.setMemberNum("aa");
+        memberAdRecordDO.setOriginalPoint(BigDecimal.valueOf(0.5));
+        memberAdRecordDO.setPoint(BigDecimal.valueOf(0.4));
+        memberAdRecordDO.setStatus(MemberAdRecordStatusEnum.YES.getVal());
+        memberAdRecordDOMapper.insert(memberAdRecordDO);
+        
+        PointGetDetailParam param  = new PointGetDetailParam();
+        param.setId(ad.getId());
+        param.setCurrentPage(1);
+		param.setPageSize(20);
+		param.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
+
+		Page<PointGetDetailBO> page = adService.getDetailPage(param);
+		
+		Assert.assertNotNull(page.getRecords());
+		Assert.assertTrue(page.getRecords().size() > 0);
 	}
 }

@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.service;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -75,5 +77,13 @@ public interface MemberService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "member/getMember/{account}")
     Result<MemberDTO> getMemberByAccount(@PathVariable("account") String account);
+    
+    /**
+     * 查询用户信息
+     * @param memberIds
+     * @return
+     */
+    @RequestMapping(value = "member/getMemberByIds", method = RequestMethod.GET)
+    Result<List<MemberDTO>> getMemberByIds(@RequestParam("memberIds") List<Long> memberIds);
 
 }

@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,4 +63,10 @@ public class MockMemberService extends BaseController implements MemberService {
         dto.setNum("M0001");
         return null;
     }
+
+	@Override
+	public Result<List<MemberDTO>> getMemberByIds(List<Long> memberIds) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -7,6 +7,7 @@
 	    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
 	    <result column="region_path" property="regionPath" jdbcType="VARCHAR" />
 	    <result column="headimg" property="headimg" jdbcType="VARCHAR" />
+	    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
 	 </resultMap>
 	 
 	 <resultMap id="BaseAllResultMap" type="com.lawu.eshop.user.srv.domain.MemberDO" >
@@ -42,6 +43,7 @@
       	   id,
        	   mobile,
        	   region_path,
+       	   nickname as nickname,
        	   headimg
         FROM
         member

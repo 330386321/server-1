@@ -52,6 +52,7 @@ import com.lawu.eshop.ad.param.AdSolrRealParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
+import com.lawu.eshop.ad.param.PointGetDetailParam;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDO;
@@ -1484,6 +1485,54 @@ public class AdControllerTest {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
             Assert.assertEquals(HttpCode.SC_OK, mvcResult.getResponse().getStatus());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+    
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void getDetailPage(){
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setHits(0);
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+        adDOMapper.insertSelective(ad);
+        
+        PointGetDetailParam param  = new PointGetDetailParam();
+        param.setId(ad.getId());
+        param.setCurrentPage(1);
+		param.setPageSize(20);
+		param.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
+		String requestListJson = JSONObject.toJSONString(param);
+		
+        try {
+            RequestBuilder request = post("/ad/getDetailPage/").contentType(MediaType.APPLICATION_JSON).content(requestListJson);
+            ResultActions perform= mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_OK)).andDo(MockMvcResultHandlers.print()).andReturn();
+
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail(e.getMessage());

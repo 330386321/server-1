@@ -402,6 +402,7 @@ public class MemberController extends BaseController {
     		 dto.setHeadimg(memberBO.getHeadimg());
     		 dto.setMobile(memberBO.getMobile());
     		 dto.setRegionPath(memberBO.getRegionPath());
+    		 dto.setNickname(memberBO.getNickname());
     		 dtoList.add(dto);
 		}
 		return successGet(dtoList);

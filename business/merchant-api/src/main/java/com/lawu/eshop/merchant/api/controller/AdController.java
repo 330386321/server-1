@@ -29,10 +29,13 @@ import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.AdSaveInfoDTO;
 import com.lawu.eshop.ad.dto.IsMyDateDTO;
+import com.lawu.eshop.ad.dto.PointGetDetailDTO;
+import com.lawu.eshop.ad.dto.UserTopDTO;
 import com.lawu.eshop.ad.param.AdAgainPutParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.PointGetDetailParam;
 import com.lawu.eshop.ad.param.UserRedpacketValue;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
@@ -50,6 +53,7 @@ import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.AdCountCacheService;
 import com.lawu.eshop.merchant.api.service.AdService;
 import com.lawu.eshop.merchant.api.service.MemberCountService;
+import com.lawu.eshop.merchant.api.service.MemberService;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.merchant.api.service.ProductService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
@@ -57,6 +61,7 @@ import com.lawu.eshop.product.dto.ProductRelateAdInfoDTO;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantStoreAdInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 
@@ -101,6 +106,9 @@ public class AdController extends BaseController {
 
     @Autowired
    	private AdCountCacheService adCountCacheService;
+    
+    @Autowired
+    private MemberService memberService;
 
     @Deprecated
     @Audit(date = "2017-04-15", reviewer = "孙林青")
@@ -699,5 +707,44 @@ public class AdController extends BaseController {
     public Result<Boolean> isPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
 		return adService.isPay(id);
     }
+	
+	@ApiOperation(value = "广告领取详情", notes = "广告领取详情,[]（张荣成）", httpMethod = "GET")
+	@Authorization
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@RequestMapping(value = "getDetailPage", method = RequestMethod.GET)
+	Result<Page<PointGetDetailDTO>> getDetailPage(
+			@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@ModelAttribute @ApiParam(required = true, value = "领取参数") PointGetDetailParam param){
+		 Result<Page<PointGetDetailDTO>>  result = adService.getDetailPage(param);
+		 List<PointGetDetailDTO> list = result.getModel().getRecords();
+		 
+		 List<Long> memberIds = new ArrayList<>();
+		 if(list.isEmpty()){
+			 return result;
+		 }
+		 
+		 for (PointGetDetailDTO pointGetDetailDTO : list) {
+			 memberIds.add(pointGetDetailDTO.getMemberId());
+		 }
+		 Result<List<MemberDTO>>  mResult = memberService.getMemberByIds(memberIds);
+		 
+		 for (MemberDTO memberDTO : mResult.getModel()) {
+			 
+			 for (PointGetDetailDTO pointGetDetailDTO : list) {
+				 if(memberDTO.getId().intValue()==pointGetDetailDTO.getMemberId().intValue()){
+					 pointGetDetailDTO.setAccount(memberDTO.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
+					 pointGetDetailDTO.setUrl(memberDTO.getHeadimg());
+					 if(StringUtils.isNotEmpty(memberDTO.getNickname())){
+						 pointGetDetailDTO.setName(memberDTO.getNickname().substring(0,1)+"**"+memberDTO.getNickname().substring(memberDTO.getNickname().length()-1,memberDTO.getNickname().length())); 
+					 }
+					 
+				 }
+				 
+			 }
+			 
+		 }
+		 
+		 return result;
+	}
 
 }

@@ -40,6 +40,7 @@ import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.AdSetPayParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
+import com.lawu.eshop.ad.param.PointGetDetailParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdClickPraiseInfoBO;
@@ -54,6 +55,7 @@ import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
+import com.lawu.eshop.ad.srv.bo.PointGetDetailBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketIsSendBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
@@ -1424,6 +1426,53 @@ public class AdServiceImpl implements AdService {
 	public Boolean isPay(Long id) {
 		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
 		return adDO.getIsPay();
+	}
+
+	@Override
+	public Page<PointGetDetailBO> getDetailPage(PointGetDetailParam param) {
+		
+		Page<PointGetDetailBO> page = new Page<>();
+		List<PointGetDetailBO> listDetail = new ArrayList<>();
+		if(param.getTypeEnum().getVal()==AdTypeEnum.AD_TYPE_FLAT.getVal() || param.getTypeEnum().getVal()==AdTypeEnum.AD_TYPE_VIDEO.getVal()){
+			
+			MemberAdRecordDOExample maDoExample = new MemberAdRecordDOExample();
+			maDoExample.createCriteria().andAdIdEqualTo(param.getId());
+			RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+			List<MemberAdRecordDO> list = memberAdRecordDOMapper.selectByExampleWithRowbounds(maDoExample, rowBounds);
+			page.setCurrentPage(param.getCurrentPage());
+			Long count = memberAdRecordDOMapper.countByExample(maDoExample);
+			page.setTotalCount(count.intValue());
+			
+			for (MemberAdRecordDO memberAdRecordDO : list) {
+				PointGetDetailBO detail = new PointGetDetailBO();
+				detail.setMemberId(memberAdRecordDO.getMemberId());
+				detail.setGmtCreate(memberAdRecordDO.getGmtCreate());
+				detail.setPoint(memberAdRecordDO.getPoint());
+				listDetail.add(detail);
+			}
+			
+		}else{
+			
+			PointPoolDOExample ppExample = new PointPoolDOExample();
+			ppExample.createCriteria().andAdIdEqualTo(param.getId());
+			RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+			List<PointPoolDO> list = pointPoolDOMapper.selectByExampleWithRowbounds(ppExample, rowBounds);
+			page.setCurrentPage(param.getCurrentPage());
+			Long count = pointPoolDOMapper.countByExample(ppExample);
+			page.setTotalCount(count.intValue());
+			
+			for (PointPoolDO pointPoolDO : list) {
+				PointGetDetailBO detail = new PointGetDetailBO();
+				detail.setMemberId(pointPoolDO.getMemberId());
+				detail.setGmtCreate(pointPoolDO.getGmtCreate());
+				detail.setPoint(pointPoolDO.getPoint().multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
+				listDetail.add(detail);
+			}
+			
+		}
+		page.setRecords(listDetail);
+		
+		return page;
 	}
 
 	

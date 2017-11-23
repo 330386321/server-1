@@ -59,12 +59,12 @@
         </dependency>
         <dependency>
             <groupId>com.lawu.eshop</groupId>
-            <artifactId>media</artifactId>
+            <artifactId>common-dto</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.lawu.eshop</groupId>
-            <artifactId>statistics-dto</artifactId>
+            <artifactId>media</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
