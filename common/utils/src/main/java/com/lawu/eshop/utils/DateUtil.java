@@ -21,13 +21,13 @@ public class DateUtil {
 	private static Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
 	// 默认日期格式
-	private static final String DATE_DEFAULT_FORMAT = "yyyy-MM-dd";
+	public static final String DATE_DEFAULT_FORMAT = "yyyy-MM-dd";
 
 	// 斜杠日期格式
-	private static final String DATE_SPRIT_FORMAT = "yyyy/MM/dd";
+	public static final String DATE_SPRIT_FORMAT = "yyyy/MM/dd";
 
 	// int日期格式
-	private static final String DATE_INT_FORMAT = "yyyyMMdd";
+	public static final String DATE_INT_FORMAT = "yyyyMMdd";
 
 	// 年月日期格式
 	public static final String DATE_YYYY_MM_FORMAT = "yyyy-MM";
@@ -36,54 +36,19 @@ public class DateUtil {
 	public static final String DATE_MM_DD_FORMAT = "MM-dd";
 
 	// 默认日期时间格式
-	private static final String DATETIME_DEFAULT_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	public static final String DATETIME_DEFAULT_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
 	// 斜杠日期时间格式
-	private static final String DATETIME_SPRIT_FORMAT = "yyyy/MM/dd HH:mm:ss";
+	public static final String DATETIME_SPRIT_FORMAT = "yyyy/MM/dd HH:mm:ss";
 
 	// int日期时间格式
-	private static final String DATETIME_INT_FORMAT = "yyyyMMddHHmmss";
+	public static final String DATETIME_INT_FORMAT = "yyyyMMddHHmmss";
 
 	// 默认时间格式
-	private static final String TIME_DEFAULT_FORMAT = "HH:mm:ss";
+	public static final String TIME_DEFAULT_FORMAT = "HH:mm:ss";
 
 	// int时间格式
-	private static final String TIME_INT_FORMAT = "HHmmss";
-
-	// 默认日期格式化
-	private static DateFormat dateFormat;
-
-	// 斜杠日期格式化
-	private static DateFormat dateSpritFormat;
-
-	// int日期格式化
-	private static DateFormat dateIntFormat;
-
-	// 日期时间格式化
-	private static DateFormat dateTimeFormat;
-
-	// 斜杠日期时间格式化
-	private static DateFormat dateTimeSpritFormat;
-
-	// int日期时间格式化
-	private static DateFormat dateTimeIntFormat;
-
-	// 时间格式化
-	private static DateFormat timeFormat;
-
-	// int时间格式化
-	private static DateFormat timeIntFormat;
-
-	static {
-		dateFormat = new SimpleDateFormat(DATE_DEFAULT_FORMAT);
-		dateSpritFormat = new SimpleDateFormat(DATE_SPRIT_FORMAT);
-		dateIntFormat = new SimpleDateFormat(DATE_INT_FORMAT);
-		dateTimeFormat = new SimpleDateFormat(DATETIME_DEFAULT_FORMAT);
-		dateTimeSpritFormat = new SimpleDateFormat(DATETIME_SPRIT_FORMAT);
-		dateTimeIntFormat = new SimpleDateFormat(DATETIME_INT_FORMAT);
-		timeFormat = new SimpleDateFormat(TIME_DEFAULT_FORMAT);
-		timeIntFormat = new SimpleDateFormat(TIME_INT_FORMAT);
-	}
+	public static final String TIME_INT_FORMAT = "HHmmss";
 
 	private DateUtil() {
 	}
@@ -94,6 +59,7 @@ public class DateUtil {
 	 * @return String
 	 */
 	public static String getDate() {
+	    DateFormat dateFormat = new SimpleDateFormat(DATE_DEFAULT_FORMAT);
 		return dateFormat.format(new Date());
 	}
 
@@ -103,6 +69,7 @@ public class DateUtil {
 	 * @return String
 	 */
 	public static String getSpritDate() {
+	    DateFormat dateSpritFormat = new SimpleDateFormat(DATE_SPRIT_FORMAT);
 		return dateSpritFormat.format(new Date());
 	}
 
@@ -112,6 +79,7 @@ public class DateUtil {
 	 * @return String
 	 */
 	public static String getIntDate() {
+	    DateFormat dateIntFormat = new SimpleDateFormat(DATE_INT_FORMAT);
 		return dateIntFormat.format(new Date());
 	}
 
@@ -121,7 +89,8 @@ public class DateUtil {
 	 * @return String
 	 */
 	public static String getDateTime() {
-		return dateTimeFormat.format(new Date());
+	    DateFormat dateTimeFormat = new SimpleDateFormat(DATETIME_DEFAULT_FORMAT);
+	    return dateTimeFormat.format(new Date());
 	}
 
 	/**
@@ -130,6 +99,7 @@ public class DateUtil {
 	 * @return String
 	 */
 	public static String getSpritDateTime() {
+	    DateFormat dateTimeSpritFormat = new SimpleDateFormat(DATETIME_SPRIT_FORMAT);
 		return dateTimeSpritFormat.format(new Date());
 	}
 
@@ -139,6 +109,7 @@ public class DateUtil {
 	 * @return String
 	 */
 	public static String getIntDateTime() {
+	    DateFormat dateTimeIntFormat = new SimpleDateFormat(DATETIME_INT_FORMAT);
 		return dateTimeIntFormat.format(new Date());
 	}
 
@@ -148,6 +119,7 @@ public class DateUtil {
 	 * @return String
 	 */
 	public static String getTime() {
+	    DateFormat timeFormat = new SimpleDateFormat(TIME_DEFAULT_FORMAT);
 		return timeFormat.format(new Date());
 	}
 
@@ -157,6 +129,7 @@ public class DateUtil {
 	 * @return String
 	 */
 	public static String getIntTime() {
+	    DateFormat timeIntFormat = new SimpleDateFormat(TIME_INT_FORMAT);
 		return timeIntFormat.format(new Date());
 	}
 
@@ -167,6 +140,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static Double dateDateToDoubleDate(Date date) {
+	    DateFormat dateTimeIntFormat = new SimpleDateFormat(DATETIME_INT_FORMAT);
 		return Double.valueOf(dateTimeIntFormat.format(date));
 	}
 
@@ -177,6 +151,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static String getDateTimeFormat(Date date) {
+	    DateFormat dateTimeFormat = new SimpleDateFormat(DATETIME_DEFAULT_FORMAT);
 		return dateTimeFormat.format(date);
 	}
 
@@ -187,6 +162,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static String getDateFormat(Date date) {
+	    DateFormat dateFormat = new SimpleDateFormat(DATE_DEFAULT_FORMAT);
 		return dateFormat.format(date);
 	}
 
@@ -197,6 +173,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static Date stringToDate(String date) {
+	    DateFormat dateTimeFormat = new SimpleDateFormat(DATETIME_DEFAULT_FORMAT);
 		try {
 			return dateTimeFormat.parse(date);
 		} catch (ParseException e) {
@@ -267,7 +244,9 @@ public class DateUtil {
 
 		try {
 			Date endDate = new Date();
+			DateFormat dateFormat = new SimpleDateFormat(DATE_DEFAULT_FORMAT);
 			String date = dateFormat.format(beginDate) + " 23:59:59";
+			DateFormat dateTimeFormat = new SimpleDateFormat(DATETIME_DEFAULT_FORMAT);
 			long intervalMilli = endDate.getTime() - dateTimeFormat.parse(date).getTime();
 			return intervalMilli > 0;
 		} catch (Exception e) {
@@ -324,6 +303,7 @@ public class DateUtil {
 	 * @return HH:mm:ss
 	 */
 	public static String getTimeFormat(Date date) {
+	    DateFormat timeFormat = new SimpleDateFormat(TIME_DEFAULT_FORMAT);
 		return timeFormat.format(date);
 	}
 
@@ -346,6 +326,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static Date getDateFormat(String date) {
+	    DateFormat dateFormat = new SimpleDateFormat(DATE_DEFAULT_FORMAT);
 		try {
 			return dateFormat.parse(date);
 		} catch (ParseException e) {
@@ -361,6 +342,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static Date getDateTimeFormat(String date) {
+	    DateFormat dateTimeFormat = new SimpleDateFormat(DATETIME_DEFAULT_FORMAT);
 		try {
 			return dateTimeFormat.parse(date);
 		} catch (ParseException e) {
@@ -376,6 +358,7 @@ public class DateUtil {
 	 * @return
 	 */
 	public static Date getNowDate() {
+	    DateFormat dateFormat = new SimpleDateFormat(DATE_DEFAULT_FORMAT);
 		return DateUtil.getDateFormat(dateFormat.format(new Date()));
 	}
 
@@ -781,6 +764,7 @@ public class DateUtil {
 	}
 
 	public static String getIntDateByTime(Date time) {
+	    DateFormat dateIntFormat = new SimpleDateFormat(DATE_INT_FORMAT);
 		return dateIntFormat.format(time);
 	}
 
@@ -796,7 +780,7 @@ public class DateUtil {
 	public static boolean checkDateFormat(String dateStr, String formatStr) {
 		SimpleDateFormat format = new SimpleDateFormat(formatStr);
 		try {
-			Date date = format.parse(dateStr);
+			format.parse(dateStr);
 		} catch (Exception e) {
 			return false;
 		}
