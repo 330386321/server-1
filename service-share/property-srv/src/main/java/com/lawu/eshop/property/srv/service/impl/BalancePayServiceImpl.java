@@ -91,6 +91,7 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
         tdsParam.setBizId(param.getBizIds());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
+        tdsParam.setTransactionDesc(param.getMemberTransactionTypeEnum().getDescPrefix()+param.getTitle());
         transactionDetailService.save(tdsParam);
 
         //减会员财产余额
@@ -131,6 +132,7 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam.setBizId(param.getBizIds());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(transactionNum);
+        tdsParam.setTransactionDesc(param.getMemberTransactionTypeEnum().getDescPrefix()+param.getTitle());
         transactionDetailService.save(tdsParam);
         //减会员财产余额
         int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "M", new BigDecimal(param.getTotalAmount()));
@@ -151,6 +153,7 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam1.setBizNum(transactionNum);
         tdsParam1.setRegionPath(param.getRegionPath());
         tdsParam1.setTitle(param.getTitleMerchant());
+        tdsParam1.setTransactionDesc(param.getMerchantTransactionTypeEnum().getDescPrefix()+param.getTitleMerchant());
         transactionDetailService.save(tdsParam1);
         //加商家财产余额
         PropertyInfoDOEiditView infoDoView1 = new PropertyInfoDOEiditView();
@@ -207,6 +210,7 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam.setBizId(param.getBizIds());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(num);
+        tdsParam.setTransactionDesc(MemberTransactionTypeEnum.getEnum(transactionType).getDescPrefix());
         transactionDetailService.save(tdsParam);
 
         //新增积分明细
@@ -310,6 +314,7 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
         tdsParam.setBizId(param.getBizIds());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
+        tdsParam.setTransactionDesc(param.getMemberTransactionTypeEnum().getDescPrefix()+param.getTitle());
         transactionDetailService.save(tdsParam);
 
         //减会员财产余额
@@ -350,6 +355,7 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam.setBizId(param.getBizIds());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(transactionNum);
+        tdsParam.setTransactionDesc(param.getMemberTransactionTypeEnum().getDescPrefix()+param.getTitle());
         transactionDetailService.save(tdsParam);
         //减会员财产余额
         int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "M", new BigDecimal(param.getTotalAmount()));
@@ -369,6 +375,7 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam1.setDirection(PropertyInfoDirectionEnum.IN.getVal());
         tdsParam1.setBizNum(transactionNum);
         tdsParam1.setRegionPath(param.getRegionPath());
+        tdsParam1.setTransactionDesc(param.getMerchantTransactionTypeEnum().getDescPrefix()+param.getTitleMerchant());
         transactionDetailService.save(tdsParam1);
         //加商家财产余额
         PropertyInfoDOEiditView infoDoView1 = new PropertyInfoDOEiditView();
@@ -425,6 +432,7 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam.setBizId(param.getBizIds());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(num);
+        tdsParam.setTransactionDesc(MemberTransactionTypeEnum.getEnum(transactionType).getDescPrefix());
         transactionDetailService.save(tdsParam);
 
         //新增积分明细

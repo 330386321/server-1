@@ -89,25 +89,10 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
             return ResultCode.PROPERTY_CASH_BANK_NOT_MATCH;
         }
 
-        WithdrawCashDO withdrawCashDO = new WithdrawCashDO();
-//        WithdrawCashDOExample example = new WithdrawCashDOExample();
-//        example.createCriteria().andUserNumEqualTo(cash.getUserNum()).andStatusLessThan(CashStatusEnum.FAILURE.getVal()).andGmtCreateGreaterThanOrEqualTo(DateUtil.formatDate(DateUtil.getDateFormat(new Date(),"yyyy-MM")+"-01 00:00:00","yyyy-MM-dd HH:mm:ss"));
-//        int count = withdrawCashDOMapper.countByExample(example);
-//        String currentScale = propertyService.getValue(PropertyType.CASH_SCALE);
-//        double dCurrentScale = Double.parseDouble(currentScale);
-//        double money = 0;
-//        if (count > 0) {
-//            String minusMoney = propertyService.getValue(PropertyType.CASH_GREATER_ONE_MINUS_MONEY);
-//            money = dCashMoney * dCurrentScale - Double.parseDouble(minusMoney);
-//            withdrawCashDO.setRemark("自然月提现次数大于1次后，实际到账=提现金额*95%-5块");
-//        } else {
-//            money = dCashMoney * dCurrentScale;
-//        }
+        BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(cash.getBusinessBankAccountId());
 
-        // 保存提现表记录
+        WithdrawCashDO withdrawCashDO = new WithdrawCashDO();
         withdrawCashDO.setCashMoney(new BigDecimal(cash.getCashMoney()));
-//        withdrawCashDO.setCurrentScale(currentScale);
-//        withdrawCashDO.setMoney(BigDecimal.valueOf(money));
         withdrawCashDO.setUserNum(cash.getUserNum());
         withdrawCashDO.setUserType(cash.getUserType());
         withdrawCashDO.setChannel(CashChannelEnum.ARTIFICIAL.getVal());
@@ -121,6 +106,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
         withdrawCashDO.setCityId(cash.getCityId());
         withdrawCashDO.setAreaId(cash.getAreaId());
         withdrawCashDO.setRegionFullName(cash.getRegionFullName());
+        withdrawCashDO.setRemark(bankAccountDO.getNote());
         withdrawCashDOMapper.insertSelective(withdrawCashDO);
 
         // 新增交易明细

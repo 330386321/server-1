@@ -1552,52 +1552,52 @@ public class MemberDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andGradeEqualTo(Boolean value) {
+        public Criteria andGradeEqualTo(Byte value) {
             addCriterion("grade =", value, "grade");
             return (Criteria) this;
         }
 
-        public Criteria andGradeNotEqualTo(Boolean value) {
+        public Criteria andGradeNotEqualTo(Byte value) {
             addCriterion("grade <>", value, "grade");
             return (Criteria) this;
         }
 
-        public Criteria andGradeGreaterThan(Boolean value) {
+        public Criteria andGradeGreaterThan(Byte value) {
             addCriterion("grade >", value, "grade");
             return (Criteria) this;
         }
 
-        public Criteria andGradeGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andGradeGreaterThanOrEqualTo(Byte value) {
             addCriterion("grade >=", value, "grade");
             return (Criteria) this;
         }
 
-        public Criteria andGradeLessThan(Boolean value) {
+        public Criteria andGradeLessThan(Byte value) {
             addCriterion("grade <", value, "grade");
             return (Criteria) this;
         }
 
-        public Criteria andGradeLessThanOrEqualTo(Boolean value) {
+        public Criteria andGradeLessThanOrEqualTo(Byte value) {
             addCriterion("grade <=", value, "grade");
             return (Criteria) this;
         }
 
-        public Criteria andGradeIn(List<Boolean> values) {
+        public Criteria andGradeIn(List<Byte> values) {
             addCriterion("grade in", values, "grade");
             return (Criteria) this;
         }
 
-        public Criteria andGradeNotIn(List<Boolean> values) {
+        public Criteria andGradeNotIn(List<Byte> values) {
             addCriterion("grade not in", values, "grade");
             return (Criteria) this;
         }
 
-        public Criteria andGradeBetween(Boolean value1, Boolean value2) {
+        public Criteria andGradeBetween(Byte value1, Byte value2) {
             addCriterion("grade between", value1, value2, "grade");
             return (Criteria) this;
         }
 
-        public Criteria andGradeNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andGradeNotBetween(Byte value1, Byte value2) {
             addCriterion("grade not between", value1, value2, "grade");
             return (Criteria) this;
         }

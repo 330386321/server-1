@@ -191,7 +191,7 @@ public class MemberDO implements Serializable {
      *
      * @mbg.generated
      */
-    private Boolean grade;
+    private Byte grade;
 
     /**
      *
@@ -716,7 +716,7 @@ public class MemberDO implements Serializable {
      *
      * @mbg.generated
      */
-    public Boolean getGrade() {
+    public Byte getGrade() {
         return grade;
     }
 
@@ -728,7 +728,7 @@ public class MemberDO implements Serializable {
      *
      * @mbg.generated
      */
-    public void setGrade(Boolean grade) {
+    public void setGrade(Byte grade) {
         this.grade = grade;
     }
 

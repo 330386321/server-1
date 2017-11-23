@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.dto.TransactionDetailH5InfoDTO;
+import com.lawu.eshop.property.dto.TransactionDetailH5InfoMemberDTO;
+import com.lawu.eshop.property.dto.TransactionDetailH5InfoMerchantDTO;
+import com.lawu.eshop.property.srv.bo.TransactionDetailH5InfoBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -66,7 +70,7 @@ public class TransactionDetailController extends BaseController {
 	 * 提供给用户
 	 * <p>
 	 * 根据用户编号和查询参数查询交易明细
-	 * 
+	 *
 	 * @param userNum
 	 *            用户编号
 	 * @param param
@@ -77,7 +81,7 @@ public class TransactionDetailController extends BaseController {
 	@RequestMapping(value = "findPageByUserNumForMember/{userNum}", method = RequestMethod.POST)
 	public Result<Page<TransactionDetailToMemberDTO>> findPageByUserNumForMember(@PathVariable("userNum") String userNum, @RequestBody TransactionDetailQueryForMemberParam param) {
 		Page<TransactionDetailBO> transactionDetailBOPage = transactionDetailService.findPageByUserNumForMember(userNum, param);
-		
+
 		return successCreated(TransactionDetailConverter.convertTransactionDetailToMemberDTOPage(transactionDetailBOPage));
 	}
 
@@ -86,7 +90,7 @@ public class TransactionDetailController extends BaseController {
 	 * 提供给商家
 	 * <p>
 	 * 根据用户编号和查询参数查询交易明细
-	 * 
+	 *
 	 * @param userNum
 	 *            用户编号
 	 * @param transactionDetailQueryParam
@@ -96,13 +100,13 @@ public class TransactionDetailController extends BaseController {
 	@RequestMapping(value = "findPageByUserNumForMerchant/{userNum}", method = RequestMethod.POST)
 	public Result<Page<TransactionDetailToMerchantDTO>> findPageByUserNumForMerchant(@PathVariable("userNum") String userNum, @RequestBody TransactionDetailQueryForMerchantParam transactionDetailQueryParam) {
 		Page<TransactionDetailBO> transactionDetailBOPage = transactionDetailService.findPageByUserNumForMerchant(userNum, transactionDetailQueryParam);
-		
+
 		return successCreated(TransactionDetailConverter.convertTransactionDetailToMerchantDTOPage(transactionDetailBOPage));
 	}
 
 	/**
 	 * 保存交易明细记录
-	 * 
+	 *
 	 * @param param
 	 * @return
 	 */
@@ -124,7 +128,7 @@ public class TransactionDetailController extends BaseController {
 
 		return successCreated(TransactionDetailConverter.convertTransactionDetailBackageDTOPage(transactionDetailBOPage));
 	}
-	
+
 	/**
 	 * 查询指定日期的平台销量
 	 *
@@ -137,7 +141,7 @@ public class TransactionDetailController extends BaseController {
 		TotalSalesDTO rtn = TotalSalesConverter.convertTotalSalesDTO(totalSalesBOList);
 		return successCreated(rtn);
 	}
-	
+
 	/**
 	 * 查询指定日期的平台销量(group by area)
 	 *
@@ -164,8 +168,8 @@ public class TransactionDetailController extends BaseController {
 		}
 		return successCreated(rtnList);
 	}
-	
-	
+
+
 	/**
 	 * 查询用户收入和支出
 	 *
@@ -200,10 +204,10 @@ public class TransactionDetailController extends BaseController {
 		}
 		return successCreated(dtos);
 	}
-	
+
     /**
      * 根据会员编号和查询参数分页查询交易明细
-     * 
+     *
      * @param userNum 会员编号
      * @param param 查询参数
      * @return
@@ -219,10 +223,10 @@ public class TransactionDetailController extends BaseController {
         Page<TransactionDetailBO> transactionDetailBOPage = transactionDetailService.page(userNum, param);
         return successCreated(TransactionDetailConverter.convertTransactionDetailOfMemberDTOPage(transactionDetailBOPage));
     }
-    
+
     /**
      * 根据会员编号和查询参数月结账单
-     * 
+     *
      * @param userNum 会员编号
      * @param param 查询参数
      * @return
@@ -238,10 +242,10 @@ public class TransactionDetailController extends BaseController {
         MonthlyBillBO monthlyBillBO = transactionDetailService.monthlyBill(userNum, param);
         return successCreated(TransactionDetailConverter.convert(monthlyBillBO));
     }
-    
+
     /**
      * 根据会员编号和查询参数分页查询交易明细
-     * 
+     *
      * @param userNum 会员编号
      * @param param 查询参数
      * @return
@@ -257,10 +261,10 @@ public class TransactionDetailController extends BaseController {
         Page<TransactionDetailBO> transactionDetailBOPage = transactionDetailService.page(userNum, param);
         return successCreated(TransactionDetailConverter.convertTransactionDetailOfMerchantDTOPage(transactionDetailBOPage));
     }
-    
+
     /**
      * 根据会员编号和查询参数月结账单
-     * 
+     *
      * @param userNum 会员编号
      * @param param 查询参数
      * @return
@@ -276,5 +280,16 @@ public class TransactionDetailController extends BaseController {
         MonthlyBillBO monthlyBillBO = transactionDetailService.monthlyBill(userNum, param);
         return successCreated(TransactionDetailConverter.convert(monthlyBillBO));
     }
-    
+
+    @RequestMapping(value = "getById/member/{id}", method = RequestMethod.GET)
+    public Result<TransactionDetailH5InfoMemberDTO> getByIdOfMember(@PathVariable("id") Long id) {
+        TransactionDetailH5InfoBO transactionDetailH5InfoBO = transactionDetailService.getById(id);
+        return successCreated(TransactionDetailConverter.convertToTransactionDetailH5InfoMemberDTO(transactionDetailH5InfoBO));
+    }
+
+    @RequestMapping(value = "getById/merchant/{id}", method = RequestMethod.GET)
+    public Result<TransactionDetailH5InfoMerchantDTO> getByIdOfMerchant(@PathVariable("id") Long id) {
+        TransactionDetailH5InfoBO transactionDetailH5InfoBO = transactionDetailService.getById(id);
+        return successCreated(TransactionDetailConverter.convertToTransactionDetailH5InfoMerchantDTO(transactionDetailH5InfoBO));
+    }
 }

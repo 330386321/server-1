@@ -23,6 +23,7 @@ import com.lawu.eshop.property.srv.bo.MonthlyBillBO;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
 import com.lawu.eshop.property.srv.bo.TotalSalesGroupByAreaBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
+import com.lawu.eshop.property.srv.bo.TransactionDetailH5InfoBO;
 import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
 
 /**
@@ -164,4 +165,11 @@ public interface TransactionDetailService {
      * @date 2017年10月20日
      */
     MonthlyBillBO monthlyBill(String userNum, TransactionDetailMonthlyBillOfMerchantForeignParam param);
+
+	/**
+	 * 交易详情
+	 * @param id
+	 * @return
+	 */
+	TransactionDetailH5InfoBO getById(Long id);
 }

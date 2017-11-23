@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.service;
 
+import com.lawu.eshop.property.dto.TransactionDetailH5InfoDTO;
+import com.lawu.eshop.property.dto.TransactionDetailH5InfoMerchantDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,4 +60,12 @@ public interface TransactionDetailService {
      */
     @RequestMapping(value = "monthlyBill/merchant/{userNum}", method = RequestMethod.POST)
     Result<MonthlyBillDTO> monthlyBill(@PathVariable("userNum") String userNum, @RequestBody TransactionDetailMonthlyBillOfMerchantForeignParam param);
+
+	/**
+	 * 交易详情
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "getById/merchant/{id}", method = RequestMethod.GET)
+	Result<TransactionDetailH5InfoMerchantDTO> getById(@PathVariable("id") Long id);
 }

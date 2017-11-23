@@ -6,6 +6,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.srv.bo.TransactionDetailH5InfoBO;
+import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
+import com.lawu.eshop.property.srv.mapper.WithdrawCashDOMapper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +84,9 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 
 	@Autowired
 	private PropertyInfoDOMapper propertyInfoDOMapper;
+
+	@Autowired
+	private WithdrawCashDOMapper withdrawCashDOMapper;
 
 	/**
 	 * 根据用户编号、查询参数分页查询交易明细  - 商家
@@ -569,4 +577,44 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
         List<MonthlyBillDO> monthlyBillDOList = transactionDetailExtendDOMapper.selectMonthlyBill(transactionDetailDOExample);
         return TransactionDetailConverter.convertMonthlyBillBO(monthlyBillDOList);
     }
+
+	@Override
+	public TransactionDetailH5InfoBO getById(Long id) {
+		TransactionDetailDO transactionDetailDO = transactionDetailDOMapper.selectByPrimaryKey(id);
+		TransactionDetailH5InfoBO bo = new TransactionDetailH5InfoBO();
+		bo.setTransactionType(transactionDetailDO.getTransactionType());
+		bo.setTitle(transactionDetailDO.getTitle());
+		bo.setDirection(ConsumptionTypeEnum.getEnum(transactionDetailDO.getDirection()));
+		bo.setAmount(transactionDetailDO.getAmount());
+		bo.setTransactionDesc(transactionDetailDO.getTransactionDesc());
+		bo.setGmtCreate(transactionDetailDO.getGmtCreate());
+		bo.setTransactionNum(transactionDetailDO.getTransactionNum());
+		if(TransactionPayTypeEnum.BALANCE.getVal().equals(transactionDetailDO.getTransactionAccountType())){
+			bo.setOtherDesc("余额支付");
+		} else if(TransactionPayTypeEnum.ALIPAY.getVal().equals(transactionDetailDO.getTransactionAccountType())){
+			bo.setOtherDesc("支付宝支付");
+		}  else if(TransactionPayTypeEnum.WX.getVal().equals(transactionDetailDO.getTransactionAccountType())){
+			bo.setOtherDesc("微信支付");
+		} else if(TransactionPayTypeEnum.PLAT.getVal().equals(transactionDetailDO.getTransactionAccountType())){
+			bo.setOtherDesc("平台支付");
+		}
+
+		if(MemberTransactionTypeEnum.WITHDRAW.getValue().equals(transactionDetailDO.getTransactionType()) || MerchantTransactionTypeEnum.WITHDRAW.getValue().equals(transactionDetailDO.getTransactionType())){
+			WithdrawCashDO withdrawCashDO = withdrawCashDOMapper.selectByPrimaryKey(Long.parseLong(transactionDetailDO.getBizId()));
+			bo.setOtherDesc(withdrawCashDO.getRemark());
+		}
+		if(MemberTransactionTypeEnum.WITHDRAW_BACK.getValue().equals(transactionDetailDO.getTransactionType()) || MerchantTransactionTypeEnum.WITHDRAW_BACK.getValue().equals(transactionDetailDO.getTransactionType())){
+			bo.setOtherDesc("原路退回-余额");
+		}
+		if(MemberTransactionTypeEnum.REFUND_ORDERS.getValue().equals(transactionDetailDO.getTransactionType())){
+			if(TransactionPayTypeEnum.BALANCE.getVal().equals(transactionDetailDO.getTransactionAccountType())){
+				bo.setOtherDesc("原路退回-余额");
+			} else if(TransactionPayTypeEnum.ALIPAY.getVal().equals(transactionDetailDO.getTransactionAccountType())){
+				bo.setOtherDesc("原路退回-支付宝");
+			}  else if(TransactionPayTypeEnum.WX.getVal().equals(transactionDetailDO.getTransactionAccountType())){
+				bo.setOtherDesc("原路退回-微信");
+			}
+		}
+		return bo;
+	}
 }

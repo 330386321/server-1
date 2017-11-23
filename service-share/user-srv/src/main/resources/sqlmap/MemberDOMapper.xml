@@ -26,7 +26,7 @@
     <result column="level" property="level" jdbcType="INTEGER" />
     <result column="gt_cid" property="gtCid" jdbcType="VARCHAR" />
     <result column="ry_token" property="ryToken" jdbcType="VARCHAR" />
-    <result column="grade" property="grade" jdbcType="BIT" />
+    <result column="grade" property="grade" jdbcType="TINYINT" />
     <result column="growth_value" property="growthValue" jdbcType="INTEGER" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
@@ -174,7 +174,7 @@
       #{birthday,jdbcType=DATE}, #{headimg,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
       #{isFreeze,jdbcType=BIT}, #{freezeReason,jdbcType=VARCHAR}, #{inviterId,jdbcType=BIGINT}, 
       #{inviterType,jdbcType=TINYINT}, #{level,jdbcType=INTEGER}, #{gtCid,jdbcType=VARCHAR}, 
-      #{ryToken,jdbcType=VARCHAR}, #{grade,jdbcType=BIT}, #{growthValue,jdbcType=INTEGER}, 
+      #{ryToken,jdbcType=VARCHAR}, #{grade,jdbcType=TINYINT}, #{growthValue,jdbcType=INTEGER}, 
       #{gmtModified,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.user.srv.domain.MemberDO" >
@@ -316,7 +316,7 @@
         #{ryToken,jdbcType=VARCHAR},
       </if>
       <if test="grade != null" >
-        #{grade,jdbcType=BIT},
+        #{grade,jdbcType=TINYINT},
       </if>
       <if test="growthValue != null" >
         #{growthValue,jdbcType=INTEGER},
@@ -407,7 +407,7 @@
         ry_token = #{record.ryToken,jdbcType=VARCHAR},
       </if>
       <if test="record.grade != null" >
-        grade = #{record.grade,jdbcType=BIT},
+        grade = #{record.grade,jdbcType=TINYINT},
       </if>
       <if test="record.growthValue != null" >
         growth_value = #{record.growthValue,jdbcType=INTEGER},
@@ -449,7 +449,7 @@
       level = #{record.level,jdbcType=INTEGER},
       gt_cid = #{record.gtCid,jdbcType=VARCHAR},
       ry_token = #{record.ryToken,jdbcType=VARCHAR},
-      grade = #{record.grade,jdbcType=BIT},
+      grade = #{record.grade,jdbcType=TINYINT},
       growth_value = #{record.growthValue,jdbcType=INTEGER},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP}
@@ -522,7 +522,7 @@
         ry_token = #{ryToken,jdbcType=VARCHAR},
       </if>
       <if test="grade != null" >
-        grade = #{grade,jdbcType=BIT},
+        grade = #{grade,jdbcType=TINYINT},
       </if>
       <if test="growthValue != null" >
         growth_value = #{growthValue,jdbcType=INTEGER},
@@ -561,7 +561,7 @@
       level = #{level,jdbcType=INTEGER},
       gt_cid = #{gtCid,jdbcType=VARCHAR},
       ry_token = #{ryToken,jdbcType=VARCHAR},
-      grade = #{grade,jdbcType=BIT},
+      grade = #{grade,jdbcType=TINYINT},
       growth_value = #{growthValue,jdbcType=INTEGER},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}

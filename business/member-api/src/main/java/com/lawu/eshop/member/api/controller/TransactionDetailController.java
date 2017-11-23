@@ -7,10 +7,13 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import com.lawu.eshop.property.dto.TransactionDetailH5InfoDTO;
+import com.lawu.eshop.property.dto.TransactionDetailH5InfoMemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -182,6 +185,18 @@ public class TransactionDetailController extends BaseController {
         }
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         Result<MonthlyBillDTO> result = transactionDetailService.monthlyBill(userNum, param);
+        if (!isSuccess(result)) {
+            return successGet(result);
+        }
+        return successGet(result);
+    }
+
+    @ApiOperation(value = "获取交易明细详情", notes = "分页获取交易明细详情。[]（杨清华）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public Result<TransactionDetailH5InfoMemberDTO> getById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "列表ID") Long id) {
+        Result<TransactionDetailH5InfoMemberDTO> result = transactionDetailService.getById(id);
         if (!isSuccess(result)) {
             return successGet(result);
         }

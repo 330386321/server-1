@@ -16,6 +16,9 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2017年10月20日
  */
 public class TransactionDetailForeignDTO {
+
+    @ApiModelProperty(value = "列表ID", required = true)
+    private Long id;
     
     /**
      * 交易标题
@@ -42,7 +45,15 @@ public class TransactionDetailForeignDTO {
      */
     @ApiModelProperty(value = "资金流向(EXPENDITURE-支出|INCOME-收入)", required = true)
     private ConsumptionTypeEnum direction;
-    
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }
