@@ -10,4 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>mall-dto</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>com.lawu.eshop</groupId>
+            <artifactId>common-dto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
