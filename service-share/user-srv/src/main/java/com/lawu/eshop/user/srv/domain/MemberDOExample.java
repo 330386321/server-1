@@ -1542,6 +1542,126 @@ public class MemberDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andGradeIsNull() {
+            addCriterion("grade is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGradeIsNotNull() {
+            addCriterion("grade is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGradeEqualTo(Boolean value) {
+            addCriterion("grade =", value, "grade");
+            return (Criteria) this;
+        }
+
+        public Criteria andGradeNotEqualTo(Boolean value) {
+            addCriterion("grade <>", value, "grade");
+            return (Criteria) this;
+        }
+
+        public Criteria andGradeGreaterThan(Boolean value) {
+            addCriterion("grade >", value, "grade");
+            return (Criteria) this;
+        }
+
+        public Criteria andGradeGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("grade >=", value, "grade");
+            return (Criteria) this;
+        }
+
+        public Criteria andGradeLessThan(Boolean value) {
+            addCriterion("grade <", value, "grade");
+            return (Criteria) this;
+        }
+
+        public Criteria andGradeLessThanOrEqualTo(Boolean value) {
+            addCriterion("grade <=", value, "grade");
+            return (Criteria) this;
+        }
+
+        public Criteria andGradeIn(List<Boolean> values) {
+            addCriterion("grade in", values, "grade");
+            return (Criteria) this;
+        }
+
+        public Criteria andGradeNotIn(List<Boolean> values) {
+            addCriterion("grade not in", values, "grade");
+            return (Criteria) this;
+        }
+
+        public Criteria andGradeBetween(Boolean value1, Boolean value2) {
+            addCriterion("grade between", value1, value2, "grade");
+            return (Criteria) this;
+        }
+
+        public Criteria andGradeNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("grade not between", value1, value2, "grade");
+            return (Criteria) this;
+        }
+
+        public Criteria andGrowthValueIsNull() {
+            addCriterion("growth_value is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGrowthValueIsNotNull() {
+            addCriterion("growth_value is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGrowthValueEqualTo(Integer value) {
+            addCriterion("growth_value =", value, "growthValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andGrowthValueNotEqualTo(Integer value) {
+            addCriterion("growth_value <>", value, "growthValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andGrowthValueGreaterThan(Integer value) {
+            addCriterion("growth_value >", value, "growthValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andGrowthValueGreaterThanOrEqualTo(Integer value) {
+            addCriterion("growth_value >=", value, "growthValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andGrowthValueLessThan(Integer value) {
+            addCriterion("growth_value <", value, "growthValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andGrowthValueLessThanOrEqualTo(Integer value) {
+            addCriterion("growth_value <=", value, "growthValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andGrowthValueIn(List<Integer> values) {
+            addCriterion("growth_value in", values, "growthValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andGrowthValueNotIn(List<Integer> values) {
+            addCriterion("growth_value not in", values, "growthValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andGrowthValueBetween(Integer value1, Integer value2) {
+            addCriterion("growth_value between", value1, value2, "growthValue");
+            return (Criteria) this;
+        }
+
+        public Criteria andGrowthValueNotBetween(Integer value1, Integer value2) {
+            addCriterion("growth_value not between", value1, value2, "growthValue");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtModifiedIsNull() {
             addCriterion("gmt_modified is null");
             return (Criteria) this;
@@ -1659,66 +1779,6 @@ public class MemberDOExample {
 
         public Criteria andGmtCreateNotBetween(Date value1, Date value2) {
             addCriterion("gmt_create not between", value1, value2, "gmtCreate");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdIsNull() {
-            addCriterion("property_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdIsNotNull() {
-            addCriterion("property_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdEqualTo(Long value) {
-            addCriterion("property_id =", value, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdNotEqualTo(Long value) {
-            addCriterion("property_id <>", value, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdGreaterThan(Long value) {
-            addCriterion("property_id >", value, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("property_id >=", value, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdLessThan(Long value) {
-            addCriterion("property_id <", value, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdLessThanOrEqualTo(Long value) {
-            addCriterion("property_id <=", value, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdIn(List<Long> values) {
-            addCriterion("property_id in", values, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdNotIn(List<Long> values) {
-            addCriterion("property_id not in", values, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdBetween(Long value1, Long value2) {
-            addCriterion("property_id between", value1, value2, "propertyId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPropertyIdNotBetween(Long value1, Long value2) {
-            addCriterion("property_id not between", value1, value2, "propertyId");
             return (Criteria) this;
         }
     }

@@ -1046,6 +1046,76 @@ public class TransactionDetailDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andTransactionDescIsNull() {
+            addCriterion("transaction_desc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescIsNotNull() {
+            addCriterion("transaction_desc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescEqualTo(String value) {
+            addCriterion("transaction_desc =", value, "transactionDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescNotEqualTo(String value) {
+            addCriterion("transaction_desc <>", value, "transactionDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescGreaterThan(String value) {
+            addCriterion("transaction_desc >", value, "transactionDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescGreaterThanOrEqualTo(String value) {
+            addCriterion("transaction_desc >=", value, "transactionDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescLessThan(String value) {
+            addCriterion("transaction_desc <", value, "transactionDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescLessThanOrEqualTo(String value) {
+            addCriterion("transaction_desc <=", value, "transactionDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescLike(String value) {
+            addCriterion("transaction_desc like", value, "transactionDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescNotLike(String value) {
+            addCriterion("transaction_desc not like", value, "transactionDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescIn(List<String> values) {
+            addCriterion("transaction_desc in", values, "transactionDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescNotIn(List<String> values) {
+            addCriterion("transaction_desc not in", values, "transactionDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescBetween(String value1, String value2) {
+            addCriterion("transaction_desc between", value1, value2, "transactionDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTransactionDescNotBetween(String value1, String value2) {
+            addCriterion("transaction_desc not between", value1, value2, "transactionDesc");
+            return (Criteria) this;
+        }
+
         public Criteria andProvinceIdIsNull() {
             addCriterion("province_id is null");
             return (Criteria) this;
