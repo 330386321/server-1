@@ -1,18 +1,26 @@
 package com.lawu.eshop.product.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.CommentProductInfoDTO;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
+import com.lawu.eshop.product.dto.ProductModelDataDTO;
 import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
+import com.lawu.eshop.product.srv.bo.productModelDataBO;
 import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
 import com.lawu.eshop.product.srv.service.ProductModelService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 
@@ -88,6 +96,26 @@ public class ProductModelController extends BaseController {
 		dto.setPrice(commentProductInfoBO.getPrice());
 
 		return successGet(dto);
+	}
+	
+	/**
+	 * 商品型号查询
+	 * @param productId
+	 * @return
+	 */
+	@RequestMapping(value = "queryProductModel/{productId}", method = RequestMethod.GET)
+	public Result<List<ProductModelDataDTO>> queryProductModel(@PathVariable("productId") Long productId){
+		
+		 List<productModelDataBO>  list = productModelService.queryProductModel(productId);
+		 List<ProductModelDataDTO> modelList = new ArrayList<>();
+		 for (productModelDataBO productModelDataBO : list) {
+			 ProductModelDataDTO dto = new ProductModelDataDTO();
+			 dto.setName(productModelDataBO.getName());
+			 dto.setUrl(productModelDataBO.getUrl());
+			 modelList.add(dto);
+		 }
+		 
+		 return successGet(modelList);
 	}
 
 }

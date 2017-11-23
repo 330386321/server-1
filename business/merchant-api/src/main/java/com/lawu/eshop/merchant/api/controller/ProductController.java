@@ -38,6 +38,7 @@ import com.lawu.eshop.merchant.api.service.ProductService;
 import com.lawu.eshop.product.constant.ProductImagePrefix;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
+import com.lawu.eshop.product.dto.ProductModelDataDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.EditProductParam;
@@ -344,6 +345,16 @@ public class ProductController extends BaseController {
 		}
 		String images = nimages.toString();
 		return images;
+	}
+	
+	
+	@ApiOperation(value = "查询商品型号", notes = "查询商品型号，[]，（张荣成）", httpMethod = "GET")
+	@Authorization
+	@RequestMapping(value = "queryProductModel", method = RequestMethod.GET)
+	public Result<List<ProductModelDataDTO>> queryProductModel(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@RequestParam @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {
+		return productService.queryProductModel(productId);
+
 	}
 
 	
