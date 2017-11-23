@@ -28,6 +28,8 @@ CREATE TABLE `seckill_activity_product` (
   `left_count` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '剩余数量',
   `turnover` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '成交额',
   `reasons` varchar(200) NOT NULL DEFAULT '' COMMENT '反馈原因',
+  `auditor_account` varchar(50) DEFAULT NULL COMMENT '审核人员',
+  `audit_time` datetime DEFAULT NULL COMMENT '审核时间',
   `attention_count` int(10) unsigned NOT NULL COMMENT '关注人数',
   `status` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '状态(1-未审核|2-已审核|3-未通过|)',
   `gmt_modified` datetime NOT NULL COMMENT '修改时间',
