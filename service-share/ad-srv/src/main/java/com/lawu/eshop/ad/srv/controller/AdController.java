@@ -44,6 +44,7 @@ import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.IsMyDateDTO;
 import com.lawu.eshop.ad.dto.MerchantInfoDTO;
 import com.lawu.eshop.ad.dto.OperatorAdDTO;
+import com.lawu.eshop.ad.dto.PointGetDetailDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
 import com.lawu.eshop.ad.dto.ReportAdDTO;
@@ -60,6 +61,7 @@ import com.lawu.eshop.ad.param.AdSolrRealParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.param.OperatorAdParam;
+import com.lawu.eshop.ad.param.PointGetDetailParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdClickPraiseInfoBO;
@@ -74,6 +76,7 @@ import com.lawu.eshop.ad.srv.bo.ClickPointBO;
 import com.lawu.eshop.ad.srv.bo.GetRedPacketBO;
 import com.lawu.eshop.ad.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.ad.srv.bo.OperatorAdBO;
+import com.lawu.eshop.ad.srv.bo.PointGetDetailBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
@@ -1355,5 +1358,35 @@ public class AdController extends BaseController {
 	public Result<Boolean> isPay(@PathVariable Long id) {
 		Boolean flag = adService.isPay(id);
 		return successCreated(flag);
+	}
+	
+	
+	/**
+	 * 商家端广告领取详情
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "getDetailPage", method = RequestMethod.POST)
+	public Result<Page<PointGetDetailDTO>> getDetailPage(@RequestBody PointGetDetailParam param) {
+		
+		Page<PointGetDetailDTO> pageDetail = new Page<>();
+		Page<PointGetDetailBO> page = adService.getDetailPage(param);
+		List<PointGetDetailBO> list = page.getRecords();
+		
+		List<PointGetDetailDTO> listDetail = new ArrayList<>();
+		for (PointGetDetailBO pointGetDetailBO : list) {
+			 PointGetDetailDTO detailDTO = new PointGetDetailDTO();
+			 detailDTO.setMemberId(pointGetDetailBO.getMemberId());
+			 detailDTO.setGmtCreate(pointGetDetailBO.getGmtCreate());
+			 detailDTO.setPoint(pointGetDetailBO.getPoint());
+			 listDetail.add(detailDTO);
+		}
+		
+		pageDetail.setCurrentPage(page.getCurrentPage());
+		pageDetail.setRecords(listDetail);
+		pageDetail.setTotalCount(page.getTotalCount());
+		
+		return successGet(pageDetail);
+		
 	}
 }

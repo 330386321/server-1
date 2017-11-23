@@ -17,8 +17,10 @@ import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.IsMyDateDTO;
+import com.lawu.eshop.ad.dto.PointGetDetailDTO;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.PointGetDetailParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -98,6 +100,11 @@ public class MockAdService extends BaseController implements AdService {
 
 	@Override
 	public Result<Boolean> isPay(@PathVariable("id") Long id) {
+		return null;
+	}
+
+	@Override
+	public Result<Page<PointGetDetailDTO>> getDetailPage(PointGetDetailParam param) {
 		return null;
 	}
 }

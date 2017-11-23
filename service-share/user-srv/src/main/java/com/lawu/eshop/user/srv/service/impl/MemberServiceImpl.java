@@ -583,6 +583,7 @@ public class MemberServiceImpl implements MemberService {
 			bo.setMobile(memberDOView.getMobile());
 			bo.setHeadimg(memberDOView.getHeadimg());
 			bo.setRegionPath(memberDOView.getRegionPath());
+			bo.setNickname(memberDOView.getNickname());
 			listBO.add(bo);
 		}
 		return listBO;

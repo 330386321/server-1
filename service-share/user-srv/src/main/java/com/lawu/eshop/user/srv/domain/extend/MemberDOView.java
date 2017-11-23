@@ -9,6 +9,8 @@ public class MemberDOView {
 	private String regionPath;
 
 	private String headimg;
+	
+	private String nickname;
 
 	public String getMobile() {
 		return mobile;
@@ -42,5 +44,16 @@ public class MemberDOView {
 		this.id = id;
 	}
 
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	
+
+	
 	
 }

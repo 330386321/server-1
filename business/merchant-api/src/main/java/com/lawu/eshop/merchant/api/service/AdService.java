@@ -17,8 +17,10 @@ import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.AdSaveInfoDTO;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.IsMyDateDTO;
+import com.lawu.eshop.ad.dto.PointGetDetailDTO;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.PointGetDetailParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 
@@ -125,4 +127,12 @@ public interface AdService {
 	 */
 	@RequestMapping(value = "ad/isPay/{id}", method = RequestMethod.GET)
 	Result<Boolean> isPay(@PathVariable("id") Long id);
+	
+	/**
+	 * 领取详情
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "ad/getDetailPage", method = RequestMethod.POST)
+	Result<Page<PointGetDetailDTO>> getDetailPage(@RequestBody PointGetDetailParam param);
 }
