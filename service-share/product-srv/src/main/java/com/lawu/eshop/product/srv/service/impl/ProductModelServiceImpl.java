@@ -23,6 +23,7 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.srv.ProductSrvConfig;
 import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
+import com.lawu.eshop.product.srv.bo.productModelDataBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
 import com.lawu.eshop.product.srv.domain.ProductDO;
@@ -35,6 +36,7 @@ import com.lawu.eshop.product.srv.domain.extend.ProductModelNumsView;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
 import com.lawu.eshop.product.srv.mapper.ProductCategoryeDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelInventoryDOMapper;
 import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
@@ -68,6 +70,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 
 	@Autowired
 	private SolrService solrService;
+	
 
 	@Override
 	public ShoppingCartProductModelBO getShoppingCartProductModel(Long id) {
@@ -340,5 +343,25 @@ public class ProductModelServiceImpl implements ProductModelService {
 			}
 		}
 		return rtn;
+	}
+
+	@Override
+	public List<productModelDataBO> queryProductModel(Long productId) {
+		
+		ProductModelDOExample pmExample = new ProductModelDOExample();
+		pmExample.createCriteria().andProductIdEqualTo(productId);
+		List<ProductModelDO> list = productModelDOMapper.selectByExample(pmExample);
+		
+		ProductDO  product = productDOMapper.selectByPrimaryKey(productId);
+		
+		List<productModelDataBO> modelList = new ArrayList<>();
+		for (ProductModelDO productModelDO : list) {
+			productModelDataBO modelBO = new productModelDataBO();
+			modelBO.setName(productModelDO.getName());
+			modelBO.setUrl(product.getFeatureImage());
+			modelList.add(modelBO);
+		}
+		
+		return modelList;
 	}
 }

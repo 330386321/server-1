@@ -9,6 +9,7 @@ import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessIncreaseSalesNotif
 import com.lawu.eshop.mq.dto.order.reply.ShoppingOrderCreateOrderReply;
 import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
+import com.lawu.eshop.product.srv.bo.productModelDataBO;
 
 /**
  * 
@@ -77,5 +78,15 @@ public interface ProductModelService {
 	 * @date 2017年7月11日
 	 */
 	ShoppingOrderCreateOrderReply checkLessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification);
+	
+	
+	/**
+	 * 商品对应的型号
+	 * @param productId
+	 * @return
+	 * @author zhangrc
+	 * @date 2017/11/23
+	 */
+	List<productModelDataBO> queryProductModel(Long productId);
 
 }

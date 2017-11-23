@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.service;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +15,7 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.CommentProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
+import com.lawu.eshop.product.dto.ProductModelDataDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.dto.ProductRelateAdInfoDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
@@ -96,6 +99,18 @@ public interface ProductService {
     
     @RequestMapping(value = "product/selectProductRelateAdInfo/{id}", method = RequestMethod.GET)
     Result<ProductRelateAdInfoDTO> selectProductRelateAdInfo(@PathVariable("id") Long id);
+    
+    
+    /**
+     * 商品型号查询
+     * @param productId
+     * @return
+     * @author zhangrc
+     * @date 2017/11/23
+     */
+    @RequestMapping(value = "productModel/queryProductModel/{productId}", method = RequestMethod.GET)
+	Result<List<ProductModelDataDTO>> queryProductModel(@PathVariable("productId") Long productId);
+    
 
 }
 

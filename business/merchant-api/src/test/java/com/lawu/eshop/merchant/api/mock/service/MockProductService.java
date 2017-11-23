@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.mock.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,7 @@ import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.dto.ProductRelateAdInfoDTO;
+import com.lawu.eshop.product.dto.ProductModelDataDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 
@@ -71,6 +74,12 @@ public class MockProductService extends BaseController implements ProductService
 	@Override
 	public Result<ProductRelateAdInfoDTO> selectProductRelateAdInfo(Long id) {
 		return successGet(new ProductRelateAdInfoDTO());
+	}
+
+	@Override
+	public Result<List<ProductModelDataDTO>> queryProductModel(Long productId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
