@@ -109,6 +109,9 @@
         </table>
         <table tableName="fans_invite_content" domainObjectName="FansInviteContentDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="user_grade" domainObjectName="UserGradeDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
     </context>
 </generatorConfiguration>
