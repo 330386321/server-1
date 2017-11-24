@@ -60,23 +60,27 @@ public class LotteryRecordController extends BaseController {
     @Autowired
     private UserGradeService userGradeService;
 
-    @ApiOperation(value = "立即抽奖", notes = "立即抽奖。 (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "立即抽奖", notes = "立即抽奖。[1002] (梅述全)", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveLotteryRecord", method = RequestMethod.POST)
     public Result saveLotteryRecord(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                    @RequestParam @ApiParam(required = true, value = "抽奖活动ID") Long lotteryActivityId,
-                                    @RequestParam @ApiParam(required = true, value = "奖品名称") String prizeName) {
+                                    @RequestParam @ApiParam(required = true, value = "抽奖活动ID") Long lotteryActivityId) {
         Long userId = UserUtil.getCurrentUserId(getRequest());
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         String account = UserUtil.getCurrentAccount(getRequest());
+
+        Result<LotteryActivityDTO> activityDTOResult = lotteryActivityService.getLotteryActivityById(lotteryActivityId);
+        if (activityDTOResult.getModel() == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
 
         LotteryRecordParam param = new LotteryRecordParam();
         param.setUserId(userId);
         param.setUserNum(userNum);
         param.setAccount(account);
         param.setLotteryActivityId(lotteryActivityId);
-        param.setPrizeName(prizeName);
+        param.setPrizeName(activityDTOResult.getModel().getPrizeName());
         lotteryRecordService.saveLotteryRecord(param);
         return successCreated();
     }
@@ -124,8 +128,8 @@ public class LotteryRecordController extends BaseController {
     @ApiOperation(value = "中奖公告列表", notes = "中奖公告列表。 (梅述全)", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "saveLotteryRecord", method = RequestMethod.GET)
-    public Result<Page<LotteryRecordDTO>> saveLotteryRecord(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    @RequestMapping(value = "listLotteryRecord", method = RequestMethod.GET)
+    public Result<Page<LotteryRecordDTO>> listLotteryRecord(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                             @ModelAttribute LotteryRecordQuery query) {
         Result<Page<LotteryRecordDTO>> result = lotteryRecordService.listLotteryRecord(query);
         return successGet(result);

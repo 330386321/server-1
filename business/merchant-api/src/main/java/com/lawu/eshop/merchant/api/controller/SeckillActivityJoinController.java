@@ -42,15 +42,18 @@ public class SeckillActivityJoinController extends BaseController {
 	@Autowired
 	private SeckillActivityJoinService seckillActivityJoinService;
 	
+	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "分页查询专场活动", notes = "专场活动，[]。(张荣成)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "queryPage", method = RequestMethod.GET)
 	public Result<Page<SeckillActivityJoinDTO>>  queryPage(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam SeckillActivityJoinParam param) {
-		return seckillActivityJoinService.queryPage(param);
+		 Result<Page<SeckillActivityJoinDTO>>  result= seckillActivityJoinService.queryPage(param);
+		return successGet(result);
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "分页查询活动管理", notes = "活动管理，[]。(张荣成)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "queryManagePage", method = RequestMethod.GET)
@@ -61,7 +64,8 @@ public class SeckillActivityJoinController extends BaseController {
 		manageParam.setMerchantId(merchantId);
 		manageParam.setCurrentPage(param.getCurrentPage());
 		manageParam.setPageSize(param.getPageSize());
-		return seckillActivityJoinService.queryManagePage(manageParam);
+		Result<Page<SeckillActivityManagerDTO>> result = seckillActivityJoinService.queryManagePage(manageParam);
+		return successGet(result);
 	}
 	
 	

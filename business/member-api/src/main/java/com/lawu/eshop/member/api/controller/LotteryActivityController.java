@@ -39,7 +39,7 @@ public class LotteryActivityController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listLotteryActivity", method = RequestMethod.GET)
-    public Result<LotteryActivityDTO> listLotteryActivity(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    public Result<Page<LotteryActivityDTO>> listLotteryActivity(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                 @ModelAttribute LotteryActivityQuery activityQuery) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         LotteryActivityRealQuery query = new LotteryActivityRealQuery();

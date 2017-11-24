@@ -43,7 +43,7 @@ public class AdRateSettingController extends BaseController{
 	}
 	
 	
-	@ApiOperation(value = "咻一咻中奖率列表", notes = "列表数量（张荣成）", httpMethod = "POST")
+	@ApiOperation(value = "保存咻一咻中奖率", notes = "保存咻一咻中奖率（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "saveRateSetting", method = RequestMethod.GET)
 	public Result saveRateSetting( @RequestParam @ApiParam(required = true, value = "时间") int gameTime,
@@ -52,7 +52,7 @@ public class AdRateSettingController extends BaseController{
 	}
 	
 	
-	@ApiOperation(value = "咻一咻中奖率列表", notes = "列表数量（张荣成）", httpMethod = "DELETE")
+	@ApiOperation(value = "删除咻一咻中奖率", notes = "删除（张荣成）", httpMethod = "DELETE")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "deleteRateSetting/{id}", method = RequestMethod.DELETE)
 	public Result deleteRateSetting(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
