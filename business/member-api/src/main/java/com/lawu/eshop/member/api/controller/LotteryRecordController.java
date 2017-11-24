@@ -18,6 +18,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.LotteryActivityDTO;
 import com.lawu.eshop.mall.dto.LotteryInfoDTO;
 import com.lawu.eshop.mall.dto.LotteryRecordDTO;
@@ -85,6 +86,7 @@ public class LotteryRecordController extends BaseController {
         return successCreated();
     }
 
+    @Audit(date = "2017-11-24", reviewer = "孙林青")
     @ApiOperation(value = "积分抽奖", notes = "积分抽奖。[1002|1004|2020|6025|6002|6003|6024|6010|6011] (梅述全)", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -116,6 +118,7 @@ public class LotteryRecordController extends BaseController {
         return successCreated(propertyResult.getRet());
     }
 
+    @Audit(date = "2017-11-24", reviewer = "孙林青")
     @ApiOperation(value = "中奖滚动列表", notes = "中奖滚动列表。 (梅述全)", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -125,6 +128,7 @@ public class LotteryRecordController extends BaseController {
         return successGet(result);
     }
 
+    @Audit(date = "2017-11-24", reviewer = "孙林青")
     @ApiOperation(value = "中奖公告列表", notes = "中奖公告列表。 (梅述全)", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

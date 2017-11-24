@@ -14,6 +14,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.LotteryActivityDTO;
 import com.lawu.eshop.mall.query.LotteryActivityQuery;
 import com.lawu.eshop.mall.query.LotteryActivityRealQuery;
@@ -35,6 +36,7 @@ public class LotteryActivityController extends BaseController {
     @Autowired
     private LotteryActivityService lotteryActivityService;
 
+    @Audit(date = "2017-11-24", reviewer = "孙林青")
     @ApiOperation(value = "抽奖活动列表", notes = "抽奖活动列表。 (梅述全)", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

@@ -190,6 +190,7 @@ public class TransactionDetailController extends BaseController {
         return successGet(result);
     }
 
+    @Audit(date = "2017-11-24", reviewer = "孙林青")
     @ApiOperation(value = "获取交易明细详情", notes = "分页获取交易明细详情。[]（杨清华）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
