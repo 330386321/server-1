@@ -9,7 +9,7 @@ import com.lawu.eshop.framework.web.json.KeepDecimalJsonSerializer;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 
-public class TransactionDetailH5InfoDTO {
+public class TransactionDetailBaseInfoDTO {
 
     @ApiModelProperty(value = "交易标题", required = true)
     private String title;

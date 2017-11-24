@@ -1,7 +1,6 @@
 package com.lawu.eshop.member.api.service;
 
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoDTO;
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoMemberDTO;
+import com.lawu.eshop.property.dto.TransactionDetailInfoMemberDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,5 +67,5 @@ public interface TransactionDetailService {
      * @return
      */
     @RequestMapping(value = "getById/member/{id}", method = RequestMethod.GET)
-    Result<TransactionDetailH5InfoMemberDTO> getById(@PathVariable("id") Long id);
+    Result<TransactionDetailInfoMemberDTO> getById(@PathVariable("id") Long id);
 }

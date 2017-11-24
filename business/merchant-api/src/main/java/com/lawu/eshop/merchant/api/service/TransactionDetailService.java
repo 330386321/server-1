@@ -1,7 +1,6 @@
 package com.lawu.eshop.merchant.api.service;
 
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoDTO;
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoMerchantDTO;
+import com.lawu.eshop.property.dto.TransactionDetailInfoMerchantDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,5 +66,5 @@ public interface TransactionDetailService {
 	 * @return
 	 */
 	@RequestMapping(value = "getById/merchant/{id}", method = RequestMethod.GET)
-	Result<TransactionDetailH5InfoMerchantDTO> getById(@PathVariable("id") Long id);
+	Result<TransactionDetailInfoMerchantDTO> getById(@PathVariable("id") Long id);
 }

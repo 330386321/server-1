@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoDTO;
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoMemberDTO;
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoMerchantDTO;
+import com.lawu.eshop.property.dto.TransactionDetailInfoMemberDTO;
+import com.lawu.eshop.property.dto.TransactionDetailInfoMerchantDTO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailH5InfoBO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -282,13 +281,13 @@ public class TransactionDetailController extends BaseController {
     }
 
     @RequestMapping(value = "getById/member/{id}", method = RequestMethod.GET)
-    public Result<TransactionDetailH5InfoMemberDTO> getByIdOfMember(@PathVariable("id") Long id) {
+    public Result<TransactionDetailInfoMemberDTO> getByIdOfMember(@PathVariable("id") Long id) {
         TransactionDetailH5InfoBO transactionDetailH5InfoBO = transactionDetailService.getById(id);
         return successCreated(TransactionDetailConverter.convertToTransactionDetailH5InfoMemberDTO(transactionDetailH5InfoBO));
     }
 
     @RequestMapping(value = "getById/merchant/{id}", method = RequestMethod.GET)
-    public Result<TransactionDetailH5InfoMerchantDTO> getByIdOfMerchant(@PathVariable("id") Long id) {
+    public Result<TransactionDetailInfoMerchantDTO> getByIdOfMerchant(@PathVariable("id") Long id) {
         TransactionDetailH5InfoBO transactionDetailH5InfoBO = transactionDetailService.getById(id);
         return successCreated(TransactionDetailConverter.convertToTransactionDetailH5InfoMerchantDTO(transactionDetailH5InfoBO));
     }

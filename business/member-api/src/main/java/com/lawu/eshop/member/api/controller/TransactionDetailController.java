@@ -7,8 +7,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoDTO;
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoMemberDTO;
+import com.lawu.eshop.property.dto.TransactionDetailInfoMemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -195,8 +194,8 @@ public class TransactionDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public Result<TransactionDetailH5InfoMemberDTO> getById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "列表ID") Long id) {
-        Result<TransactionDetailH5InfoMemberDTO> result = transactionDetailService.getById(id);
+    public Result<TransactionDetailInfoMemberDTO> getById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "列表ID") Long id) {
+        Result<TransactionDetailInfoMemberDTO> result = transactionDetailService.getById(id);
         if (!isSuccess(result)) {
             return successGet(result);
         }

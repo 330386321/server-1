@@ -9,13 +9,11 @@ import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.dto.MonthlyBillDTO;
 import com.lawu.eshop.property.dto.TransactionDetailBackageDTO;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoDTO;
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoMemberDTO;
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoMerchantDTO;
+import com.lawu.eshop.property.dto.TransactionDetailInfoMemberDTO;
+import com.lawu.eshop.property.dto.TransactionDetailInfoMerchantDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
 import com.lawu.eshop.property.dto.foreign.TransactionDetailOfMemberDTO;
@@ -299,12 +297,12 @@ public class TransactionDetailConverter {
     }
 
 
-    public static TransactionDetailH5InfoMemberDTO convertToTransactionDetailH5InfoMemberDTO(TransactionDetailH5InfoBO transactionDetailH5InfoBO) {
-        TransactionDetailH5InfoMemberDTO rtn = null;
+    public static TransactionDetailInfoMemberDTO convertToTransactionDetailH5InfoMemberDTO(TransactionDetailH5InfoBO transactionDetailH5InfoBO) {
+        TransactionDetailInfoMemberDTO rtn = null;
         if(transactionDetailH5InfoBO == null){
             return null;
         }
-        rtn = new TransactionDetailH5InfoMemberDTO();
+        rtn = new TransactionDetailInfoMemberDTO();
         rtn.setTransactionCategory(MemberTransactionTypeEnum.getEnum(transactionDetailH5InfoBO.getTransactionType()).getPriorityCategory());
         rtn.setTitle(transactionDetailH5InfoBO.getTitle());
         rtn.setDirection(transactionDetailH5InfoBO.getDirection());
@@ -316,12 +314,12 @@ public class TransactionDetailConverter {
         return rtn;
     }
 
-    public static TransactionDetailH5InfoMerchantDTO convertToTransactionDetailH5InfoMerchantDTO(TransactionDetailH5InfoBO transactionDetailH5InfoBO) {
-        TransactionDetailH5InfoMerchantDTO rtn = null;
+    public static TransactionDetailInfoMerchantDTO convertToTransactionDetailH5InfoMerchantDTO(TransactionDetailH5InfoBO transactionDetailH5InfoBO) {
+        TransactionDetailInfoMerchantDTO rtn = null;
         if(transactionDetailH5InfoBO == null){
             return null;
         }
-        rtn = new TransactionDetailH5InfoMerchantDTO();
+        rtn = new TransactionDetailInfoMerchantDTO();
         rtn.setTransactionCategory(MerchantTransactionTypeEnum.getEnum(transactionDetailH5InfoBO.getTransactionType()).getPriorityCategory());
         rtn.setTitle(transactionDetailH5InfoBO.getTitle());
         rtn.setDirection(transactionDetailH5InfoBO.getDirection());

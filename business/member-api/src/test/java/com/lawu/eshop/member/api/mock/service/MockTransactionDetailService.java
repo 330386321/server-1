@@ -4,8 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoDTO;
-import com.lawu.eshop.property.dto.TransactionDetailH5InfoMemberDTO;
+import com.lawu.eshop.property.dto.TransactionDetailInfoMemberDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,7 +61,7 @@ public class MockTransactionDetailService extends BaseController implements Tran
     }
 
     @Override
-    public Result<TransactionDetailH5InfoMemberDTO> getById(@PathVariable("id") Long id) {
+    public Result<TransactionDetailInfoMemberDTO> getById(@PathVariable("id") Long id) {
         return null;
     }
 
