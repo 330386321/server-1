@@ -2,18 +2,26 @@ package com.lawu.eshop.product.dto;
 
 import java.math.BigDecimal;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class SeckillActivityProductManageDTO {
 	
+	@ApiModelProperty(value = "商品id")
 	private Long productId;
 	
+	@ApiModelProperty(value = "商品图片")
 	private String productPicture;
 	
+	@ApiModelProperty(value = "商品名称")
 	private String productName;
 	
+	@ApiModelProperty(value = "销量")
 	private Integer saleCount;
 	
+	@ApiModelProperty(value = "成交额")
 	private BigDecimal saleMoney;
 	
+	@ApiModelProperty(value = "总量")
 	private Integer modelCount;
 
 	

@@ -1,5 +1,6 @@
 package com.lawu.eshop.product.srv.converter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -225,7 +226,7 @@ public class SeckillActivityJoinConverter {
 			seckillActivityProductManageBO.setProductId(seckillActivityProductDO.getProductId());
 			seckillActivityProductManageBO.setProductPicture(seckillActivityProductDO.getProductPicture());
 			seckillActivityProductManageBO.setProductName(seckillActivityProductDO.getProductName());
-			seckillActivityProductManageBO.setSaleMoney(seckillActivityProductDO.getTurnover());
+			seckillActivityProductManageBO.setSaleMoney(seckillActivityProductDO.getTurnover().multiply(BigDecimal.valueOf((seckillActivityProductDO.getProductModelCount()-seckillActivityProductDO.getLeftCount()))));
 			seckillActivityProductManageBO.setSaleCount(seckillActivityProductDO.getProductModelCount()-seckillActivityProductDO.getLeftCount());
 			productList.add(seckillActivityProductManageBO);
 		}
