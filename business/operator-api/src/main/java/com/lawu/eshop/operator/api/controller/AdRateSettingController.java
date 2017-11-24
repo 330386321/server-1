@@ -14,6 +14,7 @@ import com.lawu.eshop.ad.dto.AdRateSettingDTO;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.operator.api.service.AdRateSettingService;
 
 import io.swagger.annotations.Api;
@@ -34,15 +35,17 @@ public class AdRateSettingController extends BaseController{
 	
 	@Autowired
 	private AdRateSettingService adRateSettingService;
-	
+
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "咻一咻中奖率列表", notes = "列表数量（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "queryAdRateSetting", method = RequestMethod.GET)
 	public Result<List<AdRateSettingDTO>> queryAdRateSetting() {
 		return adRateSettingService.queryAdRateSetting();
 	}
-	
-	
+
+
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "保存咻一咻中奖率", notes = "保存咻一咻中奖率（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "saveRateSetting", method = RequestMethod.GET)
@@ -50,8 +53,9 @@ public class AdRateSettingController extends BaseController{
 			 @RequestParam @ApiParam(required = true, value = "概率") int rate) {
 		return adRateSettingService.saveRateSetting(gameTime, rate);
 	}
-	
-	
+
+
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "删除咻一咻中奖率", notes = "删除（张荣成）", httpMethod = "DELETE")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "deleteRateSetting/{id}", method = RequestMethod.DELETE)

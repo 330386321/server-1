@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.lawu.eshop.common.constants.MemberGradeEnum;
 import com.lawu.eshop.product.constant.ActivityStatusEnum;
-import com.lawu.eshop.product.dto.SeckillActivityProductInformationDTO;
 import com.lawu.eshop.product.dto.SeckillActivityProductModelInformationDTO;
 
 import io.swagger.annotations.ApiModel;
@@ -19,7 +18,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @updateDate 2017年11月24日
  */
 @ApiModel
-public class SeckillActivityProductInformationForeignDTO extends SeckillActivityProductInformationDTO {
+public class SeckillActivityProductInformationForeignDTO {
 
     /**
      * 活动商品id

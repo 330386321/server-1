@@ -346,8 +346,9 @@ public class ProductController extends BaseController {
 		String images = nimages.toString();
 		return images;
 	}
-	
-	
+
+
+	@Audit(date = "2017-11-24", reviewer = "杨清华")
 	@ApiOperation(value = "查询商品型号", notes = "查询商品型号，[]，（张荣成）", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "queryProductModel", method = RequestMethod.GET)

@@ -11,6 +11,7 @@ import com.lawu.eshop.ad.dto.AdRateSettingDTO;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.AdRateSettingService;
 
 import io.swagger.annotations.Api;
@@ -30,7 +31,8 @@ public class AdRateSettingController extends BaseController{
 	
 	@Autowired
 	private AdRateSettingService adRateSettingService;
-	
+
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "咻一咻中奖率", notes = "咻一咻存在高并发，避免频繁访问接口，客户端进行数据缓存,判断概率，并定期重新请求接口[]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "queryAdRateSetting", method = RequestMethod.GET)

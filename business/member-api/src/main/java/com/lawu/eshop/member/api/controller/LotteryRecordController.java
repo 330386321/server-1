@@ -61,11 +61,12 @@ public class LotteryRecordController extends BaseController {
     @Autowired
     private UserGradeService userGradeService;
 
-    @ApiOperation(value = "立即抽奖", notes = "立即抽奖。[1002] (梅述全)", httpMethod = "POST")
+    @Audit(date = "2017-11-24", reviewer = "孙林青")
+    @ApiOperation(value = "参与抽奖", notes = "立即抽奖。[1002] (梅述全)", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "saveLotteryRecord", method = RequestMethod.POST)
-    public Result saveLotteryRecord(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    @RequestMapping(value = "takePart", method = RequestMethod.POST)
+    public Result takePart(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                     @RequestParam @ApiParam(required = true, value = "抽奖活动ID") Long lotteryActivityId) {
         Long userId = UserUtil.getCurrentUserId(getRequest());
         String userNum = UserUtil.getCurrentUserNum(getRequest());
@@ -90,8 +91,8 @@ public class LotteryRecordController extends BaseController {
     @ApiOperation(value = "积分抽奖", notes = "积分抽奖。[1002|1004|2020|6025|6002|6003|6024|6010|6011] (梅述全)", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "pointConvertLottery", method = RequestMethod.POST)
-    public Result pointConvertLottery(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    @RequestMapping(value = "takePartByPay", method = RequestMethod.POST)
+    public Result takePartByPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                       @RequestParam @ApiParam(required = true, value = "抽奖活动ID") Long lotteryActivityId) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
 

@@ -13,6 +13,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.SeckillActivityAttentionService;
 
 import io.swagger.annotations.Api;
@@ -34,7 +35,8 @@ public class SeckillActivityAttentionController extends BaseController {
     
     @Autowired
     private SeckillActivityAttentionService seckillActivityAttentionService;
-    
+
+    @Audit(date = "2017-11-24", reviewer = "孙林青")
     @SuppressWarnings("rawtypes")
     @ApiOperation(value = "关注抢购活动商品", notes = "关注抢购活动商品[]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

@@ -17,6 +17,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.SeckillActivityProductService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.param.ActivityProductBuyQueryParam;
@@ -37,7 +38,7 @@ import io.swagger.annotations.ApiResponse;
  * @createDate 2017年11月24日
  * @updateDate 2017年11月24日
  */
-@Api(tags = "seckillActivityAttention")
+@Api(tags = "seckillActivityProduct")
 @RestController
 @RequestMapping(path = "seckillActivityProduct/")
 public class SeckillActivityProductController extends BaseController {
@@ -47,7 +48,8 @@ public class SeckillActivityProductController extends BaseController {
     
     @Autowired
     private ShoppingOrderService shoppingOrderService;
-    
+
+    @Audit(date = "2017-11-24", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "查询当前活动所有商品", notes = "根据抢购活动id分页查询活动下的所有商品[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -68,6 +70,7 @@ public class SeckillActivityProductController extends BaseController {
      * @createDate 2017年11月24日
      * @updateDate 2017年11月24日
      */
+    @Audit(date = "2017-11-24", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "获取活动商品详情", notes = "获取活动商品详情[1004,1100]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
