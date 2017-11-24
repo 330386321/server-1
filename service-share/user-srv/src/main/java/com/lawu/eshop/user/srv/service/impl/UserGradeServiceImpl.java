@@ -1,7 +1,10 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.user.dto.UserGradeDTO;
+import com.lawu.eshop.user.srv.bo.UserGradeBO;
 import com.lawu.eshop.user.srv.domain.UserGradeDO;
 import com.lawu.eshop.user.srv.domain.UserGradeDOExample;
 import com.lawu.eshop.user.srv.mapper.UserGradeDOMapper;
@@ -25,5 +28,26 @@ public class UserGradeServiceImpl implements UserGradeService {
 			return null;
 		}
 		return userGradeList.get(0).getLotteryActivityPoint();
+	}
+
+	@Override
+	public List<UserGradeBO> selectGradeList() {
+		UserGradeDOExample example = new UserGradeDOExample();
+		example.setOrderByClause(" grade_weight asc ");
+		List<UserGradeDO> userGradeList = userGradeDOMapper.selectByExample(example);
+		List<UserGradeBO> bos = new ArrayList<>();
+		for(UserGradeDO userGradeDO : userGradeList){
+			UserGradeBO bo = new UserGradeBO();
+			bo.setId(userGradeDO.getId());
+			bo.setGradeName(userGradeDO.getGradeName());
+			bo.setGradeValue(userGradeDO.getGradeValue());
+			bo.setGradeWeight(userGradeDO.getGradeWeight());
+			bo.setLotteryActivityPoint(userGradeDO.getLotteryActivityPoint());
+			bo.setMinGrowthValue(userGradeDO.getMinGrowthValue());
+			bo.setGmtCreate(userGradeDO.getGmtCreate());
+			bo.setGmtModified(userGradeDO.getGmtModified());
+			bos.add(bo);
+		}
+		return bos;
 	}
 }

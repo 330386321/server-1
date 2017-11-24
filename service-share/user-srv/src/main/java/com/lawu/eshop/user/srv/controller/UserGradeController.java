@@ -1,7 +1,13 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.dto.UserGradeDTO;
+import com.lawu.eshop.user.srv.bo.UserGradeBO;
+import com.lawu.eshop.user.srv.domain.UserGradeDO;
 import com.lawu.eshop.user.srv.service.UserGradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +39,29 @@ public class UserGradeController extends BaseController {
 		return successGet(lotteryActivityPoint);
 	}
 
+	/**
+	 * 获取所有会员等级列表(权重值升序)
+	 * @return
+	 */
+	@RequestMapping(value = "selectUserGradeList", method = RequestMethod.GET)
+	public Result<List<UserGradeDTO>> selectUserGradeList() {
+
+		List<UserGradeBO> gradeList = userGradeService.selectGradeList();
+		List<UserGradeDTO> dtos = new ArrayList<>();
+		for(UserGradeBO userGradeBO : gradeList){
+			UserGradeDTO dto = new UserGradeDTO();
+			dto.setId(userGradeBO.getId());
+			dto.setGradeName(userGradeBO.getGradeName());
+			dto.setGradeValue(userGradeBO.getGradeValue());
+			dto.setGradeWeight(userGradeBO.getGradeWeight());
+			dto.setLotteryActivityPoint(userGradeBO.getLotteryActivityPoint());
+			dto.setMinGrowthValue(userGradeBO.getMinGrowthValue());
+			dto.setGmtCreate(userGradeBO.getGmtCreate());
+			dto.setGmtModified(userGradeBO.getGmtModified());
+			dtos.add(dto);
+		}
+		return successGet(dtos);
+	}
 
 
 }
