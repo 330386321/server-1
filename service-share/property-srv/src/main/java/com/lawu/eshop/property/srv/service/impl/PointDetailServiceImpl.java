@@ -358,4 +358,30 @@ public class PointDetailServiceImpl implements PointDetailService {
 		}
 		return false;
 	}
+
+	@Override
+	public boolean existsPointDetailByUserNumAndBizId(String userNum, String bizId) {
+		PointDetailDOExample example = new PointDetailDOExample();
+		example.createCriteria().andUserNumEqualTo(userNum).andBizIdEqualTo(bizId);
+		int count = pointDetailDOMapper.countByExample(example);
+		return count > 0;
+	}
+
+	@Override
+	public PointDetailBO getPointDetailByUserNumAndBizId(String userNum, String bizId) {
+		PointDetailDOExample example = new PointDetailDOExample();
+		example.createCriteria().andUserNumEqualTo(userNum).andBizIdEqualTo(bizId);
+		List<PointDetailDO> pointDetailDOS = pointDetailDOMapper.selectByExample(example);
+		if (pointDetailDOS.isEmpty()) {
+			return null;
+		}
+		return PointDetailConverter.convert(pointDetailDOS.get(0));
+	}
+
+	@Override
+	public PointDetailBO getPointDetailById(Long id) {
+		PointDetailDO pointDetailDO = pointDetailDOMapper.selectByPrimaryKey(id);
+		return PointDetailConverter.convert(pointDetailDO);
+	}
+
 }

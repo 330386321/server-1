@@ -190,4 +190,19 @@ public class PointDetailController extends BaseController {
         }
         return successCreated(dtos);
     }
+
+    /**
+     * 根据用户编号和业务ID查询是否存在记录
+     *
+     * @param userNum
+     * @param bizId
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "existsPointDetailByUserNumAndBizId", method = RequestMethod.GET)
+    public Result<Boolean> existsPointDetailByUserNumAndBizId(@RequestParam String userNum, @RequestParam String bizId) {
+        boolean result = pointDetailService.existsPointDetailByUserNumAndBizId(userNum, bizId);
+        return successGet(result);
+    }
+
 }

@@ -1,10 +1,10 @@
-package com.lawu.eshop.mall.param;
+package com.lawu.eshop.mall.query;
 
 /**
  * @author meishuquan
  * @date 2017/11/23.
  */
-public class LotteryActivityRealParam extends LotteryActivityParam {
+public class LotteryActivityRealQuery extends LotteryActivityQuery {
 
     private String userNum;
 

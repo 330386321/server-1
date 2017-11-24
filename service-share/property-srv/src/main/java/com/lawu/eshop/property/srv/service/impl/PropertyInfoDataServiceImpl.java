@@ -7,15 +7,16 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.idworker.client.impl.BizIdType;
 import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.param.CheckRepeatOfPropertyOperationParam;
 import com.lawu.eshop.property.param.PointDetailQueryData1Param;
@@ -23,6 +24,7 @@ import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.CommissionUtilBO;
+import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.domain.FansInviteDetailDO;
 import com.lawu.eshop.property.srv.domain.LoveDetailDO;
 import com.lawu.eshop.property.srv.domain.PointDetailDOExample;
@@ -30,6 +32,7 @@ import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.exception.PointNegativeException;
 import com.lawu.eshop.property.srv.exception.RepeatDealException;
+import com.lawu.eshop.property.srv.exception.SavePointDetailException;
 import com.lawu.eshop.property.srv.mapper.FansInviteDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.LoveDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
@@ -69,6 +72,9 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	private PointDetailDOMapper pointDetailDOMapper;
 	@Autowired
 	private PropertyInfoDOMapper propertyInfoDOMapper;
+	@Autowired
+	@Qualifier("lotteryRecordTransactionMainServiceImpl")
+	private TransactionMainService lotteryRecordTransactionMainServiceImpl;
 
 	@Override
 	@Transactional
@@ -116,22 +122,6 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "M", point);
 		if(ResultCode.ERROR_POINT_NEGATIVE == ret){
 			throw new PointNegativeException(ResultCode.get(ResultCode.ERROR_POINT_NEGATIVE));
-		}
-
-		// 插入邀请粉丝记录
-		if (param.getMerchantTransactionTypeEnum() != null && param.getMerchantTransactionTypeEnum()
-				.getValue() == MerchantTransactionTypeEnum.INVITE_FANS.getValue()) {
-			FansInviteDetailDO fansInviteDetailDO = new FansInviteDetailDO();
-			fansInviteDetailDO.setMerchantId(param.getMerchantId());
-			fansInviteDetailDO.setPointNum(pointNum);
-			fansInviteDetailDO.setRegionName(param.getRegionName());
-			fansInviteDetailDO.setSex(param.getSex());
-			fansInviteDetailDO.setAge(param.getAge());
-			fansInviteDetailDO.setInviteFansCount(param.getInviteFansCount());
-			fansInviteDetailDO.setConsumePoint(new BigDecimal(param.getPoint()));
-			fansInviteDetailDO.setGmtCreate(new Date());
-			fansInviteDetailDOMapper.insertSelective(fansInviteDetailDO);
-			return fansInviteDetailDO.getId().intValue();
 		}
 		
 		return ResultCode.SUCCESS;
@@ -319,6 +309,61 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		}else{
 			return Integer.valueOf(1);
 		}
+	}
+
+	@Override
+	@Transactional
+	public int doHanlderMinusPointWithLottery(PropertyInfoDataParam param) {
+		if (param.getBizId() != null && !"".equals(param.getBizId()) && !"0".equals(param.getBizId())) {
+			CheckRepeatOfPropertyOperationParam validateParam = new CheckRepeatOfPropertyOperationParam();
+			validateParam.setUserNum(param.getUserNum());
+			validateParam.setMerchantTransactionTypeEnum(param.getMerchantTransactionTypeEnum());
+			validateParam.setMemberTransactionTypeEnum(param.getMemberTransactionTypeEnum());
+			validateParam.setBizIds(param.getBizId());
+			boolean repeat = pointDetailService.verifyRepeatByUserNumAndTransactionTypeAndBizId(validateParam);
+			if (repeat) {
+				logger.info("重复操作(判断幂等)-积分扣除业务");
+				return ResultCode.PROCESSED_RETURN_SUCCESS;
+			}
+		}
+
+		int retCode = propertyInfoService.validatePoint(param.getUserNum(), param.getPoint());
+		if (retCode != ResultCode.SUCCESS) {
+			return retCode;
+		}
+		String pointNum = IdWorkerHelperImpl.generate(BizIdType.POINT);
+		// 插入积分明细
+		PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
+		pointDetailSaveDataParam.setPointNum(pointNum);
+		pointDetailSaveDataParam.setUserNum(param.getUserNum());
+		if (param.getMemberTransactionTypeEnum() != null) {
+			pointDetailSaveDataParam.setTitle(param.getMemberTransactionTypeEnum().getName());
+			pointDetailSaveDataParam.setPointType(param.getMemberTransactionTypeEnum().getValue());
+		} else if (param.getMerchantTransactionTypeEnum() != null) {
+			pointDetailSaveDataParam.setTitle(param.getMerchantTransactionTypeEnum().getName());
+			pointDetailSaveDataParam.setPointType(param.getMerchantTransactionTypeEnum().getValue());
+		} else {
+			return ResultCode.BIZ_TYPE_NULL;
+		}
+		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
+		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
+		pointDetailSaveDataParam.setBizId(param.getBizId());
+		pointDetailSaveDataParam.setRegionPath(param.getRegionPath());
+		pointDetailService.save(pointDetailSaveDataParam);
+
+		// 更新用户资产
+		BigDecimal point = new BigDecimal(param.getPoint());
+		int ret = propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "M", point);
+		if (ResultCode.ERROR_POINT_NEGATIVE == ret) {
+			throw new PointNegativeException(ResultCode.get(ResultCode.ERROR_POINT_NEGATIVE));
+		}
+
+		PointDetailBO pointDetailBO = pointDetailService.getPointDetailByUserNumAndBizId(param.getUserNum(), param.getBizId());
+		if (pointDetailBO == null) {
+			throw new SavePointDetailException(ResultCode.get(ResultCode.ERROR_SAVE_POINT_DETAIL));
+		}
+		lotteryRecordTransactionMainServiceImpl.sendNotice(pointDetailBO.getId());
+		return ResultCode.SUCCESS;
 	}
 
 	@Override

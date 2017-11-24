@@ -1,18 +1,19 @@
 package com.lawu.eshop.member.api.mock.service;
 
-import com.lawu.eshop.ad.dto.PointPoolDTO;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.PointDetailService;
 import com.lawu.eshop.property.dto.PointDetailDTO;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 class MockPointDetailService extends BaseController implements PointDetailService {
@@ -28,5 +29,10 @@ class MockPointDetailService extends BaseController implements PointDetailServic
         page.setTotalCount(10);
         page.setRecords(list);
         return successCreated(page);
+    }
+
+    @Override
+    public Result<Boolean> existsPointDetailByUserNumAndBizId(@RequestParam("userNum") String userNum, @RequestParam("bizId") String bizId) {
+        return null;
     }
 }

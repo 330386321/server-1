@@ -1,4 +1,4 @@
-package com.lawu.eshop.mall.param;
+package com.lawu.eshop.mall.query;
 
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
 
@@ -6,6 +6,6 @@ import com.lawu.eshop.framework.core.page.AbstractPageParam;
  * @author meishuquan
  * @date 2017/11/23.
  */
-public class LotteryActivityParam extends AbstractPageParam{
+public class LotteryActivityQuery extends AbstractPageParam{
 
 }

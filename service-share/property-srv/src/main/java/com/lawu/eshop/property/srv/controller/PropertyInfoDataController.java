@@ -95,4 +95,23 @@ public class PropertyInfoDataController extends BaseController {
 		Integer dataCode = propertyInfoDataService.getPointDetailByUserNumAndPointTypeAndBizId(param);
 		return successCreated(dataCode);
 	}
+
+	/**
+	 * 积分兑换抽奖
+	 *
+	 * @param param
+	 * @param result
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "doHanlderMinusPointWithLottery", method = RequestMethod.POST)
+	public Result doHanlderMinusPointWithLottery(@RequestBody @Valid PropertyInfoDataParam param, BindingResult result) {
+		String message = validate(result);
+		if (message != null) {
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+		}
+		int retCode = propertyInfoDataService.doHanlderMinusPointWithLottery(param);
+		return successCreated(retCode);
+	}
+
 }

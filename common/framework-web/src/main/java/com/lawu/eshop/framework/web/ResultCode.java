@@ -78,6 +78,7 @@ public class ResultCode {
     public static final int MAX_USERREDPACKET_MONTY=2017;
     public static final int MIN_USERREDPACKET_MONTY=2018;
     public static final int ACCOUNT_IS_INVALID = 2019;
+    public static final int NO_LOTTERY_COUNT = 2020;
 
 
     // 商品模块代码 3xxx
@@ -169,6 +170,7 @@ public class ResultCode {
     public static final int BANK_ACCOUNT_LENTH_OUT_OF_RANGE = 6028;
     public static final int ERROR_BALANCE_NEGATIVE = 6029;
     public static final int ERROR_POINT_NEGATIVE = 6030;
+    public static final int ERROR_SAVE_POINT_DETAIL = 6031;
 
 
 
@@ -270,6 +272,7 @@ public class ResultCode {
         ResultCode.messageMap.put(MAX_USERREDPACKET_MONTY, "单个红包金额不能大于50000");
         ResultCode.messageMap.put(MIN_USERREDPACKET_MONTY, "单个红包金额不能小于0.01");
         ResultCode.messageMap.put(ACCOUNT_IS_INVALID, "账号已被封");
+        ResultCode.messageMap.put(NO_LOTTERY_COUNT, "只能增加一次抽奖机会");
         
 
         //运营
@@ -381,6 +384,7 @@ public class ResultCode {
         ResultCode.messageMap.put(BANK_ACCOUNT_LENTH_OUT_OF_RANGE, "银行卡长度有误。");
         ResultCode.messageMap.put(ERROR_POINT_NEGATIVE, "非法操作，积分减到负数");
         ResultCode.messageMap.put(ERROR_BALANCE_NEGATIVE, "非法操作，余额减到负数");
+        ResultCode.messageMap.put(ERROR_SAVE_POINT_DETAIL, "保存积分明细异常");
         
 
         // 商城模块 7xxx

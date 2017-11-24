@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.LotteryActivityStatusEnum;
-import com.lawu.eshop.mall.param.LotteryActivityRealParam;
+import com.lawu.eshop.mall.query.LotteryActivityRealQuery;
 import com.lawu.eshop.mall.srv.bo.LotteryActivityBO;
 import com.lawu.eshop.mall.srv.converter.LotteryActivityConverter;
 import com.lawu.eshop.mall.srv.domain.LotteryActivityDO;
@@ -34,12 +34,12 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
     private LotteryRecordDOMapper lotteryRecordDOMapper;
 
     @Override
-    public Page<LotteryActivityBO> listLotteryActivity(LotteryActivityRealParam param) {
+    public Page<LotteryActivityBO> listLotteryActivity(LotteryActivityRealQuery query) {
         LotteryActivityDOExample example = new LotteryActivityDOExample();
         example.createCriteria().andStatusLessThan(LotteryActivityStatusEnum.CANCEL.getVal());
         example.setOrderByClause("status asc,grade asc");
 
-        RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+        RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
         List<LotteryActivityDO> activityDOS = lotteryActivityDOMapper.selectByExampleWithRowbounds(example, rowBounds);
         List<LotteryActivityBO> activityBOS = new ArrayList<>();
         if (!activityDOS.isEmpty()) {
@@ -54,7 +54,7 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
                 activityBO.setLotteryNumber(lotteryNumber);
 
                 //查询参与次数
-                criteria.andUserNumEqualTo(param.getUserNum());
+                criteria.andUserNumEqualTo(query.getUserNum());
                 List<LotteryRecordDO> recordDOS = lotteryRecordDOMapper.selectByExample(recordDOExample);
                 if (recordDOS.isEmpty()) {
                     activityBO.setLotteryCount(0);
@@ -66,7 +66,7 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
         }
 
         Page<LotteryActivityBO> page = new Page<>();
-        page.setCurrentPage(param.getCurrentPage());
+        page.setCurrentPage(query.getCurrentPage());
         page.setTotalCount(lotteryActivityDOMapper.countByExample(example));
         page.setRecords(activityBOS);
         return page;

@@ -269,4 +269,9 @@ public class MqConstant {
      */
     public static final String TAG_INVITE_FANS = "invite_fans";
 
+    /**
+     * 积分兑换抽奖
+     */
+    public static final String TAG_POINT_CONVERT_LOTTERY = "point_convert_lottery";
+
 }

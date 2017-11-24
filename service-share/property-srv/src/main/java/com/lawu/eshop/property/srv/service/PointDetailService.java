@@ -107,4 +107,34 @@ public interface PointDetailService {
      * @return
      */
     boolean verifyRepeatByUserNumAndTransactionTypeAndBizId(CheckRepeatOfPropertyOperationParam validateParam);
+
+    /**
+     * 根据用户编号和业务ID查询是否存在记录
+     *
+     * @param userNum
+     * @param bizId
+     * @return
+     * @author meishuquan
+     */
+    boolean existsPointDetailByUserNumAndBizId(String userNum, String bizId);
+
+    /**
+     * 根据用户编号和业务ID查询积分详情
+     *
+     * @param userNum
+     * @param bizId
+     * @return
+     * @author meishuquan
+     */
+    PointDetailBO getPointDetailByUserNumAndBizId(String userNum, String bizId);
+
+    /**
+     * 根据id查询积分明细
+     *
+     * @param id
+     * @return
+     * @author meishuquan
+     */
+    PointDetailBO getPointDetailById(Long id);
+
 }
