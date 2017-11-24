@@ -1,6 +1,12 @@
 package com.lawu.eshop.mall.srv.service;
 
+import java.util.List;
+
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.param.LotteryRecordParam;
+import com.lawu.eshop.mall.query.LotteryRecordQuery;
+import com.lawu.eshop.mall.srv.bo.LotteryInfoBO;
+import com.lawu.eshop.mall.srv.bo.LotteryRecordBO;
 
 /**
  * @author meishuquan
@@ -23,5 +29,22 @@ public interface LotteryRecordService {
      * @param lotteryActivityId
      */
     void updateLotteryCountByUserNumAndLotteryActivityId(String userNum, Long lotteryActivityId);
+
+    /**
+     * 查询中奖滚动列表
+     *
+     * @return
+     * @author meishuquan
+     */
+    List<LotteryInfoBO> listLotteryInfo();
+
+    /**
+     * 查询中奖公告列表
+     *
+     * @param query
+     * @return
+     * @author meishuquan
+     */
+    Page<LotteryRecordBO> listLotteryRecord(LotteryRecordQuery query);
 
 }
