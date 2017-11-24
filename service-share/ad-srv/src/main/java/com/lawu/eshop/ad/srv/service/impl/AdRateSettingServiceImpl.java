@@ -1,6 +1,7 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,28 @@ public class AdRateSettingServiceImpl implements AdRateSettingService {
 			AdRateSettingBO adRateSetting = new AdRateSettingBO();
 			adRateSetting.setGameTime(adRateSettingDO.getGameTime());
 			adRateSetting.setRate(adRateSettingDO.getRate());
+			adRateSetting.setId(adRateSettingDO.getId());
 			listSetting.add(adRateSetting);
 		}
 		return listSetting;
+	}
+
+	@Override
+	public void saveRateSetting(int gameTime, int rate) {
+		
+		AdRateSettingDO record = new AdRateSettingDO();
+		record.setGameTime(gameTime);
+		record.setGmtCreate(new Date());
+		record.setRate(rate);
+		adRateSettingDOMapper.insertSelective(record);
+		
+	}
+
+	@Override
+	public void deleteRateSetting(Long id) {
+		
+		adRateSettingDOMapper.deleteByPrimaryKey(id);
+		
 	}
 
 }

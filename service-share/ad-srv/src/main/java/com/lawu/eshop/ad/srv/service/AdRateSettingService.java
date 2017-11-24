@@ -18,5 +18,18 @@ public interface AdRateSettingService {
 	 * @return
 	 */
 	List<AdRateSettingBO> queryAdRateSetting();
+	
+	/**
+	 * 中奖率设置
+	 * @param gameTime
+	 * @param rate
+	 */
+	void saveRateSetting(int gameTime , int rate);
+	
+	/**
+	 * 删除中奖率
+	 * @param id
+	 */
+	void deleteRateSetting(Long id);
 
 }

@@ -1,0 +1,63 @@
+package com.lawu.eshop.operator.api.controller;
+
+import java.util.List;
+
+import org.omg.PortableInterceptor.SUCCESSFUL;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lawu.eshop.ad.dto.AdRateSettingDTO;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.operator.api.service.AdRateSettingService;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+
+/**
+ * 描述：咻一咻中奖率配置
+ *
+ * @author zhangrc
+ * @date 2017/11/23
+ */
+@Api(tags = "adRateSetting", value = "咻一咻中奖率配置接口")
+@RestController
+@RequestMapping(value = "adRateSetting/")
+public class AdRateSettingController extends BaseController{
+	
+	@Autowired
+	private AdRateSettingService adRateSettingService;
+	
+	@ApiOperation(value = "咻一咻中奖率列表", notes = "列表数量（张荣成）", httpMethod = "GET")
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@RequestMapping(value = "queryAdRateSetting", method = RequestMethod.GET)
+	public Result<List<AdRateSettingDTO>> queryAdRateSetting() {
+		return adRateSettingService.queryAdRateSetting();
+	}
+	
+	
+	@ApiOperation(value = "咻一咻中奖率列表", notes = "列表数量（张荣成）", httpMethod = "POST")
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@RequestMapping(value = "saveRateSetting", method = RequestMethod.GET)
+	public Result saveRateSetting( @RequestParam @ApiParam(required = true, value = "时间") int gameTime,
+			 @RequestParam @ApiParam(required = true, value = "概率") int rate) {
+		return adRateSettingService.saveRateSetting(gameTime, rate);
+	}
+	
+	
+	@ApiOperation(value = "咻一咻中奖率列表", notes = "列表数量（张荣成）", httpMethod = "DELETE")
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@RequestMapping(value = "deleteRateSetting/{id}", method = RequestMethod.DELETE)
+	public Result deleteRateSetting(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+		adRateSettingService.deleteRateSetting(id);
+		return successDelete();
+	}
+
+}

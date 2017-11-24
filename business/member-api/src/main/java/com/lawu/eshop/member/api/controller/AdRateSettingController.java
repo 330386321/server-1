@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.AdRateSettingDTO;
+import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.AdRateSettingService;
@@ -25,7 +26,7 @@ import io.swagger.annotations.ApiResponse;
 @Api(tags = "adRateSetting", value = "咻一咻中奖率配置接口")
 @RestController
 @RequestMapping(value = "adRateSetting/")
-public class AdRateSettingController {
+public class AdRateSettingController extends BaseController{
 	
 	@Autowired
 	private AdRateSettingService adRateSettingService;
