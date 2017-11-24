@@ -236,6 +236,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 
 		PayOrderDOExample example = new PayOrderDOExample();
 		PayOrderDOExample.Criteria criteria = example.createCriteria();
+		criteria.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 		if (param.getMerchantId() != null) {
 			criteria.andMerchantIdEqualTo(param.getMerchantId());
 		}
