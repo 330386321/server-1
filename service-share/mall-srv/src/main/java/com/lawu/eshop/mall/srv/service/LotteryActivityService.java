@@ -18,4 +18,14 @@ public interface LotteryActivityService {
      * @author meishuquan
      */
     Page<LotteryActivityBO> listLotteryActivity(LotteryActivityRealQuery query);
+
+    /**
+     * 根据id查询抽奖活动
+     *
+     * @param id
+     * @return
+     * @author meishuquan
+     */
+    LotteryActivityBO getLotteryActivityById(Long id);
+
 }

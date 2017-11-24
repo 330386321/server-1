@@ -3,6 +3,7 @@ package com.lawu.eshop.product.srv.bo;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.lawu.eshop.common.constants.MemberGradeEnum;
 import com.lawu.eshop.product.constant.ActivityStatusEnum;
 
 /**
@@ -37,7 +38,7 @@ public class SeckillActivityBO {
     /**
      * 会员等级
      */
-    private Byte memberLevel;
+    private MemberGradeEnum memberLevel;
 
     /**
      * 商家可提交审核的商品数
@@ -90,12 +91,12 @@ public class SeckillActivityBO {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-
-    public Byte getMemberLevel() {
+    
+    public MemberGradeEnum getMemberLevel() {
         return memberLevel;
     }
 
-    public void setMemberLevel(Byte memberLevel) {
+    public void setMemberLevel(MemberGradeEnum memberLevel) {
         this.memberLevel = memberLevel;
     }
 

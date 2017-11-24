@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.service;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -26,4 +27,15 @@ public interface LotteryActivityService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "lotteryActivity/listLotteryActivity")
     Result<Page<LotteryActivityDTO>> listLotteryActivity(@ModelAttribute LotteryActivityRealQuery query);
+
+    /**
+     * 根据id查询抽奖活动
+     *
+     * @param id
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "lotteryActivity/getLotteryActivity/{id}")
+    Result<LotteryActivityDTO> getLotteryActivityById(@PathVariable("id") Long id);
+
 }

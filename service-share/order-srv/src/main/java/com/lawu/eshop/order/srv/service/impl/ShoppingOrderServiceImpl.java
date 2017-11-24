@@ -36,6 +36,7 @@ import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.dto.ReportRiseRateDTO;
 import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
+import com.lawu.eshop.order.param.ActivityProductBuyQueryParam;
 import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingOrderReportDataParam;
@@ -1488,6 +1489,20 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         
         // 查找所有超时未收货的订单，自动收货
         return shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
+    }
+    
+    @Override
+    public Boolean isBuy(ActivityProductBuyQueryParam param) {
+        ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
+        ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
+        criteria.andMemberIdEqualTo(param.getMemberId());
+        criteria.andActivityProductIdEqualTo(param.getActivityProductId());
+        criteria.andOrderStatusNotEqualTo(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+        Long count = shoppingOrderDOMapper.countByExample(shoppingOrderDOExample);
+        if (count <= 0) {
+            return false;
+        }
+        return true;
     }
     
 	/**************************************************************

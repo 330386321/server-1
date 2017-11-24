@@ -1,6 +1,8 @@
 package com.lawu.eshop.ad.srv.bo;
 
 public class AdRateSettingBO {
+	
+	private Long id;
 
 	/**
 	 *
@@ -17,6 +19,16 @@ public class AdRateSettingBO {
 	 * @mbg.generated
 	 */
 	private Integer rate;
+	
+	
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public Integer getGameTime() {
 		return gameTime;

@@ -9,6 +9,6 @@ import com.lawu.eshop.framework.core.page.AbstractPageParam;
  * @createDate 2017年11月23日
  * @updateDate 2017年11月23日
  */
-public class SnapUpActivityPageQueryParam extends AbstractPageParam {
+public class SeckillActivityPageQueryParam extends AbstractPageParam {
 
 }

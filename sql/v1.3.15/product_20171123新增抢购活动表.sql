@@ -26,7 +26,7 @@ CREATE TABLE `seckill_activity_product` (
   `original_price` decimal(10,2) unsigned NOT NULL COMMENT '商品原价',
   `product_model_count` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '商品型号总数量',
   `left_count` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '剩余数量',
-  `turnover` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '成交额',
+  `turnover` decimal(10,2) unsigned NOT NULL DEFAULT '0' COMMENT '成交额',
   `reasons` varchar(200) NOT NULL DEFAULT '' COMMENT '反馈原因',
   `auditor_account` varchar(50) DEFAULT NULL COMMENT '审核人员',
   `audit_time` datetime DEFAULT NULL COMMENT '审核时间',

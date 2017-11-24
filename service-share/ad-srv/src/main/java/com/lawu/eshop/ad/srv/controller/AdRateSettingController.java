@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.AdRateSettingDTO;
@@ -43,11 +45,41 @@ public class AdRateSettingController extends BaseController{
 			AdRateSettingDTO adRateSetting = new AdRateSettingDTO();
 			adRateSetting.setGameTime(adRateSettingBO.getGameTime());
 			adRateSetting.setRate(adRateSettingBO.getRate());
+			adRateSetting.setId(adRateSettingBO.getId());
 			rateList.add(adRateSetting);
 		}
 
 		return successGet(rateList);
 
+	}
+	
+	/**
+	 * 保存中奖率设置
+	 * @param gameTime
+	 * @param rate
+	 * @return
+	 */
+	@RequestMapping(value = "saveRateSetting", method = RequestMethod.POST)
+	public Result saveRateSetting(@RequestParam int gameTime,@RequestParam int rate){
+		
+		adRateSettingService.saveRateSetting(gameTime, rate);
+		
+		return successCreated();
+		
+	}
+	
+	/**
+	 * 删除中奖率设置
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "deleteRateSetting/{id}", method = RequestMethod.DELETE)
+	public Result deleteRateSetting(@PathVariable Long id){
+		
+		adRateSettingService.deleteRateSetting(id);
+		
+		return successCreated();
+		
 	}
 
 }

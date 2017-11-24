@@ -20,7 +20,7 @@ public enum StatusEnum {
     VALID((byte) 0x01);
 
     private Byte value;
-
+    
     StatusEnum(Byte value) {
         this.value = value;
     }

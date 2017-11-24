@@ -23,6 +23,7 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
+import com.lawu.eshop.order.param.ActivityProductBuyQueryParam;
 import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
@@ -126,4 +127,9 @@ public class MockShoppingOrderService extends BaseController implements Shopping
 	public Result<ShoppingOrderExpressInfoDTO> expressInfo(Long id, Long memberId) {
 		return successGet();
 	}
+
+    @Override
+    public Result<Boolean> isBuy(ActivityProductBuyQueryParam param) {
+        return successGet(true);
+    }
 }
