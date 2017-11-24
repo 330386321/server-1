@@ -1,9 +1,11 @@
 package com.lawu.eshop.product.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.product.param.JoinSeckillActivityParam;
 import com.lawu.eshop.product.param.SeckillActivityJoinParam;
 import com.lawu.eshop.product.param.SeckillActivityManageParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityDetailBO;
+import com.lawu.eshop.product.srv.bo.SeckillActivityInfoBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityJoinBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityManageBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityManageDetailBO;
@@ -47,5 +49,20 @@ public interface SeckillActivityJoinService {
 	 * @return
 	 */
 	SeckillActivityManageDetailBO querySeckillActivityManageDetail(Long id , Long merchantId);
+	
+	
+	/**
+	 * 参入活动
+	 * @param joinParam
+	 * @param merchantId
+	 */
+	void joinSeckillActivity(JoinSeckillActivityParam joinParam,Long merchantId);
+	
+	/**
+	 * 查询是否可报名信息
+	 * @param id
+	 * @return
+	 */
+	SeckillActivityInfoBO querySeckillActivityInfo(Long id);
 
 }

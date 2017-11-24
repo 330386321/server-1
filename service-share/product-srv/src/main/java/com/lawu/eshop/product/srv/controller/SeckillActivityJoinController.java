@@ -13,13 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.SeckillActivityDetailDTO;
 import com.lawu.eshop.product.dto.SeckillActivityJoinDTO;
 import com.lawu.eshop.product.dto.SeckillActivityManageDetailDTO;
 import com.lawu.eshop.product.dto.SeckillActivityManagerDTO;
+import com.lawu.eshop.product.param.JoinSeckillActivityParam;
 import com.lawu.eshop.product.param.SeckillActivityJoinParam;
 import com.lawu.eshop.product.param.SeckillActivityManageParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityDetailBO;
+import com.lawu.eshop.product.srv.bo.SeckillActivityInfoBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityJoinBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityManageBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityManageDetailBO;
@@ -106,6 +109,32 @@ public class SeckillActivityJoinController extends BaseController{
 		seckillActivityManageDetailDTO.setList(SeckillActivityJoinConverter.seckillActivityProductManageDTOConverter(seckillActivityManageDetailBO.getList()));
 		
 		return successGet(seckillActivityManageDetailDTO);
+	}
+	
+	/**
+	 * 参加活动
+	 * @param joinParam
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(value = "joinSeckillActivity", method = RequestMethod.POST)
+	public Result joinSeckillActivity(@RequestBody JoinSeckillActivityParam joinParam, @RequestParam Long merchantId){
+		
+		SeckillActivityInfoBO seckillActivityInfoBO = seckillActivityJoinService.querySeckillActivityInfo(joinParam.getSeckillActivityId());
+		
+		//可报名数已满
+		if(seckillActivityInfoBO.getIsOverCount()){
+			return successCreated(ResultCode.SECKILL_ACTIVITY_COUNT_OVER);
+			
+		}
+		//可报名时间已到
+		if(seckillActivityInfoBO.getIsOverTime()){
+			
+			return successCreated(ResultCode.SECKILL_ACTIVITY_TIME_OVER);
+		}
+		seckillActivityJoinService.joinSeckillActivity(joinParam, merchantId);
+		
+		return successCreated();
 	}
 
 }

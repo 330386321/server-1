@@ -87,6 +87,8 @@ public class ResultCode {
     public static final int GOODS_PRODUCT_FACORITE_EXIST = 3003;
     public static final int GOODS_PRODUCT_INVENTORY = 3004;
     public static final int GOODS_PRODUCT_EXIST_ADFLAT = 3005;
+    public static final int SECKILL_ACTIVITY_COUNT_OVER = 3006;
+    public static final int SECKILL_ACTIVITY_TIME_OVER = 3007;
 
     // 订单模块代码 4xxx
     public static final int PRODUCT_EVALUATE_TRUE = 4001;
@@ -300,6 +302,8 @@ public class ResultCode {
         ResultCode.messageMap.put(GOODS_PRODUCT_FACORITE_EXIST, "商品已经被收藏");
         ResultCode.messageMap.put(GOODS_PRODUCT_INVENTORY, "存在商品库存为0无法上架");
         ResultCode.messageMap.put(GOODS_PRODUCT_EXIST_ADFLAT, "商品存在广告位中无法下架，请联系后台管理员。");
+        ResultCode.messageMap.put(SECKILL_ACTIVITY_COUNT_OVER, "抢购活动报名数量已满");
+        ResultCode.messageMap.put(SECKILL_ACTIVITY_TIME_OVER, "抢购活动报名时间已到");
 
         // 订单模块 4xxx
         ResultCode.messageMap.put(PRODUCT_EVALUATE_TRUE, "该订单已评价");

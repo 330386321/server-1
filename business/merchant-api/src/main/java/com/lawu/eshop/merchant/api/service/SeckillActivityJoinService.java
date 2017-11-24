@@ -13,6 +13,7 @@ import com.lawu.eshop.product.dto.SeckillActivityDetailDTO;
 import com.lawu.eshop.product.dto.SeckillActivityJoinDTO;
 import com.lawu.eshop.product.dto.SeckillActivityManageDetailDTO;
 import com.lawu.eshop.product.dto.SeckillActivityManagerDTO;
+import com.lawu.eshop.product.param.JoinSeckillActivityParam;
 import com.lawu.eshop.product.param.SeckillActivityJoinParam;
 import com.lawu.eshop.product.param.SeckillActivityManageParam;
 
@@ -59,4 +60,13 @@ public interface SeckillActivityJoinService {
 	 */
 	@RequestMapping(value = "seckillActivityJoin/querySeckillActivityManageDetail/{id}", method = RequestMethod.GET)
 	Result<SeckillActivityManageDetailDTO> querySeckillActivityManageDetail(@PathVariable("id") Long id,@RequestParam("merchantId") Long merchantId);
+	
+	/**
+	 * 参入报名
+	 * @param joinParam
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(value = "seckillActivityJoin/joinSeckillActivity", method = RequestMethod.POST)
+	Result joinSeckillActivity(@RequestBody JoinSeckillActivityParam joinParam, @RequestParam("merchantId") Long merchantId);
 }

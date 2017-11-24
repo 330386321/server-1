@@ -3,6 +3,7 @@ package com.lawu.eshop.merchant.api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +20,7 @@ import com.lawu.eshop.product.dto.SeckillActivityDetailDTO;
 import com.lawu.eshop.product.dto.SeckillActivityJoinDTO;
 import com.lawu.eshop.product.dto.SeckillActivityManageDetailDTO;
 import com.lawu.eshop.product.dto.SeckillActivityManagerDTO;
+import com.lawu.eshop.product.param.JoinSeckillActivityParam;
 import com.lawu.eshop.product.param.SeckillActivityJoinParam;
 import com.lawu.eshop.product.param.SeckillActivityManageParam;
 
@@ -80,6 +82,15 @@ public class SeckillActivityJoinController extends BaseController {
 			@PathVariable @ApiParam(required = true, value = "活动id") Long id) {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		return seckillActivityJoinService.querySeckillActivityManageDetail(id, merchantId);
+	}
+	
+	@ApiOperation(value = "报名活动", notes = "报名活动，[3006|3007]。(张荣成)", httpMethod = "POST")
+	@Authorization
+	@RequestMapping(value = "joinSeckillActivity", method = RequestMethod.POST)
+	public Result  joinSeckillActivity(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@RequestBody @ApiParam JoinSeckillActivityParam param) {
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		return seckillActivityJoinService.joinSeckillActivity(param, merchantId);
 	}
 	
 }
