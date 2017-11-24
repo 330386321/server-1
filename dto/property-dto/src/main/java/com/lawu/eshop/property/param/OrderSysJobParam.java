@@ -29,7 +29,7 @@ public class OrderSysJobParam {
 	
 	//订单支付方式
 	@NotNull(message="payWays不能为空")
-	private Byte[] payWays;
+	private Byte payWays;
 	
 	// 订单实际支付金额
 	@NotBlank(message = "orderActualMoney不能为空")
@@ -39,6 +39,9 @@ public class OrderSysJobParam {
 	private String regionPaths;
 
 	private String orderItemProductName;
+
+	//用户编号，用于待收货14天后自动收货大款给商家时更新用户等级
+	private String memberNum;
 
 	public String getUserNums() {
 		return userNums;
@@ -64,11 +67,11 @@ public class OrderSysJobParam {
 		this.accounts = accounts;
 	}
 
-	public Byte[] getPayWays() {
+	public Byte getPayWays() {
 		return payWays;
 	}
 
-	public void setPayWays(Byte[] payWays) {
+	public void setPayWays(Byte payWays) {
 		this.payWays = payWays;
 	}
 
@@ -94,5 +97,13 @@ public class OrderSysJobParam {
 
 	public void setOrderItemProductName(String orderItemProductName) {
 		this.orderItemProductName = orderItemProductName;
+	}
+
+	public String getMemberNum() {
+		return memberNum;
+	}
+
+	public void setMemberNum(String memberNum) {
+		this.memberNum = memberNum;
 	}
 }

@@ -32,8 +32,9 @@ public class ShoppingOrderPaymentsToMerchantTransactionFollowServiceImpl extends
 		param.setOrderIds(notification.getShoppingOrderId().toString());
 		param.setUserNums(notification.getMerchantNum());
 		param.setRegionPaths(notification.getMerchantStoreRegionPath());
-		param.setPayWays(new Byte[]{notification.getPaymentMethod().getVal()});
+		param.setPayWays(notification.getPaymentMethod().getVal());
 		param.setOrderItemProductName(notification.getOrderItemProductName());
+		param.setMemberNum(notification.getMemberNum());
 		orderService.comfirmReleaseFreeze(param);
 	}
 }

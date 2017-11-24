@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * 支付购物订单成功后修改用户等级事务处理-主模块
+ * 确认收货7天后或待收货14天后定时打款给商家后修改用户等级事务处理-主模块
  *
  * @author yangqh
  * @date 2017年11月24日
@@ -33,7 +33,7 @@ public class ShoppingOrderPaymentUpdateUserGradeTransactionMainServiceImpl exten
         notification.setOrderId(transactionDetailDO.getBizId());
         notification.setTransactionDetailId(transactionDetailId);
         notification.setPayMoney(transactionDetailDO.getAmount());
-        notification.setUserNum(transactionDetailDO.getUserNum());
+        notification.setUserNum(transactionDetailDO.getRemark());
         notification.setTransactionType(transactionDetailDO.getTransactionType());
         return notification;
     }

@@ -21,6 +21,11 @@ public class ShoppingOrderPaymentsToMerchantNotification extends Notification {
     * 商家编号
     */
     private String merchantNum;
+
+	/**
+	 * 用户编号-释放冻结资金时用于更新对应用户等级用
+	 */
+	private String memberNum;
     
     /**
     * 商家门店区域（省市区id）
@@ -72,5 +77,13 @@ public class ShoppingOrderPaymentsToMerchantNotification extends Notification {
 
 	public void setOrderItemProductName(String orderItemProductName) {
 		this.orderItemProductName = orderItemProductName;
+	}
+
+	public String getMemberNum() {
+		return memberNum;
+	}
+
+	public void setMemberNum(String memberNum) {
+		this.memberNum = memberNum;
 	}
 }

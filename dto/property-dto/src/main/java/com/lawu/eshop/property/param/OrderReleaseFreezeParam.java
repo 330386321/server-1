@@ -20,22 +20,25 @@ public class OrderReleaseFreezeParam {
 	@NotBlank(message = "userNums不能为空")
 	private String userNums;
 
-	// 商品订单ID,多个已英文逗号分隔
+	// 商品订单ID
 	@NotBlank(message = "orderIds不能为空")
 	private String orderIds;
 
-	// 商家账号,多个已英文逗号分隔
+	// 商家账号
 	@NotBlank(message = "accounts不能为空")
 	private String accounts;
 	
-	//订单支付方式,多个已英文逗号分隔
+	//订单支付方式
 	@NotNull(message="payWays不能为空")
-	private Byte[] payWays;
+	private Byte payWays;
 
-	//商家门店省/市/区ID,多个以英文逗号分隔
+	//商家门店省/市/区ID
 	private String regionPaths;
 
 	private String orderItemProductName;
+
+	//用户编号-释放冻结资金时用于更新用户等级
+	private String memberNum;
 
 	public String getUserNums() {
 		return userNums;
@@ -61,11 +64,11 @@ public class OrderReleaseFreezeParam {
 		this.accounts = accounts;
 	}
 
-	public Byte[] getPayWays() {
+	public Byte getPayWays() {
 		return payWays;
 	}
 
-	public void setPayWays(Byte[] payWays) {
+	public void setPayWays(Byte payWays) {
 		this.payWays = payWays;
 	}
 
@@ -83,5 +86,13 @@ public class OrderReleaseFreezeParam {
 
 	public void setOrderItemProductName(String orderItemProductName) {
 		this.orderItemProductName = orderItemProductName;
+	}
+
+	public String getMemberNum() {
+		return memberNum;
+	}
+
+	public void setMemberNum(String memberNum) {
+		this.memberNum = memberNum;
 	}
 }

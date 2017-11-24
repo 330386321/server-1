@@ -85,6 +85,14 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private PropertyInfoDOMapper propertyInfoDOMapper;
 
+    @Autowired
+    @Qualifier("payOrderPaymentUpdateUserGradeTransactionMainServiceImpl")
+    private TransactionMainService<Reply> payOrderPaymentUpdateUserGradeTransactionMainServiceImpl;
+
+    @Autowired
+    @Qualifier("shoppingOrderPaymentUpdateUserGradeTransactionMainServiceImpl")
+    private TransactionMainService<Reply> shoppingOrderPaymentUpdateUserGradeTransactionMainServiceImpl;
+
     /**
      * 商品订单第三方付款后回调处理：新增会员交易记录，<更新订单状态>
      * <p>
@@ -175,6 +183,9 @@ public class OrderServiceImpl implements OrderService {
 
         // 更新订单状态
         payOrderTransactionMainServiceImpl.sendNotice(tdsParam.getId());
+
+        //发送消息给用户模块更新用户会员等级
+        payOrderPaymentUpdateUserGradeTransactionMainServiceImpl.sendNotice(tdsParam.getId());
 
         return ResultCode.SUCCESS;
     }
@@ -381,54 +392,54 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public int comfirmReleaseFreeze(OrderReleaseFreezeParam param) {
-        String[] userNums = param.getUserNums().split(",");
-        String[] orderIds = param.getOrderIds().split(",");
-        String[] regionPaths = param.getRegionPaths().split(",");
-        String[] productNames = param.getOrderItemProductName().split(",");
-        Byte[] payWays = param.getPayWays();
+        String userNums = param.getUserNums();
+        String orderIds = param.getOrderIds();
+        String regionPaths = param.getRegionPaths();
+        String productNames = param.getOrderItemProductName();
+        Byte payWays = param.getPayWays();
+        String memberNum = param.getMemberNum();
+
         FreezeDOExample example = new FreezeDOExample();
-        List<String> finishOrderIds = new ArrayList<String>();//成功处理的订单ID
-        for (int i = 0; i < userNums.length; i++) {
-            example.clear();
-            example.createCriteria().andUserNumEqualTo(userNums[i]).andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.getVal())
-                    .andBizIdEqualTo(Long.valueOf(orderIds[i])).andStatusEqualTo(FreezeStatusEnum.FREEZE.getVal());
-            example.setOrderByClause(" id desc ");
-            List<FreezeDO> freezeDOS = freezeDOMapper.selectByExample(example);
-            if (freezeDOS != null && !freezeDOS.isEmpty() && freezeDOS.size() == 1) {
-                FreezeDO freeze = freezeDOS.get(0);
-                Long freezeId = freeze.getId();
+        example.createCriteria().andUserNumEqualTo(userNums).andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.getVal())
+                .andBizIdEqualTo(Long.valueOf(orderIds)).andStatusEqualTo(FreezeStatusEnum.FREEZE.getVal());
+        example.setOrderByClause(" id desc ");
+        List<FreezeDO> freezeDOS = freezeDOMapper.selectByExample(example);
+        if (freezeDOS != null && !freezeDOS.isEmpty() && freezeDOS.size() == 1) {
+            FreezeDO freeze = freezeDOS.get(0);
+            Long freezeId = freeze.getId();
 
-                // 新增商家订单付款交易记录
-                TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-                tdsParam.setTitle(MerchantTransactionTypeEnum.ORDER.getName());
-                tdsParam.setUserNum(userNums[i]);
-                tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
-                tdsParam.setTransactionAccountType(payWays[i]);
-                tdsParam.setAmount(freeze.getMoney());
-                tdsParam.setBizId(orderIds[i]);
-                tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
-                tdsParam.setRegionPath(regionPaths[i]);
-                tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.ORDER.getDescPrefix()+productNames[i]);
-                transactionDetailService.save(tdsParam);
+            // 新增商家订单付款交易记录
+            TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+            tdsParam.setTitle(MerchantTransactionTypeEnum.ORDER.getName());
+            tdsParam.setUserNum(userNums);
+            tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
+            tdsParam.setTransactionAccountType(payWays);
+            tdsParam.setAmount(freeze.getMoney());
+            tdsParam.setBizId(orderIds);
+            tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
+            tdsParam.setRegionPath(regionPaths);
+            tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.ORDER.getDescPrefix()+productNames);
+            tdsParam.setRemark(memberNum);
+            transactionDetailService.save(tdsParam);
 
-                // 释放冻结资金
-                FreezeDO freezeDO = new FreezeDO();
-                freezeDO.setId(freezeId);
-                freezeDO.setStatus(FreezeStatusEnum.RELEASE.getVal());
-                freezeDO.setGmtModified(new Date());
-                freezeDO.setRemark("Release by Timed task!");
-                freezeDOMapper.updateByPrimaryKeySelective(freezeDO);
+            // 释放冻结资金
+            FreezeDO freezeDO = new FreezeDO();
+            freezeDO.setId(freezeId);
+            freezeDO.setStatus(FreezeStatusEnum.RELEASE.getVal());
+            freezeDO.setGmtModified(new Date());
+            freezeDO.setRemark("Release by Timed task!");
+            freezeDOMapper.updateByPrimaryKeySelective(freezeDO);
 
-                // 加商家财产余额，减冻结资金
-                PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
-                infoDoView.setUserNum(userNums[i]);
-                infoDoView.setBalance(freeze.getMoney());
-                infoDoView.setFreezeMoney(freeze.getMoney());
-                infoDoView.setGmtModified(new Date());
-                propertyInfoDOMapperExtend.updatePropertyInfoAddBalanceMinusFreeze(infoDoView);
+            // 加商家财产余额，减冻结资金
+            PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
+            infoDoView.setUserNum(userNums);
+            infoDoView.setBalance(freeze.getMoney());
+            infoDoView.setFreezeMoney(freeze.getMoney());
+            infoDoView.setGmtModified(new Date());
+            propertyInfoDOMapperExtend.updatePropertyInfoAddBalanceMinusFreeze(infoDoView);
 
-                finishOrderIds.add(orderIds[i]);
-            }
+            //发消息更新用户等级
+            shoppingOrderPaymentUpdateUserGradeTransactionMainServiceImpl.sendNotice(tdsParam.getId());
         }
         return ResultCode.SUCCESS;
     }
@@ -436,33 +447,37 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public int comfirmSysJob(OrderSysJobParam param) {
-        String[] userNums = param.getUserNums().split(",");
-        String[] orderIds = param.getOrderIds().split(",");
-        String[] regionPaths = param.getRegionPaths().split(",");
-        String[] productNames = param.getOrderItemProductName().split(",");
-        Byte[] payWays = param.getPayWays();
-        String[] orderActualMoneys = param.getOrderActualMoney().split(",");
-        for (int i = 0; i < userNums.length; i++) {
-            // 新增商家订单付款交易记录
-            TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-            tdsParam.setTitle(MerchantTransactionTypeEnum.ORDER.getName());
-            tdsParam.setUserNum(userNums[i]);
-            tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
-            tdsParam.setTransactionAccountType(payWays[i]);
-            tdsParam.setAmount(new BigDecimal(orderActualMoneys[i]));
-            tdsParam.setBizId(orderIds[i]);
-            tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
-            tdsParam.setRegionPath(regionPaths[i]);
-            tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.ORDER.getDescPrefix()+productNames[i]);
-            transactionDetailService.save(tdsParam);
+        String userNums = param.getUserNums();
+        String orderIds = param.getOrderIds();
+        String regionPaths = param.getRegionPaths();
+        String productNames = param.getOrderItemProductName();
+        Byte payWays = param.getPayWays();
+        String orderActualMoneys = param.getOrderActualMoney();
 
-            // 加商家财产余额
-            PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
-            infoDoView.setUserNum(userNums[i]);
-            infoDoView.setBalance(new BigDecimal(orderActualMoneys[i]));
-            infoDoView.setGmtModified(new Date());
-            propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
-        }
+        // 新增商家订单付款交易记录
+        TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+        tdsParam.setTitle(MerchantTransactionTypeEnum.ORDER.getName());
+        tdsParam.setUserNum(userNums);
+        tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
+        tdsParam.setTransactionAccountType(payWays);
+        tdsParam.setAmount(new BigDecimal(orderActualMoneys));
+        tdsParam.setBizId(orderIds);
+        tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
+        tdsParam.setRegionPath(regionPaths);
+        tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.ORDER.getDescPrefix()+productNames);
+        tdsParam.setRemark(param.getMemberNum());
+        transactionDetailService.save(tdsParam);
+
+        // 加商家财产余额
+        PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
+        infoDoView.setUserNum(userNums);
+        infoDoView.setBalance(new BigDecimal(orderActualMoneys));
+        infoDoView.setGmtModified(new Date());
+        propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
+
+        //发消息更新用户等级
+        shoppingOrderPaymentUpdateUserGradeTransactionMainServiceImpl.sendNotice(tdsParam.getId());
+
         return ResultCode.SUCCESS;
     }
 

@@ -50,6 +50,8 @@ public class ShoppingOrderPaymentsToMerchantTransactionMainServiceImpl extends A
 
 		String productName = shoppingOrderItemService.getOrderItemProductName(shoppingOrderId);
 		rtn.setOrderItemProductName(productName);
+
+		rtn.setMemberNum(shoppingOrderBO.getMemberNum());
 		return rtn;
 	}
 }

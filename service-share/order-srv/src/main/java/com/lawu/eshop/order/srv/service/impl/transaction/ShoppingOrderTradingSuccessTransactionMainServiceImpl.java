@@ -50,6 +50,7 @@ public class ShoppingOrderTradingSuccessTransactionMainServiceImpl extends Abstr
         rtn.setOrderNum(shoppingOrderBO.getOrderNum());
         String orderItemProductName = shoppingOrderItemService.getOrderItemProductName(shoppingOrderId);
         rtn.setOrderItemProductName(orderItemProductName);
+        rtn.setMemberNum(shoppingOrderBO.getMemberNum());
         return rtn;
     }
 }

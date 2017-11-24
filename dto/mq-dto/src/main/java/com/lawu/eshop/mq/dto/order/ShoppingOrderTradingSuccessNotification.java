@@ -48,6 +48,9 @@ public class ShoppingOrderTradingSuccessNotification extends Notification {
 	private String orderNum;
 
 	private String orderItemProductName;
+
+	//用户编号，用于待收货14天后自动收货大款给商家时更新用户等级
+	private String memberNum;
     
 	public Long getShoppingOrderId() {
 		return shoppingOrderId;
@@ -111,5 +114,13 @@ public class ShoppingOrderTradingSuccessNotification extends Notification {
 
 	public void setOrderItemProductName(String orderItemProductName) {
 		this.orderItemProductName = orderItemProductName;
+	}
+
+	public String getMemberNum() {
+		return memberNum;
+	}
+
+	public void setMemberNum(String memberNum) {
+		this.memberNum = memberNum;
 	}
 }
