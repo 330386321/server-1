@@ -51,4 +51,6 @@ public interface PropertyService {
      * @return
      */
     Page<PropertyBO> listProperty(ListPropertyParam listPropertyParam);
+
+    String getValue(String key);
 }

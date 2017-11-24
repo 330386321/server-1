@@ -166,4 +166,12 @@ public interface MemberService {
      * @author meishuquan
      */
     void saveLoginLog(UserLoginLogParam loginLogParam);
+
+    /**
+     * 更新用户等级
+     * @param userNum
+     * @param resultMoney
+     * @param userCurrentGrade
+     */
+    void updateGradeInfoByUserNum(String userNum, Integer resultMoney, Byte userCurrentGrade);
 }

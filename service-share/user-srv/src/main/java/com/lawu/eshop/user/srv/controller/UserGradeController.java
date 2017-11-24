@@ -7,7 +7,6 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.UserGradeDTO;
 import com.lawu.eshop.user.srv.bo.UserGradeBO;
-import com.lawu.eshop.user.srv.domain.UserGradeDO;
 import com.lawu.eshop.user.srv.service.UserGradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

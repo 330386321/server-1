@@ -60,6 +60,10 @@ public class BalancePayServiceImpl implements BalancePayService {
     private TransactionMainService<Reply> memberRedPacketPaymentTransactionMainServiceImpl;
 
     @Autowired
+    @Qualifier("payOrderPaymentUpdateUserGradeTransactionMainServiceImpl")
+    private TransactionMainService<Reply> payOrderPaymentUpdateUserGradeTransactionMainServiceImpl;
+
+    @Autowired
     private PropertyService propertyService;
     @Autowired
     private PointDetailService pointDetailService;
@@ -163,6 +167,10 @@ public class BalancePayServiceImpl implements BalancePayService {
         propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView1);
 
         payOrderTransactionMainServiceImpl.sendNotice(tdsParam.getId());
+
+        //发送消息给用户模块更新用户会员等级
+        payOrderPaymentUpdateUserGradeTransactionMainServiceImpl.sendNotice(tdsParam.getId());
+
         return ResultCode.SUCCESS;
     }
 
@@ -385,6 +393,10 @@ public class BalancePayServiceImpl implements BalancePayService {
         propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView1);
 
         payOrderTransactionMainServiceImpl.sendNotice(tdsParam.getId());
+
+        //发送消息给用户模块更新用户会员等级
+        payOrderPaymentUpdateUserGradeTransactionMainServiceImpl.sendNotice(tdsParam.getId());
+
         return ResultCode.SUCCESS;
     }
 

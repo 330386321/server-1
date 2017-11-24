@@ -63,4 +63,14 @@ public class TransactionConstant {
      */
     public static final byte POINT_CONVERT_LOTTERY = 0x0B;
 
+    /**
+     * 支付购物订单成功后修改用户等级
+     */
+    public static final byte SHOPPING_ORDER_PAY_UPDATE_USER_GRADE = 0x0C;
+
+    /**
+     * 支付买单订单成功后修改用户等级
+     */
+    public static final byte PAY_ORDER_PAY_UPDATE_USER_GRADE = 0x0D;
+
 }

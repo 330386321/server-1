@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.constants.PropertyType;
 import com.lawu.eshop.user.param.ListPropertyParam;
 import com.lawu.eshop.user.srv.bo.PropertyBO;
 import com.lawu.eshop.user.srv.converter.PropertyConverter;
@@ -70,5 +71,24 @@ public class PropertyServiceImpl implements PropertyService {
         List<PropertyDO> propertyDOList = propertyDOMapper.selectByExampleWithRowbounds(propertyDOExample, rowBounds);
         page.setRecords(PropertyConverter.convertBO(propertyDOList));
         return page;
+    }
+
+    @Override
+    public String getValue(String key) {
+        PropertyDOExample example = new PropertyDOExample();
+        example.createCriteria().andNameEqualTo(key);
+        List<PropertyDO> list = propertyDOMapper.selectByExample(example);
+        if (list == null || list.isEmpty()) {
+            String defaultValue = "";
+            switch (key) {
+                case PropertyType.GROWTH_VALUE_RATE:
+                    defaultValue = PropertyType.GROWTH_VALUE_RATE_DEFAULT;
+                    break;
+                default:
+                    break;
+            }
+            return defaultValue;
+        }
+        return list.get(0).getValue();
     }
 }

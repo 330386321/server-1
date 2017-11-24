@@ -63,6 +63,8 @@ public class MemberBO {
 
     private Byte grade;
 
+    private Integer growthValue;
+
     public UserSexEnum getUserSex() {
         return userSex;
     }
@@ -265,5 +267,13 @@ public class MemberBO {
 
     public void setGrade(Byte grade) {
         this.grade = grade;
+    }
+
+    public Integer getGrowthValue() {
+        return growthValue;
+    }
+
+    public void setGrowthValue(Integer growthValue) {
+        this.growthValue = growthValue;
     }
 }

@@ -64,6 +64,7 @@ public class MemberConverter {
         memberBO.setName(memberDO.getName());
         memberBO.setStatus(memberDO.getStatus());
         memberBO.setGrade(memberDO.getGrade());
+        memberBO.setGrowthValue(memberDO.getGrowthValue());
         return memberBO;
     }
 

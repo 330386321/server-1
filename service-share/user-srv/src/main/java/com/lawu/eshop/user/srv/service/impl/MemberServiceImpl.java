@@ -667,4 +667,16 @@ public class MemberServiceImpl implements MemberService {
         userLoginLogDOMapper.insertSelective(loginLogDO);
     }
 
+    @Override
+    @Transactional
+    public void updateGradeInfoByUserNum(String userNum, Integer resultMoney, Byte userCurrentGrade) {
+        MemberDOExample example = new MemberDOExample();
+        example.createCriteria().andNumEqualTo(userNum);
+        MemberDO memberDO = new MemberDO();
+        memberDO.setGrade(userCurrentGrade);
+        memberDO.setGrowthValue(resultMoney);
+        memberDO.setGmtModified(new Date());
+        memberDOMapper.updateByExampleSelective(memberDO,example);
+    }
+
 }

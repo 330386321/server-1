@@ -246,6 +246,16 @@ public class MqConstant {
      */
     public static final String TAG_HANDLE_AD = "tag_handle_ad";
 
+    /**
+     * 支付购物订单成功后修改用户等级
+     */
+    public static final String TAG_SHOPPING_ORDER_PAY_UPDATE_USER_GRADE = "shopping_order_pay_update_user_grade";
+
+    /**
+     * 支付买单订单成功后修改用户等级
+     */
+    public static final String TAG_PAY_ORDER_PAY_UPDATE_USER_GRADE = "pay_order_pay_update_user_grade";
+
     /******************************************/
     /******* user-srv模块tag **********/
 
