@@ -1,7 +1,11 @@
 package com.lawu.eshop.product.srv.converter;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.common.constants.MemberGradeEnum;
+import com.lawu.eshop.product.constant.ActivityStatusEnum;
+import com.lawu.eshop.product.dto.SeckillActivityThatDayDTO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
 
@@ -13,13 +17,74 @@ import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
  */
 public class SeckillActivityConverter {
 	
-	/**
-	 * SeckillActivityDO转SeckillActivityBO
-	 * @param favoriteProductView
-	 * @return
-	 */
-	public static List<SeckillActivityBO> convert(List<SeckillActivityDO> list) {
-        return null;
+    /**
+     * SeckillActivityDO List转SeckillActivityBO List
+     * @param list
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月23日
+     * @updateDate 2017年11月23日
+     */
+	public static List<SeckillActivityBO> convertSeckillActivityBOList(List<SeckillActivityDO> list) {
+	    if (list == null || list.isEmpty()) {
+	        return null;
+	    }
+	    List<SeckillActivityBO> rtn = new ArrayList<>();
+	    for (SeckillActivityDO item : list) {
+	        rtn.add(convert(item));
+	    }
+        return rtn;
     }
 	
+    /**
+     * SeckillActivityDO转SeckillActivityBO
+     * @param source
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月23日
+     * @updateDate 2017年11月23日
+     */
+    public static SeckillActivityBO convert(SeckillActivityDO source) {
+        if (source == null) {
+            return null;
+        }
+        SeckillActivityBO rtn = new SeckillActivityBO();
+        rtn.setActivityStatus(ActivityStatusEnum.getEnum(source.getActivityStatus()));
+        rtn.setId(source.getId());
+        rtn.setEndDate(source.getEndDate());
+        rtn.setMemberLevel(MemberGradeEnum.getEnum(source.getMemberLevel()));
+        rtn.setName(source.getName());
+        rtn.setPicture(source.getPicture());
+        rtn.setProductValidCount(source.getProductValidCount());
+        rtn.setSellingPrice(source.getSellingPrice());
+        rtn.setStartDate(source.getStartDate());
+        return rtn;
+    }
+	
+	/**
+	 * SeckillActivityBO List转SeckillActivityThatDayDTO List
+	 * @param list
+	 * @return
+	 * @author jiangxinjun
+	 * @createDate 2017年11月23日
+	 * @updateDate 2017年11月23日
+	 */
+    public static List<SeckillActivityThatDayDTO> convertSeckillActivityThatDayDTOList(List<SeckillActivityBO> list) {
+        List<SeckillActivityThatDayDTO> rtn = new ArrayList<>();
+        if (list == null || list.isEmpty()) {
+            return rtn;
+        }
+        for (SeckillActivityBO item : list) {
+            SeckillActivityThatDayDTO seckillActivityThatDayDTO = new SeckillActivityThatDayDTO();
+            seckillActivityThatDayDTO.setActivityStatus(item.getActivityStatus());
+            seckillActivityThatDayDTO.setId(item.getId());
+            seckillActivityThatDayDTO.setMemberLevel(item.getMemberLevel());
+            seckillActivityThatDayDTO.setName(item.getName());
+            seckillActivityThatDayDTO.setPicture(item.getPicture());
+            seckillActivityThatDayDTO.setStartDate(item.getStartDate());
+            seckillActivityThatDayDTO.setSellingPrice(item.getSellingPrice());
+            rtn.add(seckillActivityThatDayDTO);
+        }
+        return rtn;
+    }
 }

@@ -1,63 +1,64 @@
-package com.lawu.eshop.product.srv.bo;
+package com.lawu.eshop.product.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.common.constants.MemberGradeEnum;
 import com.lawu.eshop.product.constant.ActivityStatusEnum;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
- * 抢购活动BO
+ * 当天抢购活动列表DTO
  * 
  * @author jiangxinjun
  * @createDate 2017年11月23日
  * @updateDate 2017年11月23日
  */
-public class SeckillActivityBO {
+public class SeckillActivityThatDayDTO {
 
     /**
      * 主键
      */
+    @ApiModelProperty(value = "主键", required = true)
     private Long id;
 
     /**
      * 活动名称
      */
+    @ApiModelProperty(value = "活动名称", required = true)
     private String name;
 
     /**
-     * 开始时间
+     * 开始时间(HH:mm)
      */
+    @JsonFormat(pattern = "HH:mm")
+    @ApiModelProperty(value = "开始时间", required = true)
     private Date startDate;
-
-    /**
-     * 结束时间
-     */
-    private Date endDate;
 
     /**
      * 会员等级
      */
+    @ApiModelProperty(value = "会员等级", required = true)
     private MemberGradeEnum memberLevel;
-
-    /**
-     * 商家可提交审核的商品数
-     */
-    private Integer productValidCount;
-
+    
     /**
      * 活动定价
      */
+    @ApiModelProperty(value = "活动定价", required = true)
     private BigDecimal sellingPrice;
-
+    
     /**
      * 宣传图片
      */
+    @ApiModelProperty(value = "宣传图片", required = true)
     private String picture;
 
     /**
      * 活动状态
      */
+    @ApiModelProperty(value = "活动状态(UNPUBLISHED-未发布|NOT_STARTED-未开始|PROCESSING-进行中|END-已结束)", required = true)
     private ActivityStatusEnum activityStatus;
 
     public Long getId() {
@@ -84,28 +85,12 @@ public class SeckillActivityBO {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-    
     public MemberGradeEnum getMemberLevel() {
         return memberLevel;
     }
 
     public void setMemberLevel(MemberGradeEnum memberLevel) {
         this.memberLevel = memberLevel;
-    }
-
-    public Integer getProductValidCount() {
-        return productValidCount;
-    }
-
-    public void setProductValidCount(Integer productValidCount) {
-        this.productValidCount = productValidCount;
     }
 
     public BigDecimal getSellingPrice() {

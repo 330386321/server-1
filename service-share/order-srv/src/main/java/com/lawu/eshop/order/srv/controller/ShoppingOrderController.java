@@ -8,6 +8,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +40,7 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
+import com.lawu.eshop.order.param.ActivityProductBuyQueryParam;
 import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
@@ -278,6 +281,23 @@ public class ShoppingOrderController extends BaseController {
 		}
 		return successCreated();
 	}
+	
+    /**
+     * 查询当前用户是否购买过抢购商品
+     * 
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月24日
+     * @updateDate 2017年11月24日
+     */
+    @RequestMapping(value = "isBuy", method = RequestMethod.PUT)
+    public Result<Boolean> isBuy(@RequestBody @Validated ActivityProductBuyQueryParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        return successCreated(shoppingOrderService.isBuy(param));
+    }
 
 	/*********************************************************
 	 * Merchant Api

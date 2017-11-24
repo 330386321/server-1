@@ -7,6 +7,7 @@ import com.lawu.eshop.mq.dto.order.reply.ShoppingOrderCreateOrderReply;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
 import com.lawu.eshop.order.dto.ReportRiseRateDTO;
 import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
+import com.lawu.eshop.order.param.ActivityProductBuyQueryParam;
 import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
@@ -425,5 +426,14 @@ public interface ShoppingOrderService {
      * @updateDate 2017年11月14日
      */
     List<ShoppingOrderDO> selectAutoReceiptOrder(int currentPage, int pageSize);
-
+    
+    /**
+     * 查询当前用户是否购买过抢购商品
+     * 
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月24日
+     * @updateDate 2017年11月24日
+     */
+    Boolean isBuy(ActivityProductBuyQueryParam param);
 }

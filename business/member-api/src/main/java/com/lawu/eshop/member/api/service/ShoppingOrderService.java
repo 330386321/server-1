@@ -21,6 +21,7 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
+import com.lawu.eshop.order.param.ActivityProductBuyQueryParam;
 import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
@@ -214,4 +215,16 @@ public interface ShoppingOrderService {
 	 */
 	@RequestMapping(value = "getOrderItemProductName/{id}", method = RequestMethod.GET)
 	Result<String> getOrderItemProductName(@PathVariable("id") String id);
+	
+    /**
+     * 查询当前用户是否购买过抢购商品
+     * 
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月24日
+     * @updateDate 2017年11月24日
+     */
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "isBuy", method = RequestMethod.PUT)
+    Result<Boolean> isBuy(@RequestBody ActivityProductBuyQueryParam param);
 }

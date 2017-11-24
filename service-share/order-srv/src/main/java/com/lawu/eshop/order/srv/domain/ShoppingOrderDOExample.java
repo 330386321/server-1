@@ -646,6 +646,126 @@ public class ShoppingOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andActivityIdIsNull() {
+            addCriterion("activity_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdIsNotNull() {
+            addCriterion("activity_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdEqualTo(Long value) {
+            addCriterion("activity_id =", value, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdNotEqualTo(Long value) {
+            addCriterion("activity_id <>", value, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdGreaterThan(Long value) {
+            addCriterion("activity_id >", value, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("activity_id >=", value, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdLessThan(Long value) {
+            addCriterion("activity_id <", value, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdLessThanOrEqualTo(Long value) {
+            addCriterion("activity_id <=", value, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdIn(List<Long> values) {
+            addCriterion("activity_id in", values, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdNotIn(List<Long> values) {
+            addCriterion("activity_id not in", values, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdBetween(Long value1, Long value2) {
+            addCriterion("activity_id between", value1, value2, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityIdNotBetween(Long value1, Long value2) {
+            addCriterion("activity_id not between", value1, value2, "activityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdIsNull() {
+            addCriterion("activity_product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdIsNotNull() {
+            addCriterion("activity_product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdEqualTo(Long value) {
+            addCriterion("activity_product_id =", value, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdNotEqualTo(Long value) {
+            addCriterion("activity_product_id <>", value, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdGreaterThan(Long value) {
+            addCriterion("activity_product_id >", value, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("activity_product_id >=", value, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdLessThan(Long value) {
+            addCriterion("activity_product_id <", value, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdLessThanOrEqualTo(Long value) {
+            addCriterion("activity_product_id <=", value, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdIn(List<Long> values) {
+            addCriterion("activity_product_id in", values, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdNotIn(List<Long> values) {
+            addCriterion("activity_product_id not in", values, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdBetween(Long value1, Long value2) {
+            addCriterion("activity_product_id between", value1, value2, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdNotBetween(Long value1, Long value2) {
+            addCriterion("activity_product_id not between", value1, value2, "activityProductId");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchantNumIsNull() {
             addCriterion("merchant_num is null");
             return (Criteria) this;
