@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
-            location="G:/lib/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
+           location="d:/maven/repository/mysql/mysql-connector-java/5.1.40/mysql-connector-java-5.1.40.jar"/>
     <context id="MysqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
     	<!-- 再次生成xml时候是覆盖 -->
     	<property name="mergeable" value="false"></property>
@@ -73,8 +73,7 @@
         <table tableName="product" domainObjectName="ProductDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        -->
-        <table tableName="seckill_activity" domainObjectName="SeckillActivityDO">
+         <table tableName="seckill_activity" domainObjectName="SeckillActivityDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="seckill_activity_attention" domainObjectName="SeckillActivityAttentionDO">
@@ -84,6 +83,11 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="seckill_activity_product_model" domainObjectName="SeckillActivityProductModelDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        -->
+      
+        <table tableName="seckill_activity_product" domainObjectName="SeckillActivityProductDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

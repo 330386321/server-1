@@ -766,52 +766,52 @@ public class SeckillActivityProductDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andTurnoverEqualTo(Long value) {
+        public Criteria andTurnoverEqualTo(BigDecimal value) {
             addCriterion("turnover =", value, "turnover");
             return (Criteria) this;
         }
 
-        public Criteria andTurnoverNotEqualTo(Long value) {
+        public Criteria andTurnoverNotEqualTo(BigDecimal value) {
             addCriterion("turnover <>", value, "turnover");
             return (Criteria) this;
         }
 
-        public Criteria andTurnoverGreaterThan(Long value) {
+        public Criteria andTurnoverGreaterThan(BigDecimal value) {
             addCriterion("turnover >", value, "turnover");
             return (Criteria) this;
         }
 
-        public Criteria andTurnoverGreaterThanOrEqualTo(Long value) {
+        public Criteria andTurnoverGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("turnover >=", value, "turnover");
             return (Criteria) this;
         }
 
-        public Criteria andTurnoverLessThan(Long value) {
+        public Criteria andTurnoverLessThan(BigDecimal value) {
             addCriterion("turnover <", value, "turnover");
             return (Criteria) this;
         }
 
-        public Criteria andTurnoverLessThanOrEqualTo(Long value) {
+        public Criteria andTurnoverLessThanOrEqualTo(BigDecimal value) {
             addCriterion("turnover <=", value, "turnover");
             return (Criteria) this;
         }
 
-        public Criteria andTurnoverIn(List<Long> values) {
+        public Criteria andTurnoverIn(List<BigDecimal> values) {
             addCriterion("turnover in", values, "turnover");
             return (Criteria) this;
         }
 
-        public Criteria andTurnoverNotIn(List<Long> values) {
+        public Criteria andTurnoverNotIn(List<BigDecimal> values) {
             addCriterion("turnover not in", values, "turnover");
             return (Criteria) this;
         }
 
-        public Criteria andTurnoverBetween(Long value1, Long value2) {
+        public Criteria andTurnoverBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("turnover between", value1, value2, "turnover");
             return (Criteria) this;
         }
 
-        public Criteria andTurnoverNotBetween(Long value1, Long value2) {
+        public Criteria andTurnoverNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("turnover not between", value1, value2, "turnover");
             return (Criteria) this;
         }
@@ -883,6 +883,136 @@ public class SeckillActivityProductDOExample {
 
         public Criteria andReasonsNotBetween(String value1, String value2) {
             addCriterion("reasons not between", value1, value2, "reasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountIsNull() {
+            addCriterion("auditor_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountIsNotNull() {
+            addCriterion("auditor_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountEqualTo(String value) {
+            addCriterion("auditor_account =", value, "auditorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountNotEqualTo(String value) {
+            addCriterion("auditor_account <>", value, "auditorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountGreaterThan(String value) {
+            addCriterion("auditor_account >", value, "auditorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("auditor_account >=", value, "auditorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountLessThan(String value) {
+            addCriterion("auditor_account <", value, "auditorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountLessThanOrEqualTo(String value) {
+            addCriterion("auditor_account <=", value, "auditorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountLike(String value) {
+            addCriterion("auditor_account like", value, "auditorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountNotLike(String value) {
+            addCriterion("auditor_account not like", value, "auditorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountIn(List<String> values) {
+            addCriterion("auditor_account in", values, "auditorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountNotIn(List<String> values) {
+            addCriterion("auditor_account not in", values, "auditorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountBetween(String value1, String value2) {
+            addCriterion("auditor_account between", value1, value2, "auditorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditorAccountNotBetween(String value1, String value2) {
+            addCriterion("auditor_account not between", value1, value2, "auditorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeIsNull() {
+            addCriterion("audit_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeIsNotNull() {
+            addCriterion("audit_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeEqualTo(Date value) {
+            addCriterion("audit_time =", value, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeNotEqualTo(Date value) {
+            addCriterion("audit_time <>", value, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeGreaterThan(Date value) {
+            addCriterion("audit_time >", value, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("audit_time >=", value, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeLessThan(Date value) {
+            addCriterion("audit_time <", value, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeLessThanOrEqualTo(Date value) {
+            addCriterion("audit_time <=", value, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeIn(List<Date> values) {
+            addCriterion("audit_time in", values, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeNotIn(List<Date> values) {
+            addCriterion("audit_time not in", values, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeBetween(Date value1, Date value2) {
+            addCriterion("audit_time between", value1, value2, "auditTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditTimeNotBetween(Date value1, Date value2) {
+            addCriterion("audit_time not between", value1, value2, "auditTime");
             return (Criteria) this;
         }
 
