@@ -61,6 +61,8 @@ public class MemberBO {
 
     private String freezeReason;
 
+    private Byte grade;
+
     public UserSexEnum getUserSex() {
         return userSex;
     }
@@ -255,5 +257,13 @@ public class MemberBO {
 
     public void setFreezeReason(String freezeReason) {
         this.freezeReason = freezeReason;
+    }
+
+    public Byte getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Byte grade) {
+        this.grade = grade;
     }
 }

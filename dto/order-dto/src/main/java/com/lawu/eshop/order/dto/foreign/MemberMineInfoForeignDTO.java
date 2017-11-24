@@ -2,6 +2,7 @@ package com.lawu.eshop.order.dto.foreign;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.common.constants.MemberGradeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -48,6 +49,12 @@ public class MemberMineInfoForeignDTO extends ShoppingOrderNumberOfOrderStatusDT
 	 */
 	@ApiModelProperty(value= "爱心账户", required = true)
 	private BigDecimal loveAccount;
+
+	@ApiModelProperty(value = "会员等级枚举")
+	private MemberGradeEnum gradeEnum;
+
+	@ApiModelProperty(value = "会员等级值（一个数字对应一个级别，从低到高）")
+	private Byte grade;
 	
 	public String getNickname() {
 		return nickname;
@@ -96,5 +103,20 @@ public class MemberMineInfoForeignDTO extends ShoppingOrderNumberOfOrderStatusDT
 	public void setLoveAccount(BigDecimal loveAccount) {
 		this.loveAccount = loveAccount;
 	}
-	
+
+	public MemberGradeEnum getGradeEnum() {
+		return gradeEnum;
+	}
+
+	public void setGradeEnum(MemberGradeEnum gradeEnum) {
+		this.gradeEnum = gradeEnum;
+	}
+
+	public Byte getGrade() {
+		return grade;
+	}
+
+	public void setGrade(Byte grade) {
+		this.grade = grade;
+	}
 }

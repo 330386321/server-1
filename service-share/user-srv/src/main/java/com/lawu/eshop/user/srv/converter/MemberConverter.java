@@ -63,6 +63,7 @@ public class MemberConverter {
         memberBO.setGmtCreate(memberDO.getGmtCreate());
         memberBO.setName(memberDO.getName());
         memberBO.setStatus(memberDO.getStatus());
+        memberBO.setGrade(memberDO.getGrade());
         return memberBO;
     }
 
