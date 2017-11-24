@@ -66,5 +66,14 @@ public interface PropertyInfoDataService {
 	 * @date 2017年6月15日 下午12:08:37
 	 */
 	Integer getPointDetailByUserNumAndPointTypeAndBizId(PointDetailQueryData1Param param);
+
+	/**
+	 * 消费积分兑换抽奖
+	 *
+	 * @param param
+	 * @return
+	 * @author meishuquan
+	 */
+	int doHanlderMinusPointWithLottery(PropertyInfoDataParam param);
 	
 }

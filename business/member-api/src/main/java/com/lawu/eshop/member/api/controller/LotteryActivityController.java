@@ -15,10 +15,9 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.dto.LotteryActivityDTO;
-import com.lawu.eshop.mall.param.LotteryActivityParam;
-import com.lawu.eshop.mall.param.LotteryActivityRealParam;
+import com.lawu.eshop.mall.query.LotteryActivityQuery;
+import com.lawu.eshop.mall.query.LotteryActivityRealQuery;
 import com.lawu.eshop.member.api.service.LotteryActivityService;
-import com.lawu.eshop.order.dto.foreign.MemberMineInfoForeignDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,14 +39,14 @@ public class LotteryActivityController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listLotteryActivity", method = RequestMethod.GET)
-    public Result<MemberMineInfoForeignDTO> listLotteryActivity(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                                @ModelAttribute LotteryActivityParam activityParam) {
+    public Result<LotteryActivityDTO> listLotteryActivity(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                                @ModelAttribute LotteryActivityQuery activityQuery) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
-        LotteryActivityRealParam param = new LotteryActivityRealParam();
-        param.setCurrentPage(activityParam.getCurrentPage());
-        param.setPageSize(activityParam.getPageSize());
-        param.setUserNum(userNum);
-        Result<Page<LotteryActivityDTO>> result = lotteryActivityService.listLotteryActivity(param);
+        LotteryActivityRealQuery query = new LotteryActivityRealQuery();
+        query.setCurrentPage(activityQuery.getCurrentPage());
+        query.setPageSize(activityQuery.getPageSize());
+        query.setUserNum(userNum);
+        Result<Page<LotteryActivityDTO>> result = lotteryActivityService.listLotteryActivity(query);
         return successGet(result);
     }
 }

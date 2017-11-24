@@ -27,4 +27,15 @@ public interface PropertyInfoDataService {
 	 */
 	@RequestMapping(value = "propertyInfoData/getPointDetailByUserNumAndPointTypeAndBizId", method = RequestMethod.POST)
 	Result<Integer> getPointDetailByUserNumAndPointTypeAndBizId(@RequestBody PointDetailQueryData1Param param);
+
+	/**
+	 * 积分兑换抽奖
+	 *
+	 * @param param
+	 * @return
+	 * @author meishuquan
+	 */
+	@RequestMapping(value = "propertyInfoData/doHanlderMinusPointWithLottery", method = RequestMethod.POST)
+	Result doHanlderMinusPointWithLottery(@RequestBody @Valid PropertyInfoDataParam param);
+
 }

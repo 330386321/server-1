@@ -57,4 +57,10 @@ public class TransactionConstant {
      * 商家发广告异步回调后发笑锡修改广告记录
      */
     public static final byte HANDLE_MERCHANT_AD = 0x0A;
+
+    /**
+     * 积分兑换抽奖
+     */
+    public static final byte POINT_CONVERT_LOTTERY = 0x0B;
+
 }

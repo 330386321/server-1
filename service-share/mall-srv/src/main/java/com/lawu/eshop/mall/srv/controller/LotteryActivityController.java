@@ -10,7 +10,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.LotteryActivityDTO;
-import com.lawu.eshop.mall.param.LotteryActivityRealParam;
+import com.lawu.eshop.mall.query.LotteryActivityRealQuery;
 import com.lawu.eshop.mall.srv.bo.LotteryActivityBO;
 import com.lawu.eshop.mall.srv.converter.LotteryActivityConverter;
 import com.lawu.eshop.mall.srv.service.LotteryActivityService;
@@ -29,13 +29,13 @@ public class LotteryActivityController extends BaseController {
     /**
      * 抽奖活动列表
      *
-     * @param param
+     * @param query
      * @return
      * @author meishuquan
      */
     @RequestMapping(value = "listLotteryActivity", method = RequestMethod.POST)
-    public Result<Page<LotteryActivityDTO>> listLotteryActivity(@RequestBody LotteryActivityRealParam param) {
-        Page<LotteryActivityBO> activityBOPage = lotteryActivityService.listLotteryActivity(param);
+    public Result<Page<LotteryActivityDTO>> listLotteryActivity(@RequestBody LotteryActivityRealQuery query) {
+        Page<LotteryActivityBO> activityBOPage = lotteryActivityService.listLotteryActivity(query);
         Page<LotteryActivityDTO> page = new Page<>();
         page.setCurrentPage(activityBOPage.getCurrentPage());
         page.setTotalCount(activityBOPage.getTotalCount());
