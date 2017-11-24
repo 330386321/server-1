@@ -545,6 +545,20 @@ public class DateUtil {
 		gregorianCalendar.set(Calendar.DATE, day - 1);
 		return gregorianCalendar.getTime();
 	}
+	
+	/**
+	 * 获取日期前两天
+	 *
+	 * @param date
+	 * @return
+	 */
+	public static Date getDayBeforeTwo(Date date) {
+		Calendar gregorianCalendar = new GregorianCalendar();
+		gregorianCalendar.setTime(date);
+		int day = gregorianCalendar.get(Calendar.DATE);
+		gregorianCalendar.set(Calendar.DATE, day - 2);
+		return gregorianCalendar.getTime();
+	}
 
 	/**
 	 * 获取日期后一天

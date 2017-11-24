@@ -10,13 +10,16 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ActivityStatusEnum;
 import com.lawu.eshop.product.param.SeckillActivityJoinParam;
 import com.lawu.eshop.product.param.SeckillActivityManageParam;
+import com.lawu.eshop.product.srv.bo.SeckillActivityDetailBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityJoinBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityManageBO;
 import com.lawu.eshop.product.srv.converter.SeckillActivityJoinConverter;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDOExample;
+import com.lawu.eshop.product.srv.domain.SeckillActivityProductDOExample;
 import com.lawu.eshop.product.srv.domain.extend.SeckillActivityDOView;
 import com.lawu.eshop.product.srv.mapper.SeckillActivityDOMapper;
+import com.lawu.eshop.product.srv.mapper.SeckillActivityProductDOMapper;
 import com.lawu.eshop.product.srv.mapper.extend.SeckillActivityDOMapperExtend;
 import com.lawu.eshop.product.srv.service.SeckillActivityJoinService;
 
@@ -28,6 +31,9 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 	
 	@Autowired
 	private SeckillActivityDOMapperExtend seckillActivityDOMapperExtend;
+	
+	@Autowired
+	private SeckillActivityProductDOMapper seckillActivityProductDOMapper;
 
 	@Override
 	public Page<SeckillActivityJoinBO> queryPage(SeckillActivityJoinParam param) {
@@ -58,6 +64,19 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		page.setRecords(SeckillActivityJoinConverter.seckillActivityJoinManageBOConverter(list));
 		
 		return page;
+	}
+
+	@Override
+	public SeckillActivityDetailBO querySeckillActivityDetail(Long id,Long merchantId) {
+		
+		SeckillActivityDO seckillActivityDO = seckillActivityDOMapper.selectByPrimaryKey(id);
+		SeckillActivityDetailBO seckillActivityDetailBO = SeckillActivityJoinConverter.seckillActivityJoinDetailBOConverter(seckillActivityDO);
+		SeckillActivityProductDOExample example = new SeckillActivityProductDOExample();
+		example.createCriteria().andActivityIdEqualTo(id).andMerchantIdEqualTo(merchantId);
+		Long joinCount = seckillActivityProductDOMapper.countByExample(example);
+		seckillActivityDetailBO.setJoinCount(joinCount.intValue());
+		
+		return seckillActivityDetailBO;
 	}
 
 }

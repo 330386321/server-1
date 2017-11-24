@@ -3,6 +3,7 @@ package com.lawu.eshop.product.srv.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.param.SeckillActivityJoinParam;
 import com.lawu.eshop.product.param.SeckillActivityManageParam;
+import com.lawu.eshop.product.srv.bo.SeckillActivityDetailBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityJoinBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityManageBO;
 
@@ -29,5 +30,13 @@ public interface SeckillActivityJoinService {
 	 * @return
 	 */
 	Page<SeckillActivityManageBO> queryManagePage(SeckillActivityManageParam param);
+	
+	
+	/**
+	 * 活动详情
+	 * @param id
+	 * @return
+	 */
+	SeckillActivityDetailBO querySeckillActivityDetail(Long id , Long merchantId);
 
 }
