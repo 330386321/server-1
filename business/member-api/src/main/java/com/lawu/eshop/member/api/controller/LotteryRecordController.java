@@ -14,10 +14,13 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.mall.dto.LotteryActivityDTO;
 import com.lawu.eshop.mall.param.LotteryRecordParam;
+import com.lawu.eshop.member.api.service.LotteryActivityService;
 import com.lawu.eshop.member.api.service.LotteryRecordService;
 import com.lawu.eshop.member.api.service.PointDetailService;
 import com.lawu.eshop.member.api.service.PropertyInfoDataService;
+import com.lawu.eshop.member.api.service.UserGradeService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 
@@ -39,10 +42,16 @@ public class LotteryRecordController extends BaseController {
     private LotteryRecordService lotteryRecordService;
 
     @Autowired
+    private LotteryActivityService lotteryActivityService;
+
+    @Autowired
     private PointDetailService pointDetailService;
 
     @Autowired
     private PropertyInfoDataService propertyInfoDataService;
+
+    @Autowired
+    private UserGradeService userGradeService;
 
     @ApiOperation(value = "立即抽奖", notes = "立即抽奖。 (梅述全)", httpMethod = "POST")
     @Authorization
@@ -65,7 +74,7 @@ public class LotteryRecordController extends BaseController {
         return successCreated();
     }
 
-    @ApiOperation(value = "积分抽奖", notes = "积分抽奖。[1004|2020|6025|6002|6003|6024|6010|6011] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "积分抽奖", notes = "积分抽奖。[1002|1004|2020|6025|6002|6003|6024|6010|6011] (梅述全)", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "pointConvertLottery", method = RequestMethod.POST)
@@ -78,12 +87,18 @@ public class LotteryRecordController extends BaseController {
             return successCreated(ResultCode.NO_LOTTERY_COUNT);
         }
 
-        //TODO 获取对应积分
-        String point = "";
+        Result<LotteryActivityDTO> activityDTOResult = lotteryActivityService.getLotteryActivityById(lotteryActivityId);
+        if (activityDTOResult.getModel() == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        Result<Integer> pointResult = userGradeService.selectLotteryActivityPointByGradeValue(activityDTOResult.getModel().getGradeEnum().getVal());
+        if (pointResult.getModel() == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
 
         PropertyInfoDataParam param = new PropertyInfoDataParam();
         param.setUserNum(userNum);
-        param.setPoint(point);
+        param.setPoint(String.valueOf(pointResult.getModel()));
         param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.POINT_CONVERT_LOTTERY);
         param.setBizId(String.valueOf(lotteryActivityId));
         Result propertyResult = propertyInfoDataService.doHanlderMinusPointWithLottery(param);

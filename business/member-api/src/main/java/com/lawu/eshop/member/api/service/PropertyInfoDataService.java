@@ -36,6 +36,6 @@ public interface PropertyInfoDataService {
 	 * @author meishuquan
 	 */
 	@RequestMapping(value = "propertyInfoData/doHanlderMinusPointWithLottery", method = RequestMethod.POST)
-	Result doHanlderMinusPointWithLottery(@RequestBody @Valid PropertyInfoDataParam param);
+	Result doHanlderMinusPointWithLottery(@RequestBody PropertyInfoDataParam param);
 
 }

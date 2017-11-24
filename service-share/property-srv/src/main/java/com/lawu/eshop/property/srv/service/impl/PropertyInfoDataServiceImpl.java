@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.idworker.client.impl.BizIdType;
@@ -74,7 +75,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	private PropertyInfoDOMapper propertyInfoDOMapper;
 	@Autowired
 	@Qualifier("lotteryRecordTransactionMainServiceImpl")
-	private TransactionMainService lotteryRecordTransactionMainServiceImpl;
+	private TransactionMainService<Reply> lotteryRecordTransactionMainService;
 
 	@Override
 	@Transactional
@@ -362,7 +363,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		if (pointDetailBO == null) {
 			throw new SavePointDetailException(ResultCode.get(ResultCode.ERROR_SAVE_POINT_DETAIL));
 		}
-		lotteryRecordTransactionMainServiceImpl.sendNotice(pointDetailBO.getId());
+		lotteryRecordTransactionMainService.sendNotice(pointDetailBO.getId());
 		return ResultCode.SUCCESS;
 	}
 

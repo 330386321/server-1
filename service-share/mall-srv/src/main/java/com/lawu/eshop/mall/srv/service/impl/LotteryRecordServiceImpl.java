@@ -43,7 +43,7 @@ public class LotteryRecordServiceImpl implements LotteryRecordService {
         recordDO.setLotteryCount(2);
         LotteryRecordDOExample example = new LotteryRecordDOExample();
         example.createCriteria().andUserNumEqualTo(userNum).andLotteryActivityIdEqualTo(lotteryActivityId);
-        lotteryRecordDOMapper.updateByExample(recordDO, example);
+        lotteryRecordDOMapper.updateByExampleSelective(recordDO, example);
     }
 
 }

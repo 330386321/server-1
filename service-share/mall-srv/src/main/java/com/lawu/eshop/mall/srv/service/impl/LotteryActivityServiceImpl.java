@@ -72,4 +72,10 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
         return page;
     }
 
+    @Override
+    public LotteryActivityBO getLotteryActivityById(Long id) {
+        LotteryActivityDO activityDO = lotteryActivityDOMapper.selectByPrimaryKey(id);
+        return LotteryActivityConverter.converBO(activityDO);
+    }
+
 }

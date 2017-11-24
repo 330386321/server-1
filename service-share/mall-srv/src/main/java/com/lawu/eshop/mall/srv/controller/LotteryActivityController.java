@@ -1,6 +1,7 @@
 package com.lawu.eshop.mall.srv.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,6 +42,19 @@ public class LotteryActivityController extends BaseController {
         page.setTotalCount(activityBOPage.getTotalCount());
         page.setRecords(LotteryActivityConverter.converDTOS(activityBOPage.getRecords()));
         return successCreated(page);
+    }
+
+    /**
+     * 根据id查询抽奖活动
+     *
+     * @param id
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "getLotteryActivity/{id}", method = RequestMethod.GET)
+    public Result<LotteryActivityDTO> getLotteryActivity(@PathVariable Long id) {
+        LotteryActivityBO activityBO = lotteryActivityService.getLotteryActivityById(id);
+        return successCreated(LotteryActivityConverter.converDTO(activityBO));
     }
 
 }
