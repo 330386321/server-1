@@ -13,9 +13,11 @@ import com.lawu.eshop.product.param.SeckillActivityManageParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityDetailBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityJoinBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityManageBO;
+import com.lawu.eshop.product.srv.bo.SeckillActivityManageDetailBO;
 import com.lawu.eshop.product.srv.converter.SeckillActivityJoinConverter;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDOExample;
+import com.lawu.eshop.product.srv.domain.SeckillActivityProductDO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityProductDOExample;
 import com.lawu.eshop.product.srv.domain.extend.SeckillActivityDOView;
 import com.lawu.eshop.product.srv.mapper.SeckillActivityDOMapper;
@@ -77,6 +79,17 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		seckillActivityDetailBO.setJoinCount(joinCount.intValue());
 		
 		return seckillActivityDetailBO;
+	}
+
+	@Override
+	public SeckillActivityManageDetailBO querySeckillActivityManageDetail(Long id, Long merchantId) {
+		SeckillActivityDO seckillActivityDO = seckillActivityDOMapper.selectByPrimaryKey(id);
+		SeckillActivityProductDOExample example = new SeckillActivityProductDOExample();
+		example.createCriteria().andActivityIdEqualTo(id).andMerchantIdEqualTo(merchantId);
+		List<SeckillActivityProductDO> list = seckillActivityProductDOMapper.selectByExample(example);
+		SeckillActivityManageDetailBO seckillActivityManageDetailBO = SeckillActivityJoinConverter.seckillActivityManageDetailBOConverter(seckillActivityDO);
+		seckillActivityManageDetailBO.setList(SeckillActivityJoinConverter.seckillActivityProductManageBOConverter(list));
+		return seckillActivityManageDetailBO;
 	}
 
 }

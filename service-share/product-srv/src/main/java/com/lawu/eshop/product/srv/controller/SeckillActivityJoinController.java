@@ -15,12 +15,14 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.dto.SeckillActivityDetailDTO;
 import com.lawu.eshop.product.dto.SeckillActivityJoinDTO;
+import com.lawu.eshop.product.dto.SeckillActivityManageDetailDTO;
 import com.lawu.eshop.product.dto.SeckillActivityManagerDTO;
 import com.lawu.eshop.product.param.SeckillActivityJoinParam;
 import com.lawu.eshop.product.param.SeckillActivityManageParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityDetailBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityJoinBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityManageBO;
+import com.lawu.eshop.product.srv.bo.SeckillActivityManageDetailBO;
 import com.lawu.eshop.product.srv.converter.SeckillActivityJoinConverter;
 import com.lawu.eshop.product.srv.service.SeckillActivityJoinService;
 
@@ -87,6 +89,23 @@ public class SeckillActivityJoinController extends BaseController{
 		SeckillActivityDetailBO  seckillActivityDetailBO  = seckillActivityJoinService.querySeckillActivityDetail(id, merchantId);
 		
 		return successGet(SeckillActivityJoinConverter.seckillActivityJoinDetailDTOConverter(seckillActivityDetailBO));
+	}
+	
+	
+	/**
+	 * 活动管理详情
+	 * @param id
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(value = "querySeckillActivityManageDetail/{id}", method = RequestMethod.GET)
+	public Result<SeckillActivityManageDetailDTO> querySeckillActivityManageDetail(@PathVariable Long id,@RequestParam Long merchantId){
+		
+		SeckillActivityManageDetailBO  seckillActivityManageDetailBO  = seckillActivityJoinService.querySeckillActivityManageDetail(id, merchantId);
+		SeckillActivityManageDetailDTO	seckillActivityManageDetailDTO	= SeckillActivityJoinConverter.seckillActivityManageDetailDTOConverter(seckillActivityManageDetailBO);
+		seckillActivityManageDetailDTO.setList(SeckillActivityJoinConverter.seckillActivityProductManageDTOConverter(seckillActivityManageDetailBO.getList()));
+		
+		return successGet(seckillActivityManageDetailDTO);
 	}
 
 }

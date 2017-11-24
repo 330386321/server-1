@@ -17,6 +17,7 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.SeckillActivityJoinService;
 import com.lawu.eshop.product.dto.SeckillActivityDetailDTO;
 import com.lawu.eshop.product.dto.SeckillActivityJoinDTO;
+import com.lawu.eshop.product.dto.SeckillActivityManageDetailDTO;
 import com.lawu.eshop.product.dto.SeckillActivityManagerDTO;
 import com.lawu.eshop.product.param.SeckillActivityJoinParam;
 import com.lawu.eshop.product.param.SeckillActivityManageParam;
@@ -70,5 +71,15 @@ public class SeckillActivityJoinController extends BaseController {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		return seckillActivityJoinService.querySeckillActivityDetail(id, merchantId);
 	}
+	
 
+	@ApiOperation(value = "活动管理详情", notes = "活动管理详情，[]。(张荣成)", httpMethod = "GET")
+	@Authorization
+	@RequestMapping(value = "querySeckillActivityManageDetail/{id}", method = RequestMethod.GET)
+	public Result<SeckillActivityManageDetailDTO>  querySeckillActivityManageDetail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@PathVariable @ApiParam(required = true, value = "活动id") Long id) {
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		return seckillActivityJoinService.querySeckillActivityManageDetail(id, merchantId);
+	}
+	
 }

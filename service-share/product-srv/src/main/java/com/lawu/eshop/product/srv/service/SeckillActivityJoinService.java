@@ -6,6 +6,7 @@ import com.lawu.eshop.product.param.SeckillActivityManageParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityDetailBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityJoinBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityManageBO;
+import com.lawu.eshop.product.srv.bo.SeckillActivityManageDetailBO;
 
 /**
  * 参加抢购活动服务接口
@@ -38,5 +39,13 @@ public interface SeckillActivityJoinService {
 	 * @return
 	 */
 	SeckillActivityDetailBO querySeckillActivityDetail(Long id , Long merchantId);
+	
+	
+	/**
+	 * 活动管理详情
+	 * @param id
+	 * @return
+	 */
+	SeckillActivityManageDetailBO querySeckillActivityManageDetail(Long id , Long merchantId);
 
 }
