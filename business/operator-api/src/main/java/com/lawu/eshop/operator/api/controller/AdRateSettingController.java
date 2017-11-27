@@ -2,6 +2,7 @@ package com.lawu.eshop.operator.api.controller;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.omg.PortableInterceptor.SUCCESSFUL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,6 +39,7 @@ public class AdRateSettingController extends BaseController{
 
 	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "咻一咻中奖率列表", notes = "列表数量（张荣成）", httpMethod = "GET")
+	@RequiresPermissions("rate:list")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "queryAdRateSetting", method = RequestMethod.GET)
 	public Result<List<AdRateSettingDTO>> queryAdRateSetting() {
@@ -48,6 +50,7 @@ public class AdRateSettingController extends BaseController{
 	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "保存咻一咻中奖率", notes = "保存咻一咻中奖率（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@RequiresPermissions("rate:save")
 	@RequestMapping(value = "saveRateSetting", method = RequestMethod.GET)
 	public Result saveRateSetting( @RequestParam @ApiParam(required = true, value = "时间") int gameTime,
 			 @RequestParam @ApiParam(required = true, value = "概率") int rate) {
@@ -57,6 +60,7 @@ public class AdRateSettingController extends BaseController{
 
 	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "删除咻一咻中奖率", notes = "删除（张荣成）", httpMethod = "DELETE")
+	@RequiresPermissions("rate:delete")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "deleteRateSetting/{id}", method = RequestMethod.DELETE)
 	public Result deleteRateSetting(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {

@@ -18,6 +18,7 @@ import com.lawu.eshop.user.dto.MerchantAdInfoDTO;
 import com.lawu.eshop.user.dto.MerchantInfoForShoppingCartDTO;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreFavorInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreStatusDTO;
 import com.lawu.eshop.user.dto.PayOrderMerchantStoreInfoDTO;
 import com.lawu.eshop.user.dto.PayOrderStoreInfoDTO;
@@ -188,4 +189,10 @@ public class MockMerchantStoreService extends BaseController implements Merchant
         dto.setAccount("1122212");
         return dto;
     }
+
+	@Override
+	public Result<MerchantStoreFavorInfoDTO> selectMerchantStoreFavor(Long merchantId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

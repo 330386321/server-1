@@ -24,6 +24,7 @@ import com.lawu.eshop.user.dto.MerchantAdInfoDTO;
 import com.lawu.eshop.user.dto.MerchantInfoForShoppingCartDTO;
 import com.lawu.eshop.user.dto.MerchantStoreAdInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreFavorInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
 import com.lawu.eshop.user.dto.MerchantStoreStatusDTO;
@@ -52,6 +53,7 @@ import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreAdInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreFavorInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreImageBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
@@ -777,6 +779,17 @@ public class MerchantStoreController extends BaseController {
 	public Result<String> getPrincipalName(@PathVariable Long merchantId){
 		String principalName = merchantStoreService.getPrincipalName(merchantId);
 		 return successGet(principalName);
+	}
+	
+	
+	@RequestMapping(value = "selectMerchantStoreFavor/{merchantId}", method = RequestMethod.GET)
+	public Result<MerchantStoreFavorInfoDTO> selectMerchantStoreFavor(@PathVariable Long merchantId){
+		 MerchantStoreFavorInfoBO  merchantStoreFavorInfoBO  = merchantStoreService.selectMerchantStoreFavor(merchantId);
+		 MerchantStoreFavorInfoDTO dto = new MerchantStoreFavorInfoDTO();
+		 dto.setName(merchantStoreFavorInfoBO.getName());
+		 dto.setPicStore(merchantStoreFavorInfoBO.getPicStore());
+		 dto.setUserNum(merchantStoreFavorInfoBO.getUserNum());
+		 return successGet(dto);
 	}
 	
 }

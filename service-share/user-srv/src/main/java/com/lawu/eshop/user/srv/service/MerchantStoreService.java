@@ -10,6 +10,7 @@ import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreAdInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreFavorInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
 import com.lawu.eshop.user.srv.bo.NewMerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.RecommendFoodBO;
@@ -130,5 +131,12 @@ public interface MerchantStoreService {
      * @return
      */
 	String getPrincipalName(Long merchantId);
+	
+	/**
+	 * 获取门店信息
+	 * @param merchantId
+	 * @return
+	 */
+	MerchantStoreFavorInfoBO selectMerchantStoreFavor(Long merchantId);
 
 }

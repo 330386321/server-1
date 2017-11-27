@@ -16,7 +16,7 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
 import com.lawu.eshop.member.api.service.MerchantFavoredService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
-import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.user.dto.MerchantStoreFavorInfoDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,15 +47,17 @@ public class MerchantFavoredController extends BaseController {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Result<MerchantFavoredDTO> result = merchantFavoredService.findFavoredByMerchantId(merchantId);
-        Long memberId = UserUtil.getCurrentUserId(getRequest());
-        Result<StoreDetailDTO> stoResult = merchantStoreService.getStoreDetailById(merchantId, memberId);
+        Result<MerchantStoreFavorInfoDTO> stoResult = merchantStoreService.selectMerchantStoreFavor(merchantId);
         if (!isSuccess(stoResult)) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         MerchantFavoredDTO merchantFavoredDTO = result.getModel();
+        if(merchantFavoredDTO == null){
+        	return result;
+        }
         merchantFavoredDTO.setName(stoResult.getModel().getName());
         merchantFavoredDTO.setUserNum(stoResult.getModel().getUserNum());
-        merchantFavoredDTO.setStorePic(stoResult.getModel().getStorePic());
+        merchantFavoredDTO.setStorePic(stoResult.getModel().getPicStore());
         
         return result;
     }
