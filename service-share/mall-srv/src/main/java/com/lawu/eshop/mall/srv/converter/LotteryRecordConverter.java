@@ -88,6 +88,7 @@ public class LotteryRecordConverter {
 
         for (LotteryRecordDO recordDO : recordDOS) {
             LotteryRecordOperatorBO operatorBO = new LotteryRecordOperatorBO();
+            operatorBO.setId(recordDO.getId());
             operatorBO.setAccount(recordDO.getAccount());
             operatorBO.setPrizeName(recordDO.getPrizeName());
             operatorBO.setLotteryCount(recordDO.getLotteryCount());
@@ -111,6 +112,7 @@ public class LotteryRecordConverter {
 
         for (LotteryRecordOperatorBO operatorBO : operatorBOS) {
             LotteryRecordOperatorDTO operatorDTO = new LotteryRecordOperatorDTO();
+            operatorDTO.setId(operatorBO.getId());
             operatorDTO.setAccount(operatorBO.getAccount());
             operatorDTO.setPrizeName(operatorBO.getPrizeName());
             operatorDTO.setLotteryCount(operatorBO.getLotteryCount());

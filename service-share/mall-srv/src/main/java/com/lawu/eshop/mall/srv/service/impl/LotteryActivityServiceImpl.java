@@ -152,6 +152,7 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
         //进行中更新为结束
         LotteryActivityDO activityDO = new LotteryActivityDO();
         activityDO.setStatus(LotteryActivityStatusEnum.FINISHED.getVal());
+        activityDO.setGmtModified(new Date());
         LotteryActivityDOExample example = new LotteryActivityDOExample();
         example.createCriteria().andStatusEqualTo(LotteryActivityStatusEnum.LOTTERYING.getVal()).andEndTimeLessThanOrEqualTo(date);
         lotteryActivityDOMapper.updateByExampleSelective(activityDO, example);

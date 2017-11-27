@@ -1,21 +1,45 @@
 package com.lawu.eshop.operator.api.controller;
 
+import java.io.DataInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.openxml4j.util.ZipSecureFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.mall.dto.LotteryRecordOperatorDTO;
 import com.lawu.eshop.mall.query.OperatorLotteryRecordQuery;
+import com.lawu.eshop.operator.api.OperatorApiConfig;
 import com.lawu.eshop.operator.api.service.LotteryRecordService;
 import com.lawu.eshop.operator.api.service.MemberService;
 import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.utils.DateUtil;
+import com.lawu.excel.util.ExcelExportRecordLoadCallback;
+import com.lawu.excel.util.ExcelImportRowCallback;
+import com.lawu.excel.util.ExcelImportRowResult;
+import com.lawu.excel.util.ExcelUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,11 +55,16 @@ import io.swagger.annotations.ApiResponse;
 @RequestMapping(value = "lotteryRecord/")
 public class LotteryRecordController extends BaseController {
 
+    private static Logger logger = LoggerFactory.getLogger(LotteryRecordController.class);
+
     @Autowired
     private LotteryRecordService lotteryRecordService;
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private OperatorApiConfig operatorApiConfig;
 
     @ApiOperation(value = "参与抽奖列表", notes = "参与抽奖列表。（梅述全）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -53,6 +82,128 @@ public class LotteryRecordController extends BaseController {
             }
         }
         return result;
+    }
+
+    @ApiOperation(value = "导出抽奖信息", notes = "导出抽奖信息。（梅述全）", httpMethod = "POST")
+    @RequestMapping(value = "exportExcel", method = RequestMethod.POST)
+    //@RequiresPermissions("withdraw:export")
+    public void exportExcel(@ModelAttribute OperatorLotteryRecordQuery query) {
+        Result<Page<LotteryRecordOperatorDTO>> result = lotteryRecordService.listOperatorLotteryRecord(query);
+
+        ZipSecureFile.setMinInflateRatio(0.001);
+        OutputStream out = null;
+        try {
+            String fileName = DateUtil.getIntDateTime() + "_lottery.xlsx";
+            HttpServletResponse response = getResponse();
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-disposition", "attachment;filename=" + fileName);
+            out = response.getOutputStream();
+            ExcelUtils.exportExcel(out, new ExcelExportRecordLoadCallback() {
+
+                private int currentPage = 1;
+                private int pageSize = 1000;
+                private int totalCount = result.getModel().getTotalCount();
+
+                @Override
+                public String[] getCellTitles() {
+                    return new String[]{"ID", "账号", "姓名", "奖品名称", "抽奖次数", "抽奖结果"};
+                }
+
+                @Override
+                public List<String[]> loadRecords() {
+                    query.setCurrentPage(currentPage);
+                    query.setPageSize(pageSize);
+                    Result<Page<LotteryRecordOperatorDTO>> result = lotteryRecordService.listOperatorLotteryRecord(query);
+
+                    List<String[]> records = new ArrayList<>();
+                    for (LotteryRecordOperatorDTO dto : result.getModel().getRecords()) {
+                        Result<MemberDTO> memberResult = memberService.getMemberByAccount(dto.getAccount());
+                        if (isSuccess(memberResult)) {
+                            dto.setName(memberResult.getModel().getName());
+                        }
+
+                        String lotteryResult = "未中奖";
+                        if (dto.getLotteryResult()) {
+                            lotteryResult = "中奖";
+                        }
+                        records.add(
+                                new String[]{String.valueOf(dto.getId()), dto.getAccount(), dto.getName(), dto.getPrizeName(), String.valueOf(dto.getLotteryCount()), lotteryResult});
+                    }
+                    currentPage++;
+                    return records;
+                }
+
+                @Override
+                public boolean isFinished() {
+                    if ((currentPage - 1) * pageSize < totalCount) {
+                        return false;
+                    }
+                    return true;
+                }
+
+                @Override
+                public int getRowAccessWindowSize() {
+                    return pageSize;
+                }
+            });
+
+        } catch (IOException e) {
+            logger.error("导出EXCEL异常=========={}", e.getMessage());
+        } finally {
+            if (out != null) {
+                try {
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @ApiOperation(value = "导入中奖结果处理", notes = "导入中奖结果处理。（梅述全）", httpMethod = "POST")
+    @RequestMapping(value = "importExcel", method = RequestMethod.POST)
+    //@RequiresPermissions("withdraw:import")
+    public Result importExcel(@RequestParam @ApiParam(required = true, value = "文件路径") String filePath) {
+
+        StringBuilder sb = new StringBuilder();
+        try {
+            URL url = new URL(operatorApiConfig.getImageUrl() + filePath);
+            URLConnection conn = url.openConnection();
+            DataInputStream in = new DataInputStream(conn.getInputStream());
+            List<ExcelImportRowResult> excelImportRowResults = ExcelUtils.importExcel(
+                    in, new ExcelImportRowCallback() {
+                        @Override
+                        public ExcelImportRowResult checkAndSave(int row, List<Object> cellValues) {
+                            boolean lotteryResult = false;
+                            if ("中奖".equals(cellValues.get(5).toString())) {
+                                lotteryResult = true;
+                            }
+                            Result result = lotteryRecordService.updateLotteryResult(Long.valueOf(cellValues.get(0).toString()), lotteryResult);
+
+                            ExcelImportRowResult rowResult = new ExcelImportRowResult();
+                            rowResult.setRowNum(row);
+                            rowResult.setCellValues(cellValues);
+                            rowResult.setErr(false);
+                            rowResult.setBlockedErr(false);
+
+                            if (ResultCode.SUCCESS != result.getRet()) {
+                                rowResult.setErr(true);
+                            }
+                            return rowResult;
+                        }
+                    });
+            for (ExcelImportRowResult rowResult : excelImportRowResults) {
+                sb.append(rowResult.getCellValues().get(0).toString()).append(",");
+            }
+            String errIds = StringUtils.isEmpty(sb.toString()) ? "" : sb.substring(0, sb.length() - 1);
+            return successCreated(errIds);
+        } catch (FileNotFoundException e) {
+            logger.error("EXCEL文件没找到--------{}", e.getMessage());
+        } catch (Exception e) {
+            logger.error("处理异常----------{}", e.getMessage());
+        }
+        return successCreated(ResultCode.FAIL);
     }
 
 }

@@ -2,8 +2,10 @@ package com.lawu.eshop.operator.api.service;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
@@ -26,5 +28,16 @@ public interface LotteryRecordService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "lotteryRecord/listOperatorLotteryRecord")
     Result<Page<LotteryRecordOperatorDTO>> listOperatorLotteryRecord(@ModelAttribute OperatorLotteryRecordQuery query);
+
+    /**
+     * 更新抽奖结果
+     *
+     * @param id
+     * @param lotteryResult
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "lotteryRecord/updateLotteryResult/{id}")
+    Result updateLotteryResult(@PathVariable("id") Long id, @RequestParam("lotteryResult") Boolean lotteryResult);
 
 }
