@@ -202,6 +202,11 @@ public class ResultCode {
     public static final int USER_UNAUTHORIZED = 8113;
     public static final int EXISTS_ENABLE_APP_VERSION= 8114;
     public static final int GET_HEADER_ERROR= 8115;
+    public static final int GRADE_WEIGHT_REPEAT= 8116;
+    public static final int GRADE_LOTTERY_ACTIVITY_POINT_LESSTHAN_ERROR= 8117;
+    public static final int GRADE_MIN_GROWTH_VALUE_LESSTHAN_ERROR= 8118;
+    public static final int GRADE_LOTTERY_ACTIVITY_POINT_GRETERTHAN_ERROR= 8119;
+    public static final int GRADE_MIN_GROWTH_VALUE_GRETERTHAN_ERROR= 8120;
 
 
 
@@ -294,6 +299,11 @@ public class ResultCode {
         ResultCode.messageMap.put(USER_UNAUTHORIZED, "未授权");
         ResultCode.messageMap.put(EXISTS_ENABLE_APP_VERSION, "存在启用的版本");
         ResultCode.messageMap.put(GET_HEADER_ERROR, "获取请求头失败");
+        ResultCode.messageMap.put(GRADE_WEIGHT_REPEAT, "等级权值重复！");
+        ResultCode.messageMap.put(GRADE_LOTTERY_ACTIVITY_POINT_LESSTHAN_ERROR, "抽奖活动兑换积分不能小于或等于上一级！");
+        ResultCode.messageMap.put(GRADE_MIN_GROWTH_VALUE_LESSTHAN_ERROR, "最小成长值不能小于或等于上一级！");
+        ResultCode.messageMap.put(GRADE_LOTTERY_ACTIVITY_POINT_GRETERTHAN_ERROR, "抽奖活动兑换积分不能大于或等于下一级！");
+        ResultCode.messageMap.put(GRADE_MIN_GROWTH_VALUE_GRETERTHAN_ERROR, "最小成长值不能大于或等于下一级！");
         
 
         // 商品模块 3xxx

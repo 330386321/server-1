@@ -2,6 +2,9 @@ package com.lawu.eshop.user.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.param.UserGradeQuery;
+import com.lawu.eshop.user.param.UserGradeUpdateParam;
 import com.lawu.eshop.user.srv.bo.UserGradeBO;
 
 /**
@@ -28,4 +31,32 @@ public interface UserGradeService {
      * @return
      */
     UserGradeBO selectUserGradeByMinGrowthValue(Integer resultMoney);
+
+    /**
+     * 分页查询
+     * @param query
+     * @return
+     */
+    Page<UserGradeBO> selectPage(UserGradeQuery query);
+
+    /**
+     *
+     * @param id
+     * @param param
+     */
+    int updateById(Long id, UserGradeUpdateParam param);
+
+    /**
+     *
+     * @param param
+     * @return
+     */
+    int save(UserGradeUpdateParam param);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    UserGradeBO selectUserGradeById(Long id);
 }
