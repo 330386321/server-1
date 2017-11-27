@@ -79,6 +79,7 @@ public class ResultCode {
     public static final int MIN_USERREDPACKET_MONTY=2018;
     public static final int ACCOUNT_IS_INVALID = 2019;
     public static final int NO_LOTTERY_COUNT = 2020;
+    public static final int HAVE_TAKE_PART = 2021;
 
 
     // 商品模块代码 3xxx
@@ -280,6 +281,7 @@ public class ResultCode {
         ResultCode.messageMap.put(MIN_USERREDPACKET_MONTY, "单个红包金额不能小于0.01");
         ResultCode.messageMap.put(ACCOUNT_IS_INVALID, "账号已被封");
         ResultCode.messageMap.put(NO_LOTTERY_COUNT, "只能增加一次抽奖机会");
+        ResultCode.messageMap.put(HAVE_TAKE_PART, "已参与抽奖");
         
 
         //运营

@@ -172,4 +172,8 @@ public interface MerchantStoreService {
      */
     @RequestMapping(value = "merchantStore/findAccountAndRegionPathByNum", method = RequestMethod.GET)
     VisitUserInfoDTO findAccountAndRegionPathByNum(@RequestParam("merchantNum") String merchantNum);
+    
+    
+    @RequestMapping(value = "merchantStore/selectMerchantStoreFavor/{merchantId}", method = RequestMethod.GET)
+	Result<MerchantStoreFavorInfoDTO> selectMerchantStoreFavor(@PathVariable("merchantId") Long merchantId);
 }

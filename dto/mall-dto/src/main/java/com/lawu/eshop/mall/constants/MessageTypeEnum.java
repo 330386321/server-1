@@ -75,7 +75,9 @@ public enum MessageTypeEnum {
 	
 	MESSAGE_TYPE_PRODUCT_FORCE_DOWN((byte) 0x30),//商品强制下架48
 	
-	MESSAGE_TYPE_PLAT_RED_PACKET((byte) 0x31);//领取平台红包49
+	MESSAGE_TYPE_PLAT_RED_PACKET((byte) 0x31),//领取平台红包49
+    
+    MESSAGE_TYPE_SECKILL_ACTIVITY_ABOUT_START((byte) 0x32);//抢购即将开始提醒50
 
     private Byte val;
     

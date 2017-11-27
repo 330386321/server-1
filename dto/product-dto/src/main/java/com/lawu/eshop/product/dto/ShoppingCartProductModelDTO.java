@@ -1,6 +1,5 @@
 package com.lawu.eshop.product.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,9 +12,7 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
  * @author Sunny
  * @date 2017/3/30
  */
-public class ShoppingCartProductModelDTO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingCartProductModelDTO {
 
 	private Long id;
 

@@ -32,7 +32,7 @@ public class SeckillActivityDetailDTO {
 	@ApiModelProperty(value = "已参数商品数量")
 	private int joinCount;
 
-	@ApiModelProperty(value = "可参入数量")
+	@ApiModelProperty(value = "可参加数量")
 	private int productValidCount;
 	
 	@ApiModelProperty(value = "报名倒计时")

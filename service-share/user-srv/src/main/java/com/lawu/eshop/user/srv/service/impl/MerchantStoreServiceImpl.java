@@ -25,6 +25,7 @@ import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreAdInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreFavorInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
 import com.lawu.eshop.user.srv.bo.NewMerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.RecommendFoodBO;
@@ -301,6 +302,28 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         	return list.get(0).getPrincipalName();
         }
 		return null;
+	}
+
+	@Override
+	public MerchantStoreFavorInfoBO selectMerchantStoreFavor(Long merchantId) {
+		MerchantStoreDOExample example = new MerchantStoreDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(example);
+        MerchantStoreFavorInfoBO info = new MerchantStoreFavorInfoBO();
+        
+        MerchantDO merchantDO =  merchantDOMapper.selectByPrimaryKey(merchantId);
+        info.setUserNum(merchantDO.getNum());
+        
+        if(!list.isEmpty()){
+        	info.setName(list.get(0).getName());
+        	MerchantStoreImageDOExample  msiExample = new MerchantStoreImageDOExample();
+        	msiExample.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val);
+        	List<MerchantStoreImageDO> imgs = merchantStoreImageDOMapper.selectByExample(msiExample);
+        	if(!imgs.isEmpty()){
+        		info.setPicStore(imgs.get(0).getPath());
+        	}
+        }
+		return info;
 	}
 
 }

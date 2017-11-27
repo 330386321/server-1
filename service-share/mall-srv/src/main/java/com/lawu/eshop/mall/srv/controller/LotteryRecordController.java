@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.core.page.Page;
@@ -14,10 +16,13 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.LotteryInfoDTO;
 import com.lawu.eshop.mall.dto.LotteryRecordDTO;
+import com.lawu.eshop.mall.dto.LotteryRecordOperatorDTO;
 import com.lawu.eshop.mall.param.LotteryRecordParam;
 import com.lawu.eshop.mall.query.LotteryRecordQuery;
+import com.lawu.eshop.mall.query.OperatorLotteryRecordQuery;
 import com.lawu.eshop.mall.srv.bo.LotteryInfoBO;
 import com.lawu.eshop.mall.srv.bo.LotteryRecordBO;
+import com.lawu.eshop.mall.srv.bo.LotteryRecordOperatorBO;
 import com.lawu.eshop.mall.srv.converter.LotteryRecordConverter;
 import com.lawu.eshop.mall.srv.service.LotteryRecordService;
 import com.lawu.eshop.utils.StringUtil;
@@ -80,6 +85,37 @@ public class LotteryRecordController extends BaseController {
         page.setTotalCount(recordBOPage.getTotalCount());
         page.setRecords(LotteryRecordConverter.converDTOS(recordBOPage.getRecords()));
         return successCreated(page);
+    }
+
+    /**
+     * 运营平台查询参与抽奖列表
+     *
+     * @param query
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "listOperatorLotteryRecord", method = RequestMethod.POST)
+    public Result<Page<LotteryRecordOperatorDTO>> listOperatorLotteryRecord(@RequestBody OperatorLotteryRecordQuery query) {
+        Page<LotteryRecordOperatorBO> recordBOPage = lotteryRecordService.listOperatorLotteryRecord(query);
+        Page<LotteryRecordOperatorDTO> page = new Page<>();
+        page.setCurrentPage(recordBOPage.getCurrentPage());
+        page.setTotalCount(recordBOPage.getTotalCount());
+        page.setRecords(LotteryRecordConverter.converOperatorDTO(recordBOPage.getRecords()));
+        return successCreated(page);
+    }
+
+    /**
+     * 查询用户是否参与抽奖
+     *
+     * @param lotteryActivityId
+     * @param userNum
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "lotteryRecord/{lotteryActivityId}", method = RequestMethod.GET)
+    public Result<Boolean> lotteryRecord(@PathVariable Long lotteryActivityId, @RequestParam String userNum) {
+        Boolean result = lotteryRecordService.lotteryRecord(lotteryActivityId, userNum);
+        return successGet(result);
     }
 
 }

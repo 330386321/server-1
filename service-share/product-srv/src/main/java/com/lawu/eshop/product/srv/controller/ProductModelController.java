@@ -3,6 +3,8 @@ package com.lawu.eshop.product.srv.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,12 +16,16 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.CommentProductInfoDTO;
-import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import com.lawu.eshop.product.dto.ProductModelDataDTO;
+import com.lawu.eshop.product.dto.SeckillActivityProductModelInfoDTO;
+import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
+import com.lawu.eshop.product.srv.ProductSrvApplication;
 import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
+import com.lawu.eshop.product.srv.bo.SeckillActivityProductModelInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.bo.productModelDataBO;
 import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
+import com.lawu.eshop.product.srv.exception.DataNotExistException;
 import com.lawu.eshop.product.srv.service.ProductModelService;
 
 /**
@@ -30,7 +36,9 @@ import com.lawu.eshop.product.srv.service.ProductModelService;
 @RestController
 @RequestMapping(value = "productModel/")
 public class ProductModelController extends BaseController {
-
+    
+    private static Logger logger = LoggerFactory.getLogger(ProductSrvApplication.class);
+    
 	@Autowired
 	private ProductModelService productModelService;
 
@@ -117,5 +125,26 @@ public class ProductModelController extends BaseController {
 		 
 		 return successGet(modelList);
 	}
-
+	
+	/**
+     * 根据抢购活动商品型号id
+     * 查询抢购活动所需要的商品型号数据
+     * 
+     * @param activityProductModelId 抢购活动商品型号id
+	 * @return
+	 * @author jiangxinjun
+	 * @createDate 2017年11月24日
+	 * @updateDate 2017年11月24日
+	 */
+    @RequestMapping(value = "seckillActivity/{activityProductModelId}", method = RequestMethod.GET)
+    public Result<SeckillActivityProductModelInfoDTO> seckillActivityProductModel(@PathVariable("activityProductModelId") Long activityProductModelId) {
+        SeckillActivityProductModelInfoBO seckillActivityProductModelInfoBO = null;
+        try {
+            seckillActivityProductModelInfoBO = productModelService.seckillActivityProductModel(activityProductModelId);
+        } catch (DataNotExistException e) {
+            logger.error(e.getMessage(), e);
+            return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        }
+        return successGet(ShoppingCartProductModelConverter.convert(seckillActivityProductModelInfoBO));
+    }
 }

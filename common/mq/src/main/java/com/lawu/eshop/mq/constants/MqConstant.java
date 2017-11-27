@@ -202,6 +202,11 @@ public class MqConstant {
     /******************************************/
     /******* product-srv模块tag **********/
     public static final String TAG_DEL_COMMENT = "del_comment";
+    
+    /**
+     * 活动即将开始提醒
+     */
+    public static final String TAG_SECKILL_ACTIVITY_ABOUT_START_NOTICE = "seckill_activity_about_start_notice";
 
     /******************************************/
     /******* property-srv模块tag **********/

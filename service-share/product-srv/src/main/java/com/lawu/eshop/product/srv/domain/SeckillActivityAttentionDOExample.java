@@ -315,6 +315,66 @@ public class SeckillActivityAttentionDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andActivityProductIdIsNull() {
+            addCriterion("activity_product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdIsNotNull() {
+            addCriterion("activity_product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdEqualTo(Long value) {
+            addCriterion("activity_product_id =", value, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdNotEqualTo(Long value) {
+            addCriterion("activity_product_id <>", value, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdGreaterThan(Long value) {
+            addCriterion("activity_product_id >", value, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("activity_product_id >=", value, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdLessThan(Long value) {
+            addCriterion("activity_product_id <", value, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdLessThanOrEqualTo(Long value) {
+            addCriterion("activity_product_id <=", value, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdIn(List<Long> values) {
+            addCriterion("activity_product_id in", values, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdNotIn(List<Long> values) {
+            addCriterion("activity_product_id not in", values, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdBetween(Long value1, Long value2) {
+            addCriterion("activity_product_id between", value1, value2, "activityProductId");
+            return (Criteria) this;
+        }
+
+        public Criteria andActivityProductIdNotBetween(Long value1, Long value2) {
+            addCriterion("activity_product_id not between", value1, value2, "activityProductId");
+            return (Criteria) this;
+        }
+
         public Criteria andProductIdIsNull() {
             addCriterion("product_id is null");
             return (Criteria) this;
@@ -435,63 +495,73 @@ public class SeckillActivityAttentionDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andIsRemindIsNull() {
-            addCriterion("is_remind is null");
+        public Criteria andMemberNumIsNull() {
+            addCriterion("member_num is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsRemindIsNotNull() {
-            addCriterion("is_remind is not null");
+        public Criteria andMemberNumIsNotNull() {
+            addCriterion("member_num is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsRemindEqualTo(Boolean value) {
-            addCriterion("is_remind =", value, "isRemind");
+        public Criteria andMemberNumEqualTo(String value) {
+            addCriterion("member_num =", value, "memberNum");
             return (Criteria) this;
         }
 
-        public Criteria andIsRemindNotEqualTo(Boolean value) {
-            addCriterion("is_remind <>", value, "isRemind");
+        public Criteria andMemberNumNotEqualTo(String value) {
+            addCriterion("member_num <>", value, "memberNum");
             return (Criteria) this;
         }
 
-        public Criteria andIsRemindGreaterThan(Boolean value) {
-            addCriterion("is_remind >", value, "isRemind");
+        public Criteria andMemberNumGreaterThan(String value) {
+            addCriterion("member_num >", value, "memberNum");
             return (Criteria) this;
         }
 
-        public Criteria andIsRemindGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("is_remind >=", value, "isRemind");
+        public Criteria andMemberNumGreaterThanOrEqualTo(String value) {
+            addCriterion("member_num >=", value, "memberNum");
             return (Criteria) this;
         }
 
-        public Criteria andIsRemindLessThan(Boolean value) {
-            addCriterion("is_remind <", value, "isRemind");
+        public Criteria andMemberNumLessThan(String value) {
+            addCriterion("member_num <", value, "memberNum");
             return (Criteria) this;
         }
 
-        public Criteria andIsRemindLessThanOrEqualTo(Boolean value) {
-            addCriterion("is_remind <=", value, "isRemind");
+        public Criteria andMemberNumLessThanOrEqualTo(String value) {
+            addCriterion("member_num <=", value, "memberNum");
             return (Criteria) this;
         }
 
-        public Criteria andIsRemindIn(List<Boolean> values) {
-            addCriterion("is_remind in", values, "isRemind");
+        public Criteria andMemberNumLike(String value) {
+            addCriterion("member_num like", value, "memberNum");
             return (Criteria) this;
         }
 
-        public Criteria andIsRemindNotIn(List<Boolean> values) {
-            addCriterion("is_remind not in", values, "isRemind");
+        public Criteria andMemberNumNotLike(String value) {
+            addCriterion("member_num not like", value, "memberNum");
             return (Criteria) this;
         }
 
-        public Criteria andIsRemindBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_remind between", value1, value2, "isRemind");
+        public Criteria andMemberNumIn(List<String> values) {
+            addCriterion("member_num in", values, "memberNum");
             return (Criteria) this;
         }
 
-        public Criteria andIsRemindNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("is_remind not between", value1, value2, "isRemind");
+        public Criteria andMemberNumNotIn(List<String> values) {
+            addCriterion("member_num not in", values, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumBetween(String value1, String value2) {
+            addCriterion("member_num between", value1, value2, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotBetween(String value1, String value2) {
+            addCriterion("member_num not between", value1, value2, "memberNum");
             return (Criteria) this;
         }
 

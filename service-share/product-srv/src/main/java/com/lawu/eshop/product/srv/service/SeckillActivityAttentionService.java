@@ -1,5 +1,9 @@
 package com.lawu.eshop.product.srv.service;
 
+import java.util.List;
+
+import com.lawu.eshop.product.param.SeckillActivityProductAttentionParam;
+import com.lawu.eshop.product.srv.bo.SeckillActivityAttentionBO;
 import com.lawu.eshop.product.srv.exception.DataNotExistException;
 
 /**
@@ -20,5 +24,27 @@ public interface SeckillActivityAttentionService {
      * @createDate 2017年11月24日
      * @updateDate 2017年11月24日
      */
-    void attention(Long activityProductId, Long memberId) throws DataNotExistException;
+    void attention(Long activityProductId, SeckillActivityProductAttentionParam param) throws DataNotExistException;
+    
+    /**
+     * 分页查询<p>
+     * 即将开始的秒杀活动的关注列表<p>
+     * 用于发送用户提醒<p>
+     * 
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    List<SeckillActivityAttentionBO> selectAboutStartSeckillActivityAttention(int offset, int pageSize);
+    
+    /**
+     * 提示活动即将开始
+     * 
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    void promptSeckillActivityAboutStart(SeckillActivityAttentionBO seckillActivityAttentionBO) throws DataNotExistException;
 }

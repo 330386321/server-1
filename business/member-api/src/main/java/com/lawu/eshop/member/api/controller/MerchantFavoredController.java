@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.autotest.client.AutoTesting;
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -14,6 +15,8 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
 import com.lawu.eshop.member.api.service.MerchantFavoredService;
+import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.user.dto.MerchantStoreFavorInfoDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +33,9 @@ public class MerchantFavoredController extends BaseController {
 
     @Autowired
     private MerchantFavoredService merchantFavoredService;
+    
+    @Autowired
+    private MerchantStoreService merchantStoreService;
 
     @AutoTesting
     @Audit(date = "2017-04-21", reviewer = "孙林青")
@@ -41,6 +47,18 @@ public class MerchantFavoredController extends BaseController {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Result<MerchantFavoredDTO> result = merchantFavoredService.findFavoredByMerchantId(merchantId);
+        Result<MerchantStoreFavorInfoDTO> stoResult = merchantStoreService.selectMerchantStoreFavor(merchantId);
+        if (!isSuccess(stoResult)) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        MerchantFavoredDTO merchantFavoredDTO = result.getModel();
+        if(merchantFavoredDTO == null){
+        	return result;
+        }
+        merchantFavoredDTO.setName(stoResult.getModel().getName());
+        merchantFavoredDTO.setUserNum(stoResult.getModel().getUserNum());
+        merchantFavoredDTO.setStorePic(stoResult.getModel().getPicStore());
+        
         return result;
     }
 }

@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class LotteryActivityBO {
 
-    private Long LotteryActivityId;
+    private Long id;
 
     private String prizeName;
 
@@ -18,6 +18,8 @@ public class LotteryActivityBO {
     private Integer prizeNumber;
 
     private String imagePath;
+
+    private Date beginTime;
 
     private Date endTime;
 
@@ -29,12 +31,12 @@ public class LotteryActivityBO {
 
     private Integer lotteryNumber;
 
-    public Long getLotteryActivityId() {
-        return LotteryActivityId;
+    public Long getId() {
+        return id;
     }
 
-    public void setLotteryActivityId(Long lotteryActivityId) {
-        LotteryActivityId = lotteryActivityId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getPrizeName() {
@@ -67,6 +69,14 @@ public class LotteryActivityBO {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public Date getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(Date beginTime) {
+        this.beginTime = beginTime;
     }
 
     public Date getEndTime() {

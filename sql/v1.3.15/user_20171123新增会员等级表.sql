@@ -1,7 +1,7 @@
 use eshop_user;
 CREATE TABLE `user_grade` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT ''主键'',
-  `grade_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT ''等级名称'',
+  `grade_name` varchar(50) DEFAULT NULL COMMENT ''等级名称'',
   `grade_value` tinyint(2) unsigned NOT NULL COMMENT ''等级值'',
   `grade_weight` int(5) unsigned NOT NULL COMMENT ''等级权值'',
   `min_growth_value` int(11) NOT NULL COMMENT ''最小成长值'',

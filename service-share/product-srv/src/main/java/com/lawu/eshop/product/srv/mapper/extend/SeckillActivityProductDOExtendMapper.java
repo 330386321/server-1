@@ -1,5 +1,7 @@
 package com.lawu.eshop.product.srv.mapper.extend;
 
+import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
+
 /**
  * ProductModelDOMapper扩展
  * 
@@ -17,4 +19,13 @@ public interface SeckillActivityProductDOExtendMapper {
      * @updateDate 2017年11月24日
      */
 	void increaseAttentionCount(Long id);
+	    
+    /**
+     * 修改商品剩余数量
+     * @param view 参数
+     * @author jiangxinjun
+     * @createDate 2017年11月24日
+     * @updateDate 2017年11月24日
+     */
+    void editTotalInventory(ProductNumsView view);
 }

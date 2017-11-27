@@ -8,8 +8,6 @@ package com.lawu.eshop.product.constant;
  */
 public enum ProductModelInventoryTypeEnum {
 
-	//更新类型(0-加库存|1-减库存|2-创建订单|3-取消订单)
-	
 	/**
 	 * 加库存
 	 */
@@ -28,7 +26,17 @@ public enum ProductModelInventoryTypeEnum {
 	/**
 	 * 取消订单
 	 */
-	CANCEL_ORDER((byte)0x04);
+	CANCEL_ORDER((byte)0x04),
+	
+	/**
+     * 创建抢购活动订单
+     */
+    CREATE_SECKILL_ACTIVITY_ORDER((byte)0x05),
+    
+    /**
+     * 取消抢购活动订单
+     */
+    CANCEL_SECKILL_ACTIVITY_ORDER((byte)0x06);
 	
 	private Byte value;
 

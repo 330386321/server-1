@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.ad.param.RateParam;
 import com.lawu.eshop.ad.srv.bo.AdRateSettingBO;
 import com.lawu.eshop.ad.srv.domain.AdRateSettingDO;
 import com.lawu.eshop.ad.srv.mapper.AdRateSettingDOMapper;
 import com.lawu.eshop.ad.srv.service.AdRateSettingService;
+import com.lawu.eshop.framework.core.page.Page;
 
 @Service
 public class AdRateSettingServiceImpl implements AdRateSettingService {
@@ -49,6 +52,28 @@ public class AdRateSettingServiceImpl implements AdRateSettingService {
 		
 		adRateSettingDOMapper.deleteByPrimaryKey(id);
 		
+	}
+
+	@Override
+	public Page<AdRateSettingBO> queryRatePage(RateParam param) {
+		Long count=adRateSettingDOMapper.countByExample(null);
+        RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		List<AdRateSettingDO> list = adRateSettingDOMapper.selectByExampleWithRowbounds(null, rowBounds);
+		
+		List<AdRateSettingBO>  listSetting = new ArrayList<>();
+		for (AdRateSettingDO adRateSettingDO : list) {
+			AdRateSettingBO adRateSetting = new AdRateSettingBO();
+			adRateSetting.setGameTime(adRateSettingDO.getGameTime());
+			adRateSetting.setRate(adRateSettingDO.getRate());
+			adRateSetting.setId(adRateSettingDO.getId());
+			listSetting.add(adRateSetting);
+		}
+		Page<AdRateSettingBO> page = new Page<>();
+		page.setCurrentPage(param.getCurrentPage());
+		page.setRecords(listSetting);
+		page.setTotalCount(count.intValue());
+		
+		return page;
 	}
 
 }

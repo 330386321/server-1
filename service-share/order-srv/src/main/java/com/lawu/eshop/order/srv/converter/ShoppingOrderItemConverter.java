@@ -51,6 +51,7 @@ public class ShoppingOrderItemConverter {
 		rtn.setQuantity(param.getQuantity());
 		rtn.setRegularPrice(param.getRegularPrice());
 		rtn.setSalesPrice(param.getSalesPrice());
+		rtn.setActivityProductModelId(param.getActivityProductModelId());
 		
 		// 设置订单id
 		rtn.setShoppingOrderId(shoppingOrderId);
@@ -72,11 +73,9 @@ public class ShoppingOrderItemConverter {
 	 */
 	public static ShoppingOrderItemBO convert(ShoppingOrderItemDO shoppingOrderItemDO) {
 		ShoppingOrderItemBO rtn = null;
-		
 		if (shoppingOrderItemDO == null) {
 			return rtn;
 		}
-
 		rtn = new ShoppingOrderItemBO();
 		rtn.setId(shoppingOrderItemDO.getId());
 		rtn.setIsAllowRefund(shoppingOrderItemDO.getIsAllowRefund());
@@ -95,7 +94,7 @@ public class ShoppingOrderItemConverter {
 		rtn.setGmtModified(shoppingOrderItemDO.getGmtModified());
 		rtn.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderItemDO.getOrderStatus()));
 		rtn.setRefundStatus(RefundStatusEnum.getEnum(shoppingOrderItemDO.getRefundStatus()));
-		
+		rtn.setActivityProductModelId(shoppingOrderItemDO.getActivityProductModelId());
 		return rtn;
 	}
 	

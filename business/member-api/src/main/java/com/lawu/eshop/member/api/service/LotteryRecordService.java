@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
@@ -49,5 +51,16 @@ public interface LotteryRecordService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "lotteryRecord/listLotteryRecord")
     Result<Page<LotteryRecordDTO>> listLotteryRecord(@ModelAttribute LotteryRecordQuery query);
+
+    /**
+     * 查询用户是否参与抽奖
+     *
+     * @param lotteryActivityId
+     * @param userNum
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "lotteryRecord/lotteryRecord/{lotteryActivityId}")
+    Result<Boolean> lotteryRecord(@PathVariable("lotteryActivityId") Long lotteryActivityId, @RequestParam("userNum") String userNum);
 
 }

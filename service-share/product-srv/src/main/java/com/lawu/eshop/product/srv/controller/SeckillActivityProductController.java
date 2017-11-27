@@ -30,7 +30,7 @@ import com.lawu.eshop.product.srv.service.SeckillActivityProductService;
 import com.lawu.eshop.utils.DateUtil;
 
 @RestController
-@RequestMapping(path = "seckillActivityProduct/")
+@RequestMapping(value = "seckillActivityProduct/")
 public class SeckillActivityProductController extends BaseController {
     
     private static Logger logger = LoggerFactory.getLogger(SeckillActivityProductController.class);
@@ -49,7 +49,7 @@ public class SeckillActivityProductController extends BaseController {
      * @createDate 2017年11月23日
      * @updateDate 2017年11月24日
      */
-    @RequestMapping(path = "page/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "page/{id}", method = RequestMethod.PUT)
     public Result<Page<SeckillActivityProductBuyPageDTO>> page(@PathVariable("id") Long id, @RequestBody @Validated SeckillActivityProductPageQueryParam param, BindingResult bindingResult) {
         String message = validate(bindingResult);
         if (message != null) {
@@ -71,7 +71,7 @@ public class SeckillActivityProductController extends BaseController {
      * @createDate 2017年11月24日
      * @updateDate 2017年11月24日
      */
-    @RequestMapping(path = "information/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "information/{id}", method = RequestMethod.GET)
     public Result<SeckillActivityProductInformationDTO> information(@PathVariable("id") Long id) {
         SeckillActivityProductExtendBO seckillActivityProductExtendBO = null;
         try {

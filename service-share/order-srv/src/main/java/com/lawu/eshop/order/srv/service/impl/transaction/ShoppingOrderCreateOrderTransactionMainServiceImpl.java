@@ -54,6 +54,7 @@ public class ShoppingOrderCreateOrderTransactionMainServiceImpl extends Abstract
         	ProductModeUpdateInventoryDTO productModeUpdateInventoryParam = new ProductModeUpdateInventoryDTO();
         	productModeUpdateInventoryParam.setProdecutModelId(shoppingOrderItemBO.getProductModelId());
         	productModeUpdateInventoryParam.setQuantity(shoppingOrderItemBO.getQuantity());
+        	productModeUpdateInventoryParam.setActivityProductModelId(shoppingOrderItemBO.getActivityProductModelId());
         	params.add(productModeUpdateInventoryParam);
         }
         

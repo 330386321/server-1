@@ -1,9 +1,8 @@
 package com.lawu.eshop.operator.api.controller;
 
-import java.util.List;
-
-import org.omg.PortableInterceptor.SUCCESSFUL;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,9 +10,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.AdRateSettingDTO;
+import com.lawu.eshop.ad.param.RateParam;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.annotation.PageBody;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.operator.api.service.AdRateSettingService;
 
 import io.swagger.annotations.Api;
@@ -34,25 +37,34 @@ public class AdRateSettingController extends BaseController{
 	
 	@Autowired
 	private AdRateSettingService adRateSettingService;
-	
+
+	@SuppressWarnings("unchecked")
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "咻一咻中奖率列表", notes = "列表数量（张荣成）", httpMethod = "GET")
+	@RequiresPermissions("rate:list")
+	@PageBody
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "queryAdRateSetting", method = RequestMethod.GET)
-	public Result<List<AdRateSettingDTO>> queryAdRateSetting() {
-		return adRateSettingService.queryAdRateSetting();
+	public Result<Page<AdRateSettingDTO>> queryAdRateSetting( @ModelAttribute @ApiParam(value = "查询信息") RateParam param) {
+	    Result<Page<AdRateSettingDTO>> result = adRateSettingService.queryRatePage(param);
+		return successGet(result);
 	}
-	
-	
+
+
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "保存咻一咻中奖率", notes = "保存咻一咻中奖率（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@RequestMapping(value = "saveRateSetting", method = RequestMethod.GET)
+	@RequiresPermissions("rate:save")
+	@RequestMapping(value = "saveRateSetting", method = RequestMethod.POST)
 	public Result saveRateSetting( @RequestParam @ApiParam(required = true, value = "时间") int gameTime,
 			 @RequestParam @ApiParam(required = true, value = "概率") int rate) {
 		return adRateSettingService.saveRateSetting(gameTime, rate);
 	}
-	
-	
+
+
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "删除咻一咻中奖率", notes = "删除（张荣成）", httpMethod = "DELETE")
+	@RequiresPermissions("rate:delete")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "deleteRateSetting/{id}", method = RequestMethod.DELETE)
 	public Result deleteRateSetting(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.SeckillActivityService;
 import com.lawu.eshop.product.dto.SeckillActivityThatDayDTO;
 
@@ -26,24 +27,26 @@ import io.swagger.annotations.ApiResponse;
  */
 @Api(tags = "seckillActivity")
 @RestController
-@RequestMapping(path = "seckillActivity/")
+@RequestMapping(value = "seckillActivity/")
 public class SeckillActivityController extends BaseController {
     
     @Autowired
     private SeckillActivityService seckillActivityService;
-    
+
+    @Audit(date = "2017-11-24", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "获取当天的所有活动", notes = "获取当天的所有活动[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(path = "thatday/list", method = RequestMethod.GET)
+    @RequestMapping(value = "thatday/list", method = RequestMethod.GET)
     public Result<List<SeckillActivityThatDayDTO>> thatDayList() {
         return successGet(seckillActivityService.thatDayList());
     }
-    
+
+    @Audit(date = "2017-11-24", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "获取最近一天的所有活动", notes = "获取最近一天的所有活动[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(path = "recently/list", method = RequestMethod.GET)
+    @RequestMapping(value = "recently/list", method = RequestMethod.GET)
     public Result<List<SeckillActivityThatDayDTO>> recentlyList() {
         return successGet(seckillActivityService.recentlyList());
     }

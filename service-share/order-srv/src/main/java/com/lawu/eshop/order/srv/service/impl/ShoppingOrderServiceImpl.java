@@ -54,6 +54,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderMoneyBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
+import com.lawu.eshop.order.srv.constants.PropertyConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ReportConvert;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
@@ -1350,15 +1351,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
     public List<ShoppingOrderDO> selectAutoCancelOrder(int offset, int pageSize) {
         ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
         ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
-
         String automaticCancelOrderTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
-
+        // 不是抢购活动订单
+        criteria.andActivityIdIsNull();
         criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
         criteria.andGmtCreateLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticCancelOrderTime) * -1, Calendar.DAY_OF_YEAR));
-        
         // 分页参数
         RowBounds rowBounds = new RowBounds(offset, pageSize);
-        
         // 查找所有超时未付款的订单
         return shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
     }
@@ -1503,6 +1502,21 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public List<ShoppingOrderBO> selectCancelSeckillActivityOrder(int offset, int pageSize) {
+        ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
+        ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
+        // 是抢购活动订单
+        criteria.andActivityIdIsNotNull();
+        criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+        criteria.andGmtCreateLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(PropertyConstant.SECKILL_ACTIVITY_CANCEL_ORDER_TIME) * -1, Calendar.MINUTE));
+        // 分页参数
+        RowBounds rowBounds = new RowBounds(offset, pageSize);
+        // 查找所有超时未付款的订单
+        List<ShoppingOrderDO> shoppingOrderDOList = shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
+        return ShoppingOrderConverter.convert(shoppingOrderDOList);
     }
     
 	/**************************************************************

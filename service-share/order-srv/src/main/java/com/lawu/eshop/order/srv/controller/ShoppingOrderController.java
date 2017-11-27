@@ -60,6 +60,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderMoneyBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
+import com.lawu.eshop.order.srv.constants.PropertyConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
@@ -491,10 +492,14 @@ public class ShoppingOrderController extends BaseController {
 		switch (shoppingOrderDetailDTO.getOrderStatus()) {
 		case PENDING_PAYMENT:
 			// 1.自动取消订单
-			String automaticCancelOrder = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
-
-			Date automaticCancelOrderTo = DateUtil.add(shoppingOrderDetailDTO.getGmtCreate(), Integer.valueOf(automaticCancelOrder), Calendar.DAY_OF_YEAR);
-
+		    Date automaticCancelOrderTo = null;
+		    // 判断订单是否是抢购订单
+		    if (shoppingOrderExtendDetailBO.getActivityId() == null) {
+    			String automaticCancelOrder = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
+    			automaticCancelOrderTo = DateUtil.add(shoppingOrderDetailDTO.getGmtCreate(), Integer.valueOf(automaticCancelOrder), Calendar.DAY_OF_YEAR);
+		    } else {
+		        automaticCancelOrderTo = DateUtil.add(shoppingOrderDetailDTO.getGmtCreate(), Integer.valueOf(PropertyConstant.SECKILL_ACTIVITY_CANCEL_ORDER_TIME), Calendar.MINUTE);
+		    }
 			countdown = DateUtil.interval(new Date(), automaticCancelOrderTo, Calendar.MILLISECOND);
 			break;
 		case TO_BE_RECEIVED:

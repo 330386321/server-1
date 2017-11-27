@@ -37,6 +37,16 @@ public class ShoppingOrderSettlementParam {
 	private Long merchantStoreId;
 	
     /**
+     * 活动id
+     */
+    private Long activityId;
+    
+    /**
+     * 活动商品id
+     */
+    private Long activityProductId;
+	
+    /**
     * 商家门店省市区
     */
     private String merchantStoreRegionPath;
@@ -141,7 +151,23 @@ public class ShoppingOrderSettlementParam {
 		this.merchantStoreId = merchantStoreId;
 	}
 
-	public String getMerchantStoreRegionPath() {
+	public Long getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(Long activityId) {
+        this.activityId = activityId;
+    }
+
+    public Long getActivityProductId() {
+        return activityProductId;
+    }
+
+    public void setActivityProductId(Long activityProductId) {
+        this.activityProductId = activityProductId;
+    }
+
+    public String getMerchantStoreRegionPath() {
 		return merchantStoreRegionPath;
 	}
 

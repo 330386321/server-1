@@ -2,7 +2,9 @@ package com.lawu.eshop.ad.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.ad.param.RateParam;
 import com.lawu.eshop.ad.srv.bo.AdRateSettingBO;
+import com.lawu.eshop.framework.core.page.Page;
 
 /**
  * 咻一咻中奖率配置
@@ -31,5 +33,12 @@ public interface AdRateSettingService {
 	 * @param id
 	 */
 	void deleteRateSetting(Long id);
+	
+	/**
+	 * 平台查询中奖率
+	 * @param param
+	 * @return
+	 */
+	Page<AdRateSettingBO> queryRatePage(RateParam param);
 
 }

@@ -15,6 +15,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.SeckillActivityJoinService;
 import com.lawu.eshop.product.dto.SeckillActivityDetailDTO;
 import com.lawu.eshop.product.dto.SeckillActivityJoinDTO;
@@ -41,7 +42,8 @@ public class SeckillActivityJoinController extends BaseController {
 	
 	@Autowired
 	private SeckillActivityJoinService seckillActivityJoinService;
-	
+
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "分页查询专场活动", notes = "专场活动，[]。(张荣成)", httpMethod = "GET")
 	@Authorization
@@ -51,8 +53,8 @@ public class SeckillActivityJoinController extends BaseController {
 		 Result<Page<SeckillActivityJoinDTO>>  result= seckillActivityJoinService.queryPage(param);
 		return successGet(result);
 	}
-	
-	
+
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "分页查询活动管理", notes = "活动管理，[]。(张荣成)", httpMethod = "GET")
 	@Authorization
@@ -67,8 +69,8 @@ public class SeckillActivityJoinController extends BaseController {
 		Result<Page<SeckillActivityManagerDTO>> result = seckillActivityJoinService.queryManagePage(manageParam);
 		return successGet(result);
 	}
-	
-	
+
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "活动详情(报名前)", notes = "活动详情，[]。(张荣成)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "querySeckillActivityDetail/{id}", method = RequestMethod.GET)
@@ -77,8 +79,9 @@ public class SeckillActivityJoinController extends BaseController {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		return seckillActivityJoinService.querySeckillActivityDetail(id, merchantId);
 	}
-	
 
+
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "活动管理详情", notes = "活动管理详情，[]。(张荣成)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "querySeckillActivityManageDetail/{id}", method = RequestMethod.GET)
@@ -87,7 +90,8 @@ public class SeckillActivityJoinController extends BaseController {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		return seckillActivityJoinService.querySeckillActivityManageDetail(id, merchantId);
 	}
-	
+
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "报名活动", notes = "报名活动，[3006|3007]。(张荣成)", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "joinSeckillActivity", method = RequestMethod.POST)

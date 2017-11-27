@@ -20,7 +20,7 @@ import com.lawu.eshop.product.srv.converter.SeckillActivityConverter;
 import com.lawu.eshop.product.srv.service.SeckillActivityService;
 
 @RestController
-@RequestMapping(path = "seckillActivity/")
+@RequestMapping(value = "seckillActivity/")
 public class SeckillActivityController extends BaseController {
     
     @Autowired
@@ -38,7 +38,7 @@ public class SeckillActivityController extends BaseController {
      * @updateDate 2017年11月23日
      */
     @SuppressWarnings("rawtypes")
-    @RequestMapping(path = "page", method = RequestMethod.PUT)
+    @RequestMapping(value = "page", method = RequestMethod.PUT)
     public Result page(@RequestBody @Validated SeckillActivityPageQueryParam param, BindingResult bindingResult) {
         String message = validate(bindingResult);
         if (message != null) {
@@ -56,7 +56,7 @@ public class SeckillActivityController extends BaseController {
      * @createDate 2017年11月23日
      * @updateDate 2017年11月23日
      */
-    @RequestMapping(path = "thatday/list", method = RequestMethod.GET)
+    @RequestMapping(value = "thatday/list", method = RequestMethod.GET)
     public Result<List<SeckillActivityThatDayDTO>> thatDayList() {
         List<SeckillActivityBO> list = seckillActivityService.thatDayList();
         return successGet(SeckillActivityConverter.convertSeckillActivityThatDayDTOList(list));
@@ -71,7 +71,7 @@ public class SeckillActivityController extends BaseController {
      * @createDate 2017年11月23日
      * @updateDate 2017年11月23日
      */
-    @RequestMapping(path = "recently/list", method = RequestMethod.GET)
+    @RequestMapping(value = "recently/list", method = RequestMethod.GET)
     public Result<List<SeckillActivityThatDayDTO>> recentlyList() {
         List<SeckillActivityBO> list = seckillActivityService.recentlyList();
         return successGet(SeckillActivityConverter.convertSeckillActivityThatDayDTOList(list));

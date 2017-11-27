@@ -7,6 +7,7 @@ import java.util.List;
 import com.lawu.eshop.common.constants.MemberGradeEnum;
 import com.lawu.eshop.mall.constants.LotteryActivityStatusEnum;
 import com.lawu.eshop.mall.dto.LotteryActivityDTO;
+import com.lawu.eshop.mall.dto.LotteryActivityOperatorDTO;
 import com.lawu.eshop.mall.srv.bo.LotteryActivityBO;
 import com.lawu.eshop.mall.srv.domain.LotteryActivityDO;
 import com.lawu.eshop.utils.DateUtil;
@@ -29,11 +30,12 @@ public class LotteryActivityConverter {
         }
 
         LotteryActivityBO activityBO = new LotteryActivityBO();
-        activityBO.setLotteryActivityId(activityDO.getId());
+        activityBO.setId(activityDO.getId());
         activityBO.setPrizeName(activityDO.getPrizeName());
         activityBO.setPrizePrice(activityDO.getPrizePrice());
         activityBO.setPrizeNumber(activityDO.getPrizeNumber());
         activityBO.setImagePath(activityDO.getImagePath());
+        activityBO.setBeginTime(activityDO.getBeginTime());
         activityBO.setEndTime(activityDO.getEndTime());
         activityBO.setGrade(activityDO.getGrade());
         activityBO.setStatus(activityDO.getStatus());
@@ -52,7 +54,7 @@ public class LotteryActivityConverter {
         }
 
         LotteryActivityDTO activityDTO = new LotteryActivityDTO();
-        activityDTO.setLotteryActivityId(activityBO.getLotteryActivityId());
+        activityDTO.setLotteryActivityId(activityBO.getId());
         activityDTO.setPrizeName(activityBO.getPrizeName());
         activityDTO.setPrizePrice(activityBO.getPrizePrice());
         activityDTO.setPrizeNumber(activityBO.getPrizeNumber());
@@ -65,6 +67,23 @@ public class LotteryActivityConverter {
         return activityDTO;
     }
 
+    /**
+     * BO转换
+     *
+     * @param activityDOS
+     * @return
+     */
+    public static List<LotteryActivityBO> converBOS(List<LotteryActivityDO> activityDOS) {
+        List<LotteryActivityBO> activityBOS = new ArrayList<>();
+        if (activityDOS == null || activityDOS.isEmpty()) {
+            return activityBOS;
+        }
+
+        for (LotteryActivityDO activityDO : activityDOS) {
+            activityBOS.add(converBO(activityDO));
+        }
+        return activityBOS;
+    }
 
     /**
      * DTO转换
@@ -82,6 +101,49 @@ public class LotteryActivityConverter {
             activityDTOS.add(converDTO(activityBO));
         }
         return activityDTOS;
+    }
+
+    /**
+     * DTO转换
+     *
+     * @param activityBO
+     * @return
+     */
+    public static LotteryActivityOperatorDTO converOperatorDTO(LotteryActivityBO activityBO) {
+        if (activityBO == null) {
+            return null;
+        }
+
+        LotteryActivityOperatorDTO activityOperatorDTO = new LotteryActivityOperatorDTO();
+        activityOperatorDTO.setId(activityBO.getId());
+        activityOperatorDTO.setPrizeName(activityBO.getPrizeName());
+        activityOperatorDTO.setPrizePrice(activityBO.getPrizePrice());
+        activityOperatorDTO.setPrizeNumber(activityBO.getPrizeNumber());
+        activityOperatorDTO.setImagePath(activityBO.getImagePath());
+        activityOperatorDTO.setBeginTime(activityBO.getBeginTime());
+        activityOperatorDTO.setEndTime(activityBO.getEndTime());
+        activityOperatorDTO.setGradeEnum(MemberGradeEnum.getEnum(activityBO.getGrade()));
+        activityOperatorDTO.setStatusEnum(LotteryActivityStatusEnum.getEnum(activityBO.getStatus()));
+        activityOperatorDTO.setStatusDes(LotteryActivityStatusEnum.getEnum(activityBO.getStatus()).getName());
+        return activityOperatorDTO;
+    }
+
+    /**
+     * DTO转换
+     *
+     * @param activityBOS
+     * @return
+     */
+    public static List<LotteryActivityOperatorDTO> converOperatorDTOS(List<LotteryActivityBO> activityBOS) {
+        List<LotteryActivityOperatorDTO> activityOperatorDTOS = new ArrayList<>();
+        if (activityBOS == null || activityBOS.isEmpty()) {
+            return activityOperatorDTOS;
+        }
+
+        for (LotteryActivityBO activityBO : activityBOS) {
+            activityOperatorDTOS.add(converOperatorDTO(activityBO));
+        }
+        return activityOperatorDTOS;
     }
 
 }

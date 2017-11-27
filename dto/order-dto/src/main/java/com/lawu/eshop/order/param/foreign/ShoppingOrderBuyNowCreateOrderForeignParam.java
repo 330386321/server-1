@@ -42,7 +42,13 @@ public class ShoppingOrderBuyNowCreateOrderForeignParam {
     @NotNull(message = "产品型号id不能为空")
     @ApiModelProperty(name = "productModelId", required = true, value = "商品型号ID")
     private Long productModelId;
-
+    
+    /**
+     * 活动商品型号id
+     */
+    @ApiModelProperty(value = "活动商品型号id", required = true)
+    private Long activityProductModelId;
+    
     /**
      * 数量
      */
@@ -82,7 +88,15 @@ public class ShoppingOrderBuyNowCreateOrderForeignParam {
 		this.productModelId = productModelId;
 	}
 
-	public Integer getQuantity() {
+	public Long getActivityProductModelId() {
+        return activityProductModelId;
+    }
+
+    public void setActivityProductModelId(Long activityProductModelId) {
+        this.activityProductModelId = activityProductModelId;
+    }
+
+    public Integer getQuantity() {
 		return quantity;
 	}
 

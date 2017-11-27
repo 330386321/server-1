@@ -2,11 +2,13 @@ package com.lawu.eshop.member.api.service;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.product.param.SeckillActivityProductAttentionParam;
 
 /**
  * 抢购活动商品服务接口
@@ -29,5 +31,5 @@ public interface SeckillActivityAttentionService {
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(path = "attention/{activityProductId}", method = RequestMethod.POST)
-    Result attention(@PathVariable("activityProductId") Long activityProductId, @RequestParam("memberId") Long memberId);
+    Result attention(@PathVariable("activityProductId") Long activityProductId, @RequestBody SeckillActivityProductAttentionParam param);
 }

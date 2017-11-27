@@ -1,11 +1,13 @@
 package com.lawu.eshop.mall.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lawu.eshop.mall.constants.MerchantFavoredTypeEnum;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.math.BigDecimal;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.mall.constants.MerchantFavoredTypeEnum;
+import com.lawu.eshop.mall.constants.StatusEnum;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author zhangyong
@@ -106,8 +108,29 @@ public class MerchantFavoredDTO {
     @ApiModelProperty(value = "总有效期：结束时间")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date entireEndTime;
+    
+    @ApiModelProperty(value = "是否逾期：true--是，false--否")
+    private Boolean isOverdue ;
+    
+    @ApiModelProperty(value = "商家编号")
+    private String userNum;
+    
+    
+    @ApiModelProperty(value = "名称")
+    private String name;
+    
+    @ApiModelProperty(value = "门店照")
+    private String storePic; 
 
-    public Long getId() {
+	public Boolean getIsOverdue() {
+		return isOverdue;
+	}
+
+	public void setIsOverdue(Boolean isOverdue) {
+		this.isOverdue = isOverdue;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -194,5 +217,31 @@ public class MerchantFavoredDTO {
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
 	}
+
+	public String getUserNum() {
+		return userNum;
+	}
+
+	public void setUserNum(String userNum) {
+		this.userNum = userNum;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getStorePic() {
+		return storePic;
+	}
+
+	public void setStorePic(String storePic) {
+		this.storePic = storePic;
+	}
+	
+	
     
 }
