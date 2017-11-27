@@ -68,4 +68,14 @@ public interface LotteryRecordService {
      */
     Boolean lotteryRecord(Long lotteryActivityId, String userNum);
 
+    /**
+     * 更新抽奖结果
+     *
+     * @param id
+     * @param lotteryResult
+     * @return
+     * @author meishuquan
+     */
+    int updateLotteryResult(Long id, Boolean lotteryResult);
+
 }

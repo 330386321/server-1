@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.LotteryActivityStatusEnum;
 import com.lawu.eshop.mall.param.LotteryRecordParam;
 import com.lawu.eshop.mall.query.LotteryRecordQuery;
@@ -176,6 +177,20 @@ public class LotteryRecordServiceImpl implements LotteryRecordService {
         example.createCriteria().andLotteryActivityIdEqualTo(lotteryActivityId).andUserNumEqualTo(userNum);
         int count = lotteryRecordDOMapper.countByExample(example);
         return count > 0;
+    }
+
+    @Override
+    @Transactional
+    public int updateLotteryResult(Long id, Boolean lotteryResult) {
+        LotteryRecordDO recordDO = new LotteryRecordDO();
+        recordDO.setId(id);
+        recordDO.setGmtModified(new Date());
+        recordDO.setLotteryResult(lotteryResult);
+        int result = lotteryRecordDOMapper.updateByPrimaryKeySelective(recordDO);
+        if (result == 0) {
+            return ResultCode.FAIL;
+        }
+        return ResultCode.SUCCESS;
     }
 
 }

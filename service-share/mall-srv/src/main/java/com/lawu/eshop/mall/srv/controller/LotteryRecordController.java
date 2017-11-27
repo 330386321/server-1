@@ -118,4 +118,18 @@ public class LotteryRecordController extends BaseController {
         return successGet(result);
     }
 
+    /**
+     * 更新抽奖结果
+     *
+     * @param id
+     * @param lotteryResult
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "updateLotteryResult/{id}", method = RequestMethod.PUT)
+    public Result updateLotteryResult(@PathVariable Long id, @RequestParam Boolean lotteryResult) {
+        int result = lotteryRecordService.updateLotteryResult(id, lotteryResult);
+        return successCreated(result);
+    }
+
 }

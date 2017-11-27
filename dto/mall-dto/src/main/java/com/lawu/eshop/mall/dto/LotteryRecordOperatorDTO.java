@@ -8,6 +8,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class LotteryRecordOperatorDTO {
 
+    @ApiModelProperty(value = "ID")
+    private Long id;
+
     @ApiModelProperty(value = "账号")
     private String account;
 
@@ -22,6 +25,14 @@ public class LotteryRecordOperatorDTO {
 
     @ApiModelProperty(value = "抽奖结果")
     private Boolean lotteryResult;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getAccount() {
         return account;
