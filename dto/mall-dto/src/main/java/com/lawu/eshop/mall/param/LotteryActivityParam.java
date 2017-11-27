@@ -1,13 +1,14 @@
-package com.lawu.eshop.mall.srv.bo;
+package com.lawu.eshop.mall.param;
 
 import java.math.BigDecimal;
-import java.util.Date;
+
+import com.lawu.eshop.mall.constants.LotteryActivityStatusEnum;
 
 /**
  * @author meishuquan
- * @date 2017/11/23.
+ * @date 2017/11/24.
  */
-public class LotteryActivityBO {
+public class LotteryActivityParam {
 
     private Long id;
 
@@ -19,17 +20,13 @@ public class LotteryActivityBO {
 
     private String imagePath;
 
-    private Date beginTime;
+    private String beginTime;
 
-    private Date endTime;
+    private String endTime;
 
     private Byte grade;
 
-    private Byte status;
-
-    private Integer lotteryCount;
-
-    private Integer lotteryNumber;
+    private LotteryActivityStatusEnum statusEnum;
 
     public Long getId() {
         return id;
@@ -71,19 +68,19 @@ public class LotteryActivityBO {
         this.imagePath = imagePath;
     }
 
-    public Date getBeginTime() {
+    public String getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(Date beginTime) {
+    public void setBeginTime(String beginTime) {
         this.beginTime = beginTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -95,27 +92,11 @@ public class LotteryActivityBO {
         this.grade = grade;
     }
 
-    public Byte getStatus() {
-        return status;
+    public LotteryActivityStatusEnum getStatusEnum() {
+        return statusEnum;
     }
 
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
-    public Integer getLotteryCount() {
-        return lotteryCount;
-    }
-
-    public void setLotteryCount(Integer lotteryCount) {
-        this.lotteryCount = lotteryCount;
-    }
-
-    public Integer getLotteryNumber() {
-        return lotteryNumber;
-    }
-
-    public void setLotteryNumber(Integer lotteryNumber) {
-        this.lotteryNumber = lotteryNumber;
+    public void setStatusEnum(LotteryActivityStatusEnum statusEnum) {
+        this.statusEnum = statusEnum;
     }
 }

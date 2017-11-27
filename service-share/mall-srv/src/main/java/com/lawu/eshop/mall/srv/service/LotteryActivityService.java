@@ -1,6 +1,9 @@
 package com.lawu.eshop.mall.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.mall.constants.LotteryActivityStatusEnum;
+import com.lawu.eshop.mall.param.LotteryActivityParam;
+import com.lawu.eshop.mall.query.ListLotteryActivityQuery;
 import com.lawu.eshop.mall.query.LotteryActivityRealQuery;
 import com.lawu.eshop.mall.srv.bo.LotteryActivityBO;
 
@@ -27,5 +30,31 @@ public interface LotteryActivityService {
      * @author meishuquan
      */
     LotteryActivityBO getLotteryActivityById(Long id);
+
+    /**
+     * 运营平台查询抽奖活动列表
+     *
+     * @param query
+     * @return
+     * @author meishuquan
+     */
+    Page<LotteryActivityBO> listOperatorLotteryActivity(ListLotteryActivityQuery query);
+
+    /**
+     * 根据id更新活动状态
+     *
+     * @param id
+     * @param statusEnum
+     * @author meishuquan
+     */
+    void updateLotteryActivityStatus(Long id, LotteryActivityStatusEnum statusEnum);
+
+    /**
+     * 新增抽奖活动
+     *
+     * @param param
+     * @author meishuquan
+     */
+    void saveLotteryActivity(LotteryActivityParam param);
 
 }

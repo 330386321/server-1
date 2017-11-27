@@ -14,10 +14,13 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.LotteryInfoDTO;
 import com.lawu.eshop.mall.dto.LotteryRecordDTO;
+import com.lawu.eshop.mall.dto.LotteryRecordOperatorDTO;
 import com.lawu.eshop.mall.param.LotteryRecordParam;
 import com.lawu.eshop.mall.query.LotteryRecordQuery;
+import com.lawu.eshop.mall.query.OperatorLotteryRecordQuery;
 import com.lawu.eshop.mall.srv.bo.LotteryInfoBO;
 import com.lawu.eshop.mall.srv.bo.LotteryRecordBO;
+import com.lawu.eshop.mall.srv.bo.LotteryRecordOperatorBO;
 import com.lawu.eshop.mall.srv.converter.LotteryRecordConverter;
 import com.lawu.eshop.mall.srv.service.LotteryRecordService;
 import com.lawu.eshop.utils.StringUtil;
@@ -79,6 +82,23 @@ public class LotteryRecordController extends BaseController {
         page.setCurrentPage(recordBOPage.getCurrentPage());
         page.setTotalCount(recordBOPage.getTotalCount());
         page.setRecords(LotteryRecordConverter.converDTOS(recordBOPage.getRecords()));
+        return successCreated(page);
+    }
+
+    /**
+     * 运营平台查询参与抽奖列表
+     *
+     * @param query
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "listOperatorLotteryRecord", method = RequestMethod.POST)
+    public Result<Page<LotteryRecordOperatorDTO>> listOperatorLotteryRecord(@RequestBody OperatorLotteryRecordQuery query) {
+        Page<LotteryRecordOperatorBO> recordBOPage = lotteryRecordService.listOperatorLotteryRecord(query);
+        Page<LotteryRecordOperatorDTO> page = new Page<>();
+        page.setCurrentPage(recordBOPage.getCurrentPage());
+        page.setTotalCount(recordBOPage.getTotalCount());
+        page.setRecords(LotteryRecordConverter.converOperatorDTO(recordBOPage.getRecords()));
         return successCreated(page);
     }
 

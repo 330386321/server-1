@@ -5,8 +5,10 @@ import java.util.List;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.param.LotteryRecordParam;
 import com.lawu.eshop.mall.query.LotteryRecordQuery;
+import com.lawu.eshop.mall.query.OperatorLotteryRecordQuery;
 import com.lawu.eshop.mall.srv.bo.LotteryInfoBO;
 import com.lawu.eshop.mall.srv.bo.LotteryRecordBO;
+import com.lawu.eshop.mall.srv.bo.LotteryRecordOperatorBO;
 
 /**
  * @author meishuquan
@@ -46,5 +48,14 @@ public interface LotteryRecordService {
      * @author meishuquan
      */
     Page<LotteryRecordBO> listLotteryRecord(LotteryRecordQuery query);
+
+    /**
+     * 运营平台查询参与抽奖列表
+     *
+     * @param query
+     * @return
+     * @author meishuquan
+     */
+    Page<LotteryRecordOperatorBO> listOperatorLotteryRecord(OperatorLotteryRecordQuery query);
 
 }

@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lawu.eshop.mall.dto.LotteryRecordDTO;
+import com.lawu.eshop.mall.dto.LotteryRecordOperatorDTO;
 import com.lawu.eshop.mall.srv.bo.LotteryRecordBO;
+import com.lawu.eshop.mall.srv.bo.LotteryRecordOperatorBO;
 import com.lawu.eshop.mall.srv.domain.LotteryActivityDO;
+import com.lawu.eshop.mall.srv.domain.LotteryRecordDO;
 
 /**
  * @author meishuquan
@@ -69,6 +72,52 @@ public class LotteryRecordConverter {
             recordDTOS.add(converDTO(recordBO));
         }
         return recordDTOS;
+    }
+
+    /**
+     * BO转换
+     *
+     * @param recordDOS
+     * @return
+     */
+    public static List<LotteryRecordOperatorBO> converOperatorBO(List<LotteryRecordDO> recordDOS) {
+        List<LotteryRecordOperatorBO> operatorBOS = new ArrayList<>();
+        if (recordDOS == null || recordDOS.isEmpty()) {
+            return operatorBOS;
+        }
+
+        for (LotteryRecordDO recordDO : recordDOS) {
+            LotteryRecordOperatorBO operatorBO = new LotteryRecordOperatorBO();
+            operatorBO.setAccount(recordDO.getAccount());
+            operatorBO.setPrizeName(recordDO.getPrizeName());
+            operatorBO.setLotteryCount(recordDO.getLotteryCount());
+            operatorBO.setLotteryResult(recordDO.getLotteryResult());
+            operatorBOS.add(operatorBO);
+        }
+        return operatorBOS;
+    }
+
+    /**
+     * DTO转换
+     *
+     * @param operatorBOS
+     * @return
+     */
+    public static List<LotteryRecordOperatorDTO> converOperatorDTO(List<LotteryRecordOperatorBO> operatorBOS) {
+        List<LotteryRecordOperatorDTO> operatorDTOS = new ArrayList<>();
+        if (operatorBOS == null || operatorBOS.isEmpty()) {
+            return operatorDTOS;
+        }
+
+        for (LotteryRecordOperatorBO operatorBO : operatorBOS) {
+            LotteryRecordOperatorDTO operatorDTO = new LotteryRecordOperatorDTO();
+            operatorDTO.setAccount(operatorBO.getAccount());
+            operatorDTO.setPrizeName(operatorBO.getPrizeName());
+            operatorDTO.setLotteryCount(operatorBO.getLotteryCount());
+            operatorDTO.setLotteryResult(operatorBO.getLotteryResult());
+            operatorDTOS.add(operatorDTO);
+        }
+        return operatorDTOS;
     }
 
 }
