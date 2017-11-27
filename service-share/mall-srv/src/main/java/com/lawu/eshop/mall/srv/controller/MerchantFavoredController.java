@@ -9,6 +9,8 @@ import com.lawu.eshop.mall.param.MerchantFavoredParam;
 import com.lawu.eshop.mall.srv.bo.MerchantFavoredBO;
 import com.lawu.eshop.mall.srv.converter.MerchantFavoredConverter;
 import com.lawu.eshop.mall.srv.service.MerchantFavoredService;
+import com.lawu.eshop.utils.DateUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,7 +64,7 @@ public class MerchantFavoredController extends BaseController {
         } else {
             merchantFavoredDTO.setDiscountRate(null);
         }
-
+        merchantFavoredDTO.setIsOverdue(DateUtil.isOverdue(merchantFavoredDTO.getEntireEndTime()));
         return successGet(merchantFavoredDTO);
     }
 

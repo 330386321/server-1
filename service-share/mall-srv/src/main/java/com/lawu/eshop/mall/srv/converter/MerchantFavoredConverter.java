@@ -26,6 +26,7 @@ public class MerchantFavoredConverter {
         merchantFavoredBO.setReachAmount(merchantFavoredDO.getReachAmount());
         merchantFavoredBO.setEntireBeginTime(merchantFavoredDO.getEntireBeginTime());
         merchantFavoredBO.setEntireEndTime(merchantFavoredDO.getEntireEndTime());
+        merchantFavoredBO.setStatus(merchantFavoredDO.getStatus());
 
         return merchantFavoredBO;
     }
