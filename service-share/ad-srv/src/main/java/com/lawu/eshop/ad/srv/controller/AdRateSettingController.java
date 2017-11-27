@@ -5,14 +5,17 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.AdRateSettingDTO;
+import com.lawu.eshop.ad.param.RateParam;
 import com.lawu.eshop.ad.srv.bo.AdRateSettingBO;
 import com.lawu.eshop.ad.srv.service.AdRateSettingService;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 
@@ -80,6 +83,28 @@ public class AdRateSettingController extends BaseController{
 		
 		return successCreated();
 		
+	}
+	
+	@RequestMapping(value = "queryRatePage", method = RequestMethod.POST)
+	public Result<Page<AdRateSettingDTO>> queryRatePage(@RequestBody RateParam param) {
+		Page<AdRateSettingBO>  page = adRateSettingService.queryRatePage(param);
+
+		List<AdRateSettingDTO> rateList = new ArrayList<>();
+		for (AdRateSettingBO adRateSettingBO : page.getRecords()) {
+			
+			AdRateSettingDTO adRateSetting = new AdRateSettingDTO();
+			adRateSetting.setGameTime(adRateSettingBO.getGameTime());
+			adRateSetting.setRate(adRateSettingBO.getRate());
+			adRateSetting.setId(adRateSettingBO.getId());
+			rateList.add(adRateSetting);
+		}
+		
+		Page<AdRateSettingDTO> ratePage = new Page<>();
+		ratePage.setCurrentPage(page.getCurrentPage());
+		ratePage.setRecords(rateList);
+		ratePage.setTotalCount(page.getTotalCount());
+
+		return successCreated(ratePage);
 	}
 
 }

@@ -4,11 +4,14 @@ import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.dto.AdRateSettingDTO;
+import com.lawu.eshop.ad.param.RateParam;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 
 @FeignClient(value = "ad-srv")
@@ -18,8 +21,8 @@ public interface AdRateSettingService {
 	 * 咻一咻中奖率配置数据
 	 * @return
 	 */
-	@RequestMapping(value = "adRateSetting/queryAdRateSetting", method = RequestMethod.GET)
-	Result<List<AdRateSettingDTO>> queryAdRateSetting();
+	@RequestMapping(value = "adRateSetting/queryRatePage", method = RequestMethod.POST)
+	Result<Page<AdRateSettingDTO>> queryRatePage(@RequestBody RateParam param);
 	
 	/**
 	 * 保存中奖率设置
