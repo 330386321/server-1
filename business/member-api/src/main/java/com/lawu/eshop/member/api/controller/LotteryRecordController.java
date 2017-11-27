@@ -62,12 +62,12 @@ public class LotteryRecordController extends BaseController {
     private UserGradeService userGradeService;
 
     @Audit(date = "2017-11-24", reviewer = "孙林青")
-    @ApiOperation(value = "参与抽奖", notes = "立即抽奖。[1002] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "参与抽奖", notes = "立即抽奖。[1002|2021] (梅述全)", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "takePart", method = RequestMethod.POST)
     public Result takePart(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                    @RequestParam @ApiParam(required = true, value = "抽奖活动ID") Long lotteryActivityId) {
+                           @RequestParam @ApiParam(required = true, value = "抽奖活动ID") Long lotteryActivityId) {
         Long userId = UserUtil.getCurrentUserId(getRequest());
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         String account = UserUtil.getCurrentAccount(getRequest());
@@ -75,6 +75,10 @@ public class LotteryRecordController extends BaseController {
         Result<LotteryActivityDTO> activityDTOResult = lotteryActivityService.getLotteryActivityById(lotteryActivityId);
         if (activityDTOResult.getModel() == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        Result<Boolean> result = lotteryRecordService.lotteryRecord(lotteryActivityId, userNum);
+        if (result.getModel()) {
+            return successCreated(ResultCode.HAVE_TAKE_PART);
         }
 
         LotteryRecordParam param = new LotteryRecordParam();
@@ -93,7 +97,7 @@ public class LotteryRecordController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "takePartByPay", method = RequestMethod.POST)
     public Result takePartByPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                      @RequestParam @ApiParam(required = true, value = "抽奖活动ID") Long lotteryActivityId) {
+                                @RequestParam @ApiParam(required = true, value = "抽奖活动ID") Long lotteryActivityId) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
 
         Result<Boolean> result = pointDetailService.existsPointDetailByUserNumAndBizId(userNum, String.valueOf(lotteryActivityId));

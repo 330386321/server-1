@@ -58,4 +58,14 @@ public interface LotteryRecordService {
      */
     Page<LotteryRecordOperatorBO> listOperatorLotteryRecord(OperatorLotteryRecordQuery query);
 
+    /**
+     * 查询用户是否参与抽奖
+     *
+     * @param lotteryActivityId
+     * @param userNum
+     * @return
+     * @author meishuquan
+     */
+    Boolean lotteryRecord(Long lotteryActivityId, String userNum);
+
 }

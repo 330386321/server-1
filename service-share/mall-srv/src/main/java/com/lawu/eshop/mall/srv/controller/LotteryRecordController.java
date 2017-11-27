@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.core.page.Page;
@@ -100,6 +102,20 @@ public class LotteryRecordController extends BaseController {
         page.setTotalCount(recordBOPage.getTotalCount());
         page.setRecords(LotteryRecordConverter.converOperatorDTO(recordBOPage.getRecords()));
         return successCreated(page);
+    }
+
+    /**
+     * 查询用户是否参与抽奖
+     *
+     * @param lotteryActivityId
+     * @param userNum
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(value = "lotteryRecord/{lotteryActivityId}", method = RequestMethod.GET)
+    public Result<Boolean> lotteryRecord(@PathVariable Long lotteryActivityId, @RequestParam String userNum) {
+        Boolean result = lotteryRecordService.lotteryRecord(lotteryActivityId, userNum);
+        return successGet(result);
     }
 
 }

@@ -170,4 +170,12 @@ public class LotteryRecordServiceImpl implements LotteryRecordService {
         return page;
     }
 
+    @Override
+    public Boolean lotteryRecord(Long lotteryActivityId, String userNum) {
+        LotteryRecordDOExample example = new LotteryRecordDOExample();
+        example.createCriteria().andLotteryActivityIdEqualTo(lotteryActivityId).andUserNumEqualTo(userNum);
+        int count = lotteryRecordDOMapper.countByExample(example);
+        return count > 0;
+    }
+
 }
