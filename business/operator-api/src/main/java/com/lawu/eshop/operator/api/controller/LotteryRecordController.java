@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +69,7 @@ public class LotteryRecordController extends BaseController {
 
     @ApiOperation(value = "参与抽奖列表", notes = "参与抽奖列表。（梅述全）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    //@RequiresPermissions("log:list")
+    @RequiresPermissions("lottery:record")
     @PageBody
     @RequestMapping(value = "listOperatorLotteryRecord", method = RequestMethod.POST)
     public Result<Page<LotteryRecordOperatorDTO>> listOperatorLotteryRecord(@RequestBody @ApiParam OperatorLotteryRecordQuery query) {
@@ -86,7 +87,7 @@ public class LotteryRecordController extends BaseController {
 
     @ApiOperation(value = "导出抽奖信息", notes = "导出抽奖信息。（梅述全）", httpMethod = "POST")
     @RequestMapping(value = "exportExcel", method = RequestMethod.POST)
-    //@RequiresPermissions("withdraw:export")
+    @RequiresPermissions("lottery:export")
     public void exportExcel(@ModelAttribute OperatorLotteryRecordQuery query) {
         Result<Page<LotteryRecordOperatorDTO>> result = lotteryRecordService.listOperatorLotteryRecord(query);
 
@@ -163,7 +164,7 @@ public class LotteryRecordController extends BaseController {
 
     @ApiOperation(value = "导入中奖结果处理", notes = "导入中奖结果处理。（梅述全）", httpMethod = "POST")
     @RequestMapping(value = "importExcel", method = RequestMethod.POST)
-    //@RequiresPermissions("withdraw:import")
+    @RequiresPermissions("lottery:import")
     public Result importExcel(@RequestParam @ApiParam(required = true, value = "文件路径") String filePath) {
 
         StringBuilder sb = new StringBuilder();
