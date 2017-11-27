@@ -1,5 +1,7 @@
 package com.lawu.eshop.operator.api.service;
 
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.UserGradeDTO;
@@ -23,6 +25,7 @@ public interface UserGradeService {
      *
      * @param query
      * @return
+     * @author yangqh
      */
     @RequestMapping(value = "page", method = RequestMethod.POST)
     Page<UserGradeDTO> selectPage(@RequestBody UserGradeQuery query);
@@ -32,6 +35,7 @@ public interface UserGradeService {
      *
      * @param id
      * @param param
+     * @author yangqh
      */
     @RequestMapping(value = "updateById/{id}", method = RequestMethod.POST)
     Result updateById(@PathVariable("id") Long id, @RequestBody UserGradeUpdateParam param);
@@ -41,6 +45,7 @@ public interface UserGradeService {
      *
      * @param param
      * @return
+     * @author yangqh
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     Result save(@RequestBody UserGradeUpdateParam param);
@@ -49,7 +54,17 @@ public interface UserGradeService {
      *
      * @param id
      * @return
+     * @author yangqh
      */
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     UserGradeDTO selectUserGradeById(@PathVariable("id") Long id);
+
+    /**
+     * 查询会员等级
+     *
+     * @return
+     * @author meishuquan
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "selectUserGradeList")
+    Result<List<UserGradeDTO>> selectLotteryActivityPointByGradeValue();
 }

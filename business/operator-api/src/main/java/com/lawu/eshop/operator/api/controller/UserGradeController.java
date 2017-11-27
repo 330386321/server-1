@@ -1,9 +1,11 @@
 package com.lawu.eshop.operator.api.controller;
 
 import javax.validation.Valid;
+import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.annotation.PageBody;
@@ -12,12 +14,12 @@ import com.lawu.eshop.user.dto.UserGradeDTO;
 import com.lawu.eshop.user.param.UserGradeQuery;
 import com.lawu.eshop.user.param.UserGradeUpdateParam;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +39,7 @@ public class UserGradeController extends BaseController {
      *
      * @param query
      * @return
+     * @author yangqh
      */
     @PageBody
     @ApiOperation(value = "会员等级列表查询", notes = "会员等级列表查询,[]（杨清华）", httpMethod = "POST")
@@ -49,6 +52,7 @@ public class UserGradeController extends BaseController {
     /**
      * @param param
      * @return
+     * @author yangqh
      */
     @ApiOperation(value = "会员等级新增保存", notes = "会员等级新增保存,[]（杨清华）", httpMethod = "POST")
     @RequestMapping(value = "save", method = RequestMethod.POST)
@@ -62,11 +66,11 @@ public class UserGradeController extends BaseController {
     }
 
     /**
-     *
      * @param id
      * @param param
      * @param result
      * @return
+     * @author yangqh
      */
     @ApiOperation(value = "会员等级修改保存", notes = "会员等级修改保存,[]（杨清华）", httpMethod = "POST")
     @RequestMapping(value = "updateById/{id}", method = RequestMethod.POST)
@@ -79,10 +83,29 @@ public class UserGradeController extends BaseController {
         return userGradeService.updateById(id, param);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     * @author yangqh
+     */
     @ApiOperation(value = "id查询", notes = "id查询,[]（杨清华）", httpMethod = "GET")
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @RequiresPermissions("grade:list")
     public Result<UserGradeDTO> selectUserGradeById(@PathVariable("id") Long id) {
         return successCreated(userGradeService.selectUserGradeById(id));
+    }
+
+    /**
+     *
+     * @return
+     * @author meishuquan
+     */
+    @ApiOperation(value = "查询会员等级", notes = "查询会员等级。（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    //@RequiresPermissions("log:list")
+    @RequestMapping(value = "selectLotteryActivityPointByGradeValue", method = RequestMethod.GET)
+    public Result<List<UserGradeDTO>> selectLotteryActivityPointByGradeValue() {
+        return userGradeService.selectLotteryActivityPointByGradeValue();
     }
 }
