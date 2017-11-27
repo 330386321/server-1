@@ -15,6 +15,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.SeckillActivityAttentionService;
+import com.lawu.eshop.product.param.SeckillActivityProductAttentionParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,8 +44,10 @@ public class SeckillActivityAttentionController extends BaseController {
     @Authorization
     @RequestMapping(value = "attention/{activityProductId}", method = RequestMethod.POST)
     public Result attention(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ApiParam(value = "抢购活动商品id", required = true) @PathVariable("activityProductId") Long activityProductId) {
-        Long memberId = UserUtil.getCurrentUserId(getRequest());
-        seckillActivityAttentionService.attention(activityProductId, memberId);
+        SeckillActivityProductAttentionParam param = new SeckillActivityProductAttentionParam();
+        param.setMemberId(UserUtil.getCurrentUserId(getRequest()));
+        param.setMemberNum(UserUtil.getCurrentUserNum(getRequest()));
+        seckillActivityAttentionService.attention(activityProductId, param);
         return successCreated();
     }
     

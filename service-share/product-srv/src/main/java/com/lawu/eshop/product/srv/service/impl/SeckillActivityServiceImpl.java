@@ -4,6 +4,7 @@
  */
 package com.lawu.eshop.product.srv.service.impl;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ActivityStatusEnum;
 import com.lawu.eshop.product.param.SeckillActivityPageQueryParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
+import com.lawu.eshop.product.srv.constants.PropertyConstant;
 import com.lawu.eshop.product.srv.converter.SeckillActivityConverter;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDOExample;

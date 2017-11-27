@@ -3,15 +3,18 @@ package com.lawu.eshop.product.srv.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.product.param.SeckillActivityProductAttentionParam;
 import com.lawu.eshop.product.srv.exception.DataNotExistException;
 import com.lawu.eshop.product.srv.service.SeckillActivityAttentionService;
 
@@ -42,9 +45,13 @@ public class SeckillActivityAttentionController extends BaseController {
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = "attention/{activityProductId}", method = RequestMethod.POST)
-    public Result attention(@PathVariable("activityProductId") Long activityProductId, @RequestParam("memberId") Long memberId) {
+    public Result attention(@PathVariable("activityProductId") Long activityProductId, @RequestBody @Validated SeckillActivityProductAttentionParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
         try {
-            seckillActivityAttentionService.attention(activityProductId, memberId);
+            seckillActivityAttentionService.attention(activityProductId, param);
         } catch (DataNotExistException e) {
             logger.error(e.getMessage(), e);
             return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());

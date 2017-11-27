@@ -251,7 +251,32 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
 				return;
 			}
+		} else if (MqConstant.TOPIC_PRODUCT_SRV.equals(topic)) {
+            /*
+             *  提醒用户活动即将开始
+             *
+             */
+            if (MqConstant.TAG_SECKILL_ACTIVITY_ABOUT_START_NOTICE.equals(tags)) {
+                RefundDepositDoSuccessOrFailureNotification notification = (RefundDepositDoSuccessOrFailureNotification) message;
+                /*
+                 * 发送站内信
+                 */
+                // 组装信息
+                MessageInfoParam messageInfoParam = new MessageInfoParam();
+                messageInfoParam.setRelateId(notification.getDepositId());
+                if (BusinessDepositOperEnum.REFUND_SUCCESS.getVal().equals(notification.getDepositOperEnumVal())) {
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_DEPOSIT_SUCCESS);
+                } else  if(BusinessDepositOperEnum.REFUND_FAILURE.getVal().equals(notification.getDepositOperEnumVal())){
+                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_DEPOSIT_FAIL);
+                }
 
-		}
+                messageInfoParam.setMessageParam(new MessageTempParam());
+                messageInfoParam.getMessageParam().setFailReason(notification.getFailureReason());
+
+                // 保存站内信，并且发送个推
+                messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
+                return;
+            }
+        }
 	}
 }

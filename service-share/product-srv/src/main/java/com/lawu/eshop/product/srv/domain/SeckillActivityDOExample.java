@@ -756,6 +756,66 @@ public class SeckillActivityDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsRemindIsNull() {
+            addCriterion("is_remind is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRemindIsNotNull() {
+            addCriterion("is_remind is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRemindEqualTo(Boolean value) {
+            addCriterion("is_remind =", value, "isRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRemindNotEqualTo(Boolean value) {
+            addCriterion("is_remind <>", value, "isRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRemindGreaterThan(Boolean value) {
+            addCriterion("is_remind >", value, "isRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRemindGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_remind >=", value, "isRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRemindLessThan(Boolean value) {
+            addCriterion("is_remind <", value, "isRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRemindLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_remind <=", value, "isRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRemindIn(List<Boolean> values) {
+            addCriterion("is_remind in", values, "isRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRemindNotIn(List<Boolean> values) {
+            addCriterion("is_remind not in", values, "isRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRemindBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_remind between", value1, value2, "isRemind");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsRemindNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_remind not between", value1, value2, "isRemind");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

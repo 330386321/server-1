@@ -11,7 +11,7 @@ import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
  * 
  * @author jiangxinjun
  * @createDate 2017年11月23日
- * @updateDate 2017年11月23日
+ * @updateDate 2017年11月27日
  */
 public interface SeckillActivityService {
 
