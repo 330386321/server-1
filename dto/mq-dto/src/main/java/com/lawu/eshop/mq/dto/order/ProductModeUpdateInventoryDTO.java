@@ -3,18 +3,26 @@ package com.lawu.eshop.mq.dto.order;
 import java.io.Serializable;
 
 /**
- * @author Sunny
- * @date 2017/4/6
+ * 更新库存DTO
+ * 
+ * @author jiangxinjun
+ * @createDate 2017年11月24日
+ * @updateDate 2017年11月24日
  */
 public class ProductModeUpdateInventoryDTO implements Serializable {
+    
+    private static final long serialVersionUID = 2505963000435878237L;
 
-	private static final long serialVersionUID = 566121492322667451L;
-
-	/**
+    /**
 	 * 商品模型id
 	 */
 	private Long prodecutModelId;
-
+	
+    /**
+     * 活动商品型号id
+     */
+    private Long activityProductModelId;
+	
 	/**
 	 * 数量
 	 */
@@ -27,8 +35,16 @@ public class ProductModeUpdateInventoryDTO implements Serializable {
 	public void setProdecutModelId(Long prodecutModelId) {
 		this.prodecutModelId = prodecutModelId;
 	}
+	
+	public Long getActivityProductModelId() {
+        return activityProductModelId;
+    }
 
-	public Integer getQuantity() {
+    public void setActivityProductModelId(Long activityProductModelId) {
+        this.activityProductModelId = activityProductModelId;
+    }
+
+    public Integer getQuantity() {
 		return quantity;
 	}
 

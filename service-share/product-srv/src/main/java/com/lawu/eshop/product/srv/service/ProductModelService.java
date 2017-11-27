@@ -8,8 +8,10 @@ import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessIncreaseSalesNotification;
 import com.lawu.eshop.mq.dto.order.reply.ShoppingOrderCreateOrderReply;
 import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
+import com.lawu.eshop.product.srv.bo.SeckillActivityProductModelInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.bo.productModelDataBO;
+import com.lawu.eshop.product.srv.exception.DataNotExistException;
 
 /**
  * 
@@ -88,5 +90,17 @@ public interface ProductModelService {
 	 * @date 2017/11/23
 	 */
 	List<productModelDataBO> queryProductModel(Long productId);
+	
+	/**
+	 * 根据抢购活动商品型号id
+	 * 查询抢购活动所需要的商品型号数据
+	 * 
+	 * @param activityProductModelId 抢购活动商品型号id
+	 * @return
+	 * @author jiangxinjun
+	 * @createDate 2017年11月24日
+	 * @updateDate 2017年11月24日
+	 */
+	SeckillActivityProductModelInfoBO seckillActivityProductModel(Long activityProductModelId) throws DataNotExistException;
 
 }

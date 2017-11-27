@@ -51,7 +51,7 @@ CREATE TABLE `seckill_activity_product_model` (
 
 use eshop_product;
 CREATE TABLE `seckill_activity_attention` (
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `activity_id` bigint(20) unsigned NOT NULL COMMENT '抢购活动id',
   `product_id` bigint(20) unsigned NOT NULL COMMENT '商品id',
   `member_id` bigint(20) unsigned NOT NULL COMMENT '用户id',

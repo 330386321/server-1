@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiResponse;
  */
 @Api(tags = "seckillActivity")
 @RestController
-@RequestMapping(path = "seckillActivity/")
+@RequestMapping(value = "seckillActivity/")
 public class SeckillActivityController extends BaseController {
     
     @Autowired
@@ -37,7 +37,7 @@ public class SeckillActivityController extends BaseController {
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "获取当天的所有活动", notes = "获取当天的所有活动[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(path = "thatday/list", method = RequestMethod.GET)
+    @RequestMapping(value = "thatday/list", method = RequestMethod.GET)
     public Result<List<SeckillActivityThatDayDTO>> thatDayList() {
         return successGet(seckillActivityService.thatDayList());
     }
@@ -46,7 +46,7 @@ public class SeckillActivityController extends BaseController {
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "获取最近一天的所有活动", notes = "获取最近一天的所有活动[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(path = "recently/list", method = RequestMethod.GET)
+    @RequestMapping(value = "recently/list", method = RequestMethod.GET)
     public Result<List<SeckillActivityThatDayDTO>> recentlyList() {
         return successGet(seckillActivityService.recentlyList());
     }

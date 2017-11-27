@@ -81,6 +81,8 @@ public class ShoppingOrderConverter {
 		rtn.setMerchantStoreRegionPath(param.getMerchantStoreRegionPath());
 		rtn.setMessage(param.getMessage());
 		rtn.setOrderTotalPrice(param.getOrderTotalPrice());
+		rtn.setActivityId(param.getActivityId());
+		rtn.setActivityProductId(param.getActivityProductId());
 		
 		List<Long> shoppingCartIdList = new ArrayList<>();
 		for (ShoppingOrderSettlementItemParam item : param.getItems()) {

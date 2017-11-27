@@ -5,11 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.lawu.eshop.product.constant.ProductStatusEnum;
+import com.lawu.eshop.product.dto.SeckillActivityProductModelInfoDTO;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
+import com.lawu.eshop.product.srv.bo.SeckillActivityProductModelInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductModelDO;
+import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
+import com.lawu.eshop.product.srv.domain.SeckillActivityProductDO;
+import com.lawu.eshop.product.srv.domain.SeckillActivityProductModelDO;
 
 /**
  * 购物车产品型号转换器
@@ -19,6 +27,8 @@ import com.lawu.eshop.product.srv.domain.ProductModelDO;
  */
 public class ShoppingCartProductModelConverter {
 	
+    private static Logger logger = LoggerFactory.getLogger(ShoppingCartProductModelConverter.class);
+    
 	/**
 	 * 隐藏默认的构造函数
 	 */
@@ -34,45 +44,81 @@ public class ShoppingCartProductModelConverter {
 	 * @return
 	 */
 	public static ShoppingCartProductModelBO convert(ProductModelDO productModelDO, ProductDO productDO) {
-		ShoppingCartProductModelBO rtn = null;
-		if (productModelDO == null) {
-			return rtn;
-		}
-
-		rtn = new ShoppingCartProductModelBO();
-		rtn.setId(productModelDO.getId());
-		rtn.setInventory(productModelDO.getInventory());
-		rtn.setMerchantId(productModelDO.getMerchantId());
-		rtn.setName(productModelDO.getName());
-		rtn.setOriginalPrice(productModelDO.getOriginalPrice());
-		rtn.setPrice(productModelDO.getPrice());
-		rtn.setProductId(productModelDO.getProductId());
-		
-		if (productDO != null) {
-			rtn.setProductName(productDO.getName());
-			rtn.setFeatureImage(productDO.getFeatureImage());
-			if (ProductStatusEnum.PRODUCT_STATUS_UP.getVal().equals(productDO.getStatus())) {
-				if (productModelDO.getStatus()) {
-					rtn.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP);
-				} else {
-					rtn.setGmtDown(productModelDO.getGmtModified());
-					rtn.setStatus(ProductStatusEnum.PRODUCT_STATUS_DEL);
-				}
-			} else {
-				rtn.setStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
-				if (ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal().equals(productDO.getStatus())) {
-					rtn.setGmtDown(productDO.getGmtDown());
-				} else {
-					rtn.setGmtDown(productDO.getGmtModified());
-				}
-			}
-			
-			rtn.setIsAllowRefund(productDO.getIsAllowRefund());
-		}
-
-		return rtn;
+		return convert(productModelDO, productDO, ShoppingCartProductModelBO.class);
 	}
 	
+	/**
+	 * 
+	 * @param productModelDO
+	 * @param productDO
+	 * @param clazz 需要转换的类型
+	 * @return
+	 * @author jiangxinjun
+	 * @createDate 2017年11月24日
+	 * @updateDate 2017年11月24日
+	 */
+    public static ShoppingCartProductModelBO convert(ProductModelDO productModelDO, ProductDO productDO, Class<? extends ShoppingCartProductModelBO> clazz) {
+        ShoppingCartProductModelBO rtn = null;
+        if (productModelDO == null) {
+            return rtn;
+        }
+        try {
+            rtn = clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            logger.error(e.getMessage(), e);
+            return rtn;
+        }
+        rtn.setId(productModelDO.getId());
+        rtn.setInventory(productModelDO.getInventory());
+        rtn.setMerchantId(productModelDO.getMerchantId());
+        rtn.setName(productModelDO.getName());
+        rtn.setOriginalPrice(productModelDO.getOriginalPrice());
+        rtn.setPrice(productModelDO.getPrice());
+        rtn.setProductId(productModelDO.getProductId());
+        if (productDO != null) {
+            rtn.setProductName(productDO.getName());
+            rtn.setFeatureImage(productDO.getFeatureImage());
+            if (ProductStatusEnum.PRODUCT_STATUS_UP.getVal().equals(productDO.getStatus())) {
+                if (productModelDO.getStatus()) {
+                    rtn.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP);
+                } else {
+                    rtn.setGmtDown(productModelDO.getGmtModified());
+                    rtn.setStatus(ProductStatusEnum.PRODUCT_STATUS_DEL);
+                }
+            } else {
+                rtn.setStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
+                if (ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal().equals(productDO.getStatus())) {
+                    rtn.setGmtDown(productDO.getGmtDown());
+                } else {
+                    rtn.setGmtDown(productDO.getGmtModified());
+                }
+            }
+            rtn.setIsAllowRefund(productDO.getIsAllowRefund());
+        }
+        return rtn;
+    }
+	
+    /**
+     * 
+     * @param productModelDO
+     * @param productDO
+     * @param seckillActivityDO
+     * @param seckillActivityProductDO
+     * @param seckillActivityProductModelDO
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月24日
+     * @updateDate 2017年11月24日
+     */
+    public static SeckillActivityProductModelInfoBO convert(ProductModelDO productModelDO, ProductDO productDO, SeckillActivityDO seckillActivityDO, SeckillActivityProductDO seckillActivityProductDO, SeckillActivityProductModelDO seckillActivityProductModelDO) {
+        SeckillActivityProductModelInfoBO rtn = (SeckillActivityProductModelInfoBO) convert(productModelDO, productDO, SeckillActivityProductModelInfoBO.class);
+        rtn.setInventory(seckillActivityProductModelDO.getLeftCount());
+        rtn.setActivityId(seckillActivityDO.getId());
+        rtn.setActivityProductId(seckillActivityProductDO.getId());
+        rtn.setPrice(seckillActivityDO.getSellingPrice());
+        return rtn;
+    }
+    
 	/**
 	 * BOS转换
 	 * 
@@ -113,7 +159,6 @@ public class ShoppingCartProductModelConverter {
 		if (shoppingCartProductModelBO == null) {
 			return rtn;
 		}
-
 		rtn = new ShoppingCartProductModelDTO();
 		rtn.setFeatureImage(shoppingCartProductModelBO.getFeatureImage());
 		rtn.setId(shoppingCartProductModelBO.getId());
@@ -127,9 +172,62 @@ public class ShoppingCartProductModelConverter {
 		rtn.setProductName(shoppingCartProductModelBO.getProductName());
 		rtn.setStatus(shoppingCartProductModelBO.getStatus());
 		rtn.setGmtDown(shoppingCartProductModelBO.getGmtDown());
-
 		return rtn;
 	}
+	
+	/**
+	 * 
+	 * @param shoppingCartProductModelBO
+	 * @param clazz 需要转换的类
+	 * @return
+	 * @author jiangxinjun
+	 * @createDate 2017年11月24日
+	 * @updateDate 2017年11月24日
+	 */
+	public static ShoppingCartProductModelDTO convert(ShoppingCartProductModelBO shoppingCartProductModelBO, Class<? extends ShoppingCartProductModelDTO> clazz) {
+        ShoppingCartProductModelDTO rtn = null;
+        if (shoppingCartProductModelBO == null) {
+            return rtn;
+        }
+        try {
+            rtn = clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            logger.error(e.getMessage(), e);
+            return rtn;
+        }
+        rtn.setFeatureImage(shoppingCartProductModelBO.getFeatureImage());
+        rtn.setId(shoppingCartProductModelBO.getId());
+        rtn.setInventory(shoppingCartProductModelBO.getInventory());
+        rtn.setIsAllowRefund(shoppingCartProductModelBO.getIsAllowRefund());
+        rtn.setMerchantId(shoppingCartProductModelBO.getMerchantId());
+        rtn.setName(shoppingCartProductModelBO.getName());
+        rtn.setOriginalPrice(shoppingCartProductModelBO.getOriginalPrice());
+        rtn.setPrice(shoppingCartProductModelBO.getPrice());
+        rtn.setProductId(shoppingCartProductModelBO.getProductId());
+        rtn.setProductName(shoppingCartProductModelBO.getProductName());
+        rtn.setStatus(shoppingCartProductModelBO.getStatus());
+        rtn.setGmtDown(shoppingCartProductModelBO.getGmtDown());
+        return rtn;
+    }
+	
+	/**
+	 * 
+	 * @param seckillActivityProductModelInfoBO
+	 * @return
+	 * @author jiangxinjun
+	 * @createDate 2017年11月24日
+	 * @updateDate 2017年11月24日
+	 */
+	public static SeckillActivityProductModelInfoDTO convert(SeckillActivityProductModelInfoBO seckillActivityProductModelInfoBO) {
+	    SeckillActivityProductModelInfoDTO rtn = null;
+        if (seckillActivityProductModelInfoBO == null) {
+            return rtn;
+        }
+        rtn = (SeckillActivityProductModelInfoDTO) convert(seckillActivityProductModelInfoBO, SeckillActivityProductModelInfoDTO.class);
+        rtn.setActivityId(seckillActivityProductModelInfoBO.getActivityId());
+        rtn.setActivityProductId(seckillActivityProductModelInfoBO.getActivityProductId());
+        return rtn;
+    }
 	
 	/**
 	 * DTOS转换

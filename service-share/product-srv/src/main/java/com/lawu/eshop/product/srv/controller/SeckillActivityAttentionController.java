@@ -23,7 +23,7 @@ import com.lawu.eshop.product.srv.service.SeckillActivityAttentionService;
  * @updateDate 2017年11月24日
  */
 @RestController
-@RequestMapping(path = "seckillActivityAttention/")
+@RequestMapping(value = "seckillActivityAttention/")
 public class SeckillActivityAttentionController extends BaseController {
     
     private static Logger logger = LoggerFactory.getLogger(SeckillActivityAttentionController.class);
@@ -41,7 +41,7 @@ public class SeckillActivityAttentionController extends BaseController {
      * @updateDate 2017年11月24日
      */
     @SuppressWarnings("rawtypes")
-    @RequestMapping(path = "attention/{activityProductId}", method = RequestMethod.POST)
+    @RequestMapping(value = "attention/{activityProductId}", method = RequestMethod.POST)
     public Result attention(@PathVariable("activityProductId") Long activityProductId, @RequestParam("memberId") Long memberId) {
         try {
             seckillActivityAttentionService.attention(activityProductId, memberId);

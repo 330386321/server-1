@@ -29,6 +29,11 @@ public class ShoppingOrderSettlementItemParam {
 	 * 商品型号id
 	 */
 	private Long productModelId;
+	
+    /**
+     * 活动商品型号id
+     */
+    private Long activityProductModelId;
 
 	/**
 	 * 商品型号名称
@@ -92,7 +97,15 @@ public class ShoppingOrderSettlementItemParam {
 		this.productModelId = productModelId;
 	}
 
-	public String getProductModelName() {
+	public Long getActivityProductModelId() {
+        return activityProductModelId;
+    }
+
+    public void setActivityProductModelId(Long activityProductModelId) {
+        this.activityProductModelId = activityProductModelId;
+    }
+
+    public String getProductModelName() {
 		return productModelName;
 	}
 

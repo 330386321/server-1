@@ -17,11 +17,14 @@ import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessIncreaseSalesNotification;
 import com.lawu.eshop.mq.dto.order.reply.ShoppingOrderCreateOrderReply;
 import com.lawu.eshop.mq.dto.product.CheckLessInventoryResultEnum;
+import com.lawu.eshop.product.constant.ActivityProductStatusEnum;
+import com.lawu.eshop.product.constant.ActivityStatusEnum;
 import com.lawu.eshop.product.constant.ProductModelInventoryTypeEnum;
 import com.lawu.eshop.product.constant.ProductNumFlagEnum;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.srv.ProductSrvConfig;
 import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
+import com.lawu.eshop.product.srv.bo.SeckillActivityProductModelInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.bo.productModelDataBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
@@ -32,21 +35,28 @@ import com.lawu.eshop.product.srv.domain.ProductModelDO;
 import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
 import com.lawu.eshop.product.srv.domain.ProductModelInventoryDO;
 import com.lawu.eshop.product.srv.domain.ProductModelInventoryDOExample;
+import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
+import com.lawu.eshop.product.srv.domain.SeckillActivityProductDO;
+import com.lawu.eshop.product.srv.domain.SeckillActivityProductModelDO;
 import com.lawu.eshop.product.srv.domain.extend.ProductModelNumsView;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
-import com.lawu.eshop.product.srv.mapper.ProductCategoryeDOMapper;
+import com.lawu.eshop.product.srv.exception.DataNotExistException;
 import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
-import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelInventoryDOMapper;
+import com.lawu.eshop.product.srv.mapper.SeckillActivityDOMapper;
+import com.lawu.eshop.product.srv.mapper.SeckillActivityProductDOMapper;
+import com.lawu.eshop.product.srv.mapper.SeckillActivityProductModelDOMapper;
 import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.mapper.extend.ProductModelDOMapperExtend;
+import com.lawu.eshop.product.srv.mapper.extend.SeckillActivityProductDOExtendMapper;
+import com.lawu.eshop.product.srv.mapper.extend.SeckillActivityProductModelDOExtendMapper;
 import com.lawu.eshop.product.srv.service.ProductModelService;
 import com.lawu.eshop.solr.service.SolrService;
 
 @Service
 public class ProductModelServiceImpl implements ProductModelService {
-
+    
 	@Autowired
 	private ProductDOMapper productDOMapper;
 	
@@ -61,9 +71,21 @@ public class ProductModelServiceImpl implements ProductModelService {
 	
 	@Autowired
 	private ProductModelInventoryDOMapper productModelInventoryDOMapper;
-
-	@Autowired
-	private ProductCategoryeDOMapper productCategoryeDOMapper;
+	
+    @Autowired
+    private SeckillActivityProductModelDOMapper seckillActivityProductModelDOMapper;
+    
+    @Autowired
+    private SeckillActivityProductDOMapper seckillActivityProductDOMapper;
+    
+    @Autowired
+    private SeckillActivityDOMapper seckillActivityDOMapper;
+    
+    @Autowired
+    private SeckillActivityProductDOExtendMapper seckillActivityProductDOExtendMapper;
+    
+    @Autowired
+    private SeckillActivityProductModelDOExtendMapper seckillActivityProductModelDOExtendMapper;
 
 	@Autowired
 	private ProductSrvConfig productSrvConfig;
@@ -126,64 +148,97 @@ public class ProductModelServiceImpl implements ProductModelService {
 	@Override
 	public void lessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification) {
 		for (ProductModeUpdateInventoryDTO param : shoppingOrderCreateOrderNotification.getParams()) {
-			/*
-	    	 * 可能重复收到MQ消息
-	    	 * 需要实现幂等性
-	    	 */
-			ProductModelInventoryDOExample productModelInventoryDOExample = new ProductModelInventoryDOExample();
-			ProductModelInventoryDOExample.Criteria criteria = productModelInventoryDOExample.createCriteria();
-			criteria.andShoppingOrderIdEqualTo(shoppingOrderCreateOrderNotification.getShoppingOrderId());
-			criteria.andTypeEqualTo(ProductModelInventoryTypeEnum.CREATE_ORDER.getValue());
-			criteria.andProductModelIdEqualTo(param.getProdecutModelId());
-			int count = productModelInventoryDOMapper.countByExample(productModelInventoryDOExample);
-			// 如果记录已经存在。继续循环
-			if (count > 0) {
-				continue;
-			}
-			// 获取商品型号之前的库存数据
-			ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(param.getProdecutModelId());
-			// 获取商品库存信息
-			ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
-			/*
-			 *  判断商品是否有效
-			 *  商品状态是否是上架状态
-			 *  商品型号状态是否正常
-			 */
-			if (!ProductStatusEnum.PRODUCT_STATUS_UP.getVal().equals(productDO.getStatus()) || !productModelDO.getStatus()) {
-				return;
-			}
-			// 判断库存
-			if (productModelDO.getInventory() < param.getQuantity()) {
-				return;
-			}
-			// 判断库存
-			if (productDO.getTotalInventory() < param.getQuantity()) {
-				return;
-			}
-			// 减商品型号库存
-			ProductModelNumsView productModelNumsView = new ProductModelNumsView();
-			productModelNumsView.setFlag(ProductNumFlagEnum.MINUS.getValue());
-			productModelNumsView.setGmtModified(new Date());
-			productModelNumsView.setNum(param.getQuantity());
-			productModelNumsView.setProductModelId(param.getProdecutModelId());
-			productModelDOMapperExtend.editInventory(productModelNumsView);
-			// 保存库存流程记录
-			ProductModelInventoryDO productModelInventoryDO = new ProductModelInventoryDO();
-			productModelInventoryDO.setProductModelId(param.getProdecutModelId());
-			productModelInventoryDO.setQuantity(param.getQuantity());
-			productModelInventoryDO.setShoppingOrderId(shoppingOrderCreateOrderNotification.getShoppingOrderId());
-			// 类型为创建订单
-			productModelInventoryDO.setType(ProductModelInventoryTypeEnum.CREATE_ORDER.getValue());
-			productModelInventoryDO.setGmtCreate(new Date());
-			productModelInventoryDO.setGmtModified(new Date());
-			productModelInventoryDOMapper.insertSelective(productModelInventoryDO);
-			// 减商品库存
-			ProductNumsView productNumsView = new ProductNumsView();
-			productNumsView.setFlag(ProductNumFlagEnum.MINUS.getValue());
-			productNumsView.setGmtModified(new Date());
-			productNumsView.setNum(param.getQuantity());
-			productNumsView.setProductId(productModelDO.getProductId());
-			productDOMapperExtend.editTotalInventory(productNumsView);
+		    // 根据ActivityProductModelId是否为空判断库存记录的类型
+		    ProductModelInventoryTypeEnum type = ProductModelInventoryTypeEnum.CREATE_ORDER;
+		    if (param.getActivityProductModelId() != null) {
+		        type = ProductModelInventoryTypeEnum.CREATE_SECKILL_ACTIVITY_ORDER;
+		    }
+            /*
+             * 可能重复收到MQ消息
+             * 需要实现幂等性
+             */
+            ProductModelInventoryDOExample productModelInventoryDOExample = new ProductModelInventoryDOExample();
+            ProductModelInventoryDOExample.Criteria criteria = productModelInventoryDOExample.createCriteria();
+            criteria.andShoppingOrderIdEqualTo(shoppingOrderCreateOrderNotification.getShoppingOrderId());
+            criteria.andTypeEqualTo(type.getValue());
+            criteria.andProductModelIdEqualTo(param.getProdecutModelId());
+            int count = productModelInventoryDOMapper.countByExample(productModelInventoryDOExample);
+            // 如果记录已经存在。继续循环
+            if (count > 0) {
+                continue;
+            }
+		    if (param.getActivityProductModelId() == null) {
+    			// 获取商品型号之前的库存数据
+    			ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(param.getProdecutModelId());
+    			// 获取商品库存信息
+    			ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
+    			/*
+    			 *  判断商品是否有效
+    			 *  商品状态是否是上架状态
+    			 *  商品型号状态是否正常
+    			 */
+    			if (!ProductStatusEnum.PRODUCT_STATUS_UP.getVal().equals(productDO.getStatus()) || !productModelDO.getStatus()) {
+    				return;
+    			}
+    			// 判断库存
+    			if (productModelDO.getInventory() < param.getQuantity()) {
+    				return;
+    			}
+    			// 判断库存
+    			if (productDO.getTotalInventory() < param.getQuantity()) {
+    				return;
+    			}
+    			// 减商品型号库存
+    			ProductModelNumsView productModelNumsView = new ProductModelNumsView();
+    			productModelNumsView.setFlag(ProductNumFlagEnum.MINUS.getValue());
+    			productModelNumsView.setGmtModified(new Date());
+    			productModelNumsView.setNum(param.getQuantity());
+    			productModelNumsView.setProductModelId(param.getProdecutModelId());
+    			productModelDOMapperExtend.editInventory(productModelNumsView);
+    			// 减商品库存
+    			ProductNumsView productNumsView = new ProductNumsView();
+    			productNumsView.setFlag(ProductNumFlagEnum.MINUS.getValue());
+    			productNumsView.setGmtModified(new Date());
+    			productNumsView.setNum(param.getQuantity());
+    			productNumsView.setProductId(productModelDO.getProductId());
+    			productDOMapperExtend.editTotalInventory(productNumsView);
+		    } else {
+		        // 获取商品型号之前的库存数据
+		        SeckillActivityProductModelDO seckillActivityProductModelDO = seckillActivityProductModelDOMapper.selectByPrimaryKey(param.getActivityProductModelId());
+                // 获取商品库存信息
+		        SeckillActivityProductDO seckillActivityProductDO = seckillActivityProductDOMapper.selectByPrimaryKey(seckillActivityProductModelDO.getActivityProductId());
+                // 判断库存
+                if (seckillActivityProductModelDO.getLeftCount() < param.getQuantity()) {
+                    return;
+                }
+                // 判断库存
+                if (seckillActivityProductDO.getLeftCount() < param.getQuantity()) {
+                    return;
+                }
+                // 减商品型号库存
+                ProductModelNumsView productModelNumsView = new ProductModelNumsView();
+                productModelNumsView.setFlag(ProductNumFlagEnum.MINUS.getValue());
+                productModelNumsView.setGmtModified(new Date());
+                productModelNumsView.setNum(param.getQuantity());
+                productModelNumsView.setProductModelId(seckillActivityProductModelDO.getId());
+                seckillActivityProductModelDOExtendMapper.editInventory(productModelNumsView);
+                // 减商品库存
+                ProductNumsView productNumsView = new ProductNumsView();
+                productNumsView.setFlag(ProductNumFlagEnum.MINUS.getValue());
+                productNumsView.setGmtModified(new Date());
+                productNumsView.setNum(param.getQuantity());
+                productNumsView.setProductId(seckillActivityProductDO.getId());
+                seckillActivityProductDOExtendMapper.editTotalInventory(productNumsView);
+		    }
+            // 保存库存流程记录
+            ProductModelInventoryDO productModelInventoryDO = new ProductModelInventoryDO();
+            productModelInventoryDO.setProductModelId(param.getProdecutModelId());
+            productModelInventoryDO.setQuantity(param.getQuantity());
+            productModelInventoryDO.setShoppingOrderId(shoppingOrderCreateOrderNotification.getShoppingOrderId());
+            productModelInventoryDO.setType(type.getValue());
+            productModelInventoryDO.setGmtCreate(new Date());
+            productModelInventoryDO.setGmtModified(new Date());
+            productModelInventoryDOMapper.insertSelective(productModelInventoryDO);
 		}
 	}
 	
@@ -198,37 +253,65 @@ public class ProductModelServiceImpl implements ProductModelService {
 	@Override
 	public void releaseInventory(ShoppingOrderCancelOrderNotification shoppingOrderCancelOrderNotification) {
 		for (ProductModeUpdateInventoryDTO param : shoppingOrderCancelOrderNotification.getParams()) {
-			// 获取商品型号数据
-			ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(param.getProdecutModelId());
-			
-			// 释放商品型号库存
-			ProductModelNumsView productModelNumsView = new ProductModelNumsView();
-			productModelNumsView.setFlag(ProductNumFlagEnum.ADD.getValue());
-			productModelNumsView.setGmtModified(new Date());
-			productModelNumsView.setNum(param.getQuantity());
-			productModelNumsView.setProductModelId(param.getProdecutModelId());
-			productModelDOMapperExtend.editInventory(productModelNumsView);
-			
-			// 保存库存流程记录
-			ProductModelInventoryDO productModelInventoryDO = new ProductModelInventoryDO();
-			productModelInventoryDO.setProductModelId(param.getProdecutModelId());
-			productModelInventoryDO.setQuantity(param.getQuantity());
-			productModelInventoryDO.setShoppingOrderId(shoppingOrderCancelOrderNotification.getShoppingOrderId());
-			// 类型为创建订单
-			productModelInventoryDO.setType(ProductModelInventoryTypeEnum.CANCEL_ORDER.getValue());
-			productModelInventoryDO.setGmtCreate(new Date());
-			productModelInventoryDO.setGmtModified(new Date());
-			productModelInventoryDOMapper.insertSelective(productModelInventoryDO);
-			
-			/*
-			 * 释放商品总库存
-			 */
-			ProductNumsView productNumsView = new ProductNumsView();
-			productNumsView.setFlag(ProductNumFlagEnum.ADD.getValue());
-			productNumsView.setGmtModified(new Date());
-			productNumsView.setNum(param.getQuantity());
-			productNumsView.setProductId(productModelDO.getProductId());
-			productDOMapperExtend.editTotalInventory(productNumsView);
+		    // 根据ActivityProductModelId是否为空判断库存记录的类型
+            ProductModelInventoryTypeEnum type = ProductModelInventoryTypeEnum.CREATE_ORDER;
+            if (param.getActivityProductModelId() != null) {
+                type = ProductModelInventoryTypeEnum.CREATE_SECKILL_ACTIVITY_ORDER;
+            }
+            
+            if (param.getActivityProductModelId() == null) {
+    			// 获取商品型号数据
+    			ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(param.getProdecutModelId());
+    			
+    			// 释放商品型号库存
+    			ProductModelNumsView productModelNumsView = new ProductModelNumsView();
+    			productModelNumsView.setFlag(ProductNumFlagEnum.ADD.getValue());
+    			productModelNumsView.setGmtModified(new Date());
+    			productModelNumsView.setNum(param.getQuantity());
+    			productModelNumsView.setProductModelId(param.getProdecutModelId());
+    			productModelDOMapperExtend.editInventory(productModelNumsView);
+    			
+    			/*
+    			 * 释放商品总库存
+    			 */
+    			ProductNumsView productNumsView = new ProductNumsView();
+    			productNumsView.setFlag(ProductNumFlagEnum.ADD.getValue());
+    			productNumsView.setGmtModified(new Date());
+    			productNumsView.setNum(param.getQuantity());
+    			productNumsView.setProductId(productModelDO.getProductId());
+    			productDOMapperExtend.editTotalInventory(productNumsView);
+            } else {
+                // 获取商品型号数据
+                SeckillActivityProductModelDO seckillActivityProductModelDO = seckillActivityProductModelDOMapper.selectByPrimaryKey(param.getActivityProductModelId());
+                
+                // 释放商品型号库存
+                ProductModelNumsView productModelNumsView = new ProductModelNumsView();
+                productModelNumsView.setFlag(ProductNumFlagEnum.ADD.getValue());
+                productModelNumsView.setGmtModified(new Date());
+                productModelNumsView.setNum(param.getQuantity());
+                productModelNumsView.setProductModelId(param.getProdecutModelId());
+                seckillActivityProductModelDOExtendMapper.editInventory(productModelNumsView);
+                
+                /*
+                 * 释放商品总库存
+                 */
+                ProductNumsView productNumsView = new ProductNumsView();
+                productNumsView.setFlag(ProductNumFlagEnum.ADD.getValue());
+                productNumsView.setGmtModified(new Date());
+                productNumsView.setNum(param.getQuantity());
+                productNumsView.setProductId(seckillActivityProductModelDO.getActivityProductId());
+                seckillActivityProductDOExtendMapper.editTotalInventory(productNumsView);
+            }
+	        // 保存库存流程记录
+            ProductModelInventoryDO productModelInventoryDO = new ProductModelInventoryDO();
+            productModelInventoryDO.setProductModelId(param.getProdecutModelId());
+            productModelInventoryDO.setQuantity(param.getQuantity());
+            productModelInventoryDO.setShoppingOrderId(shoppingOrderCancelOrderNotification.getShoppingOrderId());
+            // 类型为创建订单
+            productModelInventoryDO.setType(type.getValue());
+            productModelInventoryDO.setGmtCreate(new Date());
+            productModelInventoryDO.setGmtModified(new Date());
+            productModelInventoryDOMapper.insertSelective(productModelInventoryDO);
 		}
 	}
 
@@ -307,6 +390,11 @@ public class ProductModelServiceImpl implements ProductModelService {
 	public ShoppingOrderCreateOrderReply checkLessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification) {
 		ShoppingOrderCreateOrderReply rtn = new ShoppingOrderCreateOrderReply();
 		for (ProductModeUpdateInventoryDTO param : shoppingOrderCreateOrderNotification.getParams()) {
+		    // 根据ActivityProductModelId是否为空判断库存记录的类型
+            ProductModelInventoryTypeEnum type = ProductModelInventoryTypeEnum.CREATE_ORDER;
+            if (param.getActivityProductModelId() != null) {
+                type = ProductModelInventoryTypeEnum.CREATE_SECKILL_ACTIVITY_ORDER;
+            }
 			/*
 	    	 * 可能重复收到MQ消息
 	    	 * 需要实现幂等性
@@ -314,7 +402,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			ProductModelInventoryDOExample productModelInventoryDOExample = new ProductModelInventoryDOExample();
 			ProductModelInventoryDOExample.Criteria criteria = productModelInventoryDOExample.createCriteria();
 			criteria.andShoppingOrderIdEqualTo(shoppingOrderCreateOrderNotification.getShoppingOrderId());
-			criteria.andTypeEqualTo(ProductModelInventoryTypeEnum.CREATE_ORDER.getValue());
+			criteria.andTypeEqualTo(type.getValue());
 			criteria.andProductModelIdEqualTo(param.getProdecutModelId());
 			int count = productModelInventoryDOMapper.countByExample(productModelInventoryDOExample);
 			// 如果记录已经存在。继续循环
@@ -330,7 +418,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			 *  商品状态是否是上架状态
 			 *  商品型号状态是否正常
 			 */
-			if (!ProductStatusEnum.PRODUCT_STATUS_UP.getVal().equals(productDO.getStatus()) || !productModelDO.getStatus()) {
+			if (param.getActivityProductModelId() != null && (!ProductStatusEnum.PRODUCT_STATUS_UP.getVal().equals(productDO.getStatus()) || !productModelDO.getStatus())) {
 				rtn.setResult(CheckLessInventoryResultEnum.PRODUCT_HAS_EXPIRED);
 			}
 			// 判断库存
@@ -364,4 +452,31 @@ public class ProductModelServiceImpl implements ProductModelService {
 		
 		return modelList;
 	}
+	
+    @Override
+    public SeckillActivityProductModelInfoBO seckillActivityProductModel(Long activityProductModelId) throws DataNotExistException {
+        SeckillActivityProductModelDO seckillActivityProductModelDO = seckillActivityProductModelDOMapper.selectByPrimaryKey(activityProductModelId);
+        if (seckillActivityProductModelDO == null) {
+            throw new DataNotExistException("抢购活动商品型号数据不存在");
+        }
+        SeckillActivityProductDO seckillActivityProductDO = seckillActivityProductDOMapper.selectByPrimaryKey(seckillActivityProductModelDO.getActivityProductId());
+        // 如果活动商品未审核也提示数据不存在
+        if (seckillActivityProductDO == null || !ActivityProductStatusEnum.AUDITED.getValue().equals(seckillActivityProductDO.getStatus())) {
+            throw new DataNotExistException("抢购活动商品数据不存在");
+        }
+        SeckillActivityDO seckillActivityDO = seckillActivityDOMapper.selectByPrimaryKey(seckillActivityProductDO.getActivityId());
+        // 如果活动不是进行中也提示数据不存在
+        if (seckillActivityDO == null || !ActivityStatusEnum.PROCESSING.getValue().equals(seckillActivityDO.getActivityStatus())) {
+            throw new DataNotExistException("抢购活动数据不存在");
+        }
+        ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(seckillActivityProductModelDO.getProductModelId());
+        if (productModelDO == null) {
+            throw new DataNotExistException("商品型号数据不存在");
+        }
+        ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
+        if (productDO == null) {
+            throw new DataNotExistException("商品数据不存在");
+        }
+        return ShoppingCartProductModelConverter.convert(productModelDO, productDO, seckillActivityDO, seckillActivityProductDO, seckillActivityProductModelDO);
+    }
 }

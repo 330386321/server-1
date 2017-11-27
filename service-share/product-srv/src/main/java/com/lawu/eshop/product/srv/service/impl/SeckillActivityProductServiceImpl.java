@@ -80,6 +80,9 @@ public class SeckillActivityProductServiceImpl implements SeckillActivityProduct
         SeckillActivityProductModelDOExample example = new SeckillActivityProductModelDOExample();
         example.createCriteria().andActivityProductIdEqualTo(id);
         List<SeckillActivityProductModelDO> productModelList = seckillActivityProductModelDOMapper.selectByExample(example);
+        if (productModelList == null || productModelList.isEmpty()) {
+            throw new DataNotExistException("抢购活动商品型号数据不存在");
+        }
         return SeckillActivityProductConverter.convert(seckillActivityDO, seckillActivityProductDO, productModelList);
     }
 

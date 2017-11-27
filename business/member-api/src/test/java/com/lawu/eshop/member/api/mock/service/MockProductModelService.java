@@ -1,17 +1,19 @@
 package com.lawu.eshop.member.api.mock.service;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.member.api.service.ProductModelService;
-import com.lawu.eshop.product.constant.ProductStatusEnum;
-import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.member.api.service.ProductModelService;
+import com.lawu.eshop.product.constant.ProductStatusEnum;
+import com.lawu.eshop.product.dto.SeckillActivityProductModelInfoDTO;
+import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 
 @Service
 class MockProductModelService extends BaseController implements ProductModelService {
@@ -42,4 +44,9 @@ class MockProductModelService extends BaseController implements ProductModelServ
 		list.add(dto);
 		return successCreated(list);
 	}
+
+    @Override
+    public Result<SeckillActivityProductModelInfoDTO> seckillActivityProductModel(Long activityProductModelId) {
+        return null;
+    }
 }

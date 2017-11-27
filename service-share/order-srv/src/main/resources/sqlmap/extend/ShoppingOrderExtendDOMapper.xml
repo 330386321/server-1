@@ -8,6 +8,7 @@
 		<result column="product_id" jdbcType="BIGINT" property="productId" />
 		<result column="product_name" jdbcType="VARCHAR" property="productName" />
 		<result column="product_model_id" jdbcType="BIGINT" property="productModelId" />
+        <result column="activity_product_model_id" jdbcType="BIGINT" property="activityProductModelId" />
 		<result column="product_model_name" jdbcType="VARCHAR" property="productModelName" />
 		<result column="product_feature_image" jdbcType="VARCHAR" property="productFeatureImage" />
 		<result column="regular_price" jdbcType="DECIMAL" property="regularPrice" />
@@ -30,6 +31,8 @@
 		<result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
 		<result column="merchant_store_id" jdbcType="BIGINT" property="merchantStoreId" />
 		<result column="merchant_store_region_path" jdbcType="VARCHAR" property="merchantStoreRegionPath" />
+        <result column="activity_id" jdbcType="BIGINT" property="activityId" />
+        <result column="activity_product_id" jdbcType="BIGINT" property="activityProductId" />
 		<result column="merchant_num" jdbcType="VARCHAR" property="merchantNum" />
 		<result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
 		<result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
@@ -118,7 +121,7 @@
 	
 	<sql id="ShoppingOrder_Column_List">
 		so.id, so.member_id, so.member_num, member_nickname,
-		so.merchant_id, so.merchant_store_id, so.merchant_store_region_path, so.merchant_num, so.merchant_name,
+		so.merchant_id, so.merchant_store_id, so.merchant_store_region_path, so.activity_id, so.activity_product_id, so.merchant_num, so.merchant_name,
 		so.consignee_name,
 		so.consignee_address,
 		so.consignee_mobile, so.remark,
@@ -135,7 +138,7 @@
 	<sql id="ShoppingOrderItem_Column_List">
 		soi.id as item_id, soi.shopping_order_id, soi.product_id,
 		soi.product_name,
-		soi.product_model_id,
+		soi.product_model_id, soi.activity_product_model_id,
 		soi.product_model_name,
 		soi.product_feature_image, soi.regular_price, soi.sales_price,
 		soi.quantity, soi.is_allow_refund, soi.is_evaluation, soi.order_status as item_order_status, soi.refund_status,

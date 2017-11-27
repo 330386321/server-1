@@ -35,6 +35,7 @@ import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderBuyNowCreateOrderForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderSettlementForeignParam;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
+import com.lawu.eshop.product.dto.SeckillActivityProductModelInfoDTO;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.user.dto.AddressDTO;
@@ -459,22 +460,33 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	return successCreated(shoppingCartSettlementDTO);
 	}
 
-	/**
-	 * 立即购买,不保存到数据库
-	 * @param param 购物参数
-	 * @return 返回订单的结算数据
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public Result<ShoppingCartSettlementDTO> buyNow(Long memberId, String memberNum, ShoppingCartParam param) {
-		// 查询产品信息
-    	Result<ShoppingCartProductModelDTO> resultShoppingCartProductModelDTO = productModelService.getShoppingCartProductModel(param.getProductModelId());
-    	if (!isSuccess(resultShoppingCartProductModelDTO)) {
-    		return successCreated(resultShoppingCartProductModelDTO.getRet());
-    	}
-    	
-    	ShoppingCartProductModelDTO shoppingCartProductModelDTO = resultShoppingCartProductModelDTO.getModel();
-    	
+	    ShoppingCartSettlementDTO rtn = new ShoppingCartSettlementDTO();
+	    ShoppingCartProductModelDTO shoppingCartProductModelDTO = null;
+	    /*
+	     *  查询产品信息
+	     *  判断是否是抢购
+	     */
+	    if (param.getActivityProductModelId() == null) {
+	        Result<ShoppingCartProductModelDTO> result = productModelService.getShoppingCartProductModel(param.getProductModelId());
+	        if (!isSuccess(result)) {
+	            return successCreated(result);
+	        }
+	        shoppingCartProductModelDTO = result.getModel();
+	    } else {
+	        Result<SeckillActivityProductModelInfoDTO> result = productModelService.seckillActivityProductModel(param.getActivityProductModelId());
+	        if (!isSuccess(result)) {
+                return successCreated(result);
+            }
+	        SeckillActivityProductModelInfoDTO model = result.getModel();
+	        rtn.setActivityId(model.getActivityId());
+	        rtn.setActivityProductId(model.getActivityProductId());
+	        rtn.setActivityProductModelId(param.getActivityProductModelId());
+	        param.setQuantity(1);
+	        shoppingCartProductModelDTO = model;
+	    }
     	// 查询商家名称
     	Result<MerchantInfoForShoppingCartDTO> getMerchantInfoForShoppingCartResult = merchantStoreService.getMerchantInfoForShoppingCart(shoppingCartProductModelDTO.getMerchantId());
     	if (!isSuccess(getMerchantInfoForShoppingCartResult)) {
@@ -509,8 +521,6 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		return successGet(resultPropertyBalanceDTO.getRet());
     	}
 		
-		ShoppingCartSettlementDTO shoppingCartSettlementDTO = new ShoppingCartSettlementDTO();
-    	
     	// 每一个商家的商品会合并在一起，小计金额
     	List<ShoppingCartSettlementItemDTO> items = new ArrayList<>();
 		ShoppingCartSettlementItemDTO shoppingCartSettlementItemDTO = new ShoppingCartSettlementItemDTO();
@@ -519,13 +529,13 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		shoppingCartSettlementItemDTO.setItems(memberShoppingCartDTOList);
 		items.add(shoppingCartSettlementItemDTO);
 		
-    	shoppingCartSettlementDTO.setTotal(memberShoppingCartDTO.getSalesPrice().multiply(new BigDecimal(memberShoppingCartDTO.getQuantity())));
-    	shoppingCartSettlementDTO.setItems(items);
+    	rtn.setTotal(memberShoppingCartDTO.getSalesPrice().multiply(new BigDecimal(memberShoppingCartDTO.getQuantity())));
+    	rtn.setItems(items);
     	
     	// 放入用户余额
-    	shoppingCartSettlementDTO.setBalance(resultPropertyBalanceDTO.getModel().getBalance());
+    	rtn.setBalance(resultPropertyBalanceDTO.getModel().getBalance());
 		
-		return successCreated(shoppingCartSettlementDTO);
+		return successCreated(rtn);
 	}
 	
 	/**
@@ -537,12 +547,26 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	@Override
 	public Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param) {
     	// 通过商品型号id列表查询商品信息
-    	Result<ShoppingCartProductModelDTO> resultShoppingCartProductModelDTO = productModelService.getShoppingCartProductModel(param.getProductModelId());
-    	if (!isSuccess(resultShoppingCartProductModelDTO)) {
-    		return successCreated(resultShoppingCartProductModelDTO.getRet());
-    	}
-    	
-    	ShoppingCartProductModelDTO shoppingCartProductModelDTO = resultShoppingCartProductModelDTO.getModel();
+        ShoppingCartProductModelDTO shoppingCartProductModelDTO = null;
+        /*
+         *  查询产品信息
+         *  判断是否是抢购
+         */
+        if (param.getActivityProductModelId() == null) {
+            Result<ShoppingCartProductModelDTO> result = productModelService.getShoppingCartProductModel(param.getProductModelId());
+            if (!isSuccess(result)) {
+                return successCreated(result);
+            }
+            shoppingCartProductModelDTO = result.getModel();
+        } else {
+            Result<SeckillActivityProductModelInfoDTO> result = productModelService.seckillActivityProductModel(param.getActivityProductModelId());
+            if (!isSuccess(result)) {
+                return successCreated(result);
+            }
+            SeckillActivityProductModelInfoDTO model = result.getModel();
+            param.setQuantity(1);
+            shoppingCartProductModelDTO = model;
+        }
     	
     	// 查询地址
     	Result<AddressDTO> resultAddressDTO = addressService.get(param.getAddressId());
@@ -588,6 +612,11 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		
 		// 用户是否是商家粉丝
 		shoppingOrderSettlementParam.setIsFans(shoppingOrderFindMerchantInfoDTO.getIsFans());
+		if (param.getActivityProductModelId() != null) {
+		    SeckillActivityProductModelInfoDTO seckillActivityProductModelInfoDTO = (SeckillActivityProductModelInfoDTO) shoppingCartProductModelDTO;
+		    shoppingOrderSettlementParam.setActivityId(seckillActivityProductModelInfoDTO.getActivityId());
+		    shoppingOrderSettlementParam.setActivityProductId(seckillActivityProductModelInfoDTO.getActivityProductId());
+		}
 		
 		BigDecimal commodityTotalPrice = new BigDecimal(0);
 		List<ShoppingOrderSettlementItemParam> items = new ArrayList<>();
@@ -599,10 +628,13 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		shoppingOrderSettlementItemParam.setProductName(shoppingCartProductModelDTO.getProductName());
 		shoppingOrderSettlementItemParam.setProductFeatureImage(shoppingCartProductModelDTO.getFeatureImage());
 		shoppingOrderSettlementItemParam.setProductModelId(shoppingCartProductModelDTO.getId());
+		if (param.getActivityProductModelId() != null) {
+		    shoppingOrderSettlementItemParam.setActivityProductModelId(param.getActivityProductModelId());
+		}
 		shoppingOrderSettlementItemParam.setProductModelName(shoppingCartProductModelDTO.getName());
 		
 		// 判断商品是否失效
-		if (!ProductStatusEnum.PRODUCT_STATUS_UP.equals(shoppingCartProductModelDTO.getStatus())) {
+		if (param.getActivityProductModelId() == null && !ProductStatusEnum.PRODUCT_STATUS_UP.equals(shoppingCartProductModelDTO.getStatus())) {
 			return successCreated(ResultCode.PRODUCT_HAS_EXPIRED);
 		}
 		

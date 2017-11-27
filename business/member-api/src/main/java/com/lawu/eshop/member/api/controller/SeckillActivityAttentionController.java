@@ -30,7 +30,7 @@ import io.swagger.annotations.ApiResponse;
  */
 @Api(tags = "seckillActivityAttention")
 @RestController
-@RequestMapping(path = "seckillActivityAttention/")
+@RequestMapping(value = "seckillActivityAttention/")
 public class SeckillActivityAttentionController extends BaseController {
     
     @Autowired
@@ -41,7 +41,7 @@ public class SeckillActivityAttentionController extends BaseController {
     @ApiOperation(value = "关注抢购活动商品", notes = "关注抢购活动商品[]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
-    @RequestMapping(path = "attention/{activityProductId}", method = RequestMethod.POST)
+    @RequestMapping(value = "attention/{activityProductId}", method = RequestMethod.POST)
     public Result attention(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ApiParam(value = "抢购活动商品id", required = true) @PathVariable("activityProductId") Long activityProductId) {
         Long memberId = UserUtil.getCurrentUserId(getRequest());
         seckillActivityAttentionService.attention(activityProductId, memberId);

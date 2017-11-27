@@ -1,8 +1,10 @@
 package com.lawu.eshop.product.srv.service.impl.transaction;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
@@ -14,9 +16,6 @@ import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductDOExample;
 import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
 import com.lawu.eshop.product.srv.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 款成功操作后，发送消息修改下架 - 从事务
