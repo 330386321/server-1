@@ -84,6 +84,7 @@ public class ShoppingOrderExtendConverter {
 		rtn.setGmtTransaction(shoppingOrderExtendDO.getGmtTransaction());
 		rtn.setGmtCreate(shoppingOrderExtendDO.getGmtCreate());
 		rtn.setGmtModified(shoppingOrderExtendDO.getGmtModified());
+		rtn.setActivityId(shoppingOrderExtendDO.getActivityId());
 		
 		// 转换为枚举类型
 		rtn.setStatus(StatusEnum.getEnum(shoppingOrderExtendDO.getStatus()));

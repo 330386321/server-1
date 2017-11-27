@@ -436,4 +436,15 @@ public interface ShoppingOrderService {
      * @updateDate 2017年11月24日
      */
     Boolean isBuy(ActivityProductBuyQueryParam param);
+    
+    /**
+     * 分页查询查找符合自动取消的未付款抢购活动订单 用于定时任务
+     * 
+     * @param currentPage
+     * @param pageSize
+     * @author jiangxinjun
+     * @createDate 2017年11月13日
+     * @updateDate 2017年11月13日
+     */
+    List<ShoppingOrderBO> selectCancelSeckillActivityOrder(int offset, int pageSize);
 }
