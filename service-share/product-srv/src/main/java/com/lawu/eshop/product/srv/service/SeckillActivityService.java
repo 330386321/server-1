@@ -45,4 +45,24 @@ public interface SeckillActivityService {
      * @updateDate 2017年11月23日
      */
     List<SeckillActivityBO> recentlyList();
+    
+    /**
+     * 抢购活动开始，修改抢购活动的状态为进行中
+     * 
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    void seckillActivityStart();
+    
+    /**
+     * 抢购活动结束，修改抢购活动的状态为已结束
+     * 
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    void seckillActivityEnd();
 }

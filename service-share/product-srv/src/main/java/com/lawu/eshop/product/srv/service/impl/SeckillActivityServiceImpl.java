@@ -4,20 +4,19 @@
  */
 package com.lawu.eshop.product.srv.service.impl;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.common.constants.StatusEnum;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ActivityStatusEnum;
 import com.lawu.eshop.product.param.SeckillActivityPageQueryParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
-import com.lawu.eshop.product.srv.constants.PropertyConstant;
 import com.lawu.eshop.product.srv.converter.SeckillActivityConverter;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDOExample;
@@ -72,6 +71,51 @@ public class SeckillActivityServiceImpl implements SeckillActivityService {
         return thatDaylist(list.get(0).getStartDate());
     }
 
+    @Transactional
+    @Override
+    public void seckillActivityStart() {
+        SeckillActivityDOExample example = new SeckillActivityDOExample();
+        SeckillActivityDOExample.Criteria criteria = example.createCriteria();
+        // 有效的记录
+        criteria.andStatusEqualTo(StatusEnum.VALID.getValue());
+        // 未开始
+        criteria.andActivityStatusEqualTo(ActivityStatusEnum.NOT_STARTED.getValue());
+        // 已经到开始时间了
+        criteria.andStartDateLessThanOrEqualTo(new Date());
+        // 按照开始时间正序
+        example.setOrderByClause("start_date asc");
+        List<SeckillActivityDO> list = seckillActivityDOMapper.selectByExample(example);
+        for (SeckillActivityDO item : list) {
+            SeckillActivityDO seckillActivityDO = new SeckillActivityDO();
+            seckillActivityDO.setId(item.getId());
+            seckillActivityDO.setActivityStatus(ActivityStatusEnum.PROCESSING.getValue());
+            seckillActivityDO.setGmtModified(new Date());
+            seckillActivityDOMapper.updateByPrimaryKeySelective(seckillActivityDO);
+        }
+    }
+    
+    @Override
+    public void seckillActivityEnd() {
+        SeckillActivityDOExample example = new SeckillActivityDOExample();
+        SeckillActivityDOExample.Criteria criteria = example.createCriteria();
+        // 有效的记录
+        criteria.andStatusEqualTo(StatusEnum.VALID.getValue());
+        // 正在进行中的
+        criteria.andActivityStatusEqualTo(ActivityStatusEnum.PROCESSING.getValue());
+        // 已经到结束时间了
+        criteria.andEndDateLessThanOrEqualTo(new Date());
+        // 按照开始时间正序
+        example.setOrderByClause("end_date asc");
+        List<SeckillActivityDO> list = seckillActivityDOMapper.selectByExample(example);
+        for (SeckillActivityDO item : list) {
+            SeckillActivityDO seckillActivityDO = new SeckillActivityDO();
+            seckillActivityDO.setId(item.getId());
+            seckillActivityDO.setActivityStatus(ActivityStatusEnum.END.getValue());
+            seckillActivityDO.setGmtModified(new Date());
+            seckillActivityDOMapper.updateByPrimaryKeySelective(seckillActivityDO);
+        }
+    }
+    
     /**********************************************************************
      * PRIVATE METHOD
      * **********************************************************************/
@@ -101,4 +145,5 @@ public class SeckillActivityServiceImpl implements SeckillActivityService {
         List<SeckillActivityDO> list = seckillActivityDOMapper.selectByExample(example);
         return SeckillActivityConverter.convertSeckillActivityBOList(list);
     }
+
 }

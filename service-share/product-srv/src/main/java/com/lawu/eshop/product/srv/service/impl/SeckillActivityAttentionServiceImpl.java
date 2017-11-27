@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.common.constants.StatusEnum;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.product.SeckillActivityAboutStartNoticeNotification;
 import com.lawu.eshop.mq.message.MessageProducerService;
@@ -85,6 +86,8 @@ public class SeckillActivityAttentionServiceImpl implements SeckillActivityAtten
     public List<SeckillActivityAttentionBO> selectAboutStartSeckillActivityAttention(int offset, int pageSize) {
         SeckillActivityDOExample seckillActivityDOExample = new SeckillActivityDOExample();
         SeckillActivityDOExample.Criteria seckillActivityDOExampleCriteria = seckillActivityDOExample.createCriteria();
+        // 有效的记录
+        seckillActivityDOExampleCriteria.andStatusEqualTo(StatusEnum.VALID.getValue());
         // 未开始状态的
         seckillActivityDOExampleCriteria.andActivityStatusEqualTo(ActivityStatusEnum.NOT_STARTED.getValue());
         // 开始时间在十分钟以后的
@@ -113,7 +116,7 @@ public class SeckillActivityAttentionServiceImpl implements SeckillActivityAtten
             seckillActivityDO.setId(seckillActivityDOList.get(0).getId());
             seckillActivityDO.setIsRemind(true);
             seckillActivityDO.setGmtModified(new Date());
-            seckillActivityDOMapper.updateByPrimaryKey(seckillActivityDO);
+            seckillActivityDOMapper.updateByPrimaryKeySelective(seckillActivityDO);
         }
         return SeckillActivityAttentionConverter.convertSeckillActivityAttentionBOList(seckillActivityAttentionDOList);
     }
