@@ -145,4 +145,22 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
         }
     }
 
+    @Override
+    @Transactional
+    public void executeUpdateLotteryActivityStatus() {
+        Date date = new Date();
+        //进行中更新为结束
+        LotteryActivityDO activityDO = new LotteryActivityDO();
+        activityDO.setStatus(LotteryActivityStatusEnum.FINISHED.getVal());
+        LotteryActivityDOExample example = new LotteryActivityDOExample();
+        example.createCriteria().andStatusEqualTo(LotteryActivityStatusEnum.LOTTERYING.getVal()).andEndTimeLessThanOrEqualTo(date);
+        lotteryActivityDOMapper.updateByExampleSelective(activityDO, example);
+
+        //即将开始更新为进行中
+        activityDO.setStatus(LotteryActivityStatusEnum.LOTTERYING.getVal());
+        example = new LotteryActivityDOExample();
+        example.createCriteria().andStatusEqualTo(LotteryActivityStatusEnum.PUBLISHED.getVal()).andBeginTimeLessThanOrEqualTo(date);
+        lotteryActivityDOMapper.updateByExampleSelective(activityDO, example);
+    }
+
 }

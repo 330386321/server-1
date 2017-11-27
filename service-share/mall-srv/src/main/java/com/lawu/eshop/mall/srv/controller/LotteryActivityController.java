@@ -124,4 +124,15 @@ public class LotteryActivityController extends BaseController {
         return successCreated();
     }
 
+    /**
+     * 定时更新活动进行中、已结束状态
+     *
+     * @author meishuquan
+     */
+    @RequestMapping(value = "executeUpdateLotteryActivityStatus", method = RequestMethod.PUT)
+    public Result executeUpdateLotteryActivityStatus() {
+        lotteryActivityService.executeUpdateLotteryActivityStatus();
+        return successCreated();
+    }
+
 }

@@ -122,6 +122,8 @@
 	<job:simple id="userFansJob" description="更新过期的粉丝邀请" class="com.lawu.eshop.jobs.impl.user.UserFansJob" registry-center-ref="regCenter" cron="0 0/10 * * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 
+	<job:simple id="lotteryActivityJob" description="更新抽奖活动进行中、已结束状态" class="com.lawu.eshop.jobs.impl.activity.LotteryActivityJob" registry-center-ref="regCenter" cron="0 0/1 * * * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"/>
 	
 	<!-- Lock service -->
 	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />

@@ -57,4 +57,11 @@ public interface LotteryActivityService {
      */
     void saveLotteryActivity(LotteryActivityParam param);
 
+    /**
+     * 定时更新活动进行中、已结束状态
+     *
+     * @author meishuquan
+     */
+    void executeUpdateLotteryActivityStatus();
+
 }
