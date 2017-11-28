@@ -18,6 +18,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.LotteryActivityDTO;
+import com.lawu.eshop.mall.dto.LotteryActivityPointDTO;
 import com.lawu.eshop.mall.query.LotteryActivityQuery;
 import com.lawu.eshop.mall.query.LotteryActivityRealQuery;
 import com.lawu.eshop.member.api.service.LotteryActivityService;
@@ -63,8 +64,8 @@ public class LotteryActivityController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getLotteryActivityPoint/{id}", method = RequestMethod.GET)
-    public Result<Integer> getLotteryActivityPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                   @PathVariable @ApiParam(required = true, value = "抽奖活动ID") Long id) {
+    public Result<LotteryActivityPointDTO> getLotteryActivityPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                                   @PathVariable @ApiParam(required = true, value = "抽奖活动ID") Long id) {
         Result<LotteryActivityDTO> activityDTOResult = lotteryActivityService.getLotteryActivityById(id);
         if (activityDTOResult.getModel() == null) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
@@ -73,7 +74,9 @@ public class LotteryActivityController extends BaseController {
         if (pointResult.getModel() == null) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
-        return successGet(pointResult.getModel());
+        LotteryActivityPointDTO pointDTO = new LotteryActivityPointDTO();
+        pointDTO.setPoint(pointResult.getModel());
+        return successGet(pointDTO);
     }
 
 }
