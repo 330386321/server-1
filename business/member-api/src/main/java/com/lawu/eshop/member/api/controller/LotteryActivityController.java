@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,15 +14,18 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.LotteryActivityDTO;
 import com.lawu.eshop.mall.query.LotteryActivityQuery;
 import com.lawu.eshop.mall.query.LotteryActivityRealQuery;
 import com.lawu.eshop.member.api.service.LotteryActivityService;
+import com.lawu.eshop.member.api.service.UserGradeService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 
 /**
@@ -35,6 +39,9 @@ public class LotteryActivityController extends BaseController {
 
     @Autowired
     private LotteryActivityService lotteryActivityService;
+
+    @Autowired
+    private UserGradeService userGradeService;
 
     @Audit(date = "2017-11-24", reviewer = "孙林青")
     @ApiOperation(value = "抽奖活动列表", notes = "抽奖活动列表。 (梅述全)", httpMethod = "GET")
@@ -51,4 +58,22 @@ public class LotteryActivityController extends BaseController {
         Result<Page<LotteryActivityDTO>> result = lotteryActivityService.listLotteryActivity(query);
         return successGet(result);
     }
+
+    @ApiOperation(value = "抽奖活动所需积分", notes = "抽奖活动所需积分。[1002] (梅述全)", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getLotteryActivityPoint/{id}", method = RequestMethod.GET)
+    public Result<Integer> getLotteryActivityPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                   @PathVariable @ApiParam(required = true, value = "抽奖活动ID") Long id) {
+        Result<LotteryActivityDTO> activityDTOResult = lotteryActivityService.getLotteryActivityById(id);
+        if (activityDTOResult.getModel() == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        Result<Integer> pointResult = userGradeService.selectLotteryActivityPointByGradeValue(activityDTOResult.getModel().getGradeEnum().getVal());
+        if (pointResult.getModel() == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        return successGet(pointResult.getModel());
+    }
+
 }
