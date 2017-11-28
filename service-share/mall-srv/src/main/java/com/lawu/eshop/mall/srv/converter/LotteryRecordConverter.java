@@ -80,7 +80,7 @@ public class LotteryRecordConverter {
      * @param recordDOS
      * @return
      */
-    public static List<LotteryRecordOperatorBO> converOperatorBO(List<LotteryRecordDO> recordDOS) {
+    public static List<LotteryRecordOperatorBO> converOperatorBOS(List<LotteryRecordDO> recordDOS) {
         List<LotteryRecordOperatorBO> operatorBOS = new ArrayList<>();
         if (recordDOS == null || recordDOS.isEmpty()) {
             return operatorBOS;
@@ -104,7 +104,7 @@ public class LotteryRecordConverter {
      * @param operatorBOS
      * @return
      */
-    public static List<LotteryRecordOperatorDTO> converOperatorDTO(List<LotteryRecordOperatorBO> operatorBOS) {
+    public static List<LotteryRecordOperatorDTO> converOperatorDTOS(List<LotteryRecordOperatorBO> operatorBOS) {
         List<LotteryRecordOperatorDTO> operatorDTOS = new ArrayList<>();
         if (operatorBOS == null || operatorBOS.isEmpty()) {
             return operatorDTOS;

@@ -167,7 +167,7 @@ public class LotteryRecordServiceImpl implements LotteryRecordService {
         Page<LotteryRecordOperatorBO> page = new Page<>();
         page.setCurrentPage(query.getCurrentPage());
         page.setTotalCount(lotteryRecordDOMapper.countByExample(example));
-        page.setRecords(LotteryRecordConverter.converOperatorBO(recordDOS));
+        page.setRecords(LotteryRecordConverter.converOperatorBOS(recordDOS));
         return page;
     }
 

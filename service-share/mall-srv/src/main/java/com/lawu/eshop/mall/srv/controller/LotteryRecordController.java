@@ -100,7 +100,7 @@ public class LotteryRecordController extends BaseController {
         Page<LotteryRecordOperatorDTO> page = new Page<>();
         page.setCurrentPage(recordBOPage.getCurrentPage());
         page.setTotalCount(recordBOPage.getTotalCount());
-        page.setRecords(LotteryRecordConverter.converOperatorDTO(recordBOPage.getRecords()));
+        page.setRecords(LotteryRecordConverter.converOperatorDTOS(recordBOPage.getRecords()));
         return successCreated(page);
     }
 
