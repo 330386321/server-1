@@ -2,9 +2,9 @@ package com.lawu.eshop.product.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.common.exception.DataNotExistException;
 import com.lawu.eshop.product.param.SeckillActivityProductAttentionParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityAttentionBO;
-import com.lawu.eshop.product.srv.exception.DataNotExistException;
 
 /**
  * 抢购活动关注服务接口

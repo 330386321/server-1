@@ -80,6 +80,7 @@ public class ResultCode {
     public static final int ACCOUNT_IS_INVALID = 2019;
     public static final int NO_LOTTERY_COUNT = 2020;
     public static final int HAVE_TAKE_PART = 2021;
+    public static final int GRADE_NOT_MATCH = 2022;
 
 
     // 商品模块代码 3xxx
@@ -282,7 +283,8 @@ public class ResultCode {
         ResultCode.messageMap.put(ACCOUNT_IS_INVALID, "账号已被封");
         ResultCode.messageMap.put(NO_LOTTERY_COUNT, "只能增加一次抽奖机会");
         ResultCode.messageMap.put(HAVE_TAKE_PART, "已参与抽奖");
-        
+        ResultCode.messageMap.put(GRADE_NOT_MATCH, "用户等级不符合");
+
 
         //运营
         ResultCode.messageMap.put(USER_NOT_LOGIN, "用户未登录");

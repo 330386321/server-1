@@ -62,7 +62,8 @@
   	<job:simple id="transactionScheduledJob" description="补偿事务" class="com.lawu.eshop.compensating.transaction.job.TransactionScheduledJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
     <job:simple id="seckillActivityStartJob" description="抢购活动开始" class="com.lawu.eshop.product.srv.jobs.SeckillActivityStartJob" registry-center-ref="regCenter" cron="0/15 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
     <job:simple id="seckillActivityEndJob" description="抢购活动结束" class="com.lawu.eshop.product.srv.jobs.SeckillActivityEndJob" registry-center-ref="regCenter" cron="0/20 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
-    <job:simple id="promptSeckillActivityAboutStartJob" description="抢购活动即将开始提醒" class="com.lawu.eshop.product.srv.jobs.PromptSeckillActivityAboutStartJob" registry-center-ref="regCenter" cron="0/25 * * * * ?" sharding-total-count="1" overwrite="true" job-parameter="10" disabled="${dangdang.ddframe.job.disabled}" />
+    <job:simple id="seckillActivityRegistrationEndJob" description="抢购活动报名结束" class="com.lawu.eshop.product.srv.jobs.SeckillActivityRegistrationEndJob" registry-center-ref="regCenter" cron="0/25 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+    <job:simple id="promptSeckillActivityAboutStartJob" description="抢购活动即将开始提醒" class="com.lawu.eshop.product.srv.jobs.PromptSeckillActivityAboutStartJob" registry-center-ref="regCenter" cron="0/30 * * * * ?" sharding-total-count="1" overwrite="true" job-parameter="10" disabled="${dangdang.ddframe.job.disabled}" />
 	
 	<!-- Lock service -->
 	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />

@@ -3,6 +3,7 @@ package com.lawu.eshop.product.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.common.exception.DataNotExistException;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessIncreaseSalesNotification;
@@ -11,7 +12,6 @@ import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityProductModelInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.bo.productModelDataBO;
-import com.lawu.eshop.product.srv.exception.DataNotExistException;
 
 /**
  * 

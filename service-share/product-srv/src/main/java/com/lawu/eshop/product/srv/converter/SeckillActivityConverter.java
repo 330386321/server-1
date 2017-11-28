@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.lawu.eshop.common.constants.MemberGradeEnum;
 import com.lawu.eshop.product.constant.ActivityStatusEnum;
+import com.lawu.eshop.product.dto.SeckillActivityDetailsDTO;
+import com.lawu.eshop.product.dto.SeckillActivityInfoDTO;
 import com.lawu.eshop.product.dto.SeckillActivityThatDayDTO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
@@ -85,6 +87,58 @@ public class SeckillActivityConverter {
             seckillActivityThatDayDTO.setSellingPrice(item.getSellingPrice());
             rtn.add(seckillActivityThatDayDTO);
         }
+        return rtn;
+    }
+    
+    /**
+     * SeckillActivityBO List转SeckillActivityInfoDTO List
+     * @param list
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    public static List<SeckillActivityInfoDTO> convertSeckillActivityInfoDTOList(List<SeckillActivityBO> list) {
+        List<SeckillActivityInfoDTO> rtn = new ArrayList<>();
+        if (list == null || list.isEmpty()) {
+            return rtn;
+        }
+        for (SeckillActivityBO item : list) {
+            SeckillActivityInfoDTO entry = new SeckillActivityInfoDTO();
+            entry.setActivityStatus(item.getActivityStatus());
+            entry.setId(item.getId());
+            entry.setMemberLevel(item.getMemberLevel());
+            entry.setName(item.getName());
+            entry.setPicture(item.getPicture());
+            entry.setStartDate(item.getStartDate());
+            entry.setSellingPrice(item.getSellingPrice());
+            rtn.add(entry);
+        }
+        return rtn;
+    }
+    
+    /**
+     * SeckillActivityBO转SeckillActivityDetailsDTO
+     * @param list
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    public static SeckillActivityDetailsDTO convert(SeckillActivityBO source) {
+        if (source == null) {
+            return null;
+        }
+        SeckillActivityDetailsDTO rtn = new SeckillActivityDetailsDTO();
+        rtn.setActivityStatus(source.getActivityStatus());
+        rtn.setId(source.getId());
+        rtn.setMemberLevel(source.getMemberLevel());
+        rtn.setName(source.getName());
+        rtn.setPicture(source.getPicture());
+        rtn.setStartDate(source.getStartDate());
+        rtn.setSellingPrice(source.getSellingPrice());
+        rtn.setEndDate(source.getEndDate());
+        rtn.setProductValidCount(source.getProductValidCount());
         return rtn;
     }
 }

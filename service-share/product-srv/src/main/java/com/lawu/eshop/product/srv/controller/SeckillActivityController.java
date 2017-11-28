@@ -5,16 +5,23 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.common.exception.DataNotExistException;
+import com.lawu.eshop.common.exception.WrongOperationException;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.product.dto.SeckillActivityDetailsDTO;
+import com.lawu.eshop.product.dto.SeckillActivityInfoDTO;
 import com.lawu.eshop.product.dto.SeckillActivityThatDayDTO;
 import com.lawu.eshop.product.param.SeckillActivityPageQueryParam;
+import com.lawu.eshop.product.param.SeckillActivityUpdateParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
 import com.lawu.eshop.product.srv.converter.SeckillActivityConverter;
 import com.lawu.eshop.product.srv.service.SeckillActivityService;
@@ -35,16 +42,20 @@ public class SeckillActivityController extends BaseController {
      * @return
      * @author jiangxinjun
      * @createDate 2017年11月23日
-     * @updateDate 2017年11月23日
+     * @updateDate 2017年11月27日
      */
-    @SuppressWarnings("rawtypes")
     @RequestMapping(value = "page", method = RequestMethod.PUT)
-    public Result page(@RequestBody @Validated SeckillActivityPageQueryParam param, BindingResult bindingResult) {
+    public Result<Page<SeckillActivityInfoDTO>> page(@RequestBody @Validated SeckillActivityPageQueryParam param, BindingResult bindingResult) {
         String message = validate(bindingResult);
         if (message != null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
         }
-        return null;
+        Page<SeckillActivityBO> page = seckillActivityService.page(param);
+        Page<SeckillActivityInfoDTO> rtn = new Page<>();
+        rtn.setCurrentPage(page.getCurrentPage());
+        rtn.setTotalCount(page.getTotalCount());
+        rtn.setRecords(SeckillActivityConverter.convertSeckillActivityInfoDTOList(page.getRecords()));
+        return successCreated(rtn);
     }
     
     /**
@@ -76,5 +87,136 @@ public class SeckillActivityController extends BaseController {
         List<SeckillActivityBO> list = seckillActivityService.recentlyList();
         return successGet(SeckillActivityConverter.convertSeckillActivityThatDayDTOList(list));
     }
-
+    
+    /**
+     * 根据id查询活动详情
+     * 用于运营平台
+     * 
+     * @param id 抢购活动id
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public Result<SeckillActivityDetailsDTO> detail(@PathVariable("id") Long id) {
+        SeckillActivityBO seckillActivityBO = null;
+        try {
+            seckillActivityBO = seckillActivityService.get(id);
+        } catch (DataNotExistException e) {
+            return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        }
+        return successCreated(SeckillActivityConverter.convert(seckillActivityBO));
+    }
+    
+    /**
+     * 根据id删除抢购活动   
+     * 
+     * @param id 抢购活动id
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    @RequestMapping(value = "delete/{id}", method = RequestMethod.PUT)
+    public Result<?> delete(@PathVariable("id") Long id) {
+        try {
+            seckillActivityService.delete(id);
+        } catch (DataNotExistException e) {
+            return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        } catch (WrongOperationException e) {
+            return successGet(ResultCode.FAIL, e.getMessage());
+        }
+        return successCreated();
+    }
+    
+    /**
+     * 根据id下架抢购活动
+     * 下架之后抢购的活动的状态为已结束
+     * 
+     * @param id 抢购活动id
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    @RequestMapping(value = "down/{id}", method = RequestMethod.PUT)
+    public Result<?> down(@PathVariable("id") Long id) {
+        try {
+            seckillActivityService.down(id);
+        } catch (DataNotExistException e) {
+            return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        } catch (WrongOperationException e) {
+            return successGet(ResultCode.FAIL, e.getMessage());
+        }
+        return successCreated();
+    }
+    
+    /**
+     * 根据id发布抢购活动   
+     * 
+     * @param id 抢购活动id
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    @RequestMapping(value = "release/{id}", method = RequestMethod.PUT)
+    public Result<?> release(@PathVariable("id") Long id) {
+        try {
+            seckillActivityService.release(id);
+        } catch (DataNotExistException e) {
+            return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        } catch (WrongOperationException e) {
+            return successGet(ResultCode.FAIL, e.getMessage());
+        }
+        return successCreated();
+    }
+    
+    /**
+     * 根据id更新抢购活动
+     * 
+     * @param id 抢购活动id
+     * @param param 抢购活动更新参数
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    @RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
+    public Result<?> update(@PathVariable("id") Long id, @RequestBody @Validated SeckillActivityUpdateParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        try {
+            seckillActivityService.update(id, param);
+        } catch (DataNotExistException e) {
+            return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        } catch (WrongOperationException e) {
+            return successGet(ResultCode.FAIL, e.getMessage());
+        }
+        return successCreated();
+    }
+    
+    /**
+     * 根据id审核抢购活动
+     * 
+     * @param id 抢购活动id
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    @RequestMapping(value = "audit/{id}", method = RequestMethod.PUT)
+    public Result<?> audit(@PathVariable("id") Long id) {
+        try {
+            seckillActivityService.audit(id);
+        } catch (DataNotExistException e) {
+            return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        } catch (WrongOperationException e) {
+            return successGet(ResultCode.FAIL, e.getMessage());
+        }
+        return successCreated();
+    }
 }

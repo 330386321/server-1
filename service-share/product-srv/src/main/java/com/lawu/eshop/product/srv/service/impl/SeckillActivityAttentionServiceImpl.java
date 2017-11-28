@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.common.constants.StatusEnum;
+import com.lawu.eshop.common.exception.DataNotExistException;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.product.SeckillActivityAboutStartNoticeNotification;
 import com.lawu.eshop.mq.message.MessageProducerService;
@@ -24,7 +25,6 @@ import com.lawu.eshop.product.srv.domain.SeckillActivityAttentionDOExample;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDOExample;
 import com.lawu.eshop.product.srv.domain.SeckillActivityProductDO;
-import com.lawu.eshop.product.srv.exception.DataNotExistException;
 import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
 import com.lawu.eshop.product.srv.mapper.SeckillActivityAttentionDOMapper;
 import com.lawu.eshop.product.srv.mapper.SeckillActivityDOMapper;

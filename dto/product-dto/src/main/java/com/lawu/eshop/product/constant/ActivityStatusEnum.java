@@ -13,21 +13,31 @@ public enum ActivityStatusEnum {
      * 1-未发布
      */
     UNPUBLISHED((byte) 0x01),
+    
+    /**
+     * 2-发布中
+     */
+    PUBLISHED((byte) 0x02),
+    
+    /**
+     * 3-审核中
+     */
+    IN_REVIEW((byte) 0x03),
 
     /**
-     * 2-未开始
+     * 4-未开始
      */
-    NOT_STARTED((byte) 0x02),
+    NOT_STARTED((byte) 0x04),
     
     /**
-     * 3-进行中
+     * 5-进行中
      */
-    PROCESSING((byte) 0x03),
+    PROCESSING((byte) 0x05),
     
     /**
-     * 4-已结束
+     * 6-已结束
      */
-    END((byte) 0x04);
+    END((byte) 0x06);
     
     
     private Byte value;

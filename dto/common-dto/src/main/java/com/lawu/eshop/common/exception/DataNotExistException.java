@@ -1,4 +1,4 @@
-package com.lawu.eshop.product.srv.exception;
+package com.lawu.eshop.common.exception;
 
 /**
  * 数据不存在异常<p>

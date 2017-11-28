@@ -2,24 +2,21 @@ package com.lawu.eshop.product.dto;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.product.constant.ActivityProductStatusEnum;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 抢购活动商品分页列表DTO
+ * 用于运营平台
  * 
  * @author jiangxinjun
- * @createDate 2017年11月24日
+ * @createDate 2017年11月27日
  * @updateDate 2017年11月27日
  */
 @ApiModel
-public class SeckillActivityProductBuyPageDTO {
-    
-    /**
-     * 抢购活动id
-     */
-    @ApiModelProperty(value = "抢购活动id", required = true)
-    private Long activityId;
+public class SeckillActivityProductInfoDTO {
     
     /**
      * 抢购活动商品id
@@ -62,15 +59,31 @@ public class SeckillActivityProductBuyPageDTO {
      */
     @ApiModelProperty(value = "剩余数量", required = true)
     private Integer leftCount;
+    
+    /**
+     * 成交额
+     */
+    @ApiModelProperty(value = "成交额", required = true)
+    private BigDecimal turnover;
 
-    public Long getActivityId() {
-        return activityId;
-    }
+    /**
+     * 反馈原因
+     */
+    @ApiModelProperty(value = "反馈原因", required = true)
+    private String reasons;
 
-    public void setActivityId(Long activityId) {
-        this.activityId = activityId;
-    }
+    /**
+     * 关注人数
+     */
+    @ApiModelProperty(value = "关注人数", required = true)
+    private Integer attentionCount;
 
+    /**
+     * 状态
+     */
+    @ApiModelProperty(value = "状态", required = true)
+    private ActivityProductStatusEnum status;
+    
     public Long getActivityProductId() {
         return activityProductId;
     }
@@ -125,5 +138,37 @@ public class SeckillActivityProductBuyPageDTO {
 
     public void setLeftCount(Integer leftCount) {
         this.leftCount = leftCount;
+    }
+
+    public BigDecimal getTurnover() {
+        return turnover;
+    }
+
+    public void setTurnover(BigDecimal turnover) {
+        this.turnover = turnover;
+    }
+
+    public String getReasons() {
+        return reasons;
+    }
+
+    public void setReasons(String reasons) {
+        this.reasons = reasons;
+    }
+
+    public Integer getAttentionCount() {
+        return attentionCount;
+    }
+
+    public void setAttentionCount(Integer attentionCount) {
+        this.attentionCount = attentionCount;
+    }
+
+    public ActivityProductStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(ActivityProductStatusEnum status) {
+        this.status = status;
     }
 }

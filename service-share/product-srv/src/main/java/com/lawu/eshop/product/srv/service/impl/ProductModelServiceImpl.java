@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.common.exception.DataNotExistException;
 import com.lawu.eshop.mq.dto.order.ProductModeUpdateInventoryDTO;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
@@ -40,7 +41,6 @@ import com.lawu.eshop.product.srv.domain.SeckillActivityProductDO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityProductModelDO;
 import com.lawu.eshop.product.srv.domain.extend.ProductModelNumsView;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
-import com.lawu.eshop.product.srv.exception.DataNotExistException;
 import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelInventoryDOMapper;

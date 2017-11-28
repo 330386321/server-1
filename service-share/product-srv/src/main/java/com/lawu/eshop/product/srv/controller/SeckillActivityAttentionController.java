@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.common.exception.DataNotExistException;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.param.SeckillActivityProductAttentionParam;
-import com.lawu.eshop.product.srv.exception.DataNotExistException;
 import com.lawu.eshop.product.srv.service.SeckillActivityAttentionService;
 
 /**

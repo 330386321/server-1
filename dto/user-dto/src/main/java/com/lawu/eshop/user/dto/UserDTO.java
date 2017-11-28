@@ -3,6 +3,7 @@ package com.lawu.eshop.user.dto;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.common.constants.MemberGradeEnum;
 import com.lawu.eshop.user.constants.UserSexEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -47,6 +48,12 @@ public class UserDTO {
     private String ryToken;
 
     private Boolean isFreeze;
+
+    @ApiModelProperty(name = "gradeEnum", value = "消费等级枚举")
+    private MemberGradeEnum gradeEnum;
+
+    @ApiModelProperty(name = "grade", value = "消费等级")
+    private Byte grade;
 
     public UserSexEnum getUserSex() {
         return userSex;
@@ -142,5 +149,21 @@ public class UserDTO {
 
     public void setIsFreeze(Boolean freeze) {
         isFreeze = freeze;
+    }
+
+    public MemberGradeEnum getGradeEnum() {
+        return gradeEnum;
+    }
+
+    public void setGradeEnum(MemberGradeEnum gradeEnum) {
+        this.gradeEnum = gradeEnum;
+    }
+
+    public Byte getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Byte grade) {
+        this.grade = grade;
     }
 }

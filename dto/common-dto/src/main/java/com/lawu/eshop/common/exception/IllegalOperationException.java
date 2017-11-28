@@ -1,4 +1,4 @@
-package com.lawu.eshop.product.srv.exception;
+package com.lawu.eshop.common.exception;
 
 /**
  * 非法操作异常<p>
@@ -9,9 +9,9 @@ package com.lawu.eshop.product.srv.exception;
  */
 public class IllegalOperationException extends RuntimeException {
 	
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public IllegalOperationException(String message) {
+    public IllegalOperationException(String message) {
         super(message);
     }
 }

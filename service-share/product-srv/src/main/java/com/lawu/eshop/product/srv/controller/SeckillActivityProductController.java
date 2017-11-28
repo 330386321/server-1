@@ -14,18 +14,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.common.exception.DataNotExistException;
+import com.lawu.eshop.common.exception.WrongOperationException;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.SeckillActivityProductBuyPageDTO;
+import com.lawu.eshop.product.dto.SeckillActivityProductInfoDTO;
 import com.lawu.eshop.product.dto.SeckillActivityProductInformationDTO;
+import com.lawu.eshop.product.param.SeckillActivityProductNotPassedParam;
 import com.lawu.eshop.product.param.SeckillActivityProductPageQueryParam;
+import com.lawu.eshop.product.param.SeckillActivityProductPageSearchParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityProductBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityProductExtendBO;
 import com.lawu.eshop.product.srv.converter.SeckillActivityProductConverter;
-import com.lawu.eshop.product.srv.exception.DataNotExistException;
 import com.lawu.eshop.product.srv.service.SeckillActivityProductService;
 import com.lawu.eshop.utils.DateUtil;
 
@@ -96,5 +100,82 @@ public class SeckillActivityProductController extends BaseController {
         }
         rtn.setCountdown(countdown);
         return successGet(rtn);
+    }
+    
+    /**
+     * 根据id和查询参数分页查询抢购活动商品列表
+     * 用于运营平台
+     * 
+     * @param id 抢购活动id
+     * @param param 分页查询参数
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    @RequestMapping(value = "pageSearch/{id}", method = RequestMethod.PUT)
+    public Result<Page<SeckillActivityProductInfoDTO>> pageSearch(@PathVariable("id") Long id, @RequestBody @Validated SeckillActivityProductPageSearchParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        Page<SeckillActivityProductBO> page = seckillActivityProductService.page(id, param);
+        Page<SeckillActivityProductInfoDTO> rtn = new Page<>();
+        rtn.setCurrentPage(page.getCurrentPage());
+        rtn.setTotalCount(page.getTotalCount());
+        rtn.setRecords(SeckillActivityProductConverter.convertSeckillActivityProductInfoDTOList(page.getRecords()));
+        return successCreated(rtn);
+    }
+    
+    /**
+     * 抢购活动商品
+     * 审核不通过
+     * 
+     * @param id 抢购活动商品id
+     * @param param 反馈参数
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    @RequestMapping(value = "notPassed/{id}", method = RequestMethod.PUT)
+    public Result<?> notPassed(@PathVariable("id") Long id, @RequestBody @Validated SeckillActivityProductNotPassedParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        try {
+            seckillActivityProductService.notPassed(id, param);
+        } catch (DataNotExistException e) {
+            logger.error(e.getMessage(), e);
+            return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        } catch (WrongOperationException e) {
+            logger.error(e.getMessage(), e);
+            return successCreated(ResultCode.FAIL, e.getMessage());
+        }
+        return successCreated();
+    }
+    
+    /**
+     * 审核抢购活动商品
+     * 
+     * @param id 抢购活动商品id
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月27日
+     * @updateDate 2017年11月27日
+     */
+    @RequestMapping(value = "audit/{id}", method = RequestMethod.PUT)
+    public Result<?> audit(@PathVariable("id") Long id) {
+        try {
+            seckillActivityProductService.audit(id);
+        } catch (DataNotExistException e) {
+            logger.error(e.getMessage(), e);
+            return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        } catch (WrongOperationException e) {
+            logger.error(e.getMessage(), e);
+            return successCreated(ResultCode.FAIL, e.getMessage());
+        }
+        return successCreated();
     }
 }
