@@ -60,7 +60,7 @@ public class LotteryActivityController extends BaseController {
     @RequestMapping(value = "getLotteryActivity/{id}", method = RequestMethod.GET)
     public Result<LotteryActivityDTO> getLotteryActivity(@PathVariable Long id) {
         LotteryActivityBO activityBO = lotteryActivityService.getLotteryActivityById(id);
-        return successCreated(LotteryActivityConverter.converDTO(activityBO));
+        return successGet(LotteryActivityConverter.converDTO(activityBO));
     }
 
     /**
@@ -108,7 +108,7 @@ public class LotteryActivityController extends BaseController {
     @RequestMapping(value = "getOperatorLotteryActivity/{id}", method = RequestMethod.GET)
     public Result<LotteryActivityOperatorDTO> getOperatorLotteryActivity(@PathVariable Long id) {
         LotteryActivityBO activityBO = lotteryActivityService.getLotteryActivityById(id);
-        return successCreated(LotteryActivityConverter.converOperatorDTO(activityBO));
+        return successGet(LotteryActivityConverter.converOperatorDTO(activityBO));
     }
 
     /**

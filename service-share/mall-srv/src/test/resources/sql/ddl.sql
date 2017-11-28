@@ -466,3 +466,40 @@ CREATE TABLE `app_version` (
   PRIMARY KEY (`id`)
 );
 
+-- ----------------------------
+-- Table structure for lottery_activity
+-- ----------------------------
+DROP TABLE IF EXISTS `lottery_activity`;
+CREATE TABLE `lottery_activity`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `prize_name` varchar(50) NOT NULL COMMENT '奖品名称',
+  `prize_price` decimal(10, 2) UNSIGNED NOT NULL COMMENT '奖品价值',
+  `prize_number` int(3) UNSIGNED NOT NULL COMMENT '奖品数量',
+  `image_path` varchar(200) NOT NULL COMMENT '奖品图片',
+  `begin_time` datetime(0) NOT NULL COMMENT '开始时间',
+  `end_time` datetime(0) NOT NULL COMMENT '结束时间',
+  `grade` tinyint(2) UNSIGNED NOT NULL COMMENT '等级',
+  `status` tinyint(3) UNSIGNED NOT NULL COMMENT '0--未发布，1--进行中，2--已发布，3--已结束，4--下架，5--删除',
+  `gmt_modified` datetime(0) DEFAULT NULL COMMENT '修改时间',
+  `gmt_create` datetime(0) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+);
+
+-- ----------------------------
+-- Table structure for lottery_record
+-- ----------------------------
+DROP TABLE IF EXISTS `lottery_record`;
+CREATE TABLE `lottery_record`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) UNSIGNED NOT NULL COMMENT '用户id',
+  `user_num` varchar(19) NOT NULL COMMENT '用户编号',
+  `account` varchar(20) NOT NULL COMMENT '账号',
+  `lottery_activity_id` bigint(20) UNSIGNED NOT NULL COMMENT '抽奖活动id',
+  `prize_name` varchar(50) NOT NULL COMMENT '奖品名称',
+  `lottery_count` int(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '抽奖次数',
+  `lottery_result` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '抽奖结果(0--未中奖，1--中奖)',
+  `gmt_modified` datetime(0) DEFAULT NULL COMMENT '修改时间',
+  `gmt_create` datetime(0) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+);
+
