@@ -23,6 +23,7 @@ public class SeckillActivityManageDetailBO {
 	private ActivityStatusEnum activityStatusEnum;
 	
 	private List<SeckillActivityProductManageBO> list ;
+	
 
 	public Long getId() {
 		return id;
