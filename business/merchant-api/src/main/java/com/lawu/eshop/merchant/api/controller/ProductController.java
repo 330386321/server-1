@@ -348,7 +348,7 @@ public class ProductController extends BaseController {
 	}
 
 
-	@Audit(date = "2017-11-24", reviewer = "杨清华")
+	@Audit(date = "2017-11-24", reviewer = "孙林青")
 	@ApiOperation(value = "查询商品型号", notes = "查询商品型号，[]，（张荣成）", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "queryProductModel", method = RequestMethod.GET)

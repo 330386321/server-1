@@ -60,6 +60,7 @@ public class LotteryActivityController extends BaseController {
         return successGet(result);
     }
 
+    @Audit(date = "2017-11-28", reviewer = "孙林青")
     @ApiOperation(value = "抽奖活动所需积分", notes = "抽奖活动所需积分。[1002] (梅述全)", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
