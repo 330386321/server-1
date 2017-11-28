@@ -24,7 +24,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 
-/**
+/** 
  * 描述：咻一咻中奖率配置
  *
  * @author zhangrc
