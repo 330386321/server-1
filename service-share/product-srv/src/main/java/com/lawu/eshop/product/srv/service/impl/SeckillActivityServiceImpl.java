@@ -294,7 +294,7 @@ public class SeckillActivityServiceImpl implements SeckillActivityService {
         }
         SeckillActivityDO seckillActivityUpdateDO = new SeckillActivityDO();
         seckillActivityUpdateDO.setId(seckillActivityDO.getId());
-        seckillActivityUpdateDO.setActivityStatus(ActivityStatusEnum.END.getValue());
+        seckillActivityUpdateDO.setActivityStatus(ActivityStatusEnum.NOT_STARTED.getValue());
         seckillActivityDOMapper.updateByPrimaryKeySelective(seckillActivityUpdateDO);
     }
     
