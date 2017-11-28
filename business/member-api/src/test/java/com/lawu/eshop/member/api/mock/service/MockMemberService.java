@@ -53,6 +53,7 @@ public class MockMemberService extends BaseController implements MemberService {
         dto.setHeadimg("/head/1.jpg");
         dto.setLevel(1);
         dto.setAccount("1383838481");
+        dto.setGrade((byte) 5);
         return successCreated(dto);
     }
 

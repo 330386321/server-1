@@ -33,6 +33,6 @@ class MockPointDetailService extends BaseController implements PointDetailServic
 
     @Override
     public Result<Boolean> existsPointDetailByUserNumAndBizId(@RequestParam("userNum") String userNum, @RequestParam("bizId") String bizId) {
-        return null;
+        return successGet(false);
     }
 }
