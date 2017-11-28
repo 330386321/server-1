@@ -1,0 +1,2 @@
+-- 抢购活动运营平台相关权限
+INSERT INTO `eshop_operator`.`permission` (`id`, `permission_name`, `permission_key`, `permission_url`, `parent_id`, `sort_id`, `gmt_modified`, `gmt_create`) VALUES ('161', '新增抢购活动', 'seckillActivity:add', NULL, '145', '999', '2017-11-28 14:08:17', '2017-11-28 14:08:20');

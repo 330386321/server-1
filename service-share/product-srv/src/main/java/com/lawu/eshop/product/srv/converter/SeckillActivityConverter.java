@@ -112,6 +112,7 @@ public class SeckillActivityConverter {
             entry.setPicture(item.getPicture());
             entry.setStartDate(item.getStartDate());
             entry.setSellingPrice(item.getSellingPrice());
+            entry.setEndDate(item.getEndDate());
             rtn.add(entry);
         }
         return rtn;

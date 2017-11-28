@@ -21,6 +21,7 @@ import com.lawu.eshop.product.dto.SeckillActivityDetailsDTO;
 import com.lawu.eshop.product.dto.SeckillActivityInfoDTO;
 import com.lawu.eshop.product.dto.SeckillActivityThatDayDTO;
 import com.lawu.eshop.product.param.SeckillActivityPageQueryParam;
+import com.lawu.eshop.product.param.SeckillActivitySaveParam;
 import com.lawu.eshop.product.param.SeckillActivityUpdateParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
 import com.lawu.eshop.product.srv.converter.SeckillActivityConverter;
@@ -217,6 +218,25 @@ public class SeckillActivityController extends BaseController {
         } catch (WrongOperationException e) {
             return successGet(ResultCode.FAIL, e.getMessage());
         }
+        return successCreated();
+    }
+    
+    /**
+     * 新增抢购活动
+     * 
+     * @param param 抢购活动保存参数
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月28日
+     * @updateDate 2017年11月28日
+     */
+    @RequestMapping(value = "add", method = RequestMethod.POST)
+    public Result<?> add(@RequestBody @Validated SeckillActivitySaveParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        seckillActivityService.add(param);
         return successCreated();
     }
 }

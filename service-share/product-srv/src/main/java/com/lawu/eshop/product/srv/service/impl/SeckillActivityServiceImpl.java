@@ -20,6 +20,7 @@ import com.lawu.eshop.common.exception.WrongOperationException;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ActivityStatusEnum;
 import com.lawu.eshop.product.param.SeckillActivityPageQueryParam;
+import com.lawu.eshop.product.param.SeckillActivitySaveParam;
 import com.lawu.eshop.product.param.SeckillActivityUpdateParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
 import com.lawu.eshop.product.srv.constants.PropertyConstant;
@@ -49,6 +50,19 @@ public class SeckillActivityServiceImpl implements SeckillActivityService {
         SeckillActivityDOExample.Criteria criteria = example.createCriteria();
         // 有效的记录
         criteria.andStatusEqualTo(StatusEnum.VALID.getValue());
+        if (param.getActivityStatus() != null) {
+            criteria.andActivityStatusEqualTo(param.getActivityStatus().getValue());
+        }
+        if (param.getMemberLevel() != null) {
+            criteria.andMemberLevelEqualTo(param.getMemberLevel().getVal());
+        }
+        if (param.getStartDateLeft() != null && param.getStartDateRight() != null) {
+            criteria.andStartDateBetween(param.getStartDateLeft(), param.getStartDateRight());
+        } else if (param.getStartDateLeft() != null) {
+            criteria.andStartDateGreaterThanOrEqualTo(param.getStartDateLeft());
+        } else if (param.getStartDateRight() != null) {
+            criteria.andStartDateLessThanOrEqualTo(param.getStartDateRight());
+        }
         Page<SeckillActivityBO> rtn = new Page<>();
         rtn.setCurrentPage(param.getCurrentPage());
         Long count = seckillActivityDOMapper.countByExample(example);
@@ -282,6 +296,26 @@ public class SeckillActivityServiceImpl implements SeckillActivityService {
         seckillActivityUpdateDO.setId(seckillActivityDO.getId());
         seckillActivityUpdateDO.setActivityStatus(ActivityStatusEnum.END.getValue());
         seckillActivityDOMapper.updateByPrimaryKeySelective(seckillActivityUpdateDO);
+    }
+    
+    @Transactional
+    @Override
+    public void add(SeckillActivitySaveParam param) {
+        SeckillActivityDO seckillActivityUpdateDO = new SeckillActivityDO();
+        seckillActivityUpdateDO.setEndDate(param.getEndDate());
+        seckillActivityUpdateDO.setGmtModified(new Date());
+        seckillActivityUpdateDO.setMemberLevel(param.getMemberLevel().getVal());
+        seckillActivityUpdateDO.setName(param.getName());
+        seckillActivityUpdateDO.setPicture(param.getPicture());
+        seckillActivityUpdateDO.setProductValidCount(param.getProductValidCount());
+        seckillActivityUpdateDO.setSellingPrice(param.getSellingPrice());
+        seckillActivityUpdateDO.setStartDate(param.getStartDate());
+        seckillActivityUpdateDO.setStatus(StatusEnum.VALID.getValue());
+        seckillActivityUpdateDO.setActivityStatus(ActivityStatusEnum.UNPUBLISHED.getValue());
+        seckillActivityUpdateDO.setIsRemind(false);
+        seckillActivityUpdateDO.setGmtCreate(new Date());
+        seckillActivityUpdateDO.setGmtModified(new Date());
+        seckillActivityDOMapper.insert(seckillActivityUpdateDO);
     }
     
     /**********************************************************************

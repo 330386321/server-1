@@ -38,6 +38,13 @@ public class SeckillActivityInfoDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @ApiModelProperty(value = "开始时间(yyyy-MM-dd HH:mm)", required = true)
     private Date startDate;
+    
+    /**
+     * 结束时间(yyyy-MM-dd HH:mm)
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @ApiModelProperty(value = "结束时间(yyyy-MM-dd HH:mm)", required = true)
+    private Date endDate;
 
     /**
      * 会员等级
@@ -85,6 +92,14 @@ public class SeckillActivityInfoDTO {
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public MemberGradeEnum getMemberLevel() {

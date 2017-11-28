@@ -6,6 +6,7 @@ import com.lawu.eshop.common.exception.DataNotExistException;
 import com.lawu.eshop.common.exception.WrongOperationException;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.param.SeckillActivityPageQueryParam;
+import com.lawu.eshop.product.param.SeckillActivitySaveParam;
 import com.lawu.eshop.product.param.SeckillActivityUpdateParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
 
@@ -146,4 +147,15 @@ public interface SeckillActivityService {
      * @updateDate 2017年11月27日
      */
     void seckillActivityRegistrationEnd();
+    
+    /**
+     * 新增抢购活动
+     * 
+     * @param param 抢购活动保存参数
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月28日
+     * @updateDate 2017年11月28日
+     */
+    void add(SeckillActivitySaveParam param);
 }

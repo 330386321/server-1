@@ -20,6 +20,7 @@ import com.lawu.eshop.operator.api.service.SeckillActivityService;
 import com.lawu.eshop.product.dto.SeckillActivityDetailsDTO;
 import com.lawu.eshop.product.dto.SeckillActivityInfoDTO;
 import com.lawu.eshop.product.param.SeckillActivityPageQueryParam;
+import com.lawu.eshop.product.param.SeckillActivitySaveParam;
 import com.lawu.eshop.product.param.SeckillActivityUpdateParam;
 
 import io.swagger.annotations.Api;
@@ -176,5 +177,26 @@ public class SeckillActivityController extends BaseController {
     @RequestMapping(value = "audit/{id}", method = RequestMethod.PUT)
     public Result<?> audit(@PathVariable("id") Long id) {
         return successCreated(seckillActivityService.audit(id));
+    }
+    
+    /**
+     * 新增抢购活动
+     * 
+     * @param param 抢购活动保存参数
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月28日
+     * @updateDate 2017年11月28日
+     */
+    @ApiOperation(value = "新增抢购活动", notes = "新增抢购活动(蒋鑫俊)[1004]", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequiresPermissions("seckillActivity:add")
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public Result<?> add(@ModelAttribute @Validated SeckillActivitySaveParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        return successCreated(seckillActivityService.add(param));
     }
 }

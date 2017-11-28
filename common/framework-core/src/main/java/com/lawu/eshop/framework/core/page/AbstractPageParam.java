@@ -1,5 +1,7 @@
 package com.lawu.eshop.framework.core.page;
 
+import javax.validation.constraints.Min;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -12,12 +14,14 @@ public abstract class AbstractPageParam {
     /**
      * 当前页码
      */
+    @Min(value = 1, message = "页码从1开始")
     @ApiModelProperty(value = "当前页码（从1开始）", required = true)
     private Integer currentPage = 1;
 
     /**
      * 每页数量
      */
+    @Min(value = 1, message = "每页数量必须大于0")
     @ApiModelProperty(value = "每页数量", required = true)
     private Integer pageSize = 10;
 

@@ -1,6 +1,7 @@
 package com.lawu.eshop.operator.api.service;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.dto.SeckillActivityDetailsDTO;
 import com.lawu.eshop.product.dto.SeckillActivityInfoDTO;
 import com.lawu.eshop.product.param.SeckillActivityPageQueryParam;
+import com.lawu.eshop.product.param.SeckillActivitySaveParam;
 import com.lawu.eshop.product.param.SeckillActivityUpdateParam;
 
 @FeignClient(value = "product-srv", path = "seckillActivity/")
@@ -107,4 +109,16 @@ public interface SeckillActivityService {
      */
     @RequestMapping(value = "audit/{id}", method = RequestMethod.PUT)
     Result<?> audit(@PathVariable("id") Long id);
+    
+    /**
+     * 新增抢购活动
+     * 
+     * @param param 抢购活动保存参数
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月28日
+     * @updateDate 2017年11月28日
+     */
+    @RequestMapping(value = "add", method = RequestMethod.POST)
+    Result<?> add(@RequestBody @Validated SeckillActivitySaveParam param);
 }
