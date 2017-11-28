@@ -46,10 +46,10 @@ public class AdPuttedJob extends AbstractPageJob<AdDO> {
 	private TransactionMainService<Reply> matransactionMainAddService;
 
 	@Override
-	public List<AdDO> queryPage(int currentPage, int pageSize) {
+	public List<AdDO> queryPage(int offset, int pageSize) {
 		AdDOExample example = new AdDOExample();
 		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.getVal());
-		RowBounds rowBounds = new RowBounds((currentPage - 1) * pageSize, pageSize);
+		RowBounds rowBounds = new RowBounds(offset, pageSize);
 		List<AdDO> list = adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		return list;
 	}
