@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.lawu.eshop.common.constants.MemberGradeEnum;
 import com.lawu.eshop.product.constant.ActivityStatusEnum;
+import com.lawu.eshop.product.constant.SeckillActivityProductEnum;
 import com.lawu.eshop.product.dto.SeckillActivityDetailDTO;
 import com.lawu.eshop.product.dto.SeckillActivityJoinDTO;
 import com.lawu.eshop.product.dto.SeckillActivityManageDetailDTO;
@@ -227,6 +228,8 @@ public class SeckillActivityJoinConverter {
 			seckillActivityProductManageBO.setProductName(seckillActivityProductDO.getProductName());
 			seckillActivityProductManageBO.setSaleMoney(seckillActivityProductDO.getTurnover());
 			seckillActivityProductManageBO.setSaleCount(seckillActivityProductDO.getProductModelCount()-seckillActivityProductDO.getLeftCount());
+			seckillActivityProductManageBO.setStatusEnum(SeckillActivityProductEnum.getEnum(seckillActivityProductDO.getStatus()));
+			seckillActivityProductManageBO.setReasons(seckillActivityProductDO.getReasons());
 			productList.add(seckillActivityProductManageBO);
 		}
 		
@@ -247,6 +250,8 @@ public class SeckillActivityJoinConverter {
 			seckillActivityProductManageDTO.setProductName(seckillActivityProductManageBO.getProductName());
 			seckillActivityProductManageDTO.setSaleMoney(seckillActivityProductManageBO.getSaleMoney());
 			seckillActivityProductManageDTO.setSaleCount(seckillActivityProductManageBO.getSaleCount());
+			seckillActivityProductManageDTO.setReasons(seckillActivityProductManageBO.getReasons());
+			seckillActivityProductManageDTO.setStatusEnum(seckillActivityProductManageBO.getStatusEnum());
 			productList.add(seckillActivityProductManageDTO);
 		}
 		

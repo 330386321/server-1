@@ -2,6 +2,9 @@ package com.lawu.eshop.product.srv.bo;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.product.constant.ActivityProductStatusEnum;
+import com.lawu.eshop.product.constant.SeckillActivityProductEnum;
+
 public class SeckillActivityProductManageBO {
 	
 	private Long productId;
@@ -15,6 +18,10 @@ public class SeckillActivityProductManageBO {
 	private Integer modelCount;
 	
 	private Integer saleCount;
+	
+	private SeckillActivityProductEnum  statusEnum;
+	
+	private String reasons;
 
 	public Long getProductId() {
 		return productId;
@@ -64,6 +71,22 @@ public class SeckillActivityProductManageBO {
 
 	public void setSaleCount(Integer saleCount) {
 		this.saleCount = saleCount;
+	}
+
+	public SeckillActivityProductEnum getStatusEnum() {
+		return statusEnum;
+	}
+
+	public void setStatusEnum(SeckillActivityProductEnum statusEnum) {
+		this.statusEnum = statusEnum;
+	}
+
+	public String getReasons() {
+		return reasons;
+	}
+
+	public void setReasons(String reasons) {
+		this.reasons = reasons;
 	}
 	
 	

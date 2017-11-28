@@ -37,7 +37,7 @@ public class AdFlatAndVideoJob extends AbstractPageJob<AdDO>{
 	private AdSrvConfig adSrvConfig;
     
 	@Override
-	public List<AdDO> queryPage(int currentPage, int pageSize) {
+	public List<AdDO> queryPage(int offset, int pageSize) {
 		AdDOExample example = new AdDOExample();
 		List<Byte> bytes = new ArrayList<>();
 		bytes.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
@@ -48,7 +48,7 @@ public class AdFlatAndVideoJob extends AbstractPageJob<AdDO>{
 		Date before14days = calendar.getTime();
 		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeIn(bytes)
 				.andBeginTimeLessThan(before14days);
-		RowBounds rowBounds = new RowBounds((currentPage - 1) * pageSize, pageSize);
+		RowBounds rowBounds = new RowBounds(offset, pageSize);
 		List<AdDO> list = adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		return list;
 	}
