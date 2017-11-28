@@ -26,11 +26,13 @@ import com.lawu.eshop.mall.param.LotteryRecordParam;
 import com.lawu.eshop.mall.query.LotteryRecordQuery;
 import com.lawu.eshop.member.api.service.LotteryActivityService;
 import com.lawu.eshop.member.api.service.LotteryRecordService;
+import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.PointDetailService;
 import com.lawu.eshop.member.api.service.PropertyInfoDataService;
 import com.lawu.eshop.member.api.service.UserGradeService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
+import com.lawu.eshop.user.dto.UserDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -60,6 +62,9 @@ public class LotteryRecordController extends BaseController {
 
     @Autowired
     private UserGradeService userGradeService;
+
+    @Autowired
+    private MemberService memberService;
 
     @Audit(date = "2017-11-24", reviewer = "孙林青")
     @ApiOperation(value = "参与抽奖", notes = "立即抽奖。[1002|2021] (梅述全)", httpMethod = "POST")
@@ -92,22 +97,29 @@ public class LotteryRecordController extends BaseController {
     }
 
     @Audit(date = "2017-11-24", reviewer = "孙林青")
-    @ApiOperation(value = "积分抽奖", notes = "积分抽奖。[1002|1004|2020|6025|6002|6003|6024|6010|6011] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "积分抽奖", notes = "积分抽奖。[1002|1004|2020|2022|6025|6002|6003|6024|6010|6011] (梅述全)", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "takePartByPay", method = RequestMethod.POST)
     public Result takePartByPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                 @RequestParam @ApiParam(required = true, value = "抽奖活动ID") Long lotteryActivityId) {
+        Long id = UserUtil.getCurrentUserId(getRequest());
         String userNum = UserUtil.getCurrentUserNum(getRequest());
 
         Result<Boolean> result = pointDetailService.existsPointDetailByUserNumAndBizId(userNum, String.valueOf(lotteryActivityId));
         if (result.getModel()) {
             return successCreated(ResultCode.NO_LOTTERY_COUNT);
         }
-
         Result<LotteryActivityDTO> activityDTOResult = lotteryActivityService.getLotteryActivityById(lotteryActivityId);
         if (activityDTOResult.getModel() == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        Result<UserDTO> userResult = memberService.findMemberInfo(id);
+        if (userResult.getModel() == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        if (userResult.getModel().getGrade() < activityDTOResult.getModel().getGradeEnum().getVal()) {
+            return successCreated(ResultCode.GRADE_NOT_MATCH);
         }
         Result<Integer> pointResult = userGradeService.selectLotteryActivityPointByGradeValue(activityDTOResult.getModel().getGradeEnum().getVal());
         if (pointResult.getModel() == null) {

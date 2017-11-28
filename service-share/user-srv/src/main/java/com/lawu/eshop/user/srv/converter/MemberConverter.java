@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.lawu.eshop.common.constants.MemberGradeEnum;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.type.UserType;
 import com.lawu.eshop.user.constants.UserSexEnum;
@@ -124,6 +125,8 @@ public class MemberConverter {
         userDTO.setRyToken(memberBO.getRyToken());
         userDTO.setRegionName(memberBO.getRegionName());
         userDTO.setIsFreeze(memberBO.getIsFreeze());
+        userDTO.setGradeEnum(MemberGradeEnum.getEnum(memberBO.getGrade()));
+        userDTO.setGrade(memberBO.getGrade());
         return userDTO;
     }
 
