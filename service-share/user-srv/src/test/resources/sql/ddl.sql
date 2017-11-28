@@ -384,4 +384,32 @@ CREATE TABLE `user_freeze_record` (
 	PRIMARY KEY (`id`)
 );
 
+DROP TABLE IF EXISTS `user_grade`;
+CREATE TABLE `user_grade` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `grade_name` varchar(50) DEFAULT NULL COMMENT '等级名称',
+  `grade_value` tinyint(2) NOT NULL COMMENT '等级值',
+  `grade_weight` int(5) NOT NULL COMMENT '等级权值',
+  `min_growth_value` int(11) NOT NULL COMMENT '最小成长值',
+  `lottery_activity_point` int(5) NOT NULL COMMENT '抽奖活动兑换积分',
+  `gmt_modified` datetime NOT NULL COMMENT '修改时间',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+);
+
+DROP TABLE IF EXISTS `user_grade_detail`;
+CREATE TABLE `user_grade_detail` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_num` varchar(19) DEFAULT NULL COMMENT '会员编号',
+  `transaction_detail_id` bigint(20) NOT NULL COMMENT '资产模块交易明细主键',
+  `transaction_detail_type` tinyint(3) NOT NULL COMMENT '资产模块交易明细表交易类型',
+  `biz_id` varchar(128) DEFAULT '' COMMENT '参与成长值业务记录表主键',
+  `growth_value` int(11) NOT NULL COMMENT '成长值记录',
+  `grade_before` tinyint(2) DEFAULT '1' COMMENT '操作前会员等级',
+  `grade_after` tinyint(2) DEFAULT '1' COMMENT '操作后会员等级',
+  `growth_value_before` int(11) NOT NULL COMMENT '操作前成长值',
+  `growth_value_after` int(11) NOT NULL COMMENT '操作后成长值',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+);
 
