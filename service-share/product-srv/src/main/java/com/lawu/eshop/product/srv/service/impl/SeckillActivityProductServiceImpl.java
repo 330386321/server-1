@@ -95,6 +95,9 @@ public class SeckillActivityProductServiceImpl implements SeckillActivityProduct
         SeckillActivityProductDOExample example = new SeckillActivityProductDOExample();
         SeckillActivityProductDOExample.Criteria criteria = example.createCriteria();
         criteria.andActivityIdEqualTo(id);
+        if (param.getStatus() != null) {
+            criteria.andStatusEqualTo(param.getStatus().getValue());
+        }
         Page<SeckillActivityProductBO> rtn = new Page<>();
         rtn.setCurrentPage(param.getCurrentPage());
         Long count = seckillActivityProductDOMapper.countByExample(example);
