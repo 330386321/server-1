@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.lawu.eshop.product.constant.ActivityProductStatusEnum;
 import com.lawu.eshop.product.dto.SeckillActivityProductBuyPageDTO;
+import com.lawu.eshop.product.dto.SeckillActivityProductInfoDTO;
 import com.lawu.eshop.product.dto.SeckillActivityProductInformationDTO;
 import com.lawu.eshop.product.dto.SeckillActivityProductModelInformationDTO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
@@ -173,6 +174,38 @@ public class SeckillActivityProductConverter {
                 productModel.setProductModelId(item.getProductModelId());
                 rtn.getProductModelList().add(productModel);
             }
+        }
+        return rtn;
+    }
+    
+    /**
+     * SeckillActivityProductBO转SeckillActivityProductInfoDTO
+     * 
+     * @param list
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月24日
+     * @updateDate 2017年11月24日
+     */
+    public static List<SeckillActivityProductInfoDTO> convertSeckillActivityProductInfoDTOList(List<SeckillActivityProductBO> list) {
+        List<SeckillActivityProductInfoDTO> rtn = new ArrayList<>();
+        if (list == null || list.isEmpty()) {
+            return rtn;
+        }
+        for (SeckillActivityProductBO item : list) {
+            SeckillActivityProductInfoDTO entry = new SeckillActivityProductInfoDTO();
+            entry.setLeftCount(item.getLeftCount());
+            entry.setOriginalPrice(item.getOriginalPrice());
+            entry.setProductId(item.getProductId());
+            entry.setProductModelCount(item.getProductModelCount());
+            entry.setProductName(item.getProductName());
+            entry.setProductPicture(item.getProductPicture());
+            entry.setActivityProductId(item.getId());
+            entry.setAttentionCount(item.getAttentionCount());
+            entry.setReasons(item.getReasons());
+            entry.setStatus(item.getStatus());
+            entry.setTurnover(item.getTurnover());
+            rtn.add(entry);
         }
         return rtn;
     }

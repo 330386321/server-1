@@ -14,4 +14,9 @@ public class PropertyConstant {
      */
     public final static int PROMPT_SECKILL_ACTIVITY_ABOUT_START_TIME = 10;
     
+    /**
+     * 抢购活动包名截止时间(天)
+     */
+    public final static int SECKILL_ACTIVITY_REGISTRATION_DEADLINE_TIME = 2;
+    
 }
