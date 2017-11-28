@@ -61,6 +61,7 @@ public class LotteryActivityConverter {
         activityDTO.setImagePath(activityBO.getImagePath());
         activityDTO.setEndTimeDays(DateUtil.daysOfTwo(new Date(), activityBO.getEndTime()));
         activityDTO.setGradeEnum(MemberGradeEnum.getEnum(activityBO.getGrade()));
+        activityDTO.setGrade(activityBO.getGrade());
         activityDTO.setStatusEnum(LotteryActivityStatusEnum.getEnum(activityBO.getStatus()));
         activityDTO.setLotteryCount(activityBO.getLotteryCount());
         activityDTO.setLotteryNumber(activityBO.getLotteryNumber());

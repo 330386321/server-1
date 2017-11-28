@@ -34,6 +34,9 @@ public class LotteryActivityDTO {
     @ApiModelProperty(value = "等级")
     private MemberGradeEnum gradeEnum;
 
+    @ApiModelProperty(value = "等级")
+    private Byte grade;
+
     @ApiModelProperty(value = "状态")
     private LotteryActivityStatusEnum statusEnum;
 
@@ -97,6 +100,14 @@ public class LotteryActivityDTO {
 
     public void setGradeEnum(MemberGradeEnum gradeEnum) {
         this.gradeEnum = gradeEnum;
+    }
+
+    public Byte getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Byte grade) {
+        this.grade = grade;
     }
 
     public LotteryActivityStatusEnum getStatusEnum() {
