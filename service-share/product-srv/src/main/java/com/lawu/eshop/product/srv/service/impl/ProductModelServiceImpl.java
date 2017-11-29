@@ -445,6 +445,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 		List<productModelDataBO> modelList = new ArrayList<>();
 		for (ProductModelDO productModelDO : list) {
 			productModelDataBO modelBO = new productModelDataBO();
+			modelBO.setId(productModelDO.getId());
 			modelBO.setName(productModelDO.getName());
 			modelBO.setUrl(product.getFeatureImage());
 			modelList.add(modelBO);

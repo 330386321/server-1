@@ -118,6 +118,7 @@ public class ProductModelController extends BaseController {
 		 List<ProductModelDataDTO> modelList = new ArrayList<>();
 		 for (productModelDataBO productModelDataBO : list) {
 			 ProductModelDataDTO dto = new ProductModelDataDTO();
+			 dto.setId(productModelDataBO.getId());
 			 dto.setName(productModelDataBO.getName());
 			 dto.setUrl(productModelDataBO.getUrl());
 			 modelList.add(dto);
