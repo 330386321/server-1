@@ -182,6 +182,7 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		
 		if (thisJoinCount != null && thisJoinCount.intValue() > 0) {
 			info.setIsExists(true);
+			return info;
 		} else {
 			info.setIsExists(false);
 		}
@@ -196,6 +197,7 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 			info.setIsCheckProduct(true);
 		} else {
 			info.setIsCheckProduct(false);
+			return info;
 		}
 		
 		SeckillActivityProductDOExample example = new SeckillActivityProductDOExample();
@@ -208,12 +210,14 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		
 		if (seckillActivityDO.getActivityStatus() != ActivityStatusEnum.PUBLISHED.getValue()) {
 			info.setIsJoin(false);
+			return info;
 		} else {
 			info.setIsJoin(true);
 		}
 		
 		if(commitCount!=null && seckillActivityDO.getProductValidCount()<=commitCount.intValue()){
 			info.setIsOverCount(true);
+			return info;
 		}else{
 			info.setIsOverCount(false);
 		}
