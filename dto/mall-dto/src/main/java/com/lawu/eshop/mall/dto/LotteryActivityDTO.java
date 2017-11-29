@@ -28,8 +28,8 @@ public class LotteryActivityDTO {
     @ApiModelProperty(value = "奖品图片")
     private String imagePath;
 
-    @ApiModelProperty(value = "距离结束时间天数")
-    private Integer endTimeDays;
+    @ApiModelProperty(value = "距离结束毫秒数")
+    private Long millisecond;
 
     @ApiModelProperty(value = "等级")
     private MemberGradeEnum gradeEnum;
@@ -86,12 +86,12 @@ public class LotteryActivityDTO {
         this.imagePath = imagePath;
     }
 
-    public Integer getEndTimeDays() {
-        return endTimeDays;
+    public Long getMillisecond() {
+        return millisecond;
     }
 
-    public void setEndTimeDays(Integer endTimeDays) {
-        this.endTimeDays = endTimeDays;
+    public void setMillisecond(Long millisecond) {
+        this.millisecond = millisecond;
     }
 
     public MemberGradeEnum getGradeEnum() {
