@@ -51,6 +51,18 @@ public class SeckillActivityProductInformationForeignDTO {
     private Integer attentionCount;
     
     /**
+     * 是否关注
+     */
+    @ApiModelProperty(value = "是否关注", required = true)
+    private Boolean attention;
+    
+    /**
+     * 已售数量
+     */
+    @ApiModelProperty(value = "已售数量", required = true)
+    private Integer soldQuantity;
+    
+    /**
      * 倒计时
      */
     @ApiModelProperty(value = "倒计时", required = true)
@@ -106,6 +118,22 @@ public class SeckillActivityProductInformationForeignDTO {
 
     public void setAttentionCount(Integer attentionCount) {
         this.attentionCount = attentionCount;
+    }
+
+    public Boolean getAttention() {
+        return attention;
+    }
+
+    public void setAttention(Boolean attention) {
+        this.attention = attention;
+    }
+
+    public Integer getSoldQuantity() {
+        return soldQuantity;
+    }
+
+    public void setSoldQuantity(Integer soldQuantity) {
+        this.soldQuantity = soldQuantity;
     }
 
     public Long getCountdown() {

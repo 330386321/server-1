@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.common.exception.DataNotExistException;
@@ -30,6 +31,7 @@ import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityProductBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityProductExtendBO;
 import com.lawu.eshop.product.srv.converter.SeckillActivityProductConverter;
+import com.lawu.eshop.product.srv.service.SeckillActivityAttentionService;
 import com.lawu.eshop.product.srv.service.SeckillActivityProductService;
 import com.lawu.eshop.utils.DateUtil;
 
@@ -41,6 +43,9 @@ public class SeckillActivityProductController extends BaseController {
     
     @Autowired
     private SeckillActivityProductService seckillActivityProductService;
+    
+    @Autowired
+    private SeckillActivityAttentionService seckillActivityAttentionService;
     
     /**
      * 根据id和查询参数分页查询抢购活动商品列表
@@ -76,7 +81,7 @@ public class SeckillActivityProductController extends BaseController {
      * @updateDate 2017年11月24日
      */
     @RequestMapping(value = "information/{id}", method = RequestMethod.GET)
-    public Result<SeckillActivityProductInformationDTO> information(@PathVariable("id") Long id) {
+    public Result<SeckillActivityProductInformationDTO> information(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
         SeckillActivityProductExtendBO seckillActivityProductExtendBO = null;
         try {
             seckillActivityProductExtendBO = seckillActivityProductService.information(id);
@@ -85,6 +90,9 @@ public class SeckillActivityProductController extends BaseController {
             return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
         }
         SeckillActivityProductInformationDTO rtn = SeckillActivityProductConverter.convert(seckillActivityProductExtendBO);
+        // 查询是否已经关注过这个商品
+        Boolean isAttention = seckillActivityAttentionService.isAttention(rtn.getActivityProductId(), memberId);
+        rtn.setAttention(isAttention);
         // 倒计时在服务端放入
         Long countdown = null;
         SeckillActivityBO seckillActivityBO = seckillActivityProductExtendBO.getSeckillActivity();
