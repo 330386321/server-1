@@ -178,12 +178,13 @@ public class LotteryRecordServiceImpl implements LotteryRecordService {
 
     @Override
     @Transactional
-    public int updateLotteryResult(Long id, Boolean lotteryResult) {
+    public int updateLotteryResult(Long lotteryActivityId, String account) {
         LotteryRecordDO recordDO = new LotteryRecordDO();
-        recordDO.setId(id);
         recordDO.setGmtModified(new Date());
-        recordDO.setLotteryResult(lotteryResult);
-        int result = lotteryRecordDOMapper.updateByPrimaryKeySelective(recordDO);
+        recordDO.setLotteryResult(true);
+        LotteryRecordDOExample example = new LotteryRecordDOExample();
+        example.createCriteria().andLotteryActivityIdEqualTo(lotteryActivityId).andAccountEqualTo(account);
+        int result = lotteryRecordDOMapper.updateByExampleSelective(recordDO, example);
         if (result == 0) {
             return ResultCode.FAIL;
         }

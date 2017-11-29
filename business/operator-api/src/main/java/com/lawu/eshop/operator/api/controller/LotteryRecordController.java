@@ -30,9 +30,11 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.annotation.PageBody;
+import com.lawu.eshop.mall.constants.LotteryActivityStatusEnum;
 import com.lawu.eshop.mall.dto.LotteryRecordOperatorDTO;
 import com.lawu.eshop.mall.query.OperatorLotteryRecordQuery;
 import com.lawu.eshop.operator.api.OperatorApiConfig;
+import com.lawu.eshop.operator.api.service.LotteryActivityService;
 import com.lawu.eshop.operator.api.service.LotteryRecordService;
 import com.lawu.eshop.operator.api.service.MemberService;
 import com.lawu.eshop.user.dto.MemberDTO;
@@ -60,6 +62,9 @@ public class LotteryRecordController extends BaseController {
 
     @Autowired
     private LotteryRecordService lotteryRecordService;
+
+    @Autowired
+    private LotteryActivityService lotteryActivityService;
 
     @Autowired
     private MemberService memberService;
@@ -107,7 +112,7 @@ public class LotteryRecordController extends BaseController {
 
                 @Override
                 public String[] getCellTitles() {
-                    return new String[]{"ID", "账号", "姓名", "奖品名称", "抽奖次数", "抽奖结果"};
+                    return new String[]{"账号", "姓名", "奖品名称", "抽奖次数"};
                 }
 
                 @Override
@@ -123,12 +128,8 @@ public class LotteryRecordController extends BaseController {
                             dto.setName(memberResult.getModel().getName());
                         }
 
-                        String lotteryResult = "未中奖";
-                        if (dto.getLotteryResult()) {
-                            lotteryResult = "中奖";
-                        }
                         records.add(
-                                new String[]{String.valueOf(dto.getId()), dto.getAccount(), dto.getName(), dto.getPrizeName(), String.valueOf(dto.getLotteryCount()), lotteryResult});
+                                new String[]{dto.getAccount(), dto.getName(), dto.getPrizeName(), String.valueOf(dto.getLotteryCount()),});
                     }
                     currentPage++;
                     return records;
@@ -162,11 +163,74 @@ public class LotteryRecordController extends BaseController {
         }
     }
 
+    @ApiOperation(value = "导出中奖结果模板", notes = "导出中奖结果模板。（梅述全）", httpMethod = "GET")
+    @RequestMapping(value = "exportExcelTemplate", method = RequestMethod.GET)
+    public void exportExcelTemplate() {
+        ZipSecureFile.setMinInflateRatio(0.001);
+        OutputStream out = null;
+        try {
+            String fileName = "lotteryTemplate.xlsx";
+            HttpServletResponse response = getResponse();
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-disposition", "attachment;filename=" + fileName);
+            out = response.getOutputStream();
+            ExcelUtils.exportExcel(out, new ExcelExportRecordLoadCallback() {
+
+                private int currentPage = 1;
+                private int pageSize = 1000;
+
+                @Override
+                public String[] getCellTitles() {
+                    return new String[]{"中奖账号"};
+                }
+
+                @Override
+                public List<String[]> loadRecords() {
+                    List<String[]> records = new ArrayList<>();
+                    records.add(
+                            new String[]{"13666666666"});
+                    records.add(
+                            new String[]{"13888888888"});
+
+                    currentPage++;
+                    return records;
+                }
+
+                @Override
+                public boolean isFinished() {
+                    if (currentPage == 1) {
+                        return false;
+                    }
+                    return true;
+                }
+
+                @Override
+                public int getRowAccessWindowSize() {
+                    return pageSize;
+                }
+            });
+
+        } catch (IOException e) {
+            logger.error("导出EXCEL异常=========={}", e.getMessage());
+        } finally {
+            if (out != null) {
+                try {
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     @ApiOperation(value = "导入中奖结果处理", notes = "导入中奖结果处理。（梅述全）", httpMethod = "POST")
     @RequestMapping(value = "importExcel", method = RequestMethod.POST)
     @RequiresPermissions("lottery:import")
-    public Result importExcel(@RequestParam @ApiParam(required = true, value = "文件路径") String filePath) {
+    public Result importExcel(@RequestParam @ApiParam(required = true, value = "文件路径") String filePath,
+                              @RequestParam @ApiParam(required = true, value = "活动ID") Long lotteryActivityId) {
 
+        lotteryActivityService.updateLotteryActivityStatusById(lotteryActivityId, LotteryActivityStatusEnum.LOTTERYED);
         StringBuilder sb = new StringBuilder();
         try {
             URL url = new URL(operatorApiConfig.getImageUrl() + filePath);
@@ -176,11 +240,7 @@ public class LotteryRecordController extends BaseController {
                     in, new ExcelImportRowCallback() {
                         @Override
                         public ExcelImportRowResult checkAndSave(int row, List<Object> cellValues) {
-                            boolean lotteryResult = false;
-                            if ("中奖".equals(cellValues.get(5).toString())) {
-                                lotteryResult = true;
-                            }
-                            Result result = lotteryRecordService.updateLotteryResult(Long.valueOf(cellValues.get(0).toString()), lotteryResult);
+                            Result result = lotteryRecordService.updateLotteryResult(lotteryActivityId, cellValues.get(0).toString());
 
                             ExcelImportRowResult rowResult = new ExcelImportRowResult();
                             rowResult.setRowNum(row);

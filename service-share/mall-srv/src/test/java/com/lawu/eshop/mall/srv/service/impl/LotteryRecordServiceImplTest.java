@@ -150,12 +150,13 @@ public class LotteryRecordServiceImplTest {
     public void updateLotteryResult() {
         LotteryRecordDO recordDO = new LotteryRecordDO();
         recordDO.setUserNum("M001");
+        recordDO.setAccount("13666666666");
         recordDO.setLotteryActivityId(100L);
         recordDO.setLotteryResult(false);
         recordDO.setGmtModified(DateUtil.getDayBefore(new Date()));
         lotteryRecordDOMapper.insertSelective(recordDO);
 
-        lotteryRecordService.updateLotteryResult(recordDO.getId(), true);
+        lotteryRecordService.updateLotteryResult(100L, recordDO.getAccount());
         LotteryRecordDO lotteryRecordDO = lotteryRecordDOMapper.selectByPrimaryKey(recordDO.getId());
         Assert.assertNotNull(lotteryRecordDO);
         Assert.assertTrue(lotteryRecordDO.getLotteryResult());

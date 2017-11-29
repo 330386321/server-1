@@ -32,12 +32,12 @@ public interface LotteryRecordService {
     /**
      * 更新抽奖结果
      *
-     * @param id
-     * @param lotteryResult
+     * @param lotteryActivityId
+     * @param account
      * @return
      * @author meishuquan
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "lotteryRecord/updateLotteryResult/{id}")
-    Result updateLotteryResult(@PathVariable("id") Long id, @RequestParam("lotteryResult") Boolean lotteryResult);
+    @RequestMapping(method = RequestMethod.PUT, value = "lotteryRecord/updateLotteryResult/{lotteryActivityId}")
+    Result updateLotteryResult(@PathVariable("lotteryActivityId") Long lotteryActivityId, @RequestParam("account") String account);
 
 }
