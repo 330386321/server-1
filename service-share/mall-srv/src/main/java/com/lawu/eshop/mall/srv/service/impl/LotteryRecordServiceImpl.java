@@ -104,11 +104,8 @@ public class LotteryRecordServiceImpl implements LotteryRecordService {
         Date date = DateUtil.formatDate(dateStr + " 00:00:00", "yyyy-MM-dd HH:mm:ss");
         Date lastDate = new Date();
 
-        List<Byte> statusList = new ArrayList<>();
-        statusList.add(LotteryActivityStatusEnum.FINISHED.getVal());
-        statusList.add(LotteryActivityStatusEnum.CANCEL.getVal());
         LotteryActivityDOExample example = new LotteryActivityDOExample();
-        example.createCriteria().andGmtModifiedLessThan(date).andStatusIn(statusList);
+        example.createCriteria().andGmtModifiedLessThan(date).andStatusEqualTo(LotteryActivityStatusEnum.LOTTERYED.getVal());
         example.setOrderByClause("gmt_modified desc");
         List<LotteryActivityDO> activityDOS = lotteryActivityDOMapper.selectByExample(example);
         if (!activityDOS.isEmpty()) {
@@ -119,7 +116,7 @@ public class LotteryRecordServiceImpl implements LotteryRecordService {
         Date lastEndDate = DateUtil.formatDate(lastDateStr + " 23:59:59", "yyyy-MM-dd HH:mm:ss");
 
         example = new LotteryActivityDOExample();
-        example.createCriteria().andGmtModifiedGreaterThanOrEqualTo(lastBeginDate).andGmtModifiedLessThanOrEqualTo(lastEndDate).andStatusIn(statusList);
+        example.createCriteria().andGmtModifiedGreaterThanOrEqualTo(lastBeginDate).andGmtModifiedLessThanOrEqualTo(lastEndDate).andStatusEqualTo(LotteryActivityStatusEnum.LOTTERYED.getVal());
         example.setOrderByClause("gmt_modified desc");
         RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
         activityDOS = lotteryActivityDOMapper.selectByExampleWithRowbounds(example, rowBounds);
