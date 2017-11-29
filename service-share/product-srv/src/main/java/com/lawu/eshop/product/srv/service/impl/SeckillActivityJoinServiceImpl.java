@@ -161,12 +161,12 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		ProductDOExample pexample = new ProductDOExample();
 		pexample.createCriteria().andMerchantIdEqualTo(merchantId).andIdEqualTo(productId);
 		
-		List<ProductDO> pList = productDOMapper.selectByExample(pexample);
+		Long count = productDOMapper.countByExample(pexample);
 		
-		if (pList.isEmpty()) {
-			info.setIsCheckProduct(false);
-		} else {
+		if (count != null && count > 0) {
 			info.setIsCheckProduct(true);
+		} else {
+			info.setIsCheckProduct(false);
 		}
 		
 		SeckillActivityProductDOExample example = new SeckillActivityProductDOExample();
