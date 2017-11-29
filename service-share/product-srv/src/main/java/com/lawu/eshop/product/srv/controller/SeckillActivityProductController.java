@@ -30,6 +30,7 @@ import com.lawu.eshop.product.param.SeckillActivityProductPageSearchParam;
 import com.lawu.eshop.product.srv.bo.SeckillActivityBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityProductBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityProductExtendBO;
+import com.lawu.eshop.product.srv.constants.PropertyConstant;
 import com.lawu.eshop.product.srv.converter.SeckillActivityProductConverter;
 import com.lawu.eshop.product.srv.service.SeckillActivityAttentionService;
 import com.lawu.eshop.product.srv.service.SeckillActivityProductService;
@@ -93,20 +94,27 @@ public class SeckillActivityProductController extends BaseController {
         // 查询是否已经关注过这个商品
         Boolean isAttention = seckillActivityAttentionService.isAttention(rtn.getActivityProductId(), memberId);
         rtn.setAttention(isAttention);
-        // 倒计时在服务端放入
-        Long countdown = null;
+        
         SeckillActivityBO seckillActivityBO = seckillActivityProductExtendBO.getSeckillActivity();
-        switch (rtn.getActivityStatus()) {
-            case NOT_STARTED:
-                countdown = DateUtil.interval(new Date(), seckillActivityBO.getStartDate(), Calendar.MILLISECOND);
-                break;
-            case PROCESSING:
-                countdown = DateUtil.interval(new Date(), seckillActivityBO.getEndDate(), Calendar.MILLISECOND);
-                break;
-            default:
-                break;
+        if (seckillActivityBO != null) {
+            // 判断是否已经超过设置关注的时间
+            boolean isExceededAttentionTime = DateUtil.isExceeds(seckillActivityBO.getStartDate(), new Date(), PropertyConstant.PROMPT_SECKILL_ACTIVITY_ABOUT_START_TIME, Calendar.MINUTE);
+            rtn.setExceededAttentionTime(isExceededAttentionTime);
+            
+            // 倒计时在服务端放入
+            Long countdown = null;
+            switch (rtn.getActivityStatus()) {
+                case NOT_STARTED:
+                    countdown = DateUtil.interval(new Date(), seckillActivityBO.getStartDate(), Calendar.MILLISECOND);
+                    break;
+                case PROCESSING:
+                    countdown = DateUtil.interval(new Date(), seckillActivityBO.getEndDate(), Calendar.MILLISECOND);
+                    break;
+                default:
+                    break;
+            }
+            rtn.setCountdown(countdown);
         }
-        rtn.setCountdown(countdown);
         return successGet(rtn);
     }
     

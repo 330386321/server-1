@@ -100,6 +100,7 @@ public class SeckillActivityProductController extends BaseController {
         rtn.setSellingPrice(model.getSellingPrice());
         rtn.setAttention(model.getAttention());
         rtn.setSoldQuantity(model.getSoldQuantity());
+        rtn.setExceededAttentionTime(model.getExceededAttentionTime());
         return successGet(rtn);
     }
 }

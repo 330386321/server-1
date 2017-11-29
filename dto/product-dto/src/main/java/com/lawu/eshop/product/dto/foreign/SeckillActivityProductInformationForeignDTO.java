@@ -57,6 +57,12 @@ public class SeckillActivityProductInformationForeignDTO {
     private Boolean attention;
     
     /**
+     * 是否已经超过设置提醒的时间
+     */
+    @ApiModelProperty(value = "是否已经超过设置提醒的时间", required = true)
+    private Boolean exceededAttentionTime;
+    
+    /**
      * 已售数量
      */
     @ApiModelProperty(value = "已售数量", required = true)
@@ -126,6 +132,14 @@ public class SeckillActivityProductInformationForeignDTO {
 
     public void setAttention(Boolean attention) {
         this.attention = attention;
+    }
+
+    public Boolean getExceededAttentionTime() {
+        return exceededAttentionTime;
+    }
+
+    public void setExceededAttentionTime(Boolean exceededAttentionTime) {
+        this.exceededAttentionTime = exceededAttentionTime;
     }
 
     public Integer getSoldQuantity() {
