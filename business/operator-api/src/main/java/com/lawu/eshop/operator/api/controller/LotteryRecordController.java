@@ -163,8 +163,8 @@ public class LotteryRecordController extends BaseController {
         }
     }
 
-    @ApiOperation(value = "导出中奖结果模板", notes = "导出中奖结果模板。（梅述全）", httpMethod = "GET")
-    @RequestMapping(value = "exportExcelTemplate", method = RequestMethod.GET)
+    @ApiOperation(value = "导出中奖结果模板", notes = "导出中奖结果模板。（梅述全）", httpMethod = "POST")
+    @RequestMapping(value = "exportExcelTemplate", method = RequestMethod.POST)
     public void exportExcelTemplate() {
         ZipSecureFile.setMinInflateRatio(0.001);
         OutputStream out = null;
@@ -240,14 +240,16 @@ public class LotteryRecordController extends BaseController {
                     in, new ExcelImportRowCallback() {
                         @Override
                         public ExcelImportRowResult checkAndSave(int row, List<Object> cellValues) {
-                            Result result = lotteryRecordService.updateLotteryResult(lotteryActivityId, cellValues.get(0).toString());
-
                             ExcelImportRowResult rowResult = new ExcelImportRowResult();
                             rowResult.setRowNum(row);
                             rowResult.setCellValues(cellValues);
                             rowResult.setErr(false);
                             rowResult.setBlockedErr(false);
+                            if (cellValues.get(0) == null || StringUtils.isEmpty(cellValues.get(0).toString())) {
+                                return rowResult;
+                            }
 
+                            Result result = lotteryRecordService.updateLotteryResult(lotteryActivityId, cellValues.get(0).toString());
                             if (ResultCode.SUCCESS != result.getRet()) {
                                 rowResult.setErr(true);
                             }
@@ -255,7 +257,9 @@ public class LotteryRecordController extends BaseController {
                         }
                     });
             for (ExcelImportRowResult rowResult : excelImportRowResults) {
-                sb.append(rowResult.getCellValues().get(0).toString()).append(",");
+                if (rowResult.getCellValues().get(0) != null && StringUtils.isNotEmpty(rowResult.getCellValues().get(0).toString())) {
+                    sb.append(rowResult.getCellValues().get(0).toString()).append(",");
+                }
             }
             String errIds = StringUtils.isEmpty(sb.toString()) ? "" : sb.substring(0, sb.length() - 1);
             return successCreated(errIds);
