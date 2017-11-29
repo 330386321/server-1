@@ -10,6 +10,8 @@ public class FansMerchantBO {
 
     private Long memberId;
 
+    private Long merchantId;
+
     private String num;
 
     private String account;
@@ -96,5 +98,13 @@ public class FansMerchantBO {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public Long getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
     }
 }

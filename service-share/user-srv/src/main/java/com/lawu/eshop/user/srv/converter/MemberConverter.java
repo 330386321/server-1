@@ -208,6 +208,7 @@ public class MemberConverter {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setId(memberBO.getId());
         memberDTO.setNum(memberBO.getNum());
+        memberDTO.setAccount(memberBO.getAccount());
         memberDTO.setName(memberBO.getName());
         memberDTO.setNickname(memberBO.getNickname());
         memberDTO.setBirthday(memberBO.getBirthday());

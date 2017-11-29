@@ -224,7 +224,7 @@ public class AlipayNotifyController extends BaseController {
 							Result<MemberDTO> member = memberService.findMemberInfoById(dto.getMemberId());
 							PayOrderMerchantStoreInfoDTO merchantStore = merchantStoreService.getPayOrderDetailStoreInfo(dto.getMerchantId());
 							param.setTitle(merchantStore.getName());
-							param.setTitleMerchant(member.getModel().getName());
+							param.setTitleMerchant(StringUtil.hideUserAccount(member.getModel().getAccount()));
 
 							result = orderService.doHandlePayOrderNotify(param);
 						} else {

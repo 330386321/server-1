@@ -40,7 +40,7 @@ public class MemberFansTransactionFollowServiceImpl extends AbstractTransactionF
         param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.MERCHANT_RED_SWEEP);
         param.setLoveTypeEnum(LoveTypeEnum.MEMBER_FANS);
         param.setTempBizId("0");
-        param.setTransactionDesc(MemberTransactionTypeEnum.MERCHANT_RED_SWEEP.getDescPrefix());
+        param.setTransactionDesc(MemberTransactionTypeEnum.MERCHANT_RED_SWEEP.getDescPrefix()+notification.getMerchantStoreName());
         propertyInfoDataService.doHanlderBalanceIncome(param);
     }
 }

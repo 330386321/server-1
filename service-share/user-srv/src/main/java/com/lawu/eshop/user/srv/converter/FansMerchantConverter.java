@@ -29,6 +29,7 @@ public class FansMerchantConverter {
 
         FansMerchantBO fansMerchantBO = new FansMerchantBO();
         fansMerchantBO.setMemberId(fansMerchantDO.getMemberId());
+        fansMerchantBO.setMerchantId(fansMerchantBO.getMerchantId());
         return fansMerchantBO;
     }
 

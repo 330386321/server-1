@@ -156,7 +156,7 @@ public class BalancePayController extends BaseController {
         Result<MemberDTO> member = memberService.findMemberInfoById(dto.getMemberId());
         PayOrderMerchantStoreInfoDTO merchantStore = merchantStoreService.getPayOrderDetailStoreInfo(dto.getMerchantId());
         dparam.setTitle(merchantStore.getName());
-        dparam.setTitleMerchant(member.getModel().getName());
+        dparam.setTitleMerchant(StringUtil.hideUserAccount(member.getModel().getAccount()));
 
         Result result = balancePayService.billPay(dparam);
         if (ResultCode.SUCCESS != result.getRet()) {
@@ -326,7 +326,7 @@ public class BalancePayController extends BaseController {
         Result<MemberDTO> member = memberService.findMemberInfoById(dto.getMemberId());
         PayOrderMerchantStoreInfoDTO merchantStore = merchantStoreService.getPayOrderDetailStoreInfo(dto.getMerchantId());
         dparam.setTitle(merchantStore.getName());
-        dparam.setTitleMerchant(member.getModel().getNickname());
+        dparam.setTitleMerchant(StringUtil.hideUserAccount(member.getModel().getAccount()));
 
         Result result = balancePayService.billPayValidatePwd(dparam);
         if (ResultCode.SUCCESS != result.getRet()) {
