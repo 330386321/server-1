@@ -23,6 +23,7 @@ import com.lawu.eshop.product.srv.bo.SeckillActivityManageDetailBO;
 import com.lawu.eshop.product.srv.converter.SeckillActivityJoinConverter;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductDOExample;
+import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDOExample;
 import com.lawu.eshop.product.srv.domain.SeckillActivityProductDO;
@@ -30,6 +31,7 @@ import com.lawu.eshop.product.srv.domain.SeckillActivityProductDOExample;
 import com.lawu.eshop.product.srv.domain.SeckillActivityProductModelDO;
 import com.lawu.eshop.product.srv.domain.extend.SeckillActivityDOView;
 import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
 import com.lawu.eshop.product.srv.mapper.SeckillActivityDOMapper;
 import com.lawu.eshop.product.srv.mapper.SeckillActivityProductDOMapper;
 import com.lawu.eshop.product.srv.mapper.SeckillActivityProductModelDOMapper;
@@ -53,6 +55,9 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 	private ProductDOMapper productDOMapper;
 	
 	@Autowired
+	private ProductModelDOMapper productModelDOMapper;
+	
+	@Autowired
 	private SeckillActivityProductModelDOMapper seckillActivityProductModelDOMapper;
 
 	@Override
@@ -60,7 +65,7 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		
 		SeckillActivityDOExample example = new SeckillActivityDOExample();
 		example.createCriteria().andActivityStatusEqualTo(ActivityStatusEnum.PUBLISHED.getValue());
-		 example.setOrderByClause("start_date asc");
+		example.setOrderByClause("start_date asc");
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		List<SeckillActivityDO> list = seckillActivityDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		Page<SeckillActivityJoinBO> page = new Page<>();
@@ -117,7 +122,14 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		int moelCount=0;
 		for (ModelParam modelParam : list) {
 			int count = modelParam.getCount();
-			moelCount +=count;
+			//当前型号是否为该商品
+			ProductModelDOExample pmExample = new ProductModelDOExample();
+			pmExample.createCriteria().andProductIdEqualTo(joinParam.getProductId()).andIdEqualTo(modelParam.getModelId());
+			int modelCount = productModelDOMapper.countByExample(pmExample);
+			if(count > 0 && modelCount > 0){
+				moelCount +=count;
+			}
+			
 		}
 		
 		ProductDO productDO = productDOMapper.selectByPrimaryKey(joinParam.getProductId());
@@ -141,7 +153,13 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		seckillActivityProductDOMapper.insertSelective(seckillActivityProductDO);
 		
 		for (ModelParam modelParam : list) {
-			if(modelParam.getCount()>0){
+			//当前型号是否为该商品
+			ProductModelDOExample pmExample = new ProductModelDOExample();
+			pmExample.createCriteria().andProductIdEqualTo(joinParam.getProductId()).andIdEqualTo(modelParam.getModelId());
+			int modelCount = productModelDOMapper.countByExample(pmExample);
+			
+			if(modelParam.getCount()>0 && modelCount > 0){
+				
 				SeckillActivityProductModelDO seckillActivityProductModelDO = new SeckillActivityProductModelDO();
 				seckillActivityProductModelDO.setActivityProductId(seckillActivityProductDO.getId());
 				seckillActivityProductModelDO.setCount(modelParam.getCount());
