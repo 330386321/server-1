@@ -120,8 +120,17 @@ public class SeckillActivityJoinController extends BaseController{
 	@RequestMapping(value = "joinSeckillActivity", method = RequestMethod.POST)
 	public Result joinSeckillActivity(@RequestBody JoinSeckillActivityParam joinParam, @RequestParam Long merchantId){
 		
-		SeckillActivityInfoBO seckillActivityInfoBO = seckillActivityJoinService.querySeckillActivityInfo(joinParam.getSeckillActivityId());
+		SeckillActivityInfoBO seckillActivityInfoBO = seckillActivityJoinService.querySeckillActivityInfo(joinParam.getSeckillActivityId(),merchantId,joinParam.getProductId());
 		
+		//鉴权
+		if(!seckillActivityInfoBO.getIsCheckProduct()){
+			return successCreated(ResultCode.SECKILL_ACTIVITY_PRODUCT_STATUS);
+		}
+		
+		//判断活动状态
+		if(!seckillActivityInfoBO.getIsJoin()){
+			return successCreated(ResultCode.SECKILL_ACTIVITY_JOIN_STATUS);
+		}
 		//可报名数已满
 		if(seckillActivityInfoBO.getIsOverCount()){
 			return successCreated(ResultCode.SECKILL_ACTIVITY_COUNT_OVER);

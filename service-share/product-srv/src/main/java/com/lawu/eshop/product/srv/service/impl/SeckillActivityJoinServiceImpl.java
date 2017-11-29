@@ -22,6 +22,7 @@ import com.lawu.eshop.product.srv.bo.SeckillActivityManageBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityManageDetailBO;
 import com.lawu.eshop.product.srv.converter.SeckillActivityJoinConverter;
 import com.lawu.eshop.product.srv.domain.ProductDO;
+import com.lawu.eshop.product.srv.domain.ProductDOExample;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDOExample;
 import com.lawu.eshop.product.srv.domain.SeckillActivityProductDO;
@@ -115,16 +116,6 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		List<ModelParam> list = joinParam.getModelList();
 		int moelCount=0;
 		for (ModelParam modelParam : list) {
-			if(modelParam.getCount()>0){
-				SeckillActivityProductModelDO seckillActivityProductModelDO = new SeckillActivityProductModelDO();
-				seckillActivityProductModelDO.setActivityProductId(joinParam.getProductId());
-				seckillActivityProductModelDO.setCount(modelParam.getCount());
-				seckillActivityProductModelDO.setGmtCreate(new Date());
-				seckillActivityProductModelDO.setLeftCount(modelParam.getCount());
-				seckillActivityProductModelDO.setProductModelId(modelParam.getModelId());
-				seckillActivityProductModelDO.setGmtModified(new Date());
-				seckillActivityProductModelDOMapper.insertSelective(seckillActivityProductModelDO);
-			}
 			int count = modelParam.getCount();
 			moelCount +=count;
 		}
@@ -148,17 +139,49 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		seckillActivityProductDO.setTurnover(BigDecimal.valueOf(0));
 		
 		seckillActivityProductDOMapper.insertSelective(seckillActivityProductDO);
+		
+		for (ModelParam modelParam : list) {
+			if(modelParam.getCount()>0){
+				SeckillActivityProductModelDO seckillActivityProductModelDO = new SeckillActivityProductModelDO();
+				seckillActivityProductModelDO.setActivityProductId(seckillActivityProductDO.getId());
+				seckillActivityProductModelDO.setCount(modelParam.getCount());
+				seckillActivityProductModelDO.setGmtCreate(new Date());
+				seckillActivityProductModelDO.setLeftCount(modelParam.getCount());
+				seckillActivityProductModelDO.setProductModelId(modelParam.getModelId());
+				seckillActivityProductModelDO.setGmtModified(new Date());
+				seckillActivityProductModelDOMapper.insertSelective(seckillActivityProductModelDO);
+			}
+		}
 	}
 
 	@Override
-	public SeckillActivityInfoBO querySeckillActivityInfo(Long id) {
+	public SeckillActivityInfoBO querySeckillActivityInfo(Long id,Long merchantId,Long productId) {
+		SeckillActivityInfoBO info = new SeckillActivityInfoBO();
+		
+		ProductDOExample pexample = new ProductDOExample();
+		pexample.createCriteria().andMerchantIdEqualTo(merchantId).andIdEqualTo(productId);
+		
+		List<ProductDO> pList = productDOMapper.selectByExample(pexample);
+		
+		if (pList.isEmpty()) {
+			info.setIsCheckProduct(false);
+		} else {
+			info.setIsCheckProduct(true);
+		}
 		
 		SeckillActivityProductDOExample example = new SeckillActivityProductDOExample();
 		example.createCriteria().andActivityIdEqualTo(id);
 		Long commitCount = seckillActivityProductDOMapper.countByExample(example);
-		SeckillActivityInfoBO info = new SeckillActivityInfoBO();
+		
 		
 		SeckillActivityDO seckillActivityDO = seckillActivityDOMapper.selectByPrimaryKey(id);
+		
+		
+		if (seckillActivityDO.getActivityStatus() != ActivityStatusEnum.PUBLISHED.getValue()) {
+			info.setIsJoin(false);
+		} else {
+			info.setIsJoin(true);
+		}
 		
 		if(commitCount!=null && seckillActivityDO.getProductValidCount()<=commitCount.intValue()){
 			info.setIsOverCount(true);
