@@ -58,7 +58,7 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 	public Page<SeckillActivityJoinBO> queryPage(SeckillActivityJoinParam param) {
 		
 		SeckillActivityDOExample example = new SeckillActivityDOExample();
-		example.createCriteria().andActivityStatusEqualTo(ActivityStatusEnum.NOT_STARTED.getValue());
+		example.createCriteria().andActivityStatusEqualTo(ActivityStatusEnum.PUBLISHED.getValue());
 		 example.setOrderByClause("start_date asc");
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		List<SeckillActivityDO> list = seckillActivityDOMapper.selectByExampleWithRowbounds(example, rowBounds);
