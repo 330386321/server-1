@@ -131,15 +131,11 @@ public class SeckillActivityJoinController extends BaseController{
 		if(!seckillActivityInfoBO.getIsJoin()){
 			return successCreated(ResultCode.SECKILL_ACTIVITY_JOIN_STATUS);
 		}
+		
 		//可报名数已满
 		if(seckillActivityInfoBO.getIsOverCount()){
 			return successCreated(ResultCode.SECKILL_ACTIVITY_COUNT_OVER);
 			
-		}
-		//可报名时间已到
-		if(seckillActivityInfoBO.getIsOverTime()){
-			
-			return successCreated(ResultCode.SECKILL_ACTIVITY_TIME_OVER);
 		}
 		seckillActivityJoinService.joinSeckillActivity(joinParam, merchantId);
 		

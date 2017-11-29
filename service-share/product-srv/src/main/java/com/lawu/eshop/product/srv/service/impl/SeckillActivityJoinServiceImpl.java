@@ -189,15 +189,6 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 			info.setIsOverCount(false);
 		}
 		
-		Date newTime = DateUtil.getDayBeforeTwo(seckillActivityDO.getStartDate());
-		Long after = newTime.getTime();
-		Long before = new Date().getTime();
-		if (after - before > 0) {
-			info.setIsOverTime(false);
-		} else {
-			info.setIsOverTime(true);
-		}
-		 
 		return info;
 	}
 

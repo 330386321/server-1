@@ -4,8 +4,6 @@ public class SeckillActivityInfoBO {
 	
 	private Boolean isOverCount;
 	
-	private Boolean isOverTime;
-	
 	private Boolean isJoin;
 	
 	private Boolean isCheckProduct;
@@ -17,14 +15,6 @@ public class SeckillActivityInfoBO {
 
 	public void setIsOverCount(Boolean isOverCount) {
 		this.isOverCount = isOverCount;
-	}
-
-	public Boolean getIsOverTime() {
-		return isOverTime;
-	}
-
-	public void setIsOverTime(Boolean isOverTime) {
-		this.isOverTime = isOverTime;
 	}
 
 	public Boolean getIsJoin() {
