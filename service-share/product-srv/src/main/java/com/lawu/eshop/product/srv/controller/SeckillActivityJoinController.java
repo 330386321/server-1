@@ -122,6 +122,11 @@ public class SeckillActivityJoinController extends BaseController{
 		
 		SeckillActivityInfoBO seckillActivityInfoBO = seckillActivityJoinService.querySeckillActivityInfo(joinParam.getSeckillActivityId(),merchantId,joinParam.getProductId());
 		
+		//该商品是否已经参与活动
+		if(seckillActivityInfoBO.getIsExists()){
+			return successCreated(ResultCode.SECKILL_ACTIVITY_PRODUCT_EXISTS);
+		}
+		
 		//鉴权
 		if(!seckillActivityInfoBO.getIsCheckProduct()){
 			return successCreated(ResultCode.SECKILL_ACTIVITY_PRODUCT_STATUS);

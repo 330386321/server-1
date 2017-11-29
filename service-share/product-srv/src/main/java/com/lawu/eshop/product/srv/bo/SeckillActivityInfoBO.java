@@ -8,6 +8,16 @@ public class SeckillActivityInfoBO {
 	
 	private Boolean isCheckProduct;
 
+	private Boolean isExists;
+	
+
+	public Boolean getIsExists() {
+		return isExists;
+	}
+
+	public void setIsExists(Boolean isExists) {
+		this.isExists = isExists;
+	}
 
 	public Boolean getIsOverCount() {
 		return isOverCount;

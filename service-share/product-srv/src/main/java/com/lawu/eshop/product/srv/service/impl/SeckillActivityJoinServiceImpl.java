@@ -176,6 +176,17 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 	public SeckillActivityInfoBO querySeckillActivityInfo(Long id,Long merchantId,Long productId) {
 		SeckillActivityInfoBO info = new SeckillActivityInfoBO();
 		
+		SeckillActivityProductDOExample sexample = new SeckillActivityProductDOExample();
+		sexample.createCriteria().andActivityIdEqualTo(id).andProductIdEqualTo(productId);
+		Long thisJoinCount = seckillActivityProductDOMapper.countByExample(sexample);
+		
+		if (thisJoinCount != null && thisJoinCount.intValue() > 0) {
+			info.setIsExists(true);
+		} else {
+			info.setIsExists(false);
+		}
+		
+		
 		ProductDOExample pexample = new ProductDOExample();
 		pexample.createCriteria().andMerchantIdEqualTo(merchantId).andIdEqualTo(productId);
 		

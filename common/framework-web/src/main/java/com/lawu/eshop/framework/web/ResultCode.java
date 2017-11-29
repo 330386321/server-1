@@ -93,6 +93,7 @@ public class ResultCode {
     public static final int SECKILL_ACTIVITY_TIME_OVER = 3007;
     public static final int SECKILL_ACTIVITY_JOIN_STATUS = 3008;
     public static final int SECKILL_ACTIVITY_PRODUCT_STATUS = 3009;
+    public static final int SECKILL_ACTIVITY_PRODUCT_EXISTS = 3010;
 
     // 订单模块代码 4xxx
     public static final int PRODUCT_EVALUATE_TRUE = 4001;
@@ -322,6 +323,8 @@ public class ResultCode {
         ResultCode.messageMap.put(SECKILL_ACTIVITY_TIME_OVER, "抢购活动报名时间已到");
         ResultCode.messageMap.put(SECKILL_ACTIVITY_JOIN_STATUS, "该活动当前不能报名");
         ResultCode.messageMap.put(SECKILL_ACTIVITY_PRODUCT_STATUS, "该商品不存在");
+        ResultCode.messageMap.put(SECKILL_ACTIVITY_PRODUCT_EXISTS, "该商品已参与该活动");
+        
         
 
         // 订单模块 4xxx
