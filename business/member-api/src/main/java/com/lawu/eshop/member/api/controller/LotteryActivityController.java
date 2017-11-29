@@ -57,6 +57,12 @@ public class LotteryActivityController extends BaseController {
         query.setPageSize(activityQuery.getPageSize());
         query.setUserNum(userNum);
         Result<Page<LotteryActivityDTO>> result = lotteryActivityService.listLotteryActivity(query);
+        for (LotteryActivityDTO activityDTO : result.getModel().getRecords()) {
+            Result<Integer> pointResult = userGradeService.selectLotteryActivityPointByGradeValue(activityDTO.getGradeEnum().getVal());
+            if (pointResult.getModel() != null) {
+                activityDTO.setPoint(pointResult.getModel());
+            }
+        }
         return successGet(result);
     }
 
