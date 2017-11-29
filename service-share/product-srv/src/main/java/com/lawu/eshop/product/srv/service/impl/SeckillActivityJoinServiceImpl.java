@@ -132,6 +132,11 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 			
 		}
 		
+		//总型号为0直接返回
+		if(moelCount == 0){
+			return ;
+		}
+		
 		ProductDO productDO = productDOMapper.selectByPrimaryKey(joinParam.getProductId());
 		
 		//保存商品参加记录
