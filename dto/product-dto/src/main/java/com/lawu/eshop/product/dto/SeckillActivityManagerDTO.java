@@ -26,7 +26,7 @@ public class SeckillActivityManagerDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date startDate;
 	
-	@ApiModelProperty(value = "UNPUBLISHED 未发布  NOT_STARTED 未开始 PROCESSING 进行中  END 已结束")
+	@ApiModelProperty(value = "UNPUBLISHED 未发布 PUBLISHED 发布中  IN_REVIEW  审核中  NOT_STARTED 未开始 PROCESSING 进行中  END 已结束")
 	private ActivityStatusEnum activityStatusEnum;
 
 	public Long getId() {
