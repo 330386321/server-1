@@ -97,7 +97,7 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		SeckillActivityDO seckillActivityDO = seckillActivityDOMapper.selectByPrimaryKey(id);
 		SeckillActivityDetailBO seckillActivityDetailBO = SeckillActivityJoinConverter.seckillActivityJoinDetailBOConverter(seckillActivityDO);
 		SeckillActivityProductDOExample example = new SeckillActivityProductDOExample();
-		example.createCriteria().andActivityIdEqualTo(id).andMerchantIdEqualTo(merchantId);
+		example.createCriteria().andActivityIdEqualTo(id);
 		Long joinCount = seckillActivityProductDOMapper.countByExample(example);
 		seckillActivityDetailBO.setJoinCount(joinCount.intValue());
 		
