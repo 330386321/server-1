@@ -177,7 +177,8 @@ public class SeckillActivityJoinConverter {
 		seckillActivityDetailBO.setStartDate(seckillActivityDO.getStartDate());
 		seckillActivityDetailBO.setEndDate(seckillActivityDO.getEndDate());
 		//未开始
-		if(seckillActivityDO.getActivityStatus()==ActivityStatusEnum.NOT_STARTED.getValue()){
+		if(seckillActivityDO.getActivityStatus()==ActivityStatusEnum.NOT_STARTED.getValue() || seckillActivityDO.getActivityStatus()==ActivityStatusEnum.PUBLISHED.getValue()
+				|| seckillActivityDO.getActivityStatus()==ActivityStatusEnum.IN_REVIEW.getValue()){
 			Date newTime = DateUtil.getDayBeforeTwo(seckillActivityDO.getStartDate());
 			Long after = newTime.getTime();
 			Long before = new Date().getTime();
