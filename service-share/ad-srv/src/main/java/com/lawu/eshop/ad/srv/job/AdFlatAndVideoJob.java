@@ -73,7 +73,7 @@ public class AdFlatAndVideoJob extends AbstractPageJob<AdDO>{
 
 	@Override
 	public boolean isStatusData() {
-		return true;
+		return false;
 	}
 
 }
