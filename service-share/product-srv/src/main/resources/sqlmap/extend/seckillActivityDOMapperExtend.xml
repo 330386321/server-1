@@ -24,7 +24,8 @@
 			sa.`name`,
 			sa.picture,
 			sa.selling_price,
-			sa.start_date
+			sa.start_date,
+			sa.end_date 
 		FROM
 			seckill_activity sa
 		LEFT JOIN seckill_activity_product sap ON sa.id = sap.activity_id

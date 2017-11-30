@@ -15,6 +15,8 @@ public class SeckillActivityDOView {
 	
 	private Date startDate;
 	
+	private Date endDate;
+	
 	private Byte activityStatus;
 
 	public Long getId() {
@@ -63,6 +65,14 @@ public class SeckillActivityDOView {
 
 	public void setActivityStatus(Byte activityStatus) {
 		this.activityStatus = activityStatus;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 	

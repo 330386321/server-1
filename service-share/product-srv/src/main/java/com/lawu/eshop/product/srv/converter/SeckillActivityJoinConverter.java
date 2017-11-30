@@ -44,6 +44,7 @@ public class SeckillActivityJoinConverter {
 			seckillActivityJoinBO.setPicture(SeckillActivityDO.getPicture());
 			seckillActivityJoinBO.setSellingPrice(SeckillActivityDO.getSellingPrice());
 			seckillActivityJoinBO.setStartDate(SeckillActivityDO.getStartDate());
+			seckillActivityJoinBO.setEndDate(SeckillActivityDO.getEndDate());
 			joinList.add(seckillActivityJoinBO);
 		}
 		
@@ -64,6 +65,7 @@ public class SeckillActivityJoinConverter {
 			seckillActivityJoinDTO.setPicture(seckillActivityBO.getPicture());
 			seckillActivityJoinDTO.setSellingPrice(seckillActivityBO.getSellingPrice());
 			seckillActivityJoinDTO.setStartDate(seckillActivityBO.getStartDate());
+			seckillActivityJoinDTO.setEndDate(seckillActivityBO.getEndDate());
 			joinList.add(seckillActivityJoinDTO);
 		}
 		
@@ -84,6 +86,7 @@ public class SeckillActivityJoinConverter {
 			seckillActivityManageBO.setPicture(seckillActivityDOView.getPicture());
 			seckillActivityManageBO.setSellingPrice(seckillActivityDOView.getSellingPrice());
 			seckillActivityManageBO.setStartDate(seckillActivityDOView.getStartDate());
+			seckillActivityManageBO.setEndDate(seckillActivityDOView.getEndDate());
 			seckillActivityManageBO.setActivityStatusEnum(ActivityStatusEnum.getEnum(seckillActivityDOView.getActivityStatus()));
 			joinList.add(seckillActivityManageBO);
 		}
@@ -105,6 +108,7 @@ public class SeckillActivityJoinConverter {
 			seckillActivityManagerDTO.setPicture(seckillActivityManageBO.getPicture());
 			seckillActivityManagerDTO.setSellingPrice(seckillActivityManageBO.getSellingPrice());
 			seckillActivityManagerDTO.setStartDate(seckillActivityManageBO.getStartDate());
+			seckillActivityManagerDTO.setEndDate(seckillActivityManageBO.getEndDate());
 			seckillActivityManagerDTO.setActivityStatusEnum(seckillActivityManageBO.getActivityStatusEnum());
 			joinList.add(seckillActivityManagerDTO);
 		}
@@ -124,6 +128,7 @@ public class SeckillActivityJoinConverter {
 		seckillActivityDetailBO.setPicture(seckillActivityDO.getPicture());
 		seckillActivityDetailBO.setSellingPrice(seckillActivityDO.getSellingPrice());
 		seckillActivityDetailBO.setStartDate(seckillActivityDO.getStartDate());
+		seckillActivityDetailBO.setEndDate(seckillActivityDO.getEndDate());
 		seckillActivityDetailBO.setMemberLevelEnum(MemberGradeEnum.getEnum(seckillActivityDO.getMemberLevel()));
 		seckillActivityDetailBO.setProductValidCount(seckillActivityDO.getProductValidCount());
 		return seckillActivityDetailBO;
@@ -141,6 +146,7 @@ public class SeckillActivityJoinConverter {
 		seckillActivityDetailDTO.setPicture(seckillActivityDetailBO.getPicture());
 		seckillActivityDetailDTO.setSellingPrice(seckillActivityDetailBO.getSellingPrice());
 		seckillActivityDetailDTO.setStartDate(seckillActivityDetailBO.getStartDate());
+		seckillActivityDetailDTO.setEndDate(seckillActivityDetailBO.getEndDate());
 		seckillActivityDetailDTO.setMemberLevelEnum(seckillActivityDetailBO.getMemberLevelEnum());
 		seckillActivityDetailDTO.setProductValidCount(seckillActivityDetailBO.getProductValidCount());
 		seckillActivityDetailDTO.setJoinCount(seckillActivityDetailBO.getJoinCount());
@@ -168,6 +174,8 @@ public class SeckillActivityJoinConverter {
 		seckillActivityDetailBO.setPicture(seckillActivityDO.getPicture());
 		seckillActivityDetailBO.setSellingPrice(seckillActivityDO.getSellingPrice());
 		seckillActivityDetailBO.setActivityStatusEnum(ActivityStatusEnum.getEnum(seckillActivityDO.getActivityStatus()));
+		seckillActivityDetailBO.setStartDate(seckillActivityDO.getStartDate());
+		seckillActivityDetailBO.setEndDate(seckillActivityDO.getEndDate());
 		//未开始
 		if(seckillActivityDO.getActivityStatus()==ActivityStatusEnum.NOT_STARTED.getValue()){
 			Date newTime = DateUtil.getDayBeforeTwo(seckillActivityDO.getStartDate());
@@ -188,9 +196,6 @@ public class SeckillActivityJoinConverter {
 			} else {
 				seckillActivityDetailBO.setCountDown(0l);
 			}
-		//结束
-		}else{
-			seckillActivityDetailBO.setEndDate(seckillActivityDO.getEndDate());
 		}
 		return seckillActivityDetailBO;
 	}
@@ -209,6 +214,7 @@ public class SeckillActivityJoinConverter {
 		seckillActivityManageDetailDTO.setActivityStatusEnum(seckillActivityManageDetailBO.getActivityStatusEnum());
 		seckillActivityManageDetailDTO.setEndDate(seckillActivityManageDetailBO.getEndDate());
 		seckillActivityManageDetailDTO.setCountDown(seckillActivityManageDetailBO.getCountDown());
+		seckillActivityManageDetailDTO.setStartDate(seckillActivityManageDetailBO.getStartDate());
 		
 		return seckillActivityManageDetailDTO;
 	}

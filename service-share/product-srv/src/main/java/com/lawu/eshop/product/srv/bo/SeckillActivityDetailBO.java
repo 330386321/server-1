@@ -16,6 +16,8 @@ public class SeckillActivityDetailBO {
 	private BigDecimal sellingPrice;
 
 	private Date startDate;
+	
+	private Date endDate;
 
 	private MemberGradeEnum memberLevelEnum;
 
@@ -97,5 +99,14 @@ public class SeckillActivityDetailBO {
 		this.countDown = countDown;
 	}
 
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	
 	
 }

@@ -14,6 +14,8 @@ public class SeckillActivityJoinBO {
 	private BigDecimal sellingPrice;
 	
 	private Date startDate;
+	
+	private Date endDate;
 
 	public Long getId() {
 		return id;
@@ -53,6 +55,14 @@ public class SeckillActivityJoinBO {
 
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 	
