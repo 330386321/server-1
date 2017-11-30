@@ -79,4 +79,15 @@ public interface SeckillActivityProductService {
       * @updateDate 2017年11月27日
       */
      void notPassed(Long id, SeckillActivityProductNotPassedParam param) throws DataNotExistException, WrongOperationException;
+     
+     /**
+      * 查询抢购商品型号库存
+      * 
+      * @param id 抢购活动商品型号id
+      * @throws DataNotExistException 数据不存在
+      * @author jiangxinjun
+      * @createDate 2017年11月30日
+      * @updateDate 2017年11月30日
+      */
+     Integer getInventory(Long seckillActivityProductModelId) throws DataNotExistException, WrongOperationException;
 }

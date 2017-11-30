@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.common.exception.DataNotExistException;
+import com.lawu.eshop.common.exception.WrongOperationException;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -51,13 +52,16 @@ public class ProductModelController extends BaseController {
 	 */
 	@RequestMapping(value = "shoppingCart/{id}", method = RequestMethod.GET)
 	public Result<ShoppingCartProductModelDTO> getShoppingCartProductModel(@PathVariable("id") Long id) {
-
-		ShoppingCartProductModelBO shoppingCartProductModelBO = productModelService.getShoppingCartProductModel(id);
-
-		if (shoppingCartProductModelBO == null) {
-			return successGet(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
+	    ShoppingCartProductModelBO shoppingCartProductModelBO = null;
+	    try {
+	        shoppingCartProductModelBO = productModelService.getShoppingCartProductModel(id);
+        } catch (DataNotExistException e) {
+            logger.error(e.getMessage(), e);
+            return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        } catch (WrongOperationException e) {
+            logger.error(e.getMessage(), e);
+            return successGet(ResultCode.FAIL, e.getMessage());
+        }
 		return successGet(ShoppingCartProductModelConverter.convert(shoppingCartProductModelBO));
 	}
 
@@ -145,6 +149,9 @@ public class ProductModelController extends BaseController {
         } catch (DataNotExistException e) {
             logger.error(e.getMessage(), e);
             return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        } catch (WrongOperationException e) {
+            logger.error(e.getMessage(), e);
+            return successGet(ResultCode.FAIL, e.getMessage());
         }
         return successGet(ShoppingCartProductModelConverter.convert(seckillActivityProductModelInfoBO));
     }

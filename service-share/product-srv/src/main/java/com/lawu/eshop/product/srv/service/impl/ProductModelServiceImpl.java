@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.common.exception.DataNotExistException;
+import com.lawu.eshop.common.exception.WrongOperationException;
 import com.lawu.eshop.mq.dto.order.ProductModeUpdateInventoryDTO;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
@@ -95,24 +96,19 @@ public class ProductModelServiceImpl implements ProductModelService {
 	
 
 	@Override
-	public ShoppingCartProductModelBO getShoppingCartProductModel(Long id) {
-		ShoppingCartProductModelBO rtn = null;
-		
-		ProductModelDO productModelDO =  productModelDOMapper.selectByPrimaryKey(id);
-		
-		if (productModelDO == null || productModelDO.getId() == null || productModelDO.getId() <= 0) {
-			return rtn;
-		}
-		
-		ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
-		
-		if (productDO == null || productDO.getId() == null || productDO.getId() <= 0) {
-			return rtn;
-		}
-		
-		rtn = ShoppingCartProductModelConverter.convert(productModelDO, productDO);
-		
-		return rtn;
+	public ShoppingCartProductModelBO getShoppingCartProductModel(Long id) throws DataNotExistException, WrongOperationException {
+        ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(id);
+        if (productModelDO == null || !productModelDO.getStatus()) {
+            throw new DataNotExistException("商品型号数据不存在");
+        }
+        ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
+        if (productDO == null || ProductStatusEnum.PRODUCT_STATUS_DEL.getVal().equals(productDO.getStatus())) {
+            throw new DataNotExistException("商品数据不存在");
+        }
+        if (ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal().equals(productDO.getStatus())) {
+            throw new WrongOperationException("商品已下架");
+        }
+		return ShoppingCartProductModelConverter.convert(productModelDO, productDO);
 	}
 	
 	@Override
@@ -462,21 +458,30 @@ public class ProductModelServiceImpl implements ProductModelService {
         }
         SeckillActivityProductDO seckillActivityProductDO = seckillActivityProductDOMapper.selectByPrimaryKey(seckillActivityProductModelDO.getActivityProductId());
         // 如果活动商品未审核也提示数据不存在
-        if (seckillActivityProductDO == null || !ActivityProductStatusEnum.AUDITED.getValue().equals(seckillActivityProductDO.getStatus())) {
+        if (seckillActivityProductDO == null) {
             throw new DataNotExistException("抢购活动商品数据不存在");
+        }
+        if (!ActivityProductStatusEnum.AUDITED.getValue().equals(seckillActivityProductDO.getStatus())) {
+            throw new WrongOperationException("抢购活动商品未审核");
         }
         SeckillActivityDO seckillActivityDO = seckillActivityDOMapper.selectByPrimaryKey(seckillActivityProductDO.getActivityId());
         // 如果活动不是进行中也提示数据不存在
-        if (seckillActivityDO == null || !ActivityStatusEnum.PROCESSING.getValue().equals(seckillActivityDO.getActivityStatus())) {
+        if (seckillActivityDO == null) {
             throw new DataNotExistException("抢购活动数据不存在");
         }
+        if (!ActivityStatusEnum.PROCESSING.getValue().equals(seckillActivityDO.getActivityStatus())) {
+            throw new WrongOperationException("抢购活动不在进行中");
+        }
         ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(seckillActivityProductModelDO.getProductModelId());
-        if (productModelDO == null) {
+        if (productModelDO == null || !productModelDO.getStatus()) {
             throw new DataNotExistException("商品型号数据不存在");
         }
         ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
-        if (productDO == null) {
+        if (productDO == null || ProductStatusEnum.PRODUCT_STATUS_DEL.getVal().equals(productDO.getStatus())) {
             throw new DataNotExistException("商品数据不存在");
+        }
+        if (ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal().equals(productDO.getStatus())) {
+            throw new WrongOperationException("商品已下架");
         }
         return ShoppingCartProductModelConverter.convert(productModelDO, productDO, seckillActivityDO, seckillActivityProductDO, seckillActivityProductModelDO);
     }

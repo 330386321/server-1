@@ -24,4 +24,9 @@ public class MockSeckillActivityProductService extends BaseController implements
     public Result<SeckillActivityProductInformationDTO> information(@PathVariable("id") Long id) {
         return null;
     }
+
+    @Override
+    public Result<Integer> getInventory(Long seckillActivityProductModelId) {
+        return null;
+    }
 }

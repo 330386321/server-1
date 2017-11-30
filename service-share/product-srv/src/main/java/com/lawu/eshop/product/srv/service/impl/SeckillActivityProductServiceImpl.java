@@ -145,4 +145,12 @@ public class SeckillActivityProductServiceImpl implements SeckillActivityProduct
         seckillActivityProductDOMapper.updateByPrimaryKeySelective(seckillActivityProductUpdateDO);
     }
 
+    @Override
+    public Integer getInventory(Long seckillActivityProductModelId) throws DataNotExistException {
+        SeckillActivityProductModelDO seckillActivityProductModelDO = seckillActivityProductModelDOMapper.selectByPrimaryKey(seckillActivityProductModelId);
+        if (seckillActivityProductModelDO == null) {
+            throw new DataNotExistException("抢购活动商品型号数据不存在");
+        }
+        return seckillActivityProductModelDO.getLeftCount();
+    }
 }

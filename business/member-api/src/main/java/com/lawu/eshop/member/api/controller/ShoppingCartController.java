@@ -242,11 +242,6 @@ public class ShoppingCartController extends BaseController {
     	return successCreated(result);
     }
 	
-	/**
-	 * 立即购买,创建订单
-	 * @param param 创建订单参数
-	 * @return 返回订单的id
-	 */
 	@Audit(date = "2017-05-12", reviewer = "孙林青")
     @SuppressWarnings({"unchecked" })
 	@ApiOperation(value = "立即购买，创建订单", notes = "立即购买，创建订单。[1003|1004|1005|4018]（蒋鑫俊）", httpMethod = "POST")
@@ -258,14 +253,13 @@ public class ShoppingCartController extends BaseController {
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-    	
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
-    	
-    	Result<Long> result = shoppingcartExtendService.buyNowCreateOrder(memberId, param);
-    	if (!isSuccess(result)) {
-    		return successCreated(result.getRet());
+    	Result<Long> result = null;
+    	if (param.getActivityProductModelId() == null) {
+        	result = shoppingcartExtendService.buyNowCreateOrder(memberId, param);
+    	} else {
+    	    result = shoppingcartExtendService.buyNowCreateOrder(memberId, param, param.getActivityProductModelId());
     	}
-    	
     	return successCreated(result);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.lawu.eshop.common.exception.DataNotExistException;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.dto.SeckillActivityProductBuyPageDTO;
@@ -46,4 +47,16 @@ public interface SeckillActivityProductService {
      */
     @RequestMapping(path = "information/{id}", method = RequestMethod.GET)
     Result<SeckillActivityProductInformationDTO> information(@PathVariable("id") Long id);
+    
+    /**
+     * 查询抢购商品型号库存
+     * 
+     * @param id 抢购活动商品型号id
+     * @throws DataNotExistException 数据不存在
+     * @author jiangxinjun
+     * @createDate 2017年11月30日
+     * @updateDate 2017年11月30日
+     */
+    @RequestMapping(value = "inventory/{seckillActivityProductModelId}", method = RequestMethod.GET)
+    Result<Integer> getInventory(@PathVariable("seckillActivityProductModelId") Long seckillActivityProductModelId);
 }

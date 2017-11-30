@@ -224,7 +224,6 @@ public interface ShoppingOrderService {
      * @createDate 2017年11月24日
      * @updateDate 2017年11月24日
      */
-    @SuppressWarnings("rawtypes")
     @RequestMapping(value = "isBuy", method = RequestMethod.PUT)
     Result<Boolean> isBuy(@RequestBody ActivityProductBuyQueryParam param);
 }

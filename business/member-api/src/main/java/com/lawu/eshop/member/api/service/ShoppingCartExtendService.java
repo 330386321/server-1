@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.service;
 
 import java.util.List;
 
+import com.lawu.concurrentqueue.bizctrl.BusinessExecuteException;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartSettlementDTO;
@@ -66,4 +67,16 @@ public interface ShoppingCartExtendService {
 	 */
 	Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param);
 	
+	/**
+	 * 立即抢购活动商品，创建订单
+	 * 
+	 * @param memberId 用户id
+	 * @param param 创建订单参数
+	 * @param seckillActivityProductModelId 秒杀活动商品型号id
+	 * @return
+	 * @author jiangxinjun
+	 * @createDate 2017年11月30日
+	 * @updateDate 2017年11月30日
+	 */
+    Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param, Long seckillActivityProductModelId) throws BusinessExecuteException;
 }

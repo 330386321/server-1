@@ -102,5 +102,4 @@ public interface ProductModelService {
 	 * @updateDate 2017年11月24日
 	 */
 	SeckillActivityProductModelInfoBO seckillActivityProductModel(Long activityProductModelId) throws DataNotExistException;
-
 }

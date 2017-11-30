@@ -118,5 +118,10 @@ public class KeyConstant {
      * 商家时间周期内访问接口频率
      */
     public static final String REDIS_KEY_MERCHANT_VISIT_FREQUENCY = "MERCHANT_VISIT_FREQUENCY_";
+    
+    /**
+     * 商家时间周期内访问接口频率
+     */
+    public static final String REDIS_KEY_BUSINESS_INVENTORY_SYN = "BUSINESS_INVENTORY_SYN_";
 
 }

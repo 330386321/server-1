@@ -12,6 +12,9 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.concurrentqueue.bizctrl.BusinessExecuteException;
+import com.lawu.concurrentqueue.bizctrl.annotation.BusinessInventoryCtrl;
+import com.lawu.concurrentqueue.impl.BusinessKey;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -71,9 +74,6 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     @Autowired
     private PropertyInfoService propertyInfoService;
     
-    /**
-     *  加入购物车。
-     */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
 	public Result save(Long memberId, ShoppingCartParam param) {
@@ -538,11 +538,16 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		return successCreated(rtn);
 	}
 	
-	/**
-	 * 立即购买创建订单，根据产品型号和数量直接创建订单
-	 * 
-	 * @return 返回订单的id
-	 */
+	@BusinessInventoryCtrl(idParamIndex = 2, businessKey = BusinessKey.SECKILL_ACTIVITY_PRODUCT, using = SeckillActivityProductBusinessDecisionServiceImpl.class)
+    @Override
+    public Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param, Long seckillActivityProductModelId) throws BusinessExecuteException {
+	    Result<Long> result = buyNowCreateOrder(memberId, param);
+	    if (!isSuccess(result)) {
+	        throw new BusinessExecuteException(result.getRet(), result.getMsg());
+	    }
+        return buyNowCreateOrder(memberId, param);
+    }
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param) {
@@ -552,7 +557,8 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
          *  查询产品信息
          *  判断是否是抢购
          */
-        if (param.getActivityProductModelId() == null) {
+        boolean isSeckillActivityProduct = param.getActivityProductModelId() != null;
+        if (!isSeckillActivityProduct) {
             Result<ShoppingCartProductModelDTO> result = productModelService.getShoppingCartProductModel(param.getProductModelId());
             if (!isSuccess(result)) {
                 return successCreated(result);
@@ -568,6 +574,16 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
             shoppingCartProductModelDTO = model;
         }
     	
+        // 判断商品是否失效
+        if (param.getActivityProductModelId() == null && !ProductStatusEnum.PRODUCT_STATUS_UP.equals(shoppingCartProductModelDTO.getStatus())) {
+            return successCreated(ResultCode.PRODUCT_HAS_EXPIRED);
+        }
+        
+        // 判断库存
+        if (shoppingCartProductModelDTO.getInventory() < param.getQuantity()) {
+            return successCreated(ResultCode.INVENTORY_SHORTAGE);
+        }
+        
     	// 查询地址
     	Result<AddressDTO> resultAddressDTO = addressService.get(param.getAddressId());
     	if (!isSuccess(resultAddressDTO)) {
@@ -612,7 +628,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		
 		// 用户是否是商家粉丝
 		shoppingOrderSettlementParam.setIsFans(shoppingOrderFindMerchantInfoDTO.getIsFans());
-		if (param.getActivityProductModelId() != null) {
+		if (isSeckillActivityProduct) {
 		    SeckillActivityProductModelInfoDTO seckillActivityProductModelInfoDTO = (SeckillActivityProductModelInfoDTO) shoppingCartProductModelDTO;
 		    shoppingOrderSettlementParam.setActivityId(seckillActivityProductModelInfoDTO.getActivityId());
 		    shoppingOrderSettlementParam.setActivityProductId(seckillActivityProductModelInfoDTO.getActivityProductId());
@@ -628,20 +644,10 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		shoppingOrderSettlementItemParam.setProductName(shoppingCartProductModelDTO.getProductName());
 		shoppingOrderSettlementItemParam.setProductFeatureImage(shoppingCartProductModelDTO.getFeatureImage());
 		shoppingOrderSettlementItemParam.setProductModelId(shoppingCartProductModelDTO.getId());
-		if (param.getActivityProductModelId() != null) {
+		if (isSeckillActivityProduct) {
 		    shoppingOrderSettlementItemParam.setActivityProductModelId(param.getActivityProductModelId());
 		}
 		shoppingOrderSettlementItemParam.setProductModelName(shoppingCartProductModelDTO.getName());
-		
-		// 判断商品是否失效
-		if (param.getActivityProductModelId() == null && !ProductStatusEnum.PRODUCT_STATUS_UP.equals(shoppingCartProductModelDTO.getStatus())) {
-			return successCreated(ResultCode.PRODUCT_HAS_EXPIRED);
-		}
-		
-		// 判断库存
-		if (shoppingCartProductModelDTO.getInventory() < param.getQuantity()) {
-			return successCreated(ResultCode.INVENTORY_SHORTAGE);
-		}
 		
 		shoppingOrderSettlementItemParam.setQuantity(param.getQuantity());
 		shoppingOrderSettlementItemParam.setRegularPrice(shoppingCartProductModelDTO.getOriginalPrice());
@@ -650,11 +656,13 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		
 		items.add(shoppingOrderSettlementItemParam);
 		shoppingOrderSettlementParam.setItems(items);
-		// 订单总价等于货物总价+运费
+		/*
+		 *  订单总价等于货物总价+运费
+		 *  暂时不把运费计算在内
+		 */
 		shoppingOrderSettlementParam.setOrderTotalPrice(commodityTotalPrice);
 		shoppingOrderSettlementParam.setCommodityTotalPrice(commodityTotalPrice);
 		shoppingOrderSettlementParams.add(shoppingOrderSettlementParam);
-    	
     	
     	// 保存订单
     	Result<List<Long>> resultIds = shoppingOrderService.save(shoppingOrderSettlementParams);
@@ -664,5 +672,4 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	
     	return successCreated(resultIds);
 	}
-
 }

@@ -194,4 +194,25 @@ public class SeckillActivityProductController extends BaseController {
         }
         return successCreated();
     }
+    
+    /**
+     * 查询抢购商品型号库存
+     * 
+     * @param id 抢购活动商品型号id
+     * @throws DataNotExistException 数据不存在
+     * @author jiangxinjun
+     * @createDate 2017年11月30日
+     * @updateDate 2017年11月30日
+     */
+    @RequestMapping(value = "inventory/{seckillActivityProductModelId}", method = RequestMethod.GET)
+    public Result<Integer> getInventory(@PathVariable("seckillActivityProductModelId") Long seckillActivityProductModelId) {
+        Integer inventory = 0;
+        try {
+            inventory = seckillActivityProductService.getInventory(seckillActivityProductModelId);
+        } catch (DataNotExistException e) {
+            logger.error(e.getMessage(), e);
+            return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        }
+        return successCreated(inventory);
+    }
 }
