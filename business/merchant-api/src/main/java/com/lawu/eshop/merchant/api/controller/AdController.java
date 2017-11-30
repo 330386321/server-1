@@ -738,6 +738,8 @@ public class AdController extends BaseController {
 					 pointGetDetailDTO.setUrl(memberDTO.getHeadimg());
 					 if(StringUtils.isNotEmpty(memberDTO.getNickname())){
 						 pointGetDetailDTO.setName(memberDTO.getNickname().substring(0,1)+"**"+memberDTO.getNickname().substring(memberDTO.getNickname().length()-1,memberDTO.getNickname().length())); 
+					 }else{
+						 pointGetDetailDTO.setName("E**户");
 					 }
 					 
 				 }
