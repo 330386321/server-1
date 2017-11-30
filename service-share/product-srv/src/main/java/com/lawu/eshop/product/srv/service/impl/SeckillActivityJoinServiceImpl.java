@@ -8,6 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.common.constants.StatusEnum;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ActivityStatusEnum;
 import com.lawu.eshop.product.constant.SeckillActivityProductEnum;
@@ -37,7 +38,6 @@ import com.lawu.eshop.product.srv.mapper.SeckillActivityProductDOMapper;
 import com.lawu.eshop.product.srv.mapper.SeckillActivityProductModelDOMapper;
 import com.lawu.eshop.product.srv.mapper.extend.SeckillActivityDOMapperExtend;
 import com.lawu.eshop.product.srv.service.SeckillActivityJoinService;
-import com.lawu.eshop.utils.DateUtil;
 
 @Service
 public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinService {
@@ -64,7 +64,7 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 	public Page<SeckillActivityJoinBO> queryPage(SeckillActivityJoinParam param) {
 		
 		SeckillActivityDOExample example = new SeckillActivityDOExample();
-		example.createCriteria().andActivityStatusEqualTo(ActivityStatusEnum.PUBLISHED.getValue());
+		example.createCriteria().andActivityStatusEqualTo(ActivityStatusEnum.PUBLISHED.getValue()).andStatusEqualTo(StatusEnum.VALID.getValue());
 		example.setOrderByClause("start_date asc");
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		List<SeckillActivityDO> list = seckillActivityDOMapper.selectByExampleWithRowbounds(example, rowBounds);
@@ -228,6 +228,14 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		}
 		
 		return info;
+	}
+
+	@Override
+	public Boolean isJoinActivity(Long productId) {
+		
+		int count = seckillActivityDOMapperExtend.selectJoinStatus(productId);
+		
+		return count > 0;
 	}
 
 	
