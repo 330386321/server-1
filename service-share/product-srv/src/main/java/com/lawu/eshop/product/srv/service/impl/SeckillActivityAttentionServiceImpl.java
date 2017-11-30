@@ -74,7 +74,7 @@ public class SeckillActivityAttentionServiceImpl implements SeckillActivityAtten
         seckillActivityAttentionDO.setGmtCreate(new Date());
         seckillActivityAttentionDO.setGmtModified(new Date());
         seckillActivityAttentionDO.setMemberId(param.getMemberId());
-        seckillActivityAttentionDO.setMemberNum(seckillActivityAttentionDO.getMemberNum());
+        seckillActivityAttentionDO.setMemberNum(param.getMemberNum());
         seckillActivityAttentionDO.setProductId(seckillActivityProductDO.getProductId());
         seckillActivityAttentionDOMapper.insert(seckillActivityAttentionDO);
         
@@ -91,7 +91,7 @@ public class SeckillActivityAttentionServiceImpl implements SeckillActivityAtten
         // 未开始状态的
         seckillActivityDOExampleCriteria.andActivityStatusEqualTo(ActivityStatusEnum.NOT_STARTED.getValue());
         // 开始时间在十分钟以后的
-        seckillActivityDOExampleCriteria.andStartDateGreaterThanOrEqualTo(DateUtil.add(new Date(), PropertyConstant.PROMPT_SECKILL_ACTIVITY_ABOUT_START_TIME, Calendar.MINUTE));
+        seckillActivityDOExampleCriteria.andStartDateLessThanOrEqualTo(DateUtil.add(new Date(), PropertyConstant.PROMPT_SECKILL_ACTIVITY_ABOUT_START_TIME, Calendar.MINUTE));
         // 未提醒过的
         seckillActivityDOExampleCriteria.andIsRemindEqualTo(false);
         // 根据开始时间排序
@@ -129,6 +129,7 @@ public class SeckillActivityAttentionServiceImpl implements SeckillActivityAtten
             throw new DataNotExistException("商品数据不存在");
         }
         SeckillActivityAboutStartNoticeNotification notification = new SeckillActivityAboutStartNoticeNotification();
+        notification.setSeckillActivityAttentionId(seckillActivityAttentionBO.getId());
         notification.setActivityProductId(seckillActivityAttentionBO.getActivityProductId());
         notification.setMemberNum(seckillActivityAttentionBO.getMemberNum());
         notification.setProductId(seckillActivityAttentionBO.getProductId());

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
@@ -45,5 +46,5 @@ public interface SeckillActivityProductService {
      * @updateDate 2017年11月24日
      */
     @RequestMapping(path = "information/{id}", method = RequestMethod.GET)
-    Result<SeckillActivityProductInformationDTO> information(@PathVariable("id") Long id);
+    Result<SeckillActivityProductInformationDTO> information(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
 }

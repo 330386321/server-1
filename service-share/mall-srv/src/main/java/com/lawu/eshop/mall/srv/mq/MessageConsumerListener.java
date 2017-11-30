@@ -17,6 +17,7 @@ import com.lawu.eshop.mq.dto.order.ShoppingRefundRefuseRefundRemindNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeConfirmedForRefundRemindNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeRefundRemindNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeReturnRemindNotification;
+import com.lawu.eshop.mq.dto.product.SeckillActivityAboutStartNoticeNotification;
 import com.lawu.eshop.mq.dto.property.RefundDepositDoSuccessOrFailureNotification;
 import com.lawu.eshop.mq.message.impl.AbstractMessageConsumerListener;
 
@@ -257,24 +258,19 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
              *
              */
             if (MqConstant.TAG_SECKILL_ACTIVITY_ABOUT_START_NOTICE.equals(tags)) {
-                RefundDepositDoSuccessOrFailureNotification notification = (RefundDepositDoSuccessOrFailureNotification) message;
+                SeckillActivityAboutStartNoticeNotification notification = (SeckillActivityAboutStartNoticeNotification) message;
                 /*
                  * 发送站内信
                  */
                 // 组装信息
                 MessageInfoParam messageInfoParam = new MessageInfoParam();
-                messageInfoParam.setRelateId(notification.getDepositId());
-                if (BusinessDepositOperEnum.REFUND_SUCCESS.getVal().equals(notification.getDepositOperEnumVal())) {
-                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_DEPOSIT_SUCCESS);
-                } else  if(BusinessDepositOperEnum.REFUND_FAILURE.getVal().equals(notification.getDepositOperEnumVal())){
-                    messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_DEPOSIT_FAIL);
-                }
-
+                messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_SECKILL_ACTIVITY_ABOUT_START);
+                messageInfoParam.setRelateId(notification.getSeckillActivityAttentionId());
                 messageInfoParam.setMessageParam(new MessageTempParam());
-                messageInfoParam.getMessageParam().setFailReason(notification.getFailureReason());
-
+                messageInfoParam.getMessageParam().setProductName(notification.getProductName());
+                
                 // 保存站内信，并且发送个推
-                messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
+                messageService.saveMessage(notification.getMemberNum(), messageInfoParam);
                 return;
             }
         }

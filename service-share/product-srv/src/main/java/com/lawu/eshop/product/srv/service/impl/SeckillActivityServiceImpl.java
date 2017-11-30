@@ -271,7 +271,7 @@ public class SeckillActivityServiceImpl implements SeckillActivityService {
         // 快到活动开始时间了，结束抢购活动报名
         criteria.andStartDateLessThanOrEqualTo(DateUtil.add(new Date(), PropertyConstant.SECKILL_ACTIVITY_REGISTRATION_DEADLINE_TIME, Calendar.DAY_OF_YEAR));
         // 按照开始时间正序
-        example.setOrderByClause("end_date asc");
+        example.setOrderByClause("start_date asc");
         List<SeckillActivityDO> list = seckillActivityDOMapper.selectByExample(example);
         for (SeckillActivityDO item : list) {
             SeckillActivityDO seckillActivityDO = new SeckillActivityDO();
@@ -341,7 +341,11 @@ public class SeckillActivityServiceImpl implements SeckillActivityService {
         Date startDatetime = DateUtil.formatDate(date + " 00:00:00", DateUtil.DATETIME_DEFAULT_FORMAT);
         Date endDatetime = DateUtil.formatDate(date + " 23:59:59", DateUtil.DATETIME_DEFAULT_FORMAT);
         criteria.andStartDateBetween(startDatetime, endDatetime);
-        criteria.andActivityStatusNotEqualTo(ActivityStatusEnum.NOT_STARTED.getValue());
+        List<Byte> activityStatusList = new ArrayList<>();
+        activityStatusList.add(ActivityStatusEnum.NOT_STARTED.getValue());
+        activityStatusList.add(ActivityStatusEnum.PROCESSING.getValue());
+        activityStatusList.add(ActivityStatusEnum.END.getValue());
+        criteria.andActivityStatusIn(activityStatusList);
         // 按照开始时间正序
         example.setOrderByClause("start_date asc");
         List<SeckillActivityDO> list = seckillActivityDOMapper.selectByExample(example);

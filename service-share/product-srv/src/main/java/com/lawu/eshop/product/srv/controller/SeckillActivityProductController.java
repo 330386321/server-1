@@ -82,7 +82,7 @@ public class SeckillActivityProductController extends BaseController {
      * @updateDate 2017年11月24日
      */
     @RequestMapping(value = "information/{id}", method = RequestMethod.GET)
-    public Result<SeckillActivityProductInformationDTO> information(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
+    public Result<SeckillActivityProductInformationDTO> information(@PathVariable("id") Long id, @RequestParam(name = "memberId", required = false) Long memberId) {
         SeckillActivityProductExtendBO seckillActivityProductExtendBO = null;
         try {
             seckillActivityProductExtendBO = seckillActivityProductService.information(id);
@@ -91,9 +91,14 @@ public class SeckillActivityProductController extends BaseController {
             return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
         }
         SeckillActivityProductInformationDTO rtn = SeckillActivityProductConverter.convert(seckillActivityProductExtendBO);
-        // 查询是否已经关注过这个商品
-        Boolean isAttention = seckillActivityAttentionService.isAttention(rtn.getActivityProductId(), memberId);
-        rtn.setAttention(isAttention);
+        // 如果用户没有登录设置为未关注
+        if (memberId != null) {
+            // 查询是否已经关注过这个商品
+            Boolean isAttention = seckillActivityAttentionService.isAttention(rtn.getActivityProductId(), memberId);
+            rtn.setAttention(isAttention);
+        } else {
+            rtn.setAttention(false);
+        }
         
         SeckillActivityBO seckillActivityBO = seckillActivityProductExtendBO.getSeckillActivity();
         if (seckillActivityBO != null) {
