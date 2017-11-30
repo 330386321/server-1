@@ -708,6 +708,7 @@ public class AdController extends BaseController {
 		return adService.isPay(id);
     }
 	
+	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "广告领取详情", notes = "广告领取详情,[]（张荣成）", httpMethod = "GET")
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -744,7 +745,7 @@ public class AdController extends BaseController {
 			 
 		 }
 		 
-		 return result;
+		 return successGet(result);
 	}
 
 }
