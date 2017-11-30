@@ -173,6 +173,7 @@ public class SeckillActivityProductConverter {
                 SeckillActivityProductModelInformationDTO productModel = new SeckillActivityProductModelInformationDTO();
                 productModel.setLeftCount(item.getLeftCount());
                 productModel.setProductModelId(item.getProductModelId());
+                productModel.setSeckillActivityProductModelId(item.getId());
                 rtn.getProductModelList().add(productModel);
             }
         }

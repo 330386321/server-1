@@ -16,6 +16,12 @@ public class SeckillActivityProductModelInformationDTO {
      */
     @ApiModelProperty(value = "商品型号id", required = true)
     private Long productModelId;
+    
+    /**
+     * 抢购活动商品型号id
+     */
+    @ApiModelProperty(value = "抢购活动商品型号id", required = true)
+    private Long seckillActivityProductModelId;
 
     /**
      * 剩余数量
@@ -29,6 +35,14 @@ public class SeckillActivityProductModelInformationDTO {
 
     public void setProductModelId(Long productModelId) {
         this.productModelId = productModelId;
+    }
+    
+    public Long getSeckillActivityProductModelId() {
+        return seckillActivityProductModelId;
+    }
+
+    public void setSeckillActivityProductModelId(Long seckillActivityProductModelId) {
+        this.seckillActivityProductModelId = seckillActivityProductModelId;
     }
 
     public Integer getLeftCount() {
