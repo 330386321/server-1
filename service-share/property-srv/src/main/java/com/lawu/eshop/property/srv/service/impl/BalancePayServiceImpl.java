@@ -87,7 +87,8 @@ public class BalancePayServiceImpl implements BalancePayService {
 
         //新增会员交易明细
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-        tdsParam.setTitle(transactionDetailService.packageTitle(param.getMemberTransactionTypeEnum(),null,param.getTitle()));
+        //tdsParam.setTitle(transactionDetailService.packageTitle(param.getMemberTransactionTypeEnum(),null,param.getTitle()));
+        tdsParam.setTitle(param.getTitle());
         tdsParam.setUserNum(param.getUserNum());
         tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
         tdsParam.setTransactionAccount(param.getAccount());
@@ -314,7 +315,8 @@ public class BalancePayServiceImpl implements BalancePayService {
 
         //新增会员交易明细
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-        tdsParam.setTitle(transactionDetailService.packageTitle(param.getMemberTransactionTypeEnum(),null,param.getTitle()));
+        //tdsParam.setTitle(transactionDetailService.packageTitle(param.getMemberTransactionTypeEnum(),null,param.getTitle()));
+        tdsParam.setTitle(param.getTitle());
         tdsParam.setUserNum(param.getUserNum());
         tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
         tdsParam.setTransactionAccount(param.getAccount());
@@ -354,7 +356,8 @@ public class BalancePayServiceImpl implements BalancePayService {
         String transactionNum = param.getOrderNum();
         //新增会员交易明细
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-        tdsParam.setTitle(transactionDetailService.packageTitle(param.getMemberTransactionTypeEnum(),null,param.getTitle()));
+        //tdsParam.setTitle(transactionDetailService.packageTitle(param.getMemberTransactionTypeEnum(),null,param.getTitle()));
+        tdsParam.setTitle(param.getTitle());
         tdsParam.setUserNum(param.getUserNum());
         tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
         tdsParam.setTransactionAccount(param.getAccount());
@@ -373,7 +376,8 @@ public class BalancePayServiceImpl implements BalancePayService {
 
         //新增商家交易明细
         TransactionDetailSaveDataParam tdsParam1 = new TransactionDetailSaveDataParam();
-        tdsParam1.setTitle(transactionDetailService.packageTitle(null,param.getMerchantTransactionTypeEnum(),param.getTitleMerchant()));
+        //tdsParam1.setTitle(transactionDetailService.packageTitle(null,param.getMerchantTransactionTypeEnum(),param.getTitleMerchant()));
+        tdsParam1.setTitle(param.getTitleMerchant());
         tdsParam1.setUserNum(param.getSideUserNum());
         tdsParam1.setTransactionType(param.getMerchantTransactionTypeEnum().getValue());
         tdsParam1.setTransactionAccount(param.getAccount());

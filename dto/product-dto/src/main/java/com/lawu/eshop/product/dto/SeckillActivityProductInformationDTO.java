@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
  * 
  * @author jiangxinjun
  * @createDate 2017年11月23日
- * @updateDate 2017年11月23日
+ * @updateDate 2017年11月29日
  */
 @ApiModel
 public class SeckillActivityProductInformationDTO {
@@ -40,7 +40,7 @@ public class SeckillActivityProductInformationDTO {
     /**
      * 活动状态
      */
-    @ApiModelProperty(value = "活动状态(UNPUBLISHED-未发布|NOT_STARTED-未开始|PROCESSING-进行中|END-已结束)", required = true)
+    @ApiModelProperty(value = "活动状态(UNPUBLISHED-未发布|PUBLISHED-发布中|IN_REVIEW-审核中|NOT_STARTED-未开始|PROCESSING-进行中|END-已结束)", required = true)
     private ActivityStatusEnum activityStatus;
     
     /**
@@ -48,6 +48,24 @@ public class SeckillActivityProductInformationDTO {
      */
     @ApiModelProperty(value = "关注人数", required = true)
     private Integer attentionCount;
+    
+    /**
+     * 是否关注
+     */
+    @ApiModelProperty(value = "是否关注", required = true)
+    private Boolean attention;
+    
+    /**
+     * 是否已经超过设置提醒的时间
+     */
+    @ApiModelProperty(value = "是否已经超过设置提醒的时间", required = true)
+    private Boolean exceededAttentionTime;
+    
+    /**
+     * 已售数量
+     */
+    @ApiModelProperty(value = "已售数量", required = true)
+    private Integer soldQuantity;
     
     /**
      * 倒计时
@@ -99,6 +117,30 @@ public class SeckillActivityProductInformationDTO {
 
     public void setAttentionCount(Integer attentionCount) {
         this.attentionCount = attentionCount;
+    }
+
+    public Boolean getAttention() {
+        return attention;
+    }
+
+    public void setAttention(Boolean attention) {
+        this.attention = attention;
+    }
+
+    public Boolean getExceededAttentionTime() {
+        return exceededAttentionTime;
+    }
+
+    public void setExceededAttentionTime(Boolean exceededAttentionTime) {
+        this.exceededAttentionTime = exceededAttentionTime;
+    }
+
+    public Integer getSoldQuantity() {
+        return soldQuantity;
+    }
+
+    public void setSoldQuantity(Integer soldQuantity) {
+        this.soldQuantity = soldQuantity;
     }
 
     public Long getCountdown() {

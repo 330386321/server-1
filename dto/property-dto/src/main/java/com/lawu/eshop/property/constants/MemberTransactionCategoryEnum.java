@@ -7,7 +7,7 @@ public enum MemberTransactionCategoryEnum {
 
 	ALL((byte) 0x01, "全部分类"),
 	RED_SWEEP((byte) 0x02, "红包"),
-	RECOMMEND_INCOME((byte) 0x03, "推荐E友收益"),
+	RECOMMEND_INCOME((byte) 0x03, "推荐"),
 	PREFERRED_RED_SWEEP((byte) 0x04, "优选红包"),
 	WITHDRAW((byte) 0x05, "提现"),
 	PAY((byte) 0x06, "买单"),

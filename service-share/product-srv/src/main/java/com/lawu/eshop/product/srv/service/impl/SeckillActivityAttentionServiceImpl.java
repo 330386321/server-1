@@ -135,4 +135,14 @@ public class SeckillActivityAttentionServiceImpl implements SeckillActivityAtten
         notification.setProductName(productDO.getName());
         messageProducerService.sendMessage(MqConstant.TOPIC_PRODUCT_SRV, MqConstant.TAG_SECKILL_ACTIVITY_ABOUT_START_NOTICE, notification);
     }
+
+    @Override
+    public Boolean isAttention(Long seckillActivityProductId, Long memberId) {
+        SeckillActivityAttentionDOExample example = new SeckillActivityAttentionDOExample();
+        SeckillActivityAttentionDOExample.Criteria criteria = example.createCriteria();
+        criteria.andMemberIdEqualTo(memberId);
+        criteria.andActivityProductIdEqualTo(seckillActivityProductId);
+        Long count = seckillActivityAttentionDOMapper.countByExample(example);
+        return count <= 0 ? false : true;
+    }
 }

@@ -307,7 +307,7 @@ public class SeckillActivityJoinServiceTest {
 		
 		seckillActivityProductDOMapper.insertSelective(seckillActivityProductDO);
 		
-		SeckillActivityInfoBO seckillActivityInfoBO = seckillActivityJoinService.querySeckillActivityInfo(record.getId());
+		SeckillActivityInfoBO seckillActivityInfoBO = seckillActivityJoinService.querySeckillActivityInfo(record.getId(),seckillActivityProductDO.getMerchantId(),seckillActivityProductDO.getProductId());
 		Assert.assertNotNull(seckillActivityInfoBO); 
 	}
 	

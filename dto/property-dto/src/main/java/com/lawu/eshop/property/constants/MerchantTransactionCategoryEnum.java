@@ -7,9 +7,9 @@ public enum MerchantTransactionCategoryEnum {
 
 	ALL((byte) 0x01, "全部分类", new ManageTypeEnum[]{ManageTypeEnum.COMMON, ManageTypeEnum.ENTITY}),
 	RECHARGE((byte) 0x02, "充值", new ManageTypeEnum[]{ManageTypeEnum.COMMON, ManageTypeEnum.ENTITY}),
-	RECOMMEND_INCOME((byte) 0x03, "推荐E友收益", new ManageTypeEnum[]{ManageTypeEnum.COMMON, ManageTypeEnum.ENTITY}),
+	RECOMMEND_INCOME((byte) 0x03, "推荐", new ManageTypeEnum[]{ManageTypeEnum.COMMON, ManageTypeEnum.ENTITY}),
 	WITHDRAW((byte) 0x04, "提现", new ManageTypeEnum[]{ManageTypeEnum.COMMON, ManageTypeEnum.ENTITY}),
-	PAY_INCOME((byte) 0x05, "买单收入", new ManageTypeEnum[]{ManageTypeEnum.ENTITY}),
+	PAY_INCOME((byte) 0x05, "买单", new ManageTypeEnum[]{ManageTypeEnum.ENTITY}),
 	PRODUCT_INCOME((byte) 0x06, "商品收入", new ManageTypeEnum[]{ManageTypeEnum.COMMON}),
 	REFUND_MONEY((byte) 0x07, "退款", new ManageTypeEnum[]{ManageTypeEnum.COMMON, ManageTypeEnum.ENTITY}),
 	DUE_IN((byte) 0x08, "待收货款", new ManageTypeEnum[]{ManageTypeEnum.COMMON}),

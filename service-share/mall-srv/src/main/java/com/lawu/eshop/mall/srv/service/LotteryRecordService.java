@@ -71,11 +71,11 @@ public interface LotteryRecordService {
     /**
      * 更新抽奖结果
      *
-     * @param id
-     * @param lotteryResult
+     * @param lotteryActivityId
+     * @param account
      * @return
      * @author meishuquan
      */
-    int updateLotteryResult(Long id, Boolean lotteryResult);
+    int updateLotteryResult(Long lotteryActivityId, String account);
 
 }

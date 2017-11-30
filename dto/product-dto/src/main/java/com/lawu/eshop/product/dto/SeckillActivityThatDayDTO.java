@@ -58,7 +58,7 @@ public class SeckillActivityThatDayDTO {
     /**
      * 活动状态
      */
-    @ApiModelProperty(value = "活动状态(UNPUBLISHED-未发布|NOT_STARTED-未开始|PROCESSING-进行中|END-已结束)", required = true)
+    @ApiModelProperty(value = "活动状态(UNPUBLISHED-未发布|PUBLISHED-发布中|IN_REVIEW-审核中|NOT_STARTED-未开始|PROCESSING-进行中|END-已结束)", required = true)
     private ActivityStatusEnum activityStatus;
 
     public Long getId() {

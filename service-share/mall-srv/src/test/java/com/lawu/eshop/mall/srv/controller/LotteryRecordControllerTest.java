@@ -134,7 +134,7 @@ public class LotteryRecordControllerTest {
     @Rollback
     @Test
     public void updateLotteryResult() {
-        RequestBuilder request = put("/lotteryRecord/updateLotteryResult/1").param("lotteryResult", "true");
+        RequestBuilder request = put("/lotteryRecord/updateLotteryResult/1").param("account", "13666666666");
         ResultActions perform = null;
         try {
             perform = mvc.perform(request);

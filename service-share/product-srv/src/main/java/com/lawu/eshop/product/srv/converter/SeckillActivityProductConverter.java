@@ -151,7 +151,7 @@ public class SeckillActivityProductConverter {
      * @return
      * @author jiangxinjun
      * @createDate 2017年11月24日
-     * @updateDate 2017年11月24日
+     * @updateDate 2017年11月27日
      */
     public static SeckillActivityProductInformationDTO convert(SeckillActivityProductExtendBO source) {
         if (source == null) {
@@ -160,6 +160,7 @@ public class SeckillActivityProductConverter {
         SeckillActivityProductInformationDTO rtn = new SeckillActivityProductInformationDTO();
         rtn.setAttentionCount(source.getAttentionCount());
         rtn.setActivityProductId(source.getId());
+        rtn.setSoldQuantity(source.getProductModelCount() - source.getLeftCount());
         SeckillActivityBO seckillActivityBO = source.getSeckillActivity();
         if (seckillActivityBO != null) {
             rtn.setActivityStatus(seckillActivityBO.getActivityStatus());

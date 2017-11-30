@@ -22,6 +22,8 @@ import com.lawu.eshop.product.srv.bo.SeckillActivityManageBO;
 import com.lawu.eshop.product.srv.bo.SeckillActivityManageDetailBO;
 import com.lawu.eshop.product.srv.converter.SeckillActivityJoinConverter;
 import com.lawu.eshop.product.srv.domain.ProductDO;
+import com.lawu.eshop.product.srv.domain.ProductDOExample;
+import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDOExample;
 import com.lawu.eshop.product.srv.domain.SeckillActivityProductDO;
@@ -29,6 +31,7 @@ import com.lawu.eshop.product.srv.domain.SeckillActivityProductDOExample;
 import com.lawu.eshop.product.srv.domain.SeckillActivityProductModelDO;
 import com.lawu.eshop.product.srv.domain.extend.SeckillActivityDOView;
 import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
 import com.lawu.eshop.product.srv.mapper.SeckillActivityDOMapper;
 import com.lawu.eshop.product.srv.mapper.SeckillActivityProductDOMapper;
 import com.lawu.eshop.product.srv.mapper.SeckillActivityProductModelDOMapper;
@@ -52,14 +55,17 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 	private ProductDOMapper productDOMapper;
 	
 	@Autowired
+	private ProductModelDOMapper productModelDOMapper;
+	
+	@Autowired
 	private SeckillActivityProductModelDOMapper seckillActivityProductModelDOMapper;
 
 	@Override
 	public Page<SeckillActivityJoinBO> queryPage(SeckillActivityJoinParam param) {
 		
 		SeckillActivityDOExample example = new SeckillActivityDOExample();
-		example.createCriteria().andActivityStatusEqualTo(ActivityStatusEnum.NOT_STARTED.getValue());
-		 example.setOrderByClause("start_date asc");
+		example.createCriteria().andActivityStatusEqualTo(ActivityStatusEnum.PUBLISHED.getValue());
+		example.setOrderByClause("start_date asc");
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		List<SeckillActivityDO> list = seckillActivityDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		Page<SeckillActivityJoinBO> page = new Page<>();
@@ -115,18 +121,20 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		List<ModelParam> list = joinParam.getModelList();
 		int moelCount=0;
 		for (ModelParam modelParam : list) {
-			if(modelParam.getCount()>0){
-				SeckillActivityProductModelDO seckillActivityProductModelDO = new SeckillActivityProductModelDO();
-				seckillActivityProductModelDO.setActivityProductId(joinParam.getProductId());
-				seckillActivityProductModelDO.setCount(modelParam.getCount());
-				seckillActivityProductModelDO.setGmtCreate(new Date());
-				seckillActivityProductModelDO.setLeftCount(modelParam.getCount());
-				seckillActivityProductModelDO.setProductModelId(modelParam.getModelId());
-				seckillActivityProductModelDO.setGmtModified(new Date());
-				seckillActivityProductModelDOMapper.insertSelective(seckillActivityProductModelDO);
-			}
 			int count = modelParam.getCount();
-			moelCount +=count;
+			//当前型号是否为该商品
+			ProductModelDOExample pmExample = new ProductModelDOExample();
+			pmExample.createCriteria().andProductIdEqualTo(joinParam.getProductId()).andIdEqualTo(modelParam.getModelId());
+			int modelCount = productModelDOMapper.countByExample(pmExample);
+			if(count > 0 && modelCount > 0){
+				moelCount +=count;
+			}
+			
+		}
+		
+		//总型号为0直接返回
+		if(moelCount == 0){
+			return ;
 		}
 		
 		ProductDO productDO = productDOMapper.selectByPrimaryKey(joinParam.getProductId());
@@ -148,33 +156,77 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 		seckillActivityProductDO.setTurnover(BigDecimal.valueOf(0));
 		
 		seckillActivityProductDOMapper.insertSelective(seckillActivityProductDO);
+		
+		for (ModelParam modelParam : list) {
+			//当前型号是否为该商品
+			ProductModelDOExample pmExample = new ProductModelDOExample();
+			pmExample.createCriteria().andProductIdEqualTo(joinParam.getProductId()).andIdEqualTo(modelParam.getModelId());
+			int modelCount = productModelDOMapper.countByExample(pmExample);
+			
+			if(modelParam.getCount()>0 && modelCount > 0){
+				
+				SeckillActivityProductModelDO seckillActivityProductModelDO = new SeckillActivityProductModelDO();
+				seckillActivityProductModelDO.setActivityProductId(seckillActivityProductDO.getId());
+				seckillActivityProductModelDO.setCount(modelParam.getCount());
+				seckillActivityProductModelDO.setGmtCreate(new Date());
+				seckillActivityProductModelDO.setLeftCount(modelParam.getCount());
+				seckillActivityProductModelDO.setProductModelId(modelParam.getModelId());
+				seckillActivityProductModelDO.setGmtModified(new Date());
+				seckillActivityProductModelDOMapper.insertSelective(seckillActivityProductModelDO);
+			}
+		}
 	}
 
 	@Override
-	public SeckillActivityInfoBO querySeckillActivityInfo(Long id) {
+	public SeckillActivityInfoBO querySeckillActivityInfo(Long id,Long merchantId,Long productId) {
+		SeckillActivityInfoBO info = new SeckillActivityInfoBO();
+		
+		SeckillActivityProductDOExample sexample = new SeckillActivityProductDOExample();
+		sexample.createCriteria().andActivityIdEqualTo(id).andProductIdEqualTo(productId);
+		Long thisJoinCount = seckillActivityProductDOMapper.countByExample(sexample);
+		
+		if (thisJoinCount != null && thisJoinCount.intValue() > 0) {
+			info.setIsExists(true);
+			return info;
+		} else {
+			info.setIsExists(false);
+		}
+		
+		
+		ProductDOExample pexample = new ProductDOExample();
+		pexample.createCriteria().andMerchantIdEqualTo(merchantId).andIdEqualTo(productId);
+		
+		Long count = productDOMapper.countByExample(pexample);
+		
+		if (count != null && count > 0) {
+			info.setIsCheckProduct(true);
+		} else {
+			info.setIsCheckProduct(false);
+			return info;
+		}
 		
 		SeckillActivityProductDOExample example = new SeckillActivityProductDOExample();
 		example.createCriteria().andActivityIdEqualTo(id);
 		Long commitCount = seckillActivityProductDOMapper.countByExample(example);
-		SeckillActivityInfoBO info = new SeckillActivityInfoBO();
+		
 		
 		SeckillActivityDO seckillActivityDO = seckillActivityDOMapper.selectByPrimaryKey(id);
 		
+		
+		if (seckillActivityDO.getActivityStatus() != ActivityStatusEnum.PUBLISHED.getValue()) {
+			info.setIsJoin(false);
+			return info;
+		} else {
+			info.setIsJoin(true);
+		}
+		
 		if(commitCount!=null && seckillActivityDO.getProductValidCount()<=commitCount.intValue()){
 			info.setIsOverCount(true);
+			return info;
 		}else{
 			info.setIsOverCount(false);
 		}
 		
-		Date newTime = DateUtil.getDayBeforeTwo(seckillActivityDO.getStartDate());
-		Long after = newTime.getTime();
-		Long before = new Date().getTime();
-		if (after - before > 0) {
-			info.setIsOverTime(false);
-		} else {
-			info.setIsOverTime(true);
-		}
-		 
 		return info;
 	}
 

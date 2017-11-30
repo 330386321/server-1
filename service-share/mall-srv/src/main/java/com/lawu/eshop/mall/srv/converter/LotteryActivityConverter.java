@@ -10,7 +10,6 @@ import com.lawu.eshop.mall.dto.LotteryActivityDTO;
 import com.lawu.eshop.mall.dto.LotteryActivityOperatorDTO;
 import com.lawu.eshop.mall.srv.bo.LotteryActivityBO;
 import com.lawu.eshop.mall.srv.domain.LotteryActivityDO;
-import com.lawu.eshop.utils.DateUtil;
 
 /**
  * @author meishuquan
@@ -59,12 +58,13 @@ public class LotteryActivityConverter {
         activityDTO.setPrizePrice(activityBO.getPrizePrice());
         activityDTO.setPrizeNumber(activityBO.getPrizeNumber());
         activityDTO.setImagePath(activityBO.getImagePath());
-        activityDTO.setEndTimeDays(DateUtil.daysOfTwo(new Date(), activityBO.getEndTime()));
         activityDTO.setGradeEnum(MemberGradeEnum.getEnum(activityBO.getGrade()));
         activityDTO.setGrade(activityBO.getGrade());
         activityDTO.setStatusEnum(LotteryActivityStatusEnum.getEnum(activityBO.getStatus()));
         activityDTO.setLotteryCount(activityBO.getLotteryCount());
         activityDTO.setLotteryNumber(activityBO.getLotteryNumber());
+        long millisecond = activityBO.getEndTime().getTime() - new Date().getTime();
+        activityDTO.setMillisecond(millisecond > 0 ? millisecond : 0);
         return activityDTO;
     }
 

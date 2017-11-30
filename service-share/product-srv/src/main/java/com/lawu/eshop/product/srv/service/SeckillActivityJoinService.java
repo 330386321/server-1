@@ -63,6 +63,6 @@ public interface SeckillActivityJoinService {
 	 * @param id
 	 * @return
 	 */
-	SeckillActivityInfoBO querySeckillActivityInfo(Long id);
+	SeckillActivityInfoBO querySeckillActivityInfo(Long id,Long merchantId,Long productId);
 
 }

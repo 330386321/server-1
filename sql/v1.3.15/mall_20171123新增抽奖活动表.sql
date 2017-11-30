@@ -8,7 +8,7 @@ CREATE TABLE `lottery_activity` (
   `begin_time` DATETIME NOT NULL COMMENT '开始时间',
   `end_time` DATETIME NOT NULL COMMENT '结束时间',
   `grade` TINYINT(2) UNSIGNED NOT NULL COMMENT '等级',
-  `status` TINYINT(3) UNSIGNED NOT NULL COMMENT '0--未发布，1--进行中，2--已发布，3--已结束，4--下架，5--删除',
+  `status` TINYINT(3) UNSIGNED NOT NULL COMMENT '0--未发布，1--进行中，2--已发布，3--已结束，4--已开奖，5--下架，6--删除',
   `gmt_modified` DATETIME NULL DEFAULT NULL COMMENT '修改时间',
   `gmt_create` DATETIME NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)

@@ -28,8 +28,8 @@ public class LotteryActivityDTO {
     @ApiModelProperty(value = "奖品图片")
     private String imagePath;
 
-    @ApiModelProperty(value = "距离结束时间天数")
-    private Integer endTimeDays;
+    @ApiModelProperty(value = "距离结束毫秒数")
+    private Long millisecond;
 
     @ApiModelProperty(value = "等级")
     private MemberGradeEnum gradeEnum;
@@ -45,6 +45,9 @@ public class LotteryActivityDTO {
 
     @ApiModelProperty(value = "参与人数")
     private Integer lotteryNumber;
+
+    @ApiModelProperty(value = "兑换积分")
+    private Integer point;
 
     public Long getLotteryActivityId() {
         return LotteryActivityId;
@@ -86,12 +89,12 @@ public class LotteryActivityDTO {
         this.imagePath = imagePath;
     }
 
-    public Integer getEndTimeDays() {
-        return endTimeDays;
+    public Long getMillisecond() {
+        return millisecond;
     }
 
-    public void setEndTimeDays(Integer endTimeDays) {
-        this.endTimeDays = endTimeDays;
+    public void setMillisecond(Long millisecond) {
+        this.millisecond = millisecond;
     }
 
     public MemberGradeEnum getGradeEnum() {
@@ -132,5 +135,13 @@ public class LotteryActivityDTO {
 
     public void setLotteryNumber(Integer lotteryNumber) {
         this.lotteryNumber = lotteryNumber;
+    }
+
+    public Integer getPoint() {
+        return point;
+    }
+
+    public void setPoint(Integer point) {
+        this.point = point;
     }
 }

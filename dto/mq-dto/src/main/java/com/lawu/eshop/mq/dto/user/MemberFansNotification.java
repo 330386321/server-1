@@ -12,11 +12,21 @@ public class MemberFansNotification extends Notification {
 
     private String userNum;
 
+    private String merchantStoreName;
+
     public String getUserNum() {
         return userNum;
     }
 
     public void setUserNum(String userNum) {
         this.userNum = userNum;
+    }
+
+    public String getMerchantStoreName() {
+        return merchantStoreName;
+    }
+
+    public void setMerchantStoreName(String merchantStoreName) {
+        this.merchantStoreName = merchantStoreName;
     }
 }

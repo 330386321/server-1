@@ -4,8 +4,20 @@ public class SeckillActivityInfoBO {
 	
 	private Boolean isOverCount;
 	
-	private Boolean isOverTime;
+	private Boolean isJoin;
+	
+	private Boolean isCheckProduct;
 
+	private Boolean isExists;
+	
+
+	public Boolean getIsExists() {
+		return isExists;
+	}
+
+	public void setIsExists(Boolean isExists) {
+		this.isExists = isExists;
+	}
 
 	public Boolean getIsOverCount() {
 		return isOverCount;
@@ -15,12 +27,20 @@ public class SeckillActivityInfoBO {
 		this.isOverCount = isOverCount;
 	}
 
-	public Boolean getIsOverTime() {
-		return isOverTime;
+	public Boolean getIsJoin() {
+		return isJoin;
 	}
 
-	public void setIsOverTime(Boolean isOverTime) {
-		this.isOverTime = isOverTime;
+	public void setIsJoin(Boolean isJoin) {
+		this.isJoin = isJoin;
+	}
+
+	public Boolean getIsCheckProduct() {
+		return isCheckProduct;
+	}
+
+	public void setIsCheckProduct(Boolean isCheckProduct) {
+		this.isCheckProduct = isCheckProduct;
 	}
 	
 	

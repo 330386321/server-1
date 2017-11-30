@@ -113,7 +113,8 @@ public class OrderServiceImpl implements OrderService {
 
         // 新增会员交易记录
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-        tdsParam.setTitle(transactionDetailService.packageTitle(MemberTransactionTypeEnum.PAY_ORDERS,null,param.getTitle()));
+        //tdsParam.setTitle(transactionDetailService.packageTitle(MemberTransactionTypeEnum.PAY_ORDERS,null,param.getTitle()));
+        tdsParam.setTitle(param.getTitle());
         tdsParam.setUserNum(param.getUserNum());
         tdsParam.setTransactionAccount(param.getBuyerLogonId());
         tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY_ORDERS.getValue());
@@ -319,7 +320,7 @@ public class OrderServiceImpl implements OrderService {
         tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
         tdsParam.setThirdTransactionNum(param.getTradeNo() == null ? "" : param.getTradeNo());
         tdsParam.setBizNum(IdWorkerHelperImpl.generate(BizIdType.REFUND));
-        tdsParam.setTransactionDesc(MemberTransactionTypeEnum.REFUND_ORDERS.getDescPrefix());
+        tdsParam.setTransactionDesc(param.getOrderItemProdcutName());
         transactionDetailService.save(tdsParam);
 
         JsonResult jsonResult = new JsonResult();
@@ -410,7 +411,7 @@ public class OrderServiceImpl implements OrderService {
 
             // 新增商家订单付款交易记录
             TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-            tdsParam.setTitle(MerchantTransactionTypeEnum.ORDER.getName());
+            tdsParam.setTitle(productNames);
             tdsParam.setUserNum(userNums);
             tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
             tdsParam.setTransactionAccountType(payWays);
@@ -456,7 +457,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 新增商家订单付款交易记录
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-        tdsParam.setTitle(MerchantTransactionTypeEnum.ORDER.getName());
+        tdsParam.setTitle(productNames);
         tdsParam.setUserNum(userNums);
         tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
         tdsParam.setTransactionAccountType(payWays);

@@ -47,4 +47,14 @@ public interface SeckillActivityAttentionService {
      * @updateDate 2017年11月27日
      */
     void promptSeckillActivityAboutStart(SeckillActivityAttentionBO seckillActivityAttentionBO) throws DataNotExistException;
+    
+    /**
+     * 是否已经关注过这件抢购商品
+     * 
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年11月29日
+     * @updateDate 2017年11月29日
+     */
+    Boolean isAttention(Long seckillActivityProductId, Long memberId);
 }

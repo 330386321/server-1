@@ -297,13 +297,13 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 
             // 新增交易明细
             TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-            tdsParam.setTitle(TransactionTitleEnum.CASH_FAIL_BACK.getVal());
             tdsParam.setTransactionNum(IdWorkerHelperImpl.generate(BizIdType.TRANSACTION));
             tdsParam.setUserNum(wcdo.getUserNum());
             if (wcdo.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
                 tdsParam.setTransactionType(MemberTransactionTypeEnum.WITHDRAW_BACK.getValue());
                 tdsParam.setTransactionDesc(MemberTransactionTypeEnum.WITHDRAW_BACK.getDescPrefix());
             } else if (wcdo.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+                tdsParam.setTitle(MerchantTransactionTypeEnum.WITHDRAW_BACK.getName());
                 tdsParam.setTransactionType(MerchantTransactionTypeEnum.WITHDRAW_BACK.getValue());
                 tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.WITHDRAW_BACK.getDescPrefix());
             }

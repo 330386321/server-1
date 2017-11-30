@@ -707,7 +707,9 @@ public class AdController extends BaseController {
     public Result<Boolean> isPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
 		return adService.isPay(id);
     }
-	
+
+	@Audit(date = "2017-11-30", reviewer = "孙林青")
+	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "广告领取详情", notes = "广告领取详情,[]（张荣成）", httpMethod = "GET")
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -720,7 +722,7 @@ public class AdController extends BaseController {
 		 
 		 List<Long> memberIds = new ArrayList<>();
 		 if(list.isEmpty()){
-			 return result;
+			 return successGet(result);
 		 }
 		 
 		 for (PointGetDetailDTO pointGetDetailDTO : list) {
@@ -744,7 +746,7 @@ public class AdController extends BaseController {
 			 
 		 }
 		 
-		 return result;
+		 return successGet(result);
 	}
 
 }

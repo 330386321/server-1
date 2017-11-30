@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl.transaction;
 
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,12 +30,17 @@ public class MemberFansTransactionMainServiceImpl extends AbstractTransactionMai
     @Autowired
     private FansMerchantService fansMerchantService;
 
+    @Autowired
+    private MerchantStoreDOMapper merchantStoreDOMapper;
+
     @Override
     public MemberFansNotification selectNotification(Long id) {
         FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchantById(id);
         MemberBO memberBO = memberService.getMemberById(fansMerchantBO.getMemberId());
+        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(fansMerchantBO.getMerchantId());
         MemberFansNotification fansNotification = new MemberFansNotification();
         fansNotification.setUserNum(memberBO.getNum());
+        fansNotification.setMerchantStoreName(merchantStoreDO.getName());
         return fansNotification;
     }
 

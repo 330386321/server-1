@@ -22,20 +22,20 @@ import com.lawu.eshop.mq.dto.ad.AdPointNotification;
 @CompensatingTransactionMain(value = TransactionConstant.USER_SWEET_MONEY, topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_USER_SWEEP_RED)
 public class UserSweepRedTransactionMainServiceImpl extends AbstractTransactionMainService<AdPointNotification, Reply> {
 
-	@Autowired
-	private PointPoolDOMapper pointPoolDOMapper;
-	@Autowired
-	private AdDOMapper adDOMapper;
+    @Autowired
+    private PointPoolDOMapper pointPoolDOMapper;
+    @Autowired
+    private AdDOMapper adDOMapper;
 
     @Override
     public AdPointNotification selectNotification(Long id) {
-    	PointPoolDO pointPoolDO=pointPoolDOMapper.selectByPrimaryKey(id);
-    	AdPointNotification notification=new AdPointNotification();
-    	notification.setUserNum(pointPoolDO.getMemberNum());
-    	notification.setPoint(pointPoolDO.getPoint());
-    	notification.setAdId(pointPoolDO.getAdId());
-	    AdDO ad = adDOMapper.selectByPrimaryKey(pointPoolDO.getAdId());
-	    notification.setTitle(ad.getMerchantStoreName());
+        PointPoolDO pointPoolDO = pointPoolDOMapper.selectByPrimaryKey(id);
+        AdPointNotification notification = new AdPointNotification();
+        notification.setUserNum(pointPoolDO.getMemberNum());
+        notification.setPoint(pointPoolDO.getPoint());
+        notification.setAdId(pointPoolDO.getAdId());
+        AdDO ad = adDOMapper.selectByPrimaryKey(pointPoolDO.getAdId());
+        notification.setTitle(ad.getMerchantStoreName());
         return notification;
     }
 
