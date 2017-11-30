@@ -464,7 +464,7 @@ public class AdController extends BaseController {
 		
 		PraisePointDTO dto = new PraisePointDTO();
 		dto.setPoint(bo.getPoint());
-		if (bo.getPoint().compareTo(BigDecimal.valueOf(0)) > 1) {
+		if (bo.getPoint().compareTo(BigDecimal.valueOf(0)) == 1) {
 			dto.setIsGetPoint(true);
 		}else{
 			dto.setIsGetPoint(false);
