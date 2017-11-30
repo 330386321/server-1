@@ -661,7 +661,7 @@ public class DateUtil {
 	 *
 	 * @param fromDate
 	 *            开始时间
-	 * @param now
+	 * @param toDate
 	 *            现在时间
 	 * @param overTime
 	 *            超过的时间
@@ -669,9 +669,9 @@ public class DateUtil {
 	 *            单位
 	 * @return
 	 */
-	public static boolean isExceeds(Date fromDate, Date now, int overTime, int field) {
+	public static boolean isExceeds(Date fromDate, Date toDate, int overTime, int field) {
 		// 所有参数不能为空
-		if (fromDate == null || now == null) {
+		if (fromDate == null || toDate == null) {
 			return false;
 		}
 		Calendar calendar = Calendar.getInstance(); // 得到日历
@@ -679,7 +679,7 @@ public class DateUtil {
 		calendar.add(field, overTime); // 添加超过时间
 		Date afterDate = calendar.getTime();
 
-		if (now.getTime() >= afterDate.getTime()) {
+		if (toDate.getTime() >= afterDate.getTime()) {
 			return true;
 		}
 
