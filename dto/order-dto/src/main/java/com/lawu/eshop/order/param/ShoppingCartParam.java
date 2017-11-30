@@ -17,8 +17,7 @@ public class ShoppingCartParam {
     /**
      * 抢购活动商品型号id
      */
-    @NotNull(message = "抢购活动商品型号id不能为空")
-    @ApiModelProperty(name = "activityProductModelId", required = true, value = "抢购活动商品型号id")
+    @ApiModelProperty(name = "activityProductModelId", value = "抢购活动商品型号id")
     private Long activityProductModelId;
 
     /**
