@@ -19,7 +19,7 @@ public enum MemberTransactionTypeEnum {
 	PAY_ORDERS((byte) 0x07, "购物", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.SHOPPING},""),
 	RECHARGE_POINT((byte) 0x08, "积分充值", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RECHARGE},"积分充值"),
 	WITHDRAW((byte) 0x09, "提现", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.WITHDRAW},"提现申请"),
-	WITHDRAW_BACK((byte) 0x0A, "提现失败", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.WITHDRAW, MemberTransactionCategoryEnum.REFUND_MONEY},"提现失败-退款"),
+	WITHDRAW_BACK((byte) 0x0A, "提现失败", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.WITHDRAW, MemberTransactionCategoryEnum.REFUND_MONEY},"提现失败退款"),
 	REFUND_ORDERS((byte) 0x0B, "购物退款", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.REFUND_MONEY},""),
 	SALES_COMMISSION((byte) 0x0C, "推荐E友收益", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RECOMMEND_INCOME}, "推荐E友收益"),
 	VOLUME_COMMISSION((byte) 0x0D, "推荐E友收益", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RECOMMEND_INCOME}, "推荐E友收益"),
