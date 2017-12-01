@@ -137,10 +137,9 @@ public class LotteryRecordController extends BaseController {
 
     @Audit(date = "2017-11-24", reviewer = "孙林青")
     @ApiOperation(value = "中奖滚动列表", notes = "中奖滚动列表。 (梅述全)", httpMethod = "GET")
-    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listLotteryInfo", method = RequestMethod.GET)
-    public Result<List<LotteryInfoDTO>> listLotteryInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<List<LotteryInfoDTO>> listLotteryInfo() {
         Result<List<LotteryInfoDTO>> result = lotteryRecordService.listLotteryInfo();
         return successGet(result);
     }
