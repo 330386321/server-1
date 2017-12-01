@@ -8,6 +8,7 @@ import java.util.List;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
+import com.lawu.eshop.user.constants.UserCommonConstant;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -111,10 +112,10 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 
         // 新增交易明细
         TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-        if(cash.getUserNum().startsWith(UserTypeEnum.MEMBER.name())){
+        if(cash.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
             tdsParam.setTitle(MemberTransactionTypeEnum.WITHDRAW.getName());
             tdsParam.setTransactionDesc(MemberTransactionTypeEnum.WITHDRAW.getDescPrefix());
-        } else if(cash.getUserNum().startsWith(UserTypeEnum.MERCHANT.name())){
+        } else if(cash.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
             tdsParam.setTitle(MerchantTransactionTypeEnum.WITHDRAW.getName());
             tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.WITHDRAW.getDescPrefix());
         }
