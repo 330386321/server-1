@@ -111,7 +111,7 @@ public class BalancePayController extends BaseController {
         }
         double orderMoney = result.getModel().getOrderTotalPrice().doubleValue();
 
-        if (StringUtil.doubleCompareTo(orderMoney, 0) == 0) {
+        if (StringUtil.doubleCompareTo(orderMoney, 0) == 0 && !result.getModel().isActivity()) {
             return successCreated(ResultCode.MONEY_IS_ZERO);
         }
 

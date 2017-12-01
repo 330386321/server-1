@@ -663,6 +663,7 @@ public class ShoppingOrderController extends BaseController {
 		}
 		ShoppingOrderMoneyDTO shoppingOrderMoneyDTO = new ShoppingOrderMoneyDTO();
 		shoppingOrderMoneyDTO.setOrderTotalPrice(shoppingOrderMoneyBO.getOrderTotalPrice());
+		shoppingOrderMoneyDTO.setActivity(shoppingOrderMoneyBO.isActivity());
 		return successGet(shoppingOrderMoneyDTO);
 	}
 	
