@@ -785,9 +785,9 @@ public class MerchantStoreController extends BaseController {
 	@RequestMapping(value = "selectMerchantStoreFavor/{merchantId}", method = RequestMethod.GET)
 	public Result<MerchantStoreFavorInfoDTO> selectMerchantStoreFavor(@PathVariable Long merchantId){
 		 MerchantStoreFavorInfoBO  merchantStoreFavorInfoBO  = merchantStoreService.selectMerchantStoreFavor(merchantId);
-		if (merchantStoreFavorInfoBO == null) {
+	 	 if (merchantStoreFavorInfoBO == null) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
-		}
+		 }
 		 MerchantStoreFavorInfoDTO dto = new MerchantStoreFavorInfoDTO();
 		 dto.setName(merchantStoreFavorInfoBO.getName());
 		 dto.setPicStore(merchantStoreFavorInfoBO.getPicStore());

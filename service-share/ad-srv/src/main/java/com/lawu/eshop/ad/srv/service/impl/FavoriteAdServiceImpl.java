@@ -9,6 +9,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.param.FavoriteAdParam;
 import com.lawu.eshop.ad.param.PraiseWarnParam;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
@@ -84,6 +85,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
         view.setMemberId(memberId);
         view.setType(param.getTypeEnum().val);
         List<FavoriteAdDOView> views = favoriteAdDOMapperExtend.selectMyFavoriteAdByRowbounds(view, rowBounds);
+		
         Page<FavoriteAdDOViewBO> page=new Page<FavoriteAdDOViewBO>();
         page.setCurrentPage(param.getCurrentPage());
         page.setTotalCount(count);

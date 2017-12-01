@@ -39,8 +39,11 @@ public class PointPoolServiceImpl implements PointPoolService {
 	public Boolean selectStatusByMember(Long adId,Long memberId) {
 		PointPoolDOExample example=new PointPoolDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andTypeEqualTo(new Byte("1")).andAdIdEqualTo(adId);
-		long  count=pointPoolDOMapper.countByExample(example);
-		return count==0?false:true;
+		Long  count=pointPoolDOMapper.countByExample(example);
+		if(count != null && count > 0){
+			return true;
+		}
+		return false;
 	}
 
 	@Override

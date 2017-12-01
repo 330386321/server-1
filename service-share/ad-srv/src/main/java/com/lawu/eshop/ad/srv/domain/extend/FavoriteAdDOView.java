@@ -51,6 +51,16 @@ public class FavoriteAdDOView {
 	
 	private String videoImgUrl;
 	
+	private int count;
+	
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
 
 	public byte getStatus() {
 		return status;
