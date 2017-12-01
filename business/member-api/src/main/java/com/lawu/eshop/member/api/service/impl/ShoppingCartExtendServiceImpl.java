@@ -545,7 +545,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	    if (!isSuccess(result)) {
 	        throw new BusinessExecuteException(result.getRet(), result.getMsg());
 	    }
-        return buyNowCreateOrder(memberId, param);
+        return result;
     }
 	
 	@SuppressWarnings("unchecked")

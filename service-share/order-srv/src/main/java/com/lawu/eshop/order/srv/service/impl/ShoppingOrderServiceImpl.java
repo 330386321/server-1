@@ -154,12 +154,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Qualifier("shoppingOrderPaymentsToMerchantTransactionMainServiceImpl")
 	private TransactionMainService<Reply> shoppingOrderPaymentsToMerchantTransactionMainServiceImpl;
 
-	/**
-	 * 
-	 * @param params
-	 *            多个订单参数
-	 * @return 返回保存的订单id
-	 */
 	@Transactional
 	@Override
 	public List<Long> save(List<ShoppingOrderSettlementParam> params) {
