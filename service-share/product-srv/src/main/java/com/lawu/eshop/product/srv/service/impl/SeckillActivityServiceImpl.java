@@ -18,6 +18,7 @@ import com.lawu.eshop.common.constants.StatusEnum;
 import com.lawu.eshop.common.exception.DataNotExistException;
 import com.lawu.eshop.common.exception.WrongOperationException;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.product.constant.ActivityProductStatusEnum;
 import com.lawu.eshop.product.constant.ActivityStatusEnum;
 import com.lawu.eshop.product.param.SeckillActivityPageQueryParam;
 import com.lawu.eshop.product.param.SeckillActivitySaveParam;
@@ -27,7 +28,9 @@ import com.lawu.eshop.product.srv.constants.PropertyConstant;
 import com.lawu.eshop.product.srv.converter.SeckillActivityConverter;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDO;
 import com.lawu.eshop.product.srv.domain.SeckillActivityDOExample;
+import com.lawu.eshop.product.srv.domain.SeckillActivityProductDOExample;
 import com.lawu.eshop.product.srv.mapper.SeckillActivityDOMapper;
+import com.lawu.eshop.product.srv.mapper.SeckillActivityProductDOMapper;
 import com.lawu.eshop.product.srv.service.SeckillActivityService;
 import com.lawu.eshop.utils.DateUtil;
 
@@ -43,6 +46,9 @@ public class SeckillActivityServiceImpl implements SeckillActivityService {
 
     @Autowired
     private SeckillActivityDOMapper seckillActivityDOMapper;
+    
+    @Autowired
+    private SeckillActivityProductDOMapper seckillActivityProductDOMapper;
     
     @Override
     public Page<SeckillActivityBO> page(SeckillActivityPageQueryParam param) {
@@ -291,6 +297,13 @@ public class SeckillActivityServiceImpl implements SeckillActivityService {
         }
         if (!ActivityStatusEnum.IN_REVIEW.getValue().equals(seckillActivityDO.getActivityStatus())) {
             throw new WrongOperationException("抢购活动不在审核中");
+        }
+        SeckillActivityProductDOExample seckillActivityProductDOExample = new SeckillActivityProductDOExample();
+        seckillActivityProductDOExample.createCriteria().andActivityIdEqualTo(id).andStatusEqualTo(ActivityProductStatusEnum.AUDITED.getValue());
+        // 查询通过当前活动通过审核的商品数量
+        Long count = seckillActivityProductDOMapper.countByExample(seckillActivityProductDOExample);
+        if (count <= 0) {
+            throw new WrongOperationException("当前抢购活动下没有通过审核的商品");
         }
         SeckillActivityDO seckillActivityUpdateDO = new SeckillActivityDO();
         seckillActivityUpdateDO.setId(seckillActivityDO.getId());
