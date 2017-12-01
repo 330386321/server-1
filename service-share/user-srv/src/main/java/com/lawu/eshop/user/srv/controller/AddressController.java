@@ -1,5 +1,15 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -8,10 +18,6 @@ import com.lawu.eshop.user.param.AddressParam;
 import com.lawu.eshop.user.srv.bo.AddressBO;
 import com.lawu.eshop.user.srv.converter.AddressConverter;
 import com.lawu.eshop.user.srv.service.AddressService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 描述：收货地址管理
@@ -72,6 +78,9 @@ public class AddressController extends BaseController {
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
 	public Result<AddressDTO> get(@PathVariable Long id) {
 		AddressBO addressBO = addressService.get(id);
+		if (addressBO == null) {
+		    return successGet(ResultCode.NOT_FOUND_DATA, "地址数据不存在");
+		}
 		return successGet(AddressConverter.convertDTO(addressBO));
 	}
 
