@@ -312,6 +312,9 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         MerchantStoreFavorInfoBO info = new MerchantStoreFavorInfoBO();
         
         MerchantDO merchantDO =  merchantDOMapper.selectByPrimaryKey(merchantId);
+        if(merchantDO == null){
+        	return info;
+        }
         info.setUserNum(merchantDO.getNum());
         
         if(!list.isEmpty()){
