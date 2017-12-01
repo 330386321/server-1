@@ -125,6 +125,8 @@ public class SeckillActivityServiceImpl implements SeckillActivityService {
         String todayDate = DateUtil.getDateFormat(new Date());
         // 获取开始时间大于今天的活动
         criteria.andStartDateGreaterThanOrEqualTo(DateUtil.formatDate(todayDate + " 23:59:59", DateUtil.DATETIME_DEFAULT_FORMAT));
+        // 按照开始时间排序
+        example.setOrderByClause("start_date asc");
         // 获取第一条记录
         RowBounds rowBounds = new RowBounds(0, 1);
         List<SeckillActivityDO> list = seckillActivityDOMapper.selectByExampleWithRowbounds(example, rowBounds);
