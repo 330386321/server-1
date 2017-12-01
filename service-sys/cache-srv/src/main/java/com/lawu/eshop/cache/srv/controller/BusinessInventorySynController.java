@@ -34,7 +34,7 @@ public class BusinessInventorySynController extends BaseController{
 	 * @updateDate 2017年11月30日
 	 */
 	@RequestMapping(value = "inventory", method = RequestMethod.GET)
-    Result<Integer> getInventory(@RequestParam("businessKey") String businessKey, @RequestParam("businessKey") Object id) {
+    Result<Integer> getInventory(@RequestParam("businessKey") String businessKey, @RequestParam("id") Object id) {
 	     return successGet(businessInventorySynService.getInventory(businessKey, id));
     }
 
@@ -49,7 +49,7 @@ public class BusinessInventorySynController extends BaseController{
 	 * @updateDate 2017年11月30日
 	 */
     @RequestMapping(value = "setInventory", method = RequestMethod.PUT)
-    Result<?> setInventory(String businessKey, Object id, Integer inventory) {
+    Result<?> setInventory(@RequestParam("businessKey") String businessKey, @RequestParam("id") Object id, @RequestParam("inventory") Integer inventory) {
         businessInventorySynService.setInventory(businessKey, id, inventory);
         return successCreated();
     }
@@ -65,7 +65,7 @@ public class BusinessInventorySynController extends BaseController{
      * @updateDate 2017年11月30日
      */
 	@RequestMapping(value = "decreaseInventory", method = RequestMethod.PUT)
-    Result<Integer> decreaseInventory(String businessKey, Object id) {
+    Result<Integer> decreaseInventory(@RequestParam("businessKey") String businessKey, @RequestParam("id") Object id) {
         return successCreated(businessInventorySynService.decreaseInventory(businessKey, id));
     }
 
@@ -79,7 +79,7 @@ public class BusinessInventorySynController extends BaseController{
 	 * @updateDate 2017年11月30日
 	 */
 	@RequestMapping(value = "increaseInventory", method = RequestMethod.PUT)
-    Result<?> increaseInventory(String businessKey, Object id) {
+    Result<?> increaseInventory(@RequestParam("businessKey") String businessKey, @RequestParam("id") Object id) {
 	    businessInventorySynService.increaseInventory(businessKey, id);
         return successCreated();
     }

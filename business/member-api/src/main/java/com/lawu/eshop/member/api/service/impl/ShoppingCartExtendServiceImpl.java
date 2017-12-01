@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.concurrentqueue.bizctrl.BusinessExecuteException;
 import com.lawu.concurrentqueue.bizctrl.annotation.BusinessInventoryCtrl;
-import com.lawu.concurrentqueue.impl.BusinessKey;
+import com.lawu.eshop.concurrentqueue.impl.BusinessKey;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;

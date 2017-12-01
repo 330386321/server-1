@@ -42,4 +42,5 @@
        </bean>
 
        <import resource="spring-event.xml" />
+       <import resource="concurrent-queue-spring.xml" />
 </beans>

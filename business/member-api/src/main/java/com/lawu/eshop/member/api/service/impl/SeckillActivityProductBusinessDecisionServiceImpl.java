@@ -3,7 +3,7 @@ package com.lawu.eshop.member.api.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawu.concurrentqueue.bizctrl.BusinessDecisionService;
+import com.lawu.concurrentqueue.bizctrl.AbstractBusinessDecisionService;
 import com.lawu.concurrentqueue.bizctrl.BusinessExecuteException;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -18,7 +18,7 @@ import com.lawu.eshop.member.api.service.SeckillActivityProductService;
  */
 @SuppressWarnings("rawtypes")
 @Service
-public class SeckillActivityProductBusinessDecisionServiceImpl implements BusinessDecisionService<Result> {
+public class SeckillActivityProductBusinessDecisionServiceImpl extends AbstractBusinessDecisionService<Result> {
     
     @Autowired
     private SeckillActivityProductService seckillActivityProductService;

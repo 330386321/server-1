@@ -21,10 +21,10 @@ import com.lawu.eshop.framework.web.filter.XssFilter;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = {"com.lawu.eshop"})
+@EnableFeignClients(basePackages = {"com.lawu"})
 @Configuration
 @ImportResource(locations = {"classpath:spring.xml"})
-@ComponentScan(basePackages = {"com.lawu.eshop","com.lawu.autotest.client"})
+@ComponentScan(basePackages = {"com.lawu"})
 public class MemberApiApplication {
 
     private static Logger logger = LoggerFactory.getLogger(MemberApiApplication.class);

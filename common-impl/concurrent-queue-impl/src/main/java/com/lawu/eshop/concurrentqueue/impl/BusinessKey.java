@@ -1,4 +1,4 @@
-package com.lawu.concurrentqueue.impl;
+package com.lawu.eshop.concurrentqueue.impl;
 
 /**
  * 抢购业务分类key
