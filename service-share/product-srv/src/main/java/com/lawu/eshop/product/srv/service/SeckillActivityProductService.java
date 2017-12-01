@@ -3,6 +3,7 @@ package com.lawu.eshop.product.srv.service;
 import com.lawu.eshop.common.exception.DataNotExistException;
 import com.lawu.eshop.common.exception.WrongOperationException;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.product.param.SeckillActivityProductAuditParam;
 import com.lawu.eshop.product.param.SeckillActivityProductNotPassedParam;
 import com.lawu.eshop.product.param.SeckillActivityProductPageQueryParam;
 import com.lawu.eshop.product.param.SeckillActivityProductPageSearchParam;
@@ -65,7 +66,7 @@ public interface SeckillActivityProductService {
       * @createDate 2017年11月27日
       * @updateDate 2017年11月27日
       */
-     void audit(Long id) throws DataNotExistException, WrongOperationException;
+     void audit(Long id, SeckillActivityProductAuditParam param) throws DataNotExistException, WrongOperationException;
      
      /**
       * 抢购活动商品

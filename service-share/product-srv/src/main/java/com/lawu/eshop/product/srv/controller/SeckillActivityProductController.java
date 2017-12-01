@@ -24,6 +24,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.SeckillActivityProductBuyPageDTO;
 import com.lawu.eshop.product.dto.SeckillActivityProductInfoDTO;
 import com.lawu.eshop.product.dto.SeckillActivityProductInformationDTO;
+import com.lawu.eshop.product.param.SeckillActivityProductAuditParam;
 import com.lawu.eshop.product.param.SeckillActivityProductNotPassedParam;
 import com.lawu.eshop.product.param.SeckillActivityProductPageQueryParam;
 import com.lawu.eshop.product.param.SeckillActivityProductPageSearchParam;
@@ -186,9 +187,13 @@ public class SeckillActivityProductController extends BaseController {
      * @updateDate 2017年11月27日
      */
     @RequestMapping(value = "audit/{id}", method = RequestMethod.PUT)
-    public Result<?> audit(@PathVariable("id") Long id) {
+    public Result<?> audit(@PathVariable("id") Long id, @RequestBody SeckillActivityProductAuditParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
         try {
-            seckillActivityProductService.audit(id);
+            seckillActivityProductService.audit(id, param);
         } catch (DataNotExistException e) {
             logger.error(e.getMessage(), e);
             return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());

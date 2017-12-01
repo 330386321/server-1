@@ -18,12 +18,14 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.operator.api.service.SeckillActivityProductService;
 import com.lawu.eshop.product.dto.SeckillActivityProductInfoDTO;
+import com.lawu.eshop.product.param.SeckillActivityProductAuditParam;
 import com.lawu.eshop.product.param.SeckillActivityProductNotPassedParam;
 import com.lawu.eshop.product.param.SeckillActivityProductPageSearchParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
+import om.lawu.eshop.shiro.util.UserUtil;
 
 /**
  * 抢购活动商品控制器
@@ -101,6 +103,9 @@ public class SeckillActivityProductController extends BaseController {
     @RequiresPermissions("seckillActivityProduct:audit")
     @RequestMapping(value = "audit/{id}", method = RequestMethod.PUT)
     public Result<?> audit(@PathVariable("id") Long id) {
-        return successCreated(seckillActivityProductService.audit(id));
+        String account = UserUtil.getCurrentUserAccount();
+        SeckillActivityProductAuditParam param = new SeckillActivityProductAuditParam();
+        param.setAuditorAccount(account);
+        return successCreated(seckillActivityProductService.audit(id, param));
     }
 }
