@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.srv.exception.BalanceNegativeException;
 import org.slf4j.Logger;
@@ -219,7 +221,11 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam.setBizId(param.getBizIds());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(num);
-        tdsParam.setTransactionDesc(MemberTransactionTypeEnum.getEnum(transactionType).getDescPrefix());
+        if(param.getUserNum().startsWith(UserTypeEnum.MEMBER.getName())){
+            tdsParam.setTransactionDesc(MemberTransactionTypeEnum.getEnum(transactionType).getDescPrefix());
+        }else if(param.getUserNum().startsWith(UserTypeEnum.MERCHANT.getName())){
+            tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.getEnum(transactionType).getDescPrefix());
+        }
         transactionDetailService.save(tdsParam);
 
         //新增积分明细
@@ -448,7 +454,11 @@ public class BalancePayServiceImpl implements BalancePayService {
         tdsParam.setBizId(param.getBizIds());
         tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
         tdsParam.setBizNum(num);
-        tdsParam.setTransactionDesc(MemberTransactionTypeEnum.getEnum(transactionType).getDescPrefix());
+        if(param.getUserNum().startsWith(UserTypeEnum.MEMBER.getName())){
+            tdsParam.setTransactionDesc(MemberTransactionTypeEnum.getEnum(transactionType).getDescPrefix());
+        }else if(param.getUserNum().startsWith(UserTypeEnum.MERCHANT.getName())){
+            tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.getEnum(transactionType).getDescPrefix());
+        }
         transactionDetailService.save(tdsParam);
 
         //新增积分明细
