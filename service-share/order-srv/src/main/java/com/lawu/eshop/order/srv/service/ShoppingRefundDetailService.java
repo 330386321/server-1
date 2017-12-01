@@ -355,11 +355,4 @@ public interface ShoppingRefundDetailService {
      */
     List<ShoppingOrderItemExtendDO> selectAutoRefundToBeRefundWithReturnRefund(int offset, int pageSize);
     
-    /**
-     * 退款中 - 等待商家退款
-     * 平台提醒商家操作，否则自动退款
-     * 
-     * @author Sunny
-     */
-    void executeAutoForToBeRefund();
 }
