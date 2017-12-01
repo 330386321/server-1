@@ -103,9 +103,8 @@ public class SeckillActivityProductController extends BaseController {
         SeckillActivityBO seckillActivityBO = seckillActivityProductExtendBO.getSeckillActivity();
         if (seckillActivityBO != null) {
             // 判断是否已经超过设置关注的时间
-            boolean isExceededAttentionTime = DateUtil.isExceeds(new Date(), seckillActivityBO.getStartDate(), PropertyConstant.PROMPT_SECKILL_ACTIVITY_ABOUT_START_TIME, Calendar.MINUTE);
+            boolean isExceededAttentionTime = !DateUtil.isExceeds(new Date(), seckillActivityBO.getStartDate(), PropertyConstant.PROMPT_SECKILL_ACTIVITY_ABOUT_START_TIME, Calendar.MINUTE);
             rtn.setExceededAttentionTime(isExceededAttentionTime);
-            
             // 倒计时在服务端放入
             Long countdown = null;
             switch (rtn.getActivityStatus()) {

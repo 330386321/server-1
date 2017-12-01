@@ -62,6 +62,12 @@ public class SeckillActivityProductInformationDTO {
     private Boolean exceededAttentionTime;
     
     /**
+     * 商品型号总数量
+     */
+    @ApiModelProperty(value = "商品型号总数量", required = true)
+    private Integer productModelCount;
+    
+    /**
      * 已售数量
      */
     @ApiModelProperty(value = "已售数量", required = true)
@@ -133,6 +139,14 @@ public class SeckillActivityProductInformationDTO {
 
     public void setExceededAttentionTime(Boolean exceededAttentionTime) {
         this.exceededAttentionTime = exceededAttentionTime;
+    }
+
+    public Integer getProductModelCount() {
+        return productModelCount;
+    }
+
+    public void setProductModelCount(Integer productModelCount) {
+        this.productModelCount = productModelCount;
     }
 
     public Integer getSoldQuantity() {
