@@ -43,8 +43,12 @@ public class SeckillActivityProductBusinessDecisionServiceImpl extends AbstractB
     @Override
     public Result fail(BusinessExecuteException e) {
         Result rs = new Result();
-        rs.setRet(e.getRet());
-        rs.setMsg(e.getMsg());
+        if (rs.getRet() != 0) {
+            rs.setRet(e.getRet());
+            rs.setMsg(e.getMsg());
+        } else {
+            rs.setRet(ResultCode.FAIL);
+        }
         return rs;
     }
 

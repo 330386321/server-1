@@ -46,7 +46,7 @@ public class ShoppingOrderBuyNowCreateOrderForeignParam {
     /**
      * 活动商品型号id
      */
-    @ApiModelProperty(value = "活动商品型号id", required = true)
+    @ApiModelProperty(value = "活动商品型号id")
     private Long activityProductModelId;
     
     /**
