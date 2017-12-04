@@ -6,7 +6,7 @@ package com.lawu.eshop.mall.constants;
  */
 public enum UserTypeEnum {
     MEMBER((byte) 0x01),      //用户
-    MEMCHANT((byte) 0x02);     //商家
+    MERCHANT((byte) 0x02);     //商家
     private Byte val;
 
     UserTypeEnum(Byte val) {

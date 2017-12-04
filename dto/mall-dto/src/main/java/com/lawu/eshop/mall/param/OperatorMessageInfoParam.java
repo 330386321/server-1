@@ -1,6 +1,7 @@
 package com.lawu.eshop.mall.param;
 
 import com.lawu.eshop.mall.constants.UserTypeEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
