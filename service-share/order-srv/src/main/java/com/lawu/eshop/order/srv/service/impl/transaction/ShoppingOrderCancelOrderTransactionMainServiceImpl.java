@@ -39,27 +39,22 @@ public class ShoppingOrderCancelOrderTransactionMainServiceImpl extends Abstract
     public ShoppingOrderCancelOrderNotification selectNotification(Long shoppingOrderId) {
         // 获取购物订单以及订单项
         ShoppingOrderExtendBO shoppingOrderExtendBO = shoppingOrderService.get(shoppingOrderId);
-        
         // 如果没有相关记录返回null
         if (shoppingOrderExtendBO == null || shoppingOrderExtendBO.getId() == null || shoppingOrderExtendBO.getId() <= 0) {
         	return null;
         }
-        
         ShoppingOrderCancelOrderNotification shoppingOrderCancelOrderNotification = new ShoppingOrderCancelOrderNotification();
-        
         // 组装发送数据
         shoppingOrderCancelOrderNotification.setShoppingOrderId(shoppingOrderId);
-        
         List<ProductModeUpdateInventoryDTO> params = new ArrayList<>();
         for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
         	ProductModeUpdateInventoryDTO productModeUpdateInventoryParam = new ProductModeUpdateInventoryDTO();
         	productModeUpdateInventoryParam.setProdecutModelId(shoppingOrderItemBO.getProductModelId());
         	productModeUpdateInventoryParam.setQuantity(shoppingOrderItemBO.getQuantity());
+        	productModeUpdateInventoryParam.setActivityProductModelId(shoppingOrderItemBO.getActivityProductModelId());
         	params.add(productModeUpdateInventoryParam);
         }
-        
         shoppingOrderCancelOrderNotification.setParams(params);
-        
         return shoppingOrderCancelOrderNotification;
     }
 }
