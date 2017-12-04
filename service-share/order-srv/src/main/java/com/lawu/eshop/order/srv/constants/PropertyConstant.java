@@ -10,7 +10,12 @@ package com.lawu.eshop.order.srv.constants;
 public class PropertyConstant {
     
     /**
-     * 提示抢购活动即将开始时间(单位:分钟)
+     * 抢购活动取消订单时间(单位:分钟)
      */
     public final static int SECKILL_ACTIVITY_CANCEL_ORDER_TIME = 30;
+    
+    /**
+     * 抢购活动提醒即将取消订单时间(单位:分钟)
+     */
+    public final static int SECKILL_ACTIVITY_REMIND_ABOUT_CANCEL_ORDER_TIME = 20;
 }

@@ -728,7 +728,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		ShoppingOrderDO shoppingOrderUpdateDO = new ShoppingOrderDO();
 		shoppingOrderUpdateDO.setId(shoppingOrderDO.getId());
 		shoppingOrderUpdateDO.setIsRefundItems(true);
-		shoppingOrderDOMapper.updateByPrimaryKey(shoppingOrderUpdateDO);
+		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderUpdateDO);
 		// 更新购物订单项状态
 		ShoppingOrderItemDO shoppingOrderItemUpdateDO = new ShoppingOrderItemDO();
 		shoppingOrderItemUpdateDO.setId(shoppingOrderItemDO.getId());
@@ -1365,17 +1365,15 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
     public List<ShoppingOrderDO> selectAutoRemindToBeCancelledOrder(int offset, int pageSize) {
         ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
         ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
-
         String automaticRemindNoPaymentOrderTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_REMIND_NO_PAYMENT_ORDER);
-
+        // 不是抢购订单
+        criteria.andActivityIdIsNull();
         criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
         criteria.andGmtCreateLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(automaticRemindNoPaymentOrderTime) * -1, Calendar.DAY_OF_YEAR));
         // 没有发送过提醒消息的
         criteria.andSendTimeEqualTo(0);
-        
         // 分页参数
         RowBounds rowBounds = new RowBounds(offset, pageSize);
-        
         // 查找所有超时未付款的订单
         return shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
     }
@@ -1389,7 +1387,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
 
         /*
-         * 买家支付成功发送消息给商家提醒买家新增了一个订单
+         * 买家下单没有及时支付，超过支付时间，提醒买家支付
          */
         // 组装要发送的消息
         ShoppingOrderNoPaymentNotification shoppingOrderNoPaymentNotification = new ShoppingOrderNoPaymentNotification();
@@ -1510,12 +1508,28 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
         // 是抢购活动订单
         criteria.andActivityIdIsNotNull();
         criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
-        criteria.andGmtCreateLessThanOrEqualTo(DateUtil.add(new Date(), Integer.valueOf(PropertyConstant.SECKILL_ACTIVITY_CANCEL_ORDER_TIME) * -1, Calendar.MINUTE));
+        criteria.andGmtCreateLessThanOrEqualTo(DateUtil.add(new Date(), PropertyConstant.SECKILL_ACTIVITY_CANCEL_ORDER_TIME * -1, Calendar.MINUTE));
         // 分页参数
         RowBounds rowBounds = new RowBounds(offset, pageSize);
         // 查找所有超时未付款的订单
         List<ShoppingOrderDO> shoppingOrderDOList = shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
         return ShoppingOrderConverter.convert(shoppingOrderDOList);
+    }
+    
+    @Override
+    public List<ShoppingOrderDO> selectRemindAboutCancelSeckillActivityOrder(int offset, int pageSize) {
+        ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
+        ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
+        criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+        // 是抢购活动订单
+        criteria.andActivityIdIsNotNull();
+        criteria.andGmtCreateLessThanOrEqualTo(DateUtil.add(new Date(), PropertyConstant.SECKILL_ACTIVITY_REMIND_ABOUT_CANCEL_ORDER_TIME * -1, Calendar.MINUTE));
+        // 没有发送过提醒消息的
+        criteria.andSendTimeEqualTo(0);
+        // 分页参数
+        RowBounds rowBounds = new RowBounds(offset, pageSize);
+        // 查找所有超时未付款的订单
+        return shoppingOrderDOMapper.selectByExampleWithRowbounds(shoppingOrderDOExample, rowBounds);
     }
     
 	/**************************************************************

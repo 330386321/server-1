@@ -447,4 +447,16 @@ public interface ShoppingOrderService {
      * @updateDate 2017年11月13日
      */
     List<ShoppingOrderBO> selectCancelSeckillActivityOrder(int offset, int pageSize);
+    
+    /**
+     * 分页查询查找符合自动提醒即将取消的未付款抢购订单 <p>
+     * 用于定时任务
+     * 
+     * @param currentPage
+     * @param pageSize
+     * @author jiangxinjun
+     * @createDate 2017年12月04日
+     * @updateDate 2017年12月04日
+     */
+    List<ShoppingOrderDO> selectRemindAboutCancelSeckillActivityOrder(int offset, int pageSize);
 }
