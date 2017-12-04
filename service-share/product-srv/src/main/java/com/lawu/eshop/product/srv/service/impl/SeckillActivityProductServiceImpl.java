@@ -1,5 +1,6 @@
 package com.lawu.eshop.product.srv.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -11,6 +12,7 @@ import com.lawu.eshop.common.exception.DataNotExistException;
 import com.lawu.eshop.common.exception.WrongOperationException;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ActivityProductStatusEnum;
+import com.lawu.eshop.product.param.SeckillActivityProductAuditParam;
 import com.lawu.eshop.product.param.SeckillActivityProductNotPassedParam;
 import com.lawu.eshop.product.param.SeckillActivityProductPageQueryParam;
 import com.lawu.eshop.product.param.SeckillActivityProductPageSearchParam;
@@ -114,7 +116,7 @@ public class SeckillActivityProductServiceImpl implements SeckillActivityProduct
 
     @Transactional
     @Override
-    public void audit(Long id) throws DataNotExistException, WrongOperationException {
+    public void audit(Long id, SeckillActivityProductAuditParam param) throws DataNotExistException, WrongOperationException {
         SeckillActivityProductDO seckillActivityProductDO = seckillActivityProductDOMapper.selectByPrimaryKey(id);
         if (seckillActivityProductDO == null) {
             throw new DataNotExistException("抢购活动商品数据不存在");
@@ -125,6 +127,8 @@ public class SeckillActivityProductServiceImpl implements SeckillActivityProduct
         SeckillActivityProductDO seckillActivityProductUpdateDO = new SeckillActivityProductDO();
         seckillActivityProductUpdateDO.setId(seckillActivityProductDO.getId());
         seckillActivityProductUpdateDO.setStatus(ActivityProductStatusEnum.AUDITED.getValue());
+        seckillActivityProductUpdateDO.setAuditorAccount(param.getAuditorAccount());
+        seckillActivityProductUpdateDO.setAuditTime(new Date());
         seckillActivityProductDOMapper.updateByPrimaryKeySelective(seckillActivityProductUpdateDO);
     }
 

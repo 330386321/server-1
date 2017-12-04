@@ -6,13 +6,9 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.solr.common.SolrInputDocument;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import com.dangdang.ddframe.job.api.ShardingContext;
-import com.dangdang.ddframe.job.api.simple.SimpleJob;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
@@ -20,7 +16,6 @@ import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.AdDOExample;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
-import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.solr.service.SolrService;
@@ -76,6 +71,6 @@ public class AdPuttedJob extends AbstractPageJob<AdDO> {
 
 	@Override
 	public boolean isStatusData() {
-		return true;
+		return false;
 	}
 }

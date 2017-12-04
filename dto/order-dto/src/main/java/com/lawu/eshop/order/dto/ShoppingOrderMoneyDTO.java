@@ -9,11 +9,21 @@ public class ShoppingOrderMoneyDTO {
     */
     private BigDecimal orderTotalPrice;
 
+	private boolean isActivity;
+
 	public BigDecimal getOrderTotalPrice() {
 		return orderTotalPrice;
 	}
 
 	public void setOrderTotalPrice(BigDecimal orderTotalPrice) {
 		this.orderTotalPrice = orderTotalPrice;
+	}
+
+	public boolean isActivity() {
+		return isActivity;
+	}
+
+	public void setActivity(boolean activity) {
+		isActivity = activity;
 	}
 }

@@ -42,16 +42,7 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
     @Override
     public Page<LotteryActivityBO> listLotteryActivity(LotteryActivityRealQuery query) {
         LotteryActivityDOExample example = new LotteryActivityDOExample();
-        LotteryActivityDOExample.Criteria criteria1 = example.createCriteria();
-        List<Byte> statusList = new ArrayList<>();
-        statusList.add(LotteryActivityStatusEnum.LOTTERYING.getVal());
-        statusList.add(LotteryActivityStatusEnum.PUBLISHED.getVal());
-        criteria1.andStatusIn(statusList);
-
-        Date nowDate = new Date();
-        Date beforeThreeDate = DateUtil.getSomeDay(nowDate, -3);
-        LotteryActivityDOExample.Criteria criteria2 = example.or();
-        criteria2.andStatusEqualTo(LotteryActivityStatusEnum.FINISHED.getVal()).andEndTimeGreaterThanOrEqualTo(beforeThreeDate).andEndTimeLessThanOrEqualTo(nowDate);
+        example.createCriteria().andStatusGreaterThanOrEqualTo(LotteryActivityStatusEnum.LOTTERYING.getVal()).andStatusLessThanOrEqualTo(LotteryActivityStatusEnum.FINISHED.getVal());
         example.setOrderByClause("status asc,grade asc");
 
         RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());

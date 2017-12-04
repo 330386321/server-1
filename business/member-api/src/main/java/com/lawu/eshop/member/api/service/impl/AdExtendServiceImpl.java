@@ -396,6 +396,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			} else {
 				PraisePointDTO dto = new PraisePointDTO();
 				dto.setPoint(new BigDecimal(0));
+				dto.setIsGetPoint(false);
 				return successCreated(dto);
 			}
 

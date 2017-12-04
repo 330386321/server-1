@@ -24,12 +24,13 @@
 			sa.`name`,
 			sa.picture,
 			sa.selling_price,
-			sa.start_date
+			sa.start_date,
+			sa.end_date 
 		FROM
 			seckill_activity sa
 		LEFT JOIN seckill_activity_product sap ON sa.id = sap.activity_id
 		WHERE
-			sap.merchant_id = #{merchantId,jdbcType=BIGINT}
+			sap.merchant_id = #{merchantId,jdbcType=BIGINT} and sa.`status`=1
 			GROUP BY sap.activity_id
   </select>
   
@@ -48,4 +49,17 @@
 					activity_id
 			) AS sap
   </select>
+  
+  <!-- 查询商品是否参入活动 -->
+  <select resultType="java.lang.Integer" parameterType="java.lang.Long" id="selectJoinStatus" >
+   		  SELECT
+			count(*)
+		FROM
+			seckill_activity_product sap 	
+		LEFT JOIN seckill_activity sa ON sap.activity_id = sa.id
+		WHERE
+			sap.product_id = #{productId,jdbcType=BIGINT} AND sap.`status` != 3 AND sa.activity_status !=6 AND sa.`status`=1
+  </select>
+  
+
 </mapper>

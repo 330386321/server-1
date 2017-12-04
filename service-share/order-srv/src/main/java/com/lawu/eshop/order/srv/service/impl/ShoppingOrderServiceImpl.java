@@ -867,6 +867,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	public ShoppingOrderMoneyBO selectOrderMoney(String orderIds) throws TheOrderIsBeingProcessedException, OrderCreationFailedException {
 		String[] orderIdsArray = orderIds.split(",");
 		BigDecimal total = new BigDecimal(0);
+		boolean isActivity = false;
 		for (int i = 0; i < orderIdsArray.length; i++) {
 		    ShoppingOrderDO orderDO = shoppingOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderIdsArray[i]));
 			/*
@@ -879,9 +880,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				throw new OrderCreationFailedException(ExceptionMessageConstant.ORDER_CREATION_FAILED);
 			}
 			total = total.add(orderDO.getOrderTotalPrice());
+			if(orderDO.getActivityId() != null){
+				isActivity = true;
+			}
 		}
 		ShoppingOrderMoneyBO rtn = new ShoppingOrderMoneyBO();
 		rtn.setOrderTotalPrice(total);
+		rtn.setActivity(isActivity);
 		return rtn;
 	}
 	

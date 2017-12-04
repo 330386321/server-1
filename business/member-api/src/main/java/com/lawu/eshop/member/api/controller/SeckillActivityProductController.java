@@ -76,24 +76,28 @@ public class SeckillActivityProductController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "information/{id}", method = RequestMethod.GET)
     public Result<SeckillActivityProductInformationForeignDTO> information(@ApiParam(value = "如果用户有登录就传入") @RequestHeader(name = UserConstant.REQ_HEADER_TOKEN, required = false) String token, @ApiParam(value = "抢购活动商品id") @PathVariable("id") Long id) {
-        Result<SeckillActivityProductInformationDTO>  result = seckillActivityProductService.information(id);
+        Long memberId = UserUtil.getCurrentUserId(getRequest());
+        Result<SeckillActivityProductInformationDTO>  result = seckillActivityProductService.information(id, memberId);
         if (!isSuccess(result)) {
             return successGet(result);
         }
-        Long memberId = UserUtil.getCurrentUserId(getRequest());
         SeckillActivityProductInformationDTO model = result.getModel();
-        ActivityProductBuyQueryParam param = new ActivityProductBuyQueryParam();
-        param.setActivityProductId(model.getActivityProductId());
-        param.setMemberId(memberId);
         SeckillActivityProductInformationForeignDTO rtn = new SeckillActivityProductInformationForeignDTO();
+        if (memberId != null && memberId != 0L) {
+            ActivityProductBuyQueryParam param = new ActivityProductBuyQueryParam();
+            param.setActivityProductId(model.getActivityProductId());
+            param.setMemberId(memberId);
+            Result<Boolean> isBuyResult = shoppingOrderService.isBuy(param);
+            if (!isSuccess(isBuyResult)) {
+                return successGet(isBuyResult);
+            }
+            rtn.setBuy(isBuyResult.getModel());
+        } else {
+            rtn.setBuy(false);
+        }
         rtn.setActivityProductId(model.getActivityProductId());
         rtn.setActivityStatus(model.getActivityStatus());
         rtn.setAttentionCount(model.getAttentionCount());
-        Result<Boolean> isBuyResult = shoppingOrderService.isBuy(param);
-        if (!isSuccess(isBuyResult)) {
-            return successGet(isBuyResult);
-        }
-        rtn.setBuy(isBuyResult.getModel());
         rtn.setCountdown(model.getCountdown());
         rtn.setMemberLevel(model.getMemberLevel());
         rtn.setProductModelList(model.getProductModelList());

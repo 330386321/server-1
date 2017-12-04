@@ -67,6 +67,6 @@ public class AdPuttingJob extends AbstractPageJob<AdDO> {
 
 	@Override
 	public boolean isStatusData() {
-		return true;
+		return false;
 	}
 }

@@ -24,6 +24,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.SeckillActivityProductBuyPageDTO;
 import com.lawu.eshop.product.dto.SeckillActivityProductInfoDTO;
 import com.lawu.eshop.product.dto.SeckillActivityProductInformationDTO;
+import com.lawu.eshop.product.param.SeckillActivityProductAuditParam;
 import com.lawu.eshop.product.param.SeckillActivityProductNotPassedParam;
 import com.lawu.eshop.product.param.SeckillActivityProductPageQueryParam;
 import com.lawu.eshop.product.param.SeckillActivityProductPageSearchParam;
@@ -82,7 +83,7 @@ public class SeckillActivityProductController extends BaseController {
      * @updateDate 2017年11月24日
      */
     @RequestMapping(value = "information/{id}", method = RequestMethod.GET)
-    public Result<SeckillActivityProductInformationDTO> information(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
+    public Result<SeckillActivityProductInformationDTO> information(@PathVariable("id") Long id, @RequestParam(name = "memberId", required = false) Long memberId) {
         SeckillActivityProductExtendBO seckillActivityProductExtendBO = null;
         try {
             seckillActivityProductExtendBO = seckillActivityProductService.information(id);
@@ -91,16 +92,20 @@ public class SeckillActivityProductController extends BaseController {
             return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
         }
         SeckillActivityProductInformationDTO rtn = SeckillActivityProductConverter.convert(seckillActivityProductExtendBO);
-        // 查询是否已经关注过这个商品
-        Boolean isAttention = seckillActivityAttentionService.isAttention(rtn.getActivityProductId(), memberId);
-        rtn.setAttention(isAttention);
+        // 如果用户没有登录设置为未关注
+        if (memberId != null) {
+            // 查询是否已经关注过这个商品
+            Boolean isAttention = seckillActivityAttentionService.isAttention(rtn.getActivityProductId(), memberId);
+            rtn.setAttention(isAttention);
+        } else {
+            rtn.setAttention(false);
+        }
         
         SeckillActivityBO seckillActivityBO = seckillActivityProductExtendBO.getSeckillActivity();
         if (seckillActivityBO != null) {
             // 判断是否已经超过设置关注的时间
-            boolean isExceededAttentionTime = DateUtil.isExceeds(seckillActivityBO.getStartDate(), new Date(), PropertyConstant.PROMPT_SECKILL_ACTIVITY_ABOUT_START_TIME, Calendar.MINUTE);
+            boolean isExceededAttentionTime = !DateUtil.isExceeds(new Date(), seckillActivityBO.getStartDate(), PropertyConstant.PROMPT_SECKILL_ACTIVITY_ABOUT_START_TIME, Calendar.MINUTE);
             rtn.setExceededAttentionTime(isExceededAttentionTime);
-            
             // 倒计时在服务端放入
             Long countdown = null;
             switch (rtn.getActivityStatus()) {
@@ -182,9 +187,13 @@ public class SeckillActivityProductController extends BaseController {
      * @updateDate 2017年11月27日
      */
     @RequestMapping(value = "audit/{id}", method = RequestMethod.PUT)
-    public Result<?> audit(@PathVariable("id") Long id) {
+    public Result<?> audit(@PathVariable("id") Long id, @RequestBody SeckillActivityProductAuditParam param, BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
         try {
-            seckillActivityProductService.audit(id);
+            seckillActivityProductService.audit(id, param);
         } catch (DataNotExistException e) {
             logger.error(e.getMessage(), e);
             return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());

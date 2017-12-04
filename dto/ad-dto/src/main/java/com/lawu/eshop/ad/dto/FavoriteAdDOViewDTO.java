@@ -40,6 +40,8 @@ public class FavoriteAdDOViewDTO {
 	@ApiModelProperty(value = "视频封面图片")
 	private String videoImgUrl;
 	
+	@ApiModelProperty(value = "是否抢赞")
+	private Boolean isPraise;
 	
 	public AdStatusEnum getStatusEnum() {
 		return statusEnum;
@@ -127,6 +129,14 @@ public class FavoriteAdDOViewDTO {
 
 	public void setVideoImgUrl(String videoImgUrl) {
 		this.videoImgUrl = videoImgUrl;
+	}
+
+	public Boolean getIsPraise() {
+		return isPraise;
+	}
+
+	public void setIsPraise(Boolean isPraise) {
+		this.isPraise = isPraise;
 	}
 	
 	

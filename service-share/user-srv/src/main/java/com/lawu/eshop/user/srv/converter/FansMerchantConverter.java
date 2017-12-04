@@ -1,14 +1,15 @@
 package com.lawu.eshop.user.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.domain.FansMerchantDO;
 import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOView;
 import com.lawu.eshop.utils.StringUtil;
-import org.apache.commons.lang.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -29,7 +30,7 @@ public class FansMerchantConverter {
 
         FansMerchantBO fansMerchantBO = new FansMerchantBO();
         fansMerchantBO.setMemberId(fansMerchantDO.getMemberId());
-        fansMerchantBO.setMerchantId(fansMerchantBO.getMerchantId());
+        fansMerchantBO.setMerchantId(fansMerchantDO.getMerchantId());
         return fansMerchantBO;
     }
 

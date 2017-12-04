@@ -300,6 +300,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
             tdsParam.setTransactionNum(IdWorkerHelperImpl.generate(BizIdType.TRANSACTION));
             tdsParam.setUserNum(wcdo.getUserNum());
             if (wcdo.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+                tdsParam.setTitle(MemberTransactionTypeEnum.WITHDRAW_BACK.getName());
                 tdsParam.setTransactionType(MemberTransactionTypeEnum.WITHDRAW_BACK.getValue());
                 tdsParam.setTransactionDesc(MemberTransactionTypeEnum.WITHDRAW_BACK.getDescPrefix());
             } else if (wcdo.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {

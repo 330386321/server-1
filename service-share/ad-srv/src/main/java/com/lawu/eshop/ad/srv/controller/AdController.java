@@ -302,7 +302,6 @@ public class AdController extends BaseController {
 	 * @param param
 	 * @return
 	 */
-	@Deprecated
 	@RequestMapping(value = "selectChoiceness", method = RequestMethod.POST)
 	public Result<Page<AdDTO>> selectChoiceness(@RequestBody AdSolrRealParam param) {
 		List<AdSolrDTO> solrDTOS = new ArrayList<>();
@@ -423,7 +422,6 @@ public class AdController extends BaseController {
 				}
 			});
 		}
-
 		page.setRecords(AdConverter.convertAdDTOS(solrDTOS));
 		return successAccepted(page);
 	}
@@ -464,6 +462,11 @@ public class AdController extends BaseController {
 		
 		PraisePointDTO dto = new PraisePointDTO();
 		dto.setPoint(bo.getPoint());
+		if (bo.getPoint().compareTo(BigDecimal.valueOf(0)) == 1) {
+			dto.setIsGetPoint(true);
+		}else{
+			dto.setIsGetPoint(false);
+		}
 		return successCreated(dto);
 
 	}
@@ -829,12 +832,20 @@ public class AdController extends BaseController {
 						int favoriteCount = favoriteAdService.getFavoriteCount(adBO.getId());
 						solrDTO.setHits(favoriteCount);
 					}
+					if (param.getMemberId() != null || param.getMemberId() > 0) {
+						
+						if (adBO.getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PRAISE.getVal() && adBO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_PUTING.val) {
+							Boolean flag = pointPoolService.selectStatusByMember(adBO.getId(), param.getMemberId());
+							adBO.setIsPraise(flag);
+						}
+						
+					}
 					AdPraiseDTO adPraiseDTO = AdConverter.convertDTO(solrDTO, adBO);
 					adPraiseDTOS.add(adPraiseDTO);
 				}
 			}
 		}
-
+		
 		Page<AdPraiseDTO> page = new Page<>();
 		page.setCurrentPage(param.getCurrentPage());
 		page.setTotalCount(totalCount);

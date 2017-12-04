@@ -111,8 +111,13 @@ public class ProductController extends BaseController {
 				if(result.getModel()){
 					return successCreated(ResultCode.GOODS_PRODUCT_EXIST_ADFLAT);
 				}
+				//判断是否存在参入抢购活动
+				Result<Boolean> isJoinRs =  productService.isJoinActivity(Long.parseLong(id));
+				if(isJoinRs.getModel()){
+					return successCreated(ResultCode.SECKILL_ACTIVITY_PRODUCT_EXISTS);
+				}
 			}
-		}
+		} 
 
 		return productService.updateProductStatus(ids, productStatus,merchantId);
 	}

@@ -64,5 +64,12 @@ public interface SeckillActivityJoinService {
 	 * @return
 	 */
 	SeckillActivityInfoBO querySeckillActivityInfo(Long id,Long merchantId,Long productId);
+	
+	/**
+	 * 判断商品是否参入抢购活动
+	 * @param productId
+	 * @return
+	 */
+	Boolean isJoinActivity(Long productId);
 
 }

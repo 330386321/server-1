@@ -26,6 +26,10 @@ public class SeckillActivityManagerDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date startDate;
 	
+	@ApiModelProperty(value = "结束时间")
+	@JsonFormat(pattern = "HH:mm", timezone = "GMT+8")
+	private Date endDate;
+	
 	@ApiModelProperty(value = "UNPUBLISHED 未发布 PUBLISHED 发布中  IN_REVIEW  审核中  NOT_STARTED 未开始 PROCESSING 进行中  END 已结束")
 	private ActivityStatusEnum activityStatusEnum;
 
@@ -75,6 +79,14 @@ public class SeckillActivityManagerDTO {
 
 	public void setActivityStatusEnum(ActivityStatusEnum activityStatusEnum) {
 		this.activityStatusEnum = activityStatusEnum;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 	

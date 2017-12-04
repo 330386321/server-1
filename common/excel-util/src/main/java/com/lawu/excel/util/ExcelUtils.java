@@ -3,6 +3,7 @@ package com.lawu.excel.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -185,6 +186,11 @@ public class ExcelUtils {
                 cellValue = cell.getBooleanCellValue();
                 break;
             case Cell.CELL_TYPE_ERROR:
+                break;
+            case Cell.CELL_TYPE_NUMERIC:
+                double value = cell.getNumericCellValue();
+                // 处理类似于电话号码大范围数据
+                cellValue = new DecimalFormat("#").format(value);
                 break;
             default:
                 cellValue = cell.getStringCellValue();

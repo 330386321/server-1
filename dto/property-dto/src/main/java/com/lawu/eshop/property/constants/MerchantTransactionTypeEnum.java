@@ -17,7 +17,7 @@ public enum MerchantTransactionTypeEnum {
     RECHARGE((byte) 0x67, "余额充值", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECHARGE}, "余额充值"),
     INTEGRAL_RECHARGE((byte) 0x69, "积分充值", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.RECHARGE}, "积分充值"),
     WITHDRAW((byte) 0x6B, "提现", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.WITHDRAW}, "提现申请"),
-    WITHDRAW_BACK((byte) 0x6C, "提现失败", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.WITHDRAW, MerchantTransactionCategoryEnum.REFUND_MONEY}, "提现失败"),
+    WITHDRAW_BACK((byte) 0x6C, "提现失败", new MerchantTransactionCategoryEnum[]{MerchantTransactionCategoryEnum.WITHDRAW, MerchantTransactionCategoryEnum.REFUND_MONEY}, "提现失败退款"),
     INVITE_FANS((byte) 0x6D, "邀请粉丝", null, ""),
     ADD_AD((byte) 0x6E, "投放广告", null, ""),
     ADD_RED_PACKET((byte) 0x6F, "发红包", null, ""),

@@ -38,6 +38,7 @@ import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.bo.ProductRelateAdInfoBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.service.ProductService;
+import com.lawu.eshop.product.srv.service.SeckillActivityJoinService;
 import com.lawu.eshop.solr.service.SolrService;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.StringUtil;
@@ -58,6 +59,9 @@ public class ProductController extends BaseController {
 
     @Autowired
     private ProductSrvConfig productSrvConfig;
+    
+    @Autowired
+    private SeckillActivityJoinService seckillActivityJoinService;
 
     /**
      * 查询商品列表
@@ -178,6 +182,15 @@ public class ProductController extends BaseController {
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
+    	
+    	//编辑，判断是否存在参入抢购活动
+		if (product.getProductId() > 0) {
+			Boolean isJoin = seckillActivityJoinService.isJoinActivity(product.getProductId());
+			if(isJoin){
+				return successCreated(ResultCode.SECKILL_ACTIVITY_PRODUCT_EXISTS);
+			}
+		}
+    	
     	
         productService.eidtProduct(product);
         return successCreated(ResultCode.SUCCESS);

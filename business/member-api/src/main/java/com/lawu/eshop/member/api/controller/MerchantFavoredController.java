@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.autotest.client.AutoTesting;
-import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -47,6 +46,9 @@ public class MerchantFavoredController extends BaseController {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Result<MerchantFavoredDTO> result = merchantFavoredService.findFavoredByMerchantId(merchantId);
+        if (!isSuccess(result)) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
         Result<MerchantStoreFavorInfoDTO> stoResult = merchantStoreService.selectMerchantStoreFavor(merchantId);
         if (!isSuccess(stoResult)) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);

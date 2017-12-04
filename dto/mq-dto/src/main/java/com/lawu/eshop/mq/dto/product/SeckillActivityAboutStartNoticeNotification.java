@@ -10,9 +10,14 @@ import com.lawu.eshop.compensating.transaction.Notification;
  * @updateDate 2017年11月27日
  */
 public class SeckillActivityAboutStartNoticeNotification extends Notification {
+    
+    private static final long serialVersionUID = 2990958795080285858L;
 
-    private static final long serialVersionUID = 2027629523621391005L;
-
+    /**
+     * 抢购活动关注id
+     */
+    private Long seckillActivityAttentionId;
+    
     /**
      * 用户编号
      */
@@ -32,6 +37,18 @@ public class SeckillActivityAboutStartNoticeNotification extends Notification {
      * 商品id
      */
     private Long productId;
+
+    public Long getSeckillActivityAttentionId() {
+        return seckillActivityAttentionId;
+    }
+
+    public void setSeckillActivityAttentionId(Long seckillActivityAttentionId) {
+        this.seckillActivityAttentionId = seckillActivityAttentionId;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
 
     public String getMemberNum() {
         return memberNum;

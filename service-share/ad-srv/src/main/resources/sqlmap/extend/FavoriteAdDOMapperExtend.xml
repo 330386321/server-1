@@ -11,6 +11,7 @@
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="video_img_url" jdbcType="VARCHAR" property="videoImgUrl" />
+    <result column="count" jdbcType="INTEGER" property="count" />
   </resultMap>
  
   <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.ad.srv.domain.extend.FavoriteAdDOView" id="selectMyFavoriteAdByRowbounds" >
@@ -23,7 +24,8 @@
 		a.video_img_url as video_img_url,
 		a.status as status,
 		a.type as type,
-		a.merchant_id as merchant_id
+		a.merchant_id as merchant_id,
+		(SELECT count(*) FROM point_pool where ad_id =fa.ad_id and member_id=#{memberId,jdbcType=VARCHAR}) as count
     from favorite_ad fa  
     	left join ad a on fa.ad_id= a.id
 	    <where>

@@ -24,6 +24,10 @@ public class SeckillActivityJoinDTO {
 	@ApiModelProperty(value = "开始时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date startDate;
+	
+	@ApiModelProperty(value = "结束时间")
+	@JsonFormat(pattern = "HH:mm", timezone = "GMT+8")
+	private Date endDate;
 
 	public Long getId() {
 		return id;
@@ -63,6 +67,14 @@ public class SeckillActivityJoinDTO {
 
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 	

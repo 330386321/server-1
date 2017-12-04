@@ -12,6 +12,9 @@ public class PraisePointDTO {
 	@JsonSerialize(using=KeepDecimalJsonSerializer.class)
 	@ApiModelProperty(value = "积分")
 	private BigDecimal point;
+	
+	@ApiModelProperty(value = "是否抢到E咻 true 抢到 false 没有抢到")
+	private Boolean isGetPoint;
 
 	public BigDecimal getPoint() {
 		return point;
@@ -19,6 +22,14 @@ public class PraisePointDTO {
 
 	public void setPoint(BigDecimal point) {
 		this.point = point;
+	}
+
+	public Boolean getIsGetPoint() {
+		return isGetPoint;
+	}
+
+	public void setIsGetPoint(Boolean isGetPoint) {
+		this.isGetPoint = isGetPoint;
 	}
 	
 	

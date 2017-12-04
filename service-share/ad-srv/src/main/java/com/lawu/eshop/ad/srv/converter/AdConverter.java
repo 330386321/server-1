@@ -782,6 +782,7 @@ public class AdConverter {
 		adPraiseDTO.setCount(solrDTO.getHits());
 		adPraiseDTO.setLogoUrl(solrDTO.getLogoUrl());
 		adPraiseDTO.setBeginTime(adBO.getBeginTime());
+		adPraiseDTO.setIsPraise(adBO.getIsPraise());
 		Date date = new Date();
 		if (adBO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_PUTING.val) { //结束倒计时
 			Long time = adBO.getBeginTime().getTime() + (20 * 60 * 1000) - date.getTime();

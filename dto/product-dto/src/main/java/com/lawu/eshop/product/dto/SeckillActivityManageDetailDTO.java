@@ -27,6 +27,10 @@ public class SeckillActivityManageDetailDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date endDate;
 	
+	@ApiModelProperty(value = "开始时间")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
+	private Date startDate;
+	
 	@ApiModelProperty(value = "倒计时")
 	private Long countDown;
 	
@@ -98,6 +102,14 @@ public class SeckillActivityManageDetailDTO {
 
 	public void setList(List<SeckillActivityProductManageDTO> list) {
 		this.list = list;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 
 	

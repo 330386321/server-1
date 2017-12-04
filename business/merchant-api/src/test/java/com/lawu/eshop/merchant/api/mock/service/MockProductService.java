@@ -82,4 +82,10 @@ public class MockProductService extends BaseController implements ProductService
 		return null;
 	}
 
+	@Override
+	public Result<Boolean> isJoinActivity(Long productId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

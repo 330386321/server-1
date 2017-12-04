@@ -41,7 +41,18 @@ public class FavoriteAdDOViewBO {
 	
 	private String videoImgUrl;
 	
+	private Boolean isPraise;
 	
+	
+	
+	public Boolean getIsPraise() {
+		return isPraise;
+	}
+
+	public void setIsPraise(Boolean isPraise) {
+		this.isPraise = isPraise;
+	}
+
 	public AdStatusEnum getStatusEnum() {
 		return statusEnum;
 	}

@@ -146,5 +146,17 @@ public class SeckillActivityJoinController extends BaseController{
 		
 		return successCreated();
 	}
+	
+	/**
+	 * 判断商品是否参入活动
+	 * @param productId
+	 * @return
+	 */
+	@RequestMapping(value = "isJoinActivity/{productId}", method = RequestMethod.GET)
+	public Result<Boolean> isJoinActivity(@PathVariable Long productId){
+		
+		Boolean isJoin = seckillActivityJoinService.isJoinActivity(productId);
+		return successGet(isJoin);
+	}
 
 }

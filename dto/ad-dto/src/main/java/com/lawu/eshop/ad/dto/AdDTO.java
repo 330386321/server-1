@@ -80,7 +80,7 @@ public class AdDTO {
 	private Boolean isFavorite;
 	
 	@ApiModelProperty(value = "是否抢赞")
-	private Boolean isPraise;
+	private Boolean isPraise = false;
 	
 	@ApiModelProperty(value = "AD_STATUS_SHOOT 开枪中  AD_STATUS_TOBEGIN 即将开始 AD_STATUS_END 已结束")
 	private AdPraiseStatusEnum adPraiseStatusEnum;
@@ -326,6 +326,7 @@ public class AdDTO {
 	public void setIsFavorite(Boolean isFavorite) {
 		this.isFavorite = isFavorite;
 	}
+
 
 
 	public Boolean getIsPraise() {

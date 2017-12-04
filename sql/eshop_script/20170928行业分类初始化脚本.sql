@@ -1,11 +1,11 @@
 INSERT INTO `industry_type` VALUES ('10', '0', '10', '美食', 'industry/meishi.png', '1', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
 INSERT INTO `industry_type` VALUES ('11', '0', '11', '休闲娱乐', 'industry/xiuxianyule.png', '2', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
-INSERT INTO `industry_type` VALUES ('12', '0', '12', '酒店住宿', 'industry/jiudianzhusu.png', '3', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
+INSERT INTO `industry_type` VALUES ('12', '0', '12', '酒店', 'industry/jiudian.png', '3', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
 INSERT INTO `industry_type` VALUES ('13', '0', '13', '丽人', 'industry/liren.png', '4', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
 INSERT INTO `industry_type` VALUES ('15', '0', '15', '生活服务', 'industry/shenghuofuwu.png', '5', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
 INSERT INTO `industry_type` VALUES ('16', '0', '16', '旅游摄影', 'industry/lvyousheying.png', '6', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
 INSERT INTO `industry_type` VALUES ('17', '0', '17', '爱车', 'industry/aiche.png', '7', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
-INSERT INTO `industry_type` VALUES ('18', '0', '18', '医疗健康', 'industry/yiliaojiankang.png', '8', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
+INSERT INTO `industry_type` VALUES ('18', '0', '18', '医疗服务', 'industry/yiliaofuwu.png', '8', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
 INSERT INTO `industry_type` VALUES ('19', '0', '19', '教育培训', 'industry/jiaoyupeixun.png', '9', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
 INSERT INTO `industry_type` VALUES ('20', '0', '20', '其他', 'industry/qita.png', '10', '1', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');
 INSERT INTO `industry_type` VALUES ('21', '0', '21', '地产', 'industry/qita.png.png', '11', '0', '2', '2017-04-13 02:25:22', '2017-04-13 02:25:22');

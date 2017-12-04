@@ -111,6 +111,15 @@ public interface ProductService {
     @RequestMapping(value = "productModel/queryProductModel/{productId}", method = RequestMethod.GET)
 	Result<List<ProductModelDataDTO>> queryProductModel(@PathVariable("productId") Long productId);
     
+    
+    /**
+     * 判断商品是否参入抢购活动
+     * @param productId
+     * @return
+     */
+    @RequestMapping(value = "seckillActivityJoin/isJoinActivity/{productId}", method = RequestMethod.GET)
+	Result<Boolean> isJoinActivity(@PathVariable("productId") Long productId);
+    
 
 }
 

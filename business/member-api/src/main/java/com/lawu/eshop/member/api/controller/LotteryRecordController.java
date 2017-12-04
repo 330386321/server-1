@@ -19,6 +19,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.mall.constants.LotteryActivityStatusEnum;
 import com.lawu.eshop.mall.dto.LotteryActivityDTO;
 import com.lawu.eshop.mall.dto.LotteryInfoDTO;
 import com.lawu.eshop.mall.dto.LotteryRecordDTO;
@@ -67,7 +68,7 @@ public class LotteryRecordController extends BaseController {
     private MemberService memberService;
 
     @Audit(date = "2017-11-24", reviewer = "孙林青")
-    @ApiOperation(value = "参与抽奖", notes = "立即抽奖。[1002|2021] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "参与抽奖", notes = "立即抽奖。[1002|2021|2022|2023] (梅述全)", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "takePart", method = RequestMethod.POST)
@@ -80,6 +81,16 @@ public class LotteryRecordController extends BaseController {
         Result<LotteryActivityDTO> activityDTOResult = lotteryActivityService.getLotteryActivityById(lotteryActivityId);
         if (activityDTOResult.getModel() == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        if (activityDTOResult.getModel().getStatusEnum().getVal() != LotteryActivityStatusEnum.LOTTERYING.getVal().byteValue()) {
+            return successCreated(ResultCode.NOT_LOTTERYING);
+        }
+        Result<UserDTO> userResult = memberService.findMemberInfo(userId);
+        if (userResult.getModel() == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        if (userResult.getModel().getGrade() < activityDTOResult.getModel().getGradeEnum().getVal()) {
+            return successCreated(ResultCode.GRADE_NOT_MATCH);
         }
         Result<Boolean> result = lotteryRecordService.lotteryRecord(lotteryActivityId, userNum);
         if (result.getModel()) {
@@ -97,7 +108,7 @@ public class LotteryRecordController extends BaseController {
     }
 
     @Audit(date = "2017-11-24", reviewer = "孙林青")
-    @ApiOperation(value = "积分抽奖", notes = "积分抽奖。[1002|1004|2020|2022|6025|6002|6003|6024|6010|6011] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "积分抽奖", notes = "积分抽奖。[1002|1004|2020|2022|2023|6025|6002|6003|6024|6010|6011] (梅述全)", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "takePartByPay", method = RequestMethod.POST)
@@ -113,6 +124,9 @@ public class LotteryRecordController extends BaseController {
         Result<LotteryActivityDTO> activityDTOResult = lotteryActivityService.getLotteryActivityById(lotteryActivityId);
         if (activityDTOResult.getModel() == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        if (activityDTOResult.getModel().getStatusEnum().getVal() != LotteryActivityStatusEnum.LOTTERYING.getVal().byteValue()) {
+            return successCreated(ResultCode.NOT_LOTTERYING);
         }
         Result<UserDTO> userResult = memberService.findMemberInfo(id);
         if (userResult.getModel() == null) {
@@ -137,10 +151,9 @@ public class LotteryRecordController extends BaseController {
 
     @Audit(date = "2017-11-24", reviewer = "孙林青")
     @ApiOperation(value = "中奖滚动列表", notes = "中奖滚动列表。 (梅述全)", httpMethod = "GET")
-    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listLotteryInfo", method = RequestMethod.GET)
-    public Result<List<LotteryInfoDTO>> listLotteryInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<List<LotteryInfoDTO>> listLotteryInfo() {
         Result<List<LotteryInfoDTO>> result = lotteryRecordService.listLotteryInfo();
         return successGet(result);
     }

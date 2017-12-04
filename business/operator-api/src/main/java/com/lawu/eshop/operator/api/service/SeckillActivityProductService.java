@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.dto.SeckillActivityProductInfoDTO;
+import com.lawu.eshop.product.param.SeckillActivityProductAuditParam;
 import com.lawu.eshop.product.param.SeckillActivityProductNotPassedParam;
 import com.lawu.eshop.product.param.SeckillActivityProductPageSearchParam;
 
@@ -53,5 +54,5 @@ public interface SeckillActivityProductService {
      * @updateDate 2017年11月27日
      */
     @RequestMapping(value = "audit/{id}", method = RequestMethod.PUT)
-    Result<?> audit(@PathVariable("id") Long id);
+    Result<?> audit(@PathVariable("id") Long id, @RequestBody SeckillActivityProductAuditParam param);
 }

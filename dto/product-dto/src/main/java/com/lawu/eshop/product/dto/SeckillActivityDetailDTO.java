@@ -25,6 +25,10 @@ public class SeckillActivityDetailDTO {
 	@ApiModelProperty(value = "开始时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date startDate;
+	
+	@ApiModelProperty(value = "结束时间")
+	@JsonFormat(pattern = "HH:mm", timezone = "GMT+8")
+	private Date endDate;
 
 	@ApiModelProperty(value = "SILVER 白银会员 GOLD 黄金会员 PLATINUM 铂金会员 MASONRY 钻石会员 CROWN 皇冠会员")
 	private MemberGradeEnum memberLevelEnum;
@@ -108,6 +112,14 @@ public class SeckillActivityDetailDTO {
 
 	public void setCountDown(Long countDown) {
 		this.countDown = countDown;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 	
 	
