@@ -83,7 +83,7 @@ public class LotteryRecordController extends BaseController {
             for (LotteryRecordOperatorDTO operatorDTO : result.getModel().getRecords()) {
                 Result<MemberDTO> memberResult = memberService.getMemberByAccount(operatorDTO.getAccount());
                 if (isSuccess(memberResult)) {
-                    operatorDTO.setName(memberResult.getModel().getName());
+                    operatorDTO.setNickName(memberResult.getModel().getNickname());
                 }
             }
         }
@@ -112,7 +112,7 @@ public class LotteryRecordController extends BaseController {
 
                 @Override
                 public String[] getCellTitles() {
-                    return new String[]{"账号", "姓名", "奖品名称", "抽奖次数"};
+                    return new String[]{"账号", "昵称", "奖品名称", "抽奖次数"};
                 }
 
                 @Override
@@ -125,11 +125,11 @@ public class LotteryRecordController extends BaseController {
                     for (LotteryRecordOperatorDTO dto : result.getModel().getRecords()) {
                         Result<MemberDTO> memberResult = memberService.getMemberByAccount(dto.getAccount());
                         if (isSuccess(memberResult)) {
-                            dto.setName(memberResult.getModel().getName());
+                            dto.setNickName(memberResult.getModel().getName());
                         }
 
                         records.add(
-                                new String[]{dto.getAccount(), dto.getName(), dto.getPrizeName(), String.valueOf(dto.getLotteryCount()),});
+                                new String[]{dto.getAccount(), dto.getNickName(), dto.getPrizeName(), String.valueOf(dto.getLotteryCount()),});
                     }
                     currentPage++;
                     return records;

@@ -15,7 +15,7 @@ public class LotteryRecordOperatorDTO {
     private String account;
 
     @ApiModelProperty(value = "姓名")
-    private String name;
+    private String nickName;
 
     @ApiModelProperty(value = "奖品名称")
     private String prizeName;
@@ -42,12 +42,12 @@ public class LotteryRecordOperatorDTO {
         this.account = account;
     }
 
-    public String getName() {
-        return name;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getPrizeName() {
