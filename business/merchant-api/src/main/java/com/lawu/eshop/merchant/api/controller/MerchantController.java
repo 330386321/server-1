@@ -380,6 +380,7 @@ public class MerchantController extends BaseController {
         return merchantService.saveHeadImage(merchantId, headImg);
     }
 
+    @Audit(date = "2017-12-04", reviewer = "孙林青")
     @ApiOperation(value = "生成收款二维码", notes = "生成收款二维码。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getPayQrCode", method = RequestMethod.GET)
