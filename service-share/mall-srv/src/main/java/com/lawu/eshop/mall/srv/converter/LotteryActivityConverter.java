@@ -38,6 +38,7 @@ public class LotteryActivityConverter {
         activityBO.setEndTime(activityDO.getEndTime());
         activityBO.setGrade(activityDO.getGrade());
         activityBO.setStatus(activityDO.getStatus());
+        activityBO.setGmtModified(activityDO.getGmtModified());
         return activityBO;
     }
 
@@ -126,6 +127,9 @@ public class LotteryActivityConverter {
         activityOperatorDTO.setGradeEnum(MemberGradeEnum.getEnum(activityBO.getGrade()));
         activityOperatorDTO.setStatusEnum(LotteryActivityStatusEnum.getEnum(activityBO.getStatus()));
         activityOperatorDTO.setStatusDes(LotteryActivityStatusEnum.getEnum(activityBO.getStatus()).getName());
+        if (LotteryActivityStatusEnum.LOTTERYED.getVal().byteValue() == activityBO.getStatus()) {
+            activityOperatorDTO.setLotteryDate(activityBO.getGmtModified());
+        }
         return activityOperatorDTO;
     }
 

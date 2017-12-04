@@ -47,6 +47,10 @@ public class LotteryActivityOperatorDTO {
     @ApiModelProperty(value = "状态描述")
     private String statusDes;
 
+    @ApiModelProperty(value = "开奖时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date lotteryDate;
+
     public Long getId() {
         return id;
     }
@@ -125,5 +129,13 @@ public class LotteryActivityOperatorDTO {
 
     public void setStatusDes(String statusDes) {
         this.statusDes = statusDes;
+    }
+
+    public Date getLotteryDate() {
+        return lotteryDate;
+    }
+
+    public void setLotteryDate(Date lotteryDate) {
+        this.lotteryDate = lotteryDate;
     }
 }

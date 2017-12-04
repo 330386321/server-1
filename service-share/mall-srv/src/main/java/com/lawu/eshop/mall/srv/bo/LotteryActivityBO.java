@@ -31,6 +31,8 @@ public class LotteryActivityBO {
 
     private Integer lotteryNumber;
 
+    private Date gmtModified;
+
     public Long getId() {
         return id;
     }
@@ -117,5 +119,13 @@ public class LotteryActivityBO {
 
     public void setLotteryNumber(Integer lotteryNumber) {
         this.lotteryNumber = lotteryNumber;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 }
