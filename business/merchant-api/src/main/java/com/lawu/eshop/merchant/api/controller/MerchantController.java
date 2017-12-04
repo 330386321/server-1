@@ -83,10 +83,10 @@ public class MerchantController extends BaseController {
 
     @Autowired
     private InviterService inviterService;
-    
+
     @Autowired
     private MemberProfileService memberProfileService;
-   
+
     @Autowired
     private MerchantApiConfig merchantApiConfig;
 
@@ -95,7 +95,7 @@ public class MerchantController extends BaseController {
 
     @Autowired
     private MemberService memberService;
-    
+
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "修改登录密码", notes = "根据商户ID修改登录密码。[1002|1009] (梅述全)", httpMethod = "PUT")
@@ -106,7 +106,7 @@ public class MerchantController extends BaseController {
                                  @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
                                  @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
         long id = UserUtil.getCurrentUserId(getRequest());
-        return merchantService.updateLoginPwd(id,originalPwd, newPwd);
+        return merchantService.updateLoginPwd(id, originalPwd, newPwd);
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
@@ -125,10 +125,10 @@ public class MerchantController extends BaseController {
         if (!mobile.equals(verifyCodeDTO.getMobile())) {
             return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
         }
-        if(DateUtil.smsIsOverdue(smsResult.getModel().getGmtCreate(), merchantApiConfig.getSmsValidMinutes())){
+        if (DateUtil.smsIsOverdue(smsResult.getModel().getGmtCreate(), merchantApiConfig.getSmsValidMinutes())) {
             return successGet(ResultCode.VERIFY_SMS_CODE_OVERTIME);
         }
-        return merchantService.updateLoginPwd(mobile,newPwd);
+        return merchantService.updateLoginPwd(mobile, newPwd);
     }
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
@@ -161,11 +161,11 @@ public class MerchantController extends BaseController {
         if (!verifyCodeDTO.getMobile().equals(mobile)) {
             return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
         }
-        if(DateUtil.smsIsOverdue(smsResult.getModel().getGmtCreate(), merchantApiConfig.getSmsValidMinutes())){
+        if (DateUtil.smsIsOverdue(smsResult.getModel().getGmtCreate(), merchantApiConfig.getSmsValidMinutes())) {
             return successGet(ResultCode.VERIFY_SMS_CODE_OVERTIME);
         }
         String userNo = UserUtil.getCurrentUserNum(getRequest());
-        return propertyInfoService.resetPayPwd(userNo,  newPwd);
+        return propertyInfoService.resetPayPwd(userNo, newPwd);
     }
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
@@ -174,9 +174,9 @@ public class MerchantController extends BaseController {
     @Authorization
     @RequestMapping(value = "setPayPwd", method = RequestMethod.PUT)
     public Result setPayPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                              @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+                            @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
         String userNo = UserUtil.getCurrentUserNum(getRequest());
-        return propertyInfoService.setPayPwd(userNo,  newPwd);
+        return propertyInfoService.setPayPwd(userNo, newPwd);
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
@@ -184,7 +184,7 @@ public class MerchantController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "isSetPayPwd", method = RequestMethod.GET)
-    public Result isSetPayPwd(@RequestHeader (UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result isSetPayPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         return propertyInfoService.isSetPayPwd(userNum);
     }
@@ -234,7 +234,7 @@ public class MerchantController extends BaseController {
         if (!registerParam.getAccount().equals(verifyCodeDTO.getMobile())) {
             return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
         }
-        if(DateUtil.smsIsOverdue(verifyCodeDTO.getGmtCreate(), merchantApiConfig.getSmsValidMinutes())){
+        if (DateUtil.smsIsOverdue(verifyCodeDTO.getGmtCreate(), merchantApiConfig.getSmsValidMinutes())) {
             return successGet(ResultCode.VERIFY_SMS_CODE_OVERTIME);
         }
         registerRealParam.setAccount(registerParam.getAccount());
@@ -246,13 +246,13 @@ public class MerchantController extends BaseController {
     @ApiOperation(value = "设置推送CID", notes = "设置推送CID。[1005] (章勇)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
-    @RequestMapping(value = "setGetuiCid",method = RequestMethod.PUT)
-    public Result setGetuiCid(@RequestParam("cid") String cid,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+    @RequestMapping(value = "setGetuiCid", method = RequestMethod.PUT)
+    public Result setGetuiCid(@RequestParam("cid") String cid, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long id = UserUtil.getCurrentUserId(getRequest());
-        if(id == null || id <= 0 ||  "".equals(cid)){
+        if (id == null || id <= 0 || "".equals(cid)) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        return merchantService.setGtAndRongYunInfo(id,cid);
+        return merchantService.setGtAndRongYunInfo(id, cid);
     }
 
 
@@ -260,29 +260,29 @@ public class MerchantController extends BaseController {
     @ApiOperation(value = "商家个人中心", notes = "=基本信息查询[] (张荣成)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
-    @RequestMapping(value = "selectMerchantInfo",method = RequestMethod.GET)
-    public Result<MerchantSNSDTO> selectMerchantInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+    @RequestMapping(value = "selectMerchantInfo", method = RequestMethod.GET)
+    public Result<MerchantSNSDTO> selectMerchantInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long id = UserUtil.getCurrentUserId(getRequest());
-       String userNum =UserUtil.getCurrentUserNum(getRequest());
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
         Result<MerchantSNSDTO> result = merchantService.selectMerchantInfo(id);
-        MerchantSNSDTO dto=result.getModel();
-        InviteeMechantCountDTO inviteeMechantCountDTO=memberProfileService.getMerchantCount(id).getModel();
-        InviteeMemberCountDTO inviteeMemberCountDTO= memberProfileService.getMemberCount(id).getModel();
-        PropertyLoveAccountDTO propertyLoveAccountDTO=propertyInfoService.selectLoveAccount(userNum).getModel();
-        if(inviteeMechantCountDTO!=null){
-        	dto.setInviteeMechantCount(inviteeMechantCountDTO.getInviteeMechantCount());
-        }else{
-        	dto.setInviteeMechantCount(0);
+        MerchantSNSDTO dto = result.getModel();
+        InviteeMechantCountDTO inviteeMechantCountDTO = memberProfileService.getMerchantCount(id).getModel();
+        InviteeMemberCountDTO inviteeMemberCountDTO = memberProfileService.getMemberCount(id).getModel();
+        PropertyLoveAccountDTO propertyLoveAccountDTO = propertyInfoService.selectLoveAccount(userNum).getModel();
+        if (inviteeMechantCountDTO != null) {
+            dto.setInviteeMechantCount(inviteeMechantCountDTO.getInviteeMechantCount());
+        } else {
+            dto.setInviteeMechantCount(0);
         }
-        if(inviteeMemberCountDTO!=null){
-        	dto.setInviteeMemberCount(inviteeMemberCountDTO.getInviteeMemberCount());
-        }else{
-        	dto.setInviteeMemberCount(0);
+        if (inviteeMemberCountDTO != null) {
+            dto.setInviteeMemberCount(inviteeMemberCountDTO.getInviteeMemberCount());
+        } else {
+            dto.setInviteeMemberCount(0);
         }
-        if(propertyLoveAccountDTO!=null){
-        	dto.setLoveAccount(propertyLoveAccountDTO.getLoveAccount());
-        }else{
-        	dto.setLoveAccount(new BigDecimal(0));
+        if (propertyLoveAccountDTO != null) {
+            dto.setLoveAccount(propertyLoveAccountDTO.getLoveAccount());
+        } else {
+            dto.setLoveAccount(new BigDecimal(0));
         }
         return successGet(dto);
     }
@@ -298,9 +298,9 @@ public class MerchantController extends BaseController {
         Long merchantId = UserUtil.getCurrentUserId(request);
         String headImg;
         Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_HEAD, merchantApiConfig.getImageUploadUrl());
-        if(!"".equals(retMap.get("imgUrl"))){
+        if (!"".equals(retMap.get("imgUrl"))) {
             headImg = retMap.get("imgUrl");
-            return    merchantService.saveHeadImage(merchantId, headImg);
+            return merchantService.saveHeadImage(merchantId, headImg);
         }
         return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
     }
@@ -311,7 +311,7 @@ public class MerchantController extends BaseController {
     @RequestMapping(value = "getQrCode", method = RequestMethod.GET)
     public void getQrCode(@RequestParam @ApiParam(required = true, value = "token") String token) throws IOException {
         String merchantId = UserUtil.getCurrentUserIdByToken(token);
-        if(StringUtils.isEmpty(merchantId)){
+        if (StringUtils.isEmpty(merchantId)) {
             return;
         }
         HttpServletResponse response = getResponse();
@@ -330,15 +330,15 @@ public class MerchantController extends BaseController {
     @ApiOperation(value = "扫描身份二维码", notes = "扫描身份二维码。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getQrCodeContent/{merchantId}", method = RequestMethod.GET)
-    public void getQrCodeContent(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId) throws IOException{
+    public void getQrCodeContent(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId) throws IOException {
         HttpServletResponse response = getResponse();
-        if(merchantId == null || merchantId <= 0){
+        if (merchantId == null || merchantId <= 0) {
             return;
         }
         Result<IsExistsRedPacketDTO> result = adService.isExistsRedPacket(merchantId);
-        if(!result.getModel().getIsExistsRedPacket()){
+        if (!result.getModel().getIsExistsRedPacket()) {
             response.sendRedirect(merchantApiConfig.getShareRedpacketUrl() + merchantId);
-        }else{
+        } else {
             response.sendRedirect(merchantApiConfig.getShareRegisterUrl() + merchantId);
         }
     }
@@ -348,9 +348,9 @@ public class MerchantController extends BaseController {
     @ApiOperation(value = "获取商家电话", notes = "获取商家电话。 (张荣成)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectMobile/{merchantId}", method = RequestMethod.GET)
-    public Result<MobileDTO> selectMobile(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId){
-    	Result<MobileDTO> result =merchantService.selectMobile(merchantId);
-    	return result;
+    public Result<MobileDTO> selectMobile(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId) {
+        Result<MobileDTO> result = merchantService.selectMobile(merchantId);
+        return result;
     }
 
     @AutoTesting
@@ -358,13 +358,13 @@ public class MerchantController extends BaseController {
     @ApiOperation(value = "查询融云需要信息", notes = "查询融云需要信息。 [1004|1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getRongYunInfo/{num}", method = RequestMethod.GET)
-    public Result<RongYunDTO> getRongYunInfo(@PathVariable @ApiParam(required = true, value = "用户编号") String num){
-        if(StringUtils.isEmpty(num)){
+    public Result<RongYunDTO> getRongYunInfo(@PathVariable @ApiParam(required = true, value = "用户编号") String num) {
+        if (StringUtils.isEmpty(num)) {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        if(num.startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
+        if (num.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
             return memberService.getRongYunInfoByNum(num);
-        }else{
+        } else {
             return merchantService.getRongYunInfoByNum(num);
         }
     }
@@ -378,6 +378,26 @@ public class MerchantController extends BaseController {
                                 @RequestParam @ApiParam(required = true, value = "头像路径") String headImg) {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         return merchantService.saveHeadImage(merchantId, headImg);
+    }
+
+    @ApiOperation(value = "生成收款二维码", notes = "生成收款二维码。 (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getPayQrCode", method = RequestMethod.GET)
+    public void getPayQrCode(@RequestParam @ApiParam(required = true, value = "token") String token) throws IOException {
+        String merchantId = UserUtil.getCurrentUserIdByToken(token);
+        if (StringUtils.isEmpty(merchantId)) {
+            return;
+        }
+        HttpServletResponse response = getResponse();
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        response.setContentType("image/jpeg");
+        BufferedImage buffImg = QrCodeUtil.generateQrCode("MD|" + merchantId);
+        // 将图像输出到Servlet输出流中。
+        ServletOutputStream sos = response.getOutputStream();
+        ImageIO.write(buffImg, "jpeg", sos);
+        sos.close();
     }
 
 }
