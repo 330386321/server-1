@@ -41,6 +41,9 @@ public class LotteryActivityOperatorDTO {
     @ApiModelProperty(value = "等级")
     private MemberGradeEnum gradeEnum;
 
+    @ApiModelProperty(value = "等级描述")
+    private String gradeDes;
+
     @ApiModelProperty(value = "状态")
     private LotteryActivityStatusEnum statusEnum;
 
@@ -113,6 +116,14 @@ public class LotteryActivityOperatorDTO {
 
     public void setGradeEnum(MemberGradeEnum gradeEnum) {
         this.gradeEnum = gradeEnum;
+    }
+
+    public String getGradeDes() {
+        return gradeDes;
+    }
+
+    public void setGradeDes(String gradeDes) {
+        this.gradeDes = gradeDes;
     }
 
     public LotteryActivityStatusEnum getStatusEnum() {

@@ -125,6 +125,7 @@ public class LotteryActivityConverter {
         activityOperatorDTO.setBeginTime(activityBO.getBeginTime());
         activityOperatorDTO.setEndTime(activityBO.getEndTime());
         activityOperatorDTO.setGradeEnum(MemberGradeEnum.getEnum(activityBO.getGrade()));
+        activityOperatorDTO.setGradeDes(MemberGradeEnum.getEnum(activityBO.getGrade()).getName());
         activityOperatorDTO.setStatusEnum(LotteryActivityStatusEnum.getEnum(activityBO.getStatus()));
         activityOperatorDTO.setStatusDes(LotteryActivityStatusEnum.getEnum(activityBO.getStatus()).getName());
         if (LotteryActivityStatusEnum.LOTTERYED.getVal().byteValue() == activityBO.getStatus()) {
