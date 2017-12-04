@@ -285,7 +285,7 @@ public class ProductModelServiceImpl implements ProductModelService {
                 productModelNumsView.setFlag(ProductNumFlagEnum.ADD.getValue());
                 productModelNumsView.setGmtModified(new Date());
                 productModelNumsView.setNum(param.getQuantity());
-                productModelNumsView.setProductModelId(param.getProdecutModelId());
+                productModelNumsView.setProductModelId(param.getActivityProductModelId());
                 seckillActivityProductModelDOExtendMapper.editInventory(productModelNumsView);
                 
                 /*
