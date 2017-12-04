@@ -312,6 +312,7 @@ public class TransactionDetailConverter {
         rtn.setOtherDesc(transactionDetailH5InfoBO.getOtherDesc());
         rtn.setGmtDate(transactionDetailH5InfoBO.getGmtCreate());
         rtn.setOrderNum(transactionDetailH5InfoBO.getTransactionNum());
+        rtn.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.getEnum(transactionDetailH5InfoBO.getTransactionType()));
         return rtn;
     }
 
@@ -329,6 +330,7 @@ public class TransactionDetailConverter {
         rtn.setOtherDesc(transactionDetailH5InfoBO.getOtherDesc());
         rtn.setGmtDate(transactionDetailH5InfoBO.getGmtCreate());
         rtn.setOrderNum(transactionDetailH5InfoBO.getTransactionNum());
+        rtn.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.getEnum(transactionDetailH5InfoBO.getTransactionType()));
         return rtn;
     }
 }
