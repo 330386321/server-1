@@ -1,5 +1,6 @@
 package com.lawu.eshop.product.srv.converter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -221,7 +222,7 @@ public class SeckillActivityJoinConverter {
 	}
 	
 	
-	public static List<SeckillActivityProductManageBO> seckillActivityProductManageBOConverter(List<SeckillActivityProductDO> list) {
+	public static List<SeckillActivityProductManageBO> seckillActivityProductManageBOConverter(List<SeckillActivityProductDO> list,BigDecimal moeney) {
 		List<SeckillActivityProductManageBO>  productList = new ArrayList<>();
 		if(list.isEmpty()){
 			return productList;
@@ -233,7 +234,7 @@ public class SeckillActivityJoinConverter {
 			seckillActivityProductManageBO.setProductId(seckillActivityProductDO.getProductId());
 			seckillActivityProductManageBO.setProductPicture(seckillActivityProductDO.getProductPicture());
 			seckillActivityProductManageBO.setProductName(seckillActivityProductDO.getProductName());
-			seckillActivityProductManageBO.setSaleMoney(seckillActivityProductDO.getTurnover());
+			seckillActivityProductManageBO.setSaleMoney(BigDecimal.valueOf(seckillActivityProductDO.getProductModelCount()-seckillActivityProductDO.getLeftCount()).multiply(moeney));
 			seckillActivityProductManageBO.setSaleCount(seckillActivityProductDO.getProductModelCount()-seckillActivityProductDO.getLeftCount());
 			seckillActivityProductManageBO.setStatusEnum(SeckillActivityProductEnum.getEnum(seckillActivityProductDO.getStatus()));
 			seckillActivityProductManageBO.setReasons(seckillActivityProductDO.getReasons());

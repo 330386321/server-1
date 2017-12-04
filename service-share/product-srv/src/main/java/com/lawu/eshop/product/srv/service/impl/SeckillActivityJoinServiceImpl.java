@@ -107,11 +107,15 @@ public class SeckillActivityJoinServiceImpl implements SeckillActivityJoinServic
 	@Override
 	public SeckillActivityManageDetailBO querySeckillActivityManageDetail(Long id, Long merchantId) {
 		SeckillActivityDO seckillActivityDO = seckillActivityDOMapper.selectByPrimaryKey(id);
+		BigDecimal money = new BigDecimal(0);
+		if(seckillActivityDO != null){
+			money = seckillActivityDO.getSellingPrice();
+		}
 		SeckillActivityProductDOExample example = new SeckillActivityProductDOExample();
 		example.createCriteria().andActivityIdEqualTo(id).andMerchantIdEqualTo(merchantId);
 		List<SeckillActivityProductDO> list = seckillActivityProductDOMapper.selectByExample(example);
 		SeckillActivityManageDetailBO seckillActivityManageDetailBO = SeckillActivityJoinConverter.seckillActivityManageDetailBOConverter(seckillActivityDO);
-		seckillActivityManageDetailBO.setList(SeckillActivityJoinConverter.seckillActivityProductManageBOConverter(list));
+		seckillActivityManageDetailBO.setList(SeckillActivityJoinConverter.seckillActivityProductManageBOConverter(list,money));
 		return seckillActivityManageDetailBO;
 	}
 
