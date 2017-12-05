@@ -55,7 +55,7 @@ public class MerchantFavoredController extends BaseController {
         }
         MerchantFavoredDTO merchantFavoredDTO = result.getModel();
         if(merchantFavoredDTO == null){
-        	return result;
+        	merchantFavoredDTO = new MerchantFavoredDTO();
         }
         merchantFavoredDTO.setName(stoResult.getModel().getName());
         merchantFavoredDTO.setUserNum(stoResult.getModel().getUserNum());
