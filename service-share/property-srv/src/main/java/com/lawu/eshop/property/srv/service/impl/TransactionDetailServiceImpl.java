@@ -606,7 +606,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		if(MemberTransactionTypeEnum.WITHDRAW_BACK.getValue().equals(transactionDetailDO.getTransactionType()) || MerchantTransactionTypeEnum.WITHDRAW_BACK.getValue().equals(transactionDetailDO.getTransactionType())){
 			bo.setOtherDesc("原路退回-余额");
 		}
-		if(MemberTransactionTypeEnum.REFUND_ORDERS.getValue().equals(transactionDetailDO.getTransactionType())){
+		if(MemberTransactionTypeEnum.REFUND_ORDERS.getValue().equals(transactionDetailDO.getTransactionType()) || MemberTransactionTypeEnum.USER_REDPACKET_ADD.getValue().equals(transactionDetailDO.getTransactionType()) || MerchantTransactionTypeEnum.AD_DOWN.getValue().equals(transactionDetailDO.getTransactionType())){
 			if(TransactionPayTypeEnum.BALANCE.getVal().equals(transactionDetailDO.getTransactionAccountType())){
 				bo.setOtherDesc("原路退回-余额");
 			} else if(TransactionPayTypeEnum.ALIPAY.getVal().equals(transactionDetailDO.getTransactionAccountType())){

@@ -33,7 +33,7 @@ public enum MemberTransactionTypeEnum {
 	PLATFORM_RED_SWEEP((byte) 0x16, "E店红包", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.RED_SWEEP},"E店红包"),
 	AD_PLANE((byte) 0x17, "猜一猜", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.PREFERRED_RED_SWEEP},"猜一猜-"),
 	AD_VIDEO((byte) 0x18, "看一看", new MemberTransactionCategoryEnum[]{MemberTransactionCategoryEnum.PREFERRED_RED_SWEEP},"看一看-"),
-    POINT_CONVERT_LOTTERY((byte) 0x19, "积分兑换抽奖", null,"抽奖");//
+    POINT_CONVERT_LOTTERY((byte) 0x19, "积分兑换抽奖", null,"抽奖");
 
 	private Byte value;
 

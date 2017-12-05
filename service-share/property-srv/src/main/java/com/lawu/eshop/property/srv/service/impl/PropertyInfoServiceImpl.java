@@ -288,9 +288,11 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 			if(dparam.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
 				tdsParam.setTransactionType(MemberTransactionTypeEnum.RECHARGE_BALANCE.getValue());
 				tdsParam.setTitle(MemberTransactionTypeEnum.RECHARGE_BALANCE.getName());
+				tdsParam.setTransactionDesc(MemberTransactionTypeEnum.RECHARGE_BALANCE.getDescPrefix());
 			}else if(dparam.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
 				tdsParam.setTransactionType(MerchantTransactionTypeEnum.RECHARGE.getValue());
 				tdsParam.setTitle(MerchantTransactionTypeEnum.RECHARGE.getName());
+				tdsParam.setTransactionDesc(MerchantTransactionTypeEnum.RECHARGE.getDescPrefix());
 			}
 			tdsParam.setTransactionAccountType(TransactionPayTypeEnum.PLAT.getVal());
 			tdsParam.setAmount(new BigDecimal(dparam.getMoney()));
