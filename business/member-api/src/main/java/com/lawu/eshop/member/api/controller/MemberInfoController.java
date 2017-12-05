@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.controller;
 
 import com.lawu.eshop.common.constants.MemberGradeEnum;
+import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,6 +91,7 @@ public class MemberInfoController extends BaseController {
         memberMineInfoForeignDTO.setGradeEnum(MemberGradeEnum.getEnum(memberMineInfoDTO.getGrade()));
         memberMineInfoForeignDTO.setGrade(memberMineInfoDTO.getGrade());
         memberMineInfoForeignDTO.setGrowthValue(memberMineInfoDTO.getGrowthValue());
+        memberMineInfoForeignDTO.setGrowthValueFormat(StringUtil.formatNumber(memberMineInfoDTO.getGrowthValue()));
         resultMemberMineInfoDTO = null;
         resultShoppingOrderNumberOfOrderStatusDTO = null;
         resultPropertyLoveAccountDTO = null;

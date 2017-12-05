@@ -58,6 +58,9 @@ public class MemberMineInfoForeignDTO extends ShoppingOrderNumberOfOrderStatusDT
 
 	@ApiModelProperty(value = "成长值")
 	private Integer growthValue;
+
+	@ApiModelProperty(value = "成长值")
+	private String growthValueFormat;
 	
 	public String getNickname() {
 		return nickname;
@@ -129,5 +132,13 @@ public class MemberMineInfoForeignDTO extends ShoppingOrderNumberOfOrderStatusDT
 
 	public void setGrowthValue(Integer growthValue) {
 		this.growthValue = growthValue;
+	}
+
+	public String getGrowthValueFormat() {
+		return growthValueFormat;
+	}
+
+	public void setGrowthValueFormat(String growthValueFormat) {
+		this.growthValueFormat = growthValueFormat;
 	}
 }

@@ -1,6 +1,7 @@
 package com.lawu.eshop.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -241,5 +242,16 @@ public class StringUtil {
             sb.append(value);
         }
         return sb.toString();
+    }
+
+    public static String formatNumber(Integer growthValue) {
+        if (growthValue < 10000) {
+            return growthValue.toString();
+        } else {
+            double n = (double) growthValue / 10000;
+            BigDecimal bd = new BigDecimal(n);
+            BigDecimal setScale = bd.setScale(2, bd.ROUND_DOWN);
+            return setScale.doubleValue()+"万";
+        }
     }
 }
