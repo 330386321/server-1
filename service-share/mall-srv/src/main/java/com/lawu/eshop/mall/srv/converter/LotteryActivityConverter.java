@@ -64,7 +64,9 @@ public class LotteryActivityConverter {
         activityDTO.setStatusEnum(LotteryActivityStatusEnum.getEnum(activityBO.getStatus()));
         activityDTO.setLotteryCount(activityBO.getLotteryCount());
         activityDTO.setLotteryNumber(activityBO.getLotteryNumber());
+        long startMillisecond = activityBO.getBeginTime().getTime() - new Date().getTime();
         long millisecond = activityBO.getEndTime().getTime() - new Date().getTime();
+        activityDTO.setStartMillisecond(startMillisecond > 0 ? startMillisecond : 0);
         activityDTO.setMillisecond(millisecond > 0 ? millisecond : 0);
         return activityDTO;
     }
