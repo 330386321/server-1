@@ -89,6 +89,7 @@ public class MemberInfoController extends BaseController {
         memberMineInfoForeignDTO.setInviteeMechantCount(memberMineInfoDTO.getInviteMerchantCount());
         memberMineInfoForeignDTO.setGradeEnum(MemberGradeEnum.getEnum(memberMineInfoDTO.getGrade()));
         memberMineInfoForeignDTO.setGrade(memberMineInfoDTO.getGrade());
+        memberMineInfoForeignDTO.setGrowthValue(memberMineInfoDTO.getGrowthValue());
         resultMemberMineInfoDTO = null;
         resultShoppingOrderNumberOfOrderStatusDTO = null;
         resultPropertyLoveAccountDTO = null;

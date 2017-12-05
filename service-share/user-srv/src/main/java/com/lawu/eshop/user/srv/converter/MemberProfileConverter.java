@@ -55,6 +55,7 @@ public class MemberProfileConverter {
         rtn.setInviteMemberCount(memberProfileBO.getInviteMemberCount());
         rtn.setInviteMerchantCount(memberProfileBO.getInviteMerchantCount());
         rtn.setGrade(memberBO.getGrade());
+        rtn.setGrowthValue(memberBO.getGrowthValue());
         return rtn;
     }
 

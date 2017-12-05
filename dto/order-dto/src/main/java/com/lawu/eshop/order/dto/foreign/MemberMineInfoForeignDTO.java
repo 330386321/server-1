@@ -55,6 +55,9 @@ public class MemberMineInfoForeignDTO extends ShoppingOrderNumberOfOrderStatusDT
 
 	@ApiModelProperty(value = "会员等级值（一个数字对应一个级别，从低到高）")
 	private Byte grade;
+
+	@ApiModelProperty(value = "成长值")
+	private Integer growthValue;
 	
 	public String getNickname() {
 		return nickname;
@@ -118,5 +121,13 @@ public class MemberMineInfoForeignDTO extends ShoppingOrderNumberOfOrderStatusDT
 
 	public void setGrade(Byte grade) {
 		this.grade = grade;
+	}
+
+	public Integer getGrowthValue() {
+		return growthValue;
+	}
+
+	public void setGrowthValue(Integer growthValue) {
+		this.growthValue = growthValue;
 	}
 }
