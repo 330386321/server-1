@@ -251,7 +251,8 @@ public class StringUtil {
             double n = (double) growthValue / 10000;
             BigDecimal bd = new BigDecimal(n);
             BigDecimal setScale = bd.setScale(2, bd.ROUND_DOWN);
-            return setScale.doubleValue()+"万";
+            //return setScale.doubleValue()+"万";
+            return setScale.stripTrailingZeros().toPlainString()+"万";
         }
     }
 }
