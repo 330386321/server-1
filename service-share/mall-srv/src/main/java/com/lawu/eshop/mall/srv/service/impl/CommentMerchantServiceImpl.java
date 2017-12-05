@@ -249,7 +249,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
             CommentMerchantBO commentMerchantBO = CommentMerchantConverter.converBO(commentProductDO);
             CommentImageDOExample commentImageExample=new CommentImageDOExample();
 			commentImageExample.createCriteria().andCommentIdEqualTo(commentProductDO.getId())
-			.andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val).andStatusEqualTo(true);
+			.andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_MERCHANT.val).andStatusEqualTo(true);
 			
 			 List<CommentImageDO>  list=commentImageDOMapper.selectByExample(commentImageExample);
 			 
