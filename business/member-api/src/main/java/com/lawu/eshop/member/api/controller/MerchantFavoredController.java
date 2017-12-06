@@ -46,16 +46,14 @@ public class MerchantFavoredController extends BaseController {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Result<MerchantFavoredDTO> result = merchantFavoredService.findFavoredByMerchantId(merchantId);
-        if (!isSuccess(result)) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
-        Result<MerchantStoreFavorInfoDTO> stoResult = merchantStoreService.selectMerchantStoreFavor(merchantId);
-        if (!isSuccess(stoResult)) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
         MerchantFavoredDTO merchantFavoredDTO = result.getModel();
         if(merchantFavoredDTO == null){
         	merchantFavoredDTO = new MerchantFavoredDTO();
+        }
+       
+        Result<MerchantStoreFavorInfoDTO> stoResult = merchantStoreService.selectMerchantStoreFavor(merchantId);
+        if (!isSuccess(stoResult)) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         merchantFavoredDTO.setName(stoResult.getModel().getName());
         merchantFavoredDTO.setUserNum(stoResult.getModel().getUserNum());

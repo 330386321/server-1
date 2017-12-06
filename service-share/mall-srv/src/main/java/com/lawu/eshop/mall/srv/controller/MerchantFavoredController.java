@@ -55,7 +55,7 @@ public class MerchantFavoredController extends BaseController {
         }
         MerchantFavoredBO merchantFavoredBO = merchantFavoredService.findFavoredByMerchantId(merchantId);
         if (merchantFavoredBO == null) {
-            return successGet(new MerchantFavoredDTO());
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         MerchantFavoredDTO merchantFavoredDTO = MerchantFavoredConverter.coverDTO(merchantFavoredBO);
         if (merchantFavoredDTO.getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_DISCOUNT.val) {
