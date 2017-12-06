@@ -1,10 +1,11 @@
 package com.lawu.eshop.mall.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lawu.eshop.mall.constants.MessageTypeEnum;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.common.constants.MessageTypeEnum;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 站内信息统计信息

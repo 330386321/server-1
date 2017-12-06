@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gexin.fastjson.JSONObject;
+import com.lawu.eshop.common.constants.MessageTypeEnum;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.user.FansInfo;
 import com.lawu.eshop.mq.dto.user.MessagePushInfo;
-import com.lawu.eshop.mq.dto.user.MessageTypeEnum;
 import com.lawu.eshop.mq.message.impl.AbstractMessageConsumerListener;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.constants.UserTypeEnum;

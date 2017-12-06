@@ -1,4 +1,4 @@
-package com.lawu.eshop.mall.constants;
+package com.lawu.eshop.common.constants;
 
 /**
  * 消息类型枚举类

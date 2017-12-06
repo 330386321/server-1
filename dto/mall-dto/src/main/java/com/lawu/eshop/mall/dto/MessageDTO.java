@@ -3,8 +3,8 @@ package com.lawu.eshop.mall.dto;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.common.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.constants.MessageStatusReturnEnum;
-import com.lawu.eshop.mall.constants.MessageTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 

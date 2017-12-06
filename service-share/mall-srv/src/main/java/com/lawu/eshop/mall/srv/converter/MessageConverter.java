@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.common.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.constants.MessageStatusReturnEnum;
-import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.OperatorMessageDTO;
 import com.lawu.eshop.mall.srv.bo.MessageBO;

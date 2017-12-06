@@ -1,23 +1,33 @@
 package com.lawu.eshop.mall.srv.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lawu.eshop.common.constants.MessageTypeEnum;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
-import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
 import com.lawu.eshop.mall.dto.OperatorMessageDTO;
-import com.lawu.eshop.mall.param.*;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageParam;
+import com.lawu.eshop.mall.param.MessageQueryParam;
+import com.lawu.eshop.mall.param.OperatorMessageInfoParam;
+import com.lawu.eshop.mall.param.OperatorMessageParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.converter.MessageConverter;
 import com.lawu.eshop.mall.srv.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 站内信息controller
