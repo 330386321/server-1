@@ -86,7 +86,7 @@ public class IndexController extends BaseController {
                 String favoreInfo = "";
                 String favoreEndTime = "";
                 double discountOrdinal = 1000;
-                if (isSuccess(favoredDTOResult)) {
+                if (isSuccess(favoredDTOResult) && favoredDTOResult.getModel() != null && favoredDTOResult.getModel().getId() != null) {
                     if (favoredDTOResult.getModel().getTypeEnum().val.byteValue() == MerchantFavoredTypeEnum.TYPE_FULL.val) {
                         favoreInfo = "买单每满" + favoredDTOResult.getModel().getReachAmount().intValue() + "减" + favoredDTOResult.getModel().getFavoredAmount().intValue() + "元";
                         discountOrdinal = (favoredDTOResult.getModel().getReachAmount().subtract(favoredDTOResult.getModel().getFavoredAmount())).divide(favoredDTOResult.getModel().getReachAmount(), 2, BigDecimal.ROUND_HALF_UP).doubleValue();
