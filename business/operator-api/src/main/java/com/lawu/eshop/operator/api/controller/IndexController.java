@@ -130,7 +130,7 @@ public class IndexController extends BaseController {
     @RequiresPermissions("index:product")
     @RequestMapping(value = "updateProductIndex", method = RequestMethod.GET)
     public Result updateProductIndex() {
-        return productService.rebuildProductIndex();
+        return productService.rebuildProductIndex(1000);
     }
 
     @ApiOperation(value = "更新广告索引", notes = "更新广告索引。（梅述全）", httpMethod = "GET")
@@ -138,7 +138,7 @@ public class IndexController extends BaseController {
     @RequiresPermissions("index:ad")
     @RequestMapping(value = "updateAdIndex", method = RequestMethod.GET)
     public Result updateAdIndex() {
-        return adService.rebuildAdIndex();
+        return adService.rebuildAdIndex(1000);
     }
 
     @ApiOperation(value = "删除无效门店索引", notes = "删除无效门店索引。（梅述全）", httpMethod = "GET")

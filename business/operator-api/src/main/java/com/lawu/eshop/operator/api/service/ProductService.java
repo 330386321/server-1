@@ -47,7 +47,7 @@ public interface ProductService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "product/rebuildProductIndex")
-    Result rebuildProductIndex();
+    Result rebuildProductIndex(@RequestParam("pageSize") Integer pageSize);
 
     /**
      * 删除无效商品索引
