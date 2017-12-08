@@ -5,22 +5,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.concurrentqueue.bizctrl.BusinessExecuteException;
+import com.lawu.concurrentqueue.bizctrl.annotation.BusinessInventoryCtrl;
 import com.lawu.eshop.ad.constants.AdPage;
 import com.lawu.eshop.ad.constants.AdPraiseWords;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -44,6 +38,7 @@ import com.lawu.eshop.ad.param.AdPointInternalParam;
 import com.lawu.eshop.ad.param.AdPointParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.authorization.util.UserUtil;
+import com.lawu.eshop.concurrentqueue.impl.BusinessKey;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -65,7 +60,7 @@ import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.utils.DistanceUtil;
 
 @Service
-public class AdExtendServiceImpl extends BaseController implements AdExtendService, InitializingBean {
+public class AdExtendServiceImpl extends BaseController implements AdExtendService {
 
 	@Autowired
 	private AdService adService;
@@ -75,8 +70,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 
 	@Autowired
 	private MerchantStoreService merchantStoreService;
+	
 
-	@Autowired
+	@Autowired 
 	private FansMerchantService fansMerchantService;
 
 	@Autowired
@@ -93,10 +89,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 
 	@Autowired
 	private AdLexiconService adLexiconService;
-
-	private BlockingQueue<Runnable> queue ;
-	
-	private ExecutorService service;
 	
 	private static Logger logger = LoggerFactory.getLogger(AdExtendServiceImpl.class);
 
@@ -382,17 +374,18 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		return newList;
 
 	}
-
+	
+	@BusinessInventoryCtrl(idParamIndex = 0, businessKey = BusinessKey.AD_CLICK_KEY, using = AdBusinessDecisionServiceImpl.class)
 	@Override
 	public Result<PraisePointDTO> clickPraise(Long id) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		String num = UserUtil.getCurrentUserNum(getRequest());
-		Future<Result<PraisePointDTO>> future = null;
 		try {
 			Random random = new Random();
 			Integer r = random.nextInt(memberApiConfig.getClickPraiseSumProb()) % (memberApiConfig.getClickPraiseSumProb() + 1);
 			if (r > 0 && r < memberApiConfig.getClickPraiseProb()) {
-				future = service.submit(new AdClickPraiseThread(adService, id, memberId, num));
+				Result<PraisePointDTO> rs=adService.clickPraise(id,memberId,num);
+				return rs;
 			} else {
 				PraisePointDTO dto = new PraisePointDTO();
 				dto.setPoint(new BigDecimal(0));
@@ -401,17 +394,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			}
 
 		} catch (RejectedExecutionException e) {
-			// 队列已满，直接失败
 			return successCreated(ResultCode.FAIL);
 		}
-		try {
-			Result<PraisePointDTO> rs = future.get();
-			return rs;
-
-		} catch (InterruptedException | ExecutionException e) {
-			logger.error("抢赞失败", e);
-		}
-		return null;
+		
 	}
 
 	@Deprecated
@@ -537,29 +522,16 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		return successGet(newPage);
 	}
 
+	@BusinessInventoryCtrl(idParamIndex = 0, businessKey = BusinessKey.AD_CLICK_KEY, using = AdBusinessDecisionServiceImpl.class)
 	@Override
-	public Result<ClickAdPointDTO> clickAd(Long id, Long memberId, String num) {
+	public Result<ClickAdPointDTO> clickAd(Long id, Long memberId, String num) throws BusinessExecuteException {
 
-		Future<Result<ClickAdPointDTO>> future = null;
-		try {
+		Result<ClickAdPointDTO> result = adService.clickAd(id, memberId, num);
 
-			future = service.submit(new AdClickThread(adService, id, memberId, num));
-
-		} catch (RejectedExecutionException e) {
-			// 队列已满，直接失败
-			return successCreated(ResultCode.FAIL);
+		if (!isSuccess(result)) {
+			throw new BusinessExecuteException(result.getRet(), result.getMsg());
 		}
-		try {
-			Result<ClickAdPointDTO> rs = future.get();
-			if (!isSuccess(rs)) {
-				return successCreated(rs.getRet());
-			}
-			return rs;
-
-		} catch (InterruptedException | ExecutionException e) {
-			logger.error("点广告失败", e);
-		}
-		return null;
+		return result;
 	}
 
 	/**
@@ -653,9 +625,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		return successGet(result);
 	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		queue = new LinkedBlockingQueue<Runnable>(memberApiConfig.getQueueCount());
-		service = new ThreadPoolExecutor(memberApiConfig.getCorePoolSize(), memberApiConfig.getMaximumPoolSize(), memberApiConfig.getKeepAliveTime(), TimeUnit.SECONDS, queue);;
-	}
+	
+
 }

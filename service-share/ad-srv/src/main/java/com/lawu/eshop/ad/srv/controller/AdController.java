@@ -14,6 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -85,6 +87,7 @@ import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
 import com.lawu.eshop.ad.srv.service.PointPoolService;
+import com.lawu.eshop.common.exception.DataNotExistException;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -120,6 +123,8 @@ public class AdController extends BaseController {
 
 	@Autowired
 	private FavoriteAdService favoriteAdService;
+	
+	private static Logger logger = LoggerFactory.getLogger(AdController.class);
 
 	/**
 	 * 添加E赚
@@ -235,11 +240,9 @@ public class AdController extends BaseController {
 		}
 		
 		ClickAdPointDTO dto = new ClickAdPointDTO();
-		if(!bo.isOverClick() && !bo.isSysWords()){
-			ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
-			dto.setAddPoint(clickAdPointBO.getAddPoint());
-			dto.setPoint(clickAdPointBO.getAdTotlePoint());
-		}
+		ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
+		dto.setAddPoint(clickAdPointBO.getAddPoint());
+		dto.setPoint(clickAdPointBO.getAdTotlePoint());
 		
 		return successCreated(dto);
 	}
@@ -453,20 +456,18 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@PathVariable Long id, @RequestParam Long memberId, @RequestParam String num) {
 		Boolean flag = pointPoolService.selectStatusByMember(id, memberId);
-		if (flag) return successCreated(ResultCode.AD_PRAISE_POINT_GET);
+		if (flag) {
+			return successCreated(ResultCode.AD_PRAISE_POINT_GET);
+		}
 		AdClickPraiseInfoBO bo = adService.clickPraise(id, memberId, num);
 		
-		if (bo.getPoint().compareTo(new BigDecimal(0)) == 0 && !bo.isSysWordFlag()) {
+		if(bo.getIsPraiseEnd()){
 			return successCreated(ResultCode.AD_PRAISE_PUTED);
-		} 
-		
+		}
 		PraisePointDTO dto = new PraisePointDTO();
 		dto.setPoint(bo.getPoint());
-		if (bo.getPoint().compareTo(BigDecimal.valueOf(0)) == 1) {
-			dto.setIsGetPoint(true);
-		}else{
-			dto.setIsGetPoint(false);
-		}
+		dto.setIsGetPoint(bo.getPoint().compareTo(BigDecimal.valueOf(0)) == 1);
+		
 		return successCreated(dto);
 
 	}
@@ -1399,5 +1400,24 @@ public class AdController extends BaseController {
 		
 		return successGet(pageDetail);
 		
+	}
+	
+	
+	
+	/**
+	 * 获取广告剩余数量
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "getInventory/{id}", method = RequestMethod.GET)
+	public Result<Integer> getInventory(@PathVariable Long id){
+		Integer inventory = 0;
+        try {
+            inventory = adService.getInventory(id);
+        } catch (DataNotExistException e) {
+            logger.error(e.getMessage(), e);
+            return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+        }
+        return successCreated(inventory);
 	}
 }

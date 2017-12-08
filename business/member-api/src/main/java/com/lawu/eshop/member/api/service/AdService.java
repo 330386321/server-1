@@ -221,4 +221,12 @@ public interface AdService {
 	@RequestMapping(value = "ad/selectChoiceness", method = RequestMethod.POST)
 	Result<Page<AdDTO>> listAd(@RequestBody AdSolrRealParam param);
 
+	/**
+	 * 获取广告剩余数量
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "ad/getInventory/{id}", method = RequestMethod.GET)
+	Result<Integer> getInventory(@PathVariable("id") Long id);
+
 }

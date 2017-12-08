@@ -349,4 +349,5 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 			}
 		}
 	}
+	
 }

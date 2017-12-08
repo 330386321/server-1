@@ -328,4 +328,10 @@ public class MockAdService extends BaseController implements AdService{
         addto.setManageTypeEnum(ManageTypeEnum.COMMON);
         return successCreated(addto);
 	}
+
+	@Override
+	public Result<Integer> getInventory(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

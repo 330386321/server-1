@@ -374,4 +374,11 @@ public interface AdService {
 	 * @return
 	 */
 	Page<PointGetDetailBO> getDetailPage(PointGetDetailParam param);
+	
+	/**
+	 * 获取剩余广告数量
+	 * @param id
+	 * @return
+	 */
+	Integer getInventory(Long id);
 }

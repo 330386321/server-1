@@ -87,6 +87,7 @@ import com.lawu.eshop.ad.srv.service.AdCountRecordService;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
 import com.lawu.eshop.ad.srv.service.PraiseDoHanlderMinusPointService;
+import com.lawu.eshop.common.exception.DataNotExistException;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
@@ -493,56 +494,35 @@ public class AdServiceImpl implements AdService {
 	@Transactional
 	public ClickPointBO clickAd(Long id, Long memberId, String num) {
 
-		Boolean flag = lockService.tryLock(LockModule.LOCK_AD_SRV, "AD_CLICK_LOCK_", id);
 		ClickPointBO clickBO = new ClickPointBO();
 		clickBO.setPoint(BigDecimal.valueOf(0));
 		clickBO.setOverClick(false);
-		clickBO.setSysWords(false);
-		// 成功抢到锁
-		if (flag) {
 
-			Result<Object> result = adCountRecordService.getAdCountRecord(id);
-			// 是否真正抢到广告
-			if (result.getModel() != null && (int) result.getModel() >= 0) {
+		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
 
-				MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
-
-				AdDO adDO = adDOMapper.selectByPrimaryKey(id);
-
-				// 再次判断是否点击完
-				if (adDO.getHits() >= adDO.getAdCount()) {
-					clickBO.setOverClick(true);
-				} else {
-
-					memberAdRecordD.setAdId(adDO.getId());
-					memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
-					memberAdRecordD.setMemberId(memberId);
-					memberAdRecordD.setMemberNum(num);
-					memberAdRecordD.setStatus(MemberAdRecordStatusEnum.NONE.getVal());
-					memberAdRecordD.setGmtCreate(new Date());
-					memberAdRecordD.setClickDate(new Date());
-					memberAdRecordD.setOriginalPoint(adDO.getPoint());
-					memberAdRecordDOMapper.insert(memberAdRecordD);
-
-					// 修改点击次数记录
-					adDOMapperExtend.updateHitsByPrimaryKey(id);
-					//修改领取次数
-					clickBO.setOverClick(false);
-					clickBO.setPoint(adDO.getPoint());
-					//发送消息修改积分
-					userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
-				}
-				
-			} else {
-				
-				clickBO.setOverClick(true);
-			}
+		// 再次判断是否点击完
+		if (adDO.getStatus() != AdStatusEnum.AD_STATUS_PUTING.val || adDO.getHits() >= adDO.getAdCount()) {
+			clickBO.setOverClick(true);
+		} else {
+			MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
 			
-			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_CLICK_LOCK_", id);
+			memberAdRecordD.setAdId(adDO.getId());
+			memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
+			memberAdRecordD.setMemberId(memberId);
+			memberAdRecordD.setMemberNum(num);
+			memberAdRecordD.setStatus(MemberAdRecordStatusEnum.NONE.getVal());
+			memberAdRecordD.setGmtCreate(new Date());
+			memberAdRecordD.setClickDate(new Date());
+			memberAdRecordD.setOriginalPoint(adDO.getPoint());
+			memberAdRecordDOMapper.insert(memberAdRecordD);
 
-		}else{
-			//是否同时点广告
-			clickBO.setSysWords(true);
+			// 修改点击次数记录
+			adDOMapperExtend.updateHitsByPrimaryKey(id);
+			//修改领取次数
+			clickBO.setOverClick(false);
+			clickBO.setPoint(adDO.getPoint());
+			//发送消息修改积分
+			userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 		}
 
 		return clickBO;
@@ -623,84 +603,71 @@ public class AdServiceImpl implements AdService {
 		AdClickPraiseInfoBO bo = new AdClickPraiseInfoBO();
 		PointPoolDO pointPool = new PointPoolDO();
 		Double point = 0.0;
+
+		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
 		
-		Boolean flag = lockService.tryLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", id);
-		
-		// 成功抢到锁
-		if (flag) {
+		if (adDO.getStatus() != AdStatusEnum.AD_STATUS_PUTING.val) {
+			bo.setIsPraiseEnd(true);
+			return bo;
 
-			Result<Object> result = adCountRecordService.getAdCountRecord(id);
-
-			// 是否已抢完
-			if (result.getModel() != null && (int) result.getModel() >= 0) {
-
-				AdDO adDO = adDOMapper.selectByPrimaryKey(id);
-				
-				if(adSrvConfig.getIsCutPraisePoint()){
-					
-					if(adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==1 || adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==0){
-						//再次判断用户是否扣除过积分
-						Result<Boolean>  isDoPoint = praiseDoHanlderMinusPointService.getAdPraiseIsDoPointRecord(String.valueOf(id)+String.valueOf(memberId));
-						//如果没有扣除积分 不作抢赞操作
-						if(!isDoPoint.getModel()){
-							bo.setSysWordFlag(false);
-							bo.setPoint(BigDecimal.valueOf(point));
-							return bo;
-						}
-					}
-					
-				}
-				
-				//已经领取个数
-				int praiseCount = adDO.getHits() == null ? 0 : adDO.getHits();
-
-				PointPoolDOView view = pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
-				//剩余积分
-				BigDecimal subMoney = new BigDecimal(0);
-				//剩余积分
-				if (view == null) {
-					subMoney = adDO.getTotalPoint().subtract(BigDecimal.valueOf(0));
-				} else {
-					subMoney = adDO.getTotalPoint().subtract(view.getPoint());
-				}
-
-				point = SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), adDO.getAdCount(), praiseCount);
-
-				pointPool.setAdId(adDO.getId());
-				pointPool.setMerchantId(adDO.getMerchantId());
-				pointPool.setMemberId(memberId);
-				pointPool.setMemberNum(num);
-				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
-				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
-				pointPool.setGmtCreate(new Date());
-				pointPool.setGmtModified(new Date());
-				pointPool.setOrdinal(praiseCount);
-				pointPool.setPoint(BigDecimal.valueOf(point));
-				pointPoolDOMapper.insert(pointPool);
-
-				if (adDO.getAdCount() - 1 == praiseCount || praiseCount >= adDO.getAdCount()) {
-					AdDO ad = new AdDO();
-					ad.setId(adDO.getId());
-					ad.setGmtModified(new Date());
-					ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
-					adDOMapper.updateByPrimaryKeySelective(ad);
-					//更新solr状态
-					SolrInputDocument document = AdConverter.convertSolrInputDocument(ad);
-					solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-				}
-				
-				//修改领取次数
-				adDOMapperExtend.updateHitsByPrimaryKey(id);
-				adtransactionMainAddService.sendNotice(pointPool.getId());
-			}
-			bo.setSysWordFlag(false);
-			bo.setPoint(BigDecimal.valueOf(point).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
-			lockService.unLock(LockModule.LOCK_AD_SRV, "AD_PRAISE_LOCK_", id);
-			
-		}else{
-			bo.setPoint(BigDecimal.valueOf(point));
-			bo.setSysWordFlag(true);
 		}
+		
+		if(adSrvConfig.getIsCutPraisePoint()){
+			
+			if(adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==1 || adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==0){
+				//再次判断用户是否扣除过积分
+				Result<Boolean>  isDoPoint = praiseDoHanlderMinusPointService.getAdPraiseIsDoPointRecord(String.valueOf(id)+String.valueOf(memberId));
+				//如果没有扣除积分 不作抢赞操作
+				if(!isDoPoint.getModel()){
+					bo.setPoint(BigDecimal.valueOf(point));
+					return bo;
+				}
+			}
+			
+		}
+		
+		//已经领取个数
+		int praiseCount = adDO.getHits() == null ? 0 : adDO.getHits();
+
+		PointPoolDOView view = pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
+		//剩余积分
+		BigDecimal subMoney = new BigDecimal(0);
+		//剩余积分
+		if (view == null) {
+			subMoney = adDO.getTotalPoint().subtract(BigDecimal.valueOf(0));
+		} else {
+			subMoney = adDO.getTotalPoint().subtract(view.getPoint());
+		}
+
+		point = SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), adDO.getAdCount(), praiseCount);
+
+		pointPool.setAdId(adDO.getId());
+		pointPool.setMerchantId(adDO.getMerchantId());
+		pointPool.setMemberId(memberId);
+		pointPool.setMemberNum(num);
+		pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+		pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+		pointPool.setGmtCreate(new Date());
+		pointPool.setGmtModified(new Date());
+		pointPool.setOrdinal(praiseCount);
+		pointPool.setPoint(BigDecimal.valueOf(point));
+		pointPoolDOMapper.insert(pointPool);
+
+		if (adDO.getAdCount() - 1 == praiseCount || praiseCount >= adDO.getAdCount()) {
+			AdDO ad = new AdDO();
+			ad.setId(adDO.getId());
+			ad.setGmtModified(new Date());
+			ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+			adDOMapper.updateByPrimaryKeySelective(ad);
+			//更新solr状态
+			SolrInputDocument document = AdConverter.convertSolrInputDocument(ad);
+			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
+		}
+		
+		//修改领取次数
+		adDOMapperExtend.updateHitsByPrimaryKey(id);
+		adtransactionMainAddService.sendNotice(pointPool.getId());
+		bo.setPoint(BigDecimal.valueOf(point).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
 		
 		return bo;
 
@@ -1474,6 +1441,17 @@ public class AdServiceImpl implements AdService {
 		
 		return page;
 	}
-
+	
+	
+	
+	@Override
+	public Integer getInventory(Long id) throws DataNotExistException {
+		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+		if (adDO == null) {
+			throw new DataNotExistException("广告数据不存在");
+		}
+		Integer count = adDO.getAdCount()-adDO.getHits();
+		return count;
+	}
 	
 }

@@ -6,7 +6,15 @@ public class AdClickPraiseInfoBO {
 	
 	private BigDecimal point;
 	
-	private boolean sysWordFlag;
+	private Boolean isPraiseEnd = false;
+
+	public Boolean getIsPraiseEnd() {
+		return isPraiseEnd;
+	}
+
+	public void setIsPraiseEnd(Boolean isPraiseEnd) {
+		this.isPraiseEnd = isPraiseEnd;
+	}
 
 	public BigDecimal getPoint() {
 		return point;
@@ -15,15 +23,6 @@ public class AdClickPraiseInfoBO {
 	public void setPoint(BigDecimal point) {
 		this.point = point;
 	}
-
-	public boolean isSysWordFlag() {
-		return sysWordFlag;
-	}
-
-	public void setSysWordFlag(boolean sysWordFlag) {
-		this.sysWordFlag = sysWordFlag;
-	}
-	
 	
 	
 

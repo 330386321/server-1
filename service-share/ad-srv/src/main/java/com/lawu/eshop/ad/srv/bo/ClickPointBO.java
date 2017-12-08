@@ -7,8 +7,6 @@ public class ClickPointBO {
 	private BigDecimal point;
 	
 	private boolean isOverClick;
-	
-	private boolean sysWords;
 
 	public BigDecimal getPoint() {
 		return point;
@@ -26,14 +24,5 @@ public class ClickPointBO {
 		this.isOverClick = isOverClick;
 	}
 
-	public boolean isSysWords() {
-		return sysWords;
-	}
-
-	public void setSysWords(boolean sysWords) {
-		this.sysWords = sysWords;
-	}
-	
-	
 
 }

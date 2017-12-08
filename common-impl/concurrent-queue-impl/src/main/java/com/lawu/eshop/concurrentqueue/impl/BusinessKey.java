@@ -14,4 +14,10 @@ public class BusinessKey {
      */
     public final static String SECKILL_ACTIVITY_PRODUCT = "SECKILL_ACTIVITY_PRODUCT";
     
+    
+    /**
+     * 点广告key
+     */
+    public final static String AD_CLICK_KEY = "AD_CLICK_KEY";
+    
 }
