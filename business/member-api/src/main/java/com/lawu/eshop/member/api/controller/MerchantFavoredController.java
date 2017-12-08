@@ -59,6 +59,6 @@ public class MerchantFavoredController extends BaseController {
         merchantFavoredDTO.setUserNum(stoResult.getModel().getUserNum());
         merchantFavoredDTO.setStorePic(stoResult.getModel().getPicStore());
         
-        return result;
+        return successGet(merchantFavoredDTO);
     }
 }
