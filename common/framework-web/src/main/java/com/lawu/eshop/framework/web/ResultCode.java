@@ -143,6 +143,7 @@ public class ResultCode {
     public static final int AD_RED_PACKET_COUNT_ERROR=5011;
     public static final int AD_RED_PACKET_POINT_ERROR=5012;
     public static final int AD_CLICK_SYS_WORDS=5013;
+    public static final int AD_PRAISE_NOT_RATE=5014;
 
 
     // 资产模块代码 6xxx
@@ -182,7 +183,7 @@ public class ResultCode {
 
 
 
-
+ 
 
     // 商城模块代码 7xxx
     public static final int MESSAGE_HAS_NO_TEMPLATE = 7001;
@@ -376,7 +377,7 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_RED_PACKET_COUNT_ERROR, "红包数量不能超过100万");
         ResultCode.messageMap.put(AD_RED_PACKET_POINT_ERROR, "金额不合法");
         ResultCode.messageMap.put(AD_CLICK_SYS_WORDS, "系统繁忙,请稍后再试");
-        
+        ResultCode.messageMap.put(AD_PRAISE_NOT_RATE, "E咻没有抢到");
         
         
         // 资产模块 6xxx

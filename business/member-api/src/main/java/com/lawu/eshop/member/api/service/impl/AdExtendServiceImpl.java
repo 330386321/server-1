@@ -382,21 +382,22 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		String num = UserUtil.getCurrentUserNum(getRequest());
 		try {
 			Random random = new Random();
-			Integer r = random.nextInt(memberApiConfig.getClickPraiseSumProb()) % (memberApiConfig.getClickPraiseSumProb() + 1);
+			Integer r = random.nextInt(memberApiConfig.getClickPraiseSumProb())
+					% (memberApiConfig.getClickPraiseSumProb() + 1);
 			if (r > 0 && r < memberApiConfig.getClickPraiseProb()) {
-				Result<PraisePointDTO> rs=adService.clickPraise(id,memberId,num);
+				Result<PraisePointDTO> rs = adService.clickPraise(id, memberId, num);
+				if (!isSuccess(rs)) {
+					throw new BusinessExecuteException(rs.getRet(), rs.getMsg());
+				}
 				return rs;
 			} else {
-				PraisePointDTO dto = new PraisePointDTO();
-				dto.setPoint(new BigDecimal(0));
-				dto.setIsGetPoint(false);
-				return successCreated(dto);
+				return successCreated(ResultCode.AD_PRAISE_NOT_RATE);
 			}
 
 		} catch (RejectedExecutionException e) {
 			return successCreated(ResultCode.FAIL);
 		}
-		
+
 	}
 
 	@Deprecated
