@@ -58,6 +58,10 @@ DELETE FROM eshop_mall.inform;
 alter table eshop_mall.inform AUTO_INCREMENT=1;
 DELETE FROM eshop_mall.app_version;
 alter table eshop_mall.app_version AUTO_INCREMENT=1;
+DELETE FROM eshop_mall.lottery_activity;
+alter table eshop_mall.lottery_activity AUTO_INCREMENT=1;
+DELETE FROM eshop_mall.lottery_record;
+alter table eshop_mall.lottery_record AUTO_INCREMENT=1;
 
 -- eshop_operator
 DELETE FROM eshop_operator.log;
@@ -102,6 +106,14 @@ DELETE FROM eshop_product.product_model_inventory;
 alter table eshop_product.product_model_inventory AUTO_INCREMENT=1;
 DELETE FROM eshop_product.transaction_record;
 alter table eshop_product.transaction_record AUTO_INCREMENT=1;
+DELETE FROM eshop_product.seckill_activity;
+alter table eshop_product.seckill_activity AUTO_INCREMENT=1;
+DELETE FROM eshop_product.seckill_activity_product;
+alter table eshop_product.seckill_activity_product AUTO_INCREMENT=1;
+DELETE FROM eshop_product.seckill_activity_product_model;
+alter table eshop_product.seckill_activity_product_model AUTO_INCREMENT=1;
+DELETE FROM eshop_product.seckill_activity_attention;
+alter table eshop_product.seckill_activity_attention AUTO_INCREMENT=1;
 
 -- eshop_property
 DELETE FROM eshop_property.bank_account;
@@ -233,4 +245,6 @@ DELETE FROM eshop_user.user_login_log;
 alter table eshop_user.user_login_log AUTO_INCREMENT=1;
 DELETE FROM eshop_user.user_freeze_record;
 alter table eshop_user.user_freeze_record AUTO_INCREMENT=1;
+DELETE FROM eshop_user.user_grade_detail;
+alter table eshop_user.user_grade_detail AUTO_INCREMENT=1;
 */
