@@ -233,13 +233,12 @@ public class TransactionDetailConverter {
         }
         rtn = new TransactionDetailOfMemberDTO();
         rtn.setAmount(transactionDetailBO.getAmount());
-        rtn.setTitle(MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory().getName());
         rtn.setDirection(transactionDetailBO.getDirection());
         rtn.setId(transactionDetailBO.getId());
         if (MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()) != null) {
+            rtn.setTitle(MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory().getName());
             rtn.setTransactionCategory(MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory());
         }
-
         rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
         return rtn;
     }
