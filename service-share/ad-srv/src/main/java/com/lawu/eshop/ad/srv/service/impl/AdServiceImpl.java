@@ -650,17 +650,16 @@ public class AdServiceImpl implements AdService {
 		pointPool.setGmtCreate(new Date());
 		pointPool.setGmtModified(new Date());
 		pointPool.setOrdinal(praiseCount);
-		pointPool.setPoint(BigDecimal.valueOf(point));
+		pointPool.setPoint(new BigDecimal(point).setScale(2,BigDecimal.ROUND_HALF_DOWN));
 		pointPoolDOMapper.insert(pointPool);
 
 		if (adDO.getAdCount() - 1 == praiseCount || praiseCount >= adDO.getAdCount()) {
-			AdDO ad = new AdDO();
-			ad.setId(adDO.getId());
-			ad.setGmtModified(new Date());
-			ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
-			adDOMapper.updateByPrimaryKeySelective(ad);
+			adDO.setId(adDO.getId());
+			adDO.setGmtModified(new Date());
+			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+			adDOMapper.updateByPrimaryKeySelective(adDO);
 			//更新solr状态
-			SolrInputDocument document = AdConverter.convertSolrInputDocument(ad);
+			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 			solrService.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
 		

@@ -391,7 +391,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 				}
 				return rs;
 			} else {
-				return successCreated(ResultCode.AD_PRAISE_NOT_RATE);
+				throw new BusinessExecuteException(ResultCode.AD_PRAISE_NOT_RATE,ResultCode.get(ResultCode.AD_PRAISE_NOT_RATE) );
 			}
 
 		} catch (RejectedExecutionException e) {
