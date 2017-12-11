@@ -1,6 +1,7 @@
 package com.lawu.eshop.mall.param;
 
-import com.lawu.eshop.mall.constants.MessageTypeEnum;
+import com.lawu.eshop.common.constants.MessageTypeEnum;
+
 import io.swagger.annotations.ApiParam;
 
 /**

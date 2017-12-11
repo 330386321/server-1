@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lawu.eshop.ad.dto.FavoriteAdPraiseWarnDTO;
 import com.lawu.eshop.ad.param.PraiseWarnParam;
+import com.lawu.eshop.common.constants.MessageTypeEnum;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.jobs.service.FavoriteAdService;
 import com.lawu.eshop.jobs.service.MessageService;
-import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.jobsextend.AbstractPageJob;

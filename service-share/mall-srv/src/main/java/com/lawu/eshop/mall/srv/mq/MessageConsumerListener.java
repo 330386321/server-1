@@ -2,8 +2,8 @@ package com.lawu.eshop.mall.srv.mq;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.lawu.eshop.common.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.constants.BusinessDepositOperEnum;
-import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.mall.srv.service.MessageService;

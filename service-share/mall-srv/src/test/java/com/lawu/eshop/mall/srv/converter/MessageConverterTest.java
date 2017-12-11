@@ -1,24 +1,24 @@
 package com.lawu.eshop.mall.srv.converter;
 
-import com.lawu.eshop.mall.constants.MessageStatusEnum;
-import com.lawu.eshop.mall.constants.MessageTypeEnum;
-import com.lawu.eshop.mall.dto.MessageDTO;
-import com.lawu.eshop.mall.dto.OperatorMessageDTO;
-import com.lawu.eshop.mall.srv.bo.MessageBO;
-import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
-import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
-import com.lawu.eshop.mall.srv.converter.MessageConverter;
-import com.lawu.eshop.mall.srv.domain.MessageDO;
-import com.lawu.eshop.mall.srv.domain.MessageTemplateDO;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.common.constants.MessageTypeEnum;
+import com.lawu.eshop.mall.constants.MessageStatusEnum;
+import com.lawu.eshop.mall.dto.MessageDTO;
+import com.lawu.eshop.mall.dto.OperatorMessageDTO;
+import com.lawu.eshop.mall.srv.bo.MessageBO;
+import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
+import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
+import com.lawu.eshop.mall.srv.domain.MessageDO;
+import com.lawu.eshop.mall.srv.domain.MessageTemplateDO;
 
 /**
  * @author zhangyong

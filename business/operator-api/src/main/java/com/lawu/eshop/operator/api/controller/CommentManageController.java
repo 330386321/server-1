@@ -71,7 +71,7 @@ public class CommentManageController extends BaseController{
     			 }
     			 Result<MemberDTO>  result=memberService.findMember(commentOperatorDTO.getMemberId());
     			 if(isSuccess(result)){
-    				 commentOperatorDTO.setMemberName(result.getModel().getName()); 
+    				 commentOperatorDTO.setMemberName(result.getModel().getNickname()); 
     			 }
 			}
     	 }
@@ -95,7 +95,7 @@ public class CommentManageController extends BaseController{
     			 }
     			 Result<MemberDTO>  result=memberService.findMember(commentOperatorDTO.getMemberId());
     			 if(isSuccess(result)){
-    				 commentOperatorDTO.setMemberName(result.getModel().getName()); 
+    				 commentOperatorDTO.setMemberName(result.getModel().getNickname()); 
     			 }
 			}
     	 }

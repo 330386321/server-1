@@ -64,7 +64,9 @@ public class LotteryActivityConverter {
         activityDTO.setStatusEnum(LotteryActivityStatusEnum.getEnum(activityBO.getStatus()));
         activityDTO.setLotteryCount(activityBO.getLotteryCount());
         activityDTO.setLotteryNumber(activityBO.getLotteryNumber());
+        long startMillisecond = activityBO.getBeginTime().getTime() - new Date().getTime();
         long millisecond = activityBO.getEndTime().getTime() - new Date().getTime();
+        activityDTO.setStartMillisecond(startMillisecond > 0 ? startMillisecond : 0);
         activityDTO.setMillisecond(millisecond > 0 ? millisecond : 0);
         return activityDTO;
     }
@@ -125,6 +127,7 @@ public class LotteryActivityConverter {
         activityOperatorDTO.setBeginTime(activityBO.getBeginTime());
         activityOperatorDTO.setEndTime(activityBO.getEndTime());
         activityOperatorDTO.setGradeEnum(MemberGradeEnum.getEnum(activityBO.getGrade()));
+        activityOperatorDTO.setGradeDes(MemberGradeEnum.getEnum(activityBO.getGrade()).getName());
         activityOperatorDTO.setStatusEnum(LotteryActivityStatusEnum.getEnum(activityBO.getStatus()));
         activityOperatorDTO.setStatusDes(LotteryActivityStatusEnum.getEnum(activityBO.getStatus()).getName());
         if (LotteryActivityStatusEnum.LOTTERYED.getVal().byteValue() == activityBO.getStatus()) {

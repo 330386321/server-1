@@ -28,6 +28,9 @@ public class LotteryActivityDTO {
     @ApiModelProperty(value = "奖品图片")
     private String imagePath;
 
+    @ApiModelProperty(value = "距离开始毫秒数")
+    private Long startMillisecond;
+
     @ApiModelProperty(value = "距离结束毫秒数")
     private Long millisecond;
 
@@ -87,6 +90,14 @@ public class LotteryActivityDTO {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public Long getStartMillisecond() {
+        return startMillisecond;
+    }
+
+    public void setStartMillisecond(Long startMillisecond) {
+        this.startMillisecond = startMillisecond;
     }
 
     public Long getMillisecond() {

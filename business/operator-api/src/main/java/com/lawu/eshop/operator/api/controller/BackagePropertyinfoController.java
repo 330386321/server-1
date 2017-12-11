@@ -1,14 +1,35 @@
 package com.lawu.eshop.operator.api.controller;
 
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lawu.eshop.common.constants.MessageTypeEnum;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.annotation.PageBody;
-import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
-import com.lawu.eshop.operator.api.service.*;
+import com.lawu.eshop.operator.api.service.MemberService;
+import com.lawu.eshop.operator.api.service.MerchantService;
+import com.lawu.eshop.operator.api.service.MessageService;
+import com.lawu.eshop.operator.api.service.PointDetailService;
+import com.lawu.eshop.operator.api.service.PropertyinfoService;
+import com.lawu.eshop.operator.api.service.RechargeService;
+import com.lawu.eshop.operator.api.service.TransactionDetailService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
@@ -17,24 +38,20 @@ import com.lawu.eshop.property.dto.BalanceAndPointListQueryDTO;
 import com.lawu.eshop.property.dto.PointDetailBackageDTO;
 import com.lawu.eshop.property.dto.PropertyInfoDTO;
 import com.lawu.eshop.property.dto.TransactionDetailBackageDTO;
-import com.lawu.eshop.property.param.*;
+import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
+import com.lawu.eshop.property.param.BackagePropertyinfoParam;
+import com.lawu.eshop.property.param.PropertyInfoBackageParam;
+import com.lawu.eshop.property.param.RechargeQueryDataParam;
+import com.lawu.eshop.property.param.RechargeQueryParam;
+import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 

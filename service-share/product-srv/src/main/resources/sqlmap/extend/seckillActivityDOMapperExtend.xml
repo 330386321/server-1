@@ -44,7 +44,7 @@
 				FROM
 					seckill_activity_product
 				WHERE
-					merchant_id = #{merchantId,jdbcType=BIGINT}
+					merchant_id = #{merchantId,jdbcType=BIGINT} and `status`=1
 				GROUP BY
 					activity_id
 			) AS sap

@@ -28,6 +28,8 @@ public class MemberMineInfoDTO {
 	private Integer inviteMerchantCount;
 
 	private Byte grade;
+
+	private Integer growthValue;
 	
 	public String getNickname() {
 		return nickname;
@@ -75,5 +77,13 @@ public class MemberMineInfoDTO {
 
 	public void setGrade(Byte grade) {
 		this.grade = grade;
+	}
+
+	public Integer getGrowthValue() {
+		return growthValue;
+	}
+
+	public void setGrowthValue(Integer growthValue) {
+		this.growthValue = growthValue;
 	}
 }

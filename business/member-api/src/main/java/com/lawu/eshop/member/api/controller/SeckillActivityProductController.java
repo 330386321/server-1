@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,7 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.concurrentqueue.bizctrl.BusinessDecisionService;
+import com.lawu.concurrentqueue.bizctrl.BusinessInventorySynService;
 import com.lawu.eshop.authorization.util.UserUtil;
+import com.lawu.eshop.concurrentqueue.impl.BusinessKey;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -23,6 +27,7 @@ import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.param.ActivityProductBuyQueryParam;
 import com.lawu.eshop.product.dto.SeckillActivityProductBuyPageDTO;
 import com.lawu.eshop.product.dto.SeckillActivityProductInformationDTO;
+import com.lawu.eshop.product.dto.SeckillActivityProductModelInformationDTO;
 import com.lawu.eshop.product.dto.foreign.SeckillActivityProductInformationForeignDTO;
 import com.lawu.eshop.product.param.SeckillActivityProductPageQueryParam;
 
@@ -48,6 +53,14 @@ public class SeckillActivityProductController extends BaseController {
     
     @Autowired
     private ShoppingOrderService shoppingOrderService;
+    
+    @SuppressWarnings("rawtypes")
+    @Autowired
+    @Qualifier("seckillActivityProductBusinessDecisionServiceImpl")
+    private BusinessDecisionService<Result> seckillActivityProductBusinessDecisionServiceImpl;
+    
+    @Autowired
+    private BusinessInventorySynService businessInventorySynService;
 
     @Audit(date = "2017-11-24", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
@@ -105,6 +118,12 @@ public class SeckillActivityProductController extends BaseController {
         rtn.setAttention(model.getAttention());
         rtn.setSoldQuantity(model.getSoldQuantity());
         rtn.setExceededAttentionTime(model.getExceededAttentionTime());
+        
+        // 从缓存取出真实库存
+        for (SeckillActivityProductModelInformationDTO item : rtn.getProductModelList()) {
+            int inventory = businessInventorySynService.getInventory(seckillActivityProductBusinessDecisionServiceImpl, BusinessKey.SECKILL_ACTIVITY_PRODUCT, item.getSeckillActivityProductModelId());
+            item.setLeftCount(inventory);
+        }
         return successGet(rtn);
     }
 }

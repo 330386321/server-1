@@ -1,14 +1,14 @@
 package com.lawu.eshop.mall.srv.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.mall.constants.MessageStatusEnum;
-import com.lawu.eshop.mall.constants.MessageTypeEnum;
-import com.lawu.eshop.mall.constants.UserTypeEnum;
-import com.lawu.eshop.mall.param.*;
-import com.lawu.eshop.mall.srv.MallSrvApplicationTest;
-import com.lawu.eshop.mall.srv.domain.MessageDO;
-import com.lawu.eshop.mall.srv.mapper.MessageDOMapper;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,12 +27,21 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.alibaba.fastjson.JSONObject;
+import com.lawu.eshop.common.constants.MessageTypeEnum;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.mall.constants.MessageStatusEnum;
+import com.lawu.eshop.mall.constants.UserTypeEnum;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageParam;
+import com.lawu.eshop.mall.param.MessageQueryParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
+import com.lawu.eshop.mall.param.OperatorMessageInfoParam;
+import com.lawu.eshop.mall.param.OperatorMessageParam;
+import com.lawu.eshop.mall.param.PushParam;
+import com.lawu.eshop.mall.srv.MallSrvApplicationTest;
+import com.lawu.eshop.mall.srv.domain.MessageDO;
+import com.lawu.eshop.mall.srv.mapper.MessageDOMapper;
 
 /**
  * @author zhangyong

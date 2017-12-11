@@ -60,12 +60,16 @@ public class LotteryActivityServiceImpl implements LotteryActivityService {
                 activityBO.setLotteryNumber(lotteryNumber);
 
                 //查询参与次数
-                criteria.andUserNumEqualTo(query.getUserNum());
-                List<LotteryRecordDO> recordDOS = lotteryRecordDOMapper.selectByExample(recordDOExample);
-                if (recordDOS.isEmpty()) {
-                    activityBO.setLotteryCount(0);
+                if (StringUtils.isNotEmpty(query.getUserNum())) {
+                    criteria.andUserNumEqualTo(query.getUserNum());
+                    List<LotteryRecordDO> recordDOS = lotteryRecordDOMapper.selectByExample(recordDOExample);
+                    if (recordDOS.isEmpty()) {
+                        activityBO.setLotteryCount(0);
+                    } else {
+                        activityBO.setLotteryCount(recordDOS.get(0).getLotteryCount());
+                    }
                 } else {
-                    activityBO.setLotteryCount(recordDOS.get(0).getLotteryCount());
+                    activityBO.setLotteryCount(0);
                 }
                 activityBOS.add(activityBO);
             }

@@ -84,6 +84,7 @@ public class SeckillActivityConverter {
             seckillActivityThatDayDTO.setName(item.getName());
             seckillActivityThatDayDTO.setPicture(item.getPicture());
             seckillActivityThatDayDTO.setStartDate(item.getStartDate());
+            seckillActivityThatDayDTO.setDate(item.getStartDate());
             seckillActivityThatDayDTO.setSellingPrice(item.getSellingPrice());
             rtn.add(seckillActivityThatDayDTO);
         }

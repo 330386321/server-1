@@ -29,14 +29,21 @@ public class SeckillActivityThatDayDTO {
      */
     @ApiModelProperty(value = "活动名称", required = true)
     private String name;
-
+    
+    /**
+     * 日期(yyyy-MM-dd)
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @ApiModelProperty(value = "日期(yyyy-MM-dd)", required = true)
+    private Date date;
+    
     /**
      * 开始时间(HH:mm)
      */
     @JsonFormat(pattern = "HH:mm")
-    @ApiModelProperty(value = "开始时间", required = true)
+    @ApiModelProperty(value = "开始时间(HH:mm)", required = true)
     private Date startDate;
-
+    
     /**
      * 会员等级
      */
@@ -75,6 +82,14 @@ public class SeckillActivityThatDayDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public Date getStartDate() {

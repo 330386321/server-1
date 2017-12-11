@@ -87,8 +87,8 @@ public class AdPlatformController extends BaseController {
     		}
     		AdQueryMemberInfoDTO adQueryMemberInfoDTO = adQueryMemberInfoResult.getModel();
     		param.setMerchantIds(adQueryMemberInfoDTO.getFansList());
-    		if (StringUtils.isNotBlank(adQueryMemberInfoDTO.getRegionPath())) {
-    			param.setAreas(Arrays.asList(StringUtils.split(adQueryMemberInfoDTO.getRegionPath(), "/")));
+    		if (StringUtils.isNotBlank(query.getTransRegionPath())) {
+    			param.setAreas(Arrays.asList(StringUtils.split(query.getTransRegionPath(), "/")));
     		}
     	}
     	

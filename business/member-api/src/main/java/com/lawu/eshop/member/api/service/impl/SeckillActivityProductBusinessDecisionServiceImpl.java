@@ -17,7 +17,7 @@ import com.lawu.eshop.member.api.service.SeckillActivityProductService;
  * @updateDate 2017年11月30日
  */
 @SuppressWarnings("rawtypes")
-@Service
+@Service("seckillActivityProductBusinessDecisionServiceImpl")
 public class SeckillActivityProductBusinessDecisionServiceImpl extends AbstractBusinessDecisionService<Result> {
     
     @Autowired

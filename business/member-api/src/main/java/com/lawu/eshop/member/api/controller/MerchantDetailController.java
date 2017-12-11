@@ -105,7 +105,7 @@ public class MerchantDetailController extends BaseController {
         StoreDetailDTO storeDetailDTO = stoResult.getModel();
         storeDetailDTO.setIsExistStore(true);
         Result<MerchantFavoredDTO> merResult = merchantFavoredService.findFavoredByMerchantId(storeDetailDTO.getMerchantId());
-        if (isSuccess(merResult)) {
+        if (isSuccess(merResult) && merResult.getModel().getId() != null) {
             MerchantFavoredDTO merchantFavoredDTO = merResult.getModel();
             storeDetailDTO.setTypeEnum(com.lawu.eshop.user.constants.MerchantFavoredTypeEnum.getEnum(merchantFavoredDTO.getTypeEnum().val));
             storeDetailDTO.setReachAmount(merchantFavoredDTO.getReachAmount());

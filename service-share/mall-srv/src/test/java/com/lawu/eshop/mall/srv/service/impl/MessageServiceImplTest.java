@@ -1,16 +1,10 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.mall.constants.MessageStatusEnum;
-import com.lawu.eshop.mall.constants.MessageTypeEnum;
-import com.lawu.eshop.mall.constants.UserTypeEnum;
-import com.lawu.eshop.mall.param.*;
-import com.lawu.eshop.mall.srv.bo.MessageBO;
-import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
-import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
-import com.lawu.eshop.mall.srv.domain.MessageDO;
-import com.lawu.eshop.mall.srv.mapper.MessageDOMapper;
-import com.lawu.eshop.mall.srv.service.MessageService;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,10 +14,23 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.common.constants.MessageTypeEnum;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.mall.constants.MessageStatusEnum;
+import com.lawu.eshop.mall.constants.UserTypeEnum;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageParam;
+import com.lawu.eshop.mall.param.MessageQueryParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
+import com.lawu.eshop.mall.param.OperatorMessageInfoParam;
+import com.lawu.eshop.mall.param.OperatorMessageParam;
+import com.lawu.eshop.mall.param.PushParam;
+import com.lawu.eshop.mall.srv.bo.MessageBO;
+import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
+import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
+import com.lawu.eshop.mall.srv.domain.MessageDO;
+import com.lawu.eshop.mall.srv.mapper.MessageDOMapper;
+import com.lawu.eshop.mall.srv.service.MessageService;
 
 /**
  * @author zhangyong

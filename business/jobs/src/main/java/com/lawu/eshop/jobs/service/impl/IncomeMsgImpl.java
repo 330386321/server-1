@@ -2,20 +2,18 @@ package com.lawu.eshop.jobs.service.impl;
 
 import java.util.List;
 
-import com.lawu.eshop.framework.web.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.lawu.eshop.common.constants.MessageTypeEnum;
 import com.lawu.eshop.jobs.service.IncomeMsgService;
 import com.lawu.eshop.jobs.service.MessageService;
-import com.lawu.eshop.jobs.service.PropertyPointDetailService;
-import com.lawu.eshop.jobs.service.PropertyTransactionDetailService;
-import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.dto.IncomeMsgDTO;
 import com.lawu.eshop.user.constants.UserTypeEnum;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * @author yangqh
