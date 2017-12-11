@@ -252,6 +252,7 @@ public class ShoppingOrderControllerTest {
 			 Assert.assertEquals(expected.getIsNeedsLogistics(), shoppingOrderExtendQueryDTO.getIsNeedsLogistics());
 			 Assert.assertEquals(expected.getIsNoReasonReturn(), shoppingOrderExtendQueryDTO.getIsNoReasonReturn());
 			 Assert.assertEquals(expected.getMerchantId(), shoppingOrderExtendQueryDTO.getMerchantId());
+			 Assert.assertEquals(expected.getMerchantNum(), shoppingOrderExtendQueryDTO.getMerchantNum());
 			 Assert.assertEquals(expected.getMerchantStoreId(), shoppingOrderExtendQueryDTO.getMerchantStoreId());
 			 Assert.assertEquals(expected.getOrderStatus(), shoppingOrderExtendQueryDTO.getOrderStatus().getValue());
 			 Assert.assertEquals(expected.getOrderTotalPrice().doubleValue(), shoppingOrderExtendQueryDTO.getOrderTotalPrice().doubleValue(), 0D);
