@@ -816,6 +816,66 @@ public class CommentMerchantDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsHaveImgIsNull() {
+            addCriterion("is_have_img is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsHaveImgIsNotNull() {
+            addCriterion("is_have_img is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsHaveImgEqualTo(Boolean value) {
+            addCriterion("is_have_img =", value, "isHaveImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsHaveImgNotEqualTo(Boolean value) {
+            addCriterion("is_have_img <>", value, "isHaveImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsHaveImgGreaterThan(Boolean value) {
+            addCriterion("is_have_img >", value, "isHaveImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsHaveImgGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_have_img >=", value, "isHaveImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsHaveImgLessThan(Boolean value) {
+            addCriterion("is_have_img <", value, "isHaveImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsHaveImgLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_have_img <=", value, "isHaveImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsHaveImgIn(List<Boolean> values) {
+            addCriterion("is_have_img in", values, "isHaveImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsHaveImgNotIn(List<Boolean> values) {
+            addCriterion("is_have_img not in", values, "isHaveImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsHaveImgBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_have_img between", value1, value2, "isHaveImg");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsHaveImgNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_have_img not between", value1, value2, "isHaveImg");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtModifiedIsNull() {
             addCriterion("gmt_modified is null");
             return (Criteria) this;

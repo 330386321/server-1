@@ -68,6 +68,11 @@ public class CommentProductServiceImpl implements CommentProductService {
 		commentProductDO.setProductId(param.getProductId());
 		commentProductDO.setGmtCreate(new Date());
 		commentProductDO.setGmtModified(new Date());
+		if(!StringUtils.isEmpty(headImg)){
+			commentProductDO.setIsHaveImg(true);
+		}else{
+			commentProductDO.setIsHaveImg(false);
+		}
 		commentProductDOMapper.insert(commentProductDO);// 新增评价信息
 		Long id = commentProductDO.getId();
 		if (!StringUtils.isEmpty(headImg)) {

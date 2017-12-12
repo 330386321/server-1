@@ -28,21 +28,19 @@
     <!-- 根据商家ID查询用户评论总数(有图片)-->
     <select id="selectCountByMerchantId" resultType="java.lang.Integer" parameterType="java.lang.Long">
          SELECT
-        COUNT(DISTINCT cm.id)
+        COUNT(cm.id)
         FROM
         comment_merchant cm
-        LEFT JOIN comment_image ci ON cm.id = ci.comment_id
         WHERE
         cm.merchant_id = #{merchantId}
-         AND ci.type =1
-        AND ci.img_url IS NOT NULL
          AND cm.status = 1
+         AND cm.is_have_img = 1
     </select>
 
     <!-- 根据商家ID查询用户评论列表(有图片)-->
     <select id="selectCommentsWithImg" resultMap="BaseResultMap" parameterType="com.lawu.eshop.mall.param.CommentMerchantPageParam">
         SELECT
-        DISTINCT cm.id as id,
+        cm.id as id,
         cm.content,
         cm.reply_content,
         cm.grade,
@@ -53,12 +51,10 @@
         cm.merchant_id
         FROM
         comment_merchant cm
-        LEFT JOIN comment_image ci ON cm.id = ci.comment_id
         WHERE
         cm.merchant_id = #{merchantId}
-        AND ci.type =1
-        AND ci.img_url IS NOT NULL
         AND cm.status = 1
+        AND cm.is_have_img =1
         ORDER  BY
         cm.id DESC
         LIMIT #{offset},#{pageSize}

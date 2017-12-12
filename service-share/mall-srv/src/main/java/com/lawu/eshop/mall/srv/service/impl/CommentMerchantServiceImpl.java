@@ -66,6 +66,11 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         commentMerchantDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
         commentMerchantDO.setGmtCreate(new Date());
         commentMerchantDO.setGmtModified(new Date());
+        if(!StringUtils.isEmpty(commentPic)){
+        	commentMerchantDO.setIsHaveImg(true);
+		}else{
+			commentMerchantDO.setIsHaveImg(false);
+		}
         commentMerchantDOMapper.insert(commentMerchantDO);
         Long id = commentMerchantDO.getId();
         if (!StringUtils.isEmpty(commentPic)) {
