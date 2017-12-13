@@ -10,6 +10,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.framework.web.util.HeaderUtil;
 import com.lawu.eshop.mall.constants.AppTypeEnum;
 import com.lawu.eshop.mall.dto.AppPatchVersionDTO;
@@ -35,6 +36,7 @@ public class AppPatchVersionController extends BaseController {
     @Autowired
     private MemberApiConfig memberApiConfig;
 
+    @Audit(date = "2017-12-13", reviewer = "孙林青")
     @ApiOperation(value = "获取APP补丁版本", notes = "获取APP补丁版本。（梅述全）", httpMethod = "GET")
     @RequestMapping(value = "getAppPatchVersion", method = RequestMethod.GET)
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
