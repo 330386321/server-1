@@ -11,31 +11,11 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.lawu.eshop.statistics.param.PlatformTotalSalesSaveParam;
-import com.lawu.eshop.statistics.srv.domain.ReportSalesDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportSalesMonthDO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/spring-test.xml" })
 public class ReportSalesMonthConverterTest {
-	
-	@Test
-	public void convert() {
-		try {
-			PlatformTotalSalesSaveParam param = new PlatformTotalSalesSaveParam();
-			param.setGmtReport(new Date());
-			ReportSalesDailyDO reportSalesDailyDO = new ReportSalesDailyDO();
-			reportSalesDailyDO.setPayOrderAmount(new BigDecimal(10));
-			reportSalesDailyDO.setShoppingOrderAmount(new BigDecimal(20));
-			List<ReportSalesDailyDO> reportSalesDailyDOList = new ArrayList<ReportSalesDailyDO>();
-			reportSalesDailyDOList.add(reportSalesDailyDO);
-			ReportSalesMonthConverter.convert(param, reportSalesDailyDOList);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail(e.getMessage());
-		}
-	}
-	
 	
 	@Test
 	public void convertDOtoBo() {

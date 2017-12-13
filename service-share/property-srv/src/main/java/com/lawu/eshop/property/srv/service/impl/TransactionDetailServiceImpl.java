@@ -6,11 +6,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
-import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.srv.bo.TransactionDetailH5InfoBO;
-import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
-import com.lawu.eshop.property.srv.mapper.WithdrawCashDOMapper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +16,12 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.idworker.client.impl.BizIdType;
 import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
+import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionCategoryEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionCategoryEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayValidateDataParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
@@ -43,6 +40,7 @@ import com.lawu.eshop.property.srv.bo.MonthlyBillBO;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
 import com.lawu.eshop.property.srv.bo.TotalSalesGroupByAreaBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
+import com.lawu.eshop.property.srv.bo.TransactionDetailH5InfoBO;
 import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
 import com.lawu.eshop.property.srv.converter.TotalSalesConverter;
 import com.lawu.eshop.property.srv.converter.TransactionDetailConverter;
@@ -52,6 +50,7 @@ import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample.Criteria;
+import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgDOView;
 import com.lawu.eshop.property.srv.domain.extend.IncomeMsgExample;
 import com.lawu.eshop.property.srv.domain.extend.MonthlyBillDO;
@@ -62,6 +61,7 @@ import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureDO;
 import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureExample;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
+import com.lawu.eshop.property.srv.mapper.WithdrawCashDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.TransactionDetailExtendDOMapper;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -268,9 +268,12 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 	 */
 	@Override
 	public List<TotalSalesBO> selectTotalSales(TotalSalesQueryParam param) {
-		TotalSalesQueryExample example = TotalSalesConverter.convert(param);
-		List<TotalSalesDO> totalSalesDOList = transactionDetailExtendDOMapper.selectTotalSales(example);
-		return TotalSalesConverter.convertTotalSalesBOList(totalSalesDOList);
+       TotalSalesQueryExample example = new TotalSalesQueryExample();
+       String dateStr = DateUtil.getDateFormat(param.getDate(), "yyyy-MM-dd");
+       example.setStart(DateUtil.formatDate(dateStr + " 00:00:00", DateUtil.DATETIME_DEFAULT_FORMAT));
+       example.setEnd(DateUtil.formatDate(dateStr + " 23:59:59", DateUtil.DATETIME_DEFAULT_FORMAT));
+       List<TotalSalesDO> totalSalesDOList = transactionDetailExtendDOMapper.selectTotalSales(example);
+       return TotalSalesConverter.convertTotalSalesBOList(totalSalesDOList);
 	}
 	
 	/**
@@ -309,31 +312,35 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		return bos;
 	}
 
-	/**
-	 * 查询平台销售金额 group by area
-	 *
-	 * @param param
-	 * @return
-	 */
-	@Override
-	public List<TotalSalesGroupByAreaBO> selectTotalSalesGroupByArea(TotalSalesQueryParam param) {
-		TotalSalesQueryExample example = TotalSalesConverter.convert(param);
-		List<TotalSalesGroupByAreaDO> totalSalesDOList = transactionDetailExtendDOMapper.selectTotalSalesGroupByArea(example);
-		List<TotalSalesGroupByAreaBO> boList = new ArrayList<TotalSalesGroupByAreaBO>();
-		if(totalSalesDOList != null && !totalSalesDOList.isEmpty()) {
-			for(TotalSalesGroupByAreaDO DO : totalSalesDOList) {
-				TotalSalesGroupByAreaBO bo = new TotalSalesGroupByAreaBO();
-				bo.setAmount(DO.getAmount());
-				bo.setAreaId(DO.getAreaId());
-				bo.setCityId(DO.getCityId());
-				bo.setProvinceId(DO.getProvinceId());
-				bo.setTransactionType(MerchantTransactionTypeEnum.getEnum(DO.getTransactionType()));
-				bo.setType(DO.getType());
-				boList.add(bo);
-			}
-		}
-		return boList;
-	}
+    /**
+     * 查询平台销售金额 group by area
+     *
+     * @param param
+     * @return
+     */
+    @Override
+    public List<TotalSalesGroupByAreaBO> selectTotalSalesGroupByArea(TotalSalesQueryParam param) {
+        TotalSalesQueryExample example = new TotalSalesQueryExample();
+        String dateStr = DateUtil.getDateFormat(param.getDate(), "yyyy-MM-dd");
+        example.setStart(DateUtil.formatDate(dateStr + " 00:00:00", DateUtil.DATETIME_DEFAULT_FORMAT));
+        example.setEnd(DateUtil.formatDate(dateStr + " 23:59:59", DateUtil.DATETIME_DEFAULT_FORMAT));
+        List<TotalSalesGroupByAreaDO> totalSalesDOList = transactionDetailExtendDOMapper
+                .selectTotalSalesGroupByArea(example);
+        List<TotalSalesGroupByAreaBO> boList = new ArrayList<TotalSalesGroupByAreaBO>();
+        if (totalSalesDOList != null && !totalSalesDOList.isEmpty()) {
+            for (TotalSalesGroupByAreaDO DO : totalSalesDOList) {
+                TotalSalesGroupByAreaBO bo = new TotalSalesGroupByAreaBO();
+                bo.setAmount(DO.getAmount());
+                bo.setAreaId(DO.getAreaId());
+                bo.setCityId(DO.getCityId());
+                bo.setProvinceId(DO.getProvinceId());
+                bo.setTransactionType(MerchantTransactionTypeEnum.getEnum(DO.getTransactionType()));
+                bo.setType(DO.getType());
+                boList.add(bo);
+            }
+        }
+        return boList;
+    }
 
 	@Override
 	public boolean verifyByUserNumAndTransactionTypeAndBizId(BalancePayDataParam param) {

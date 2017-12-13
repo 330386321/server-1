@@ -17,16 +17,6 @@ import com.lawu.eshop.statistics.srv.domain.ReportSalesDailyDO;
 @ContextConfiguration(locations = { "/spring-test.xml" })
 public class ReportSalesDailyConverterTest {
 
-	
-	@Test
-	public void convert() {
-		PlatformTotalSalesSaveParam platformTotalSalesSaveParam = new PlatformTotalSalesSaveParam();
-		platformTotalSalesSaveParam.setPayOrderAmount(new BigDecimal(10));
-		platformTotalSalesSaveParam.setShoppingOrderAmount(new BigDecimal(20));
-		platformTotalSalesSaveParam.setGmtReport(new Date());
-		ReportSalesDailyConverter.convert(platformTotalSalesSaveParam);
-	}
-	
 	@Test
 	public void convert1() {
 		ReportSalesDailyDO reportSalesDailyDO = new ReportSalesDailyDO();

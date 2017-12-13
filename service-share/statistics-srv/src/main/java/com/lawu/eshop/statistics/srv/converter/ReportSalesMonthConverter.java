@@ -18,29 +18,6 @@ import com.lawu.eshop.statistics.srv.domain.ReportSalesMonthDO;
  */
 public class ReportSalesMonthConverter {
 
-	/**
-     * PlatformTotalSalesSaveParam转ReportSalesMonthDO
-     *
-     * @param param
-     * @return
-     */
-    public static ReportSalesMonthDO convert(PlatformTotalSalesSaveParam param, List<ReportSalesDailyDO> reportSalesDailyDOList) {
-    	ReportSalesMonthDO rtn = new ReportSalesMonthDO();
-    	
-    	BigDecimal payOrderAmount = new BigDecimal(0);
-    	BigDecimal shoppingOrderAmount = new BigDecimal(0);
-    	for (ReportSalesDailyDO reportSalesDailyDO : reportSalesDailyDOList) {
-    		payOrderAmount = payOrderAmount.add(reportSalesDailyDO.getPayOrderAmount());
-    		shoppingOrderAmount = shoppingOrderAmount.add(reportSalesDailyDO.getShoppingOrderAmount());
-    	}
-        rtn.setPayOrderAmount(payOrderAmount);
-        rtn.setShoppingOrderAmount(shoppingOrderAmount);
-        rtn.setTotalAmount(payOrderAmount.add(shoppingOrderAmount));
-        rtn.setGmtReport(param.getGmtReport());
-        rtn.setGmtCreate(new Date());
-        return rtn;
-    }
-    
     /**
      * ReportSalesMonthDO转ReportSalesBO
      *

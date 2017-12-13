@@ -6,11 +6,8 @@ import java.util.List;
 
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.dto.TotalSalesDTO;
-import com.lawu.eshop.property.param.TotalSalesQueryParam;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesDO;
-import com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample;
-import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 平台总销量转换
@@ -24,22 +21,6 @@ public class TotalSalesConverter {
 		throw new IllegalAccessError("Utility class");
 	}
 
-	/**
-	 * TotalSalesQueryParam转TotalSalesQueryExample
-	 * @param param
-	 * @return
-	 */
-	public static TotalSalesQueryExample convert(TotalSalesQueryParam param) {
-		TotalSalesQueryExample rtn = null;
-		if (param == null) {
-			return rtn;
-		}
-		rtn = new TotalSalesQueryExample();
-		rtn.setStart(DateUtil.getFirstSecondOfDay(param.getDate()));
-		rtn.setEnd(DateUtil.getLastSecondOfDay(param.getDate()));
-		return rtn;
-	}
-	
 	/**
 	 * TotalSalesDO转TotalSalesBO
 	 * @param totalSalesDO
@@ -80,9 +61,9 @@ public class TotalSalesConverter {
 	 */
 	public static TotalSalesDTO convertTotalSalesDTO(List<TotalSalesBO> totalSalesBOList) {
 		TotalSalesDTO rtn = new TotalSalesDTO();
+		rtn.setPayOrderAmount(new BigDecimal(0));
+		rtn.setShoppingOrderAmount(new BigDecimal(0));
 		if (totalSalesBOList == null || totalSalesBOList.isEmpty()) {
-			rtn.setPayOrderAmount(new BigDecimal(0));
-			rtn.setShoppingOrderAmount(new BigDecimal(0));
 			return rtn;
 		}
 		for (TotalSalesBO totalSalesBO : totalSalesBOList) {

@@ -17,22 +17,6 @@ import com.lawu.eshop.statistics.srv.domain.ReportSalesDailyDO;
 public class ReportSalesDailyConverter {
 
     /**
-     * PlatformTotalSalesSaveParam转ReportSalesDailyDO
-     *
-     * @param param
-     * @return
-     */
-    public static ReportSalesDailyDO convert(PlatformTotalSalesSaveParam param) {
-    	ReportSalesDailyDO rtn = new ReportSalesDailyDO();
-        rtn.setPayOrderAmount(param.getPayOrderAmount());
-        rtn.setShoppingOrderAmount(param.getShoppingOrderAmount());
-        rtn.setTotalAmount(param.getPayOrderAmount().add(param.getShoppingOrderAmount()));
-        rtn.setGmtReport(param.getGmtReport());
-        rtn.setGmtCreate(new Date());
-        return rtn;
-    }
-    
-    /**
      * ReportSalesDailyDO转ReportSalesBO
      *
      * @param reportSalesDailyDO

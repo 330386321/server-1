@@ -24,14 +24,6 @@ import java.util.List;
 public class TotalSalesConverterTest {
 
     @Test
-    public void convert(){
-        TotalSalesQueryParam param = new TotalSalesQueryParam();
-        param.setDate(new Date());
-        TotalSalesQueryExample bo = TotalSalesConverter.convert(param);
-        Assert.assertNotNull(bo);
-    }
-
-    @Test
     public void convert1(){
         TotalSalesDO totalSalesDO = new TotalSalesDO();
         totalSalesDO.setAmount(new BigDecimal("1"));
