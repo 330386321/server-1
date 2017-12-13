@@ -84,6 +84,7 @@ public class UserIncomeExpenditureConverter {
 				userIncomeExpenditureDTO.setIncome(new BigDecimal(0));
 				userIncomeExpenditureDTO.setExpenditure(new BigDecimal(0));
 				userIncomeExpenditureDTO.setUserNum(userIncomeExpenditureBO.getUserNum());
+				userIncomeExpenditureDTOMap.put(userIncomeExpenditureBO.getUserNum(), userIncomeExpenditureDTO);
 			}
 			switch (userIncomeExpenditureBO.getDirection()) {
 				case EXPENDITURE:
@@ -96,6 +97,7 @@ public class UserIncomeExpenditureConverter {
 					break;
 			}
 		}
+		rtn = new ArrayList<>(userIncomeExpenditureDTOMap.values());
 		return rtn;
 	}
 	

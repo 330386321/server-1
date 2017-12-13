@@ -86,8 +86,8 @@ public class ReportUserIncomeExpenditureServiceImpl extends BaseController imple
             ReportUserIncomeExpenditureSaveParam reportUserIncomeExpenditureSaveParam = new ReportUserIncomeExpenditureSaveParam();
             reportUserIncomeExpenditureSaveParam.setExpenditure(userIncomeExpenditureDTO.getExpenditure());
             reportUserIncomeExpenditureSaveParam.setIncome(userIncomeExpenditureDTO.getIncome());
-            reportUserIncomeExpenditureSaveParam.setUserNum(reportUserIncomeExpenditureSaveParam.getUserNum());
-            reportUserIncomeExpenditureSaveParam.setAccount(userInfoMap.get(reportUserIncomeExpenditureSaveParam.getUserNum()).getAccount());
+            reportUserIncomeExpenditureSaveParam.setUserNum(userIncomeExpenditureDTO.getUserNum());
+            reportUserIncomeExpenditureSaveParam.setAccount(userInfoMap.get(userIncomeExpenditureDTO.getUserNum()) != null ? userInfoMap.get(userIncomeExpenditureDTO.getUserNum()).getAccount() : null);
             rtn.add(reportUserIncomeExpenditureSaveParam);
         }
         return rtn;

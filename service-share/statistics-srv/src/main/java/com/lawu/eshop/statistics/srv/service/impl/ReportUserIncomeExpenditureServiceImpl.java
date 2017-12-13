@@ -1,5 +1,7 @@
 package com.lawu.eshop.statistics.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.statistics.constants.UserTypeEnum;
 import com.lawu.eshop.statistics.param.ReportUserIncomeExpenditureQueryParam;
 import com.lawu.eshop.statistics.param.ReportUserIncomeExpenditureSaveParam;
 import com.lawu.eshop.statistics.param.ReportUserIncomeExpenditureSaveWrapperParam;
@@ -18,6 +21,7 @@ import com.lawu.eshop.statistics.srv.domain.ReportUserIncomeExpenditureDO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserIncomeExpenditureDOExample;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserIncomeExpenditureDOMapper;
 import com.lawu.eshop.statistics.srv.service.ReportUserIncomeExpenditureService;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 用户收支服务接口实现类
@@ -41,7 +45,32 @@ public class ReportUserIncomeExpenditureServiceImpl implements ReportUserIncomeE
 	@Override
 	@Transactional
 	public void save(ReportUserIncomeExpenditureSaveParam param) {
-		ReportUserIncomeExpenditureDO record = ReportUserIncomeExpenditureConverter.convert(param);
+	    Date gmtReport = DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(DateUtil.getNowDate()));
+	    ReportUserIncomeExpenditureDOExample example = new ReportUserIncomeExpenditureDOExample();
+	    example.createCriteria().andUserNumEqualTo(param.getUserNum()).andGmtReportEqualTo(gmtReport);
+	    List<ReportUserIncomeExpenditureDO> reportUserIncomeExpenditureDOList =  reportUserIncomeExpenditureDOMapper.selectByExample(example);
+	    // 如果记录已经存在，只需要更新收支字段即可
+	    ReportUserIncomeExpenditureDO record = new ReportUserIncomeExpenditureDO();
+	    if (reportUserIncomeExpenditureDOList != null && !reportUserIncomeExpenditureDOList.isEmpty()) {
+	        ReportUserIncomeExpenditureDO reportUserIncomeExpenditureDO = reportUserIncomeExpenditureDOList.get(0);
+	        record.setId(reportUserIncomeExpenditureDO.getId());
+	        // 取数据库中最大的值为准
+	        BigDecimal income = param.getIncome().compareTo(reportUserIncomeExpenditureDO.getIncome()) == -1 ? reportUserIncomeExpenditureDO.getIncome() : param.getIncome();
+	        BigDecimal expenditure = param.getExpenditure().compareTo(reportUserIncomeExpenditureDO.getExpenditure()) == -1 ? reportUserIncomeExpenditureDO.getExpenditure() : param.getExpenditure();
+	        record.setIncome(income);
+	        record.setExpenditure(expenditure);
+	        record.setDifference(income.subtract(expenditure));
+	        reportUserIncomeExpenditureDOMapper.updateByPrimaryKeySelective(record);
+	        return;
+	    }
+        record.setAccount(param.getAccount());
+        record.setUserNum(param.getUserNum());
+        record.setUserType(UserTypeEnum.getEnum(param.getUserNum()).getValue());
+        record.setIncome(param.getIncome());
+        record.setExpenditure(param.getExpenditure());
+        record.setDifference(param.getIncome().subtract(param.getExpenditure()));
+        record.setGmtReport(gmtReport);
+        record.setGmtCreate(new Date());
 		reportUserIncomeExpenditureDOMapper.insertSelective(record);
 	}
 	

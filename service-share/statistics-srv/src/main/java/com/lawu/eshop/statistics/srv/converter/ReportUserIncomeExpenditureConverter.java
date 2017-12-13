@@ -1,16 +1,13 @@
 package com.lawu.eshop.statistics.srv.converter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.statistics.constants.UserTypeEnum;
 import com.lawu.eshop.statistics.dto.ReportUserIncomeExpenditureDTO;
-import com.lawu.eshop.statistics.param.ReportUserIncomeExpenditureSaveParam;
 import com.lawu.eshop.statistics.srv.bo.ReportUserIncomeExpenditureBO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserIncomeExpenditureDO;
-import com.lawu.eshop.utils.DateUtil;
 
 /**
  * ReportSales转换器
@@ -20,29 +17,6 @@ import com.lawu.eshop.utils.DateUtil;
  */
 public class ReportUserIncomeExpenditureConverter {
 
-    /**
-     * ReportUserIncomeExpenditureSaveParam转ReportUserIncomeExpenditureDO
-     *
-     * @param param
-     * @return
-     */
-    public static ReportUserIncomeExpenditureDO convert(ReportUserIncomeExpenditureSaveParam param) {
-    	ReportUserIncomeExpenditureDO rtn = null;
-    	if (param == null) {
-    		return rtn;
-    	}
-    	rtn = new ReportUserIncomeExpenditureDO();
-    	rtn.setAccount(param.getAccount());
-    	rtn.setUserNum(param.getUserNum());
-    	rtn.setUserType(UserTypeEnum.getEnum(param.getUserNum()).getValue());
-    	rtn.setIncome(param.getIncome());
-    	rtn.setExpenditure(param.getExpenditure());
-    	rtn.setDifference(param.getIncome().subtract(param.getExpenditure()));
-        rtn.setGmtReport(DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(DateUtil.getNowDate())));
-        rtn.setGmtCreate(new Date());
-        return rtn;
-    }
-    
     /**
      * ReportUserIncomeExpenditureDO转ReportUserIncomeExpenditureBO
      *

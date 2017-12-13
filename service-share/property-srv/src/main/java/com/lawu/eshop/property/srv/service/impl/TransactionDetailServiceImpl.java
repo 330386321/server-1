@@ -285,8 +285,10 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 	@Override
 	public List<UserIncomeExpenditureBO> selectUserIncomeExpenditure(UserIncomeExpenditureQueryParam param) {
         UserIncomeExpenditureExample example = new UserIncomeExpenditureExample();
-        example.setStart(DateUtil.getFirstDayOfMonth(param.getDate()));
-        example.setEnd(DateUtil.getLastDayOfMonth(param.getDate()));
+        String firstDateStr = DateUtil.getDateFormat(DateUtil.getFirstDayOfMonth(param.getDate()), "yyyy-MM-dd");
+        String lastDateStr = DateUtil.getDateFormat(DateUtil.getLastDayOfMonth(param.getDate()), "yyyy-MM-dd");
+        example.setStart(DateUtil.formatDate(firstDateStr + " 00:00:00", DateUtil.DATETIME_DEFAULT_FORMAT));
+        example.setEnd(DateUtil.formatDate(lastDateStr + " 23:59:59", DateUtil.DATETIME_DEFAULT_FORMAT));
         example.setOffset(param.getOffset());
         example.setPageSize(param.getPageSize());
 		List<UserIncomeExpenditureDO> userIncomeExpenditureDOList = transactionDetailExtendDOMapper.selectUserIncomeExpenditure(example);
