@@ -503,3 +503,19 @@ CREATE TABLE `lottery_record`  (
   PRIMARY KEY (`id`)
 );
 
+-- ----------------------------
+-- Table structure for app_patch_version
+-- ----------------------------
+DROP TABLE IF EXISTS `app_patch_version`;
+CREATE TABLE `app_patch_version` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `app_version_id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'app_version_id',
+  `app_version` varchar(16) NOT NULL COMMENT '版本号',
+  `patch_version` int(5) unsigned NOT NULL DEFAULT '0' COMMENT '补丁版本号',
+  `update_desc` varchar(50) NOT NULL DEFAULT '' COMMENT '更新内容',
+  `status` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '1--未启用，2--启用',
+  `gmt_modified` datetime DEFAULT NULL COMMENT '更新时间',
+  `gmt_create` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+);
+
