@@ -6,8 +6,8 @@ import com.lawu.eshop.framework.web.interceptor.VisitConstants;
 
 public class HeaderUtil {
 
-	
-	/**
+
+    /**
      * 获取当前登录用户channel
      *
      * @param request
@@ -20,7 +20,7 @@ public class HeaderUtil {
         }
         return channel.toString();
     }
-    
+
     /**
      * 获取当前登录用户platform
      *
@@ -34,4 +34,19 @@ public class HeaderUtil {
         }
         return platform.toString();
     }
+
+    /**
+     * 获取当前登录用户app_version
+     *
+     * @param request
+     * @return
+     */
+    public static String getRequestAppVersion(HttpServletRequest request) {
+        Object appVersion = request.getAttribute(VisitConstants.REQUEST_APP_VERSION);
+        if (appVersion == null) {
+            return "";
+        }
+        return appVersion.toString();
+    }
+
 }
