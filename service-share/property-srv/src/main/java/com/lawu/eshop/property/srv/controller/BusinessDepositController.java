@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -184,6 +185,13 @@ public class BusinessDepositController extends BaseController {
     public Result getDepositValue() {
         String deposit = propertyService.getValue(PropertyType.MERCHANT_BONT);
         return successCreated(deposit);
+
+    }
+
+    @RequestMapping(value = "getDepositStatusById/{depositId}", method = RequestMethod.GET)
+    public Result<BusinessDepositStatusEnum> getDepositStatusById(@PathVariable("depositId") Long depositId) {
+        BusinessDepositStatusEnum businessDepositStatusEnum = businessDepositService.getDepositStatusById(depositId);
+        return successCreated(businessDepositStatusEnum);
 
     }
 }

@@ -1,13 +1,5 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import com.lawu.eshop.merchant.api.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
@@ -16,17 +8,29 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
+import com.lawu.eshop.merchant.api.service.BusinessDepositService;
+import com.lawu.eshop.merchant.api.service.MerchantStoreService;
+import com.lawu.eshop.merchant.api.service.OrderService;
+import com.lawu.eshop.merchant.api.service.ProductService;
+import com.lawu.eshop.merchant.api.service.VerifyCodeService;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
+import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
 import com.lawu.eshop.property.param.BusinessDepositSaveParam;
 import com.lawu.eshop.property.param.BusinessRefundDepositDataParam;
 import com.lawu.eshop.property.param.BusinessRefundDepositParam;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 
@@ -130,5 +134,15 @@ public class BusinessDepositController extends BaseController {
 	@RequestMapping(value = "getDepositValue", method = RequestMethod.GET)
 	public Result getDepositValue(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 		return businessDepositService.getDepositValue();
+	}
+
+	@Audit(date = "2017-11-13", reviewer = "杨清华")
+	@Authorization
+	@ApiOperation(value = "查询保证金状态", notes = "查询保证金状态，[]，(杨清华)", httpMethod = "GET")
+	@RequestMapping(value = "getDepositStatusById/{depositId}", method = RequestMethod.GET)
+	public Result<BusinessDepositStatusEnum> getDepositStatusById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+															    @PathVariable("depositId") Long depositId){
+
+		return businessDepositService.getDepositStatusById(depositId);
 	}
 }

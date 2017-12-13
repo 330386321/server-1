@@ -388,4 +388,12 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
         return bo;
     }
 
+    @Override
+    public BusinessDepositStatusEnum getDepositStatusById(Long depositId) {
+        BusinessDepositDO businessDepositDO = businessDepositDOMapper.selectByPrimaryKey(depositId);
+        if(businessDepositDO == null){
+            return null;
+        }
+        return BusinessDepositStatusEnum.getEnum(businessDepositDO.getStatus());
+    }
 }

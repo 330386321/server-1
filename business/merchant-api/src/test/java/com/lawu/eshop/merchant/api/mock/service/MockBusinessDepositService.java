@@ -3,6 +3,7 @@ package com.lawu.eshop.merchant.api.mock.service;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.BusinessDepositService;
+import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
 import com.lawu.eshop.property.dto.BusinessDepositInitDTO;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
@@ -35,5 +36,10 @@ public class MockBusinessDepositService extends BaseController implements Busine
     @Override
     public Result getDepositValue() {
         return successGet();
+    }
+
+    @Override
+    public Result<BusinessDepositStatusEnum> getDepositStatusById(@PathVariable("depositId") Long depositId) {
+        return null;
     }
 }
