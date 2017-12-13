@@ -114,9 +114,6 @@ public class CommonServiceImpl implements CommonService {
 		example.createCriteria().andInviteUserNumEqualTo(invitedUserNum).andDepthBetween(1, level);
 		example.setOrderByClause(" depth asc ");
 		List<InviteRelationDO> dos = inviteRelationDOMapper.selectByExample(example);
-		if (dos == null || dos.isEmpty()) {
-			return null;
-		}
 		List<CommissionInvitersUserDTO> list = new ArrayList<CommissionInvitersUserDTO>();
 		for (InviteRelationDO irdo : dos) {
 			CommissionInvitersUserDTO user = new CommissionInvitersUserDTO();
