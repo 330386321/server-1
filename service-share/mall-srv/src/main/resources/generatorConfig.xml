@@ -111,15 +111,13 @@
         </table>
         <table tableName="lottery_record" domainObjectName="LotteryRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
         <table tableName="app_patch_version" domainObjectName="AppPatchVersionDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        -->
+        </table>-->
          <table tableName="comment_merchant" domainObjectName="CommentMerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-
         <table tableName="comment_product" domainObjectName="CommentProductDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
