@@ -13,7 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.statistics.constants.UserTypeEnum;
-import com.lawu.eshop.statistics.param.ReportUserIncomeExpenditureSaveParam;
 import com.lawu.eshop.statistics.srv.bo.ReportUserIncomeExpenditureBO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserIncomeExpenditureDO;
 
@@ -21,25 +20,6 @@ import com.lawu.eshop.statistics.srv.domain.ReportUserIncomeExpenditureDO;
 @ContextConfiguration(locations = { "/spring-test.xml" })
 public class ReportUserIncomeExpenditureConverterTest {
 
-	
-	@Test
-	public void convert() {
-		try {
-			ReportUserIncomeExpenditureSaveParam param = new ReportUserIncomeExpenditureSaveParam();
-			param.setAccount("13025458808");
-			param.setUserNum("M13025458808");
-			param.setIncome(new BigDecimal(20));
-			param.setExpenditure(new BigDecimal(10));
-			ReportUserIncomeExpenditureConverter.convert(param);
-			param = null;
-			ReportUserIncomeExpenditureConverter.convert(param);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail(e.getMessage());
-		}
-	}
-	
-	
 	@Test
 	public void convertDOtoBO() {
 		try {
