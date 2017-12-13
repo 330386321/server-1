@@ -236,7 +236,7 @@ public class TransactionDetailConverter {
         rtn.setDirection(transactionDetailBO.getDirection());
         rtn.setId(transactionDetailBO.getId());
         if (MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()) != null) {
-            rtn.setTitle(MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory().getName());
+            rtn.setTitle(transactionDetailBO.getTitle());
             rtn.setTransactionCategory(MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory());
         }
         rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
@@ -269,7 +269,7 @@ public class TransactionDetailConverter {
         }
         rtn = new TransactionDetailOfMerchantDTO();
         rtn.setAmount(transactionDetailBO.getAmount());
-        rtn.setTitle(MerchantTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory().getName());
+        rtn.setTitle(transactionDetailBO.getTitle());
         rtn.setDirection(transactionDetailBO.getDirection());
         rtn.setTransactionCategory(MerchantTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()) == null ? null : MerchantTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()).getPriorityCategory());
         rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
