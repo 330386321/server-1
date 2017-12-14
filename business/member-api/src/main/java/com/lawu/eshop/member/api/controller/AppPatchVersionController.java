@@ -41,7 +41,6 @@ public class AppPatchVersionController extends BaseController {
     @RequestMapping(value = "getAppPatchVersion", method = RequestMethod.GET)
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     public Result<AppPatchVersionDTO> getAppPatchVersion() {
-        String channel = HeaderUtil.getRequestChannel(getRequest());
         String platform = HeaderUtil.getRequestPlatform(getRequest());
         String appVersion = HeaderUtil.getRequestAppVersion(getRequest());
         if (StringUtils.isEmpty(platform) || StringUtils.isEmpty(appVersion)) {
@@ -61,7 +60,8 @@ public class AppPatchVersionController extends BaseController {
             appVersion = appVersion.substring(0, appVersion.length() - 1) + result.getModel() + "." + suffix;
         }
         String downUrl = memberApiConfig.getDownloadUrl();
-        downUrl = downUrl.replace("{channel}", channel).replace("{version}", appVersion);
+        downUrl = downUrl.replace("-{channel}", "").replace("{version}", appVersion);
+        downUrl = downUrl.substring(0, downUrl.length() - 4);
         versionDTO.setDownloadUrl(downUrl);
         return successGet(versionDTO);
     }
