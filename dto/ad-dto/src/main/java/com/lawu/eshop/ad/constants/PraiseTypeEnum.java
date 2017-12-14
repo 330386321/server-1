@@ -20,6 +20,9 @@ public enum PraiseTypeEnum {
         return name;
     }
 
+    public void setName(String name) {
+		this.name = name;
+	}
     public Byte getVal() {
 		return val;
 	}

@@ -329,9 +329,9 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id,
-			@RequestParam @ApiParam(value = "PRAISE_TYPE_PUZZLE 拼图    PRAISE_TYPE_CLICK 点赞") PraiseTypeEnum typeEnum) {
+			@RequestParam(required = false) @ApiParam(value = "PRAISE_TYPE_PUZZLE 拼图    PRAISE_TYPE_CLICK 点赞") PraiseTypeEnum typeEnum) {
 		if (typeEnum == null) {
-			typeEnum = PraiseTypeEnum.PRAISE_TYPE_CLICK;
+			typeEnum =PraiseTypeEnum.PRAISE_TYPE_CLICK;
 		}
 		return adExtendService.clickPraise(id,typeEnum);
 	}
