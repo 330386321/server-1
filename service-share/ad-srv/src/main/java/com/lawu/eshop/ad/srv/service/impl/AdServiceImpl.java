@@ -240,6 +240,9 @@ public class AdServiceImpl implements AdService {
 		if(adSaveParam.getClentType()!=null){
 			adDO.setClientType(adSaveParam.getClentType().getVal());
 		}
+		if(adParam.getPraiseType()!=null){
+			adDO.setPraiseType(adParam.getPraiseType().getVal());
+		}
 		adDOMapper.insert(adDO);
 
         AdSaveInfoBO bo =new AdSaveInfoBO();

@@ -2,6 +2,7 @@ package com.lawu.eshop.ad.dto;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.FavoriteTypeEnum;
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -43,6 +44,17 @@ public class FavoriteAdDOViewDTO {
 	@ApiModelProperty(value = "是否抢赞")
 	private Boolean isPraise;
 	
+	@ApiModelProperty (name="praiseType", value = "PRAISE_TYPE_PUZZLE 拼图  | PRAISE_TYPE_CLICK 点赞")
+	private PraiseTypeEnum praiseType;
+	
+	public PraiseTypeEnum getPraiseType() {
+		return praiseType;
+	}
+
+	public void setPraiseType(PraiseTypeEnum praiseType) {
+		this.praiseType = praiseType;
+	}
+
 	public AdStatusEnum getStatusEnum() {
 		return statusEnum;
 	}

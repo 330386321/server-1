@@ -2236,6 +2236,66 @@ public class AdDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andPraiseTypeIsNull() {
+            addCriterion("praise_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPraiseTypeIsNotNull() {
+            addCriterion("praise_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPraiseTypeEqualTo(Byte value) {
+            addCriterion("praise_type =", value, "praiseType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPraiseTypeNotEqualTo(Byte value) {
+            addCriterion("praise_type <>", value, "praiseType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPraiseTypeGreaterThan(Byte value) {
+            addCriterion("praise_type >", value, "praiseType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPraiseTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("praise_type >=", value, "praiseType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPraiseTypeLessThan(Byte value) {
+            addCriterion("praise_type <", value, "praiseType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPraiseTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("praise_type <=", value, "praiseType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPraiseTypeIn(List<Byte> values) {
+            addCriterion("praise_type in", values, "praiseType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPraiseTypeNotIn(List<Byte> values) {
+            addCriterion("praise_type not in", values, "praiseType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPraiseTypeBetween(Byte value1, Byte value2) {
+            addCriterion("praise_type between", value1, value2, "praiseType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPraiseTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("praise_type not between", value1, value2, "praiseType");
+            return (Criteria) this;
+        }
+
         public Criteria andAdOrderNumIsNull() {
             addCriterion("ad_order_num is null");
             return (Criteria) this;

@@ -20,6 +20,8 @@ import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.FileTypeEnum;
+import com.lawu.eshop.ad.constants.PositionEnum;
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
@@ -326,8 +328,12 @@ public class AdController extends BaseController {
 	@ApiOperation(value = "抢赞", notes = "抢赞[]（张荣成）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
-	public Result<PraisePointDTO> clickPraise(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-		return adExtendService.clickPraise(id);
+	public Result<PraisePointDTO> clickPraise(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id,
+			@RequestParam @ApiParam(value = "PRAISE_TYPE_PUZZLE 拼图    PRAISE_TYPE_CLICK 点赞") PraiseTypeEnum typeEnum) {
+		if (typeEnum == null) {
+			typeEnum = PraiseTypeEnum.PRAISE_TYPE_CLICK;
+		}
+		return adExtendService.clickPraise(id,typeEnum);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")

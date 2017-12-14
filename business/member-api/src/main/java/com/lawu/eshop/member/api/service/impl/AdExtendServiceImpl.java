@@ -18,6 +18,7 @@ import com.lawu.concurrentqueue.bizctrl.annotation.BusinessInventoryCtrl;
 import com.lawu.eshop.ad.constants.AdPage;
 import com.lawu.eshop.ad.constants.AdPraiseWords;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
@@ -377,23 +378,28 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	
 	@BusinessInventoryCtrl(idParamIndex = 0, businessKey = BusinessKey.AD_CLICK_KEY, using = AdBusinessDecisionServiceImpl.class)
 	@Override
-	public Result<PraisePointDTO> clickPraise(Long id) {
+	public Result<PraisePointDTO> clickPraise(Long id,PraiseTypeEnum typeEnum) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		String num = UserUtil.getCurrentUserNum(getRequest());
+		Result<PraisePointDTO> rs;
 		try {
-			Random random = new Random();
-			Integer r = random.nextInt(memberApiConfig.getClickPraiseSumProb())
-					% (memberApiConfig.getClickPraiseSumProb() + 1);
-			if (r > 0 && r < memberApiConfig.getClickPraiseProb()) {
-				Result<PraisePointDTO> rs = adService.clickPraise(id, memberId, num);
-				if (!isSuccess(rs)) {
-					throw new BusinessExecuteException(rs.getRet(), rs.getMsg());
+			if(typeEnum == PraiseTypeEnum.PRAISE_TYPE_PUZZLE){
+				rs = adService.clickPraise(id, memberId, num);
+			}else{
+				Random random = new Random();
+				Integer r = random.nextInt(memberApiConfig.getClickPraiseSumProb())
+						% (memberApiConfig.getClickPraiseSumProb() + 1);
+				if (r > 0 && r < memberApiConfig.getClickPraiseProb()) {
+					rs = adService.clickPraise(id, memberId, num);
+					
+				} else {
+					throw new BusinessExecuteException(ResultCode.AD_PRAISE_NOT_RATE,ResultCode.get(ResultCode.AD_PRAISE_NOT_RATE) );
 				}
-				return rs;
-			} else {
-				throw new BusinessExecuteException(ResultCode.AD_PRAISE_NOT_RATE,ResultCode.get(ResultCode.AD_PRAISE_NOT_RATE) );
 			}
-
+			if (!isSuccess(rs)) {
+				throw new BusinessExecuteException(rs.getRet(), rs.getMsg());
+			}
+			return rs;
 		} catch (RejectedExecutionException e) {
 			return successCreated(ResultCode.FAIL);
 		}

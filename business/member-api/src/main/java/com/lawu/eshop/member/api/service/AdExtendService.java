@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.service;
 
 import java.util.List;
 
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
 import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
@@ -63,7 +64,7 @@ public interface AdExtendService {
 	 * @param id
 	 * @return
 	 */
-    Result<PraisePointDTO> clickPraise(Long id);
+    Result<PraisePointDTO> clickPraise(Long id,PraiseTypeEnum typeEnum);
     
     /**
      * 精选广告

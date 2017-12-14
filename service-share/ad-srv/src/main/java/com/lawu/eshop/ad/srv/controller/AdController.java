@@ -828,20 +828,21 @@ public class AdController extends BaseController {
 			if (!solrDocumentList.isEmpty()) {
 				List<AdSolrDTO> solrDTOS = AdConverter.convertDTO(solrDocumentList);
 				for (AdSolrDTO solrDTO : solrDTOS) {
-					AdBO adBO = adService.selectById(solrDTO.getId());
-					if (adBO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_ADD.val) {
-						int favoriteCount = favoriteAdService.getFavoriteCount(adBO.getId());
+					if (solrDTO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_ADD.val) {
+						int favoriteCount = favoriteAdService.getFavoriteCount(solrDTO.getId());
 						solrDTO.setHits(favoriteCount);
 					}
 					if (param.getMemberId() != null || param.getMemberId() > 0) {
 						
-						if (adBO.getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PRAISE.getVal() && adBO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_PUTING.val) {
-							Boolean flag = pointPoolService.selectStatusByMember(adBO.getId(), param.getMemberId());
-							adBO.setIsPraise(flag);
+						if (solrDTO.getTypeEnum().getVal() == AdTypeEnum.AD_TYPE_PRAISE.getVal() && solrDTO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_PUTING.val) {
+							Boolean flag = pointPoolService.selectStatusByMember(solrDTO.getId(), param.getMemberId());
+							solrDTO.setIsPraise(flag);
 						}
 						
+					}else{
+						solrDTO.setIsPraise(false);
 					}
-					AdPraiseDTO adPraiseDTO = AdConverter.convertDTO(solrDTO, adBO);
+					AdPraiseDTO adPraiseDTO = AdConverter.convertDTO(solrDTO);
 					adPraiseDTOS.add(adPraiseDTO);
 				}
 			}

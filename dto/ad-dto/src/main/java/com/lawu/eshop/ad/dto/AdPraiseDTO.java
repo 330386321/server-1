@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -78,6 +79,9 @@ public class AdPraiseDTO {
 	@ApiModelProperty(value = "AD_STATUS_DELETE 删除 AD_STATUS_ADD 上架 AD_STATUS_PUTING 投放中  AD_STATUS_PUTED 投放结束"
 			+ "AD_STATUS_OUT 下架 AD_STATUS_AUDIT 审核中")
 	private AdStatusEnum statusEnum;
+	
+	@ApiModelProperty (name="praiseType", value = "PRAISE_TYPE_PUZZLE 拼图  | PRAISE_TYPE_CLICK 点赞")
+	private PraiseTypeEnum praiseType;
 	
 
 	public Integer getCount() {
@@ -254,6 +258,14 @@ public class AdPraiseDTO {
 
 	public void setStatusEnum(AdStatusEnum statusEnum) {
 		this.statusEnum = statusEnum;
+	}
+
+	public PraiseTypeEnum getPraiseType() {
+		return praiseType;
+	}
+
+	public void setPraiseType(PraiseTypeEnum praiseType) {
+		this.praiseType = praiseType;
 	}
 
 	

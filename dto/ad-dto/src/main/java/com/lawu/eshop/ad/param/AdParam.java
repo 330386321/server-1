@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.FileTypeEnum;
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
@@ -68,6 +69,9 @@ public class AdParam {
 	
 	@ApiParam (name="fileTime", value = "视频长度  00:00:00格式")
 	private String fileTime;
+	
+	@ApiParam (name="praiseType", value = "PRAISE_TYPE_PUZZLE 拼图  PRAISE_TYPE_CLICK 点赞")
+	private PraiseTypeEnum praiseType;
 
 	public String getTitle() {
 		return title;
@@ -258,6 +262,16 @@ public class AdParam {
 
 	public void setFileTime(String fileTime) {
 		this.fileTime = fileTime;
+	}
+
+
+	public PraiseTypeEnum getPraiseType() {
+		return praiseType;
+	}
+
+
+	public void setPraiseType(PraiseTypeEnum praiseType) {
+		this.praiseType = praiseType;
 	}
 
 	

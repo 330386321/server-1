@@ -106,6 +106,9 @@ public class AdDTO {
 	@ApiModelProperty(value = "是否点击过广告")
 	private Boolean isClickAd;
 	
+	@ApiModelProperty (name="praiseType", value = "PRAISE_TYPE_PUZZLE 拼图  | PRAISE_TYPE_CLICK 点赞")
+	private PraiseTypeEnum praiseType;
+	
 	public Long getId() {
 		return id;
 	}
@@ -406,6 +409,16 @@ public class AdDTO {
 
 	public void setIsClickAd(Boolean isClickAd) {
 		this.isClickAd = isClickAd;
+	}
+
+
+	public PraiseTypeEnum getPraiseType() {
+		return praiseType;
+	}
+
+
+	public void setPraiseType(PraiseTypeEnum praiseType) {
+		this.praiseType = praiseType;
 	}
 	
 	

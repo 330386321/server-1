@@ -6,6 +6,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
@@ -78,6 +79,9 @@ public class AdMerchantDetailDTO {
 	
 	@ApiModelProperty(value = "视频时间")
 	private String videoTime;
+	
+	@ApiModelProperty(value = "E咻类型")
+	private PraiseTypeEnum praiseType;
 
 	public Long getId() {
 		return id;
@@ -247,6 +251,14 @@ public class AdMerchantDetailDTO {
 
 	public void setVideoTime(String videoTime) {
 		this.videoTime = videoTime;
+	}
+
+	public PraiseTypeEnum getPraiseType() {
+		return praiseType;
+	}
+
+	public void setPraiseType(PraiseTypeEnum praiseType) {
+		this.praiseType = praiseType;
 	}
 	
 	

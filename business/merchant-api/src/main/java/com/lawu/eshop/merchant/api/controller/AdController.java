@@ -414,6 +414,7 @@ public class AdController extends BaseController {
     	adParam.setRegionName(adDTO.getRegionName());
     	adParam.setFileSize(adDTO.getFileSize());
     	adParam.setFileTime(adDTO.getVideoTime());
+    	adParam.setPraiseType(adDTO.getPraiseType());
     	adSave.setAdParam(adParam);
     	if(isSuccess(storeRs)){
     		MerchantStoreAdInfoDTO storeDTO= storeRs.getModel();

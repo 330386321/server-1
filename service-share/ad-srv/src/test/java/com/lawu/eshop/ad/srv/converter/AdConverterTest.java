@@ -586,7 +586,7 @@ public class AdConverterTest {
 		adBO.setBeginTime(new Date());
 		adBO.setStatusEnum(AdStatusEnum.AD_STATUS_ADD);
 
-		AdPraiseDTO dto = AdConverter.convertDTO(solrDTO, adBO);
+		AdPraiseDTO dto = AdConverter.convertDTO(solrDTO);
 		Assert.assertNotNull(dto);
 		Assert.assertEquals(solrDTO.getId(), dto.getId());
 		Assert.assertEquals(adBO.getBeginTime(), dto.getBeginTime());

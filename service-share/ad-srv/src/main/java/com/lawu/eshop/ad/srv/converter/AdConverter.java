@@ -17,6 +17,7 @@ import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.constants.RelateTypeEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
@@ -92,6 +93,11 @@ public class AdConverter {
 		adBO.setLogoUrl(adDO.getLogoUrl());
 		adBO.setFileSize(adDO.getFileSize());
 		adBO.setVideoTime(adDO.getFileTime());
+		if(adDO.getPraiseType() == 0){
+			adBO.setPraiseType(PraiseTypeEnum.PRAISE_TYPE_CLICK);
+		}else{
+			adBO.setPraiseType(PraiseTypeEnum.getEnum(adDO.getPraiseType()));
+		}
         return adBO;
 		
 	}
@@ -292,6 +298,7 @@ public class AdConverter {
 		 document.addField("totalPoint_d", adDO.getTotalPoint() == null ? 0.0 : adDO.getTotalPoint().doubleValue());
 		 document.addField("storeName_s", adDO.getMerchantStoreName());
 		 document.addField("storeLogo_s", adDO.getLogoUrl());
+		 document.addField("praiseType_i", adDO.getPraiseType());
 		 if (adDO.getMerchantLatitude() != null && adDO.getMerchantLongitude() != null) {
 			 document.addField("latLon_p", adDO.getMerchantLatitude() + "," + adDO.getMerchantLongitude());
 		 }
@@ -330,6 +337,8 @@ public class AdConverter {
 		adSolrDTO.setCount(solrDocument.get("viewCount_i") == null ? 0 : Integer.valueOf(solrDocument.get("viewCount_i").toString()));
 		adSolrDTO.setPoint(solrDocument.get("point_d") == null ? 0.0 : Double.valueOf(solrDocument.get("point_d").toString()));
 		adSolrDTO.setTotalPoint(solrDocument.get("totalPoint_d") == null ? 0.0 : Double.valueOf(solrDocument.get("totalPoint_d").toString()));
+		adSolrDTO.setPraiseType(solrDocument.get("praiseType_i") ==null ?PraiseTypeEnum.PRAISE_TYPE_CLICK : PraiseTypeEnum.getEnum(Byte.valueOf(solrDocument.get("praiseType_i").toString())));
+		adSolrDTO.setBeginTime(solrDocument.get("beginTime_l") == null ? 0 : Long.valueOf(solrDocument.get("beginTime_l").toString()));
 		return adSolrDTO;
 	}
 
@@ -375,6 +384,7 @@ public class AdConverter {
 		dto.setRelateType(adBO.getRelateType());
 		dto.setFileSize(adBO.getFileSize());
 		dto.setVideoTime(adBO.getVideoTime());
+		dto.setPraiseType(adBO.getPraiseType());
 		return dto;
 	}
 
@@ -663,6 +673,11 @@ public class AdConverter {
 		adBO.setRelateId(adDO.getRelateId());
 		adBO.setRelateType(RelateTypeEnum.getEnum(adDO.getRelateType()));
 		adBO.setStatusEnum(AdStatusEnum.getEnum(adDO.getStatus()));
+		if(adDO.getPraiseType()==0){
+			adBO.setPraiseType(PraiseTypeEnum.PRAISE_TYPE_CLICK);
+		}else{
+			adBO.setPraiseType(PraiseTypeEnum.getEnum(adDO.getPraiseType()));
+		}
         return adBO;
 
 	}
@@ -692,6 +707,7 @@ public class AdConverter {
 		dto.setRelateId(adBO.getRelateId());
 		dto.setRelateType(adBO.getRelateType());
 		dto.setStatusEnum(adBO.getStatusEnum());
+		dto.setPraiseType(adBO.getPraiseType());;
 		Date date=new Date();
 		if(adBO.getStatusEnum().val==2){ //结束倒计时
 			Long time=adBO.getBeginTime().getTime()+ (20*60*1000)-date.getTime();
@@ -767,8 +783,8 @@ public class AdConverter {
 		return rtn;
 	}
 
-	public static AdPraiseDTO convertDTO(AdSolrDTO solrDTO, AdBO adBO) {
-		if (solrDTO == null || adBO == null) {
+	public static AdPraiseDTO convertDTO(AdSolrDTO solrDTO) {
+		if (solrDTO == null) {
 			return null;
 		}
 		AdPraiseDTO adPraiseDTO = new AdPraiseDTO();
@@ -781,18 +797,19 @@ public class AdConverter {
 		adPraiseDTO.setTotalPoint(BigDecimal.valueOf(solrDTO.getTotalPoint()));
 		adPraiseDTO.setCount(solrDTO.getHits());
 		adPraiseDTO.setLogoUrl(solrDTO.getLogoUrl());
-		adPraiseDTO.setBeginTime(adBO.getBeginTime());
-		adPraiseDTO.setIsPraise(adBO.getIsPraise());
+		adPraiseDTO.setBeginTime(new Date(solrDTO.getBeginTime()));
+		adPraiseDTO.setPraiseType(solrDTO.getPraiseType());
+		adPraiseDTO.setIsPraise(solrDTO.getIsPraise());
 		Date date = new Date();
-		if (adBO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_PUTING.val) { //结束倒计时
-			Long time = adBO.getBeginTime().getTime() + (20 * 60 * 1000) - date.getTime();
+		if (solrDTO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_PUTING.val) { //结束倒计时
+			Long time = solrDTO.getBeginTime() + (20 * 60 * 1000) - date.getTime();
 			if (time > 0) {
 				adPraiseDTO.setNeedBeginTime(time);
 			} else {
 				adPraiseDTO.setNeedBeginTime(0L);
 			}
-		} else if (adBO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_ADD.val) { //开抢倒计时
-			Long time = adBO.getBeginTime().getTime() - date.getTime();
+		} else if (solrDTO.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_ADD.val) { //开抢倒计时
+			Long time = solrDTO.getBeginTime() - date.getTime();
 			adPraiseDTO.setNeedBeginTime(time);
 		}
 		return adPraiseDTO;
@@ -842,11 +859,11 @@ public class AdConverter {
 			dto.setViewCount(adSolrDTO.getCount());
 			dto.setPoint(BigDecimal.valueOf(adSolrDTO.getPoint()));
 			dto.setTotalPoint(BigDecimal.valueOf(adSolrDTO.getTotalPoint()));
+			dto.setPraiseType(adSolrDTO.getPraiseType());
 			dtos.add(dto);
 		}
 		return dtos;
 	}
-
 
 
 }

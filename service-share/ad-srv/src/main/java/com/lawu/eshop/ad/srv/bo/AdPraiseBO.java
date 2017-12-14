@@ -5,6 +5,7 @@ import java.util.Date;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
 public class AdPraiseBO {
@@ -45,6 +46,16 @@ public class AdPraiseBO {
 	
 	private RelateTypeEnum relateType;
 	
+	private PraiseTypeEnum praiseType;
+	
+
+	public PraiseTypeEnum getPraiseType() {
+		return praiseType;
+	}
+
+	public void setPraiseType(PraiseTypeEnum praiseType) {
+		this.praiseType = praiseType;
+	}
 
 	public AdStatusEnum getStatusEnum() {
 		return statusEnum;
@@ -189,9 +200,7 @@ public class AdPraiseBO {
 	public void setRelateType(RelateTypeEnum relateType) {
 		this.relateType = relateType;
 	}
-	
-	
-	
+
 	
 
 }

@@ -7,6 +7,7 @@ import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.constants.RelateTypeEnum;
 
@@ -97,6 +98,16 @@ public class AdBO {
 	private String videoTime;
 
 	private String merchantRegionPath;
+	
+	private PraiseTypeEnum praiseType;
+
+	public PraiseTypeEnum getPraiseType() {
+		return praiseType;
+	}
+
+	public void setPraiseType(PraiseTypeEnum praiseType) {
+		this.praiseType = praiseType;
+	}
 
 	public Boolean getIsPraise() {
 		return isPraise;

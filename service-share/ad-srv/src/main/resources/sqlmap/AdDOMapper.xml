@@ -38,6 +38,7 @@
     <result column="hits" jdbcType="INTEGER" property="hits" />
     <result column="viewCount" jdbcType="INTEGER" property="viewcount" />
     <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="praise_type" jdbcType="TINYINT" property="praiseType" />
     <result column="ad_order_num" jdbcType="VARCHAR" property="adOrderNum" />
     <result column="third_number" jdbcType="VARCHAR" property="thirdNumber" />
     <result column="is_pay" jdbcType="BIT" property="isPay" />
@@ -124,8 +125,8 @@
     relate_id, relate_type, merchant_longitude, merchant_latitude, merchant_region_path, 
     title, media_url, file_size, file_time, file_type, logo_url, video_img_url, content, 
     type, put_way, begin_time, end_time, areas, region_name, radius, point, total_point, 
-    ad_count, hits, viewCount, status, ad_order_num, third_number, is_pay, pay_type, 
-    client_type, auditor_id, remark, audit_time, gmt_modified, gmt_create
+    ad_count, hits, viewCount, status, praise_type, ad_order_num, third_number, is_pay, 
+    pay_type, client_type, auditor_id, remark, audit_time, gmt_modified, gmt_create
   </sql>
   <select id="selectByExample" parameterType="com.lawu.eshop.ad.srv.domain.AdDOExample" resultMap="BaseResultMap">
     <!--
@@ -191,10 +192,11 @@
       end_time, areas, region_name, 
       radius, point, total_point, 
       ad_count, hits, viewCount, 
-      status, ad_order_num, third_number, 
-      is_pay, pay_type, client_type, 
-      auditor_id, remark, audit_time, 
-      gmt_modified, gmt_create)
+      status, praise_type, ad_order_num, 
+      third_number, is_pay, pay_type, 
+      client_type, auditor_id, remark, 
+      audit_time, gmt_modified, gmt_create
+      )
     values (#{merchantId,jdbcType=BIGINT}, #{merchantNum,jdbcType=VARCHAR}, #{manageType,jdbcType=TINYINT}, 
       #{merchantStoreName,jdbcType=VARCHAR}, #{merchantStoreId,jdbcType=BIGINT}, #{relateId,jdbcType=BIGINT}, 
       #{relateType,jdbcType=TINYINT}, #{merchantLongitude,jdbcType=DECIMAL}, #{merchantLatitude,jdbcType=DECIMAL}, 
@@ -205,10 +207,11 @@
       #{endTime,jdbcType=TIMESTAMP}, #{areas,jdbcType=VARCHAR}, #{regionName,jdbcType=VARCHAR}, 
       #{radius,jdbcType=INTEGER}, #{point,jdbcType=DECIMAL}, #{totalPoint,jdbcType=DECIMAL}, 
       #{adCount,jdbcType=INTEGER}, #{hits,jdbcType=INTEGER}, #{viewcount,jdbcType=INTEGER}, 
-      #{status,jdbcType=TINYINT}, #{adOrderNum,jdbcType=VARCHAR}, #{thirdNumber,jdbcType=VARCHAR}, 
-      #{isPay,jdbcType=BIT}, #{payType,jdbcType=TINYINT}, #{clientType,jdbcType=TINYINT}, 
-      #{auditorId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{auditTime,jdbcType=TIMESTAMP}, 
-      #{gmtModified,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP})
+      #{status,jdbcType=TINYINT}, #{praiseType,jdbcType=TINYINT}, #{adOrderNum,jdbcType=VARCHAR}, 
+      #{thirdNumber,jdbcType=VARCHAR}, #{isPay,jdbcType=BIT}, #{payType,jdbcType=TINYINT}, 
+      #{clientType,jdbcType=TINYINT}, #{auditorId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{auditTime,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.ad.srv.domain.AdDO">
     <!--
@@ -312,6 +315,9 @@
       </if>
       <if test="status != null">
         status,
+      </if>
+      <if test="praiseType != null">
+        praise_type,
       </if>
       <if test="adOrderNum != null">
         ad_order_num,
@@ -437,6 +443,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
+      </if>
+      <if test="praiseType != null">
+        #{praiseType,jdbcType=TINYINT},
       </if>
       <if test="adOrderNum != null">
         #{adOrderNum,jdbcType=VARCHAR},
@@ -583,6 +592,9 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
       </if>
+      <if test="record.praiseType != null">
+        praise_type = #{record.praiseType,jdbcType=TINYINT},
+      </if>
       <if test="record.adOrderNum != null">
         ad_order_num = #{record.adOrderNum,jdbcType=VARCHAR},
       </if>
@@ -656,6 +668,7 @@
       hits = #{record.hits,jdbcType=INTEGER},
       viewCount = #{record.viewcount,jdbcType=INTEGER},
       status = #{record.status,jdbcType=TINYINT},
+      praise_type = #{record.praiseType,jdbcType=TINYINT},
       ad_order_num = #{record.adOrderNum,jdbcType=VARCHAR},
       third_number = #{record.thirdNumber,jdbcType=VARCHAR},
       is_pay = #{record.isPay,jdbcType=BIT},
@@ -770,6 +783,9 @@
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
       </if>
+      <if test="praiseType != null">
+        praise_type = #{praiseType,jdbcType=TINYINT},
+      </if>
       <if test="adOrderNum != null">
         ad_order_num = #{adOrderNum,jdbcType=VARCHAR},
       </if>
@@ -840,6 +856,7 @@
       hits = #{hits,jdbcType=INTEGER},
       viewCount = #{viewcount,jdbcType=INTEGER},
       status = #{status,jdbcType=TINYINT},
+      praise_type = #{praiseType,jdbcType=TINYINT},
       ad_order_num = #{adOrderNum,jdbcType=VARCHAR},
       third_number = #{thirdNumber,jdbcType=VARCHAR},
       is_pay = #{isPay,jdbcType=BIT},

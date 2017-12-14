@@ -53,6 +53,16 @@ public class FavoriteAdDOView {
 	
 	private int count;
 	
+	private byte praiseType;
+	
+
+	public byte getPraiseType() {
+		return praiseType;
+	}
+
+	public void setPraiseType(byte praiseType) {
+		this.praiseType = praiseType;
+	}
 
 	public int getCount() {
 		return count;

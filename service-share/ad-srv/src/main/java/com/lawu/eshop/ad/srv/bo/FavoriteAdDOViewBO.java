@@ -2,6 +2,7 @@ package com.lawu.eshop.ad.srv.bo;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.FavoriteTypeEnum;
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 
 public class FavoriteAdDOViewBO {
 
@@ -43,8 +44,17 @@ public class FavoriteAdDOViewBO {
 	
 	private Boolean isPraise;
 	
+	private PraiseTypeEnum praiseType;
 	
 	
+	public PraiseTypeEnum getPraiseType() {
+		return praiseType;
+	}
+
+	public void setPraiseType(PraiseTypeEnum praiseType) {
+		this.praiseType = praiseType;
+	}
+
 	public Boolean getIsPraise() {
 		return isPraise;
 	}

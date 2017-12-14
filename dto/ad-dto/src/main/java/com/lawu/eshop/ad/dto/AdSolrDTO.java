@@ -2,6 +2,7 @@ package com.lawu.eshop.ad.dto;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -48,6 +49,14 @@ public class AdSolrDTO {
 
     @ApiModelProperty(value = "浏览次数")
     private Integer count;
+    
+    @ApiModelProperty(value = "E咻类型")
+    private PraiseTypeEnum praiseType;
+    
+    @ApiModelProperty(value = "开始时间")
+	private Long BeginTime;
+    
+    private Boolean isPraise;
 
     public Long getId() {
         return id;
@@ -160,4 +169,32 @@ public class AdSolrDTO {
     public void setStatusEnum(AdStatusEnum statusEnum) {
         this.statusEnum = statusEnum;
     }
+
+	public PraiseTypeEnum getPraiseType() {
+		return praiseType;
+	}
+
+	public void setPraiseType(PraiseTypeEnum praiseType) {
+		this.praiseType = praiseType;
+	}
+
+	public Long getBeginTime() {
+		return BeginTime;
+	}
+
+	public void setBeginTime(Long beginTime) {
+		BeginTime = beginTime;
+	}
+
+	public Boolean getIsPraise() {
+		return isPraise;
+	}
+
+	public void setIsPraise(Boolean isPraise) {
+		this.isPraise = isPraise;
+	}
+
+	
+    
+    
 }

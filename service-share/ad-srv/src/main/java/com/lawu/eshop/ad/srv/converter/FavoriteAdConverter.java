@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.FavoriteTypeEnum;
+import com.lawu.eshop.ad.constants.PraiseTypeEnum;
 import com.lawu.eshop.ad.dto.FavoriteAdDOViewDTO;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
 import com.lawu.eshop.ad.srv.domain.extend.FavoriteAdDOView;
@@ -31,6 +32,7 @@ public class FavoriteAdConverter {
         favoriteProductBO.setTypeEnum(FavoriteTypeEnum.getEnum(favoriteAdDOView.getType()));
         favoriteProductBO.setVideoImgUrl(favoriteAdDOView.getVideoImgUrl());
         favoriteProductBO.setIsPraise(favoriteAdDOView.getCount()>0);
+        favoriteProductBO.setPraiseType(PraiseTypeEnum.getEnum(favoriteAdDOView.getPraiseType()));
         return favoriteProductBO;
     }
 	
@@ -72,6 +74,7 @@ public class FavoriteAdConverter {
 		favoriteAdDOViewDTO.setTypeEnum(favoriteAdDOViewBO.getTypeEnum());
 		favoriteAdDOViewDTO.setVideoImgUrl(favoriteAdDOViewBO.getVideoImgUrl());
 		favoriteAdDOViewDTO.setIsPraise(favoriteAdDOViewBO.getIsPraise());
+		favoriteAdDOViewDTO.setPraiseType(favoriteAdDOViewBO.getPraiseType());
         return favoriteAdDOViewDTO;
     }
 	
