@@ -56,6 +56,7 @@ public class ResultCode {
     
     //邀请粉丝异常
     public static final int INVITE_FANS_NOT_EXIST=1035;
+    public static final int NOT_PATCH_VERSION = 1036;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -240,6 +241,7 @@ public class ResultCode {
         ResultCode.messageMap.put(UPLOAD_VEDIO_FAIL, "上传视频失败");
         ResultCode.messageMap.put(UPLOAD_SIZE_BIGER, "上传文件应小于50M");
         ResultCode.messageMap.put(INVITE_FANS_NOT_EXIST, "可邀请的粉丝不存在");
+        ResultCode.messageMap.put(NOT_PATCH_VERSION, "没有可更新的补丁版本");
         
         ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "同一手机号1小时内只能发送5次");
         ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "同一设备24小时内只能发送5次");

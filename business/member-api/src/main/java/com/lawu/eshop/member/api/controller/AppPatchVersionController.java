@@ -37,7 +37,7 @@ public class AppPatchVersionController extends BaseController {
     private MemberApiConfig memberApiConfig;
 
     @Audit(date = "2017-12-13", reviewer = "孙林青")
-    @ApiOperation(value = "获取APP补丁版本", notes = "获取APP补丁版本。（梅述全）", httpMethod = "GET")
+    @ApiOperation(value = "获取APP补丁版本", notes = "获取APP补丁版本。[1036|8115]（梅述全）", httpMethod = "GET")
     @RequestMapping(value = "getAppPatchVersion", method = RequestMethod.GET)
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     public Result<AppPatchVersionDTO> getAppPatchVersion() {
@@ -47,10 +47,9 @@ public class AppPatchVersionController extends BaseController {
             return successGet(ResultCode.GET_HEADER_ERROR);
         }
 
-        AppPatchVersionDTO versionDTO = new AppPatchVersionDTO();
         Result<Integer> result = appPatchVersionService.getAppPatchVersion(AppTypeEnum.MEMBER, Byte.valueOf(platform), appVersion);
         if (result.getModel() == 0) {
-            return successGet(versionDTO);
+            return successGet(ResultCode.NOT_PATCH_VERSION);
         }
 
         String suffix = appVersion.substring(appVersion.length() - 1, appVersion.length());
@@ -62,6 +61,7 @@ public class AppPatchVersionController extends BaseController {
         String downUrl = memberApiConfig.getDownloadUrl();
         downUrl = downUrl.replace("-{channel}", "").replace("{version}", appVersion);
         downUrl = downUrl.substring(0, downUrl.length() - 4);
+        AppPatchVersionDTO versionDTO = new AppPatchVersionDTO();
         versionDTO.setDownloadUrl(downUrl);
         return successGet(versionDTO);
     }
