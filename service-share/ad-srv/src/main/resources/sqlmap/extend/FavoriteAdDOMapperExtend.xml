@@ -34,11 +34,12 @@
 	    fa.member_id=#{memberId,jdbcType=VARCHAR}
 	    <if test="type == 1" >
 	      and a.type!=4 and a.type!=3
+	      and a.status not in(0,1)
 	    </if>
 	     <if test="type == 2" >
 	      and a.type =3
+	      and a.status !=0
 	    </if>
-	    and a.status !=0
     	 ORDER BY field(a.status, 2,3,4,0),fa.gmt_create desc
     	</where>
   </select>
