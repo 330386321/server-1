@@ -40,7 +40,7 @@ public class PointPoolServiceImpl implements PointPoolService {
 		PointPoolDOExample example=new PointPoolDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andTypeEqualTo(new Byte("1")).andAdIdEqualTo(adId);
 		Long  count=pointPoolDOMapper.countByExample(example);
-		if(count != null && count > 0){
+		if(count != null && count.intValue() > 0){
 			return true;
 		}
 		return false;
