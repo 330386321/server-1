@@ -75,6 +75,12 @@ public class SeckillActivityProductInformationForeignDTO {
     private Long countdown;
     
     /**
+     * 结束倒计时
+     */
+    @ApiModelProperty(value = "结束倒计时", required = true)
+    private Long endCountdown;
+    
+    /**
      * 是否购买过
      */
     @ApiModelProperty(value = "是否购买过", required = true)
@@ -158,6 +164,14 @@ public class SeckillActivityProductInformationForeignDTO {
         this.countdown = countdown;
     }
     
+    public Long getEndCountdown() {
+        return endCountdown;
+    }
+
+    public void setEndCountdown(Long endCountdown) {
+        this.endCountdown = endCountdown;
+    }
+
     public Boolean getBuy() {
         return buy;
     }

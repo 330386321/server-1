@@ -112,6 +112,7 @@ public class SeckillActivityProductController extends BaseController {
         rtn.setActivityStatus(model.getActivityStatus());
         rtn.setAttentionCount(model.getAttentionCount());
         rtn.setCountdown(model.getCountdown());
+        rtn.setEndCountdown(model.getEndCountdown());
         rtn.setMemberLevel(model.getMemberLevel());
         rtn.setProductModelList(model.getProductModelList());
         rtn.setSellingPrice(model.getSellingPrice());
