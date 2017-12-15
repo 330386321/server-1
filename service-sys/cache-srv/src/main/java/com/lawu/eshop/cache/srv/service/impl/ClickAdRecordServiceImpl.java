@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.cache.srv.constants.KeyConstant;
 import com.lawu.eshop.cache.srv.service.ClickAdRecordService;
 
 @Service
@@ -16,12 +17,14 @@ public class ClickAdRecordServiceImpl implements ClickAdRecordService{
 
 	@Override
 	public void setClickAdRecord(String key) {
-	    stringRedisTemplate.opsForValue().set(key, "true",1,TimeUnit.DAYS);
+		String newKey = KeyConstant.REDIS_KEY_CLICK_AD.concat(key);
+	    stringRedisTemplate.opsForValue().set(newKey, "true",1,TimeUnit.DAYS);
 	}
 
 	@Override
 	public boolean getClickAdRecord(String key) {
-		 return stringRedisTemplate.hasKey(key);
+		String newKey = KeyConstant.REDIS_KEY_CLICK_AD.concat(key);
+		return stringRedisTemplate.hasKey(newKey);
 	}
 	
 	
