@@ -520,7 +520,7 @@ public class AdServiceImpl implements AdService {
 			MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
 
 			try {
-				memberAdRecordD.setAdId(adDO.getId());
+				memberAdRecordD.setAdId(adDO.getId()); 
 				memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default))
 						.multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
 				memberAdRecordD.setMemberId(memberId);
