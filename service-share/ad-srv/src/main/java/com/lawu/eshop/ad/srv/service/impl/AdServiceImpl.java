@@ -618,13 +618,13 @@ public class AdServiceImpl implements AdService {
 		PointPoolDO pointPool = new PointPoolDO();
 		Double point = 0.0;
 		
-		/*PointPoolDOExample example=new PointPoolDOExample();
+		PointPoolDOExample example=new PointPoolDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andTypeEqualTo(RedPacketStatusEnum.RED_PACKET_SUCCESS.val).andAdIdEqualTo(id);
 		Long  count=pointPoolDOMapper.countByExample(example);
 		if(count != null && count.intValue() > 0){
 			bo.setIsPraise(true);
 			return bo;
-		}*/
+		}
 		
 		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
 		
