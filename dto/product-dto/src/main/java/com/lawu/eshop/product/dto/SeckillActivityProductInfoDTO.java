@@ -83,6 +83,9 @@ public class SeckillActivityProductInfoDTO {
      */
     @ApiModelProperty(value = "状态", required = true)
     private ActivityProductStatusEnum status;
+
+    @ApiModelProperty(value = "商家id", required = true)
+    private Long merchantId;
     
     public Long getActivityProductId() {
         return activityProductId;
@@ -170,5 +173,13 @@ public class SeckillActivityProductInfoDTO {
 
     public void setStatus(ActivityProductStatusEnum status) {
         this.status = status;
+    }
+
+    public Long getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
     }
 }

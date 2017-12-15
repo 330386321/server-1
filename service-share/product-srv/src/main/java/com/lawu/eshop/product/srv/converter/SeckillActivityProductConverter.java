@@ -208,6 +208,7 @@ public class SeckillActivityProductConverter {
             entry.setReasons(item.getReasons());
             entry.setStatus(item.getStatus());
             entry.setTurnover(item.getTurnover());
+            entry.setMerchantId(item.getMerchantId());
             rtn.add(entry);
         }
         return rtn;

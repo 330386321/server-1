@@ -159,9 +159,10 @@ public class MessageServiceImpl implements MessageService {
             content = content.replace("{20}", messageInfoParam.getMessageParam().getExpressCompanyName() == null ? "" : messageInfoParam.getMessageParam().getExpressCompanyName());
             content = content.replace("{21}", messageInfoParam.getMessageParam().getRefundAmount() == null ? "" : messageInfoParam.getMessageParam().getRefundAmount().toString());
             content = content.replace("{22}", messageInfoParam.getMessageParam().getOrderAmount() == null ? "" : messageInfoParam.getMessageParam().getOrderAmount().toString());
-            content = content.replace("{23}", messageInfoParam.getMessageParam().getWorkOrderContent() == null ? "" : messageInfoParam.getMessageParam().getWorkOrderContent().toString());
-            content = content.replace("{24}", messageInfoParam.getMessageParam().getReplyWorkOrderContent() == null ? "" : messageInfoParam.getMessageParam().getReplyWorkOrderContent().toString());
+            content = content.replace("{23}", messageInfoParam.getMessageParam().getWorkOrderContent() == null ? "" : messageInfoParam.getMessageParam().getWorkOrderContent());
+            content = content.replace("{24}", messageInfoParam.getMessageParam().getReplyWorkOrderContent() == null ? "" : messageInfoParam.getMessageParam().getReplyWorkOrderContent());
             content = content.replace("{25}", messageInfoParam.getMessageParam().getRechargePoint() == null ? "" : messageInfoParam.getMessageParam().getRechargePoint().toString());
+            content = content.replace("{26}", messageInfoParam.getMessageParam().getActivityName() == null ? "" : messageInfoParam.getMessageParam().getActivityName());
         }
         messageDO.setContent(content);
         messageDO.setTitle(dos.get(0).getTitle());

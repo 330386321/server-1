@@ -1,8 +1,8 @@
 package com.lawu.eshop.mall.param;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import java.math.BigDecimal;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author zhangyong
@@ -15,7 +15,7 @@ public class MessageTempParam {
      * {7}优惠金额、{8}退款编号、{9}商品名称、{10}收益金额、{11}收益积分、{12}商家名称
      * {13}广告名称、{14}门店名称、{15}消费积分、{16}充值编号、{17}广告类型名称、{18}失败原因
      * {19}代发货商品数量、{20}快递名称、{21}退款金额、{22}订单金额、{23}工单问题、{24}回复工单的内容
-     * {25}充值积分
+     * {25}充值积分、{26}活动名称
      */
     @ApiModelProperty(value = "用户昵称{0}")
     private String userName;
@@ -94,6 +94,9 @@ public class MessageTempParam {
     
     @ApiModelProperty(value = "充值积分{25}")
     private BigDecimal rechargePoint;
+
+    @ApiModelProperty(value = "活动名称{26}")
+    private String activityName;
     
     public String getWorkOrderContent() {
 		return workOrderContent;
@@ -302,4 +305,12 @@ public class MessageTempParam {
 	public void setRechargePoint(BigDecimal rechargePoint) {
 		this.rechargePoint = rechargePoint;
 	}
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
 }

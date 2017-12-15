@@ -10,17 +10,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.common.constants.MessageTypeEnum;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.annotation.PageBody;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
+import com.lawu.eshop.operator.api.service.MerchantService;
+import com.lawu.eshop.operator.api.service.MessageService;
 import com.lawu.eshop.operator.api.service.SeckillActivityProductService;
 import com.lawu.eshop.product.dto.SeckillActivityProductInfoDTO;
 import com.lawu.eshop.product.param.SeckillActivityProductAuditParam;
 import com.lawu.eshop.product.param.SeckillActivityProductNotPassedParam;
 import com.lawu.eshop.product.param.SeckillActivityProductPageSearchParam;
+import com.lawu.eshop.user.dto.MerchantSNSDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,6 +47,12 @@ public class SeckillActivityProductController extends BaseController {
     
     @Autowired
     private SeckillActivityProductService seckillActivityProductService;
+
+    @Autowired
+    private MessageService messageService;
+
+    @Autowired
+    private MerchantService merchantService;
     
     /**
      * 根据id和查询参数分页查询抢购活动商品列表
@@ -86,7 +98,22 @@ public class SeckillActivityProductController extends BaseController {
         if (message != null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
         }
-        return successCreated(seckillActivityProductService.notPassed(id, param));
+        seckillActivityProductService.notPassed(id, param);
+
+        Result<MerchantSNSDTO> merchantResult = merchantService.selectMerchantInfo(param.getMerchantId());
+        if (isSuccess(merchantResult)) {
+            //推送消息
+            MessageInfoParam messageInfoParam = new MessageInfoParam();
+            messageInfoParam.setRelateId(id);
+            messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_SECKILL_ACTIVITY_PRODUCT_CHECK_FAIL);
+            MessageTempParam messageTempParam = new MessageTempParam();
+            messageTempParam.setProductName(param.getProductName());
+            messageTempParam.setFailReason(param.getReasons());
+            messageTempParam.setActivityName(param.getStartDate() + " " + param.getActivityName());
+            messageInfoParam.setMessageParam(messageTempParam);
+            messageService.saveMessage(merchantResult.getModel().getNum(), messageInfoParam);
+        }
+        return successCreated();
     }
     
     /**
