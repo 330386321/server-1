@@ -108,17 +108,21 @@ public class SeckillActivityProductController extends BaseController {
             rtn.setExceededAttentionTime(isExceededAttentionTime);
             // 倒计时在服务端放入
             Long countdown = null;
+            Long endCountdown = null;
             switch (rtn.getActivityStatus()) {
                 case NOT_STARTED:
                     countdown = DateUtil.interval(new Date(), seckillActivityBO.getStartDate(), Calendar.MILLISECOND);
+                    endCountdown = DateUtil.interval(new Date(), seckillActivityBO.getEndDate(), Calendar.MILLISECOND);
                     break;
                 case PROCESSING:
                     countdown = DateUtil.interval(new Date(), seckillActivityBO.getEndDate(), Calendar.MILLISECOND);
+                    endCountdown = countdown;
                     break;
                 default:
                     break;
             }
             rtn.setCountdown(countdown);
+            rtn.setEndCountdown(endCountdown);
         }
         return successGet(rtn);
     }

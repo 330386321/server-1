@@ -80,6 +80,12 @@ public class SeckillActivityProductInformationDTO {
     private Long countdown;
     
     /**
+     * 结束倒计时
+     */
+    @ApiModelProperty(value = "结束倒计时", required = true)
+    private Long endCountdown;
+    
+    /**
      * 抢购商品型号库存信息
      */
     @ApiModelProperty(value = "抢购商品型号库存信息", required = true)
@@ -163,6 +169,14 @@ public class SeckillActivityProductInformationDTO {
 
     public void setCountdown(Long countdown) {
         this.countdown = countdown;
+    }
+
+    public Long getEndCountdown() {
+        return endCountdown;
+    }
+
+    public void setEndCountdown(Long endCountdown) {
+        this.endCountdown = endCountdown;
     }
 
     public List<SeckillActivityProductModelInformationDTO> getProductModelList() {
