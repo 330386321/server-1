@@ -235,6 +235,9 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "clickAd/{id}", method = RequestMethod.PUT)
 	public Result<ClickAdPointDTO> clickAd(@PathVariable Long id, @RequestParam Long memberId, @RequestParam String num) {
 		ClickPointBO bo = adService.clickAd(id, memberId, num);
+		if(bo.getIsClick()){
+			return successCreated(ResultCode.AD_CLICK_EXIST);
+		}
 		if(bo.isOverClick()){
 			return successCreated(ResultCode.AD_CLICK_PUTED);
 		}
@@ -455,11 +458,10 @@ public class AdController extends BaseController {
 	 */
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@PathVariable Long id, @RequestParam Long memberId, @RequestParam String num) {
-		Boolean flag = pointPoolService.selectStatusByMember(id, memberId);
-		if (flag) {
+		AdClickPraiseInfoBO bo = adService.clickPraise(id, memberId, num);
+		if (bo.getIsPraise()) {
 			return successCreated(ResultCode.AD_PRAISE_POINT_GET);
 		}
-		AdClickPraiseInfoBO bo = adService.clickPraise(id, memberId, num);
 		
 		if(bo.getIsPraiseEnd()){
 			return successCreated(ResultCode.AD_PRAISE_PUTED);

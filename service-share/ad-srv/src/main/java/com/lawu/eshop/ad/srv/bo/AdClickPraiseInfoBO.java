@@ -7,6 +7,8 @@ public class AdClickPraiseInfoBO {
 	private BigDecimal point;
 	
 	private Boolean isPraiseEnd = false;
+	
+	private Boolean isPraise=false;
 
 	public Boolean getIsPraiseEnd() {
 		return isPraiseEnd;
@@ -22,6 +24,14 @@ public class AdClickPraiseInfoBO {
 
 	public void setPoint(BigDecimal point) {
 		this.point = point;
+	}
+
+	public Boolean getIsPraise() {
+		return isPraise;
+	}
+
+	public void setIsPraise(Boolean isPraise) {
+		this.isPraise = isPraise;
 	}
 	
 	

@@ -6,7 +6,9 @@ public class ClickPointBO {
 	
 	private BigDecimal point;
 	
-	private boolean isOverClick;
+	private boolean isOverClick = false;
+	
+	private Boolean isClick = false;
 
 	public BigDecimal getPoint() {
 		return point;
@@ -24,5 +26,13 @@ public class ClickPointBO {
 		this.isOverClick = isOverClick;
 	}
 
+	public Boolean getIsClick() {
+		return isClick;
+	}
+
+	public void setIsClick(Boolean isClick) {
+		this.isClick = isClick;
+	}
+	
 
 }

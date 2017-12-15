@@ -27,6 +27,7 @@ import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PropertyType;
 import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.constants.RedPacketStatusEnum;
 import com.lawu.eshop.ad.constants.SpiltRedPacketUntil;
 import com.lawu.eshop.ad.param.AdChoicenessInternalParam;
 import com.lawu.eshop.ad.param.AdEgainInternalParam;
@@ -488,7 +489,7 @@ public class AdServiceImpl implements AdService {
                 .andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
                 .andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val).andMemberIdEqualTo(memberId);
         Long number = pointPoolDOMapper.countByExample(ppexample2);
-        adBO.setIsPraise(number>0);
+        adBO.setIsPraise(number.intValue()>0);
         adBO.setIsFavorite(count > 0);
         return adBO;
     }
@@ -499,7 +500,6 @@ public class AdServiceImpl implements AdService {
 
 		ClickPointBO clickBO = new ClickPointBO();
 		clickBO.setPoint(BigDecimal.valueOf(0));
-		clickBO.setOverClick(false);
 
 		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
 
@@ -509,16 +509,27 @@ public class AdServiceImpl implements AdService {
 		} else {
 			MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
 			
-			memberAdRecordD.setAdId(adDO.getId());
-			memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
-			memberAdRecordD.setMemberId(memberId);
-			memberAdRecordD.setMemberNum(num);
-			memberAdRecordD.setStatus(MemberAdRecordStatusEnum.NONE.getVal());
-			memberAdRecordD.setGmtCreate(new Date());
-			memberAdRecordD.setClickDate(new Date());
-			memberAdRecordD.setOriginalPoint(adDO.getPoint());
-			memberAdRecordDOMapper.insert(memberAdRecordD);
-
+			try {
+				memberAdRecordD.setAdId(adDO.getId());
+				memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default))
+						.multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
+				memberAdRecordD.setMemberId(memberId);
+				memberAdRecordD.setMemberNum(num);
+				memberAdRecordD.setStatus(MemberAdRecordStatusEnum.NONE.getVal());
+				memberAdRecordD.setGmtCreate(new Date());
+				memberAdRecordD.setClickDate(new Date());
+				memberAdRecordD.setOriginalPoint(adDO.getPoint());
+				memberAdRecordDOMapper.insert(memberAdRecordD);
+				
+			} catch (Exception e) {
+				
+				Throwable cause = e.getCause();
+				if(cause instanceof java.sql.SQLException){
+					clickBO.setIsClick(true);
+					return clickBO;
+				}
+				
+			}
 			// 修改点击次数记录
 			adDOMapperExtend.updateHitsByPrimaryKey(id);
 			//修改领取次数
@@ -606,7 +617,15 @@ public class AdServiceImpl implements AdService {
 		AdClickPraiseInfoBO bo = new AdClickPraiseInfoBO();
 		PointPoolDO pointPool = new PointPoolDO();
 		Double point = 0.0;
-
+		
+		/*PointPoolDOExample example=new PointPoolDOExample();
+		example.createCriteria().andMemberIdEqualTo(memberId).andTypeEqualTo(RedPacketStatusEnum.RED_PACKET_SUCCESS.val).andAdIdEqualTo(id);
+		Long  count=pointPoolDOMapper.countByExample(example);
+		if(count != null && count.intValue() > 0){
+			bo.setIsPraise(true);
+			return bo;
+		}*/
+		
 		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
 		
 		if (adDO.getStatus() != AdStatusEnum.AD_STATUS_PUTING.val) {
@@ -644,18 +663,25 @@ public class AdServiceImpl implements AdService {
 
 		point = SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), adDO.getAdCount(), praiseCount);
 
-		pointPool.setAdId(adDO.getId());
-		pointPool.setMerchantId(adDO.getMerchantId());
-		pointPool.setMemberId(memberId);
-		pointPool.setMemberNum(num);
-		pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
-		pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
-		pointPool.setGmtCreate(new Date());
-		pointPool.setGmtModified(new Date());
-		pointPool.setOrdinal(praiseCount);
-		pointPool.setPoint(new BigDecimal(point).setScale(2,BigDecimal.ROUND_HALF_DOWN));
-		pointPoolDOMapper.insert(pointPool);
-
+		try {
+			pointPool.setAdId(adDO.getId());
+			pointPool.setMerchantId(adDO.getMerchantId());
+			pointPool.setMemberId(memberId);
+			pointPool.setMemberNum(num);
+			pointPool.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+			pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+			pointPool.setGmtCreate(new Date());
+			pointPool.setGmtModified(new Date());
+			pointPool.setOrdinal(praiseCount);
+			pointPool.setPoint(new BigDecimal(point).setScale(2, BigDecimal.ROUND_HALF_DOWN));
+			pointPoolDOMapper.insert(pointPool);
+		} catch (Exception e) {
+			Throwable cause = e.getCause();
+			if(cause instanceof java.sql.SQLException){
+				bo.setIsPraise(true);
+				return bo;
+			}
+		}
 		if (adDO.getAdCount() - 1 == praiseCount || praiseCount >= adDO.getAdCount()) {
 			adDO.setId(adDO.getId());
 			adDO.setGmtModified(new Date());
