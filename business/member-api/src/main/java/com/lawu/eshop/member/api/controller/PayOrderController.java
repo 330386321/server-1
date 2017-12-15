@@ -97,7 +97,7 @@ public class PayOrderController extends BaseController {
                     realFavoredAmount = canFavoredAmount*((10-favoredDTOResult.getModel().getDiscountRate().doubleValue())/10);
                 }
                 BigDecimal realFavoredAmount2 =   BigDecimal.valueOf(realFavoredAmount);
-                double rfa2  =  realFavoredAmount2.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
+                double rfa2  =  realFavoredAmount2.setScale(2,   BigDecimal.ROUND_DOWN).doubleValue();
                 if(Double.doubleToLongBits(rfa2) != Double.doubleToLongBits(param.getFavoredAmount())){
                     return successCreated(ResultCode.PAY_ORDER_FAVORED_AMOUNT_UNEQUAL);
                 }
