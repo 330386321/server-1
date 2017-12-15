@@ -496,19 +496,29 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	@Transactional
-	public ClickPointBO clickAd(Long id, Long memberId, String num) {
+	public ClickPointBO clickAd(Long id, Long memberId, String num) throws DataNotExistException {
 
 		ClickPointBO clickBO = new ClickPointBO();
+		
+		AdDOExample example = new AdDOExample();
+		List<Byte> types = new ArrayList<>();
+		types.add(AdTypeEnum.AD_TYPE_FLAT.getVal());
+		types.add(AdTypeEnum.AD_TYPE_VIDEO.getVal());
+		example.createCriteria().andIdEqualTo(id).andTypeIn(types);
+		List<AdDO> list = adDOMapper.selectByExample(example);
+		if(list.isEmpty()){
+			throw new DataNotExistException("广告数据不存在");
+		}
+		AdDO adDO = list.get(0);
+		
 		clickBO.setPoint(BigDecimal.valueOf(0));
-
-		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
 
 		// 再次判断是否点击完
 		if (adDO.getStatus() != AdStatusEnum.AD_STATUS_PUTING.val || adDO.getHits() >= adDO.getAdCount()) {
 			clickBO.setOverClick(true);
 		} else {
 			MemberAdRecordDO memberAdRecordD = new MemberAdRecordDO();
-			
+
 			try {
 				memberAdRecordD.setAdId(adDO.getId());
 				memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default))
@@ -520,22 +530,22 @@ public class AdServiceImpl implements AdService {
 				memberAdRecordD.setClickDate(new Date());
 				memberAdRecordD.setOriginalPoint(adDO.getPoint());
 				memberAdRecordDOMapper.insert(memberAdRecordD);
-				
+
 			} catch (Exception e) {
-				
+
 				Throwable cause = e.getCause();
-				if(cause instanceof java.sql.SQLException){
+				if (cause instanceof java.sql.SQLException) {
 					clickBO.setIsClick(true);
 					return clickBO;
 				}
-				
+
 			}
 			// 修改点击次数记录
 			adDOMapperExtend.updateHitsByPrimaryKey(id);
-			//修改领取次数
+			// 修改领取次数
 			clickBO.setOverClick(false);
 			clickBO.setPoint(adDO.getPoint());
-			//发送消息修改积分
+			// 发送消息修改积分
 			userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 		}
 
@@ -613,10 +623,15 @@ public class AdServiceImpl implements AdService {
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
-	public AdClickPraiseInfoBO clickPraise(Long id, Long memberId, String num) {
+	public AdClickPraiseInfoBO clickPraise(Long id, Long memberId, String num) throws DataNotExistException{
+		AdDOExample adExample = new AdDOExample();
+		adExample.createCriteria().andIdEqualTo(id).andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.getVal());
+		List<AdDO> list = adDOMapper.selectByExample(adExample);
+		if(list.isEmpty()){
+			throw new DataNotExistException("广告数据不存在");
+		}
+		
 		AdClickPraiseInfoBO bo = new AdClickPraiseInfoBO();
-		PointPoolDO pointPool = new PointPoolDO();
-		Double point = 0.0;
 		
 		PointPoolDOExample example=new PointPoolDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andTypeEqualTo(RedPacketStatusEnum.RED_PACKET_SUCCESS.val).andAdIdEqualTo(id);
@@ -626,14 +641,14 @@ public class AdServiceImpl implements AdService {
 			return bo;
 		}
 		
-		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+		AdDO adDO = list.get(0);
 		
 		if (adDO.getStatus() != AdStatusEnum.AD_STATUS_PUTING.val) {
 			bo.setIsPraiseEnd(true);
 			return bo;
-
 		}
 		
+		Double point = 0.0;
 		if(adSrvConfig.getIsCutPraisePoint()){
 			
 			if(adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==1 || adDO.getTotalPoint().compareTo(BigDecimal.valueOf(300))==0){
@@ -660,9 +675,10 @@ public class AdServiceImpl implements AdService {
 		} else {
 			subMoney = adDO.getTotalPoint().subtract(view.getPoint());
 		}
-
+		//分配积分
 		point = SpiltRedPacketUntil.spiltRedPackets(subMoney.doubleValue(), adDO.getAdCount(), praiseCount);
-
+		
+		PointPoolDO pointPool = new PointPoolDO();
 		try {
 			pointPool.setAdId(adDO.getId());
 			pointPool.setMerchantId(adDO.getMerchantId());
@@ -676,12 +692,14 @@ public class AdServiceImpl implements AdService {
 			pointPool.setPoint(new BigDecimal(point).setScale(2, BigDecimal.ROUND_HALF_DOWN));
 			pointPoolDOMapper.insert(pointPool);
 		} catch (Exception e) {
+			//唯一索引判断直接返回已经抢到E咻
 			Throwable cause = e.getCause();
 			if(cause instanceof java.sql.SQLException){
 				bo.setIsPraise(true);
 				return bo;
 			}
 		}
+		
 		if (adDO.getAdCount() - 1 == praiseCount || praiseCount >= adDO.getAdCount()) {
 			adDO.setId(adDO.getId());
 			adDO.setGmtModified(new Date());

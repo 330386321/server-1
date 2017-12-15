@@ -234,20 +234,26 @@ public class AdController extends BaseController {
 	 */
 	@RequestMapping(value = "clickAd/{id}", method = RequestMethod.PUT)
 	public Result<ClickAdPointDTO> clickAd(@PathVariable Long id, @RequestParam Long memberId, @RequestParam String num) {
-		ClickPointBO bo = adService.clickAd(id, memberId, num);
-		if(bo.getIsClick()){
-			return successCreated(ResultCode.AD_CLICK_EXIST);
-		}
-		if(bo.isOverClick()){
-			return successCreated(ResultCode.AD_CLICK_PUTED);
-		}
+		try {
+			ClickPointBO bo = adService.clickAd(id, memberId, num);
+			if(bo.getIsClick()){
+				return successCreated(ResultCode.AD_CLICK_EXIST);
+			}
+			if(bo.isOverClick()){
+				return successCreated(ResultCode.AD_CLICK_PUTED);
+			}
+			
+			ClickAdPointDTO dto = new ClickAdPointDTO();
+			ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
+			dto.setAddPoint(clickAdPointBO.getAddPoint());
+			dto.setPoint(clickAdPointBO.getAdTotlePoint());
+			return successCreated(dto);
+			
+	    } catch (DataNotExistException e) {
+	         logger.error(e.getMessage(), e);
+	         return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+	    }
 		
-		ClickAdPointDTO dto = new ClickAdPointDTO();
-		ClickAdPointBO clickAdPointBO = adService.getClickAdPoint(memberId, bo.getPoint());
-		dto.setAddPoint(clickAdPointBO.getAddPoint());
-		dto.setPoint(clickAdPointBO.getAdTotlePoint());
-		
-		return successCreated(dto);
 	}
 
 	/**
@@ -458,19 +464,25 @@ public class AdController extends BaseController {
 	 */
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@PathVariable Long id, @RequestParam Long memberId, @RequestParam String num) {
-		AdClickPraiseInfoBO bo = adService.clickPraise(id, memberId, num);
-		if (bo.getIsPraise()) {
-			return successCreated(ResultCode.AD_PRAISE_POINT_GET);
-		}
-		
-		if(bo.getIsPraiseEnd()){
-			return successCreated(ResultCode.AD_PRAISE_PUTED);
-		}
-		PraisePointDTO dto = new PraisePointDTO();
-		dto.setPoint(bo.getPoint());
-		dto.setIsGetPoint(bo.getPoint().compareTo(BigDecimal.valueOf(0)) == 1);
-		
-		return successCreated(dto);
+		try {
+			AdClickPraiseInfoBO bo = adService.clickPraise(id, memberId, num);
+			if (bo.getIsPraise()) {
+				return successCreated(ResultCode.AD_PRAISE_POINT_GET);
+			}
+			
+			if(bo.getIsPraiseEnd()){
+				return successCreated(ResultCode.AD_PRAISE_PUTED);
+			}
+			PraisePointDTO dto = new PraisePointDTO();
+			dto.setPoint(bo.getPoint());
+			dto.setIsGetPoint(bo.getPoint().compareTo(BigDecimal.valueOf(0)) == 1);
+			return successCreated(dto);
+			
+	    } catch (DataNotExistException e) {
+	    	
+	         logger.error(e.getMessage(), e);
+	         return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+	    }
 
 	}
 
