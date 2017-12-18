@@ -130,7 +130,7 @@ public class ProductController extends BaseController {
 				cidto.setLevel(String.valueOf(user.getModel().getLevel()));
 				commentList.add(cidto);
 			}
-		}
+		} 
 		result.getModel().setComments(commentList);
 
 		Result<Integer> count = commentMerchantService.getProductCommentCount(productId);

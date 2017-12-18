@@ -1,8 +1,10 @@
 package com.lawu.eshop.user.param;
 
+import com.lawu.eshop.framework.core.page.AbstractPageParam;
+
 import io.swagger.annotations.ApiParam;
 
-public class MerchantStorePlatParam {
+public class MerchantStorePlatParam extends AbstractPageParam{
 	
 	/**
      * 店铺名称

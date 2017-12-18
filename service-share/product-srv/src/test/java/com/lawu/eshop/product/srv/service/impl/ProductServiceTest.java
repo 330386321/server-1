@@ -305,9 +305,9 @@ public class ProductServiceTest {
 		productService.eidtProduct(product1);
 		ProductParam param = new ProductParam();
 		param.setName("小炒肉");
-		List<ProductQueryBO> list = productService.selectProductPlat(param);
-		log.info(JSON.toJSONString(list));
-		Assert.assertEquals(list.size(), 2);
+		Page<ProductQueryBO> page = productService.selectProductPlat(param);
+		log.info(JSON.toJSONString(page.getRecords()));
+		Assert.assertEquals(page.getRecords(), 2);
 	}
 
 	/**

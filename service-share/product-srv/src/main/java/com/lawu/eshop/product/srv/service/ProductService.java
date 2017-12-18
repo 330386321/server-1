@@ -102,7 +102,7 @@ public interface ProductService {
      * @param param
      * @return
      */
-    List<ProductQueryBO> selectProductPlat(ProductParam param);
+    Page<ProductQueryBO> selectProductPlat(ProductParam param);
 
     /**
      * 查询当前商家总有多少商品

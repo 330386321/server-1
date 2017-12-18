@@ -188,7 +188,7 @@ public class AdPlatformController extends BaseController {
     @ApiOperation(value = "查询所有商家的商品", notes = "查询所有商家的商品  [](张荣成)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "selectProductByPlat", method = RequestMethod.GET)
-    public Result<List<ProductPlatDTO>> selectProductByPlat(@ModelAttribute @ApiParam ProductParam param) {
+    public Result<Page<ProductPlatDTO>> selectProductByPlat(@ModelAttribute @ApiParam ProductParam param) {
         return productService.selectProductByPlat(param);
     }
     

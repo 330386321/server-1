@@ -1,8 +1,10 @@
 package com.lawu.eshop.product.param;
 
+import com.lawu.eshop.framework.core.page.AbstractPageParam;
+
 import io.swagger.annotations.ApiParam;
 
-public class ProductParam {
+public class ProductParam extends AbstractPageParam{
 
 	@ApiParam(value = "商品名称")
 	private String name;

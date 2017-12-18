@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.autotest.client.AutoTesting;
+import com.lawu.concurrentqueue.requestctrl.ConcurrentTaskExecutor;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -48,6 +49,7 @@ import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.param.RegisterGetRedPacketParam;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
+import com.lawu.eshop.concurrentqueue.impl.BaseConcurrentTask;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -135,6 +137,9 @@ public class AdController extends BaseController {
 	
 	@Autowired
 	private PraiseDoHanlderMinusPointService praiseDoHanlderMinusPointService;
+	
+	@Autowired
+	private ConcurrentTaskExecutor concurrentTaskExecutor;
 
 	/**
 	 * @see
@@ -323,19 +328,34 @@ public class AdController extends BaseController {
 		return successGet(user);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
 	@Authorization
 	@ApiOperation(value = "抢赞", notes = "抢赞[]（张荣成）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id,
-			@RequestParam(required = false) @ApiParam(value = "PRAISE_TYPE_PUZZLE 拼图    PRAISE_TYPE_CLICK 点赞") PraiseTypeEnum typeEnum) {
-		if (typeEnum == null) {
-			typeEnum =PraiseTypeEnum.PRAISE_TYPE_CLICK;
-		}
-		return adExtendService.clickPraise(id,typeEnum);
+			@RequestParam(required = false) @ApiParam(value = "PRAISE_TYPE_PUZZLE 拼图    PRAISE_TYPE_CLICK 点赞")  PraiseTypeEnum typeEnum) {
+		Result<PraisePointDTO> res = null;
+		 // 通过线程池拦截部分请求
+		res = (Result<PraisePointDTO>) concurrentTaskExecutor.execute(new BaseConcurrentTask<Result<PraisePointDTO>, Result<PraisePointDTO>>() {
+           @Override
+           public Result<PraisePointDTO> execute() {
+        	   if (typeEnum == null) {
+	       			typeEnum = PraiseTypeEnum.PRAISE_TYPE_CLICK;
+	       	   }
+               return adExtendService.clickPraise(id, typeEnum);
+           }
+           
+           @Override
+           public Result<PraisePointDTO> executeWhenSuccess(Result<PraisePointDTO> successInfo) {
+               return successInfo;
+           }
+       });
+	   return res;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
 	@Authorization
 	@ApiOperation(value = "点击广告", notes = "点击广告[5008]（张荣成）", httpMethod = "PUT")
@@ -351,10 +371,24 @@ public class AdController extends BaseController {
 		if(result.getModel()){
 			return successCreated(ResultCode.AD_CLICK_EXIST);
 		}
-		Result<ClickAdPointDTO> res=adExtendService.clickAd(id, memberId, num);
-		if(res.getModel()!=null && res.getModel().getPoint().compareTo(BigDecimal.valueOf(0))==1){ 
-			clickAdRecordService.setClickAdRecord(memberId+num+id+DateUtil.getIntDate());
-		}
+		Result<ClickAdPointDTO> res = null;
+		 // 通过线程池拦截部分请求
+		res = (Result<ClickAdPointDTO>) concurrentTaskExecutor.execute(new BaseConcurrentTask<Result<ClickAdPointDTO>, Result<ClickAdPointDTO>>() {
+            @Override
+            public Result<ClickAdPointDTO> execute() {
+            	Result<ClickAdPointDTO> result = adExtendService.clickAd(id, memberId, num);
+            	if(result.getModel()!=null && result.getModel().getPoint().compareTo(BigDecimal.valueOf(0))==1){ 
+        			clickAdRecordService.setClickAdRecord(memberId+num+id+DateUtil.getIntDate());
+        		}
+                return result;
+            }
+            
+            @Override
+            public Result<ClickAdPointDTO> executeWhenSuccess(Result<ClickAdPointDTO> successInfo) {
+                return successInfo;
+            }
+        });
+		
 		return res;
 		
 	}

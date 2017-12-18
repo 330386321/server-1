@@ -601,10 +601,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductQueryBO> selectProductPlat(ProductParam param) {
+    public Page<ProductQueryBO> selectProductPlat(ProductParam param) {
         ProductDOExample example = new ProductDOExample();
         example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
-        List<ProductDO> doList = productDOMapper.selectByExample(example);
+        RowBounds rowBounds = new RowBounds(param.getCurrentPage(), param.getPageSize());
+        
+        List<ProductDO> doList = productDOMapper.selectByExampleWithBLOBsWithRowbounds(example, rowBounds);
+        
+        Long count = productDOMapper.countByExample(example);
         List<ProductQueryBO> boList = new ArrayList<>();
         if (!doList.isEmpty()) {
             for (ProductDO productDO : doList) {
@@ -614,7 +618,11 @@ public class ProductServiceImpl implements ProductService {
                 boList.add(bo);
             }
         }
-        return boList;
+        Page<ProductQueryBO> page = new Page<>();
+        page.setCurrentPage(param.getCurrentPage());
+        page.setRecords(boList);
+        page.setTotalCount(count.intValue());
+        return page;
     }
 
     @Override

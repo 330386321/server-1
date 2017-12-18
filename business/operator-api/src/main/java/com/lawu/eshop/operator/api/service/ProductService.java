@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductPlatDTO;
@@ -31,7 +32,7 @@ public interface ProductService {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "product/selectProductByPlat")
-    Result<List<ProductPlatDTO>> selectProductByPlat(@ModelAttribute ProductParam param);
+    Result<Page<ProductPlatDTO>> selectProductByPlat(@ModelAttribute ProductParam param);
 
     /**
      * 查询所有上架的商品

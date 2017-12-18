@@ -160,7 +160,7 @@ public class AdConverter {
 		adDTO.setManageTypeEnum(adBO.getManageType());
 		adDTO.setLogoUrl(adBO.getLogoUrl());
 		Date date=new Date();
-		if(adBO.getTypeEnum().getVal()==3 && adBO.getStatusEnum().val==2){ //结束倒计时
+		/*if(adBO.getTypeEnum().getVal()==3 && adBO.getStatusEnum().val==2){ //结束倒计时
 			Long time=adBO.getBeginTime().getTime()+ (20*60*1000)-date.getTime();
 			if(time>0){
 				adDTO.setNeedBeginTime(time);
@@ -171,7 +171,7 @@ public class AdConverter {
 			Long time=adBO.getBeginTime().getTime()-date.getTime();
 			adDTO.setNeedBeginTime(time);
 			
-		}
+		}*/
 		if(adBO.getAreas()!=null){
 			adDTO.setAreas(adBO.getAreas());
 		}

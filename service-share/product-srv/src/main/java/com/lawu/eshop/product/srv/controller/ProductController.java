@@ -248,19 +248,22 @@ public class ProductController extends BaseController {
      * @date 2017/4/25
      */
     @RequestMapping(value = "selectProductByPlat", method = RequestMethod.POST)
-    public Result<List<ProductPlatDTO>> selectProductByPlat(@RequestBody ProductParam param) {
-        List<ProductQueryBO> boList = productService.selectProductPlat(param);
+    public Result<Page<ProductPlatDTO>> selectProductByPlat(@RequestBody ProductParam param) {
+        Page<ProductQueryBO> page = productService.selectProductPlat(param);
         List<ProductPlatDTO> dtoList = new ArrayList<>();
-        if (!boList.isEmpty()) {
-            for (ProductQueryBO productQueryBO : boList) {
+        if (!page.getRecords().isEmpty()) {
+            for (ProductQueryBO productQueryBO : page.getRecords()) {
                 ProductPlatDTO dto = new ProductPlatDTO();
                 dto.setId(productQueryBO.getId());
                 dto.setName(productQueryBO.getName());
                 dtoList.add(dto);
             }
         }
-
-        return successCreated(dtoList);
+        Page<ProductPlatDTO> pageDTO = new Page<>();
+        pageDTO.setCurrentPage(page.getCurrentPage());
+        pageDTO.setRecords(dtoList);
+        pageDTO.setTotalCount(page.getTotalCount());
+        return successCreated(pageDTO);
     }
 
 
