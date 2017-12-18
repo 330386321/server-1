@@ -281,7 +281,6 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
         		record.setIsBindForever(true);
         		record.setGmtModified(new Date());
         		bankAccountDOMapper.updateByPrimaryKeySelective(record);
-                return ResultCode.SUCCESS;
             }
 
             
