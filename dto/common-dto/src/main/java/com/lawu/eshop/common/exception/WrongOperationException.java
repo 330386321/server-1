@@ -1,7 +1,10 @@
 package com.lawu.eshop.common.exception;
 
+import com.lawu.eshop.framework.web.ResultCode;
+
 /**
- * 错误操作异常<p>
+ * 错误操作异常
+ * <p>
  * 用户的异常操作
  * 
  * @author jiangxinjun
@@ -9,10 +12,36 @@ package com.lawu.eshop.common.exception;
  * @updateDate 2017年11月27日
  */
 public class WrongOperationException extends RuntimeException {
-	
-	private static final long serialVersionUID = 1L;
 
-	public WrongOperationException(String message) {
-        super(message);
+    private static final long serialVersionUID = 1L;
+
+    private int ret = ResultCode.WRONG_OPERATION;
+
+    private String message = ResultCode.get(ret);
+    
+    public WrongOperationException() {
+        super();
     }
+    
+    public WrongOperationException(String message) {
+        super(message);
+        this.message = message;
+    }
+
+    public int getRet() {
+        return ret;
+    }
+
+    public void setRet(int ret) {
+        this.ret = ret;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    
 }

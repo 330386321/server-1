@@ -70,19 +70,27 @@ public class AddressController extends BaseController {
 		return successCreated();
 	}
 
-	/**
-	 * 单个查询地址
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
-	public Result<AddressDTO> get(@PathVariable Long id) {
-		AddressBO addressBO = addressService.get(id);
-		if (addressBO == null) {
-		    return successGet(ResultCode.NOT_FOUND_DATA, "地址数据不存在");
-		}
-		return successGet(AddressConverter.convertDTO(addressBO));
-	}
+    /**
+     * 通过id单个查询地址
+     * 
+     * @param id
+     * @return
+     * @author jiangxinjun
+     * @createDate 2017年12月18日
+     * @updateDate 2017年12月18日
+     */
+    @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
+    public Result<AddressDTO> get(@PathVariable Long id,
+            @RequestParam(name = "userNum", required = false) String userNum) {
+        AddressBO addressBO = addressService.get(id);
+        if (addressBO == null) {
+            return successGet(ResultCode.NOT_FOUND_DATA, "地址数据不存在");
+        }
+        if (userNum != null && !addressBO.getUserNum().equals(userNum)) {
+            return successGet(ResultCode.ILLEGAL_OPERATION, "非法操作地址数据");
+        }
+        return successGet(AddressConverter.convertDTO(addressBO));
+    }
 
 	/**
 	 * 修改地址

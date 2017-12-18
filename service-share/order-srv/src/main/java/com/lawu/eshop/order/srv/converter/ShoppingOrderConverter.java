@@ -1,15 +1,10 @@
 package com.lawu.eshop.order.srv.converter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.lawu.eshop.idworker.client.impl.BizIdType;
-import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
@@ -22,8 +17,6 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressInfoDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
-import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
-import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
@@ -51,64 +44,6 @@ public class ShoppingOrderConverter {
 		throw new IllegalAccessError("Utility class");
 	}
 
-	/**
-	 * ShoppingOrderDO转换
-	 * 
-	 * @param param
-	 * @return
-	 */
-	public static ShoppingOrderDO convert(ShoppingOrderSettlementParam param) {
-		ShoppingOrderDO rtn = null;
-		if (param == null) {
-			return rtn;
-		}
-
-		rtn = new ShoppingOrderDO();
-		rtn.setCommodityTotalPrice(param.getCommodityTotalPrice());
-		rtn.setConsigneeAddress(param.getConsigneeAddress());
-		rtn.setConsigneeMobile(param.getConsigneeMobile());
-		rtn.setConsigneeName(param.getConsigneeName());
-		rtn.setFreightPrice(param.getFreightPrice());
-		rtn.setIsFans(param.getIsFans());
-		rtn.setIsNoReasonReturn(param.getIsNoReasonReturn());
-		rtn.setMemberId(param.getMemberId());
-		rtn.setMemberNum(param.getMemberNum());
-		rtn.setMemberNickname(param.getMemberNickname());
-		rtn.setMerchantId(param.getMerchantId());
-		rtn.setMerchantName(param.getMerchantName());
-		rtn.setMerchantNum(param.getMerchantNum());
-		rtn.setMerchantStoreId(param.getMerchantStoreId());
-		rtn.setMerchantStoreRegionPath(param.getMerchantStoreRegionPath());
-		rtn.setMessage(param.getMessage());
-		rtn.setOrderTotalPrice(param.getOrderTotalPrice());
-		rtn.setActivityId(param.getActivityId());
-		rtn.setActivityProductId(param.getActivityProductId());
-		
-		List<Long> shoppingCartIdList = new ArrayList<>();
-		for (ShoppingOrderSettlementItemParam item : param.getItems()) {
-			shoppingCartIdList.add(item.getShoppingCartId());
-		}
-		// 把购物车id用逗号分隔保存在购物订单表中，用于删除购物车记录
-		rtn.setShoppingCartIdsStr(StringUtils.join(shoppingCartIdList, ","));
-		
-		// 设置自动收货为false
-		rtn.setIsAutomaticReceipt(false);
-		// 设置为待处理状态
-		rtn.setOrderStatus(ShoppingOrderStatusEnum.PENDING.getValue());
-		// 记录状态设置为正常
-		rtn.setStatus(StatusEnum.VALID.getValue());
-		
-		// 设置提成状态，和支付给商家的实际金额
-		rtn.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
-		rtn.setActualAmount(param.getOrderTotalPrice());
-		
-		rtn.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
-		rtn.setGmtCreate(new Date());
-		rtn.setGmtModified(new Date());
-
-		return rtn;
-	}
-	
 	/**
 	 * ShoppingOrderExpressDTO转换
 	 * 

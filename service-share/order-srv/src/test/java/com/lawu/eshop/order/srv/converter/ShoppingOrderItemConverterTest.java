@@ -53,14 +53,6 @@ public class ShoppingOrderItemConverterTest {
 	}
 	
 	@Test
-	public void convertShoppingOrderItemDO() {
-		ShoppingOrderSettlementItemParam expected = initShoppingOrderSettlementItemParam();
-		Long shoppingOrderId = 1L;
-		ShoppingOrderItemDO actual = ShoppingOrderItemConverter.convert(shoppingOrderId, expected);
-		assertShoppingOrderItemDO(expected, actual, shoppingOrderId);
-	}
-	
-	@Test
 	public void convertCommentOrderDTO() {
 		ShoppingOrderItemBO expected = initShoppingOrderItemBO();
 		CommentOrderDTO actual = ShoppingOrderItemConverter.coverCommentStatusDTO(expected);

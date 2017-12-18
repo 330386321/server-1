@@ -49,7 +49,7 @@ public interface ShoppingCartExtendService {
 	 * @param params 订单参数列表
 	 * @return 返回订单的id列表
 	 */
-	Result<List<Long>> createOrder(Long memberId, List<ShoppingOrderSettlementForeignParam> params);
+	Result<List<Long>> createOrder(Long memberId, List<ShoppingOrderSettlementForeignParam> params, String memberNum);
 	
 	/**
 	 * 立即购买
@@ -65,7 +65,7 @@ public interface ShoppingCartExtendService {
 	 * @return
 	 * @author Sunny
 	 */
-	Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param);
+	Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param, String memberNum);
 	
 	/**
 	 * 立即抢购活动商品，创建订单
@@ -78,5 +78,5 @@ public interface ShoppingCartExtendService {
 	 * @createDate 2017年11月30日
 	 * @updateDate 2017年11月30日
 	 */
-    Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param, Long seckillActivityProductModelId) throws BusinessExecuteException;
+    Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param, Long seckillActivityProductModelId, String memberNum) throws BusinessExecuteException;
 }

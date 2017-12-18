@@ -14,9 +14,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.common.exception.WrongOperationException;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.idworker.client.impl.BizIdType;
+import com.lawu.eshop.idworker.client.impl.IdWorkerHelperImpl;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderNoPaymentNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderOrdersTradingIncomeNoticeNotification;
@@ -59,7 +62,6 @@ import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ReportConvert;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
-import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample;
@@ -154,43 +156,109 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Qualifier("shoppingOrderPaymentsToMerchantTransactionMainServiceImpl")
 	private TransactionMainService<Reply> shoppingOrderPaymentsToMerchantTransactionMainServiceImpl;
 
-	@Transactional
-	@Override
-	public List<Long> save(List<ShoppingOrderSettlementParam> params) {
-
-		List<Long> rtn = new ArrayList<>();
-
-		// 插入订单
-		for (ShoppingOrderSettlementParam shoppingOrderSettlementParam : params) {
-			ShoppingOrderDO shoppingOrderDO = ShoppingOrderConverter.convert(shoppingOrderSettlementParam);
-
-			shoppingOrderDOMapper.insertSelective(shoppingOrderDO);
-			Long id = shoppingOrderDO.getId();
-
-			// 插入订单项
-			for (ShoppingOrderSettlementItemParam item : shoppingOrderSettlementParam.getItems()) {
-				ShoppingOrderItemDO shoppingOrderItemDO = ShoppingOrderItemConverter.convert(id, item);
-				shoppingOrderItemDOMapper.insertSelective(shoppingOrderItemDO);
-
-			}
-
-			// 考虑订单是否保存失败处理
-			if (id != null && id > 0) {
-				// 把订单id放入list返回
-				rtn.add(id);
-				// 判断用户是否是商家粉丝
-				if (!shoppingOrderDO.getIsFans()) {
-				    // 事务补偿(用户成为商家粉丝)
-				    shoppingOrderCreateOrderFansTransactionMainServiceImpl.sendNotice(id);
-				}
-				
-				// 事务补偿(减掉库存)
-				shoppingOrderCreateOrderTransactionMainServiceImpl.sendNotice(id);
-			}
-		}
-
-		return rtn;
-	}
+    @Transactional
+    @Override
+    public List<Long> save(List<ShoppingOrderSettlementParam> params) throws WrongOperationException {
+        List<Long> rtn = new ArrayList<>();
+        // 插入订单
+        for (ShoppingOrderSettlementParam shoppingOrderSettlementParam : params) {
+            ActivityProductBuyQueryParam activityProductBuyQueryParam = new ActivityProductBuyQueryParam();
+            activityProductBuyQueryParam.setActivityProductId(shoppingOrderSettlementParam.getActivityProductId());
+            activityProductBuyQueryParam.setMemberId(shoppingOrderSettlementParam.getMemberId());
+            if ( activityProductBuyQueryParam.getActivityProductId() != null) {
+                Long count = isBuy(activityProductBuyQueryParam);
+                if (count != null && count > 0) {
+                    throw new WrongOperationException(ExceptionMessageConstant.DUPLICATE_SECKILL_ACTIVITY_ORDER);
+                }
+            }
+            ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
+            shoppingOrderDO.setCommodityTotalPrice(shoppingOrderSettlementParam.getCommodityTotalPrice());
+            shoppingOrderDO.setConsigneeAddress(shoppingOrderSettlementParam.getConsigneeAddress());
+            shoppingOrderDO.setConsigneeMobile(shoppingOrderSettlementParam.getConsigneeMobile());
+            shoppingOrderDO.setConsigneeName(shoppingOrderSettlementParam.getConsigneeName());
+            shoppingOrderDO.setFreightPrice(shoppingOrderSettlementParam.getFreightPrice());
+            shoppingOrderDO.setIsFans(shoppingOrderSettlementParam.getIsFans());
+            shoppingOrderDO.setIsNoReasonReturn(shoppingOrderSettlementParam.getIsNoReasonReturn());
+            shoppingOrderDO.setMemberId(shoppingOrderSettlementParam.getMemberId());
+            shoppingOrderDO.setMemberNum(shoppingOrderSettlementParam.getMemberNum());
+            shoppingOrderDO.setMemberNickname(shoppingOrderSettlementParam.getMemberNickname());
+            shoppingOrderDO.setMerchantId(shoppingOrderSettlementParam.getMerchantId());
+            shoppingOrderDO.setMerchantName(shoppingOrderSettlementParam.getMerchantName());
+            shoppingOrderDO.setMerchantNum(shoppingOrderSettlementParam.getMerchantNum());
+            shoppingOrderDO.setMerchantStoreId(shoppingOrderSettlementParam.getMerchantStoreId());
+            shoppingOrderDO.setMerchantStoreRegionPath(shoppingOrderSettlementParam.getMerchantStoreRegionPath());
+            shoppingOrderDO.setMessage(shoppingOrderSettlementParam.getMessage());
+            shoppingOrderDO.setOrderTotalPrice(shoppingOrderSettlementParam.getOrderTotalPrice());
+            shoppingOrderDO.setActivityId(shoppingOrderSettlementParam.getActivityId());
+            shoppingOrderDO.setActivityProductId(shoppingOrderSettlementParam.getActivityProductId());
+            List<Long> shoppingCartIdList = new ArrayList<>();
+            for (ShoppingOrderSettlementItemParam item : shoppingOrderSettlementParam.getItems()) {
+                shoppingCartIdList.add(item.getShoppingCartId());
+            }
+            // 把购物车id用逗号分隔保存在购物订单表中，用于删除购物车记录
+            shoppingOrderDO.setShoppingCartIdsStr(StringUtils.join(shoppingCartIdList, ","));
+            // 设置自动收货为false
+            shoppingOrderDO.setIsAutomaticReceipt(false);
+            // 设置为待处理状态
+            shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING.getValue());
+            // 记录状态设置为正常
+            shoppingOrderDO.setStatus(StatusEnum.VALID.getValue());
+            // 设置提成状态，和支付给商家的实际金额
+            shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+            shoppingOrderDO.setActualAmount(shoppingOrderSettlementParam.getOrderTotalPrice());
+            shoppingOrderDO.setOrderNum(IdWorkerHelperImpl.generate(BizIdType.ORDER));
+            shoppingOrderDO.setGmtCreate(new Date());
+            shoppingOrderDO.setGmtModified(new Date());
+            shoppingOrderDOMapper.insertSelective(shoppingOrderDO);
+            /*
+             *  因为无法用唯一索引保证，所以在插入后再次进行判断，如果有重复，进行回滚操作
+             *  如果是抢购订单，判断数据库中的抢购订单数据是否大于1
+             */
+            if (activityProductBuyQueryParam.getActivityProductId() != null) {
+                Long count = isBuy(activityProductBuyQueryParam);
+                if (count != null && count > 1) {
+                    throw new WrongOperationException(ExceptionMessageConstant.DUPLICATE_SECKILL_ACTIVITY_ORDER);
+                }
+            }
+            Long id = shoppingOrderDO.getId();
+            // 插入订单项
+            for (ShoppingOrderSettlementItemParam item : shoppingOrderSettlementParam.getItems()) {
+                ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+                shoppingOrderItemDO.setIsAllowRefund(item.getIsAllowRefund());
+                shoppingOrderItemDO.setProductFeatureImage(item.getProductFeatureImage());
+                shoppingOrderItemDO.setProductId(item.getProductId());
+                shoppingOrderItemDO.setProductModelId(item.getProductModelId());
+                shoppingOrderItemDO.setProductModelName(item.getProductModelName());
+                shoppingOrderItemDO.setProductName(item.getProductName());
+                shoppingOrderItemDO.setQuantity(item.getQuantity());
+                shoppingOrderItemDO.setRegularPrice(item.getRegularPrice());
+                shoppingOrderItemDO.setSalesPrice(item.getSalesPrice());
+                shoppingOrderItemDO.setActivityProductModelId(item.getActivityProductModelId());
+                // 设置订单id
+                shoppingOrderItemDO.setShoppingOrderId(id);
+                // 设置为待处理
+                shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING.getValue());
+                // 设置为未评价
+                shoppingOrderItemDO.setIsEvaluation(false);
+                shoppingOrderItemDO.setGmtCreate(new Date());
+                shoppingOrderItemDO.setGmtModified(new Date());
+                shoppingOrderItemDOMapper.insertSelective(shoppingOrderItemDO);
+            }
+            // 考虑订单是否保存失败处理
+            if (id != null && id > 0) {
+                // 把订单id放入list返回
+                rtn.add(id);
+                // 判断用户是否是商家粉丝
+                if (!shoppingOrderDO.getIsFans()) {
+                    // 事务补偿(用户成为商家粉丝)
+                    shoppingOrderCreateOrderFansTransactionMainServiceImpl.sendNotice(id);
+                }
+                // 事务补偿(减掉库存)
+                shoppingOrderCreateOrderTransactionMainServiceImpl.sendNotice(id);
+            }
+        }
+        return rtn;
+    }
 
 	@Override
 	public Page<ShoppingOrderExtendBO> selectPageByMemberId(Long memberId, ShoppingOrderQueryForeignToMemberParam param) {
@@ -470,46 +538,34 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderCancelOrderTransactionMainServiceImpl.sendNotice(id);
 	}
 
-	/**
-	 * 
-	 * @param memberId
-	 *            会员id
-	 * @param id
-	 *            购物订单id
-	 * @author jiangxinjun
-	 * @date 2017年7月10日
-	 */
-	@Transactional
-	@Override
-	public void deleteOrder(Long memberId, Long id) {
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
-
-		if (shoppingOrderDO == null || shoppingOrderDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
-			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
-		}
-
-		if (!shoppingOrderDO.getMemberId().equals(memberId)) {
-			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
-		}
-
-		// 订单的当前状态必须已结束状态的订单
-		if (!shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) && !shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue())) {
-			throw new OrderNotDeleteException(ExceptionMessageConstant.ORDER_IS_NOT_OVER);
-		}
-
-		// 如果订单的状态是交易成功，检查订单项的订单状态是否是否是完成状态s
-		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) && !shoppingOrderDO.getIsDone()) {
-			throw new OrderNotDeleteException(ExceptionMessageConstant.ORDER_HAS_NOT_BEEN_COMPLETED);
-		}
-
-		// 更新购物订单的状态
-		shoppingOrderDO = new ShoppingOrderDO();
-		shoppingOrderDO.setId(id);
-		shoppingOrderDO.setGmtModified(new Date());
-		// 更改数据状态为删除
-		shoppingOrderDO.setStatus(StatusEnum.INVALID.getValue());
-		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
-	}
+    @Transactional
+    @Override
+    public void deleteOrder(Long memberId, Long id) {
+        ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+        if (shoppingOrderDO == null || shoppingOrderDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
+            throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
+        }
+        if (!shoppingOrderDO.getMemberId().equals(memberId)) {
+            throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+        }
+        // 订单的当前状态必须已结束状态的订单
+        if (!shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue())
+                && !shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue())) {
+            throw new OrderNotDeleteException(ExceptionMessageConstant.ORDER_IS_NOT_OVER);
+        }
+        // 如果订单的状态是交易成功，检查订单项的订单状态是否是否是完成状态s
+        if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue())
+                && !shoppingOrderDO.getIsDone()) {
+            throw new OrderNotDeleteException(ExceptionMessageConstant.ORDER_HAS_NOT_BEEN_COMPLETED);
+        }
+        // 更新购物订单的状态
+        shoppingOrderDO = new ShoppingOrderDO();
+        shoppingOrderDO.setId(id);
+        shoppingOrderDO.setGmtModified(new Date());
+        // 更改数据状态为删除
+        shoppingOrderDO.setStatus(StatusEnum.INVALID.getValue());
+        shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+    }
 
 	/**
 	 * 支付成功之后 修改购物订单以及订单项状态为待发货
@@ -1488,17 +1544,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
     }
     
     @Override
-    public Boolean isBuy(ActivityProductBuyQueryParam param) {
+    public Long isBuy(ActivityProductBuyQueryParam param) {
         ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
         ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
         criteria.andMemberIdEqualTo(param.getMemberId());
         criteria.andActivityProductIdEqualTo(param.getActivityProductId());
         criteria.andOrderStatusNotEqualTo(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
-        Long count = shoppingOrderDOMapper.countByExample(shoppingOrderDOExample);
-        if (count <= 0) {
-            return false;
-        }
-        return true;
+        return shoppingOrderDOMapper.countByExample(shoppingOrderDOExample);
     }
     
     @Override

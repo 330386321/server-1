@@ -1,14 +1,12 @@
 package com.lawu.eshop.order.srv.converter;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemDTO;
-import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 
@@ -28,43 +26,6 @@ public class ShoppingOrderItemConverter {
 		throw new IllegalAccessError("Utility class");
 	}
 
-	/**
-	 * ShoppingOrderItemDO转换
-	 * 
-	 * @param shoppingOrderId
-	 * @param param
-	 * @return
-	 */
-	public static ShoppingOrderItemDO convert(Long shoppingOrderId, ShoppingOrderSettlementItemParam param) {
-		ShoppingOrderItemDO rtn = null;
-		if (param == null) {
-			return rtn;
-		}
-
-		rtn = new ShoppingOrderItemDO();
-		rtn.setIsAllowRefund(param.getIsAllowRefund());
-		rtn.setProductFeatureImage(param.getProductFeatureImage());
-		rtn.setProductId(param.getProductId());
-		rtn.setProductModelId(param.getProductModelId());
-		rtn.setProductModelName(param.getProductModelName());
-		rtn.setProductName(param.getProductName());
-		rtn.setQuantity(param.getQuantity());
-		rtn.setRegularPrice(param.getRegularPrice());
-		rtn.setSalesPrice(param.getSalesPrice());
-		rtn.setActivityProductModelId(param.getActivityProductModelId());
-		
-		// 设置订单id
-		rtn.setShoppingOrderId(shoppingOrderId);
-		// 设置为待处理
-		rtn.setOrderStatus(ShoppingOrderStatusEnum.PENDING.getValue());
-		// 设置为未评价
-		rtn.setIsEvaluation(false);
-		rtn.setGmtCreate(new Date());
-		rtn.setGmtModified(new Date());
-
-		return rtn;
-	}
-	
 	/**
 	 * ShoppingOrderItemBO转换
 	 * 

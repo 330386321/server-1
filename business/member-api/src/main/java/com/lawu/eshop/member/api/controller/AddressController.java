@@ -1,5 +1,18 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
@@ -11,17 +24,11 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.AddressService;
 import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.param.AddressParam;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 描述：收货地址管理
@@ -53,14 +60,17 @@ public class AddressController extends BaseController {
 		return successGet(result);
 	}
 
-	@Audit(date = "2017-03-29", reviewer = "孙林青")
-	@Authorization
-	@ApiOperation(value = "查询单个收货地址", notes = "单个查询收货地址[]（张荣成）", httpMethod = "GET")
-	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
-	public Result<AddressDTO> get(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id) {
-		return addressService.get(id);
-	}
+    @SuppressWarnings("unchecked")
+    @Audit(date = "2017-03-29", reviewer = "孙林青")
+    @Authorization
+    @ApiOperation(value = "查询单个收货地址", notes = "单个查询收货地址[]（张荣成）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
+    public Result<AddressDTO> get(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+            @PathVariable @ApiParam(required = true, value = "收货地址id") Long id) {
+        String memberNum = UserUtil.getCurrentUserNum(getRequest());
+        return successGet(addressService.get(id, memberNum));
+    }
 
 	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-04-12", reviewer = "孙林青")

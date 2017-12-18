@@ -34,7 +34,7 @@ public interface AddressService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "address/get/{id}")
-	Result<AddressDTO> get(@PathVariable("id") Long id);
+	Result<AddressDTO> get(@PathVariable("id") Long id, @RequestParam(name = "userNum") String userNum);
 
 	/**
 	 * 刪除地址

@@ -48,6 +48,7 @@ public class ResultCode {
     public static final int ID_CARD_RECORD_EXIST = 1029;
     public static final int REG_NUMBER_RECORD_EXIST = 1030;
     public static final int REPEAT_OPERATE = 1031;
+    public static final int WRONG_OPERATION = 1032;
     
     //FastDFS上传图片异常
     public static final int FD_FILE_ERROR =1031;
@@ -260,7 +261,8 @@ public class ResultCode {
         ResultCode.messageMap.put(ID_CARD_RECORD_EXIST, "该身份证号已经创建过门店");
         ResultCode.messageMap.put(REG_NUMBER_RECORD_EXIST, "该执照已经创建过门店");
         ResultCode.messageMap.put(REPEAT_OPERATE, "重复操作");
-
+        ResultCode.messageMap.put(WRONG_OPERATION, "异常操作");
+        
         //FastDFS error info
         ResultCode.messageMap.put(FD_FILE_ERROR, "获取上传文件信息异常");
         ResultCode.messageMap.put(FD_FILE_IMG_BIG, "上传图片应小于5M");

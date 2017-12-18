@@ -24,11 +24,9 @@ public class AddressConverter {
 	 * @return
 	 */
 	public static AddressBO convertBO(AddressDO addressDO) {
-
 		if (addressDO == null) {
 			return null;
 		}
-
 		AddressBO addressBO = new AddressBO();
 		addressBO.setId(addressDO.getId());
 		addressBO.setAddr(addressDO.getAddr());
@@ -38,6 +36,7 @@ public class AddressConverter {
 		addressBO.setPostcode(addressDO.getPostcode());
 		addressBO.setRegionPath(addressDO.getRegionPath());
 		addressBO.setRegionName(addressDO.getRegionName());
+		addressBO.setUserNum(addressDO.getUserNum());
 		return addressBO;
 	}
 

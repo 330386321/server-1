@@ -1,18 +1,19 @@
 package com.lawu.eshop.member.api.mock.service;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.member.api.service.AddressService;
-import com.lawu.eshop.user.dto.AddressDTO;
-import com.lawu.eshop.user.param.AddressParam;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.member.api.service.AddressService;
+import com.lawu.eshop.user.dto.AddressDTO;
+import com.lawu.eshop.user.param.AddressParam;
 
 @Service
 public class MockAddressService extends BaseController implements AddressService {
@@ -23,7 +24,7 @@ public class MockAddressService extends BaseController implements AddressService
 	}
 
 	@Override
-	public Result<AddressDTO> get(@PathVariable("id") Long id) {
+	public Result<AddressDTO> get(@PathVariable("id") Long id, @RequestParam("userNum") String userNum) {
 		AddressDTO dto = new AddressDTO();
 		dto.setName("公司地址");
 		dto.setId(1L);

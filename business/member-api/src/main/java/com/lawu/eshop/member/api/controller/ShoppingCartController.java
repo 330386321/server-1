@@ -203,45 +203,37 @@ public class ShoppingCartController extends BaseController {
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-    	
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
-    	
-    	Result<List<Long>> result = shoppingcartExtendService.createOrder(memberId, params);
+    	String memberNum = UserUtil.getCurrentUserNum(getRequest());
+    	Result<List<Long>> result = shoppingcartExtendService.createOrder(memberId, params, memberNum);
     	if (!isSuccess(result)) {
     		return successCreated(result.getRet());
     	}
-    	
     	return successCreated(result);
     }
     
-	/**
-	 * 立即购买
-	 * @param param 购物参数
-	 * @return 返回订单的结算数据
-	 */
-	@Audit(date = "2017-05-03", reviewer = "孙林青")
-    @SuppressWarnings({"unchecked" })
-	@ApiOperation(value = "立即购买", notes = "立即购买。[1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
+    @Audit(date = "2017-05-03", reviewer = "孙林青")
+    @SuppressWarnings({ "unchecked" })
+    @ApiOperation(value = "立即购买", notes = "立即购买。[1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
-	@RequestMapping(value = "buyNow", method = RequestMethod.POST)
-	public Result<ShoppingCartSettlementDTO> buyNow(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "加入购物车参数") @Validated ShoppingCartParam param, BindingResult bindingResult) {
-    	String message = validate(bindingResult);
-    	if (message != null) {
-    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
-    	}
-    	
-    	Long memberId = UserUtil.getCurrentUserId(getRequest());
-    	String memberNum = UserUtil.getCurrentUserNum(getRequest());
-    	
-    	Result<ShoppingCartSettlementDTO> result = shoppingcartExtendService.buyNow(memberId, memberNum, param);
-    	if (!isSuccess(result)) {
-    		return successCreated(result.getRet());
-    	}
-    	
-    	return successCreated(result);
+    @RequestMapping(value = "buyNow", method = RequestMethod.POST)
+    public Result<ShoppingCartSettlementDTO> buyNow(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+            @ModelAttribute @ApiParam(name = "param", value = "加入购物车参数") @Validated ShoppingCartParam param,
+            BindingResult bindingResult) {
+        String message = validate(bindingResult);
+        if (message != null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+        }
+        Long memberId = UserUtil.getCurrentUserId(getRequest());
+        String memberNum = UserUtil.getCurrentUserNum(getRequest());
+        Result<ShoppingCartSettlementDTO> result = shoppingcartExtendService.buyNow(memberId, memberNum, param);
+        if (!isSuccess(result)) {
+            return successCreated(result.getRet());
+        }
+        return successCreated(result);
     }
-	
+
 	@Audit(date = "2017-05-12", reviewer = "孙林青")
     @SuppressWarnings({"unchecked" })
 	@ApiOperation(value = "立即购买，创建订单", notes = "立即购买，创建订单。[1003|1004|1005|4018]（蒋鑫俊）", httpMethod = "POST")
@@ -254,11 +246,12 @@ public class ShoppingCartController extends BaseController {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
+    	String memberNum = UserUtil.getCurrentUserNum(getRequest());
     	Result<Long> result = null;
     	if (param.getActivityProductModelId() == null) {
-        	result = shoppingcartExtendService.buyNowCreateOrder(memberId, param);
+        	result = shoppingcartExtendService.buyNowCreateOrder(memberId, param, memberNum);
     	} else {
-    	    result = shoppingcartExtendService.buyNowCreateOrder(memberId, param, param.getActivityProductModelId());
+    	    result = shoppingcartExtendService.buyNowCreateOrder(memberId, param, param.getActivityProductModelId(), memberNum);
     	}
     	return successCreated(result);
     }

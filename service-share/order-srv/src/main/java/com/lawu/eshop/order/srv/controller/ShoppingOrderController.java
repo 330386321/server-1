@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.common.exception.WrongOperationException;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -116,8 +117,12 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public Result<List<Long>> save(@RequestBody List<ShoppingOrderSettlementParam> params) {
-		List<Long> ids = shoppingOrderService.save(params);
-		return successCreated(ids);
+	    try {
+	        List<Long> ids = shoppingOrderService.save(params);
+	        return successCreated(ids);
+	    } catch (WrongOperationException e) {
+	        return successCreated(e.getRet(), e.getMessage());
+	    }
 	}
 
 	/**
@@ -297,7 +302,12 @@ public class ShoppingOrderController extends BaseController {
         if (message != null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
         }
-        return successCreated(shoppingOrderService.isBuy(param));
+        Long count = shoppingOrderService.isBuy(param);
+        boolean isBuy = false;
+        if (count != null && count > 0) {
+            isBuy = true;
+        }
+        return successCreated(isBuy);
     }
 
 	/*********************************************************

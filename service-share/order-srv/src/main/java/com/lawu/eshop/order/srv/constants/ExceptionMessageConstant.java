@@ -28,6 +28,8 @@ public class ExceptionMessageConstant {
 	
 	public final static String ORDER_CREATION_FAILED = "订单创建失败";
 	
+	public final static String DUPLICATE_SECKILL_ACTIVITY_ORDER = "您已经购买过这件商品了";
+	
 	/** shopping order item **/
 	public final static String IN_THE_ORDER_HAS_BEEN_REFUNDED = "订单已经在退款中";
 	

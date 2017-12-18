@@ -119,13 +119,6 @@ public class ShoppingOrderConverterTest {
 	}
 	
 	@Test
-	public void convertShoppingOrderDO() {
-		ShoppingOrderSettlementParam expected = initShoppingOrderSettlementParam();
-		ShoppingOrderDO actual = ShoppingOrderConverter.convert(expected);
-		assertShoppingOrderDO(expected, actual);
-	}
-	
-	@Test
 	public void convertReportRiseRerouceDTOList() {
 		List<ReportFansSaleTransFormDO> expected = new ArrayList<>();
 		ReportFansSaleTransFormDO reportFansSaleTransFormDO = new ReportFansSaleTransFormDO();

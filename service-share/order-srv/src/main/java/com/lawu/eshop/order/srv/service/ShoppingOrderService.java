@@ -2,6 +2,7 @@ package com.lawu.eshop.order.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.common.exception.WrongOperationException;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mq.dto.order.reply.ShoppingOrderCreateOrderReply;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
@@ -45,7 +46,7 @@ public interface ShoppingOrderService {
      *            多个订单参数
      * @return 返回保存的订单id
      */
-    List<Long> save(List<ShoppingOrderSettlementParam> params);
+    List<Long> save(List<ShoppingOrderSettlementParam> params) throws WrongOperationException;
 
     /**
      * 根据会员id和查询参数分页查询订单列表
@@ -435,7 +436,7 @@ public interface ShoppingOrderService {
      * @createDate 2017年11月24日
      * @updateDate 2017年11月24日
      */
-    Boolean isBuy(ActivityProductBuyQueryParam param);
+    Long isBuy(ActivityProductBuyQueryParam param);
     
     /**
      * 分页查询查找符合自动取消的未付款抢购活动订单 用于定时任务
