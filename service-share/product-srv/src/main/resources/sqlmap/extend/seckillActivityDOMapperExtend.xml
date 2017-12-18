@@ -40,13 +40,13 @@
 		FROM
 			(
 				SELECT
-					activity_id
-				FROM
-					seckill_activity_product
-				WHERE
-					merchant_id = #{merchantId,jdbcType=BIGINT} and `status`=1
-				GROUP BY
-					activity_id
+			sap.activity_id as id
+		FROM
+			seckill_activity sa
+		LEFT JOIN seckill_activity_product sap ON sa.id = sap.activity_id
+		WHERE
+			sap.merchant_id = #{merchantId,jdbcType=BIGINT} and sa.`status`=1
+			GROUP BY sap.activity_id
 			) AS sap
   </select>
   
