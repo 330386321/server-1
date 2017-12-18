@@ -86,7 +86,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 	public Boolean selectByAccount(String account,Byte userType,String num) {
 		BankAccountDOExample example = new BankAccountDOExample();
 		Criteria  c1 = example.createCriteria();
-		Criteria  c2 = example.createCriteria();
+		Criteria  c2 = example.createCriteria(); 
 		c1.andAccountNumberEqualTo(account).andUserTypeEqualTo(userType).andStatusEqualTo(BankStatusEnum.YES.getVal());
 		c2.andAccountNumberEqualTo(account).andUserTypeEqualTo(userType).andIsBindForeverEqualTo(true);
 		example.or(c2);

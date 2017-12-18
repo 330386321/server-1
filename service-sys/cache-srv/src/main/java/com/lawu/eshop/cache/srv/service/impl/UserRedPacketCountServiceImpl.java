@@ -23,15 +23,6 @@ public class UserRedPacketCountServiceImpl implements UserRedPacketCountService 
 	@Override
 	public Object getUserRedPacketCountRecord(Long id) {
 		
-		/*String key = KeyConstant.REDIS_KEY_USER_RED_PACKET_COUNT.concat(String.valueOf(id));
-		stringRedisTemplate.watch(key);		
-		stringRedisTemplate.multi();
-		//总数减一
-		stringRedisTemplate.boundValueOps(key).increment(-1);
-		
-		Object rs = stringRedisTemplate.exec();
-		return rs;*/
-
 		String key = KeyConstant.REDIS_KEY_USER_RED_PACKET_COUNT.concat(String.valueOf(id));
 		//总数减一
 		return stringRedisTemplate.boundValueOps(key).increment(-1);

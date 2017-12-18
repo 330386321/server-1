@@ -298,12 +298,9 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
 		UserTakedRedPacketDOExample userTakedExample = new UserTakedRedPacketDOExample();
 		userTakedExample.createCriteria().andUserRedPackIdEqualTo(redPacketId).andUserNumEqualTo(userNum)
 				.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val);
-		List<UserTakedRedPacketDO> listTaked = userTakedRedPacketDOMapper.selectByExample(userTakedExample);
-		boolean flag =false;
-		if(listTaked.size()==0){
-			flag=true;
-		}
-		return flag;
+		int count = userTakedRedPacketDOMapper.countByExample(userTakedExample);
+		
+		return count==0 ?true :false;
 	}
 
 	/**

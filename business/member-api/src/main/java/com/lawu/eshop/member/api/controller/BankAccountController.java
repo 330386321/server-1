@@ -114,6 +114,7 @@ public class BankAccountController extends BaseController{
         return successCreated(bankAccountService.selectAccount(id));
     }
 
+	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-07-04", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "修改银行卡", notes = "修改银行卡[2011|6000|6021]（张荣成）", httpMethod = "PUT")
@@ -142,8 +143,7 @@ public class BankAccountController extends BaseController{
 			Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
 			if(flag.getModel()!=null && (Boolean)flag.getModel()){
 				 bankAccountParam.setUserType(UserType.MEMBER);
-				 bankAccountService.updateBankAccount(id,userNum, bankAccountParam);
-				 return successCreated(ResultCode.SUCCESS);
+				 return  bankAccountService.updateBankAccount(id,userNum, bankAccountParam);
 			}else{
 				 return successCreated(ResultCode.PAY_PWD_ERROR);
 			}

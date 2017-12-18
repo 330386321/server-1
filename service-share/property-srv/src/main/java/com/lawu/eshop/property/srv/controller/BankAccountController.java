@@ -99,7 +99,7 @@ public class BankAccountController extends BaseController{
 			Boolean  flag=bankAccountService.selectByAccount(bankAccountParam.getAccountNumber(),bankAccountParam.getUserType().val,userNum);
 			if(flag){
 				return successCreated(ResultCode.BANK_ACCOUNT_IS_EXIST);
-			}
+			} 
 		}
 		bankAccountService.updateBankAccount(id, bankAccountParam);
 		return  successCreated();
