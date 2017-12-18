@@ -523,7 +523,8 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		return successCreated(rtn);
 	}
 	
-	@BusinessInventoryCtrl(idParamIndex = 2, businessKey = BusinessKey.SECKILL_ACTIVITY_PRODUCT, using = SeckillActivityProductBusinessDecisionServiceImpl.class)
+	@SuppressWarnings("unchecked")
+    @BusinessInventoryCtrl(idParamIndex = 2, businessKey = BusinessKey.SECKILL_ACTIVITY_PRODUCT, using = SeckillActivityProductBusinessDecisionServiceImpl.class)
     @Override
     public Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param, Long seckillActivityProductModelId, String memberNum) throws BusinessExecuteException {
 	    Result<Long> result = buyNowCreateOrder(memberId, param, memberNum);
@@ -533,9 +534,9 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
         return result;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param, String memberNum) {
+    public Result buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param, String memberNum) {
         // 通过商品型号id列表查询商品信息
         ShoppingCartProductModelDTO shoppingCartProductModelDTO = null;
         /*
@@ -546,14 +547,14 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
             Result<ShoppingCartProductModelDTO> result = productModelService
                     .getShoppingCartProductModel(param.getProductModelId());
             if (!isSuccess(result)) {
-                return successCreated(result);
+                return result;
             }
             shoppingCartProductModelDTO = result.getModel();
         } else {
             Result<SeckillActivityProductModelInfoDTO> result = productModelService
                     .seckillActivityProductModel(param.getActivityProductModelId());
             if (!isSuccess(result)) {
-                return successCreated(result);
+                return result;
             }
             SeckillActivityProductModelInfoDTO model = result.getModel();
             param.setQuantity(1);
@@ -562,16 +563,22 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
         // 判断商品是否失效
         if (param.getActivityProductModelId() == null
                 && !ProductStatusEnum.PRODUCT_STATUS_UP.equals(shoppingCartProductModelDTO.getStatus())) {
-            return successCreated(ResultCode.PRODUCT_HAS_EXPIRED);
+            Result result = new Result<>();
+            result.setRet(ResultCode.PRODUCT_HAS_EXPIRED);
+            result.setMsg(ResultCode.get(result.getRet()));
+            return result;
         }
         // 判断库存
         if (shoppingCartProductModelDTO.getInventory() < param.getQuantity()) {
-            return successCreated(ResultCode.INVENTORY_SHORTAGE);
+            Result result = new Result<>();
+            result.setRet(ResultCode.INVENTORY_SHORTAGE);
+            result.setMsg(ResultCode.get(result.getRet()));
+            return result;
         }
         // 查询地址
         Result<AddressDTO> resultAddressDTO = addressService.get(param.getAddressId(), memberNum);
         if (!isSuccess(resultAddressDTO)) {
-            return successCreated(resultAddressDTO.getRet(), resultAddressDTO.getMsg());
+            return resultAddressDTO;
         }
         // 查询商家是否支持七天退货
         List<Long> merchantIdList = new ArrayList<>();
@@ -582,7 +589,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
         Result<ShoppingOrderFindUserInfoDTO> shoppingOrderFindUserInfoDTOResult = merchantStoreService
                 .shoppingOrderFindUserInfo(shoppingOrderFindUserInfoParam);
         if (!isSuccess(shoppingOrderFindUserInfoDTOResult)) {
-            return successCreated(shoppingOrderFindUserInfoDTOResult.getRet());
+            return shoppingOrderFindUserInfoDTOResult;
         }
         ShoppingOrderFindMerchantInfoDTO shoppingOrderFindMerchantInfoDTO = shoppingOrderFindUserInfoDTOResult
                 .getModel().getShoppingOrderFindMerchantInfoDTOList().get(0);
@@ -645,8 +652,8 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
         // 保存订单
         Result<List<Long>> resultIds = shoppingOrderService.save(shoppingOrderSettlementParams);
         if (!isSuccess(resultIds)) {
-            return successCreated(resultIds.getRet(), resultIds.getMsg());
+            return resultIds;
         }
-        return successCreated(resultIds);
+        return resultIds;
     }
 }

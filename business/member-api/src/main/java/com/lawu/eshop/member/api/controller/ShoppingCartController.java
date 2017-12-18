@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.concurrentqueue.requestctrl.ConcurrentTaskExecutor;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
+import com.lawu.eshop.concurrentqueue.impl.BaseConcurrentTask;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -51,6 +53,9 @@ public class ShoppingCartController extends BaseController {
     
     @Autowired
     private ShoppingCartExtendService shoppingcartExtendService;
+    
+    @Autowired
+    private ConcurrentTaskExecutor concurrentTaskExecutor;
     
     /**
      * 加入购物车。
@@ -234,8 +239,8 @@ public class ShoppingCartController extends BaseController {
         return successCreated(result);
     }
 
-	@Audit(date = "2017-05-12", reviewer = "孙林青")
-    @SuppressWarnings({"unchecked" })
+	@SuppressWarnings("unchecked")
+    @Audit(date = "2017-05-12", reviewer = "孙林青")
 	@ApiOperation(value = "立即购买，创建订单", notes = "立即购买，创建订单。[1003|1004|1005|4018]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -251,7 +256,18 @@ public class ShoppingCartController extends BaseController {
     	if (param.getActivityProductModelId() == null) {
         	result = shoppingcartExtendService.buyNowCreateOrder(memberId, param, memberNum);
     	} else {
-    	    result = shoppingcartExtendService.buyNowCreateOrder(memberId, param, param.getActivityProductModelId(), memberNum);
+    	    // 通过线程池拦截部分请求
+    	    result = (Result<Long>) concurrentTaskExecutor.execute(new BaseConcurrentTask<Result<Long>, Result<Long>>() {
+                @Override
+                public Result<Long> execute() {
+                    return shoppingcartExtendService.buyNowCreateOrder(memberId, param, param.getActivityProductModelId(), memberNum);
+                }
+                
+                @Override
+                public Result<Long> executeWhenSuccess(Result<Long> successInfo) {
+                    return successInfo;
+                }
+            });
     	}
     	return successCreated(result);
     }
