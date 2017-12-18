@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.order.RevokeRefundRequestNoticeNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundFillReturnAddressRemindNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundRefuseRefundRemindNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeConfirmedForRefundRemindNotification;
@@ -636,6 +637,14 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundDetailUpdateDO.setStatus(StatusEnum.INVALID.getValue());
 		shoppingRefundDetailUpdateDO.setGmtModified(new Date());
 		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailUpdateDO);
+		
+		// 撤销退款申请发送推送消息给商家
+		RevokeRefundRequestNoticeNotification notification = new RevokeRefundRequestNoticeNotification();
+        notification.setShoppingOrderItemId(shoppingOrderItemDO.getId());
+        notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
+        notification.setMemberNickname(shoppingOrderDO.getMemberNickname());
+        notification.setOrderNum(shoppingOrderDO.getOrderNum());
+        messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_REVOKE_REFUND_REQUEST_NOTICE, notification);
 	}
 	
     @Override

@@ -79,7 +79,9 @@ public enum MessageTypeEnum {
     
     MESSAGE_TYPE_SECKILL_ACTIVITY_ABOUT_START((byte) 0x32),//抢购即将开始提醒50
 
-    MESSAGE_TYPE_SECKILL_ACTIVITY_PRODUCT_CHECK_FAIL((byte) 0x33);//活动商品审核不通过51
+    MESSAGE_TYPE_SECKILL_ACTIVITY_PRODUCT_CHECK_FAIL((byte) 0x33),//活动商品审核不通过51
+    
+    MESSAGE_TYPE_REVOKE_REFUND_REQUEST((byte) 0x34);//用户撤销退款申请52
 
     private Byte val;
     

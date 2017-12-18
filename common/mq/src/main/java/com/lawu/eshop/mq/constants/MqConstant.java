@@ -193,6 +193,11 @@ public class MqConstant {
      * 商家新增订单交易收入 发送到商城模块，推送给商家
      */
     public static final String TAG_ORDERS_TRADING_INCOME_NOTICE = "orders_trading_income_notice";
+    
+    /**
+     * 撤销退款申请提醒
+     */
+    public static final String TAG_REVOKE_REFUND_REQUEST_NOTICE = "revoke_refund_request_notice";
 
     /**
      * 审核成功或失败后发送消息通知mall-srv模块发送推送消息给商家

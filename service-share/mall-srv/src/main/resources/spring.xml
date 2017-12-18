@@ -53,7 +53,7 @@
         
         <property name="topicsTags">
             <map>
-                <entry key="order_srv" value="to_be_return_remind || fill_return_address_remind || refuse_refund_remind || to_be_refund_remind || to_be_return_remind || to_be_confirmed_for_refund_remind || order_no_payment_push_to_member || remind_shipments || orders_trading_income_notice || payment_successful_push" />
+                <entry key="order_srv" value="to_be_return_remind || fill_return_address_remind || refuse_refund_remind || to_be_refund_remind || to_be_return_remind || to_be_confirmed_for_refund_remind || order_no_payment_push_to_member || remind_shipments || orders_trading_income_notice || payment_successful_push || revoke_refund_request_notice" />
                 <entry key="property_srv" value="property_deposit_do_result" />
                 <entry key="product_srv" value="seckill_activity_about_start_notice" />
             </map>

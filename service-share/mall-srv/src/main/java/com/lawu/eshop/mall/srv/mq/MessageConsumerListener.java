@@ -8,6 +8,7 @@ import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.mall.srv.service.MessageService;
 import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.order.RevokeRefundRequestNoticeNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderNoPaymentNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderOrdersTradingIncomeNoticeNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderRemindShipmentsNotification;
@@ -33,7 +34,6 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
 	@Override
 	public void consumeMessage(String topic, String tags, Object message) {
-
 		if (MqConstant.TOPIC_ORDER_SRV.equals(topic)) {
 			/*
 			 * 用户付款成功提示买家新增一个订单
@@ -225,7 +225,26 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
 				return;
 			}
-
+			
+	         /*
+             *  提醒商家退款申请已经撤销
+             */
+            if (MqConstant.TAG_REVOKE_REFUND_REQUEST_NOTICE.equals(tags)) {
+                RevokeRefundRequestNoticeNotification notification = (RevokeRefundRequestNoticeNotification) message;
+                /*
+                 * 发送站内信
+                 */
+                // 组装信息
+                MessageInfoParam messageInfoParam = new MessageInfoParam();
+                messageInfoParam.setRelateId(notification.getShoppingOrderItemId());
+                messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_REVOKE_REFUND_REQUEST);
+                messageInfoParam.setMessageParam(new MessageTempParam());
+                messageInfoParam.getMessageParam().setUserName(notification.getMemberNickname());
+                messageInfoParam.getMessageParam().setOrderNum(notification.getOrderNum());
+                // 保存站内信，并且发送个推
+                messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
+                return;
+            }
 		} else if (MqConstant.TOPIC_PROPERTY_SRV.equals(topic)) {
 			/*
 			 *  提醒商家申请退款保证金结果通知
