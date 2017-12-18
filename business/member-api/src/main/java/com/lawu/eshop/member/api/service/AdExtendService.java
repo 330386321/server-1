@@ -64,7 +64,7 @@ public interface AdExtendService {
 	 * @param id
 	 * @return
 	 */
-    Result<PraisePointDTO> clickPraise(Long id,PraiseTypeEnum typeEnum);
+    Result<PraisePointDTO> clickPraise(Long id,PraiseTypeEnum praiseEnum);
     
     /**
      * 精选广告
