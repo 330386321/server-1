@@ -40,7 +40,8 @@ public class MemberProfileConverter {
     /**
      * 转换
      *
-     * @param memberDO
+     * @param memberProfileBO
+     * @param memberBO
      * @return
      */
     public static MemberMineInfoDTO convert(MemberProfileBO memberProfileBO, MemberBO memberBO) {
@@ -52,8 +53,8 @@ public class MemberProfileConverter {
         rtn.setHeadimg(memberBO.getHeadimg());
         rtn.setLevel(memberBO.getLevel());
         rtn.setNickname(memberBO.getNickname());
-        rtn.setInviteMemberCount(memberProfileBO.getInviteMemberCount());
-        rtn.setInviteMerchantCount(memberProfileBO.getInviteMerchantCount());
+        rtn.setInviteMemberCount(memberProfileBO.getInviteMemberCount()+memberProfileBO.getInviteMemberCount2()+memberProfileBO.getInviteMemberCount3());
+        rtn.setInviteMerchantCount(memberProfileBO.getInviteMerchantCount()+memberProfileBO.getInviteMerchantCount2()+memberProfileBO.getInviteMerchantCount3());
         rtn.setGrade(memberBO.getGrade());
         rtn.setGrowthValue(memberBO.getGrowthValue());
         return rtn;

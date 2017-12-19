@@ -204,7 +204,7 @@ public class CommonServiceImpl implements CommonService {
 				}else{
 					bo.setInviterCount(memberProfileDO.getInviteMemberCount() + memberProfileDO.getInviteMemberCount2() + memberProfileDO.getInviteMerchantCount() + memberProfileDO.getInviteMerchantCount2());
 				}
-				bo.setTotalInviteCount(totalCount + bo.getInviterCount());
+				bo.setTotalInviteCount(bo.getInviterCount());
 
 			}else if(invite.getInviteUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
 				List<InviteMerchantInfoView> merchantList = merchantDOMapperExtend.selectInviteMerchantInfo(invite.getInviteUserNum());
@@ -231,7 +231,7 @@ public class CommonServiceImpl implements CommonService {
 				}else{
 					bo.setInviterCount(merchantProfileDO.getInviteMemberCount() + merchantProfileDO.getInviteMemberCount2() + merchantProfileDO.getInviteMerchantCount() + merchantProfileDO.getInviteMerchantCount2());
 				}
-				bo.setTotalInviteCount(totalCount + bo.getInviterCount());
+				bo.setTotalInviteCount(bo.getInviterCount());
 
 				MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
 				merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(merchant.getId()).andStatusEqualTo(true).andTypeEqualTo(new Byte("3"));
